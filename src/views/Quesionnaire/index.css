@@ -1,0 +1,47 @@
+.schedule {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+}
+.query {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.query button{
+width: fit-content;
+}
+.complete{
+background: red;
+  color: white;
+  height: fit-content;
+  border-radius: 15px;
+  padding: 4px 10px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+.complete p{
+margin: 0;
+  font-size: 10px;
+}
+.disabled{
+background: #bfbfbf;
+}
+.disabled .query button{
+color: white;
+}
+.disabled .query .complete{
+background: green;
+  color: #ffffff;
+}
+.additional{
+margin-right: 15px;
+}
+.additional button{
+padding: 8px 12px;
+  font-size: 12px;
+}
+.completeon{
+text-align: left;
+  width: 20%;
+}

@@ -1,0 +1,7 @@
+.nav-pills .nav-item{
+    width: 25%;
+    text-align: center;
+    background: #6967ce !important;
+    border-radius: 25px;
+    height: fit-content;
+  }
