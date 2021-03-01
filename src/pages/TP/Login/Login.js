@@ -35,7 +35,7 @@ function Login(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/auth/taxProfessional`,
+      url: `${baseUrl}/tp/login`,
       data: formData,
     })
       .then(function (response) {

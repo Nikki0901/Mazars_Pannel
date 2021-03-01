@@ -26,7 +26,7 @@ function AddNew() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Add/TaxLead`,
+      url: `${baseUrl}/tl/AddTeamLead`,
       data: formData,
     })
       .then(function (response) {

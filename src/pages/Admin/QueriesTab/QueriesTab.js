@@ -20,33 +20,27 @@ import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
 function QueriesTab() {
   const userid = window.localStorage.getItem("adminkey");
 
-  // console.log(allQueriesData);
+  const [allQueriesCount, setAllQueriesCount] = useState('');
+  const [pendingAllocationCount, setPendingAllocationCount] = useState('');
+  const [pendingProposalCount, setPendingProposalCount] = useState('');
+
+
+  const CountAllQuery = (data) => {
+    setAllQueriesCount(data)
+  }
+
+  const CountPendingAllocation = (data) => {
+    setPendingAllocationCount(data)
+  }
+
+  const CountPendingProposal = (data) => {
+    setPendingProposalCount(data)
+  }
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <div class="row mt-3">
         <div class="col-md-12" style={{ top: "-12px" }}>
-          {/* <ul
-            style={{ justifyContent: "space-around" }}
-            class="nav nav-pills mb-3"
-            id="pills-tab"
-            role="tablist"
-          >
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white bg-success"
-                id="pills-query-tab"
-                data-toggle="pill"
-                href="#query"
-                role="tab"
-                aria-controls="pills-query"
-                aria-selected="true"
-              >
-                All Queries
-              </a>
-            </li>
-          </ul> */}
-
           <div class="tab-content" id="pills-tabContent">
             <div
               class="tab-pane fade show active"
@@ -70,7 +64,7 @@ function QueriesTab() {
                     aria-controls="pills-d"
                     aria-selected="true"
                   >
-                    All Queries
+                    All Queries ({allQueriesCount})
                   </a>
                 </li>
 
@@ -84,7 +78,7 @@ function QueriesTab() {
                     aria-controls="pills-a"
                     aria-selected="false"
                   >
-                    Pending for Allocation
+                    Pending for Allocation ({pendingAllocationCount})
                   </a>
                 </li>
 
@@ -98,7 +92,7 @@ function QueriesTab() {
                     aria-controls="pills-b"
                     aria-selected="false"
                   >
-                    Pending for Proposal
+                    Pending for Proposal ({pendingProposalCount})
                   </a>
                 </li>
 
@@ -124,7 +118,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-d-tab"
                 >
-                  <AllQueriesData />
+                  <AllQueriesData CountAllQuery={CountAllQuery}/>
                 </div>
 
                 <div
@@ -133,7 +127,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingForAllocation />
+                  <PendingForAllocation CountPendingAllocation={CountPendingAllocation} />
                 </div>
 
                 <div
@@ -142,7 +136,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
-                  <PendingForProposals />
+                  <PendingForProposals CountPendingProposal={CountPendingProposal}/>
                 </div>
 
                 <div

@@ -15,11 +15,11 @@ function QueriesRecevied() {
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/get/by/AssignNo/${id}`).then((res) => {
+      axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
-          setAssingmentNo(res.data.result[0].AssignNo);
+          setAssingmentNo(res.data.result[0].assign_no);
         }
       });
     };
@@ -31,7 +31,7 @@ function QueriesRecevied() {
   console.log(assingNo);
 
   const getQuery = () => {
-    axios.get(`${baseUrl}/get/additionalqueries/${assingNo}`).then((res) => {
+    axios.get(`${baseUrl}/tl/GetAdditionalQueries?assignno=${assingNo}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setDisplayQuery(res.data.result);
@@ -83,33 +83,33 @@ function QueriesRecevied() {
                       <tbody>
                         <tr>
                           <th scope="row">Facts of the case</th>
-                          <td>{p.Fact}</td>
+                          <td>{p.fact_case}</td>
                         </tr>
                         <tr>
                           <th scope="row">specific questions</th>
-                          <td colspan="1">{p.specificquery}</td>
+                          <td colspan="1">{p.specific_query}</td>
                         </tr>
                         <tr>
                           <th scope="row">
                             Purpose for which Opinion is sought
                           </th>
-                          <td colspan="1">{p.Purpose}</td>
+                          <td colspan="1">{p.purpose_opinion}</td>
                         </tr>                  
                         <tr>
                           <th scope="row">
                             Format in which Opinion is required
                           </th>
-                          <td colspan="1">{p.Format}</td>
+                          <td colspan="1">{p.format_opinion}</td>
                         </tr>
                         <tr>
                           <th scope="row">
                             Timelines within which Opinion is Required
                           </th>
-                          <td colspan="1">{p.timelines}</td>
+                          <td colspan="1">{p.Timelines}</td>
                         </tr>
                         <tr>
                           <th scope="row">Documents</th>
-                          <td>{p.Upload}</td>
+                          <td>{p.upload_doc}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -126,7 +126,7 @@ function QueriesRecevied() {
                       {displayQuery.map((p, i) => (
                         <tbody>
                           <tr key={i}>
-                            <td>{p.Additional}</td>
+                          <td>{p.additional_queries}</td>
                             <td>{p.created}</td>
                             <td>{p.upload}</td>
                           </tr>

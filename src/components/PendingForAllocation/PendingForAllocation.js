@@ -12,13 +12,12 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Multiselect } from "multiselect-react-dropdown";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 
-// import MultiSelect from './MultiSelect'
 
-function QueriesTab() {
+
+function PendingAllocation({CountPendingAllocation}) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
@@ -30,31 +29,34 @@ function QueriesTab() {
     getPendingForAllocation();
   }, []);
 
+
   const getPendingForAllocation = () => {
-    axios.get(`${baseUrl}/get/filter/admin/date`).then((res) => {
+    axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
+        CountPendingAllocation(res.data.result.length)
       }
     });
   };
 
-  
 
   //search filter
-
-  function handleChange(value) {
+  const handleChange = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    getPendingForAllocation();
   }
 
+
+  // `${baseUrl}/get/filter/admin/date1/${data.p_dateFrom}/date2/${data.p_dateTo}/category/${selectedData}`
+  // admin/pendingAllocation?category=4&date1=&date2
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
-
     axios
       .get(
-        `${baseUrl}/get/filter/admin/date1/${data.p_dateFrom}/date2/${data.p_dateTo}/category/${selectedData}`
+        `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
@@ -64,6 +66,7 @@ function QueriesTab() {
       });
   };
 
+  
   //change date format
   function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
@@ -110,6 +113,9 @@ function QueriesTab() {
 
                 <OptGroup label="Indirect Tax">
                   <Option value="9" label="Compilance">
+
+
+
                     <div className="demo-option-label-item">Compliance</div>
                   </Option>
                   <Option value="10" label="Assessment">
@@ -175,21 +181,20 @@ function QueriesTab() {
                   <th scope="col">Query Allocation</th>
                 </tr>
               </thead>
-              {pendingData.map((p, i) => (
+              {pendingData.map((p, i) => (            
                 <tbody key={i}>
                   <tr>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.parent_id} </td>
+                    <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <th scope="row">
-                      <Link to={`/admin/queries/${p.id}`}>{p.AssignNo}</Link>
+                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
                     </th>
                     <td class="text-center">
-                      {p.assignto === "1" ? (
-                        <p style={{ color: "green" }}>
-                          Assigned to {p.teamleadername}
-                        </p>
+
+                      {p.is_assigned === "1" ? (
+                        <i class="fa fa-share" style={{color:"green"}}></i>
                       ) : (
                         <Link to={`/admin/queryassing/${p.id}`}>
                           <i class="fa fa-share"></i>
@@ -204,9 +209,16 @@ function QueriesTab() {
                     <td></td>
                     <td></td>
                     <td style={{ textAlign: "center" }}>
+                      {
+                        p.is_assigned === "1" && 
+                         <p style={{ color: "green" }}>
+                         Assigned to {p.tname}
+                      </p>
+                      }
+
                       {p.reject === "3" && (
                         <p style={{ color: "red" }}>
-                          Query Rejected By {p.teamleadername}
+                          Query Rejected By {p.tname}
                         </p>
                       )}
                     </td>
@@ -221,46 +233,12 @@ function QueriesTab() {
   );
 }
 
-export default QueriesTab;
+export default PendingAllocation;
 
-const taxx = [
-  {
-    id: 1,
-    name: "direct Tax",
-  },
-  {
-    id: 2,
-    name: "Compilance",
-  },
-  {
-    id: 3,
-    name: "Assessment",
-  },
-  {
-    id: 4,
-    name: "Appeals",
-  },
-  {
-    id: 5,
-    name: "others",
-  },
-  {
-    id: 6,
-    name: "Indirect tax",
-  },
-  {
-    id: 7,
-    name: "Compilance",
-  },
-  {
-    id: 8,
-    name: "Assessment",
-  },
-  {
-    id: 9,
-    name: "Advisory/opinion",
-  },
-];
+
+{/* <i class="fa fa-share" style={{color:"green"}}></i> */}
+
+
 
 {
   /* <div class="form-group mb-2 ml-2">

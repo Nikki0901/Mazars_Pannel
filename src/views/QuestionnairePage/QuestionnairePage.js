@@ -32,7 +32,7 @@ function Questionnaire(props) {
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
-  const uid = window.localStorage.getItem("uid");
+  const userNameId = window.localStorage.getItem("userNameId");
 
 
   const onSubmit = (value) => {
@@ -65,27 +65,22 @@ function Questionnaire(props) {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/post/user/question`,
+        url: `${baseUrl}/customers/PostQuestion`,
         data: formData,
       })
         .then(function (response) {
           console.log("res-", response);  
           if (response.data.code === 1) {
-            // reset();   
-            // alert.success("Query successfully added!"); 
-            // props.history.push("/customer/dashboard");       
+            reset();   
+            alert.success("Query successfully added!"); 
+            props.history.push("/customer/dashboard");       
             }            
         })
         .catch((error) => {
           console.log("erroror - ", error);
         });
-  
     }
-
-    
-  
-    
-  };
+ };
 
 
   const SuccessMesg = () => {
@@ -97,7 +92,7 @@ function Questionnaire(props) {
   
             <ModalBody>
               <div class="modal-body">
-              <h1 style={{textAlign:"center", fontSize:"1.5rem"}}>UserId : {JSON.parse(uid)}</h1>
+              <h1 style={{textAlign:"center", fontSize:"1.5rem"}}>UserId : {JSON.parse(userNameId)}</h1>
               </div>
             </ModalBody>
        
@@ -109,7 +104,7 @@ function Questionnaire(props) {
 
   return (
     <>
-    <Header id={JSON.parse(uid)} />
+    <Header id={JSON.parse(userNameId)} />
     <div className="container">
         
         {SuccessMesg()}

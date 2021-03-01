@@ -25,7 +25,7 @@ function TeamLeaderTab() {
   }, []);
 
   const getTeamLeader = () => {
-    axios.get(`${baseUrl}/Get/teamleaderortaxprofession//tl`).then((res) => {
+    axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setData(res.data.result);
@@ -38,7 +38,7 @@ function TeamLeaderTab() {
     console.log("del", id);
 
     axios
-      .get(`${baseUrl}/delete/TaxLead/${id}`)
+      .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
       .then(function (response) {
         console.log("delete-", response);
         alert.success("successfully deleted ");
@@ -82,7 +82,7 @@ function TeamLeaderTab() {
                 <th scope="row">{i + 1}</th>
                 <td>{p.name}</td>
                 <td>{p.email}</td>
-                <td>{p.Phone}</td>
+                <td>{p.phone}</td>
                 <td>
                   <Link to={`/admin/edittl/${p.id}`}>
                     <i

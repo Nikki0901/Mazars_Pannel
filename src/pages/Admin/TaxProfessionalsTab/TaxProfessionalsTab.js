@@ -23,8 +23,9 @@ function TaxProfessionalsTab() {
     getTaxProf();
   }, []);
 
+
   const getTaxProf = () => {
-    axios.get(`${baseUrl}/Get/teamleaderortaxprofession//tp`).then((res) => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setData(res.data.result);
@@ -32,10 +33,10 @@ function TaxProfessionalsTab() {
     });
   };
 
+
   // delete data
   const del = (id) => {
     console.log("del", id);
-
     axios
       .get(`${baseUrl}/delete/TaxLead/${id}`)
       .then(function (response) {
@@ -81,7 +82,7 @@ function TaxProfessionalsTab() {
                   <th scope="row">{i + 1}</th>
                   <td>{p.name}</td>
                   <td>{p.email}</td>
-                  <td>{p.Phone}</td>
+                  <td>{p.phone}</td>
                   <td>
                     <Link to={`/admin/edittp/${p.id}`}>
                       <i

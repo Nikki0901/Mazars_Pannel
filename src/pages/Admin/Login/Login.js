@@ -36,7 +36,7 @@ function Login(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/auth/admin`,
+      url: `${baseUrl}/admin/login`,
       data: formData,
     })
       .then(function (response) {
@@ -45,7 +45,7 @@ function Login(props) {
           alert.success("Login successfully !");
           localStorage.setItem(
             "adminkey",
-            JSON.stringify(response.data.userid)
+            JSON.stringify(response.data["user id"])
           );
           props.history.push("/admin/dashboard");  
         } else

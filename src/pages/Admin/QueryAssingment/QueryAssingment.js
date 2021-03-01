@@ -16,6 +16,10 @@ function QueryAssingment() {
   const [hideQuery, setHideQuery] = useState({});
   const [query, setQuery] = useState(true);
 
+  
+  const userId = window.localStorage.getItem("adminkey");
+  const tlkey = window.localStorage.getItem("tlkey");
+
   const [queryData , setQuerData] = useState({
     queryNo: "",
     timelines: "",
@@ -24,14 +28,13 @@ function QueryAssingment() {
   const { queryNo, timelines } = queryData;
 
   useEffect(() => {
-    getQuery();
     getTaxLeader();
     getQueryData();
   }, []);
 
 
   const getTaxLeader = () => {
-    axios.get(`${baseUrl}/Get/teamleaderortaxprofession//tl`).then((res) => {
+    axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setTaxLeaderDisplay(res.data.result);
@@ -42,20 +45,24 @@ function QueryAssingment() {
 
 
   const getQueryData = () => {
-    axios.get(`${baseUrl}/get/by/AssignNo/${id}`).then((res) => {
+    axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setQuerData({
-          queryNo: res.data.result[0].AssignNo,
-          timelines: res.data.result[0].timelines,
+          queryNo: res.data.result[0].assign_no,
+          timelines: res.data.result[0].Timelines,
         });
       }
     });
   };
 
 
+  useEffect(() => {
+    getQuery();
+  }, [queryNo]);
+
   const getQuery = () => {
-    axios.get(`${baseUrl}/check/admin/query/AssignNo/${id}`).then((res) => {
+    axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${queryNo}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setQuery(false);
@@ -65,8 +72,6 @@ function QueryAssingment() {
   };
 
 
-  const userId = window.localStorage.getItem("adminkey");
-  const tlkey = window.localStorage.getItem("tlkey");
 
 
   const onSubmit = (value) => {
@@ -88,7 +93,7 @@ function QueryAssingment() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Add/QueryAssignment`,
+      url: `${baseUrl}/tl/AddQueryAssignment`,
       data: formData,
     })
       .then(function (response) {
@@ -169,14 +174,14 @@ function QueryAssingment() {
                       <th scope="row">{queryNo}</th>
                       <td>
                         <select class="form-control w-75 p-0" disabled>
-                          <option>{hideQuery.teamleadername}</option>                   
+                          {/* <option>{hideQuery.teamleadername}</option>                    */}
                         </select>
                       </td>
                       <td>
                         <input
                           type="date"
                           id="date"
-                          value={hideQuery.dateassign}
+                          // value={hideQuery.dateassign}
                           disabled
                         />
                       </td>

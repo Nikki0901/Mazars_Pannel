@@ -22,12 +22,12 @@ function SignIn(props) {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("userid", value.p_name);
+    formData.append("user_id", value.p_name);
     formData.append("password", value.password);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/auth/login`,
+      url: `${baseUrl}/customers/login`,
       data: formData,
     })
       .then(function (response) {
@@ -36,7 +36,7 @@ function SignIn(props) {
           alert.success("Login successfully !");
           localStorage.setItem(
             "userid",
-            JSON.stringify(response.data.userid)
+            JSON.stringify(response.data.user_id)
           );
           localStorage.setItem(
             "name",

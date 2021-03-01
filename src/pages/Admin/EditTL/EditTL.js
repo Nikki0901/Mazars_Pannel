@@ -23,13 +23,13 @@ function EditTL() {
 
   useEffect(() => {
     const getTeamLeader = () => {
-      axios.get(`${baseUrl}/Get/teamleaderortaxprofession/${id}/tl`).then((res) => {
+      axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setUser({
             name: res.data.result[0].name,
             email: res.data.result[0].email,
-            phone: res.data.result[0].Phone,
+            phone: res.data.result[0].phone,
           });
         }
       });
@@ -48,13 +48,13 @@ function EditTL() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/update/TaxLead/tl`,
+      url: `${baseUrl}/tl/updateTeamLeader`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TL created  !");
+          alert.success("TL updated  !");
         }
       })
       .catch((error) => {

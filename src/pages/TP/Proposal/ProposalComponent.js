@@ -11,15 +11,15 @@ export default function ProposalComponent() {
   const [incompleteData, setInCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tpkey");
 
-  const [assing, setAssing] = useState(null);
   const [custname, setCustName] = useState();
+  const [id, setId] = useState(null);
+  const [assingNo, setAssingNo] = useState('');
 
-  const [files, setFiles] = useState([]);
-
+  
   useEffect(() => {
     const getCompleteAssingment = () => {
       axios
-        .get(`${baseUrl}/get/tp/pending/tp/${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -31,62 +31,75 @@ export default function ProposalComponent() {
     getCompleteAssingment();
   }, []);
 
+
+
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get(`${baseUrl}/get/allname/${assing}`);
-      console.log("res", res.data.result);
-      {Object.entries(res.data.result).map(([key, value]) => {
-        console.log("val",value.name)
-        setCustName(value.name)
-      })}
+      
+      const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
+      console.log("res", res);
+      setCustName(res.data.name);
+      // {
+      //   Object.entries(res.data.result).map(([key, value]) => {
+      //     console.log("val", value.name);
+      //     setCustName(value.name);
+      //   });
+      // }
     };
 
     getUser();
-  }, [assing]);
+  }, [id]);
+
+
+  const getID = (key) =>{
+    setId(key)
+  
+    incompleteData.filter((data)=>{
+      if(data.id == key){
+        console.log('assingNo', data.assign_no);
+        setAssingNo(data.assign_no)
+      }
+    })
+  }
 
   const onSubmit = (value) => {
     console.log(value);
 
-    let file_reader = new FileReader();
-    let file = value.p_image[0];
+    var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+    let formData = new FormData();
 
-    file_reader.onload = () => {
-      setFiles([...files, 
-        { 
-        uploaded_file: file_reader.result }]);
-    };
+    formData.append("assign_no", assingNo);
+    formData.append("name", value.p_name);
+    formData.append("type", "tl");
+    formData.append("id", JSON.parse(userid));
+    formData.append("amount", value.p_amount);
+    formData.append("payable", value.p_payable);
+    formData.append("misc1", value.misc_1);
+    formData.append("misc2", value.misc_2);
+    formData.append("payable_date", value.p_date);
 
-    file_reader.readAsDataURL(file);
-    console.log(files)
-    // let formData = new FormData();
-    // formData.append("assignno", value.p_assingment);
-    // formData.append("name", value.p_name);
-    // formData.append("upload", value.p_image[0]);
-    // formData.append("type", "tp");
-    // formData.append("id", JSON.parse(userid));
-
-    // axios({
-    //   method: "POST",
-    //   url: `${baseUrl}/post/uploadproposal/tl/tp`,
-    //   data: formData,
-    // })
-    //   .then(function (response) {
-    //     console.log("res-", response);
-    //     if (response.data.code === 1) {
-    //       alert.success("proposal successfully added !");
-    //       reset();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("erroror - ", error);
-    //   });
+    axios({
+      method: "POST",
+      url: `${baseUrl}/tl/uploadProposal`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          reset();
+          alert.success("proposal successfully send !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
   };
 
   return (
     <>
       <div class="col-md-8">
         <div>
-        <h3>Send Proposal</h3>
+          <h3>Send Proposal</h3>
           <br />
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="row">
@@ -97,12 +110,13 @@ export default function ProposalComponent() {
                     class="form-control"
                     ref={register}
                     name="p_assingment"
-                    onChange={(e) => setAssing(e.target.value)}
+                    // onChange={(e) => setAssing(e.target.value)}
+                    onChange={(e) =>getID(e.target.value)} 
                   >
                     <option value="">--select--</option>
                     {incompleteData.map((p, index) => (
-                      <option key={index} value={p.assignno}>
-                        {p.assignno}
+                      <option key={index} value={p.id}>
+                        {p.assign_no}
                       </option>
                     ))}
                   </select>
@@ -123,10 +137,69 @@ export default function ProposalComponent() {
               </div>
             </div>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Proposal File</label>
-                <input type="file" name="p_image" ref={register} />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Amount</label>
+                  <input
+                    type="text"
+                    name="p_amount"
+                    class="form-control"
+                    ref={register}
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Payable by Through</label>
+                  <input
+                    type="text"
+                    name="p_payable"
+                    class="form-control"
+                    ref={register}
+                    defaultValue="NEFT"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Misc 1</label>
+                  <input
+                    type="text"
+                    name="misc_1"
+                    class="form-control"
+                    ref={register}
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Misc 2</label>
+                  <input
+                    type="text"
+                    name="misc_2"
+                    class="form-control"
+                    ref={register}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Payable by date</label>
+                  <input
+                    type="date"
+                    name="p_date"
+                    class="form-control"
+                    ref={register}
+                  />
+                </div>
               </div>
             </div>
 

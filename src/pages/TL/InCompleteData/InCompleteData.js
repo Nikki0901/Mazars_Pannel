@@ -18,7 +18,7 @@ function InCompleteData() {
   useEffect(() => {
     const getInCompleteAssingment = () => {
       axios
-        .get(`${baseUrl}/get/tp/tl/incomplete/id/${JSON.parse(userid)}/type/tl`)
+        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -29,6 +29,11 @@ function InCompleteData() {
 
     getInCompleteAssingment();
   }, []);
+
+   // change date format
+   function ChangeFormateDate(oldDate) {
+    return oldDate.toString().split("-").reverse().join("-");
+  }
 
   return (
     <>
@@ -50,10 +55,10 @@ function InCompleteData() {
             <tbody>
               {incompleteData.map((p, i) => (
                 <tr>
-                  <th scope="row">{p.AssignNo}</th>
+                  <th scope="row">{p.assign_no}</th>
                   <td>{p.name}</td>
-                  <td>{p.Fact}</td>
-                  <td>{p.Expect}</td>
+                  <td>{p.fact_case}</td>
+                  <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                   <td></td>
                   <td></td>
                 </tr>

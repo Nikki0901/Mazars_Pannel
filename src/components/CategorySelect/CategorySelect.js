@@ -8,38 +8,32 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 
-
 function CategorySelect({ addfreshbtn, startbtn }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const [modal, setModal] = useState(false);
 
   const toggle = () => {
-     if(store2){
-    localStorage.setItem("category", JSON.stringify(store2));
-  }
+    if (store2) {
+      localStorage.setItem("category", JSON.stringify(store2));
+    }
     setModal(!modal);
   };
 
-
   const toggle2 = () => {
-    if(store2){
+    if (store2) {
       localStorage.setItem("category", JSON.stringify(store2));
     }
   };
 
-
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
 
-
-  const [store, setStore] = useState(null);
+  const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
-
-
 
   useEffect(() => {
     const getCategory = () => {
-      axios.get(`${baseUrl}/get/by/directtax/0`).then((res) => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setTax(res.data.result);
@@ -47,27 +41,26 @@ function CategorySelect({ addfreshbtn, startbtn }) {
       });
     };
 
+    getCategory();
+  }, []);
+
+
+  useEffect(() => {
     const getSubCategory = () => {
-      axios.get(`${baseUrl}/get/by/directtax/${store}`).then((res) => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setTax2(res.data.result);
         }
       });
     };
-
-
-
-    getCategory();
     getSubCategory();
+  }, [store]);
 
-  }, [store, store2]);
-
-
+  
   const onSubmit = (value) => {
     console.log("value :", value);
   };
- 
 
   return (
     <>
@@ -75,7 +68,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
         style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}
       >
         <div class="col-sm-3" style={{ marginTop: "38px" }}>
-        <form onSubmit={handleSubmit(onSubmit)}>   
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div class="form-group">
               <label>Category</label>
               <select
@@ -94,7 +87,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
             </div>
 
             <div class="form-group">
-            <label>Sub Category</label>
+              <label>Sub Category</label>
               <select
                 className="form-select form-control"
                 name="p_tax2"
@@ -109,8 +102,6 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                 ))}
               </select>
             </div>
-
-           
 
             <div class="form-group">
               {startbtn && (
@@ -130,11 +121,10 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   class="btn btn-primary  btn-block"
                   onClick={toggle2}
                 >
-                  Submit 
+                  Submit
                 </Link>
               )}
             </div>
-
           </form>
 
           <Modal isOpen={modal} toggle={toggle}>

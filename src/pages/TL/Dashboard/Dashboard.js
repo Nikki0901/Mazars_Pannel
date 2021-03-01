@@ -19,9 +19,13 @@ function Dashboard() {
     getPendingforAcceptance();
   }, []);
 
+
+
+
+  
   const getPendingforAcceptance = () => {
     axios
-      .get(`${baseUrl}/get/tl/pending/tl/${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -30,13 +34,14 @@ function Dashboard() {
       });
   };
 
+  
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">
         <div class="col-md-12">
           <ul
             class="nav nav-pills mb-3"
-            style={{ justifyContent: "space-around" }}
+            style={{ justifyContent: "space-around"}}
             id="pills-tab"
             role="tablist"
           >

@@ -34,7 +34,7 @@ function Login(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/auth/taxleader`,
+      url: `${baseUrl}/tl/login`,
       data: formData,
     })
       .then(function (response) {
@@ -43,7 +43,7 @@ function Login(props) {
           alert.success("Login successfully !");
           localStorage.setItem(
             "tlkey",
-            JSON.stringify(response.data.userid)
+            JSON.stringify(response.data["user id"])
           );
           props.history.push("/teamleader/dashboard");  
         } else

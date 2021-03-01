@@ -39,7 +39,7 @@ function AddNew() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Add/TaxProf`,
+      url: `${baseUrl}/tp/AddTaxProfessional`,
       data: formData,
     })
       .then(function (response) {

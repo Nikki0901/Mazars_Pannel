@@ -23,7 +23,7 @@ function QueriesTab() {
     useEffect(() => {    
       const getQueriesData = () => {
         axios
-          .get(`${baseUrl}/get/customer/incomplete/deshboard/user/${JSON.parse(
+          .get(`${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
             userId
           )}`)
           .then((res) => {
@@ -75,7 +75,7 @@ function QueriesTab() {
                       <td>{ChangeFormateDate(p.created)}</td>
                       <td>
                         <Link to={`/customer/my-assingment/${p.id}`}>
-                          {p.AssignNo}
+                          {p.assign_no}
                         </Link></td>
                       <td>{p.parent_id}</td>
                       <td>{p.cat_name}</td>                   

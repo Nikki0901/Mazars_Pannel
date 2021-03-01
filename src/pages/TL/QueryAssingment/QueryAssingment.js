@@ -24,7 +24,6 @@ function QueryAssingment() {
   const { queryNo, timelines } = queryData;
 
   useEffect(() => {
-
     getQuery();
     getTaxProfession();
     getQueryData();
@@ -32,36 +31,39 @@ function QueryAssingment() {
 
   // http://65.1.26.136:7014/mazarrapi/v1/chec/tl/query/AssignNo/1
 
-  const getQuery = () => {
-    axios.get(`${baseUrl}/chec/tl/query/AssignNo/${id}`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setQuery(false);
-        setHideQuery(res.data.data);
-      }
-    });
-  };
+  
 
   const getQueryData = () => {
-    axios.get(`${baseUrl}/get/by/AssignNo/${id}`).then((res) => {
+    axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setQuerData({
-          queryNo: res.data.result[0].AssignNo,
-          timelines: res.data.result[0].timelines,
+          queryNo: res.data.result[0].assign_no,
+          timelines: res.data.result[0].Timelines,
         });
       }
     });
   };
 
   const getTaxProfession = () => {
-    axios.get(`${baseUrl}/Get/teamleaderortaxprofession//tp`).then((res) => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setTaxProfessionDisplay(res.data.result);
       }
     });
   };
+
+  const getQuery = () => {
+    axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${id}`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setQuery(false);
+        setHideQuery(res.data.data);
+      }
+    });
+};
+
 
   const userId = window.localStorage.getItem("tlkey");
   const tpkey = window.localStorage.getItem("tpkey");
@@ -89,7 +91,7 @@ function QueryAssingment() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Add/QueryAssignment`,
+      url: `${baseUrl}/tl/AddQueryAssignment`,
       data: formData,
     })
       .then(function (response) {

@@ -17,13 +17,14 @@ export default function ProposalComponent() {
   const [incompleteData, setInCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tlkey");
 
-  const [assing, setAssing] = useState(null);
+  const [id, setId] = useState(null);
+  const [assingNo, setAssingNo] = useState('');
   const [custname, setCustName] = useState();
 
   useEffect(() => {
-    const getCompleteAssingment = () => {
+    const getQuery = () => {
       axios
-        .get(`${baseUrl}/get/tp/tl/incomplete/id/${JSON.parse(userid)}/type/tl`)
+        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -32,32 +33,47 @@ export default function ProposalComponent() {
         });
     };
 
-    getCompleteAssingment();
+    getQuery();
   }, []);
+
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get(`${baseUrl}/get/allname/${assing}`);
-      // console.log("res", res);
-      {
-        Object.entries(res.data.result).map(([key, value]) => {
-          console.log("val", value.name);
-          setCustName(value.name);
-        });
-      }
+      
+      const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
+      console.log("res", res);
+      setCustName(res.data.name);
+      // {
+      //   Object.entries(res.data.result).map(([key, value]) => {
+      //     console.log("val", value.name);
+      //     setCustName(value.name);
+      //   });
+      // }
     };
 
     getUser();
-  }, [assing]);
+  }, [id]);
 
+
+  const getID = (key) =>{
+    setId(key)
+  
+    incompleteData.filter((data)=>{
+      if(data.id == key){
+        console.log('assingNo', data.assign_no);
+        setAssingNo(data.assign_no)
+      }
+    })
+  }
+
+  
   const onSubmit = (value) => {
     console.log(value);
 
     var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-
     let formData = new FormData();
 
-    formData.append("assignno", value.p_assingment);
+    formData.append("assign_no", assingNo);
     formData.append("name", value.p_name);
     formData.append("type", "tl");
     formData.append("id", JSON.parse(userid));
@@ -65,18 +81,18 @@ export default function ProposalComponent() {
     formData.append("payable", value.p_payable);
     formData.append("misc1", value.misc_1);
     formData.append("misc2", value.misc_2);
-    formData.append("payabledate", value.p_date);
+    formData.append("payable_date", value.p_date);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/post/uploadproposal/tl/tp`,
+      url: `${baseUrl}/tl/uploadProposal`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success("proposal successfully added !");
+          alert.success("proposal successfully send !");
         }
       })
       .catch((error) => {
@@ -99,12 +115,13 @@ export default function ProposalComponent() {
                     class="form-control"
                     ref={register}
                     name="p_assingment"
-                    onChange={(e) => setAssing(e.target.value)}
+                    // onChange={(e) => setAssing(e.target.value)}
+                    onChange={(e) =>getID(e.target.value)} 
                   >
                     <option value="">--select--</option>
                     {incompleteData.map((p, index) => (
-                      <option key={index} value={p.AssignNo}>
-                        {p.AssignNo}
+                      <option key={index} value={p.id}>
+                        {p.assign_no}
                       </option>
                     ))}
                   </select>

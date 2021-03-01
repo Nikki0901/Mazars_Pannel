@@ -58,6 +58,7 @@ import TlAddTeamProf from './pages/TL/AddTeamProf/AddTeamProf'
 import TlProposal from './pages/TL/Proposal/Proposal'
 import TlQueriesRecevied from './pages/TL/QueriesRecevied/QueriesRecevied'
 import TlQueryAssingment from './pages/TL/QueryAssingment/QueryAssingment'
+import TlEditTP from './pages/TL/EditTP/EditTP'
 
 
 
@@ -144,7 +145,7 @@ function App() {
         <Route exact path="/teamleader/addassingment/:id" component={TlAddAssingmentStages} />
         <Route exact path="/teamleader/queries/:id" component={TlQueriesRecevied} />
         <Route exact path="/teamleader/queryassing/:id" component={TlQueryAssingment} />
-        
+        <Route exact path="/teamleader/edittp/:id" component={TlEditTP} />
 
 
 

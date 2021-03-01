@@ -45,7 +45,7 @@ function AddFreshAssingment(props) {
   
     axios({
       method: "POST",
-      url: `${baseUrl}/post/user/question`,
+      url: `${baseUrl}/customers/PostQuestion`,
       data: formData,
     })
       .then(function (response) {

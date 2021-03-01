@@ -21,14 +21,15 @@ function MyAssingment() {
 
  
   const { id } = useParams();
+  const userId = window.localStorage.getItem("userid");
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/get/by/AssignNo/${id}`).then((res) => {
+      axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
-          setAssingmentNo(res.data.result[0].AssignNo);
+          setAssingmentNo(res.data.result[0].assign_no);
         }
       });
     };
@@ -36,11 +37,10 @@ function MyAssingment() {
     getSubmittedAssingment();
   }, [assingNo]);
 
-  
-  const userId = window.localStorage.getItem("userid");
-  
+
+
   const getQuery = () => {
-    axios.get(`${baseUrl}/get/additionalqueries/${assingNo}`).then((res) => {
+    axios.get(`${baseUrl}/tl/GetAdditionalQueries?assignno=${assingNo}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setDisplayQuery(res.data.result);
@@ -49,18 +49,18 @@ function MyAssingment() {
   };
 
 
-  
+
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("assignNo", assingNo);
-    formData.append("addqueri", value.p_addqueri);
+    formData.append("assign_no", assingNo);
+    formData.append("query", value.p_addqueri);
     formData.append("upload", value.p_upload[0]);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/post/additionalqueries`,
+      url: `${baseUrl}/customers/PostAdditionalQuery`,
       data: formData,
     })
       .then(function (response) {
@@ -107,7 +107,7 @@ function MyAssingment() {
                       aria-expanded="true"
                       aria-controls="collapseOne"
                     >
-                      {p.AssignNo}
+                      {p.assign_no}
                     </button>
                     <div style={{display:"flex" , justifyContent:"space-evenly"}}>
                       <p class="m-0" style={{ fontSize: "15px" }}>
@@ -152,35 +152,35 @@ function MyAssingment() {
                       <tbody>
                         <tr>
                           <th scope="row">Facts of the case</th>
-                          <td>{p.Fact}</td>
+                          <td>{p.fact_case}</td>
                         </tr>
                         <tr>
                           <th scope="row">specific questions</th>
-                          <td colspan="1">{p.specificquery}</td>
+                          <td colspan="1">{p.specific_query}</td>
                         </tr>
 
                         <tr>
                           <th scope="row">
                             Purpose for which Opinion is sought
                           </th>
-                          <td colspan="1">{p.Purpose}</td>
+                          <td colspan="1">{p.purpose_opinion}</td>
                         </tr>                    
                         <tr>
                           <th scope="row">
                             Format in which Opinion is required
                           </th>
-                          <td colspan="1">{p.Format}</td>
+                          <td colspan="1">{p.format_opinion}</td>
                         </tr>
                         <tr>
                           <th scope="row">
                             Timelines within which Opinion is Required
                           </th>
-                          <td colspan="1">{p.timelines}</td>
+                          <td colspan="1">{p.Timelines}</td>
                         </tr>
                         <tr>
                           <th scope="row">Documents</th>
                           <td>
-                            {p.Upload}
+                            {p.upload_doc}
                           </td>
                         </tr>
                       </tbody>
@@ -199,9 +199,9 @@ function MyAssingment() {
                       {displayQuery.map((p, i) => (
                         <tbody>
                           <tr key={i}>
-                            <td>{p.Additional}</td>
+                            <td>{p.additional_queries}</td>
                             <td>{p.created}</td>
-                            <td>{p.upload}</td>
+                            <td>{p.upload_doc}</td>
                           </tr>
                         </tbody>
                       ))}

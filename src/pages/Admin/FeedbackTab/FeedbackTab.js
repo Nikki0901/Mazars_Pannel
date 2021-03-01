@@ -20,7 +20,7 @@ function FeedbackTab() {
 
     useEffect(() => {
       const getFeedback = () => {
-        axios.get(`${baseUrl}/Get/user/feedback`).then((res) => {
+        axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
           console.log(res);
           if (res.data.code === 1) {
             setFeedBackData(res.data.result);
@@ -56,8 +56,8 @@ function FeedbackTab() {
                   feedbackData.map((p, i) => (
                     <tr key={i}>
                       <td>{i+1}</td>                 
-                      <td>{p.assignmentnumber}</td>
-                      <td>{p.feedbacks}</td>                   
+                      <td>{p.assign_no}</td>
+                      <td>{p.feedback}</td>                   
                                         
                     </tr>
                   ))

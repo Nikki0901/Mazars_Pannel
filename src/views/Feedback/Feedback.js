@@ -7,6 +7,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 
+
 // const Schema = yup.object().shape({
 //   p_feedback: yup.string().required("required feedback"),
 //   p_assignment: yup.string().required("required assignment"),
@@ -24,7 +25,7 @@ function Feedback() {
 
   useEffect(() => {
     const getAssingment = () => {
-      axios.get(`${baseUrl}/get/allassignNo/${JSON.parse(userId)}`).then((res) => {
+      axios.get(`${baseUrl}/customers/getAssignedAssignments?user=${JSON.parse(userId)}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setAssingment(res.data.result);
@@ -39,12 +40,13 @@ function Feedback() {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("AssignNo", value.p_assignment);
+    formData.append("assign_no", value.p_assignment);
     formData.append("feedback", value.p_feedback);
+    formData.append("user_id", JSON.parse(userId));
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Post/user/feedback`,
+      url: `${baseUrl}/customers/PostUserFeedback`,
       data: formData,
     })
       .then(function (response) {
@@ -87,8 +89,8 @@ function Feedback() {
                       <option value="">--select--</option>
 
                       {assignment.map((p, i) => (
-                        <option key={i} value={p.Assign}>
-                          {p.Assign}
+                        <option key={i} value={p.assign_no}>
+                          {p.assign_no}
                         </option>
                       ))}
                     </select>

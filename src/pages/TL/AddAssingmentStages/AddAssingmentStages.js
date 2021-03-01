@@ -29,7 +29,7 @@ function AddAssingmentStages() {
  
     axios({
       method: "POST",
-      url: `${baseUrl}/post/AssignmentStages`,
+      url: `${baseUrl}/tl/postAssignmentStages`,
       data: formData,
     })
       .then(function (response) {

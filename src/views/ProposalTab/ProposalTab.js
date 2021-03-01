@@ -13,6 +13,7 @@ import {
   Table,
 } from "reactstrap";
 
+
 function ProposalTab() {
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -20,7 +21,7 @@ function ProposalTab() {
   useEffect(() => {
     const getProposalData = () => {
       axios
-        .get(`${baseUrl}/get/customer/showproposal/${JSON.parse(userId)}`)
+        .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
         .then((res) => {
           console.log(res);
           console.log(res.data);
@@ -68,12 +69,12 @@ function ProposalTab() {
                 <tbody>
                   <tr key={i}>
                     <td>{p.Created}</td>
-                    <td>{p.Assign}</td>
-                    <td>{p.cat_name}</td>
+                    <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
                     <td></td>
-                    <td>{p.DateofProposal}</td>
-                    <td>{p.ProposedAmount}</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

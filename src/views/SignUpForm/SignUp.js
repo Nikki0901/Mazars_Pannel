@@ -33,24 +33,31 @@ function SignUp(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [states, setStates] = useState([]);
   const [city, setCity] = useState([]);
-  const [store, setStore] = useState(1);
+  const [name, setName] = useState('');
 
-  
+  const [store, setStore] = useState(0);
+
   useEffect(() => {
     const getStates = () => {
-      axios.get(`${baseUrl}/auth/all/states`).then((res) => {
+      // console.log(`${baseUrl}/customers/getState`)
+      axios.get(`${baseUrl}/customers/getState`).then((res) => {
+        
         console.log(res);
         if (res.data.code === 1) {
           setStates(res.data.result);
         }
       });
     };
+    getStates();
+  }, []);
 
+  
+  useEffect(() => {
     const getCity = () => {
-      axios.get(`${baseUrl}/auth/all/city/${store}`).then((res) => {
+      axios.get(`${baseUrl}/customers/getCity?state_id=${store}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setCity(res.data.result);
@@ -59,45 +66,59 @@ function SignUp(props) {
     };
 
     getCity();
-    getStates();
   }, [store]);
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    console.log("value :", value.p_state);
 
-    // let formData = new FormData();
-    // formData.append("name", value.p_name);
-    // formData.append("email", value.p_email);
-    // formData.append("phone", value.p_phone);
-    // formData.append("occupation", value.p_profession);
-    // formData.append("state", value.p_state);
-    // formData.append("city", value.p_city);
-    // formData.append("password", value.p_password);
+    let formData = new FormData();
+    formData.append("name", value.p_name);
+    formData.append("email", value.p_email);
+    formData.append("phone", value.p_phone);
+    formData.append("occupation", value.p_profession);
+    formData.append("state", name);
+    formData.append("city", value.p_city);
+    formData.append("password", value.p_password);
 
-    // axios({
-    //   method: "POST",
-    //   url: `${baseUrl}/auth/signup`,
-    //   data: formData,
-    // })
-    //   .then(function (response) {
-    //     console.log("res-", response);
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/signup`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
 
-    //     if (response.data.code === 1) {
-    //       alert.success("Login successfully !");
-    //       localStorage.setItem("uid", JSON.stringify(response.data.userid));
-    //       localStorage.setItem("userid", JSON.stringify(response.data.id));
-    //       localStorage.setItem("name", JSON.stringify(response.data.name));
-    //       props.history.push("/customer/questionnaire-page");
-    //       reset();
-    //     } else if (response.data.code === 0) {
-    //       console.log(response.data.result);
-    //       setError(response.data.message);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("erroror - ", error);
-    //   });
+        if (response.data.code === 1) {
+          alert.success("signup successfully !");
+          localStorage.setItem("userid", JSON.stringify(response.data.id));
+          localStorage.setItem("userNameId", JSON.stringify(response.data.user_id));
+          localStorage.setItem("name", JSON.stringify(response.data.name));
+          props.history.push("/customer/questionnaire-page");
+          reset();
+        } else if (response.data.code === 0) {
+          console.log(response.data.result);
+          // setError(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
   };
+
+
+const getID = (key) =>{
+  setStore(key)
+
+  states.filter((data)=>{
+    if(data.Id == key){
+      console.log('Name', data.name);
+      setName(data.name)
+      // document.getElementById('state').value=data.Name;
+    }
+  })
+}
 
   return (
     <>
@@ -171,16 +192,17 @@ function SignUp(props) {
                 <div className="mb-3">
                   <label className="form-label">State</label>
                   <select
+                    id="state"
                     name="p_state"
                     className="form-control"
                     ref={register}
                     // onClick={(e) => storeValue(e.target.value)}
-                    onChange={(e) => setStore(e.target.value)}
+                    onChange={(e) =>getID(e.target.value)}                         
                   >
                     <option value="">--select--</option>
                     {states.map((p) => (
-                      <option key={p.Id} value={p.Id}>
-                        {p.Name}
+                      <option key={p.Id} value={p.id}>
+                        {p.name}
                       </option>
                     ))}
                   </select>
@@ -190,15 +212,11 @@ function SignUp(props) {
                 <div className="mb-3">
                   <label className="form-label">City</label>
 
-                  <select
-                   className="form-control" 
-                  name="p_city" 
-                  ref={register}
-                  >
+                  <select className="form-control" name="p_city" ref={register}>
                     <option value="">--select--</option>
                     {city.map((p, index) => (
-                      <option key={index} value={p.City}>
-                        {p.City}
+                      <option key={index} value={p.city}>
+                        {p.city}
                       </option>
                     ))}
                   </select>

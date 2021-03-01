@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { useParams } from "react-router-dom";
+
 
 function EditTP() {
   const { id } = useParams();
@@ -23,13 +22,13 @@ function EditTP() {
 
   useEffect(() => {
     const getTeamLeader = () => {
-      axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
+      axios.get(`${baseUrl}/Get/teamleaderortaxprofession/${id}/tp`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setUser({
             name: res.data.result[0].name,
             email: res.data.result[0].email,
-            phone: res.data.result[0].phone,
+            phone: res.data.result[0].Phone,
           });
         }
       });
@@ -64,7 +63,7 @@ function EditTP() {
   };
 
   return (
-    <Layout adminDashboard="adminDashboard" adminUserId={userid}>
+    <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">
         <div class="col-md-12">
           <div class="text-center">

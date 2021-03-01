@@ -15,7 +15,7 @@ function Dashboard() {
   useEffect(() => {
     const getNewQueries = () => {
       axios
-        .get(`${baseUrl}/get/tp/pending/tp/${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tp/getassignedques?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -26,7 +26,7 @@ function Dashboard() {
 
     const getInCompleteAssingment = () => {
       axios
-        .get(`${baseUrl}/get/tp/tl/incomplete/id/${JSON.parse(userid)}/type/tp`)
+        .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -37,7 +37,7 @@ function Dashboard() {
 
     const getCompleteAssingment = () => {
       axios
-        .get(`${baseUrl}/get/tp/tl/complete/id/${JSON.parse(userid)}/type/tp`)
+        .get(`${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -50,6 +50,11 @@ function Dashboard() {
     getInCompleteAssingment();
     getCompleteAssingment();
   }, []);
+
+  // change date format
+  function ChangeFormateDate(oldDate) {
+    return oldDate.toString().split("-").reverse().join("-");
+  }
 
   return (
     <Layout TPDashboard="TPDashboard" TPuserId={userid}>
@@ -123,13 +128,13 @@ function Dashboard() {
                     <tbody>
                       <tr>
                         <th scope="row">
-                          <Link to={`/taxprofessional/queries/${p.assignid}`}>
-                            {p.assignno}
+                          <Link to={`/taxprofessional/queries/${p.id}`}>
+                            {p.assign_no}
                           </Link>
                         </th>
                         <td>{p.name}</td>
-                        <td>{p.factcase}</td>
-                        <td>{p.expecteddelivery}</td>
+                        <td>{p.fact_case}</td>
+                        <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                         <td></td>
                       </tr>
                       <tr>
@@ -179,10 +184,10 @@ function Dashboard() {
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">{p.AssignNo}</th>
+                        <th scope="row">{p.assign_no}</th>
                         <td>{p.name}</td>
-                        <td>{p.Fact}</td>
-                        <td>{p.Expect}</td>
+                        <td>{p.fact_case}</td>
+                        <td>{p.Exp_Delivery_Date}</td>
                         <td></td>
                         <td></td>
                       </tr>

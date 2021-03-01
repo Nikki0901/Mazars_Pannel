@@ -12,22 +12,30 @@ import {
   Table,
 } from "reactstrap";
 
-function AllQueriesData() {
+function AllQueriesData({CountAllQuery}) {
   const [allQueriesData, setAllQueriesData] = useState([]);
+
+
 
   useEffect(() => {
     const getAllQueriesData = () => {
-      axios.get(`${baseUrl}/get/all/query`).then((res) => {
+      axios.get(`${baseUrl}/admin/getAllQueries`).then((res) => {
         console.log(res);
-        console.log(res.data.result.length);
         if (res.data.code === 1) {
           setAllQueriesData(res.data.result);
+          CountAllQuery(res.data.result.length)
         }
       });
     };
 
     getAllQueriesData();
   }, []);
+
+  // change date format
+  function ChangeFormateDate(oldDate) {
+    return oldDate.toString().split("-").reverse().join("-");
+  }
+  
   return (
     <>
       <Card>
@@ -49,11 +57,11 @@ function AllQueriesData() {
               allQueriesData.map((p, i) => (
                 <tr>
                   <td>{i + 1}</td>
-                  <td>{p.created}</td>
+                  <td>{ChangeFormateDate(p.created)}</td>
                   <td>{p.parent_id} </td>
                   <td>{p.cat_name}</td>
                   <th scope="row">
-                    <Link to={`/admin/queries/${p.id}`}>{p.AssignNo}</Link>
+                    <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
                   </th>
                 </tr>
               ))

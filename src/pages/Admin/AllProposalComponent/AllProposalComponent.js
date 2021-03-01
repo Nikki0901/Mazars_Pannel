@@ -16,7 +16,7 @@ function AllProposalComponent() {
 
   useEffect(() => {
     const getProposalData = () => {
-      axios.get(`${baseUrl}/get/admin/showproposal`).then((res) => {
+      axios.get(`${baseUrl}/admin/getProposals`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
@@ -56,10 +56,10 @@ function AllProposalComponent() {
                 proposalDisplay.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.Created)}</td>
+                    <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.Assign}</td>
+                    <td>{p.assign_no}</td>
                     <td>{p.DateofProposal}</td>
                     <td>{p.ProposedAmount}</td>
                     <td></td>

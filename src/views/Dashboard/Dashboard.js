@@ -19,7 +19,7 @@ function Dashboard() {
     const getInCompleteAssingment = () => {
       axios
         .get(
-          `${baseUrl}/get/customer/incomplete/deshboard/user/${JSON.parse(
+          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
             userId
           )}`
         )
@@ -37,12 +37,13 @@ function Dashboard() {
 
     const getCompleteAssingment = () => {
       axios
-        .get(`${baseUrl}/get/customer/complete/deshboard/user/${userId}`)
+        .get(`${baseUrl}/customers/completeAssignments?user=${JSON.parse(
+          userId
+        )}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-
-            // setCompleteData(res.data.result);
+            setCompleteData(res.data.result);
           }
         });
     };
@@ -131,17 +132,15 @@ function Dashboard() {
                   <tbody>
                     <tr>
                       <td>
-                      
-                        {ChangeFormateDate(p.created)}
+                      {ChangeFormateDate(p.created)}
                         </td>
                       <th scope="row">
                         <Link to={`/customer/my-assingment/${p.id}`}>
-                          {p.AssignNo}
+                          {p.assign_no}
                         </Link>
                       </th>
-                      <td>{p.Fact}</td>
-                      <td></td>
-                      <td></td>
+                      <td>{p.parent_id}</td>
+                      <td>{p.cat_name}</td>
                       <td>
                         <div class="text-center" style={{ color: "blue" }}>
                           <p>{/* <i class="fa fa-credit-card"></i> */}</p>
@@ -185,7 +184,7 @@ function Dashboard() {
             aria-labelledby="pills-Assignments-tab"
           >
             <div>
-              <table class="table table-bordered">
+              {/* <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th scope="col">Assignment No.</th>
@@ -194,33 +193,20 @@ function Dashboard() {
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">171700-21783417</th>
-                    <td>Mukesh kumar</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"></th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
+                {
+                  completeData.map((p,i) => {
+                    <tbody>
+                    <tr>
+                      <th scope="row">{p.assign_no}</th>
+                      <td>Mukesh kumar</td>
+                      <td></td>
+                      <td></td>
+                    </tr>               
+                  </tbody>
+                  })
+                }
+               
+              </table> */}
             </div>
           </div>
         </div>
@@ -232,127 +218,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-// <div class="row mt-3">
-// <div class="col-md-12">
-//   <ul
-//     class="nav nav-pills mb-3"
-//     style={{ justifyContent: "space-around" }}
-//     id="pills-tab"
-//     role="tablist"
-//   >
-//     <li class="nav-item" role="presentation">
-//       <a
-//         class="nav-link text-white"
-//         onClick={() => toggleHandler("tab1")}
-//       >
-//         Incomplete
-//       </a>
-//     </li>
-//     <li class="nav-item" role="presentation">
-//       <a
-//         class="nav-link text-white"
-//         onClick={() => toggleHandler("tab2")}
-//       >
-//         Complete
-//       </a>
-//     </li>
-//   </ul>
-
-//   <div class="tab-content" id="pills-tabContent">
-//     {
-//     toggle ?
-// complete.map((p, i) => (
-//   <div>
-//     <table class="table table-bordered">
-//       <thead>
-//         <tr>
-//           <th scope="col">Assignment #</th>
-//           <th scope="col">Delivery Date</th>
-//           <th scope="col">Assignment Stage</th>
-//           <th scope="col">Status</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         <tr>
-//           <th scope="row">
-//             <p>{p.assign}</p>
-//           </th>
-//           <td>{p.delivery}</td>
-//           <td>Client discussion</td>
-//           <td class="bg-success text-white">{p.status}</td>
-//         </tr>
-//       </tbody>
-//     </table>
-//   </div>
-// ))
-
-//      :
-
-// submitData.map((p, i) => (
-//   <div>
-//     <table class="table table-bordered">
-//       <thead>
-//         <tr>
-//           <th scope="col">Assignment #</th>
-//           <th scope="col">Facts of the Case</th>
-//           <th scope="col">Exp. Delivery Date</th>
-//           <th scope="col">Assignment Stage</th>
-//           <th scope="col">Status</th>
-//           <th scope="col">Payment</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         <tr>
-//           <th scope="row">
-//           <Link to="/my-assingment">{p.id}</Link>
-//           </th>
-//           <td>{p.Fact}</td>
-//           <td>{p.exp}</td>
-//           <td>Client discussion</td>
-//           <td class="bg-success text-white">Complete</td>
-//           <td>
-//             <div class="text-center">
-//               <a href="payment.html">
-//                 <i class="fa fa-credit-card"></i>
-//               </a>
-//             </div>
-//           </td>
-//         </tr>
-//         <tr>
-//           <th scope="row"></th>
-//           <td></td>
-//           <td></td>
-//           <td>Draft report</td>
-//           <td class="bg-danger text-white">Inprogress</td>
-//         </tr>
-//         <tr>
-//           <th scope="row"></th>
-//           <td></td>
-//           <td></td>
-//           <td>Final Discussion</td>
-//           <td class="bg-danger text-white">Inprogress</td>
-//         </tr>
-//         <tr>
-//           <th scope="row"></th>
-//           <td></td>
-//           <td></td>
-//           <td>Delivery of report</td>
-//           <td class="bg-success text-white">Complete</td>
-//         </tr>
-//       </tbody>
-//     </table>
-//   </div>
-// ))
-// }
-//   </div>
-// </div>
-// </div>
-
-// const toggleHandler = (key) => {
-//   if (key === "tab1") {
-//     setToggle(false);
-//   } else if (key === "tab2") {
-//     setToggle(true);
-//   }
-// };
