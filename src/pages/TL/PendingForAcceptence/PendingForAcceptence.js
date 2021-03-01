@@ -17,8 +17,7 @@ import {
 function PendingForAcceptence({ p, getPendingforAcceptance }) {
   const alert = useAlert();
 
-  // const [display, setDisplay] = useState("1");
-  // const [accept, setAccept] = useState("0");
+
   const userid = window.localStorage.getItem("tlkey");
 
 
