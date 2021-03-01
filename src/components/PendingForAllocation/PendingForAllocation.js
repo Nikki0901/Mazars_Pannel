@@ -61,7 +61,9 @@ function PendingAllocation({CountPendingAllocation}) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          setPendingData(res.data.result);
+          if (res.data.result) {
+            setPendingData(res.data.result);
+          }
         }
       });
   };
@@ -113,8 +115,6 @@ function PendingAllocation({CountPendingAllocation}) {
 
                 <OptGroup label="Indirect Tax">
                   <Option value="9" label="Compilance">
-
-
 
                     <div className="demo-option-label-item">Compliance</div>
                   </Option>

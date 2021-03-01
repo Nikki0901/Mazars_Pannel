@@ -38,7 +38,7 @@ function TaxProfessionalsTab() {
   const del = (id) => {
     console.log("del", id);
     axios
-      .get(`${baseUrl}/delete/TaxLead/${id}`)
+      .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
       .then(function (response) {
         console.log("delete-", response);
         alert.success("successfully deleted ");

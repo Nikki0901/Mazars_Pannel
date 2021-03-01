@@ -16,11 +16,7 @@ import {
 
 function PendingForAcceptence({ p, getPendingforAcceptance }) {
   const alert = useAlert();
-
-
   const userid = window.localStorage.getItem("tlkey");
-
-
 
   const acceptHandler = (key) => {
     console.log("acceptHandler", key);
