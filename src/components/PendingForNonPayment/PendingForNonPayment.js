@@ -17,7 +17,7 @@ function PendingForNonPayment() {
   useEffect(() => {
     const getPendingForNonPayment = () => {
       axios
-        .get(`${baseUrl}/get/admin/showproposal`)
+        .get(`${baseUrl}/admin/getProposals`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {

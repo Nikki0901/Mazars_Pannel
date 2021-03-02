@@ -22,7 +22,7 @@ function QueriesTab() {
 
   const [allQueriesCount, setAllQueriesCount] = useState('');
   const [pendingAllocationCount, setPendingAllocationCount] = useState('');
-  const [pendingProposalCount, setPendingProposalCount] = useState('');
+
 
 
   const CountAllQuery = (data) => {
@@ -33,10 +33,7 @@ function QueriesTab() {
     setPendingAllocationCount(data)
   }
 
-  const CountPendingProposal = (data) => {
-    setPendingProposalCount(data)
-  }
-
+ 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <div class="row mt-3">
@@ -82,7 +79,7 @@ function QueriesTab() {
                   </a>
                 </li>
 
-                <li class="nav-item" role="presentation">
+                {/* <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
                     id="pills-b-tab"
@@ -94,7 +91,7 @@ function QueriesTab() {
                   >
                     Pending for Proposal ({pendingProposalCount})
                   </a>
-                </li>
+                </li> */}
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -130,14 +127,14 @@ function QueriesTab() {
                   <PendingForAllocation CountPendingAllocation={CountPendingAllocation} />
                 </div>
 
-                <div
+                {/* <div
                   class="tab-pane fade"
                   id="b"
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
                   <PendingForProposals CountPendingProposal={CountPendingProposal}/>
-                </div>
+                </div> */}
 
                 <div
                   class="tab-pane fade"

@@ -68,13 +68,13 @@ function ProposalTab() {
               proposalDisplay.map((p, i) => (
                 <tbody>
                   <tr key={i}>
-                    <td>{p.Created}</td>
+                    <td>{p.created}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td></td>                  
+                    <td>{p.DateofProposal}</td>
+                    <td>{p.ProposedAmount}</td>
                     <td></td>
                     <td></td>
                     <td></td>

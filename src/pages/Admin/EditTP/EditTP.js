@@ -49,7 +49,7 @@ function EditTP() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/update/TaxLead/tp`,
+      url: `${baseUrl}/tp/updateTP`,
       data: formData,
     })
       .then(function (response) {

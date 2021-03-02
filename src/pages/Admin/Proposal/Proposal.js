@@ -4,12 +4,13 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 
 import AllProposalComponent from "../AllProposalComponent/AllProposalComponent";
-import PendingPropoal from "../PendingProposal/PendingPropoal";
+import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
 
 function Proposal() {
   const [proposalDisplay, setProposalDisplay] = useState([]);
+  const [pendingProposalCount, setPendingProposalCount] = useState('');
 
   const userid = window.localStorage.getItem("adminkey");
   useEffect(() => {
@@ -23,6 +24,12 @@ function Proposal() {
     };
     getProposalData();
   }, []);
+
+
+  const CountPendingProposal = (data) => {
+    setPendingProposalCount(data)
+  }
+
 
   // change date format
   function ChangeFormateDate(oldDate) {
@@ -70,7 +77,7 @@ function Proposal() {
                     aria-controls="pills-a"
                     aria-selected="false"
                   >
-                    Pending Proposal
+                    Pending For Proposal ({pendingProposalCount})
                   </a>
                 </li>
 
@@ -119,7 +126,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingPropoal />
+                  <PendingForProposals  CountPendingProposal={CountPendingProposal}/>
                 </div>
 
                 <div

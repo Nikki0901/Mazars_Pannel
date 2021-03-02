@@ -35,7 +35,7 @@ function PendingAllocation({CountPendingAllocation}) {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
-        CountPendingAllocation(res.data.result.length)
+        // CountPendingAllocation(res.data.result.length)
       }
     });
   };
@@ -68,7 +68,7 @@ function PendingAllocation({CountPendingAllocation}) {
       });
   };
 
-  
+
   //change date format
   function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");

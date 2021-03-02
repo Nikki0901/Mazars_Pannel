@@ -15,24 +15,25 @@ function QueryAssingment() {
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [hideQuery, setHideQuery] = useState({});
   const [query, setQuery] = useState(true);
+
   const [queryData , setQuerData] = useState({
     queryNo: "",
     timelines: "",
+    custId: "",
   })
 
 
-  const { queryNo, timelines } = queryData;
+  const { queryNo, timelines , custId } = queryData;
+  const userId = window.localStorage.getItem("tlkey");
+  const tpkey = window.localStorage.getItem("tpkey");
+
 
   useEffect(() => {
-    getQuery();
     getTaxProfession();
     getQueryData();
   }, []);
 
-  // http://65.1.26.136:7014/mazarrapi/v1/chec/tl/query/AssignNo/1
-
   
-
   const getQueryData = () => {
     axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
       console.log(res);
@@ -40,6 +41,7 @@ function QueryAssingment() {
         setQuerData({
           queryNo: res.data.result[0].assign_no,
           timelines: res.data.result[0].Timelines,
+          custId: res.data.result[0].customer_id,
         });
       }
     });
@@ -54,8 +56,13 @@ function QueryAssingment() {
     });
   };
 
+
+  useEffect(() => {
+    getQuery();
+  }, [queryNo]);
+
   const getQuery = () => {
-    axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${id}`).then((res) => {
+    axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${queryNo}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setQuery(false);
@@ -65,8 +72,7 @@ function QueryAssingment() {
 };
 
 
-  const userId = window.localStorage.getItem("tlkey");
-  const tpkey = window.localStorage.getItem("tpkey");
+
 
 
   const onSubmit = (value) => {
@@ -86,7 +92,7 @@ function QueryAssingment() {
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
-
+    formData.append("customer_id", custId);
 
 
     axios({
@@ -168,14 +174,14 @@ function QueryAssingment() {
                           <th scope="row">{queryNo}</th>
                       <td>
                         <select class="form-control w-75 p-0" disabled>
-                        <option>{hideQuery.taxprofname}</option>    
+                        {/* <option>{hideQuery.taxprofname}</option>     */}
                         </select>
                       </td>
                       <td>
                         <input
                           type="date"
                           id="date"
-                          value={hideQuery.dateassign}
+                          // value={hideQuery.dateassign}
                           disabled
                         />
                       </td>

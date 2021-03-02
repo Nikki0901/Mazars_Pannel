@@ -23,9 +23,10 @@ function QueryAssingment() {
   const [queryData , setQuerData] = useState({
     queryNo: "",
     timelines: "",
+    custId: "",
   })
 
-  const { queryNo, timelines } = queryData;
+  const { queryNo, timelines , custId } = queryData;
 
   useEffect(() => {
     getTaxLeader();
@@ -43,7 +44,6 @@ function QueryAssingment() {
   };
 
 
-
   const getQueryData = () => {
     axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
       console.log(res);
@@ -51,16 +51,17 @@ function QueryAssingment() {
         setQuerData({
           queryNo: res.data.result[0].assign_no,
           timelines: res.data.result[0].Timelines,
+          custId: res.data.result[0].customer_id,
         });
       }
     });
   };
 
-
   useEffect(() => {
     getQuery();
   }, [queryNo]);
 
+  
   const getQuery = () => {
     axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${queryNo}`).then((res) => {
       console.log(res);
@@ -70,7 +71,6 @@ function QueryAssingment() {
       }
     });
   };
-
 
 
 
@@ -90,6 +90,7 @@ function QueryAssingment() {
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
+    formData.append("customer_id", custId);
 
     axios({
       method: "POST",
@@ -99,8 +100,7 @@ function QueryAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Query successfully assigned!");
-          // setQuery(false);
+          alert.success("Query successfully assigned!");     
           getQuery()
           reset();
         }

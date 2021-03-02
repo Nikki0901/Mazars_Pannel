@@ -20,6 +20,8 @@ export default function ProposalComponent() {
   const [id, setId] = useState(null);
   const [assingNo, setAssingNo] = useState('');
   const [custname, setCustName] = useState();
+  const [custId, setCustId] = useState('');
+
 
   useEffect(() => {
     const getQuery = () => {
@@ -37,12 +39,15 @@ export default function ProposalComponent() {
   }, []);
 
 
+
   useEffect(() => {
     const getUser = async () => {
       
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
       console.log("res", res);
       setCustName(res.data.name);
+      setCustId(res.data.id)
+      
       // {
       //   Object.entries(res.data.result).map(([key, value]) => {
       //     console.log("val", value.name);
@@ -66,6 +71,7 @@ export default function ProposalComponent() {
     })
   }
 
+  console.log(custId);
   
   const onSubmit = (value) => {
     console.log(value);
@@ -82,6 +88,7 @@ export default function ProposalComponent() {
     formData.append("misc1", value.misc_1);
     formData.append("misc2", value.misc_2);
     formData.append("payable_date", value.p_date);
+    formData.append("customer_id", custId);
 
     axios({
       method: "POST",
