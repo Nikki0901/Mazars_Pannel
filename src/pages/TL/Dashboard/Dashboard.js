@@ -20,9 +20,6 @@ function Dashboard() {
   }, []);
 
 
-
-
-  
   const getPendingforAcceptance = () => {
     axios
       .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
@@ -34,7 +31,7 @@ function Dashboard() {
       });
   };
 
-  
+ 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">

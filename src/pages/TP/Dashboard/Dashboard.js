@@ -4,6 +4,15 @@ import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+} from "reactstrap";
 
 function Dashboard() {
   const [newQueries, setNewQueries] = useState([]);
@@ -113,9 +122,9 @@ function Dashboard() {
               role="tabpanel"
               aria-labelledby="pills-profile-tab"
             >
-              {newQueries.map((p, i) => (
-                <div>
-                  <table class="table table-bordered">
+              <Card>
+                <CardBody>
+                  <Table responsive="sm" bordered>
                     <thead>
                       <tr>
                         <th scope="col">Query No .</th>
@@ -126,42 +135,29 @@ function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">
-                          <Link to={`/taxprofessional/queries/${p.id}`}>
-                            {p.assign_no}
-                          </Link>
-                        </th>
-                        <td>{p.name}</td>
-                        <td>{p.fact_case}</td>
-                        <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
+                      {newQueries.length > 0 ? (
+                        newQueries.map((p, i) => (
+                          <tr key={i}>
+                            <th scope="row">
+                              <Link to={`/taxprofessional/queries/${p.id}`}>
+                                {p.assign_no}
+                              </Link>
+                            </th>
+                            <td>{p.name}</td>
+                            <td>{p.fact_case}</td>
+                            <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
+                            <td></td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5">No Records</td>
+                        </tr>
+                      )}
                     </tbody>
-                  </table>
-                </div>
-              ))}
+                  </Table>
+                </CardBody>
+              </Card>
             </div>
             <div
               class="tab-pane fade"
@@ -169,9 +165,9 @@ function Dashboard() {
               role="tabpanel"
               aria-labelledby="pills-contact-tab"
             >
-              {incompleteData.map((p, i) => (
-                <div>
-                  <table class="table table-bordered">
+              <Card>
+                <CardBody>
+                  <Table responsive="sm" bordered>
                     <thead>
                       <tr>
                         <th scope="col">Query No .</th>
@@ -183,42 +179,26 @@ function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">{p.assign_no}</th>
-                        <td>{p.name}</td>
-                        <td>{p.fact_case}</td>
-                        <td>{p.Exp_Delivery_Date}</td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
+                      {incompleteData.length > 0 ? (
+                        incompleteData.map((p, i) => (
+                          <tr>
+                            <th scope="row">{p.assign_no}</th>
+                            <td>{p.name}</td>
+                            <td>{p.fact_case}</td>
+                            <td>{p.Exp_Delivery_Date}</td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6">No Records</td>
+                        </tr>
+                      )}
                     </tbody>
-                  </table>
-                </div>
-              ))}
+                  </Table>
+                </CardBody>
+              </Card>
             </div>
             <div
               class="tab-pane fade"

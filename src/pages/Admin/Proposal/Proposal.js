@@ -8,33 +8,16 @@ import PendingForProposals from "../../../components/PendingForProposals/Pending
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
 
+
 function Proposal() {
-  const [proposalDisplay, setProposalDisplay] = useState([]);
   const [pendingProposalCount, setPendingProposalCount] = useState('');
 
   const userid = window.localStorage.getItem("adminkey");
-  useEffect(() => {
-    const getProposalData = () => {
-      axios.get(`${baseUrl}/get/admin/showproposal`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setProposalDisplay(res.data.result);
-        }
-      });
-    };
-    getProposalData();
-  }, []);
-
-
+  
   const CountPendingProposal = (data) => {
     setPendingProposalCount(data)
   }
 
-
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>

@@ -7,14 +7,23 @@ import { useParams } from "react-router-dom";
 import { useAlert } from "react-alert";
 
 
+
 function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
   const { id } = useParams();
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
-  const [hideQuery, setHideQuery] = useState({});
+  const [hideQuery, setHideQuery] = useState({
+    name:"",
+    timeline:"",
+    date_allocation:"",
+    expdeliverydate:"",
+  });
+
   const [query, setQuery] = useState(true);
+  const userId = window.localStorage.getItem("tlkey");
+  const tpkey = window.localStorage.getItem("tpkey");
 
   const [queryData , setQuerData] = useState({
     queryNo: "",
@@ -24,16 +33,22 @@ function QueryAssingment() {
 
 
   const { queryNo, timelines , custId } = queryData;
-  const userId = window.localStorage.getItem("tlkey");
-  const tpkey = window.localStorage.getItem("tpkey");
-
 
   useEffect(() => {
     getTaxProfession();
     getQueryData();
   }, []);
 
-  
+
+  const getTaxProfession = () => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setTaxProfessionDisplay(res.data.result);
+      }
+    });
+  };
+
   const getQueryData = () => {
     axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
       console.log(res);
@@ -47,31 +62,28 @@ function QueryAssingment() {
     });
   };
 
-  const getTaxProfession = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTaxProfessionDisplay(res.data.result);
-      }
-    });
-  };
-
+ 
 
   useEffect(() => {
     getQuery();
   }, [queryNo]);
 
+
   const getQuery = () => {
-    axios.get(`${baseUrl}/tl/CheckIfAssigned?assignno=${queryNo}`).then((res) => {
+    axios.get(`${baseUrl}/tl/TlCheckIfAssigned?assignno=${queryNo}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setQuery(false);
-        setHideQuery(res.data.data);
+        // setHideQuery(res.data.meta);
+        setHideQuery({
+          name: res.data.meta[0].name,
+          timeline: res.data.meta[0].timeline,
+          date_allocation: res.data.meta[0].date_allocation,
+          expdeliverydate: res.data.meta[0].expdeliverydate,
+        });
       }
     });
 };
-
-
 
 
 
@@ -112,6 +124,9 @@ function QueryAssingment() {
         console.log("erroror - ", error);
       });
   };
+
+
+console.log(hideQuery)
 
   return (
     <Layout TLDashboard="TLDashboard">
@@ -174,22 +189,24 @@ function QueryAssingment() {
                           <th scope="row">{queryNo}</th>
                       <td>
                         <select class="form-control w-75 p-0" disabled>
-                        {/* <option>{hideQuery.taxprofname}</option>     */}
+                        <option>{hideQuery.name}</option>    
                         </select>
                       </td>
                       <td>
                         <input
                           type="date"
                           id="date"
-                          // value={hideQuery.dateassign}
+                          value={hideQuery.date_allocation}
                           disabled
                         />
                       </td>
                       <td>
-                        <input type="text" ref={register} name="p_timelines" disabled/>
+                        <input type="text" ref={register} name="p_timelines" 
+                        value={hideQuery.timeline} disabled/>
                       </td>
                       <td>
-                        <input type="date" ref={register} name="p_expdeldate" disabled/>
+                        <input type="date" ref={register} name="p_expdeldate"
+                        value={hideQuery.expdeliverydate} disabled/>
                       </td>
 
                       <td>

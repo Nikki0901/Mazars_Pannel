@@ -13,8 +13,14 @@ function QueryAssingment() {
   const { handleSubmit, register, errors, reset } = useForm();
   const { id } = useParams();
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
-  const [hideQuery, setHideQuery] = useState({});
   const [query, setQuery] = useState(true);
+
+    const [hideQuery, setHideQuery] = useState({
+    name:"",
+    timeline:"",
+    date_allocation:"",
+    expdeliverydate:"",
+  });
 
   
   const userId = window.localStorage.getItem("adminkey");
@@ -67,7 +73,12 @@ function QueryAssingment() {
       console.log(res);
       if (res.data.code === 1) {
         setQuery(false);
-        setHideQuery(res.data.data);
+        setHideQuery({
+          name: res.data.meta[0].name,
+          timeline: res.data.meta[0].timeline,
+          date_allocation: res.data.meta[0].date_allocation,
+          expdeliverydate: res.data.meta[0].expdeliverydate,
+        });
       }
     });
   };
@@ -174,22 +185,24 @@ function QueryAssingment() {
                       <th scope="row">{queryNo}</th>
                       <td>
                         <select class="form-control w-75 p-0" disabled>
-                          {/* <option>{hideQuery.teamleadername}</option>                    */}
+                        <option>{hideQuery.name}</option>    
                         </select>
                       </td>
                       <td>
                         <input
                           type="date"
                           id="date"
-                          // value={hideQuery.dateassign}
+                          value={hideQuery.date_allocation}
                           disabled
                         />
                       </td>
                       <td>
-                        <input type="text" ref={register} name="p_timelines" disabled/>
+                        <input type="text" ref={register} name="p_timelines"     
+                         value={hideQuery.timeline}disabled/>
                       </td>
                       <td>
-                        <input type="date" ref={register} name="p_expdeldate" disabled/>
+                        <input type="date" ref={register} name="p_expdeldate" 
+                           value={hideQuery.expdeliverydate} disabled/>
                       </td>
                       <td>
                         <button class="btn btn-success" disabled>

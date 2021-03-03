@@ -13,7 +13,6 @@ import {
   Table,
 } from "reactstrap";
 
-
 function ProposalTab() {
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -32,6 +31,35 @@ function ProposalTab() {
     };
     getProposalData();
   }, []);
+
+
+// accepted proposal
+const accepted = (id) => {
+  console.log("acc", id);
+  // axios
+  //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
+  //   .then(function (response) {
+  //     console.log("delete-", response);
+  //   })
+  //   .catch((error) => {
+  //     console.log("erroror - ", error);
+  //   });
+};
+
+
+// rejected proposal
+const rejected = (id) => {
+  console.log("rej", id);
+  // axios
+  //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
+  //   .then(function (response) {
+  //     console.log("delete-", response);
+  //   })
+  //   .catch((error) => {
+  //     console.log("erroror - ", error);
+  //   });
+};
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -72,7 +100,7 @@ function ProposalTab() {
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td></td>                  
+                    <td></td>
                     <td>{p.DateofProposal}</td>
                     <td>{p.ProposedAmount}</td>
                     <td></td>
@@ -82,10 +110,13 @@ function ProposalTab() {
                     <td></td>
                     <td></td>
                   </tr>
-
                   <tr>
-                    <td colSpan="3">Accept</td>
-                    <td colSpan="3">Reject</td>
+                    <td colSpan="3">
+                      <button class="btn btn-success mb-2"  onClick={() => accepted(p.id)}>Accept</button>
+                    </td>
+                    <td colSpan="3">
+                      <button class="btn btn-danger mb-2" onClick={() => rejected(p.id)}>Reject</button>
+                    </td>
                     <td colSpan="7"></td>
                   </tr>
                 </tbody>

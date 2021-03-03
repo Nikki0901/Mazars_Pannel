@@ -19,7 +19,7 @@ function MyAssingment() {
   const [addModal, setAddModal] = useState(false);
   const addHandler = () => setAddModal(!addModal);
 
- 
+
   const { id } = useParams();
   const userId = window.localStorage.getItem("userid");
 
@@ -114,7 +114,7 @@ function MyAssingment() {
                         Submitted on
                       </p>
                       <p class="m-0" style={{ fontSize: "15px" }}>
-                       : {p.date}
+                       : {p.created}
                       </p>
                     </div>
                     <div class="d-flex">

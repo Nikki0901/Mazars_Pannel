@@ -25,10 +25,10 @@ function Questionnaire(props) {
   const toggle = () => setModal(!modal);
 
 
-  // const { append, remove, fields } = useFieldArray({
-  //   control,
-  //   name: "users",
-  // });
+  const { append, remove, fields } = useFieldArray({
+    control,
+    name: "specific",
+  });
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
@@ -39,11 +39,14 @@ function Questionnaire(props) {
     console.log("value :", value);
 
     const format = [
-      value.p_format_word,
-      value.p_format_digital,
-     value.p_format_physically
+     {
+       "p_format_word":value.p_format_word,
+       "p_format_digital":value.p_format_digital,
+       "p_format_physically":value.p_format_physically,
+     }       
     ]
 
+console.log(format)
 
     let reader = new FileReader();
     reader.readAsDataURL(value.p_document[0]);
@@ -53,32 +56,32 @@ function Questionnaire(props) {
       // console.log(e.target.result)
       // files = e.target.result
 
-      let formData = new FormData();
-      formData.append("fact", value.p_fact);
-      formData.append("specific", value.p_specific);
-      formData.append("upload", value.p_document[0]);
-      formData.append("purpose", value.p_purpose);
-      formData.append("format", format);
-      formData.append("timelines", value.p_timelines);
-      formData.append("user", JSON.parse(userId));
-      formData.append("cid", JSON.parse(category));
+      // let formData = new FormData();
+      // formData.append("fact", value.p_fact);
+      // formData.append("specific", value.p_specific);
+      // formData.append("upload", value.p_document[0]);
+      // formData.append("purpose", value.p_purpose);
+      // formData.append("format", format);
+      // formData.append("timelines", value.p_timelines);
+      // formData.append("user", JSON.parse(userId));
+      // formData.append("cid", JSON.parse(category));
 
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/PostQuestion`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);  
-          if (response.data.code === 1) {
-            reset();   
-            alert.success("Query successfully added!"); 
-            props.history.push("/customer/dashboard");       
-            }            
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
+      // axios({
+      //   method: "POST",
+      //   url: `${baseUrl}/customers/PostQuestion`,
+      //   data: formData,
+      // })
+      //   .then(function (response) {
+      //     console.log("res-", response);  
+      //     if (response.data.code === 1) {
+      //       reset();   
+      //       alert.success("Query successfully added!"); 
+      //       props.history.push("/customer/dashboard");       
+      //       }            
+      //   })
+      //   .catch((error) => {
+      //     console.log("erroror - ", error);
+      //   });
     }
  };
 
@@ -129,7 +132,40 @@ function Questionnaire(props) {
             </div>
 
             <div className="col-md-6">
-            <div className="mb-3">
+            <div className="question_query mb-2">
+                  <label className="form-label">
+                    Specific Query (ies) for advisory
+                  </label>
+                  <div
+                    className="btn btn-primary"
+                    onClick={() => append({ query: "" })}
+                  >
+                    +
+                  </div>
+                </div>
+
+                { 
+                fields.length > 0 && (
+                  fields.map((item, index) => (                  
+                    <div className="question_query_field mb-2" key={index}>
+                      <input
+                        type="text"
+                        className="form-control"
+                        ref={register}
+                        name={`specific[${index}].query`}
+                        placeholder="Specify your query"
+                      />
+                      <div
+                        className="btn btn-primary ml-2"
+                        onClick={() => remove(index)}
+                      >
+                        -
+                      </div>
+                    </div>
+                  ))
+                )
+                }
+            {/* <div className="mb-3">
             <label className="form-label"> Specific Questions</label>
             <input
               type="text"
@@ -138,7 +174,7 @@ function Questionnaire(props) {
               ref={register}
               placeholder="Enter Purpose"
             />
-            </div>
+            </div> */}
               
             </div>
 
@@ -148,6 +184,20 @@ function Questionnaire(props) {
                 <input
                   type="file"
                   name="p_document"
+                  ref={register}
+                  className="form-control-file"  
+                  multiple={true}     
+                />
+                <input
+                  type="file"
+                  name="p_document1"
+                  ref={register}
+                  className="form-control-file"  
+                  multiple={true}     
+                />
+                <input
+                  type="file"
+                  name="p_document2"
                   ref={register}
                   className="form-control-file"  
                   multiple={true}     

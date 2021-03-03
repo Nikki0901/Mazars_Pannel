@@ -14,6 +14,7 @@ import {
   } from "reactstrap";
   import { Link } from "react-router-dom";
 
+ 
 function QueriesTab() {
 
   const [ queriesData, setQueriesData] = useState([]);
@@ -37,6 +38,7 @@ function QueriesTab() {
       getQueriesData();
     }, []);
 
+  
   //change date format
     function ChangeFormateDate(oldDate)
     {
@@ -52,7 +54,6 @@ function QueriesTab() {
                 <CardTitle tag="h4">Queries</CardTitle>
               </Col>
               <Col md="5">
-
               </Col>
             </Row>
           </CardHeader>
@@ -79,7 +80,7 @@ function QueriesTab() {
                         </Link></td>
                       <td>{p.parent_id}</td>
                       <td>{p.cat_name}</td>                   
-                      <td></td>                   
+                      <td>{p.status}</td>                   
                       <td></td>                   
                     </tr>
                   ))

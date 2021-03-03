@@ -45,7 +45,7 @@ function EditTP() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("id", JSON.parse(userid));
+    formData.append("id", id);
 
     axios({
       method: "POST",

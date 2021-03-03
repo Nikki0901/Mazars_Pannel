@@ -194,7 +194,9 @@ function PendingAllocation({CountPendingAllocation}) {
                     <td class="text-center">
 
                       {p.is_assigned === "1" ? (
-                        <i class="fa fa-share" style={{color:"green"}}></i>
+                         <Link to={`/admin/queryassing/${p.id}`}>
+                       <i class="fa fa-share" style={{color:"green"}}></i>
+                       </Link>                      
                       ) : (
                         <Link to={`/admin/queryassing/${p.id}`}>
                           <i class="fa fa-share"></i>

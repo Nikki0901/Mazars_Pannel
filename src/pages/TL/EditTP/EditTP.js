@@ -33,7 +33,6 @@ function EditTP() {
         }
       });
     };
-
     getTeamLeader();
   }, [id]);
 
