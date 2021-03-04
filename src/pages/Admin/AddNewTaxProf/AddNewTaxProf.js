@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 // import './index.css'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup"; 
+import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required name"),
@@ -20,13 +19,23 @@ import { useAlert } from "react-alert";
 //   .max(20, "max 20 digits"),
 // });
 
-
-
 function AddNew() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
-
+  const [teamleader, setTeamLeader] = useState([]);
   const userid = window.localStorage.getItem("adminkey");
+
+  useEffect(() => {
+    const getTeamLeader = () => {
+      axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTeamLeader(res.data.result);
+        }
+      });
+    };
+    getTeamLeader();
+  }, []);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -36,14 +45,15 @@ function AddNew() {
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
     formData.append("type", "tp");
+    formData.append("tp_id", value.p_teamleader);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/Add/TaxProf`,
+      url: `${baseUrl}/tp/AddTaxProfessional`,
       data: formData,
     })
       .then(function (response) {
-        console.log("res-", response);     
+        console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TP created  !");
           reset();
@@ -52,14 +62,10 @@ function AddNew() {
       .catch((error) => {
         console.log("erroror - ", error);
       });
-
   };
-
-
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-
       <div class="row mt-3">
         <div class="col-md-12">
           <div class="text-center">
@@ -73,7 +79,7 @@ function AddNew() {
         <div class="col-lg-2 col-xl-2 col-md-12"></div>
         <div class="col-lg-8 col-xl-8 col-md-12">
           <div>
-          <form onSubmit={handleSubmit(onSubmit)}>   
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -84,7 +90,6 @@ function AddNew() {
                       name="p_name"
                       ref={register}
                     />
-                   
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -94,12 +99,11 @@ function AddNew() {
                       type="email"
                       class="form-control"
                       name="p_email"
-                    ref={register}
+                      ref={register}
                     />
-                    
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-6">
                   <div class="form-group">
                     <label>Phone Number</label>
                     <input
@@ -108,17 +112,34 @@ function AddNew() {
                       name="p_phone"
                       ref={register}
                     />
-                    
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Select teamleader</label>
+                    <select
+                      name="p_teamleader"
+                      class="form-control"
+                      ref={register}
+                    >
+                      <option value="">--select--</option>
+                      {teamleader.map((p) => (
+                        <option key={p.Id} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
               <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
+                Submit
+              </button>
             </form>
           </div>
         </div>
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
+      
       </div>
     </Layout>
   );
