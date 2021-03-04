@@ -26,7 +26,8 @@ function AddTeamProf() {
   }, []);
 
   const getTaxProf = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userid)}`)
+    .then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setData(res.data.result);

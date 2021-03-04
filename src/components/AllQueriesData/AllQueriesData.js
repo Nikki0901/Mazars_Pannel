@@ -47,6 +47,13 @@ function AllQueriesData({CountAllQuery}) {
     }
 
 
+   //reset 
+  //  const resetData = () => {
+  //   console.log("resetData ..");
+  //   reset();
+  // }
+
+
     const onSubmit = (data) => {
       console.log("data :", data);
       console.log("selectedData :", selectedData);
@@ -158,8 +165,9 @@ function AllQueriesData({CountAllQuery}) {
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">
                   Search
-                </button>
+                </button>                          
               </form>
+            
             </div>
           </div>
         </CardHeader>

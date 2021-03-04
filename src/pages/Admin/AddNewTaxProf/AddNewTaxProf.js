@@ -8,16 +8,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required name"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_phone: yup
-//   .string()
-//   .required("required phone no")
-//   .matches(/^[0-9]+$/, "Must be only digits")
-//   .min(10, "Must be exactly 10 digits")
-//   .max(20, "max 20 digits"),
-// });
+
 
 function AddNew() {
   const alert = useAlert();
@@ -139,10 +130,25 @@ function AddNew() {
             </form>
           </div>
         </div>
-      
+        <div class="col-lg-2 col-xl-2 col-md-12"></div>
       </div>
     </Layout>
   );
 }
 
 export default AddNew;
+
+
+
+
+
+// const Schema = yup.object().shape({
+//   p_name: yup.string().required("required name"),
+//   p_email: yup.string().email("invalid email").required("required email"),
+//   p_phone: yup
+//   .string()
+//   .required("required phone no")
+//   .matches(/^[0-9]+$/, "Must be only digits")
+//   .min(10, "Must be exactly 10 digits")
+//   .max(20, "max 20 digits"),
+// });

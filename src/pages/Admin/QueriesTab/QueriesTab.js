@@ -75,7 +75,7 @@ function QueriesTab() {
                     aria-controls="pills-a"
                     aria-selected="false"
                   >
-                    Pending for Allocation ({pendingAllocationCount})
+                    Pending for Allocation 
                   </a>
                 </li>
 

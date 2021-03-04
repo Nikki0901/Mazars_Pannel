@@ -20,7 +20,7 @@ function AssignmentTab() {
 
   useEffect(() => {
     const getAssignmentData = () => {
-      axios.get(`${baseUrl}/get/all/assignment/uid/${JSON.parse(userId)}`).then((res) => {
+      axios.get(`${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setAssignmentDisplay(res.data.result);
@@ -69,7 +69,7 @@ function AssignmentTab() {
                 {assignmentDisplay.length > 0 ? (
                   assignmentDisplay.map((p, i) => (
                     <tr key={i}>
-                      <td>{ChangeFormateDate(p.date)}</td>
+                      <td></td>
                       <td>{p.assignno}</td>
                       <td>{p.subcategory}</td>
                       <td>{p.Category}</td>

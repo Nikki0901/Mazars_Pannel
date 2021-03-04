@@ -16,7 +16,7 @@ import {
 
 function Dashboard() {
   const [incompleteData, setSubmitIncompleData] = useState([]);
-  const [completeData, setCompleteData] = useState([]);
+  // const [completeData, setCompleteData] = useState([]);
   const [check, setCheck] = useState(false);
 
   const userId = window.localStorage.getItem("userid");
@@ -41,21 +41,21 @@ function Dashboard() {
         });
     };
 
-    const getCompleteAssingment = () => {
-      axios
-        .get(
-          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setCompleteData(res.data.result);
-          }
-        });
-    };
+    // const getCompleteAssingment = () => {
+    //   axios
+    //     .get(
+    //       `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
+    //     )
+    //     .then((res) => {
+    //       console.log(res);
+    //       if (res.data.code === 1) {
+    //         setCompleteData(res.data.result);
+    //       }
+    //     });
+    // };
 
     getInCompleteAssingment();
-    getCompleteAssingment();
+    // getCompleteAssingment();
   }, []);
 
   function ChangeFormateDate(oldDate) {
@@ -67,7 +67,7 @@ function Dashboard() {
       {check ? (
         <div class="col-md-12">
           <div class="schedule">
-            <Link to="/customer/addfresh" class="btn btn-primary">
+            <Link to="/customer/select-category" class="btn btn-primary">
               Fresh Assignment
             </Link>
           </div>
