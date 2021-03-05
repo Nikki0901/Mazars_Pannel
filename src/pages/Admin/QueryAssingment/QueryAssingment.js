@@ -198,7 +198,7 @@ function QueryAssingment() {
                       </td>
                       <td>
                         <input type="text" ref={register} name="p_timelines"     
-                         value={hideQuery.timeline}disabled/>
+                         value={hideQuery.timeline} disabled/>
                       </td>
                       <td>
                         <input type="date" ref={register} name="p_expdeldate" 

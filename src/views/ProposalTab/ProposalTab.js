@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 function ProposalTab() {
+  const alert = useAlert();
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
 
@@ -34,31 +35,59 @@ function ProposalTab() {
 
 
 // accepted proposal
-const accepted = (id) => {
-  console.log("acc", id);
-  // axios
-  //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
-  //   .then(function (response) {
-  //     console.log("delete-", response);
-  //   })
-  //   .catch((error) => {
-  //     console.log("erroror - ", error);
-  //   });
+const accepted = (key) => {
+  console.log("acc", key);
+
+  let formData = new FormData();
+    formData.append("id", key);
+    formData.append("status", 5);
+   
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/ProposalAccept`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response)
+        if (response.data.code === 1) {
+          alert.success("proposal accepted !");
+        } ;      
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
 };
 
 
 // rejected proposal
-const rejected = (id) => {
-  console.log("rej", id);
-  // axios
-  //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
-  //   .then(function (response) {
-  //     console.log("delete-", response);
-  //   })
-  //   .catch((error) => {
-  //     console.log("erroror - ", error);
-  //   });
+const rejected = (key) => {
+  console.log("rej", key);
+
+  let formData = new FormData();
+  formData.append("id", key);
+  formData.append("status", 6);
+ 
+  axios({
+    method: "POST",
+    url: `${baseUrl}/customers/ProposalAccept`,
+    data: formData,
+  })
+    .then(function (response) {
+      console.log("res-", response);   
+      if (response.data.code === 1) {
+        alert.success("proposal rejected !");
+      }   
+    })
+    .catch((error) => {
+      console.log("erroror - ", error);
+    });
 };
+
+
+   // change date format
+   function ChangeFormateDate(oldDate) {
+    return oldDate.toString().split("-").reverse().join("-");
+  }
 
 
   return (
@@ -96,12 +125,12 @@ const rejected = (id) => {
               proposalDisplay.map((p, i) => (
                 <tbody>
                   <tr key={i}>
-                    <td>{p.created}</td>
+                    <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td></td>
-                    <td>{p.DateofProposal}</td>
+                    <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
                     <td></td>
                     <td></td>
@@ -112,10 +141,16 @@ const rejected = (id) => {
                   </tr>
                   <tr>
                     <td colSpan="3">
-                      <button class="btn btn-success mb-2"  onClick={() => accepted(p.id)}>Accept</button>
+                      <button class="btn btn-success mb-2"  onClick={() => accepted(p.q_id)} >Accept</button>
+
+                      {/* <button class="btn btn-success mb-2" disabled>Accepted</button> */}
                     </td>
                     <td colSpan="3">
-                      <button class="btn btn-danger mb-2" onClick={() => rejected(p.id)}>Reject</button>
+                      <button class="btn btn-danger mb-2" 
+                      onClick={() => rejected(p.q_id)}>
+                        Reject
+                        </button>
+                      {/* <button class="btn btn-success mb-2"  disabled>Rejected</button> */}
                     </td>
                     <td colSpan="7"></td>
                   </tr>

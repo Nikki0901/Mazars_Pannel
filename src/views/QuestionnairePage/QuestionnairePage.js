@@ -14,6 +14,7 @@ import { useAlert } from "react-alert";
 //   p_opinion: yup.string().required("required expert"),
 // });
 
+
 function Questionnaire(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset, control } = useForm();
@@ -90,6 +91,7 @@ function Questionnaire(props) {
     );
   };
 
+
   return (
     <>
       <Header id={JSON.parse(userNameId)} />
@@ -127,25 +129,33 @@ function Questionnaire(props) {
                     +
                   </div>
                 </div>
+                
 
                 {fields.length > 0 &&
-                  fields.map((item, index) => (
-                    <div className="question_query_field mb-2" key={index}>
-                      <input
-                        type="text"
-                        className="form-control"
-                        ref={register}
-                        name={`specific[${index}].query`}
-                        placeholder="Specify your query"
-                      />
-                      <div
-                        className="btn btn-primary ml-2"
-                        onClick={() => remove(index)}
-                      >
-                        -
-                      </div>
+                  fields.map((item,index) => (                 
+                    <div>
+                      {
+                        fields.length < 5 ?
+                         <div className="question_query_field mb-2" key={index}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          ref={register}
+                          name={`specific[${index}].query`}
+                          placeholder="Specify your query"
+                        />
+                        <div
+                          className="btn btn-primary ml-2"
+                          onClick={() => remove(index)}
+                        >
+                          -
+                        </div>
+                      </div> : null
+                      }
+                      
                     </div>
-                  ))}
+                 
+                 ))}
                   
               </div>
 

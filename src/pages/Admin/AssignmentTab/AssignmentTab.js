@@ -19,7 +19,7 @@ function AssignmentTab() {
 
   useEffect(() => {
     const getAssignmentData = () => {
-      axios.get(`${baseUrl}/get/all/assignment`).then((res) => {
+      axios.get(`${baseUrl}/admin/getAllAssignment`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setAssignmentDisplay(res.data.result);
@@ -28,6 +28,7 @@ function AssignmentTab() {
     };
     getAssignmentData();
   }, []);
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -52,6 +53,7 @@ function AssignmentTab() {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Proposed date of Completion</th>
+                <th>Assignment Stage</th>
                 <th>Status</th>
                 <th>Time taken for Completion</th>
               </tr>
@@ -60,53 +62,43 @@ function AssignmentTab() {
               <tbody>
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{p.assignno}</td>
-                  <td>{p.date}</td>
-                  <td></td>
+                  <td>{p.assign_no}</td>
+                  <td>{p.date_of_query}</td>
+                  <td>{p.assign_no}</td>
                   <td>{p.AllocationDate}</td>
-                  <td>{p.subcategory}</td>
-                  <td>{p.Category}</td>
+                  <td>{p.parent_id}</td>
+                  <td>{p.cat_name}</td>
                   <td></td>
                   <td>
                     <div>
                       <p>
                         <span style={{ fontWeight: "bold" }}>
                           Client Discussion :
-                        </span>{" "}
+                        </span>
                         {p.client_discussion}
                       </p>
                       <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>{" "}
+                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
                         {p.draft_report}
                       </p>
                       <p>
                         <span style={{ fontWeight: "bold" }}>
                           Final Discussion :
-                        </span>{" "}
+                        </span>
                         {p.final_discussion}
                       </p>
                       <p>
                         <span style={{ fontWeight: "bold" }}>
                           Delivery of report :
-                        </span>{" "} 
+                        </span> 
                         {p.delivery_report}
                       </p>
                     </div>
                   </td>
                   <td></td>
                 </tr>
-                {/* <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr> */}
+                
+                
               </tbody>
             ))}
           </table>
