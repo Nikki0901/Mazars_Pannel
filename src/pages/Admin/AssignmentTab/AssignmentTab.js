@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 
+
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
 
@@ -70,7 +71,73 @@ function AssignmentTab() {
                   <td>{p.cat_name}</td>
                   <td></td>
                   <td>
-                    <div>
+                  <span style={{ fontWeight: "bold" }}>
+                        Client Discussion
+                      </span>
+                  </td>
+                  <td>    {p.client_discussion}</td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td> <span style={{ fontWeight: "bold" }}>Draft report</span></td>
+                  <td>   {p.draft_report}</td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td> <span style={{ fontWeight: "bold" }}>
+                          Final Discussion 
+                        </span></td>
+                  <td>    {p.final_discussion}</td>
+                  <td></td>
+                </tr>
+                
+                <tr>
+                <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td> <span style={{ fontWeight: "bold" }}>
+                  Delivery of report
+                        </span></td>
+                  <td> {p.delivery_report}</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            ))}
+          </table>
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
+
+export default AssignmentTab;
+
+
+
+{/* <div>
                       <p>
                         <span style={{ fontWeight: "bold" }}>
                           Client Discussion :
@@ -93,24 +160,8 @@ function AssignmentTab() {
                         </span> 
                         {p.delivery_report}
                       </p>
-                    </div>
-                  </td>
-                  <td></td>
-                </tr>
-                
-                
-              </tbody>
-            ))}
-          </table>
-        </CardBody>
-      </Card>
-    </Layout>
-  );
-}
+                    </div> */}
 
-export default AssignmentTab;
-
-{
   /* <div className="mb-3">                     
                       <select
                         className="form-select form-control"
@@ -123,4 +174,4 @@ export default AssignmentTab;
                         <option >Delivery of report : {p.delivery_report}</option>                                         
                       </select>
                     </div> */
-}
+

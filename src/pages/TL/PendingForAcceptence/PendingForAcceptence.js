@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 
+
 function PendingForAcceptence({ p, getPendingforAcceptance }) {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
@@ -95,7 +96,7 @@ function PendingForAcceptence({ p, getPendingforAcceptance }) {
             </thead>
             <tbody>
               <tr>
-                <td>{ChangeFormateDate(p.date_of_completion)}</td>
+                <td>{p.query_created}</td>
                 <th scope="row">
                   <Link to={`/teamleader/queries/${p.id}`}>
                     {p.assign_no}
@@ -133,6 +134,7 @@ function PendingForAcceptence({ p, getPendingforAcceptance }) {
                         display: "flex",
                         justifyContent: "space-evenly",
                         color: "#6967ce",
+                        cursor:"pointer"
                       }}
                       id="div1"
                     >

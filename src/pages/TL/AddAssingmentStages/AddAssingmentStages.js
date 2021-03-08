@@ -21,6 +21,7 @@ function AddAssingmentStages() {
 
     // formData.append("user", JSON.parse(userid));
     formData.append("q_id", id);
+    formData.append("user_id", JSON.parse(userid));
     formData.append("stage_1_status", value.status_1);
     formData.append("stage_2_status", value.status_2);
     formData.append("stage_3_status", value.status_3);

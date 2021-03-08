@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 
-function AcceptedProposal() {
+function AcceptedProposal({acceptedProposal}) {
 
   const [proposalDisplay, setProposalDisplay] = useState([]);
 
@@ -22,12 +22,17 @@ function AcceptedProposal() {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
+          acceptedProposal(res.data.result.length)
         }
       });
     };
     getAcceptedProposal();
   }, []);
 
+ // change date format
+ function ChangeFormateDate(oldDate) {
+  return oldDate.toString().split("-").reverse().join("-");
+}
 
   return (
     <>
@@ -42,6 +47,7 @@ function AcceptedProposal() {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Query No.</th>
+                <th>Proposed Amount</th>
   
               </tr>
             </thead>
@@ -50,10 +56,11 @@ function AcceptedProposal() {
                 proposalDisplay.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{p.created}</td>
+                    <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>                                      
+                    <td>{p.assign_no}</td>       
+                    <td>{p.ProposedAmount}</td>                                 
                   </tr>
                 ))
               ) : (

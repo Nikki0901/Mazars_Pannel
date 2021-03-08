@@ -59,9 +59,7 @@ function AddTeamProf() {
               <CardTitle tag="h4">Tax Professionals</CardTitle>
             </Col>
             <Col md="2">
-              <Link to={"/teamleader/addnew"} class="btn btn-primary">
-                Add New
-              </Link>
+           
             </Col>
           </Row>
         </CardHeader>
@@ -72,9 +70,7 @@ function AddTeamProf() {
                 <th scope="col">No.</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
-                <th scope="col">Phone No.</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
+                <th scope="col">Phone No.</th>  
               </tr>
             </thead>
             <tbody>
@@ -84,28 +80,7 @@ function AddTeamProf() {
                   <td>{p.name}</td>
                   <td>{p.email}</td>
                   <td>{p.phone}</td>
-                  <td>
-                    <Link to={`/teamleader/edittp/${p.id}`}>
-                      <i
-                        className="fa fa-edit"
-                        style={{
-                          fontSize: 18,
-                          cursor: "pointer",
-                          marginLeft: "8px",
-                        }}
-                      ></i>
-                    </Link>
-                  </td>
-                  <td onClick={() => del(p.id)}>
-                    <i
-                      className="fa fa-trash"
-                      style={{
-                        fontSize: 22,
-                        cursor: "pointer",
-                        marginLeft: "8px",
-                      }}
-                    ></i>
-                  </td>
+                  
                 </tr>
               ))}
             </tbody>

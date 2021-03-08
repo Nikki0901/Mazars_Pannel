@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
 import {
   Card,
   CardHeader,
@@ -9,31 +11,66 @@ import {
   Table,
 } from "reactstrap";
 
+
 function PendingForPayment() {
+
+  const [pendingData, setPendingData] = useState([]);
+
+  useEffect(() => {
+    const getPendingForPayment = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?&status=5`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setPendingData(res.data.result);
+          }
+        });
+    };
+    getPendingForPayment();
+  }, []);
+
   return (
     <>
       <Card>
         <CardHeader>
-          <Row>
+          {/* <Row>
             <Col md="7">
               <CardTitle tag="h4">Assignment</CardTitle>
             </Col>
             <Col md="5"></Col>
-          </Row>
+          </Row> */}
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
-            <thead>
+          <thead>
               <tr>
-                <th>Sr. No.</th>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Sub Category</th> 
-                <th>Query No</th>
-                <th>Query Allocation</th>         
+              <th>Sr. No.</th>
+                <th>Assignment No</th>
+                <th>Amount Accepted</th>
+                <th>Payment Terms</th>
+                <th>Payments Received</th>
+                <th>Outstanding payment</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {pendingData.length > 0 ? (
+                pendingData.map((p, i) => (
+                  <tr key={i}>
+                    <td>{i + 1}</td>
+                    <td>{p.assign_no}</td>
+                    <td>{p.accepted_amount}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6">No Records</td>
+                </tr>
+              )}
+            </tbody>
           </Table>
         </CardBody>
       </Card>

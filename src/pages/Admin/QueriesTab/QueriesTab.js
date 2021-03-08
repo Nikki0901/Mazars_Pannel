@@ -14,15 +14,16 @@ import {
 import { Link } from "react-router-dom";
 import PendingForAllocation from "../../../components/PendingForAllocation/PendingForAllocation";
 import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
-import PendingForNonPayment from "../../../components/PendingForNonPayment/PendingForNonPayment";
+import PendingForPayment from "../../../components/PendingForPayment/PendingForPayment";
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
+
 
 function QueriesTab() {
   const userid = window.localStorage.getItem("adminkey");
 
   const [allQueriesCount, setAllQueriesCount] = useState('');
   const [pendingAllocationCount, setPendingAllocationCount] = useState('');
-
+  const [pendingProposalCount, setPendingProposalCount] = useState('');
 
 
   const CountAllQuery = (data) => {
@@ -32,7 +33,10 @@ function QueriesTab() {
   const CountPendingAllocation = (data) => {
     setPendingAllocationCount(data)
   }
-
+  
+  const CountPendingProposal = (data) => {
+    setPendingProposalCount(data)
+  }
  
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -79,7 +83,7 @@ function QueriesTab() {
                   </a>
                 </li>
 
-                {/* <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
                     id="pills-b-tab"
@@ -91,7 +95,7 @@ function QueriesTab() {
                   >
                     Pending for Proposal ({pendingProposalCount})
                   </a>
-                </li> */}
+                </li>
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -103,7 +107,7 @@ function QueriesTab() {
                     aria-controls="pills-c"
                     aria-selected="false"
                   >
-                    Pending for Non-Payment
+                    Pending for Payment
                   </a>
                 </li>
               </ul>
@@ -127,14 +131,14 @@ function QueriesTab() {
                   <PendingForAllocation CountPendingAllocation={CountPendingAllocation} />
                 </div>
 
-                {/* <div
+               <div
                   class="tab-pane fade"
                   id="b"
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
                   <PendingForProposals CountPendingProposal={CountPendingProposal}/>
-                </div> */}
+                </div> 
 
                 <div
                   class="tab-pane fade"
@@ -142,7 +146,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-c-tab"
                 >
-                  <PendingForNonPayment />
+                  <PendingForPayment />
                 </div>
               </div>
             </div>

@@ -73,12 +73,13 @@ function AssignmentTab() {
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
+                    
                     <td>
                       <span style={{ fontWeight: "bold" }}>
                         Client Discussion
                       </span>
                     </td>
-                    <td>  {p.client_discussion}</td>
+                    <td> {p.client_discussion}</td>
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td></td>
                     <td></td>
@@ -91,7 +92,6 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td>
-                    
                       <span style={{ fontWeight: "bold" }}>Draft report</span>
                     </td>
                     <td> {p.draft_report}</td>
@@ -106,11 +106,11 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td>
-                    <span style={{ fontWeight: "bold" }}>
-                          Final Discussion 
-                        </span>
+                      <span style={{ fontWeight: "bold" }}>
+                        Final Discussion
+                      </span>
                     </td>
-                    <td>      {p.final_discussion}</td>
+                    <td> {p.final_discussion}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -122,9 +122,9 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td>
-                    <span style={{ fontWeight: "bold" }}>
-                          Delivery of report 
-                        </span> 
+                      <span style={{ fontWeight: "bold" }}>
+                        Delivery of report
+                      </span>
                     </td>
                     <td>{p.delivery_report}</td>
                     <td></td>
@@ -147,6 +147,7 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+
 
 {
   /* <p>

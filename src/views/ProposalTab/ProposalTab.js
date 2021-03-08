@@ -13,82 +13,97 @@ import {
   Table,
 } from "reactstrap";
 
+import AcceptModal from "./AcceptModal";
+import PaymentModal from "./PaymentModal";
+import { useForm } from "react-hook-form";
+
 function ProposalTab() {
   const alert = useAlert();
+
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
+  const [id, setId] = useState(null);
+
+  // edit modal
+  const [acceptedModal, setAcceptedModal] = useState(false);
+  const acceptedHandler = (id) => {
+    setAcceptedModal(!acceptedModal);
+    setId(id);
+  };
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const paymentHandler = () => setPaymentModal(!addPaymentModal);
 
   useEffect(() => {
-    const getProposalData = () => {
-      axios
-        .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          if (res.data.code === 1) {
-            setProposalDisplay(res.data.result);
-          }
-        });
-    };
     getProposalData();
   }, []);
 
+  const getProposalData = () => {
+    axios
+      .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        if (res.data.code === 1) {
+          setProposalDisplay(res.data.result);
+        }
+      });
+  };
 
-// accepted proposal
-const accepted = (key) => {
-  console.log("acc", key);
+  // accepted proposal
+  const accepted = (key) => {
+    console.log("acc", key);
 
-  let formData = new FormData();
+    let formData = new FormData();
     formData.append("id", key);
     formData.append("status", 5);
-   
+
     axios({
       method: "POST",
       url: `${baseUrl}/customers/ProposalAccept`,
       data: formData,
     })
       .then(function (response) {
-        console.log("res-", response)
+        console.log("res-", response);
         if (response.data.code === 1) {
+          getProposalData();
           alert.success("proposal accepted !");
-        } ;      
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
-};
+  };
 
+  // rejected proposal
+  const rejected = (key) => {
+    console.log("rej", key);
 
-// rejected proposal
-const rejected = (key) => {
-  console.log("rej", key);
+    let formData = new FormData();
+    formData.append("id", key);
+    formData.append("status", 6);
 
-  let formData = new FormData();
-  formData.append("id", key);
-  formData.append("status", 6);
- 
-  axios({
-    method: "POST",
-    url: `${baseUrl}/customers/ProposalAccept`,
-    data: formData,
-  })
-    .then(function (response) {
-      console.log("res-", response);   
-      if (response.data.code === 1) {
-        alert.success("proposal rejected !");
-      }   
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/ProposalAccept`,
+      data: formData,
     })
-    .catch((error) => {
-      console.log("erroror - ", error);
-    });
-};
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          getProposalData();
+          alert.success("proposal rejected !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
-
-   // change date format
-   function ChangeFormateDate(oldDate) {
+  // change date format
+  function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
   }
-
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -105,6 +120,7 @@ const rejected = (key) => {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
+                {/* <th>Sr. No.</th> */}
                 <th>Date</th>
                 <th>Query No</th>
                 <th>Category</th>
@@ -112,12 +128,14 @@ const rejected = (key) => {
                 <th>Status of Proposal</th>
                 <th>Date of Proposal</th>
                 <th>Proposed Amount</th>
+                <th>Negotiated Amount</th>
                 <th>Amount Accepted</th>
                 <th>Amount Paid</th>
                 <th>Date of Payment</th>
                 <th>Amount Outstanding</th>
                 <th>Date of acceptance of Proposal</th>
                 <th>Date of Completion</th>
+                <th>Action</th>
               </tr>
             </thead>
 
@@ -125,6 +143,7 @@ const rejected = (key) => {
               proposalDisplay.map((p, i) => (
                 <tbody>
                   <tr key={i}>
+                    {/* <td>{i + 1}</td> */}
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
@@ -132,35 +151,78 @@ const rejected = (key) => {
                     <td></td>
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
+                    <td>{p.negotiated_amount}</td>
+                    <td>{p.accepted_amount}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colSpan="3">
-                      <button class="btn btn-success mb-2"  onClick={() => accepted(p.q_id)} >Accept</button>
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          cursor: "pointer",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {p.negotiated_amount && p.accepted_amount
+                          ? ""
+                          : p.accepted_amount
+                          ? ""
+                          : p.negotiated_amount === "0" && (
+                              <div>
+                                <div>
+                                  <i
+                                    class="fa fa-check"
+                                    onClick={() => accepted(p.q_id)}
+                                  ></i>
+                                </div>
 
-                      {/* <button class="btn btn-success mb-2" disabled>Accepted</button> */}
+                                <div>
+                                  <i
+                                    class="fa fa-times"
+                                    onClick={() => rejected(p.q_id)}
+                                  ></i>
+                                </div>
+                              </div>
+                            )}
+
+                        <div>
+                          <i
+                            class="fa fa-file-text"
+                            onClick={() => acceptedHandler(p.up_id)}
+                          ></i>
+                        </div>
+                        <div>
+                          <i
+                            class="fa fa-credit-card"
+                            onClick={paymentHandler}
+                          ></i>
+                        </div>
+                      </div>
                     </td>
-                    <td colSpan="3">
-                      <button class="btn btn-danger mb-2" 
-                      onClick={() => rejected(p.q_id)}>
-                        Reject
-                        </button>
-                      {/* <button class="btn btn-success mb-2"  disabled>Rejected</button> */}
-                    </td>
-                    <td colSpan="7"></td>
                   </tr>
                 </tbody>
               ))
             ) : (
               <tr>
-                <td colSpan="13">No Records</td>
+                <td colSpan="14">No Records</td>
               </tr>
             )}
+
+            <AcceptModal
+              acceptedModal={acceptedModal}
+              acceptedHandler={acceptedHandler}
+              id={id}
+            />
+
+            <PaymentModal
+              paymentHandler={paymentHandler}
+              addPaymentModal={addPaymentModal}
+            />
           </Table>
         </CardBody>
       </Card>
@@ -169,3 +231,35 @@ const rejected = (key) => {
 }
 
 export default ProposalTab;
+
+// <td>
+// <div class="text-center">
+
+//     <i class="fa fa-credit-card"></i>
+
+// </div>
+// </td>
+
+// <tr>
+// <td colSpan="3">
+//   <button
+//     class="btn btn-success mb-2"
+//     onClick={() => accepted(p.q_id)}
+//   >
+//     Accept
+//   </button>
+// </td>
+// <td colSpan="3">
+//   <button
+//     class="btn btn-danger mb-2"
+//     onClick={() => rejected(p.q_id)}
+//   >
+//     Reject
+//   </button>
+// </td>
+// <td colSpan="8"></td>
+// </tr>
+
+{
+  /*  */
+}

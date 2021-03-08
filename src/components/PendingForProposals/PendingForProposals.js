@@ -175,6 +175,7 @@ function PendingForProposals({ CountPendingProposal }) {
             <table class="table table-bordered">
               <thead>
                 <tr>
+                <th scope="col">Sr. No.</th>
                   <th scope="col">Date</th>
                   <th scope="col">Query No .</th>
                   <th scope="col">Category</th>
@@ -187,6 +188,7 @@ function PendingForProposals({ CountPendingProposal }) {
               {nonpendingData.map((p, i) => (
                 <tbody>
                   <tr>
+                  <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
                     <th scope="row">
                       <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>

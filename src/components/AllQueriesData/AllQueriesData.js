@@ -51,8 +51,12 @@ function AllQueriesData({CountAllQuery}) {
   //  const resetData = () => {
   //   console.log("resetData ..");
   //   reset();
-  // }
+  //   if(allQueriesData){
+  //     getAllQueriesData();
+  //   }
 
+
+  // }
 
     const onSubmit = (data) => {
       console.log("data :", data);
@@ -117,7 +121,6 @@ function AllQueriesData({CountAllQuery}) {
 
                 <OptGroup label="Indirect Tax">
                   <Option value="9" label="Compilance">
-
                     <div className="demo-option-label-item">Compliance</div>
                   </Option>
                   <Option value="10" label="Assessment">
@@ -165,8 +168,12 @@ function AllQueriesData({CountAllQuery}) {
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">
                   Search
-                </button>                          
+                </button>    
+                {/* <button type="submit" class="btn btn-primary mb-2" onClick={resetData}>
+                  Reset
+                </button>                        */}
               </form>
+             
             
             </div>
           </div>
@@ -209,6 +216,7 @@ function AllQueriesData({CountAllQuery}) {
 }
 
 export default AllQueriesData;
+
 
 // {allQueriesData.map((p, i) => (
 //   <div>

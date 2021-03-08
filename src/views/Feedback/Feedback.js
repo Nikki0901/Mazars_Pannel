@@ -20,6 +20,7 @@ function Feedback() {
 
 
   const [assignment, setAssingment] = useState([]);
+  const [teamLeader, setTeamLeader] = useState([]);
 
   const userId = window.localStorage.getItem("userid");
 
@@ -36,6 +37,22 @@ function Feedback() {
     getAssingment();
   }, []);
 
+
+  useEffect(() => {
+    getTeamLeader();
+  }, []);
+
+  const getTeamLeader = () => {
+    axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setTeamLeader(res.data.result);
+      }
+    });
+  };
+
+
+
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -43,6 +60,8 @@ function Feedback() {
     formData.append("assign_no", value.p_assignment);
     formData.append("feedback", value.p_feedback);
     formData.append("user_id", JSON.parse(userId));
+    formData.append("tl_id", value.p_teamleader);
+
 
     axios({
       method: "POST",
@@ -97,6 +116,27 @@ function Feedback() {
                    
                   </div>
                 </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Select Team Leader</label>
+                    <select
+                      class="form-control"
+                      name="p_teamleader"
+                      ref={register}
+                    >
+                      <option value="">--select--</option>
+
+                      {teamLeader.map((p, i) => (
+                        <option key={i} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                   
+                  </div>
+                </div>
+
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Feedback</label>

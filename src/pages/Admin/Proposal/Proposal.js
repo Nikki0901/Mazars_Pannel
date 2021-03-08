@@ -4,20 +4,39 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 
 import AllProposalComponent from "../AllProposalComponent/AllProposalComponent";
-import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
+import PendingForAcceptence from "../../../components/PendingForAcceptence/PendingForAcceptence";
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
 
 
 function Proposal() {
+ 
+  const [allProposalCount, setAllProposalCount] = useState('');
   const [pendingProposalCount, setPendingProposalCount] = useState('');
+  const [acceptedProposalCount, setAcceptedProposalCount] = useState('');
+  const [declinedProposalCount, setDeclinedProposalCount] = useState('');
 
+  
   const userid = window.localStorage.getItem("adminkey");
   
-  const CountPendingProposal = (data) => {
+  
+
+  const allProposal = (data) => {
+    setAllProposalCount(data)
+  }
+
+  const pendingProposal = (data) => {
     setPendingProposalCount(data)
   }
 
+
+  const acceptedProposal = (data) => {
+    setAcceptedProposalCount(data)
+  }
+
+  const declinedProposal = (data) => {
+    setDeclinedProposalCount(data)
+  }
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -46,7 +65,7 @@ function Proposal() {
                     aria-controls="pills-d"
                     aria-selected="true"
                   >
-                    All Proposal
+                    All Proposal ({allProposalCount})
                   </a>
                 </li>
 
@@ -60,7 +79,7 @@ function Proposal() {
                     aria-controls="pills-a"
                     aria-selected="false"
                   >
-                    Pending For Proposal ({pendingProposalCount})
+                    Pending For Acceptence ({pendingProposalCount})
                   </a>
                 </li>
 
@@ -74,7 +93,7 @@ function Proposal() {
                     aria-controls="pills-b"
                     aria-selected="false"
                   >
-                    Accepted Proposal
+                    Accepted Proposal ({acceptedProposalCount})
                   </a>
                 </li>
 
@@ -88,7 +107,7 @@ function Proposal() {
                     aria-controls="pills-c"
                     aria-selected="false"
                   >
-                    Declined Proposal
+                    Declined Proposal ({declinedProposalCount})
                   </a>
                 </li>
               </ul>
@@ -100,7 +119,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-d-tab"
                 >
-                  <AllProposalComponent />
+                  <AllProposalComponent allProposal={allProposal}/>
                 </div>
 
                 <div
@@ -109,7 +128,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingForProposals  CountPendingProposal={CountPendingProposal}/>
+                  <PendingForAcceptence pendingProposal={pendingProposal}/>
                 </div>
 
                 <div
@@ -118,7 +137,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
-                  <AcceptedProposal />
+                  <AcceptedProposal acceptedProposal={acceptedProposal}/>
                 </div>
 
                 <div
@@ -127,7 +146,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-c-tab"
                 >
-                  <DeclinedPropoal />
+                  <DeclinedPropoal declinedProposal={declinedProposal}/>
                 </div>
               </div>
             </div>

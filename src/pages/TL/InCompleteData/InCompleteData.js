@@ -30,16 +30,16 @@ function InCompleteData() {
     getInCompleteAssingment();
   }, []);
 
-   // change date format
-   function ChangeFormateDate(oldDate) {
+
+  // change date format
+  function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
   return (
     <>
       <Card>
-        <CardHeader>
-        </CardHeader>
+        <CardHeader></CardHeader>
         <CardBody>
           <table class="table table-bordered">
             <thead>
@@ -52,18 +52,61 @@ function InCompleteData() {
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody>
-              {incompleteData.map((p, i) => (
+
+            {incompleteData.map((p, i) => (
+              <tbody>
                 <tr>
                   <th scope="row">{p.assign_no}</th>
                   <td>{p.name}</td>
                   <td>{p.fact_case}</td>
                   <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                  <td></td>
-                  <td></td>
+                  <td>
+                   
+                    <span style={{ fontWeight: "bold" }}>
+                      Client Discussion
+                    </span>
+                  </td>
+                  <td> {p.client_discussion}</td>
                 </tr>
-              ))}
-            </tbody>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                   
+                    <span style={{ fontWeight: "bold" }}>Draft report </span>
+                  </td>
+                  <td> {p.draft_report}</td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>Final Discussion</span>
+                  </td>
+                  <td> {p.final_discussion}</td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                   
+                    <span style={{ fontWeight: "bold" }}>
+                      Delivery of report
+                    </span>{" "}
+                  </td>
+                  <td>{p.delivery_report}</td>
+                </tr>
+              </tbody>
+            ))}
           </table>
         </CardBody>
       </Card>
@@ -72,3 +115,28 @@ function InCompleteData() {
 }
 
 export default InCompleteData;
+
+{
+  /* <p>
+                        <span style={{ fontWeight: "bold" }}>
+                          Client Discussion :
+                        </span>
+                        {p.client_discussion}
+                      </p>
+                      <p>
+                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
+                        {p.draft_report}
+                      </p>
+                      <p>
+                        <span style={{ fontWeight: "bold" }}>
+                          Final Discussion :
+                        </span>
+                        {p.final_discussion}
+                      </p>
+                      <p>
+                        <span style={{ fontWeight: "bold" }}>
+                          Delivery of report :
+                        </span> 
+                        {p.delivery_report}
+                      </p> */
+}

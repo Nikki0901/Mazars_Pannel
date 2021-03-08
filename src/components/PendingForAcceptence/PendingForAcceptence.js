@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { baseUrl } from "../../../config/config";
 import {
   Card,
   CardHeader,
@@ -10,30 +8,37 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
 
-function AllProposalComponent({allProposal}) {
-  const [proposalDisplay, setProposalDisplay] = useState([]);
+
+function PendingForAcceptence({pendingProposal}) {
+
+    const [proposalDisplay, setProposalDisplay] = useState([]);
 
   useEffect(() => {
-    const getProposalData = () => {
-      axios.get(`${baseUrl}/admin/getProposals`).then((res) => {
+
+    const getPendingAcceptedProposal = () => {
+      axios.get(`${baseUrl}/admin/getProposals?&status=4`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
-          allProposal(res.data.result.length)
+          pendingProposal(res.data.result.length)
         }
       });
     };
-    getProposalData();
+    getPendingAcceptedProposal();
   }, []);
 
+
+  
   // change date format
-  function ChangeFormateDate(oldDate) {
+ function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
   }
-
+  
   return (
-    <>
+    <div>
       <Card>
         <CardHeader></CardHeader>
         <CardBody>
@@ -41,15 +46,10 @@ function AllProposalComponent({allProposal}) {
             <thead>
               <tr>
                 <th>Sr. No.</th>
-                <th>Date of Query</th>
+                <th>Date</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Query No.</th>
-                <th>Proposal Sent date</th>
-                <th>Proposed Amount</th>
-                <th>Proposal Status</th>
-                <th>Amount Accepted</th>
-                <th>Assignment Number</th>
+                <th>Query No</th>
               </tr>
             </thead>
             <tbody>
@@ -60,13 +60,8 @@ function AllProposalComponent({allProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>
-                    <td>{ChangeFormateDate(p.DateofProposal)}</td>
-                    <td>{p.ProposedAmount}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  
+                    <td>{p.assign_no}</td>       
+                    <td>{p.ProposedAmount}</td>                                 
                   </tr>
                 ))
               ) : (
@@ -78,8 +73,8 @@ function AllProposalComponent({allProposal}) {
           </Table>
         </CardBody>
       </Card>
-    </>
+    </div>
   );
 }
 
-export default AllProposalComponent;
+export default PendingForAcceptence;

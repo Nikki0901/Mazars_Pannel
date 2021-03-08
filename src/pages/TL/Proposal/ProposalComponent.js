@@ -4,13 +4,10 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 
-// const Schema = yup.object().shape({
-//     p_assingment: yup.string().required("required assingment"),
-//     p_name: yup.string().required("required name"),
-//     p_document: yup.string().required("required file"),
-//   });
 
-export default function ProposalComponent() {
+
+
+function ProposalComponent() {
   const alert = useAlert();
   const { register, handleSubmit, reset } = useForm();
 
@@ -26,7 +23,7 @@ export default function ProposalComponent() {
   useEffect(() => {
     const getQuery = () => {
       axios
-        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -165,13 +162,19 @@ export default function ProposalComponent() {
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Payable by Through</label>
-                  <input
-                    type="text"
-                    name="p_payable"
+                  <select
                     class="form-control"
+                    name="p_payable"
+                    aria-label="Default select example"
                     ref={register}
-                    defaultValue="NEFT"
-                  />
+                  >
+                    <option value="">--select--</option>
+                    {payable.map((p, index) => (
+                      <option key={index} value={p.pay}>
+                        {p.pay}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -228,6 +231,19 @@ export default function ProposalComponent() {
   );
 }
 
+export default ProposalComponent;
+
+
+const payable = [
+  { pay: "NEFT" },
+  { pay: "DEBIT CARD" },
+  { pay: "CREDIT CARD" },
+  { pay: "UPI" },
+  { pay: "WALLET" },
+
+];
+
+
 // const handleImage = (e) =>{
 //   let files = e.target.files
 //    console.log(files)
@@ -239,11 +255,16 @@ export default function ProposalComponent() {
 //  console.log("img", e.target.result)
 // }
 
-{
+
   /* <div class="col-md-6">
               <div class="form-group">
                 <label>Proposal File</label>
                 <input type="file" name="p_image" ref={register} />
               </div>
             </div> */
-}
+
+// const Schema = yup.object().shape({
+//     p_assingment: yup.string().required("required assingment"),
+//     p_name: yup.string().required("required name"),
+//     p_document: yup.string().required("required file"),
+//   });

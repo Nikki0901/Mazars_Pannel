@@ -55,7 +55,7 @@ function AddFreshAssingment(props) {
           if (response.data.code === 1) {
             reset();
             alert.success("Query successfully added!");
-            props.history.push("/customer/dashboard");
+            props.history.push("/customer/queries");
           }
         })
         .catch((error) => {

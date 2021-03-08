@@ -15,21 +15,22 @@ function CompleteData() {
   const [completeData, setCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tlkey");
 
-  useEffect(() => {
-    const getCompleteAssingment = () => {
-      axios
-        .get(`${baseUrl}/get/tp/tl/complete/id/${JSON.parse(userid)}/type/tl`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setCompleteData(res.data.result);
-          }
-        });
-    };
+  // useEffect(() => {
+  //   const getCompleteAssingment = () => {
+  //     axios
+  //       .get(`${baseUrl}/get/tp/tl/complete/id/${JSON.parse(userid)}/type/tl`)
+  //       .then((res) => {
+  //         console.log(res);
+  //         if (res.data.code === 1) {
+  //           setCompleteData(res.data.result);
+  //         }
+  //       });
+  //   };
 
-    getCompleteAssingment();
-  }, []);
+  //   getCompleteAssingment();
+  // }, []);
 
+  
   return (
     <>
       <Card>

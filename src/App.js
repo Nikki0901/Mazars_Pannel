@@ -59,6 +59,8 @@ import TlProposal from './pages/TL/Proposal/Proposal'
 import TlQueriesRecevied from './pages/TL/QueriesRecevied/QueriesRecevied'
 import TlQueryAssingment from './pages/TL/QueryAssingment/QueryAssingment'
 import TlEditTP from './pages/TL/EditTP/EditTP'
+import TlFeedbackTab from './pages/TL/FeedbackTab/FeedbackTab'
+import TlPaymentStatus from './pages/TL/PaymentStatus/PaymentStatus'
 
 
 
@@ -135,7 +137,6 @@ function App() {
 
 
 
-
         <Route exact path="/teamleader/start" component={TlStart} />
         <Route exact path="/teamleader/login" component={TlLogin} />
         <Route exact path="/teamleader/dashboard" component={TlDashboard} />
@@ -146,7 +147,8 @@ function App() {
         <Route exact path="/teamleader/queries/:id" component={TlQueriesRecevied} />
         <Route exact path="/teamleader/queryassing/:id" component={TlQueryAssingment} />
         <Route exact path="/teamleader/edittp/:id" component={TlEditTP} />
-
+        <Route exact path="/teamleader/feedback" component={TlFeedbackTab} />
+        <Route exact path="/teamleader/paymentstatus" component={TlPaymentStatus} />
 
 
         <Route exact path="/taxprofessional/start" component={TpStart} />

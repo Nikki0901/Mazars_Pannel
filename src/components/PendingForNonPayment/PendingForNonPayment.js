@@ -17,7 +17,7 @@ function PendingForNonPayment() {
   useEffect(() => {
     const getPendingForNonPayment = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals`)
+        .get(`${baseUrl}/admin/getProposals?&status=5`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -36,6 +36,7 @@ function PendingForNonPayment() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
+              <th>Sr. No.</th>
                 <th>Assignment No</th>
                 <th>Amount Accepted</th>
                 <th>Payment Terms</th>
@@ -47,8 +48,9 @@ function PendingForNonPayment() {
               {pendingData.length > 0 ? (
                 pendingData.map((p, i) => (
                   <tr key={i}>
-                    <td>{p.Assign}</td>
-                    <td></td>
+                    <td>{i + 1}</td>
+                    <td>{p.assign_no}</td>
+                    <td>{p.ProposedAmount}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -56,7 +58,7 @@ function PendingForNonPayment() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5">No Records</td>
+                  <td colSpan="6">No Records</td>
                 </tr>
               )}
             </tbody>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import "./index.css";
-import PendingForAllocation from "../../../components/PendingForAllocation/PendingForAllocation";
-import PendingForPayment from "../../../components/PendingForPayment/PendingForPayment";
 
 
 
@@ -11,7 +9,7 @@ function Dashboard() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
-      <div class="row mt-3">
+      {/* <div class="row mt-3">
         <div class="col-md-12" style={{ top: "-12px" }}>
           <ul
             class="nav nav-pills mb-3 col-sm-12"
@@ -68,7 +66,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Layout>
   );
 }

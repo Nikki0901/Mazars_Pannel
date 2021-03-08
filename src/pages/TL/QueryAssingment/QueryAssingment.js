@@ -11,7 +11,7 @@ import { useAlert } from "react-alert";
 function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
-
+  
   const { id } = useParams();
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [hideQuery, setHideQuery] = useState({
@@ -41,7 +41,7 @@ function QueryAssingment() {
 
 
   const getTaxProfession = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userId)}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setTaxProfessionDisplay(res.data.result);

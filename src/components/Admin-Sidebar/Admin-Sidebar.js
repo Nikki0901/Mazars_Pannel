@@ -114,16 +114,6 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
             </li>
 
             <li class="nav-item">
-            <NavLink to={"/admin/proposal"}>
-            <i class="fa fa-envelope-o"></i>
-              <span class="menu-title" data-i18n="">
-              Proposals
-                </span>
-              </NavLink>           
-            </li>
-            
-
-            <li class="nav-item">
             <NavLink to={"/admin/queriestab"}>
             <i class="fa fa-clone">
             </i>
@@ -134,14 +124,14 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
             </li>
 
             <li class="nav-item">
-            <NavLink to={"/admin/assignment"}>
-            <i class="fa fa-sticky-note-o"></i>
+            <NavLink to={"/admin/proposal"}>
+            <i class="fa fa-envelope-o"></i>
               <span class="menu-title" data-i18n="">
-              Assignments
+              Proposals
                 </span>
               </NavLink>           
             </li>
-
+            
             <li class="nav-item">
             <NavLink to={"/admin/paymentstatus"}>
             <i class="fa fa-file-text"></i>
@@ -150,6 +140,18 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
                 </span>
               </NavLink>           
             </li>
+            
+
+            <li class="nav-item">
+            <NavLink to={"/admin/assignment"}>
+            <i class="fa fa-sticky-note-o"></i>
+              <span class="menu-title" data-i18n="">
+              Assignments
+                </span>
+              </NavLink>           
+            </li>
+
+           
 
             <li class="nav-item">
             <NavLink to={"/admin/teamleaders"}>
@@ -215,7 +217,25 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
             <NavLink to={"/teamleader/addteamprof"}>
             <i class="fa fa-users"></i>
               <span class="menu-title" data-i18n="">
-              Add / Modify T.P
+              View T.P
+                </span>
+              </NavLink>           
+            </li>
+
+            <li class="nav-item">
+            <NavLink to={"/teamleader/paymentstatus"}>
+            <i class="fa fa-file-text"></i>
+              <span class="menu-title" data-i18n="">
+              Payment Status
+                </span>
+              </NavLink>           
+            </li>
+
+            <li class="nav-item">
+            <NavLink to={"/teamleader/feedback"}>
+            <i class="fa fa-file-text"></i>
+              <span class="menu-title" data-i18n="">
+              Feedback
                 </span>
               </NavLink>           
             </li>
