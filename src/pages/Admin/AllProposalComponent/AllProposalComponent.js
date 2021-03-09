@@ -64,7 +64,7 @@ function AllProposalComponent({allProposal}) {
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
                     <td></td>
-                    <td></td>
+                    <td>{p.accepted_amount}</td>
                     <td></td>
                   
                   </tr>

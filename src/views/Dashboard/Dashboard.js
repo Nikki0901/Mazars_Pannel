@@ -16,10 +16,68 @@ import {
 
 function Dashboard() {
   const userId = window.localStorage.getItem("userid");
+  const [queries, setQueries] = useState("");
+  const [proposal, setProposal] = useState("");
+  const [assignment, setAssignment] = useState("");
 
+  useEffect(() => {
+
+    const getQueries = () => {
+      axios
+        .get(
+          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
+            userId
+          )}`
+        )
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setQueries(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    const getProposal = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setProposal(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    const getAssignment = () => {
+      axios
+        .get(
+          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
+        )
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setAssignment(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    getQueries();
+    getProposal();
+    getAssignment();
+  }, []);
+
+  
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-{/* 
       <div class="row">
         <div class="col-sm-4">
           <div class="card">
@@ -32,7 +90,7 @@ function Dashboard() {
                   justifyContent: "flex-end",
                 }}
               >
-                <h2>100</h2>
+                <h2>{queries === "0" ? "0" : queries}</h2>
               </div>
             </div>
           </div>
@@ -50,7 +108,7 @@ function Dashboard() {
                   justifyContent: "flex-end",
                 }}
               >
-                <h2>100</h2>
+                <h2>{proposal === "0" ? "0" : proposal}</h2>
               </div>
             </div>
           </div>
@@ -68,21 +126,19 @@ function Dashboard() {
                   justifyContent: "flex-end",
                 }}
               >
-                <h2>100</h2>
+                <h2>{assignment === "0" ? "0" : assignment}</h2>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-       */}
-   
-   
     </Layout>
   );
 }
 
 export default Dashboard;
+
+
 
 // {check ? (
 // <div class="col-md-12">

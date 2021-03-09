@@ -15,24 +15,25 @@ import {
 function FeedbackTab() {
   const userid = window.localStorage.getItem("tlkey");
 
+  const [feedbackData, setFeedBackData] = useState([]);
 
-    const [feedbackData, setFeedBackData] = useState([]);
-
-    useEffect(() => {
-      const getFeedback = () => {
-        axios.get(`${baseUrl}/customers/getFeedback?tl_id=${JSON.parse(userid)}`).then((res) => {
+  useEffect(() => {
+    const getFeedback = () => {
+      axios
+        .get(`${baseUrl}/customers/getFeedback?tl_id=${JSON.parse(userid)}`)
+        .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
             setFeedBackData(res.data.result);
           }
         });
-      };
-      getFeedback();
-    }, []);
+    };
+    getFeedback();
+  }, []);
 
   return (
     <>
-     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
+      <Layout TLDashboard="TLDashboard" TLuserId={userid}>
         <Card>
           <CardHeader>
             <Row>
@@ -48,6 +49,7 @@ function FeedbackTab() {
                 <tr>
                   <th>Sr. No.</th>
                   <th>Query No</th>
+                  <th>Customer Name</th>
                   <th>Details of feedback</th>
                 </tr>
               </thead>
@@ -55,10 +57,10 @@ function FeedbackTab() {
                 {feedbackData.length > 0 ? (
                   feedbackData.map((p, i) => (
                     <tr key={i}>
-                      <td>{i+1}</td>                 
+                      <td>{i + 1}</td>
                       <td>{p.assign_no}</td>
-                      <td>{p.feedback}</td>                   
-                                        
+                      <td>{p.name}</td>
+                      <td>{p.feedback}</td>
                     </tr>
                   ))
                 ) : (

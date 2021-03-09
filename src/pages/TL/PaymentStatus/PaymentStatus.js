@@ -11,37 +11,57 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import { useAlert } from "react-alert";
 
 function PaymentStatus() {
+  const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
   const [payment, setPayment] = useState([]);
 
   useEffect(() => {
-    const getPaymentStatus = () => {
-      axios.get(`${baseUrl}/tl/getUploadedProposals`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setPayment(res.data.result);
-        }
-      });
-    };
     getPaymentStatus();
   }, []);
 
+  const getPaymentStatus = () => {
+    axios.get(`${baseUrl}/tl/getUploadedProposals`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setPayment(res.data.result);
+      }
+    });
+  };
 
-    // accepted proposal
-    const accepted = (key) => {
-      console.log("acc", key);
-     
-    };
-  
-    // rejected proposal
-    const rejected = (key) => {
-      console.log("rej", key);
-      
-    };
-  
+  // accepted proposal
+  const accepted = (key) => {
+    console.log("acc", key);
+
+    let formData = new FormData();
+    formData.append("id", key);
+    formData.append("status", 7);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/ProposalAccept`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          getPaymentStatus();
+          alert.success("accepted !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+  // rejected proposal
+  const rejected = (key) => {
+    console.log("rej", key);
+  };
+
   return (
     <>
       <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -62,7 +82,8 @@ function PaymentStatus() {
                   <th>Query No</th>
                   <th>Customer Name</th>
                   <th>Negotiated Amount</th>
-                  <th style={{textAlign:"center"}}>Action</th>
+                  <th>Accepted Amount</th>
+                  <th style={{ textAlign: "center" }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,27 +93,35 @@ function PaymentStatus() {
                       <td>{i + 1}</td>
                       <td>{p.assign_no}</td>
                       <td>{p.name}</td>
-                      <td>{p.amount}</td>
+                      <td>{p.negotiated_amount}</td>
+                      <td>{p.accepted_amount}</td>
                       <td>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                          }}
-                        >
-                          <div>
-                            <i
-                              class="fa fa-check"
-                              onClick={() => accepted(p.id)}
-                            ></i>
+                        {p.negotiated_amount === "0" &&
+                        p.accepted_amount === "0" ? (
+                          ""
+                        ) : p.negotiated_amount && p.accepted_amount === "0" ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
+                          >
+                            <div style={{ cursor: "pointer" }}>
+                              <i
+                                class="fa fa-check"
+                                onClick={() => accepted(p.assign_id)}
+                              ></i>
+                            </div>
+                            {/* <div style={{ cursor: "pointer" }}>
+                              <i
+                                class="fa fa-times"
+                                onClick={() => rejected(p.assign_id)}
+                              ></i>
+                            </div> */}
                           </div>
-                          <div>
-                            <i
-                              class="fa fa-times"
-                              onClick={() => rejected(p.id)}
-                            ></i>
-                          </div>
-                        </div>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   ))
@@ -112,8 +141,7 @@ function PaymentStatus() {
 
 export default PaymentStatus;
 
-{
-  /* <tbody>
+/* <tbody>
               <tr>
                   <td>1</td>
                   <td>123</td>
@@ -126,4 +154,25 @@ export default PaymentStatus;
                   </td>               
                 </tr>
               </tbody> */
-}
+
+// {p.negotiated_amount === "0" ? (
+// <div
+//   style={{
+//     display: "flex",
+//     justifyContent: "space-evenly",
+//   }}
+// >
+//   <div style={{ cursor: "pointer" }}>
+//     <i
+//       class="fa fa-check"
+//       onClick={() => accepted(p.assign_id)}
+//     ></i>
+//   </div>
+//   <div style={{ cursor: "pointer" }}>
+//     <i
+//       class="fa fa-times"
+//       onClick={() => rejected(p.assign_id)}
+//     ></i>
+//   </div>
+// </div>
+// ) : null}

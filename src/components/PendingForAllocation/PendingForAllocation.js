@@ -194,9 +194,10 @@ function PendingAllocation({CountPendingAllocation}) {
                     <td class="text-center">
 
                       {p.is_assigned === "1" ? (
-                         <Link to={`/admin/queryassing/${p.id}`}>
-                       <i class="fa fa-share" style={{color:"green"}}></i>
-                       </Link>                      
+                        ""
+                      //    <Link to={`/admin/queryassing/${p.id}`}>
+                      //  <i class="fa fa-share" style={{color:"green"}}></i>
+                      //  </Link>                      
                       ) : (
                         <Link to={`/admin/queryassing/${p.id}`}>
                           <i class="fa fa-share"></i>
@@ -211,12 +212,12 @@ function PendingAllocation({CountPendingAllocation}) {
                     <td></td>
                     <td></td>
                     <td style={{ textAlign: "center" }}>
-                      {
+                      {/* {
                         p.is_assigned === "1" && 
                          <p style={{ color: "green" }}>
                          Assigned to {p.tname}
                       </p>
-                      }
+                      } */}
 
                       {p.reject === "3" && (
                         <p style={{ color: "red" }}>

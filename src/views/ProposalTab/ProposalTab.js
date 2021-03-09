@@ -23,8 +23,13 @@ function ProposalTab() {
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const [id, setId] = useState(null);
+  const [reject, setRejected] = useState(true);
+  const [pay, setPay] = useState({
+    pay: "",
+    amount: "",
+  });
 
-  // edit modal
+  // accept modal
   const [acceptedModal, setAcceptedModal] = useState(false);
   const acceptedHandler = (id) => {
     setAcceptedModal(!acceptedModal);
@@ -32,7 +37,6 @@ function ProposalTab() {
   };
 
   const [addPaymentModal, setPaymentModal] = useState(false);
-  const paymentHandler = () => setPaymentModal(!addPaymentModal);
 
   useEffect(() => {
     getProposalData();
@@ -43,11 +47,19 @@ function ProposalTab() {
       .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
-        console.log(res.data);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
         }
       });
+  };
+
+  const paymentHandler = (key) => {
+    console.log(key);
+    setPaymentModal(!addPaymentModal);
+    setPay({
+      amount: key.accepted_amount,
+      id: key.q_id,
+    });
   };
 
   // accepted proposal
@@ -91,6 +103,7 @@ function ProposalTab() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setRejected(false);
           getProposalData();
           alert.success("proposal rejected !");
         }
@@ -120,7 +133,7 @@ function ProposalTab() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                {/* <th>Sr. No.</th> */}
+                {/* <th>S.No</th> */}
                 <th>Date</th>
                 <th>Query No</th>
                 <th>Category</th>
@@ -156,7 +169,7 @@ function ProposalTab() {
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>{p.acpt_reject_time}</td>
                     <td></td>
                     <td>
                       <div
@@ -164,44 +177,47 @@ function ProposalTab() {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          cursor: "pointer",
                           justifyContent: "space-between",
                         }}
                       >
-                        {p.negotiated_amount && p.accepted_amount
-                          ? ""
-                          : p.accepted_amount
-                          ? ""
-                          : p.negotiated_amount === "0" && (
-                              <div>
-                                <div>
-                                  <i
-                                    class="fa fa-check"
-                                    onClick={() => accepted(p.q_id)}
-                                  ></i>
-                                </div>
+                        {p.negotiated_amount === "0" &&
+                        p.accepted_amount === "0" ? (
+                          <div>
+                            <div style={{ cursor: "pointer" }}>
+                              <i
+                                class="fa fa-check"
+                                onClick={() => accepted(p.q_id)}
+                              ></i>
+                            </div>
 
-                                <div>
-                                  <i
-                                    class="fa fa-times"
-                                    onClick={() => rejected(p.q_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            )}
+                            <div style={{ cursor: "pointer" }}>
+                              <i
+                                class="fa fa-times"
+                                onClick={() => rejected(p.q_id)}
+                              ></i>
+                            </div>
+                            <div style={{ cursor: "pointer" }}>
+                              <i
+                                class="fa fa-file-text"
+                                onClick={() => acceptedHandler(p.up_id)}
+                              ></i>
+                            </div>
+                          </div>
+                        ) : (
+                          (p.negotiated_amount === "0" || p.accepted_amount) &&
+                          ""
+                        )}
 
-                        <div>
-                          <i
-                            class="fa fa-file-text"
-                            onClick={() => acceptedHandler(p.up_id)}
-                          ></i>
-                        </div>
-                        <div>
-                          <i
-                            class="fa fa-credit-card"
-                            onClick={paymentHandler}
-                          ></i>
-                        </div>
+                        {p.accepted_amount === "0" ? (
+                          ""
+                        ) : (
+                          <div style={{ cursor: "pointer" }}>
+                            <i
+                              class="fa fa-credit-card"
+                              onClick={() => paymentHandler(p)}
+                            ></i>
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -209,7 +225,7 @@ function ProposalTab() {
               ))
             ) : (
               <tr>
-                <td colSpan="14">No Records</td>
+                <td colSpan="15">No Records</td>
               </tr>
             )}
 
@@ -222,6 +238,7 @@ function ProposalTab() {
             <PaymentModal
               paymentHandler={paymentHandler}
               addPaymentModal={addPaymentModal}
+              pay={pay}
             />
           </Table>
         </CardBody>

@@ -50,6 +50,7 @@ function PendingForAcceptence({pendingProposal}) {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Query No</th>
+                <th>Proposed Amount</th>
               </tr>
             </thead>
             <tbody>

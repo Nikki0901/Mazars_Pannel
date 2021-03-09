@@ -61,6 +61,7 @@ function QueriesTab() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
+              <th>S.No</th>
                 <th>Date</th>
                 <th>Query No</th>
                 <th>Category</th>
@@ -73,6 +74,7 @@ function QueriesTab() {
               {queriesData.length > 0 ? (
                 queriesData.map((p, i) => (
                   <tr key={i}>
+                    <td>{i+1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>
                       <Link to={`/customer/my-assingment/${p.id}`}>

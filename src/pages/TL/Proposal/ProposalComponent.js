@@ -18,6 +18,8 @@ function ProposalComponent() {
   const [assingNo, setAssingNo] = useState('');
   const [custname, setCustName] = useState();
   const [custId, setCustId] = useState('');
+  const [assignId, setAssignID] = useState('');
+
 
 
   useEffect(() => {
@@ -28,6 +30,7 @@ function ProposalComponent() {
           console.log(res);
           if (res.data.code === 1) {
             setInCompleteData(res.data.result);
+            // setAssignID(res.data.resul)
           }
         });
     };
@@ -64,11 +67,12 @@ function ProposalComponent() {
       if(data.id == key){
         console.log('assingNo', data.assign_no);
         setAssingNo(data.assign_no)
+        setAssignID(data.id)
       }
     })
   }
 
-  console.log(custId);
+  console.log(assignId)
   
   const onSubmit = (value) => {
     console.log(value);
@@ -86,6 +90,8 @@ function ProposalComponent() {
     formData.append("misc2", value.misc_2);
     formData.append("payable_date", value.p_date);
     formData.append("customer_id", custId);
+    formData.append("assign_id", assignId);
+
 
     axios({
       method: "POST",

@@ -18,7 +18,7 @@ function AcceptedProposal({acceptedProposal}) {
   useEffect(() => {
 
     const getAcceptedProposal = () => {
-      axios.get(`${baseUrl}/admin/getProposals?&status=5`).then((res) => {
+      axios.get(`${baseUrl}/admin/getProposals?&status=5,7`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
@@ -48,6 +48,7 @@ function AcceptedProposal({acceptedProposal}) {
                 <th>Sub Category</th>
                 <th>Query No.</th>
                 <th>Proposed Amount</th>
+                <th>Amount Accepted</th>
   
               </tr>
             </thead>
@@ -60,7 +61,8 @@ function AcceptedProposal({acceptedProposal}) {
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td>{p.assign_no}</td>       
-                    <td>{p.ProposedAmount}</td>                                 
+                    <td>{p.ProposedAmount}</td>   
+                    <td>{p.accepted_amount}</td>                              
                   </tr>
                 ))
               ) : (

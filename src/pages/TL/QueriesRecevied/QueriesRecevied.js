@@ -20,7 +20,7 @@ function QueriesRecevied() {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
-          setAssingmentNo(res.data.result[0].AssignNo);
+          setAssingmentNo(res.data.result[0].assign_no);
         }
       });
     };

@@ -182,7 +182,7 @@ function PendingForProposals({ CountPendingProposal }) {
                   <th scope="col">Sub Category</th>
                   <th scope="col">Customer Name</th>
                   <th scope="col">Facts of the Case</th>
-                  <th scope="col">Pending for Allocation</th>
+                  <th scope="col">Accepted by</th>
                 </tr>
               </thead>
               {nonpendingData.map((p, i) => (

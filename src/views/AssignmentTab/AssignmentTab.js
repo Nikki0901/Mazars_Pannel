@@ -53,6 +53,7 @@ function AssignmentTab() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
+              <th>S.No</th>
                 <th>Date of Query</th>
                 <th>Query No</th>
                 <th>Category</th>
@@ -69,6 +70,7 @@ function AssignmentTab() {
               assignmentDisplay.map((p, i) => (
                 <tbody>
                   <tr key={i}>
+                  <td>{i+1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
@@ -91,6 +93,7 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td>
                       <span style={{ fontWeight: "bold" }}>Draft report</span>
                     </td>
@@ -99,8 +102,10 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td></td>
+                   
                   </tr>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -115,8 +120,10 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td></td>
+                    
                   </tr>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -131,12 +138,14 @@ function AssignmentTab() {
                     <td></td>
                     <td></td>
                     <td></td>
+                  
+                
                   </tr>
                 </tbody>
               ))
             ) : (
               <tr>
-                <td colSpan="9">No Records</td>
+                <td colSpan="10">No Records</td>
               </tr>
             )}
           </Table>

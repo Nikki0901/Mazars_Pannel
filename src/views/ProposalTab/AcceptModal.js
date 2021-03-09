@@ -8,7 +8,7 @@ import { baseUrl } from "../../config/config";
 function AcceptModal({ acceptedModal, acceptedHandler, id}) {
     const { handleSubmit, register, reset } = useForm();
 
-console.log("accept-id",id)
+// console.log("accept-id",id)
 
     const onSubmit = (value) => {
       console.log("value :", value);
