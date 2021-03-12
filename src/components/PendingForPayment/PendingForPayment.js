@@ -12,23 +12,34 @@ import {
 } from "reactstrap";
 
 
-function PendingForPayment() {
+function PendingForPayment({CountPendingForPayment}) {
 
   const [pendingData, setPendingData] = useState([]);
 
   useEffect(() => {
     const getPendingForPayment = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals?&status=5`)
+        .get(`${baseUrl}/admin/getProposals?&status=5,7`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
             setPendingData(res.data.result);
+            CountPendingForPayment(res.data.result.length)
           }
         });
     };
     getPendingForPayment();
   }, []);
+
+
+  function checkOutstading(p, a) {
+    console.log("paid -", p);
+    console.log("acc -", a);
+    if (p == 0) {
+      return "0";
+    } else return a - p;
+  }
+
 
   return (
     <>
@@ -61,8 +72,8 @@ function PendingForPayment() {
                     <td>{p.assign_no}</td>
                     <td>{p.accepted_amount}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{p.paid_amount}</td>
+                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td>
                   </tr>
                 ))
               ) : (
@@ -79,3 +90,6 @@ function PendingForPayment() {
 }
 
 export default PendingForPayment;
+
+
+{/* <td>{p.accepted_amount - p.paid_amount}</td> */}

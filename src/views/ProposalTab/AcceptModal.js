@@ -3,11 +3,11 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import { useAlert } from "react-alert";
 
-
-function AcceptModal({ acceptedModal, acceptedHandler, id}) {
+function AcceptModal({ acceptedModal, acceptedHandler, id,getProposalData}) {
     const { handleSubmit, register, reset } = useForm();
-
+    const alert = useAlert();
 // console.log("accept-id",id)
 
     const onSubmit = (value) => {
@@ -23,8 +23,13 @@ function AcceptModal({ acceptedModal, acceptedHandler, id}) {
         data: formData,
       })
         .then(function (response) {
-          console.log("res-", response);  
-          acceptedHandler();            
+          console.log("res-", response); 
+          if (response.data.code === 1) {
+            alert.success("pay success!");
+            getProposalData();
+            acceptedHandler();        
+          } 
+                      
         })
         .catch((error) => {
           console.log("erroror - ", error);

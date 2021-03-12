@@ -61,6 +61,8 @@ import TlQueryAssingment from './pages/TL/QueryAssingment/QueryAssingment'
 import TlEditTP from './pages/TL/EditTP/EditTP'
 import TlFeedbackTab from './pages/TL/FeedbackTab/FeedbackTab'
 import TlPaymentStatus from './pages/TL/PaymentStatus/PaymentStatus'
+import TlAssignmentTab from './pages/TL/AssignmentTab/AssignmentTab'
+
 
 
 
@@ -149,6 +151,9 @@ function App() {
         <Route exact path="/teamleader/edittp/:id" component={TlEditTP} />
         <Route exact path="/teamleader/feedback" component={TlFeedbackTab} />
         <Route exact path="/teamleader/paymentstatus" component={TlPaymentStatus} />
+        <Route exact path="/teamleader/assignment" component={TlAssignmentTab} />
+
+
 
 
         <Route exact path="/taxprofessional/start" component={TpStart} />

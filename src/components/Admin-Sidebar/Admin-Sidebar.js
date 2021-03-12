@@ -78,7 +78,7 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
               <NavLink to={"/customer/assignment"}>
               <i class="fa fa-sticky-note-o"></i>
               <span class="menu-title" data-i18n="">
-              Assignment
+              Assignments
                 </span>
               </NavLink> 
             </li>  
@@ -177,18 +177,15 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
               <span class="menu-title" data-i18n="">
                 Feedback
                 </span>
-              </NavLink>           
-            </li>
-
-
-            
+              </NavLink>             
+            </li>          
         </ul>
       }
           
 
           {
             TLDashboard  &&
-            <ul
+          <ul
           class="navigation navigation-main"
           id="main-menu-navigation"
           data-menu="menu-navigation"
@@ -213,20 +210,30 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
             </li>
 
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/addteamprof"}>
-            <i class="fa fa-users"></i>
-              <span class="menu-title" data-i18n="">
-              View T.P
-                </span>
-              </NavLink>           
-            </li>
 
             <li class="nav-item">
             <NavLink to={"/teamleader/paymentstatus"}>
             <i class="fa fa-file-text"></i>
               <span class="menu-title" data-i18n="">
               Payment Status
+                </span>
+              </NavLink>           
+            </li>
+
+            <li class="nav-item">
+            <NavLink to={"/teamleader/assignment"}>
+            <i class="fa fa-sticky-note-o"></i>
+              <span class="menu-title" data-i18n="">
+              Assignments
+                </span>
+              </NavLink>           
+            </li>
+
+            <li class="nav-item">
+            <NavLink to={"/teamleader/addteamprof"}>
+            <i class="fa fa-users"></i>
+              <span class="menu-title" data-i18n="">
+              View T.P
                 </span>
               </NavLink>           
             </li>

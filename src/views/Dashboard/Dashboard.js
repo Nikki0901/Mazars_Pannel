@@ -126,7 +126,7 @@ function Dashboard() {
                   justifyContent: "flex-end",
                 }}
               >
-                <h2>{assignment === "0" ? "0" : assignment}</h2>
+                <h2>{assignment === "" ? "0" : assignment}</h2>
               </div>
             </div>
           </div>

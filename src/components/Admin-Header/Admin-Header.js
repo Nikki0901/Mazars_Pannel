@@ -20,6 +20,7 @@ function AdminHeader({custUserId , adminUserId , TLuserId , TPuserId}) {
 
   const adminLogout = () => {  
     localStorage.removeItem("adminkey");
+      localStorage.removeItem("count_PFA");
      history.push("/admin/login");
   }
 

@@ -17,6 +17,7 @@ function ProposalComponent() {
   const [id, setId] = useState(null);
   const [assingNo, setAssingNo] = useState('');
   const [custId, setCustId] = useState('');
+  const [assignId, setAssignID] = useState('');
   
   useEffect(() => {
     const getCompleteAssingment = () => {
@@ -61,6 +62,7 @@ function ProposalComponent() {
       if(data.id == key){
         console.log('assingNo', data.assign_no);
         setAssingNo(data.assign_no)
+        setAssignID(data.id)
       }
     })
   }
@@ -73,7 +75,7 @@ function ProposalComponent() {
 
     formData.append("assign_no", assingNo);
     formData.append("name", value.p_name);
-    formData.append("type", "tl");
+    formData.append("type", "tp");
     formData.append("id", JSON.parse(userid));
     formData.append("amount", value.p_amount);
     formData.append("payable", value.p_payable);
@@ -81,6 +83,7 @@ function ProposalComponent() {
     formData.append("misc2", value.misc_2);
     formData.append("payable_date", value.p_date);
     formData.append("customer_id", custId);
+    formData.append("assign_id", assignId);
 
     axios({
       method: "POST",

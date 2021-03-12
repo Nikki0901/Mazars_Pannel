@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-
 import {
   Card,
   CardHeader,
@@ -38,6 +37,10 @@ function AssignmentTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
+  function cutFun(str) {
+    console.log(str);
+  }
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -53,99 +56,74 @@ function AssignmentTab() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-              <th>S.No</th>
+                <th>S.No</th>
                 <th>Date of Query</th>
                 <th>Query No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Assignment Stage</th>
                 <th>Status</th>
                 <th>Expected date of delivery</th>
                 <th>Actual date of delivery</th>
-                <th>Deliverable</th>
-                <th>Team Leader, name and contact number, email</th>
+                <th>Draft Report</th>
+                <th>Final Report</th>
+                <th>profile</th>
               </tr>
             </thead>
             {assignmentDisplay.length > 0 ? (
               assignmentDisplay.map((p, i) => (
                 <tbody>
                   <tr key={i}>
-                  <td>{i+1}</td>
+                    <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    
-                    <td>
-                      <span style={{ fontWeight: "bold" }}>
-                        Client Discussion
-                      </span>
-                    </td>
-                    <td> {p.client_discussion}</td>
-                    <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
 
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td>
-                      <span style={{ fontWeight: "bold" }}>Draft report</span>
+                      {/* <p>{p.tname}</p>
+                      <p>{p.phone}</p> */}
                     </td>
-                    <td> {p.draft_report}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                   
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
+                    <td>{p.date_of_delivery}</td>
+                    <td style={{ textAlign: "center" }}>
+                      {p.assignment_draft_report == null ? (
+                        ""
+                      ) : (
+                        <div>
+                          <a
+                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
+                          >
+                            <i class="fa fa-file-text"></i>
+                          </a>
+                        </div>
+                      )}
+                    </td>
+
+                    <td style={{ textAlign: "center" }}>
+                      {p.final_report == null ? (
+                        ""
+                      ) : (
+                        <div>
+                          <a
+                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
+                          >
+                            <i class="fa fa-file-text"></i>
+                          </a>
+                        </div>
+                      )}
+                    </td>
+
                     <td>
-                      <span style={{ fontWeight: "bold" }}>
-                        Final Discussion
-                      </span>
+                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
+                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
+                      <p style={{ fontSize: "10px" }}>{p.email}</p>
                     </td>
-                    <td> {p.final_discussion}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <span style={{ fontWeight: "bold" }}>
-                        Delivery of report
-                      </span>
-                    </td>
-                    <td>{p.delivery_report}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  
-                
                   </tr>
                 </tbody>
               ))
             ) : (
               <tr>
-                <td colSpan="10">No Records</td>
+                <td colSpan="11">No Records</td>
               </tr>
             )}
           </Table>
@@ -156,7 +134,6 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
-
 
 {
   /* <p>

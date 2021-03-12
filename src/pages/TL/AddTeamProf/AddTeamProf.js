@@ -26,13 +26,14 @@ function AddTeamProf() {
   }, []);
 
   const getTaxProf = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userid)}`)
-    .then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setData(res.data.result);
-      }
-    });
+    axios
+      .get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userid)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setData(res.data.result);
+        }
+      });
   };
 
   // delete data
@@ -58,19 +59,17 @@ function AddTeamProf() {
             <Col md="10">
               <CardTitle tag="h4">Tax Professionals</CardTitle>
             </Col>
-            <Col md="2">
-           
-            </Col>
+            <Col md="2"></Col>
           </Row>
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th scope="col">No.</th>
+                <th scope="col">S.No</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
-                <th scope="col">Phone No.</th>  
+                <th scope="col">Phone No.</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +79,6 @@ function AddTeamProf() {
                   <td>{p.name}</td>
                   <td>{p.email}</td>
                   <td>{p.phone}</td>
-                  
                 </tr>
               ))}
             </tbody>

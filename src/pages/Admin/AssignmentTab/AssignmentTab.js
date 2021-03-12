@@ -12,7 +12,6 @@ import {
   Table,
 } from "reactstrap";
 
-
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
 
@@ -20,7 +19,7 @@ function AssignmentTab() {
 
   useEffect(() => {
     const getAssignmentData = () => {
-      axios.get(`${baseUrl}/admin/getAllAssignment`).then((res) => {
+      axios.get(`${baseUrl}/tl/getAssignments`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setAssignmentDisplay(res.data.result);
@@ -29,7 +28,6 @@ function AssignmentTab() {
     };
     getAssignmentData();
   }, []);
-
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -66,21 +64,36 @@ function AssignmentTab() {
                   <td>{p.assign_no}</td>
                   <td>{p.date_of_query}</td>
                   <td>{p.assign_no}</td>
-                  <td>{p.AllocationDate}</td>
+                  <td>{p.assignment_date}</td>
                   <td>{p.parent_id}</td>
                   <td>{p.cat_name}</td>
+                  <td>{p.Exp_Delivery_Date}</td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>
+                      Client Discussion
+                    </span>
+                  </td>
+                  <td> {p.client_discussion}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td>
-                  <span style={{ fontWeight: "bold" }}>
-                        Client Discussion
-                      </span>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>Draft report</span>
                   </td>
-                  <td>    {p.client_discussion}</td>
+                  <td> {p.draft_report}</td>
                   <td></td>
                 </tr>
 
                 <tr>
-                <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -88,13 +101,16 @@ function AssignmentTab() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td> <span style={{ fontWeight: "bold" }}>Draft report</span></td>
-                  <td>   {p.draft_report}</td>
+                  <td></td>
+                  <td>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>Final Discussion</span>
+                  </td>
+                  <td> {p.final_discussion}</td>
                   <td></td>
                 </tr>
 
                 <tr>
-                <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -102,25 +118,13 @@ function AssignmentTab() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td> <span style={{ fontWeight: "bold" }}>
-                          Final Discussion 
-                        </span></td>
-                  <td>    {p.final_discussion}</td>
                   <td></td>
-                </tr>
-                
-                <tr>
-                <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td> <span style={{ fontWeight: "bold" }}>
-                  Delivery of report
-                        </span></td>
+                  <td>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      Delivery of report
+                    </span>
+                  </td>
                   <td> {p.delivery_report}</td>
                   <td></td>
                 </tr>
@@ -135,9 +139,8 @@ function AssignmentTab() {
 
 export default AssignmentTab;
 
-
-
-{/* <div>
+{
+  /* <div>
                       <p>
                         <span style={{ fontWeight: "bold" }}>
                           Client Discussion :
@@ -160,9 +163,10 @@ export default AssignmentTab;
                         </span> 
                         {p.delivery_report}
                       </p>
-                    </div> */}
+                    </div> */
+}
 
-  /* <div className="mb-3">                     
+/* <div className="mb-3">                     
                       <select
                         className="form-select form-control"
                         name="p_purpose"                     
@@ -174,4 +178,3 @@ export default AssignmentTab;
                         <option >Delivery of report : {p.delivery_report}</option>                                         
                       </select>
                     </div> */
-

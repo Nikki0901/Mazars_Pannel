@@ -15,15 +15,12 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 
-
 function PendingForProposals({ CountPendingProposal }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
   const [nonpendingData, setNonPendingData] = useState([]);
- const [selectedData, setSelectedData] = useState([]);
-
-
+  const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     getPendingForProposals();
@@ -39,17 +36,28 @@ function PendingForProposals({ CountPendingProposal }) {
     });
   };
 
-
-   //search filter
-   const handleChange = (value) => {
+  //search filter
+  const handleChange = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
     getPendingForProposals();
-  }
+  };
 
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    // setSelectedData([]);
+    getPendingForProposals();
+  };
 
-  // `${baseUrl}/get/filter/admin/date1/${data.p_dateFrom}/date2/${data.p_dateTo}/category/${selectedData}`
-  // admin/pendingAllocation?category=4&date1=&date2
+  //reset category
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getPendingForProposals();
+  };
+
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
@@ -67,9 +75,6 @@ function PendingForProposals({ CountPendingProposal }) {
       });
   };
 
-  
-
-
   //change date format
   function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
@@ -78,9 +83,9 @@ function PendingForProposals({ CountPendingProposal }) {
   return (
     <>
       <Card>
-       <CardHeader>
+        <CardHeader>
           <div className="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
                 style={{ width: "100%" }}
@@ -88,6 +93,7 @@ function PendingForProposals({ CountPendingProposal }) {
                 defaultValue={[]}
                 onChange={handleChange}
                 optionLabelProp="label"
+                value={selectedData}
               >
                 <OptGroup label="Direct Tax">
                   <Option value="3" label="Compilance">
@@ -116,7 +122,6 @@ function PendingForProposals({ CountPendingProposal }) {
 
                 <OptGroup label="Indirect Tax">
                   <Option value="9" label="Compilance">
-
                     <div className="demo-option-label-item">Compliance</div>
                   </Option>
                   <Option value="10" label="Assessment">
@@ -135,37 +140,60 @@ function PendingForProposals({ CountPendingProposal }) {
                   </Option>
                 </OptGroup>
               </Select>
+
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2 ml-3"
+                  onClick={resetCategory}
+                >
+                  X
+                </button>
+              </div>
             </div>
 
-            <div className="col-sm-8">
-              <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">From</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateFrom"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
+            <div className="col-sm-9 d-flex">
+              <div>
+                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label className="form-select form-control">From</label>
+                  </div>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <input
+                      type="date"
+                      name="p_dateFrom"
+                      className="form-select form-control"
+                      ref={register}
+                    />
+                  </div>
 
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">To</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateTo"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary mb-2">
-                  Search
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label className="form-select form-control">To</label>
+                  </div>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <input
+                      type="date"
+                      name="p_dateTo"
+                      className="form-select form-control"
+                      ref={register}
+                    />
+                  </div>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <button type="submit" class="btn btn-primary">
+                      Search
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2"
+                  onClick={resetData}
+                >
+                  Reset
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -175,7 +203,7 @@ function PendingForProposals({ CountPendingProposal }) {
             <table class="table table-bordered">
               <thead>
                 <tr>
-                <th scope="col">Sr. No.</th>
+                  <th scope="col">Sr. No.</th>
                   <th scope="col">Date</th>
                   <th scope="col">Query No .</th>
                   <th scope="col">Category</th>
@@ -188,7 +216,7 @@ function PendingForProposals({ CountPendingProposal }) {
               {nonpendingData.map((p, i) => (
                 <tbody>
                   <tr>
-                  <td>{i + 1}</td>
+                    <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
                     <th scope="row">
                       <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>

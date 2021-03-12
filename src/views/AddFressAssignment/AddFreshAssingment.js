@@ -29,7 +29,6 @@ function AddFreshAssingment(props) {
     console.log("value :", Number(value.p_format_digital));
     console.log("value :", Number(value.p_format_physically));
 
-
    
       let formData = new FormData();
       formData.append("fact", value.p_fact);
@@ -45,10 +44,11 @@ function AddFreshAssingment(props) {
       formData.append("softcopy_digitally_assigned",Number(value.p_format_digital) );
       formData.append("printout_physically_assigned",Number(value.p_format_physically));
 
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/PostQuestion`,
-        data: formData,
+      
+      axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
       })
         .then(function (response) {
           console.log("res-", response);

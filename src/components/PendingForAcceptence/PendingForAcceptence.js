@@ -19,7 +19,7 @@ function PendingForAcceptence({pendingProposal}) {
   useEffect(() => {
 
     const getPendingAcceptedProposal = () => {
-      axios.get(`${baseUrl}/admin/getProposals?&status=4`).then((res) => {
+      axios.get(`${baseUrl}/admin/getProposals?&status=2  `).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
@@ -50,6 +50,7 @@ function PendingForAcceptence({pendingProposal}) {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Query No</th>
+                <th>status</th>
                 <th>Proposed Amount</th>
               </tr>
             </thead>
@@ -61,7 +62,8 @@ function PendingForAcceptence({pendingProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>       
+                    <td>{p.assign_no}</td>   
+                    <td>{p.status}</td>    
                     <td>{p.ProposedAmount}</td>                                 
                   </tr>
                 ))

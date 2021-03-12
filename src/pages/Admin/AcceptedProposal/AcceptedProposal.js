@@ -47,6 +47,7 @@ function AcceptedProposal({acceptedProposal}) {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Query No.</th>
+                <th>status</th>
                 <th>Proposed Amount</th>
                 <th>Amount Accepted</th>
   
@@ -60,7 +61,8 @@ function AcceptedProposal({acceptedProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>       
+                    <td>{p.assign_no}</td>  
+                    <td>{p.status}</td>     
                     <td>{p.ProposedAmount}</td>   
                     <td>{p.accepted_amount}</td>                              
                   </tr>

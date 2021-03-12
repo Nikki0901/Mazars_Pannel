@@ -7,6 +7,8 @@ import AllProposalComponent from "../AllProposalComponent/AllProposalComponent";
 import PendingForAcceptence from "../../../components/PendingForAcceptence/PendingForAcceptence";
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
+// import PendingForPaymentProposal from "../PendingForPaymentProposal/PendingForPaymentProposal";
+
 
 
 function Proposal() {
@@ -16,7 +18,6 @@ function Proposal() {
   const [acceptedProposalCount, setAcceptedProposalCount] = useState('');
   const [declinedProposalCount, setDeclinedProposalCount] = useState('');
 
-  
   const userid = window.localStorage.getItem("adminkey");
   
   
@@ -93,7 +94,7 @@ function Proposal() {
                     aria-controls="pills-b"
                     aria-selected="false"
                   >
-                    Accepted Proposal ({acceptedProposalCount})
+                    Accepted / Pending Payment  ({acceptedProposalCount})
                   </a>
                 </li>
 
@@ -107,9 +108,11 @@ function Proposal() {
                     aria-controls="pills-c"
                     aria-selected="false"
                   >
-                    Declined Proposal ({declinedProposalCount})
+                    Declined  ({declinedProposalCount})
                   </a>
                 </li>
+
+               
               </ul>
 
               <div class="tab-content" id="pills-tabContent">
@@ -148,6 +151,8 @@ function Proposal() {
                 >
                   <DeclinedPropoal declinedProposal={declinedProposal}/>
                 </div>
+
+              
               </div>
             </div>
           </div>

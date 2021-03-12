@@ -15,14 +15,12 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 
-
-function AllQueriesData({CountAllQuery}) {
+function AllQueriesData({ CountAllQuery }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
   const [allQueriesData, setAllQueriesData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
-
 
   useEffect(() => {
     getAllQueriesData();
@@ -33,59 +31,61 @@ function AllQueriesData({CountAllQuery}) {
       console.log(res);
       if (res.data.code === 1) {
         setAllQueriesData(res.data.result);
-        CountAllQuery(res.data.result.length)
+        CountAllQuery(res.data.result.length);
       }
     });
   };
 
+  //search filter
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    getAllQueriesData();
+  };
 
-    //search filter
-    const handleChange = (value) => {
-      console.log(`selected ${value}`);
-      setSelectedData(value);
-      getAllQueriesData();
-    }
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getAllQueriesData();
+  };
 
+  //reset category
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getAllQueriesData();
+  };
 
-   //reset 
-  //  const resetData = () => {
-  //   console.log("resetData ..");
-  //   reset();
-  //   if(allQueriesData){
-  //     getAllQueriesData();
-  //   }
-
-
-  // }
-
-    const onSubmit = (data) => {
-      console.log("data :", data);
-      console.log("selectedData :", selectedData);
-      axios
-        .get(
-          `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setAllQueriesData(res.data.result);
-            }
+  const onSubmit = (data) => {
+    console.log("data :", data);
+    console.log("selectedData :", selectedData);
+    axios
+      .get(
+        `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          if (res.data.result) {
+            setAllQueriesData(res.data.result);
+            // reset();
           }
-        });
-    };
+        }
+      });
+  };
 
   // change date format
   function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
   }
-  
+
   return (
     <>
       <Card>
-      <CardHeader>
+        <CardHeader>
           <div className="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
                 style={{ width: "100%" }}
@@ -93,6 +93,7 @@ function AllQueriesData({CountAllQuery}) {
                 defaultValue={[]}
                 onChange={handleChange}
                 optionLabelProp="label"
+                value={selectedData}
               >
                 <OptGroup label="Direct Tax">
                   <Option value="3" label="Compilance">
@@ -139,76 +140,99 @@ function AllQueriesData({CountAllQuery}) {
                   </Option>
                 </OptGroup>
               </Select>
+
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2 ml-3"
+                  onClick={resetCategory}
+                >
+                  X
+                </button>
+              </div>
             </div>
 
-            <div className="col-sm-8">
-              <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">From</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateFrom"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
+            <div className="col-sm-9 d-flex">
+              <div>
+                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label className="form-select form-control">From</label>
+                  </div>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <input
+                      type="date"
+                      name="p_dateFrom"
+                      className="form-select form-control"
+                      ref={register}
+                    />
+                  </div>
 
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">To</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateTo"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary mb-2">
-                  Search
-                </button>    
-                {/* <button type="submit" class="btn btn-primary mb-2" onClick={resetData}>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label className="form-select form-control">To</label>
+                  </div>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <input
+                      type="date"
+                      name="p_dateTo"
+                      className="form-select form-control"
+                      ref={register}
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary mb-2">
+                    Search
+                  </button>
+                </form>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2 ml-3"
+                  onClick={resetData}
+                >
                   Reset
-                </button>                        */}
-              </form>
-             
-            
+                </button>
+              </div>
             </div>
           </div>
         </CardHeader>
         <CardBody>
-        <Table responsive="sm" bordered>
-          <thead>
-            <tr>
-              <th scope="col">Sr. No.</th>
-              <th scope="col">Date</th>
-              <th scope="col">Category</th>
-              <th scope="col">Sub Category</th>
-              <th scope="col">Query No .</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allQueriesData.length > 0 ? (
-              allQueriesData.map((p, i) => (
-                <tr>
-                  <td>{i + 1}</td>
-                  <td>{ChangeFormateDate(p.created)}</td>
-                  <td>{p.parent_id} </td>
-                  <td>{p.cat_name}</td>
-                  <th scope="row">
-                    <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
-                  </th>
-                </tr>
-              ))
-            ) : (
+          <Table responsive="sm" bordered>
+            <thead>
               <tr>
-                <td colSpan="5">No Records</td>
+                <th scope="col">Sr. No.</th>
+                <th scope="col">Date</th>
+                <th scope="col">Category</th>
+                <th scope="col">Sub Category</th>
+                <th>status</th>
+                <th scope="col">Query No .</th>
+                <th>View</th>
               </tr>
-            )}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {allQueriesData.length > 0 ? (
+                allQueriesData.map((p, i) => (
+                  <tr>
+                    <td>{i + 1}</td>
+                    <td>{ChangeFormateDate(p.created)}</td>
+                    <td>{p.parent_id} </td>
+                    <td>{p.cat_name}</td>
+                    <td>{p.status}</td>
+                    <td scope="row">{p.assign_no}</td>
+                    <td>
+                      <Link to={`/admin/queries/${p.id}`}>
+                        <i class="fa fa-eye"></i>
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No Records</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
         </CardBody>
       </Card>
     </>
@@ -216,7 +240,6 @@ function AllQueriesData({CountAllQuery}) {
 }
 
 export default AllQueriesData;
-
 
 // {allQueriesData.map((p, i) => (
 //   <div>

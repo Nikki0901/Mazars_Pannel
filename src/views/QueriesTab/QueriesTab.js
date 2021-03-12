@@ -42,18 +42,36 @@ function QueriesTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
+ 
+  // function ChangeFormateDate2(date) {
+
+
+  //   var month = (1 + date.getMonth()).toString();
+  //   month = month.length > 1 ? month : '0' + month;
+  
+  //   var day = date.getDate().toString();
+  //   day = day.length > 1 ? day : '0' + day;
+    
+  //   return month + '/' + day + '/' + year;
+  // }
+
+
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
         <CardHeader>
           <Row>
-            <Col md="10">
+            <Col md="9">
               <CardTitle tag="h4">Queries</CardTitle>
             </Col>
-            <Col md="2">
+            <Col md="3">
+              <div style={{display:"flex", justifyContent:"space-around"}}>
               <Link to="/customer/select-category" class="btn btn-primary">
                 Fresh Assignment
               </Link>
+              </div>
+              
             </Col>
           </Row>
         </CardHeader>
@@ -61,30 +79,32 @@ function QueriesTab() {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-              <th>S.No</th>
+                <th>S.No</th>
                 <th>Date</th>
                 <th>Query No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Status</th>
                 <th>Expected Delivery Date</th>
+                <th>View</th>
               </tr>
             </thead>
             <tbody>
               {queriesData.length > 0 ? (
                 queriesData.map((p, i) => (
                   <tr key={i}>
-                    <td>{i+1}</td>
+                    <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>
-                      <Link to={`/customer/my-assingment/${p.id}`}>
-                        {p.assign_no}
-                      </Link>
-                    </td>
+                    <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td>{p.status}</td>
                     <td>{p.exp_delivery_date}</td>
+                    <td>
+                      <Link to={`/customer/my-assingment/${p.id}`}>
+                        <i class="fa fa-eye"></i>
+                      </Link>
+                    </td>
                   </tr>
                 ))
               ) : (

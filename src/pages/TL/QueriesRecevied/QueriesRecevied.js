@@ -9,6 +9,8 @@ function QueriesRecevied() {
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
   const [displayQuery, setDisplayQuery] = useState([]);
+  const [diaplaySpecific, setDisplaySpecific] = useState([]);
+
 
   const { id } = useParams();
 
@@ -20,6 +22,7 @@ function QueriesRecevied() {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
+          setDisplaySpecific(res.data.additional_queries);
           setAssingmentNo(res.data.result[0].assign_no);
         }
       });
@@ -73,46 +76,102 @@ function QueriesRecevied() {
                 </div>
               
                   <div class="card-body">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th scope="col">Titles</th>
-                          <th scope="col">Data</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">Facts of the case</th>
-                          <td>{p.fact_case}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">specific questions</th>
-                          <td colspan="1">{p.specific_query}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            Purpose for which Opinion is sought
-                          </th>
-                          <td colspan="1">{p.purpose_opinion}</td>
-                        </tr>                  
-                        <tr>
-                          <th scope="row">
-                            Format in which Opinion is required
-                          </th>
-                          <td colspan="1">{p.format_opinion}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">
-                            Timelines within which Opinion is Required
-                          </th>
-                          <td colspan="1">{p.Timelines}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Documents</th>
-                          <td>{p.upload_doc}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Titles</th>
+                      <th scope="col">Data</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Facts of the case</th>
+                      <td>{p.fact_case}</td>
+                    </tr>
+                  
+
+                    <tr>
+                      <th scope="row">Purpose for which Opinion is sought</th>
+                      <td colspan="1">{p.purpose_opinion}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        Timelines within which Opinion is Required
+                      </th>
+                      <td colspan="1">{p.Timelines}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">specific questions</th>
+                      <td colspan="1">
+                        {diaplaySpecific.map((p, i) => (
+                          <p>{p.text}</p>
+                        ))}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th scope="row">Documents</th>
+                      <td>
+                        {p.upload_doc_1 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+
+                        {p.upload_doc_2 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+
+                        {p.upload_doc_3 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Format in which Opinion is required</th>
+                      <td colspan="1">
+                        <p>
+                          {p.softcopy_word === "1" && "Softcopy - Word/ Pdf"}
+                        </p>
+                        <p>
+                          {p.softcopy_digitally_assigned === "1" &&
+                            "SoftCopy- Digitally Signed"}
+                        </p>
+
+                        <p>
+                          {p.printout_physically_assigned === "1" &&
+                            "Printout- Physically Signed"}
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Query Status</th>
+                      <td>{p.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
                     <table class="table table-bordered">
                       <thead>
                         <tr>

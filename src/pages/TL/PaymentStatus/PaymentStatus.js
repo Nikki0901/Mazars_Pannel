@@ -16,6 +16,7 @@ import { useAlert } from "react-alert";
 function PaymentStatus() {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
+  const cust_id = window.localStorage.getItem("userid");
 
   const [payment, setPayment] = useState([]);
 
@@ -58,9 +59,50 @@ function PaymentStatus() {
   };
 
   // rejected proposal
-  const rejected = (key) => {
-    console.log("rej", key);
+  // const rejected = (key) => {
+  //   console.log("rej", key);
+  // };
+
+  const makeAssignment = (key) => {
+    console.log("makeAssignment", key);
+
+    let formData = new FormData();
+    formData.append("proposal_id", key.id);
+    formData.append("q_id", key.assign_id);
+    formData.append("tl_id", JSON.parse(userid));
+    formData.append("customer_id", JSON.parse(cust_id));
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/tl/MakeAssignment`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          getPaymentStatus();
+          alert.success("accepted assignment!");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
   };
+
+  function checkStatus(p, a) {
+    console.log("paid -", p);
+    console.log("acc -", a);
+
+    if (p > 0 && p < a) {
+      return "Partial Received ";
+    } else     
+    if (p === a && p > 0) {
+      return "Full Received";
+    } else {
+      return "pending";
+    }
+  }
+
 
   return (
     <>
@@ -83,7 +125,10 @@ function PaymentStatus() {
                   <th>Customer Name</th>
                   <th>Negotiated Amount</th>
                   <th>Accepted Amount</th>
-                  <th style={{ textAlign: "center" }}>Action</th>
+                  <th>Paid Amount</th>
+                  <th>status</th>
+                  <th style={{ textAlign: "center" }}>Accept as Amount</th>
+                  <th>Accept as Assignment</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,6 +140,13 @@ function PaymentStatus() {
                       <td>{p.name}</td>
                       <td>{p.negotiated_amount}</td>
                       <td>{p.accepted_amount}</td>
+                      <td>{p.paid_amount}</td>
+                      <td>
+                        {checkStatus(
+                          Number(p.paid_amount),
+                          Number(p.accepted_amount)
+                        )}
+                      </td>
                       <td>
                         {p.negotiated_amount === "0" &&
                         p.accepted_amount === "0" ? (
@@ -112,22 +164,31 @@ function PaymentStatus() {
                                 onClick={() => accepted(p.assign_id)}
                               ></i>
                             </div>
-                            {/* <div style={{ cursor: "pointer" }}>
-                              <i
-                                class="fa fa-times"
-                                onClick={() => rejected(p.assign_id)}
-                              ></i>
-                            </div> */}
+                            
                           </div>
                         ) : (
                           ""
                         )}
                       </td>
+
+                      <td>
+                        <div style={{ textAlign: "center" }}>
+                          {p.paid_amount > 0 && (
+                            <div>
+                              <i
+                                class="fa fa-check"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => makeAssignment(p)}
+                              ></i>
+                            </div>
+                          )}
+                        </div>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6">No Records</td>
+                    <td colSpan="9">No Records</td>
                   </tr>
                 )}
               </tbody>

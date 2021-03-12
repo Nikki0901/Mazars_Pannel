@@ -38,7 +38,6 @@ function Questionnaire(props) {
     console.log("value :", Number(value.p_format_digital));
     console.log("value :", Number(value.p_format_physically));
 
-
    
       let formData = new FormData();
       formData.append("fact", value.p_fact);
@@ -54,10 +53,19 @@ function Questionnaire(props) {
       formData.append("softcopy_digitally_assigned",Number(value.p_format_digital) );
       formData.append("printout_physically_assigned",Number(value.p_format_physically));
 
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/PostQuestion`,
-        data: formData,
+      // axios({
+      //   method: "POST",
+      //   url: `${baseUrl}/customers/PostQuestion`,
+      //   data: formData,
+      //   headers: {
+      //     'content-type': 'multipart/form-data'
+      //   }
+      // })
+
+      axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
       })
         .then(function (response) {
           console.log("res-", response);
@@ -71,7 +79,9 @@ function Questionnaire(props) {
           console.log("erroror - ", error);
         });
     };
-  
+
+
+
 
   const SuccessMesg = () => {
     return (
@@ -151,10 +161,8 @@ function Questionnaire(props) {
                           -
                         </div>
                       </div> : null
-                      }
-                      
-                    </div>
-                 
+                      }                  
+                    </div>    
                  ))}
                   
               </div>
@@ -167,7 +175,6 @@ function Questionnaire(props) {
                     name="p_document1"
                     ref={register}
                     className="form-control-file"
-                    multiple={true}
                   />
                   <input
                     type="file"
@@ -298,6 +305,25 @@ function Questionnaire(props) {
 export default Questionnaire;
 
 
+
+//   const onSubmit = (value) => {
+//     console.log("value :", value);
+
+//     let formData = new FormData();
+//     formData.append("draft_report", value.p_draft[0]);
+   
+//     axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
+//       headers: {
+//         'content-type': 'multipart/form-data'
+//       }
+//     }).then(response => {
+//       console.log(response.data)
+//       alert.success("draft Report uploaded !");
+//     });
+     
+// };
+ 
+
  // let reader = new FileReader();
     // reader.readAsDataURL(value.p_document[0]);
 
@@ -411,3 +437,5 @@ export default Questionnaire;
 
 //   <label>Printout- Physically Signed</label>
 // </div>
+
+

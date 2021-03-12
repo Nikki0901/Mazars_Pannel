@@ -7,7 +7,6 @@ import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { useAlert } from "react-alert";
 
-
 function MyAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, reset } = useForm();
@@ -15,6 +14,7 @@ function MyAssingment() {
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
   const [displayQuery, setDisplayQuery] = useState([]);
+  const [diaplaySpecific, setDisplaySpecific] = useState([]);
 
   const [addModal, setAddModal] = useState(false);
   const addHandler = () => setAddModal(!addModal);
@@ -24,10 +24,11 @@ function MyAssingment() {
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
+      axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
+          setDisplaySpecific(res.data.additional_queries);
           setAssingmentNo(res.data.result[0].assign_no);
         }
       });
@@ -35,6 +36,8 @@ function MyAssingment() {
     getQuery();
     getSubmittedAssingment();
   }, [assingNo]);
+
+  console.log(diaplaySpecific);
 
   const getQuery = () => {
     axios
@@ -91,10 +94,7 @@ function MyAssingment() {
                 style={{ padding: ".5rem .1rem" }}
               >
                 <h2 class="mb-0 query">
-                  <button
-                    class="btn btn-block text-left"
-                    type="button"
-                  >
+                  <button class="btn btn-block text-left" type="button">
                     {p.assign_no}
                   </button>
                   <div
@@ -139,18 +139,10 @@ function MyAssingment() {
                       <th scope="row">Facts of the case</th>
                       <td>{p.fact_case}</td>
                     </tr>
-                    <tr>
-                      <th scope="row">specific questions</th>
-                      <td colspan="1">{p.specific_query}</td>
-                    </tr>
 
                     <tr>
                       <th scope="row">Purpose for which Opinion is sought</th>
                       <td colspan="1">{p.purpose_opinion}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Format in which Opinion is required</th>
-                      <td colspan="1">{p.format_opinion}</td>
                     </tr>
                     <tr>
                       <th scope="row">
@@ -159,8 +151,99 @@ function MyAssingment() {
                       <td colspan="1">{p.Timelines}</td>
                     </tr>
                     <tr>
+                      <th scope="row">specific questions</th>
+                      <td colspan="1">
+                        {diaplaySpecific.map((p, i) => (
+                          <p>{p.text}</p>
+                        ))}
+                      </td>
+                    </tr>
+
+                    <tr>
                       <th scope="row">Documents</th>
-                      <td>{p.upload_doc}</td>
+                      <td>
+                        {p.upload_doc_1 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+
+                        {p.upload_doc_2 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+
+                        {p.upload_doc_3 == null ? (
+                          ""
+                        ) : (
+                          <p>
+                            <a
+                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Format in which Opinion is required</th>
+                      <td colspan="1">
+                        <p>
+                          {p.softcopy_word === "1" && "Softcopy - Word/ Pdf"}
+                        </p>
+                        <p>
+                          {p.softcopy_digitally_assigned === "1" &&
+                            "SoftCopy- Digitally Signed"}
+                        </p>
+
+                        <p>
+                          {p.printout_physically_assigned === "1" &&
+                            "Printout- Physically Signed"}
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Query Status</th>
+                      <td>{p.status}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Assignment Status</th>
+                      <td>
+                        <tr>
+                          <th>Assignment Stage</th>
+                          <th>Status</th>
+                        </tr>
+                        <tr>
+                          <td>Client Discussion</td>
+                          <td>{p.client_discussion}</td>
+                        </tr>
+                        <tr>
+                          <td>Draft report</td>
+                          <td>{p.draft_report}</td>
+                        </tr>
+                        <tr>
+                          <td>Final Discussion</td>
+                          <td>{p.final_discussion}</td>
+                        </tr>
+                        <tr>
+                          <td> Delivery of report</td>
+                          <td>{p.draft_report}</td>
+                        </tr>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
