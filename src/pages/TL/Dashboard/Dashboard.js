@@ -3,116 +3,56 @@ import Layout from "../../../components/Layout/Layout";
 import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { Link } from "react-router-dom";
-import { useAlert } from "react-alert";
-
-import PendingForAcceptence from "../PendingForAcceptence/PendingForAcceptence";
-import InCompleteData from "../InCompleteData/InCompleteData";
-import CompleteData from "../CompleteData/CompleteData";
 
 function Dashboard() {
-  const [pendingData, setPendingData] = useState([]);
-
   const userid = window.localStorage.getItem("tlkey");
 
+  const [pendindForAccepttence, setPendingForAcceptence] = useState("");
+
   useEffect(() => {
-    getPendingforAcceptance();
+    const getPendindForAccepttence = () => {
+      axios
+        .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPendingForAcceptence(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    getPendindForAccepttence();
   }, []);
-
-
-  const getPendingforAcceptance = () => {
-    axios
-      .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setPendingData(res.data.result);
-        }
-      });
-  };
-
- 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">
-        <div class="col-md-12">
-          <ul
-            class="nav nav-pills mb-3"
-            style={{ justifyContent: "space-around"}}
-            id="pills-tab"
-            role="tablist"
-          >
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white active"
-                id="pills-pending-tab"
-                data-toggle="pill"
-                href="#pending"
-                role="tab"
-                aria-controls="pills-pending"
-                aria-selected="false"
-              >
-                Pending for Acceptance
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white"
-                id="pills-incomplete-tab"
-                data-toggle="pill"
-                href="#incomplete"
-                role="tab"
-                aria-controls="pills-incomplete"
-                aria-selected="false"
-              >
-                Incomplete
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white"
-                id="pills-complete-tab"
-                data-toggle="pill"
-                href="#complete"
-                role="tab"
-                aria-controls="pills-complete"
-                aria-selected="false"
-              >
-                Complete
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="pending"
-              role="tabpanel"
-              aria-labelledby="pills-pending-tab"
-            >
-              {pendingData.map((p, i) => (
-                <PendingForAcceptence
-                  p={p}
-                  getPendingforAcceptance={getPendingforAcceptance}
-                />
-              ))}
-            </div>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Pending for Acceptance
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
 
-            <div
-              class="tab-pane fade"
-              id="incomplete"
-              role="tabpanel"
-              aria-labelledby="pills-incomplete-tab"
-            >
-              <InCompleteData />
-            </div>
-
-            <div
-              class="tab-pane fade"
-              id="complete"
-              role="tabpanel"
-              aria-labelledby="pills-complete-tab"
-            >
-              <CompleteData />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4>{pendindForAccepttence}</h4>
+              </div>
             </div>
           </div>
         </div>

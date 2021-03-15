@@ -109,173 +109,176 @@ function Dashboard() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>All Queries</p>
+      <div class="row mt-3">
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    All Queries
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
+
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
+                  marginTop: "50px",
                 }}
               >
-                <h2>{allQueries}</h2>
+                <h4>{allQueries}</h4>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Pending For Allocation</p>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Pending For Allocation
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
 
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
+                  marginTop: "50px",
                 }}
               >
-                <h2>{allPendingForAllocation}</h2>
+                <h4>{allPendingForAllocation}</h4>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Pending For Proposal</p>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <h2>{allPendingForProposal}</h2>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Pending For Proposal
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>All Proposal</p>
 
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
+                  marginTop: "50px",
                 }}
               >
-                <h2>{allProposal}</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Accepted Proposal</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <h2>{allAcceptedProposal}</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Declined Proposal</p>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <h2>{allDeclinedProposal}</h2>
+                <h4>{allPendingForProposal}</h4>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      {/* 
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Accepted Proposal</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <h2>100</h2>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Declined Proposal</p>
+      <div class="row mt-3">
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    All Proposal
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
 
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
+                  marginTop: "50px",
                 }}
               >
-                <h2>100</h2>
+                <h4>{allProposal}</h4>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <p style={{ fontSize: "20px" }}>Pending For Proposal</p>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Accepted Proposal
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
 
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
+                  marginTop: "50px",
                 }}
               >
-                <h2>100</h2>
+                <h4>{allAcceptedProposal}</h4>
               </div>
             </div>
           </div>
         </div>
-        
-      </div> */}
-    </Layout>
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Declined Proposal
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4>{allDeclinedProposal}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </Layout>
   );
 }
 

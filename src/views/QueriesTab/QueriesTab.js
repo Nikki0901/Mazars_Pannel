@@ -89,7 +89,8 @@ function QueriesTab() {
                 <th>View</th>
               </tr>
             </thead>
-            <tbody>
+            {/* style="height: 10px !important; overflow: scroll; " */}
+            <tbody style={{height:"400px" , overflowY:"scroll"}}>
               {queriesData.length > 0 ? (
                 queriesData.map((p, i) => (
                   <tr key={i}>

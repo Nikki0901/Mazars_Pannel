@@ -12,11 +12,10 @@ import {
   Col,
   Table,
 } from "reactstrap";
-
+import { Link } from "react-router-dom";
 import AcceptModal from "./AcceptModal";
 import PaymentModal from "./PaymentModal";
-import './index.css'
-
+import "./index.css";
 
 function ProposalTab() {
   const alert = useAlert();
@@ -139,124 +138,135 @@ function ProposalTab() {
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
-            <thead class="table_head">
-              <tr>
-                <th>S.No</th>
-                <th>Date</th>
-                <th>Query No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Status of Proposal</th>
-                <th>Date of Proposal</th>
-                <th>Proposed Amount</th>
-                <th>Negotiated Amount</th>
-                <th>Amount Accepted</th>
-                <th>Amount Paid</th>
-                <th>Date of Payment</th>
-                <th>Amount Outstanding</th>
-                <th>Date of acceptance of Proposal</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+          <div>
+            <table class="table table-bordered ">
+              <thead class="table_head">
+                <tr>
+                  <th>S.No</th>
+                  <th>Date</th>
+                  <th>Query No</th>
+                  <th>Category</th>
+                  <th>Sub Category</th>
+                  <th>Status of Proposal</th>
+                  <th>Date of Proposal</th>
+                  <th>Proposed Amount</th>
+                  <th>Negotiated Amount</th>
+                  <th>Amount Accepted</th>
+                  <th>Amount Paid</th>
+                  <th>Date of Payment</th>
+                  <th>Amount Outstanding</th>
+                  <th>Date of acceptance of Proposal</th>
+                  <th>Action</th>                
+                </tr>
+              </thead>
 
-            {proposalDisplay.length > 0 ? (
-              proposalDisplay.map((p, i) => (
-                <tbody class="table_bdy">
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.assign_no}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.status}</td>
-                    <td>{ChangeFormateDate(p.DateofProposal)}</td>
-                    <td>{p.ProposedAmount}</td>
-                    <td>{p.negotiated_amount}</td>
-                    <td>{p.accepted_amount}</td>
-                    <td>{p.paid_amount}</td>
-                    <td>{p.pay_date}</td>
-                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td>
-                    <td>{p.acpt_reject_time}</td>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        {p.statuscode === "6" ? null : (
-                          <div>
-                            {p.negotiated_amount === "0" &&
-                            p.accepted_amount === "0" ? (
-                              <div>
+              {proposalDisplay.length > 0 ? (
+                proposalDisplay.map((p, i) => (
+                  <tbody class="table_bdy">
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>{ChangeFormateDate(p.created)}</td>
+                      <td>{p.assign_no}</td>
+                      <td>{p.parent_id}</td>
+                      <td>{p.cat_name}</td>
+                      <td>{p.status}</td>
+                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
+                      <td>{p.ProposedAmount}</td>
+                      <td>{p.negotiated_amount}</td>
+                      <td>{p.accepted_amount}</td>
+                      <td>{p.paid_amount}</td>
+                      <td>{p.pay_date}</td>
+                      <td>
+                        {checkOutstading(p.paid_amount, p.accepted_amount)}
+                      </td>
+                      <td>{p.acpt_reject_time}</td>
+                      <td>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          {p.statuscode === "6" ? null : (
+                            <div>
+                              {p.negotiated_amount === "0" &&
+                              p.accepted_amount === "0" ? (
+                                <div>
+                                  <div style={{ cursor: "pointer" }}>
+                                    <i
+                                      class="fa fa-check"
+                                      onClick={() => accepted(p.q_id)}
+                                    ></i>
+                                  </div>
+
+                                  <div style={{ cursor: "pointer" }}>
+                                    <i
+                                      class="fa fa-times"
+                                      onClick={() => rejected(p.q_id)}
+                                    ></i>
+                                  </div>
+                                  <div style={{ cursor: "pointer" }}>
+                                    <i
+                                      class="fa fa-file-text"
+                                      onClick={() => acceptedHandler(p.up_id)}
+                                    ></i>
+                                  </div>
+                                </div>
+                              ) : (
+                                (p.negotiated_amount === "0" ||
+                                  p.accepted_amount) &&
+                                ""
+                              )}
+
+                              {p.statuscode == 5 ||
+                              p.statuscode == 7 ||
+                              p.statuscode == 8 ? (
                                 <div style={{ cursor: "pointer" }}>
                                   <i
-                                    class="fa fa-check"
-                                    onClick={() => accepted(p.q_id)}
+                                    class="fa fa-credit-card"
+                                    onClick={() => paymentHandler(p)}
                                   ></i>
                                 </div>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      {/* <td>
+                      <Link to={`/customer/proposal-received/${p.id}`}>
+                        <i class="fa fa-eye"></i>
+                      </Link>
+                    </td> */}
+                    </tr>
+                  </tbody>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="15">No Records</td>
+                </tr>
+              )}
 
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-times"
-                                    onClick={() => rejected(p.q_id)}
-                                  ></i>
-                                </div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-file-text"
-                                    onClick={() => acceptedHandler(p.up_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            ) : (
-                              (p.negotiated_amount === "0" ||
-                                p.accepted_amount) &&
-                              ""
-                            )}
+              <AcceptModal
+                acceptedModal={acceptedModal}
+                acceptedHandler={acceptedHandler}
+                id={id}
+                getProposalData={getProposalData}
+              />
 
-                            {p.statuscode == 5 ||
-                            p.statuscode == 7 ||
-                            p.statuscode == 8 ? (
-                              <div style={{ cursor: "pointer" }}>
-                                <i
-                                  class="fa fa-credit-card"
-                                  onClick={() => paymentHandler(p)}
-                                ></i>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="15">No Records</td>
-              </tr>
-            )}
+              <PaymentModal
+                paymentHandler={paymentHandler}
+                addPaymentModal={addPaymentModal}
+                pay={pay}
+                getProposalData={getProposalData}
+              />
+            </table>
+          </div>
 
-            <AcceptModal
-              acceptedModal={acceptedModal}
-              acceptedHandler={acceptedHandler}
-              id={id}
-              getProposalData={getProposalData}
-            />
-
-            <PaymentModal
-              paymentHandler={paymentHandler}
-              addPaymentModal={addPaymentModal}
-              pay={pay}
-              getProposalData={getProposalData}
-            />
-          </Table>
+      
         </CardBody>
       </Card>
     </Layout>
@@ -264,6 +274,24 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
+
+
+
+// <div class="tableFixHead">
+//   <table>
+//     <thead>
+//       <tr><th>TH 1</th><th>TH 2</th></tr>
+//     </thead>
+//     <tbody>
+//       <tr><td>A1</td><td>A2</td></tr>
+//       <tr><td>B1</td><td>B2</td></tr>
+//       <tr><td>C1</td><td>C2</td></tr>
+//       <tr><td>D1</td><td>D2</td></tr>
+//       <tr><td>E1</td><td>E2</td></tr>
+//     </tbody>
+//   </table>
+// </div>
+
 
 // <td>
 // <div class="text-center">

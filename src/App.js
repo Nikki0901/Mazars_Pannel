@@ -24,6 +24,8 @@ import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
 import ProposalTab from './views/ProposalTab/ProposalTab'
 import AssignmentTab from './views/AssignmentTab/AssignmentTab'
+import ProposalReceived from './views/ProposalReceived/ProposalReceived'
+
 
 
 
@@ -62,6 +64,10 @@ import TlEditTP from './pages/TL/EditTP/EditTP'
 import TlFeedbackTab from './pages/TL/FeedbackTab/FeedbackTab'
 import TlPaymentStatus from './pages/TL/PaymentStatus/PaymentStatus'
 import TlAssignmentTab from './pages/TL/AssignmentTab/AssignmentTab'
+import TlSendProposal from './pages/TL/SendProposal/SendProposal'
+import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
+
+
 
 
 
@@ -72,6 +78,8 @@ import TpLogin from './pages/TP/Login/Login'
 import TpDashboard from './pages/TP/Dashboard/Dashboard'
 import TpProposal from './pages/TP/Proposal/Proposal'
 import TpQueriesRecevied from './pages/TP/QueriesRecevied/QueriesRecevied'
+import TpSendProposal from './pages/TP/SendProposal/SendProposal'
+
 
 
 //private routes
@@ -115,6 +123,8 @@ function App() {
         <Route exact path="/customer/queries" component={QueriesTab} />
         <Route exact path="/customer/proposal" component={ProposalTab} />
         <Route exact path="/customer/assignment" component={AssignmentTab} />
+        <Route exact path="/customer/proposal-received/:id" component={ProposalReceived} />
+
 
 
 
@@ -152,6 +162,10 @@ function App() {
         <Route exact path="/teamleader/feedback" component={TlFeedbackTab} />
         <Route exact path="/teamleader/paymentstatus" component={TlPaymentStatus} />
         <Route exact path="/teamleader/assignment" component={TlAssignmentTab} />
+        <Route exact path="/teamleader/sendproposal/:id" component={TlSendProposal} />
+        <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
+
+
 
 
 
@@ -161,6 +175,8 @@ function App() {
         <Route exact path="/taxprofessional/dashboard" component={TpDashboard} />
         <Route exact path="/taxprofessional/proposal" component={TpProposal} />
         <Route exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
+        <Route exact path="/taxprofessional/sendproposal/:id" component={TpSendProposal} />
+
       
     
         </Switch>

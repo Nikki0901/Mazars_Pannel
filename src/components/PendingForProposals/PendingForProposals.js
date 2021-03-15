@@ -178,17 +178,15 @@ function PendingForProposals({ CountPendingProposal }) {
                       ref={register}
                     />
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <button type="submit" class="btn btn-primary">
-                      Search
-                    </button>
-                  </div>
+                  <button type="submit" class="btn btn-primary mb-2">
+                    Search
+                  </button>
                 </form>
               </div>
               <div>
                 <button
                   type="submit"
-                  class="btn btn-primary mb-2"
+                  class="btn btn-primary mb-2 ml-3"
                   onClick={resetData}
                 >
                   Reset

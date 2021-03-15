@@ -3,69 +3,49 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-
-
+import { useParams } from "react-router-dom";
 
 function ProposalComponent() {
   const alert = useAlert();
   const { register, handleSubmit, reset } = useForm();
 
-  const [incompleteData, setInCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tpkey");
 
+  const [assignId, setAssignID] = useState("");
+  const [assingNo, setAssingNo] = useState("");
+  const [custId, setCustId] = useState("");
   const [custname, setCustName] = useState();
-  const [id, setId] = useState(null);
-  const [assingNo, setAssingNo] = useState('');
-  const [custId, setCustId] = useState('');
-  const [assignId, setAssignID] = useState('');
-  
+  const { id } = useParams();
+
   useEffect(() => {
-    const getCompleteAssingment = () => {
+    const getQuery = () => {
       axios
-        .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
+        .get(
+          `${baseUrl}/tp/getassignedques?id=${JSON.parse(
+            userid
+          )}&assign_id=${id}`
+        )
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setInCompleteData(res.data.result);
+            setAssingNo(res.data.result[0].assign_no);
+            setAssignID(res.data.result[0].id);
           }
         });
     };
-
-    getCompleteAssingment();
+    getQuery();
   }, []);
-
-
 
   useEffect(() => {
     const getUser = async () => {
-      
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
       console.log("res", res);
       setCustName(res.data.name);
-      setCustId(res.data.id)
-      // {
-      //   Object.entries(res.data.result).map(([key, value]) => {
-      //     console.log("val", value.name);
-      //     setCustName(value.name);
-      //   });
-      // }
+      setCustId(res.data.id);
     };
 
     getUser();
   }, [id]);
-
-
-  const getID = (key) =>{
-    setId(key)
-  
-    incompleteData.filter((data)=>{
-      if(data.id == key){
-        console.log('assingNo', data.assign_no);
-        setAssingNo(data.assign_no)
-        setAssignID(data.id)
-      }
-    })
-  }
 
   const onSubmit = (value) => {
     console.log(value);
@@ -113,20 +93,13 @@ function ProposalComponent() {
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Query No.</label>
-                  <select
-                    class="form-control"
-                    ref={register}
+                  <input
+                    type="text"
                     name="p_assingment"
-                    // onChange={(e) => setAssing(e.target.value)}
-                    onChange={(e) =>getID(e.target.value)} 
-                  >
-                    <option value="">--select--</option>
-                    {incompleteData.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.assign_no}
-                      </option>
-                    ))}
-                  </select>
+                    class="form-control"
+                    value={assingNo}
+                    ref={register}
+                  />
                 </div>
               </div>
 
@@ -231,12 +204,29 @@ function ProposalComponent() {
 
 export default ProposalComponent;
 
-
 const payable = [
   { pay: "NEFT" },
   { pay: "DEBIT CARD" },
   { pay: "CREDIT CARD" },
   { pay: "UPI" },
   { pay: "WALLET" },
-
 ];
+
+// {
+//   Object.entries(res.data.result).map(([key, value]) => {
+//     console.log("val", value.name);
+//     setCustName(value.name);
+//   });
+// }
+
+// const getID = (key) =>{
+//   setId(key)
+
+//   incompleteData.filter((data)=>{
+//     if(data.id == key){
+//       console.log('assingNo', data.assign_no);
+//       setAssingNo(data.assign_no)
+//       setAssignID(data.id)
+//     }
+//   })
+// }

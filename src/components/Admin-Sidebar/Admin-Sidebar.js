@@ -1,14 +1,13 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
 
-function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
+function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
+  const [toggleState, setToggleState] = useState("active");
 
-  const [toggleState, setToggleState] = useState('active');
-
-  const toggleTab = (index) =>{
-    console.log(index)
-    setToggleState(index)
-  }
+  const toggleTab = (index) => {
+    console.log(index);
+    setToggleState(index);
+  };
 
   return (
     <>
@@ -37,251 +36,241 @@ function Sidebar({adminDashboard , custDashboard , TLDashboard , TPDashboard}) {
           </ul>
         </div>
 
-        <div class="main-menu-content">     
-          {
-            custDashboard
-            && 
+        <div class="main-menu-content">
+          {custDashboard && (
             <ul
-            class="navigation navigation-main"
-            id="main-menu-navigation"
-            data-menu="menu-navigation"
-          >
-            
-            <li class={toggleState === "active" ? "active ": "nav-item"}>
-            <NavLink to={"/customer/dashboard"}>
-              <i class="fa fa-home"></i>
-              <span class="menu-title" data-i18n="">
-                  Dashboard
-                </span>
-              </NavLink>           
-            </li>
+              class="navigation navigation-main"
+              id="main-menu-navigation"
+              data-menu="menu-navigation"
+            >
+              <li class={toggleState === "active" ? "active " : "nav-item"}>
+                <NavLink to={"/customer/dashboard"}>
+                  <i class="fa fa-home"></i>
+                  <span class="menu-title" data-i18n="">
+                    Dashboard
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class={toggleState === "query" && "active nav-item"} onClick={() => toggleTab("query")}>
-              <NavLink to={"/customer/queries"}>
-              <i class="fa fa-clone"></i>
-              <span class="menu-title" data-i18n="">
-              Queries
-                </span>
-              </NavLink> 
-            </li>  
+              <li
+                class={toggleState === "query" && "active nav-item"}
+                onClick={() => toggleTab("query")}
+              >
+                <NavLink to={"/customer/queries"}>
+                  <i class="fa fa-clone"></i>
+                  <span class="menu-title" data-i18n="">
+                    Queries
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-              <NavLink to={"/customer/proposal"}>
-              <i class="fa fa-envelope-o"></i>
-              <span class="menu-title" data-i18n="">
-              Proposal
-                </span>
-              </NavLink> 
-            </li>  
+              <li class="nav-item">
+                <NavLink to={"/customer/proposal"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Proposal
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-              <NavLink to={"/customer/assignment"}>
-              <i class="fa fa-sticky-note-o"></i>
-              <span class="menu-title" data-i18n="">
-              Assignments
-                </span>
-              </NavLink> 
-            </li>  
+              <li class="nav-item">
+                <NavLink to={"/customer/assignment"}>
+                  <i class="fa fa-file"></i>
+                  <span class="menu-title" data-i18n="">
+                    Assignments
+                  </span>
+                </NavLink>
+              </li>
 
-           
-            <li class="nav-item">
-              <NavLink to={"/customer/feedback"}>
-              <i class="fa fa-rss-square"></i>
-              <span class="menu-title" data-i18n="">
-              Feedback
-                </span>
-              </NavLink> 
-            </li>          
-          </ul>
-          }
-        
-       {
-        adminDashboard 
-        && 
-        <ul
-          class="navigation navigation-main"
-          id="main-menu-navigation"
-          data-menu="menu-navigation"
-        >
-         
-         <li class="active nav-item">
-            <NavLink to={"/admin/dashboard"}>
-            <i class="fa fa-home"></i>
-              <span class="menu-title" data-i18n="">
-                  Dashboard
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/customer/feedback"}>
+                  <i class="fa fa-rss-square"></i>
+                  <span class="menu-title" data-i18n="">
+                    Feedback
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
 
-            <li class="nav-item">
-            <NavLink to={"/admin/queriestab"}>
-            <i class="fa fa-clone">
-            </i>
-              <span class="menu-title" data-i18n="">
-              Queries
-                </span>
-              </NavLink>           
-            </li>
+          {adminDashboard && (
+            <ul
+              class="navigation navigation-main"
+              id="main-menu-navigation"
+              data-menu="menu-navigation"
+            >
+              <li class="active nav-item">
+                <NavLink to={"/admin/dashboard"}>
+                  <i class="fa fa-home"></i>
+                  <span class="menu-title" data-i18n="">
+                    Dashboard
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/admin/proposal"}>
-            <i class="fa fa-envelope-o"></i>
-              <span class="menu-title" data-i18n="">
-              Proposals
-                </span>
-              </NavLink>           
-            </li>
-            
-            <li class="nav-item">
-            <NavLink to={"/admin/paymentstatus"}>
-            <i class="fa fa-file-text"></i>
-              <span class="menu-title" data-i18n="">
-              Payment Status
-                </span>
-              </NavLink>           
-            </li>
-            
+              <li class="nav-item">
+                <NavLink to={"/admin/queriestab"}>
+                  <i class="fa fa-clone"></i>
+                  <span class="menu-title" data-i18n="">
+                    Queries
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/admin/assignment"}>
-            <i class="fa fa-sticky-note-o"></i>
-              <span class="menu-title" data-i18n="">
-              Assignments
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/admin/proposal"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Proposals
+                  </span>
+                </NavLink>
+              </li>
 
-           
+              <li class="nav-item">
+                <NavLink to={"/admin/paymentstatus"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Payment Status
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/admin/teamleaders"}>
-            <i class="fa fa-users"></i>
-              <span class="menu-title" data-i18n="">
-              Team Leaders
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/admin/assignment"}>
+                  <i class="fa fa-file"></i>
+                  <span class="menu-title" data-i18n="">
+                    Assignments
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/admin/taxprofessionals"}>
-            <i class="fa fa-users"></i>
-              <span class="menu-title" data-i18n="">
-              Tax Professionals
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/admin/teamleaders"}>
+                  <i class="fa fa-users"></i>
+                  <span class="menu-title" data-i18n="">
+                    Team Leaders
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/admin/feedback"}>
-            <i class="fa fa-file-text"></i>
-              <span class="menu-title" data-i18n="">
-                Feedback
-                </span>
-              </NavLink>             
-            </li>          
-        </ul>
-      }
-          
+              <li class="nav-item">
+                <NavLink to={"/admin/taxprofessionals"}>
+                  <i class="fa fa-users"></i>
+                  <span class="menu-title" data-i18n="">
+                    Tax Professionals
+                  </span>
+                </NavLink>
+              </li>
 
-          {
-            TLDashboard  &&
-          <ul
-          class="navigation navigation-main"
-          id="main-menu-navigation"
-          data-menu="menu-navigation"
-        >
-         
-         <li class="active nav-item">
-            <NavLink to={"/teamleader/dashboard"}>
-            <i class="fa fa-home"></i>
-              <span class="menu-title" data-i18n="">
-                  Dashboard
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/admin/feedback"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Feedback
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/proposal"}>
-            <i class="fa fa-file-text"></i>
-              <span class="menu-title" data-i18n="">
-              Proposal
-                </span>
-              </NavLink>           
-            </li>
+          {TLDashboard && (
+            <ul
+              class="navigation navigation-main"
+              id="main-menu-navigation"
+              data-menu="menu-navigation"
+            >
+              <li class="active nav-item">
+                <NavLink to={"/teamleader/dashboard"}>
+                  <i class="fa fa-home"></i>
+                  <span class="menu-title" data-i18n="">
+                    Dashboard
+                  </span>
+                </NavLink>
+              </li>
 
+              <li class="nav-item">
+                <NavLink to={"/teamleader/queriestab"}>
+                  <i class="fa fa-clone"></i>
+                  <span class="menu-title" data-i18n="">
+                    Queries
+                  </span>
+                </NavLink>
+              </li>
 
+              <li class="nav-item">
+                <NavLink to={"/teamleader/proposal"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Proposal
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/paymentstatus"}>
-            <i class="fa fa-file-text"></i>
-              <span class="menu-title" data-i18n="">
-              Payment Status
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/teamleader/paymentstatus"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Payment Status
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/assignment"}>
-            <i class="fa fa-sticky-note-o"></i>
-              <span class="menu-title" data-i18n="">
-              Assignments
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/teamleader/assignment"}>
+                  <i class="fa fa-file"></i>
+                  <span class="menu-title" data-i18n="">
+                    Assignments
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/addteamprof"}>
-            <i class="fa fa-users"></i>
-              <span class="menu-title" data-i18n="">
-              View T.P
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/teamleader/addteamprof"}>
+                  <i class="fa fa-users"></i>
+                  <span class="menu-title" data-i18n="">
+                    View T.P
+                  </span>
+                </NavLink>
+              </li>
 
-            <li class="nav-item">
-            <NavLink to={"/teamleader/feedback"}>
-            <i class="fa fa-file-text"></i>
-              <span class="menu-title" data-i18n="">
-              Feedback
-                </span>
-              </NavLink>           
-            </li>
+              <li class="nav-item">
+                <NavLink to={"/teamleader/feedback"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Feedback
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
 
-        </ul>
-          }
+          {TPDashboard && (
+            <ul
+              class="navigation navigation-main"
+              id="main-menu-navigation"
+              data-menu="menu-navigation"
+            >
+              <li class="active nav-item">
+                <NavLink to={"/taxprofessional/dashboard"}>
+                  <i class="fa fa-home"></i>
+                  <span class="menu-title" data-i18n="">
+                    Dashboard
+                  </span>
+                </NavLink>
+              </li>
 
-          {
-            TPDashboard
-            &&
-             <ul
-             class="navigation navigation-main"
-             id="main-menu-navigation"
-             data-menu="menu-navigation"
-           >
-            
-            <li class="active nav-item">
-               <NavLink to={"/taxprofessional/dashboard"}>
-               <i class="fa fa-home"></i>
-                 <span class="menu-title" data-i18n="">
-                     Dashboard
-                   </span>
-                 </NavLink>           
-               </li>
-   
-               <li class="nav-item">
-               <NavLink to={"/taxprofessional/proposal"}>
-               <i class="fa fa-file-text"></i>
-                 <span class="menu-title" data-i18n="">
-                 Proposal
-                   </span>
-                 </NavLink>           
-               </li>
-   
-           </ul>
-          }
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/proposal"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Proposal
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
         </div>
         <div class="navigation-background"></div>
-
       </div>
     </>
   );

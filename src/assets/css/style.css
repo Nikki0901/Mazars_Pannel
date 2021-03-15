@@ -6,9 +6,11 @@
   background: #2b345f;
 }
 
+
 .heading {
   padding-bottom: 2%;
 }
+
 
 .form {
   width: 60%;
@@ -36,6 +38,7 @@
   list-style: none;
   display: flex;
 }
+
 .menu li {
   padding-right: 15px;
   padding: 4px 15px;
@@ -72,7 +75,6 @@ footer {
   box-shadow: 0px -3px 10px #00000029;
 }
 
-
 .content_register {
   width: 50%;
   margin: auto;
@@ -91,6 +93,7 @@ footer {
   border: 1px solid red;
   margin-bottom: 15%;
 } */
+
 
 .otp{
   width: 50%;

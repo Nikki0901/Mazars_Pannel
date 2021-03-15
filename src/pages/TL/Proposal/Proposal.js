@@ -11,6 +11,8 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import { Link, useParams } from "react-router-dom";
+
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
@@ -19,12 +21,14 @@ function Proposal() {
 
   useEffect(() => {
     const getProposalList = () => {
-      axios.get(`${baseUrl}/admin/pendingProposal`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setProposal(res.data.result);
-        }
-      });
+      axios
+        .get(`${baseUrl}/tl/pendingTlProposal?tl_id=${JSON.parse(userid)}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setProposal(res.data.result);
+          }
+        });
     };
     getProposalList();
   }, []);
@@ -38,11 +42,13 @@ function Proposal() {
               <CardTitle tag="h4">List of Proposals</CardTitle>
             </Col>
             <Col md="3">
-              {/* <div style={{display:"flex", justifyContent:"space-around"}}>
-              <Link to="/customer/select-category" class="btn btn-primary">
-                Fresh Assignment
-              </Link>
-              </div> */}
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                {/* <Link
+                  to={`/teamleader/sendproposal/${id}`}                
+                >
+                  Send Proposal
+                </Link> */}
+              </div>
             </Col>
           </Row>
         </CardHeader>
@@ -53,7 +59,6 @@ function Proposal() {
                 <th>S.No.</th>
                 <th>Query No</th>
                 <th>Customer Name </th>
-                <th>status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -64,8 +69,11 @@ function Proposal() {
                     <td>{i + 1}</td>
                     <td>{p.assign_no}</td>
                     <td>{p.name}</td>
-                    <td></td>
-                    <td>{p.status}</td>
+                    <td>
+                      <Link to={`/teamleader/sendproposal/${p.id}`}>
+                        <i class="fa fa-mail-forward"></i>
+                      </Link>
+                    </td>
                   </tr>
                 ))
               ) : (

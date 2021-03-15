@@ -63,7 +63,7 @@ function UnPaidComponent() {
                 <th>Negotiated Amount</th>
                 <th>Accepted Amount</th>
                 <th>Paid Amount</th>
-                <th>status</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>

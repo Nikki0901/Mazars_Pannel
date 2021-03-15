@@ -127,6 +127,7 @@ function Dashboard() {
                   <Table responsive="sm" bordered>
                     <thead>
                       <tr>
+                      <th scope="col">S.No</th>
                         <th scope="col">Query No .</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Facts of the Case</th>
@@ -138,11 +139,12 @@ function Dashboard() {
                       {newQueries.length > 0 ? (
                         newQueries.map((p, i) => (
                           <tr key={i}>
-                            <th scope="row">
+                            <td>{i+1}</td>
+                            <td scope="row">
                               <Link to={`/taxprofessional/queries/${p.id}`}>
                                 {p.assign_no}
                               </Link>
-                            </th>
+                            </td>
                             <td>{p.name}</td>
                             <td>{p.fact_case}</td>
                             <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
