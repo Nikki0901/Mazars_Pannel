@@ -63,7 +63,7 @@ function QueriesRecevied() {
               </button>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "center" }}>
-              <p style={{ fontSize: "20px" }}>Queries Received</p>
+              <p style={{ fontSize: "20px" }}>Query Details</p>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "flex-end" }}>
               <p>{assingNo}</p>

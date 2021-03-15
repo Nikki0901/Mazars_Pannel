@@ -145,18 +145,18 @@ function ProposalTab() {
                   <th>S.No</th>
                   <th>Date</th>
                   <th>Query No</th>
-                  <th>Category</th>
-                  <th>Sub Category</th>
+
                   <th>Status of Proposal</th>
-                  <th>Date of Proposal</th>
+
                   <th>Proposed Amount</th>
                   <th>Negotiated Amount</th>
                   <th>Amount Accepted</th>
                   <th>Amount Paid</th>
-                  <th>Date of Payment</th>
+
                   <th>Amount Outstanding</th>
-                  <th>Date of acceptance of Proposal</th>
-                  <th>Action</th>                
+
+                  <th>Action</th>
+                  <th>View</th>
                 </tr>
               </thead>
 
@@ -167,19 +167,18 @@ function ProposalTab() {
                       <td>{i + 1}</td>
                       <td>{ChangeFormateDate(p.created)}</td>
                       <td>{p.assign_no}</td>
-                      <td>{p.parent_id}</td>
-                      <td>{p.cat_name}</td>
+
                       <td>{p.status}</td>
-                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
+
                       <td>{p.ProposedAmount}</td>
                       <td>{p.negotiated_amount}</td>
                       <td>{p.accepted_amount}</td>
                       <td>{p.paid_amount}</td>
-                      <td>{p.pay_date}</td>
+
                       <td>
                         {checkOutstading(p.paid_amount, p.accepted_amount)}
                       </td>
-                      <td>{p.acpt_reject_time}</td>
+
                       <td>
                         <div
                           style={{
@@ -236,17 +235,17 @@ function ProposalTab() {
                           )}
                         </div>
                       </td>
-                      {/* <td>
-                      <Link to={`/customer/proposal-received/${p.id}`}>
-                        <i class="fa fa-eye"></i>
-                      </Link>
-                    </td> */}
+                      <td>
+                        <Link to={`/customer/proposal-received/${p.id}`}>
+                          <i class="fa fa-eye"></i>
+                        </Link>
+                      </td>
                     </tr>
                   </tbody>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="15">No Records</td>
+                  <td colSpan="16">No Records</td>
                 </tr>
               )}
 
@@ -265,8 +264,6 @@ function ProposalTab() {
               />
             </table>
           </div>
-
-      
         </CardBody>
       </Card>
     </Layout>
@@ -274,8 +271,6 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
-
-
 
 // <div class="tableFixHead">
 //   <table>
@@ -291,7 +286,6 @@ export default ProposalTab;
 //     </tbody>
 //   </table>
 // </div>
-
 
 // <td>
 // <div class="text-center">

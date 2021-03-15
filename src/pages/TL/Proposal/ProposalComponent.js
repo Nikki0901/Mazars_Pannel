@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import { Link, useParams } from "react-router-dom";
+// import { Link, useParams } from "react-router-dom";
 
-function ProposalComponent() {
-  // const { assign } = props;
-  // console.log(assign);
+
+function ProposalComponent(props) {
+  const { id } = props;
+  console.log(id);
 
   const alert = useAlert();
   const { register, handleSubmit, reset } = useForm();
@@ -18,7 +19,7 @@ function ProposalComponent() {
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
 
-  const { id } = useParams();
+  // const { id } = useParams();
 
   useEffect(() => {
     const getQuery = () => {
@@ -38,6 +39,7 @@ function ProposalComponent() {
     };
     getQuery();
   }, []);
+
 
   useEffect(() => {
     const getUser = async () => {

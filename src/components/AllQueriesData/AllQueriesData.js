@@ -228,7 +228,7 @@ function AllQueriesData({ CountAllQuery }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5">No Records</td>
+                  <td colSpan="7">No Records</td>
                 </tr>
               )}
             </tbody>

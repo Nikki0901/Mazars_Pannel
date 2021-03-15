@@ -6,11 +6,9 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 
-
-
 function AddAssingmentStages() {
   const alert = useAlert();
-  const { register, handleSubmit, errors , reset} = useForm();
+  const { register, handleSubmit, errors, reset } = useForm();
   const userid = window.localStorage.getItem("tlkey");
   const { id } = useParams();
 
@@ -27,7 +25,7 @@ function AddAssingmentStages() {
     formData.append("stage_3_status", value.status_3);
     formData.append("stage_4_status", value.status_4);
     formData.append("stage_5_status", value.status_5);
- 
+
     axios({
       method: "POST",
       url: `${baseUrl}/tl/postAssignmentStages`,
@@ -41,10 +39,9 @@ function AddAssingmentStages() {
         }
       })
       .catch((error) => {
-        console.log("erroror - ", error); 
+        console.log("erroror - ", error);
       });
   };
-
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -58,13 +55,20 @@ function AddAssingmentStages() {
           <div class="col-md-8">
             <br />
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="row">  
-              <div class="col-md-6">      
+              <div class="row">
+                <div class="col-md-6">
                   <div class="form-group">
-                    <label style={{fontSize:"20px", fontWeight:"500", paddingTop:"30px"}}>
-                      Client Discussion</label>
+                    <label
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        paddingTop: "30px",
+                      }}
+                    >
+                      Client Discussion
+                    </label>
                   </div>
-                </div>  
+                </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Status 1</label>
@@ -74,112 +78,136 @@ function AddAssingmentStages() {
                       name="status_1"
                       // onChange={(e) => setAssing(e.target.value)}
                     >
-                      <option value="">--Select Status--</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
+                      <option value="notApplicable">Not Applicable</option>
                     </select>
                   </div>
                 </div>
               </div>
 
               <div class="row">
-              <div class="col-md-6">  
-              <div class="form-group">
-              <label style={{fontSize:"20px", fontWeight:"500", paddingTop:"30px"}}>
-                      Draft Report</label>
-                  </div>
-              </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                  <label>Status 2</label>
-                  <select
+                    <label
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        paddingTop: "30px",
+                      }}
+                    >
+                      Draft Report
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Status 2</label>
+                    <select
                       class="form-control"
                       ref={register}
                       name="status_2"
                       // onChange={(e) => setAssing(e.target.value)}
                     >
-                      <option value="">--Select Status--</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
+                      <option value="notApplicable">Not Applicable</option>
                     </select>
                   </div>
                 </div>
               </div>
 
               <div class="row">
-              <div class="col-md-6">  
-              <div class="form-group">
-              <label style={{fontSize:"20px", fontWeight:"500", paddingTop:"30px"}}>
-              Final Discussion</label>
-                  </div>
-            </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                  <label>Status 3</label>
-                  <select
+                    <label
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        paddingTop: "30px",
+                      }}
+                    >
+                      Final Discussion
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Status 3</label>
+                    <select
                       class="form-control"
                       ref={register}
                       name="status_3"
                       // onChange={(e) => setAssing(e.target.value)}
                     >
-                      <option value="">--Select Status--</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
-                      {/* <option value="notapplicable">Not Applicable</option> */}
+                      <option value="notApplicable">Not Applicable</option>
                     </select>
                   </div>
                 </div>
               </div>
 
               <div class="row">
-              
-              <div class="col-md-6">  
-              <div class="form-group">
-              <label style={{fontSize:"20px", fontWeight:"500", paddingTop:"30px"}}>
-                   Delivery of report</label>
-                  </div>
-            </div>
                 <div class="col-md-6">
-                <div class="form-group">
-                <label>Status 4</label>
-                <select
+                  <div class="form-group">
+                    <label
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        paddingTop: "30px",
+                      }}
+                    >
+                      Delivery of report
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Status 4</label>
+                    <select
                       class="form-control"
                       ref={register}
                       name="status_4"
                       // onChange={(e) => setAssing(e.target.value)}
                     >
-                      <option value="">--Select Status--</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
+                      <option value="notApplicable">Not Applicable</option>
                     </select>
                   </div>
                 </div>
-                
               </div>
 
               <div class="row">
-              <div class="col-md-6">  
-              <div class="form-group">
-              <label style={{fontSize:"20px", fontWeight:"500", paddingTop:"30px"}}>
-                Others</label>
-                  </div>
-                    </div>
                 <div class="col-md-6">
-                <div class="form-group">
-                <label>Status 5</label>
-                <select
+                  <div class="form-group">
+                    <label
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "500",
+                        paddingTop: "30px",
+                      }}
+                    >
+                      Others
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Status 5</label>
+                    <select
                       class="form-control"
                       ref={register}
                       name="status_5"
                       // onChange={(e) => setAssing(e.target.value)}
                     >
-                      <option value="">--Select Status--</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
+                      <option value="notApplicable">Not Applicable</option>
                     </select>
                   </div>
                 </div>
-               
               </div>
 
               <br />

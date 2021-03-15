@@ -25,7 +25,7 @@ function AcceptModal({ acceptedModal, acceptedHandler, id,getProposalData}) {
         .then(function (response) {
           console.log("res-", response); 
           if (response.data.code === 1) {
-            alert.success("pay success!");
+            alert.success("Revision Submitted!");
             getProposalData();
             acceptedHandler();        
           } 
@@ -39,7 +39,7 @@ function AcceptModal({ acceptedModal, acceptedHandler, id,getProposalData}) {
     return (
         <div>
               <Modal isOpen={acceptedModal} toggle={acceptedHandler} size="sm">
-              <ModalHeader toggle={acceptedHandler}>Add Amount</ModalHeader>
+              <ModalHeader toggle={acceptedHandler}>Revised Amount</ModalHeader>
               <ModalBody>
                    <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mb-3">

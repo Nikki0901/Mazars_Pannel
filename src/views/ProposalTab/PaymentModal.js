@@ -43,7 +43,7 @@ function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData })
   return (
     <div>
       <Modal isOpen={addPaymentModal} toggle={paymentHandler} size="sm">
-        <ModalHeader toggle={paymentHandler}>Add Paid Payment</ModalHeader>
+        <ModalHeader toggle={paymentHandler}>Payment</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">

@@ -68,7 +68,7 @@ function QueriesTab() {
             <Col md="3">
               <div style={{display:"flex", justifyContent:"space-around"}}>
               <Link to="/customer/select-category" class="btn btn-primary">
-                Fresh Assignment
+              Fresh Query
               </Link>
               </div>
               

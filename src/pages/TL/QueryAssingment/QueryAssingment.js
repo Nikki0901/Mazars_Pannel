@@ -6,47 +6,45 @@ import { baseUrl } from "../../../config/config";
 import { useParams } from "react-router-dom";
 import { useAlert } from "react-alert";
 
-
-
 function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
-  
+
   const { id } = useParams();
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [hideQuery, setHideQuery] = useState({
-    name:"",
-    timeline:"",
-    date_allocation:"",
-    expdeliverydate:"",
+    name: "",
+    timeline: "",
+    date_allocation: "",
+    expdeliverydate: "",
   });
 
   const [query, setQuery] = useState(true);
   const userId = window.localStorage.getItem("tlkey");
   const tpkey = window.localStorage.getItem("tpkey");
 
-  const [queryData , setQuerData] = useState({
+  const [queryData, setQuerData] = useState({
     queryNo: "",
     timelines: "",
     custId: "",
-  })
+  });
 
-
-  const { queryNo, timelines , custId } = queryData;
+  const { queryNo, timelines, custId } = queryData;
 
   useEffect(() => {
     getTaxProfession();
     getQueryData();
   }, []);
 
-
   const getTaxProfession = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userId)}`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTaxProfessionDisplay(res.data.result);
-      }
-    });
+    axios
+      .get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTaxProfessionDisplay(res.data.result);
+        }
+      });
   };
 
   const getQueryData = () => {
@@ -62,36 +60,35 @@ function QueryAssingment() {
     });
   };
 
- 
-
   useEffect(() => {
     getQuery();
   }, [queryNo]);
 
-
   const getQuery = () => {
-    axios.get(`${baseUrl}/tl/TlCheckIfAssigned?assignno=${queryNo}`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setQuery(false);
-        // setHideQuery(res.data.meta);
-        setHideQuery({
-          name: res.data.meta[0].name,
-          timeline: res.data.meta[0].timeline,
-          date_allocation: res.data.meta[0].date_allocation,
-          expdeliverydate: res.data.meta[0].expdeliverydate,
-        });
-      }
-    });
-};
-
-
+    axios
+      .get(`${baseUrl}/tl/TlCheckIfAssigned?assignno=${queryNo}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setQuery(false);
+          // setHideQuery(res.data.meta);
+          setHideQuery({
+            name: res.data.meta[0].name,
+            timeline: res.data.meta[0].timeline,
+            date_allocation: res.data.meta[0].date_allocation,
+            expdeliverydate: res.data.meta[0].expdeliverydate,
+          });
+        }
+      });
+  };
 
   const onSubmit = (value) => {
     console.log("value :", value);
     var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-    var expdeliverydate = value.p_expdeldate.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-
+    var expdeliverydate = value.p_expdeldate.replace(
+      /(\d\d)\/(\d\d)\/(\d{4})/,
+      "$3-$1-$2"
+    );
 
     let formData = new FormData();
     formData.append("who", JSON.parse(tpkey));
@@ -106,7 +103,6 @@ function QueryAssingment() {
     formData.append("assignNo", queryNo);
     formData.append("customer_id", custId);
 
-
     axios({
       method: "POST",
       url: `${baseUrl}/tl/AddQueryAssignment`,
@@ -116,7 +112,7 @@ function QueryAssingment() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Query assigned successfully  !");
-          getQuery()
+          getQuery();
           reset();
         }
       })
@@ -125,15 +121,14 @@ function QueryAssingment() {
       });
   };
 
-
-console.log(hideQuery)
+  console.log(hideQuery);
 
   return (
     <Layout TLDashboard="TLDashboard">
       <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12">
-          <div class="">
-            <h2>Query Assignment</h2>
+          <div style={{ textAlign: "center" }}>
+            <h2>Query Allocation</h2>
           </div>
           <br />
           <br />
@@ -145,7 +140,7 @@ console.log(hideQuery)
                     <th scope="col">Query No.</th>
                     <th scope="col">Tax Professional</th>
                     <th scope="col">Date of Allocation</th>
-                    <th scope="col">Timeline</th>
+                    <th scope="col">Expected Timeline</th>
                     <th scope="col">Exp. Delivery Date</th>
                     <th scope="col">Action</th>
                   </tr>
@@ -153,7 +148,7 @@ console.log(hideQuery)
                 <tbody>
                   {query ? (
                     <tr>
-                       <th scope="row">{queryNo}</th>
+                      <th scope="row">{queryNo}</th>
                       <td>
                         <select
                           class="form-control w-75 p-0"
@@ -170,13 +165,18 @@ console.log(hideQuery)
                       </td>
                       <td>
                         <input type="date" ref={register} name="p_date" />
-                      </td>      
+                      </td>
                       <td>
-                        <input type="text" ref={register} name="p_timelines" defaultValue={timelines} />
+                        <input
+                          type="text"
+                          ref={register}
+                          name="p_timelines"
+                          defaultValue={timelines}
+                        />
                       </td>
                       <td>
                         <input type="date" ref={register} name="p_expdeldate" />
-                      </td>     
+                      </td>
 
                       <td>
                         <button type="submit" class="btn btn-success">
@@ -186,10 +186,10 @@ console.log(hideQuery)
                     </tr>
                   ) : (
                     <tr>
-                          <th scope="row">{queryNo}</th>
+                      <th scope="row">{queryNo}</th>
                       <td>
                         <select class="form-control w-75 p-0" disabled>
-                        <option>{hideQuery.name}</option>    
+                          <option>{hideQuery.name}</option>
                         </select>
                       </td>
                       <td>
@@ -201,12 +201,22 @@ console.log(hideQuery)
                         />
                       </td>
                       <td>
-                        <input type="text" ref={register} name="p_timelines" 
-                        value={hideQuery.timeline} disabled/>
+                        <input
+                          type="text"
+                          ref={register}
+                          name="p_timelines"
+                          value={hideQuery.timeline}
+                          disabled
+                        />
                       </td>
                       <td>
-                        <input type="date" ref={register} name="p_expdeldate"
-                        value={hideQuery.expdeliverydate} disabled/>
+                        <input
+                          type="date"
+                          ref={register}
+                          name="p_expdeldate"
+                          value={hideQuery.expdeliverydate}
+                          disabled
+                        />
                       </td>
 
                       <td>

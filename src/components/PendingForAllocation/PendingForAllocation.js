@@ -208,6 +208,7 @@ function PendingAllocation({ CountPendingAllocation }) {
                   <th scope="col">Date</th>
                   <th scope="col">Category</th>
                   <th scope="col">Sub Category</th>
+                  <th>Customer Name</th>
                   <th scope="col">Query No .</th>
                   <th scope="col">Query Allocation</th>
                 </tr>
@@ -219,6 +220,7 @@ function PendingAllocation({ CountPendingAllocation }) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
+                    <td>{p.name}</td>
                     <th scope="row">
                       <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
                     </th>
@@ -236,6 +238,7 @@ function PendingAllocation({ CountPendingAllocation }) {
                     </td>
                   </tr>
                   <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

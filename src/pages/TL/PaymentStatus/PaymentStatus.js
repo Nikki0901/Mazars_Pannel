@@ -127,7 +127,7 @@ function PaymentStatus() {
                   <th>Accepted Amount</th>
                   <th>Paid Amount</th>
                   <th>status</th>
-                  <th style={{ textAlign: "center" }}>Accept as Amount</th>
+                  <th style={{ textAlign: "center" }}>Accept Amount</th>
                   <th>Accept as Assignment</th>
                 </tr>
               </thead>

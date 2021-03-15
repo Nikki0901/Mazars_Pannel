@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams ,useHistory} from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
@@ -20,6 +20,8 @@ function MyAssingment() {
   const addHandler = () => setAddModal(!addModal);
 
   const { id } = useParams();
+  const history = useHistory();
+
   const userId = window.localStorage.getItem("userid");
 
   useEffect(() => {
@@ -81,7 +83,7 @@ function MyAssingment() {
       <div class="row mt-3">
         <div class="col-md-12">
           <div class="schedule">
-            <h3>Query No</h3>
+            <h3>Query Detail</h3>
           </div>
         </div>
 
@@ -94,9 +96,10 @@ function MyAssingment() {
                 style={{ padding: ".5rem .1rem" }}
               >
                 <h2 class="mb-0 query">
-                  <button class="btn btn-block text-left" type="button">
-                    {p.assign_no}
-                  </button>
+                <button class="btn btn-success ml-3" onClick={() => history.goBack()}>
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
                   <div
                     style={{ display: "flex", justifyContent: "space-evenly" }}
                   >
@@ -109,19 +112,15 @@ function MyAssingment() {
                   </div>
                   <div class="d-flex">
                     <div class="additional">
-                      <button
-                        class="btn"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#staticBackdrop"
-                        onClick={addHandler}
-                      >
-                        Add. Query
+                    <button type="button" 
+                    class="btn btn-info"
+                    onClick={addHandler}
+                    >
+                      Additional Query
                       </button>
+                     
                     </div>
-                    {/* <div class="complete">
-                      <p>Pending</p>
-                    </div> */}
+                    
                   </div>
                 </h2>
               </div>
@@ -135,6 +134,10 @@ function MyAssingment() {
                     </tr>
                   </thead>
                   <tbody>
+                  <tr>
+                      <th scope="row">Query No</th>
+                      <td>{p.assign_no}</td>
+                    </tr>
                     <tr>
                       <th scope="row">Facts of the case</th>
                       <td>{p.fact_case}</td>
@@ -263,7 +266,19 @@ function MyAssingment() {
                       <tr key={i}>
                         <td>{p.additional_queries}</td>
                         <td>{p.created}</td>
-                        <td>{p.upload_doc}</td>
+                        <td>
+                          {p.upload_doc == "" ? (
+                            ""
+                          ) : (
+                            <p>
+                              <a
+                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                              >
+                                <i class="fa fa-photo"></i>
+                              </a>
+                            </p>
+                          )}
+                        </td>
                       </tr>
                     </tbody>
                   ))}

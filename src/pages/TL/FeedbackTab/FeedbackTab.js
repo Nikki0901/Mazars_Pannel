@@ -38,7 +38,7 @@ function FeedbackTab() {
           <CardHeader>
             <Row>
               <Col md="7">
-                <CardTitle tag="h4">List of Feedback</CardTitle>
+                <CardTitle tag="h4">Feedback Recieved</CardTitle>
               </Col>
               <Col md="5"></Col>
             </Row>

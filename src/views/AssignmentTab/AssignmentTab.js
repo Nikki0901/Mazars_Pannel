@@ -62,11 +62,11 @@ function AssignmentTab() {
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Status</th>
+                <th>Assigned to</th>
                 <th>Expected date of delivery</th>
                 <th>Actual date of delivery</th>
                 <th>Draft Report</th>
                 <th>Final Report</th>
-                <th>profile</th>
               </tr>
             </thead>
             {assignmentDisplay.length > 0 ? (
@@ -79,9 +79,11 @@ function AssignmentTab() {
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
 
+                    <td></td>
                     <td>
-                      {/* <p>{p.tname}</p>
-                      <p>{p.phone}</p> */}
+                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
+                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
+                      <p style={{ fontSize: "10px" }}>{p.email}</p>
                     </td>
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>{p.date_of_delivery}</td>
@@ -111,12 +113,6 @@ function AssignmentTab() {
                           </a>
                         </div>
                       )}
-                    </td>
-
-                    <td>
-                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
-                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
-                      <p style={{ fontSize: "10px" }}>{p.email}</p>
                     </td>
                   </tr>
                 </tbody>

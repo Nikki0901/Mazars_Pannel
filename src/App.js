@@ -92,7 +92,7 @@ import PrivateRouteTP from './Service/PrivateRouteTP'
 
 
 const options = {
-  timeout: 2000,
+  timeout: 4000,
   position: positions.TOP_CENTER,
   offset: "80px",
   transition: transitions.SCALE,

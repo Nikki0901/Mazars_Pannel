@@ -70,9 +70,11 @@ function Proposal() {
                     <td>{p.assign_no}</td>
                     <td>{p.name}</td>
                     <td>
+                      
                       <Link to={`/teamleader/sendproposal/${p.id}`}>
                         <i class="fa fa-mail-forward"></i>
                       </Link>
+
                     </td>
                   </tr>
                 ))

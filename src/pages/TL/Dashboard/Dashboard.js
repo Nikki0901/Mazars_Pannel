@@ -56,6 +56,62 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Incomplete
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Complete
+                  </h5>
+                </div>
+                <div>
+                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4></h4>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Layout>
   );

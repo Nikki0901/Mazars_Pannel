@@ -127,8 +127,8 @@ function QueryAssingment() {
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
       <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12">
-          <div class="">
-            <h2>Query Assignment</h2>
+          <div style={{textAlign:"center"}}>
+            <h2>Query Allocation</h2>
           </div>
           <br />
           <br />
@@ -140,7 +140,7 @@ function QueryAssingment() {
                     <th scope="col">Query No.</th>
                     <th scope="col">Team Leaders</th>
                     <th scope="col">Date of Allocation</th>
-                    <th scope="col">Timeline</th>
+                    <th scope="col">Expected Timeline</th>
                     <th scope="col">Exp. Delivery Date</th>
                     <th scope="col">Action</th>
                   </tr>
