@@ -12,22 +12,18 @@ import CompleteData from "../CompleteData/CompleteData";
 
 function QueriesTab() {
   const userid = window.localStorage.getItem("tlkey");
-  // const [pendingData, setPendingData] = useState([]);
 
-  // useEffect(() => {
-  //   getPendingforAcceptance();
-  // }, []);
+  const [pendingAcceptence, setPendingAcceptence] = useState("");
+  const [incomplete, setIncomplete] = useState("");
 
-  // const getPendingforAcceptance = () => {
-  //   axios
-  //     .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.data.code === 1) {
-  //         setPendingData(res.data.result);
-  //       }
-  //     });
-  // };
+  const CountPendingForAcceptence = (data) => {
+    setPendingAcceptence(data);
+  };
+
+  const CountIncomplete = (data) => {
+    setIncomplete(data);
+  };
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">
@@ -48,7 +44,7 @@ function QueriesTab() {
                 aria-controls="pills-pending"
                 aria-selected="false"
               >
-                Pending for Acceptance
+                Pending for Acceptance ({pendingAcceptence})
               </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -61,7 +57,7 @@ function QueriesTab() {
                 aria-controls="pills-incomplete"
                 aria-selected="false"
               >
-                Incomplete
+                Incomplete ({incomplete})
               </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -85,12 +81,9 @@ function QueriesTab() {
               role="tabpanel"
               aria-labelledby="pills-pending-tab"
             >
-              {/* {pendingData.map((p, i) => ( */}
-                <PendingForAcceptence
-                  // p={p}
-                  // getPendingforAcceptance={getPendingforAcceptance}
-                />
-              {/* // ))} */}
+              <PendingForAcceptence
+                CountPendingForAcceptence={CountPendingForAcceptence}
+              />
             </div>
 
             <div
@@ -99,7 +92,7 @@ function QueriesTab() {
               role="tabpanel"
               aria-labelledby="pills-incomplete-tab"
             >
-              <InCompleteData />
+              <InCompleteData CountIncomplete={CountIncomplete} />
             </div>
 
             <div
@@ -118,3 +111,12 @@ function QueriesTab() {
 }
 
 export default QueriesTab;
+
+{
+  /* {pendingData.map((p, i) => ( */
+}
+// <PendingForAcceptence
+// p={p}
+// getPendingforAcceptance={getPendingforAcceptance}
+// />
+// {/* // ))}

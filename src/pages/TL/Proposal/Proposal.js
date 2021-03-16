@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 
-
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
 
@@ -22,7 +21,7 @@ function Proposal() {
   useEffect(() => {
     const getProposalList = () => {
       axios
-        .get(`${baseUrl}/tl/pendingTlProposal?tl_id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -59,7 +58,8 @@ function Proposal() {
                 <th>S.No.</th>
                 <th>Query No</th>
                 <th>Customer Name </th>
-                <th>Action</th>
+                <th>Send</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -70,12 +70,23 @@ function Proposal() {
                     <td>{p.assign_no}</td>
                     <td>{p.name}</td>
                     <td>
-                      
                       <Link to={`/teamleader/sendproposal/${p.id}`}>
                         <i class="fa fa-mail-forward"></i>
                       </Link>
-
                     </td>
+                    <td>
+                    <Link to={`/teamleader/edit-proposal/${p.id}`}>
+                      <i
+                        className="fa fa-edit"
+                        style={{
+                          fontSize: 18,
+                          cursor: "pointer",
+                          marginLeft: "8px",
+                          color:"green"
+                        }}
+                      ></i>
+                    </Link>
+                  </td>
                   </tr>
                 ))
               ) : (

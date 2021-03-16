@@ -84,7 +84,7 @@ function QueryAssingment() {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
     var expdeliverydate = value.p_expdeldate.replace(
       /(\d\d)\/(\d\d)\/(\d{4})/,
       "$3-$1-$2"
@@ -97,7 +97,7 @@ function QueryAssingment() {
     formData.append("type", "tl");
     formData.append("types", "tp");
     formData.append("name", value.p_taxprof);
-    formData.append("date", date);
+    // formData.append("date", date);
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
@@ -139,7 +139,7 @@ function QueryAssingment() {
                   <tr>
                     <th scope="col">Query No.</th>
                     <th scope="col">Tax Professional</th>
-                    <th scope="col">Date of Allocation</th>
+                    {/* <th scope="col">Date of Allocation</th> */}
                     <th scope="col">Expected Timeline</th>
                     <th scope="col">Exp. Delivery Date</th>
                     <th scope="col">Action</th>
@@ -163,15 +163,15 @@ function QueryAssingment() {
                           ))}
                         </select>
                       </td>
-                      <td>
+                      {/* <td>
                         <input type="date" ref={register} name="p_date" />
-                      </td>
+                      </td> */}
                       <td>
                         <input
                           type="text"
                           ref={register}
                           name="p_timelines"
-                          defaultValue={timelines}
+                          value={timelines}
                         />
                       </td>
                       <td>
@@ -192,14 +192,14 @@ function QueryAssingment() {
                           <option>{hideQuery.name}</option>
                         </select>
                       </td>
-                      <td>
+                      {/* <td>
                         <input
                           type="date"
                           id="date"
                           value={hideQuery.date_allocation}
                           disabled
                         />
-                      </td>
+                      </td> */}
                       <td>
                         <input
                           type="text"

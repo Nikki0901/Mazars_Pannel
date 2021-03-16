@@ -3,38 +3,53 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import { useParams } from "react-router-dom";
+import { useHistory} from "react-router-dom";
+import Layout from "../../../components/Layout/Layout";
+import {
+    Card,
+    CardHeader,
+    CardBody,
+    CardTitle,
+    Row,
+    Col,
+    Table,
+  } from "reactstrap";
 
-function ProposalComponent() {
+function ProposalComponent(props) {
+  const { id } = props;
+  console.log(id);
+
   const alert = useAlert();
   const { register, handleSubmit, reset } = useForm();
+  const userid = window.localStorage.getItem("tlkey");
 
-  const userid = window.localStorage.getItem("tpkey");
-
-  const [assignId, setAssignID] = useState("");
-  const [assingNo, setAssingNo] = useState("");
   const [custId, setCustId] = useState("");
   const [custname, setCustName] = useState();
-  const { id } = useParams();
+  const [assignId, setAssignID] = useState("");
+  const [assingNo, setAssingNo] = useState("");
+
+   const history = useHistory();
+
 
   useEffect(() => {
     const getQuery = () => {
       axios
         .get(
-          `${baseUrl}/tp/getassignedques?id=${JSON.parse(
+          `${baseUrl}/tl/pendingTlProposal?tl_id=${JSON.parse(
             userid
           )}&assign_id=${id}`
         )
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setAssingNo(res.data.result[0].assign_no);
-            setAssignID(res.data.result[0].id);
+            // setAssingNo(res.data.result[0].assign_no);
+            // setAssignID(res.data.result[0].id);
           }
         });
     };
     getQuery();
   }, []);
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -47,6 +62,9 @@ function ProposalComponent() {
     getUser();
   }, [id]);
 
+  console.log(assignId);
+
+
   const onSubmit = (value) => {
     console.log(value);
 
@@ -55,7 +73,7 @@ function ProposalComponent() {
 
     formData.append("assign_no", assingNo);
     formData.append("name", value.p_name);
-    formData.append("type", "tp");
+    formData.append("type", "tl");
     formData.append("id", JSON.parse(userid));
     formData.append("amount", value.p_amount);
     formData.append("payable", value.p_payable);
@@ -83,12 +101,26 @@ function ProposalComponent() {
   };
 
   return (
-    <>
-      <div class="col-md-8">
-        <div>
-          <h3>Send Proposal</h3>
-          <br />
-          <form onSubmit={handleSubmit(onSubmit)}>
+    <Layout TLDashboard="TLDashboard" TLuserId={userid}>
+         <Card>
+        <CardHeader>
+          <Row>
+            <Col md="5">
+            <button class="btn btn-success ml-3" onClick={() => history.goBack()}>
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </Col>
+            <Col md="7">
+            <div class="btn ml-3">               
+                <h4>Edit Proposal</h4>
+              </div>
+            </Col>
+          </Row>
+        </CardHeader>
+        
+        <CardBody>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -196,9 +228,10 @@ function ProposalComponent() {
               </button>
             </div>
           </form>
-        </div>
-      </div>
-    </>
+        </CardBody>
+        </Card>
+    
+    </Layout>
   );
 }
 
@@ -212,21 +245,12 @@ const payable = [
   { pay: "WALLET" },
 ];
 
-// {
-//   Object.entries(res.data.result).map(([key, value]) => {
-//     console.log("val", value.name);
-//     setCustName(value.name);
-//   });
-// }
 
-// const getID = (key) =>{
-//   setId(key)
 
-//   incompleteData.filter((data)=>{
-//     if(data.id == key){
-//       console.log('assingNo', data.assign_no);
-//       setAssingNo(data.assign_no)
-//       setAssignID(data.id)
-//     }
-//   })
-// }
+// <div class="col-md-8">
+// <div>
+//   <h3>Edit Proposal</h3>
+//   <br />
+ 
+// </div>
+// </div>

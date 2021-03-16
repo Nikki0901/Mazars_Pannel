@@ -39,22 +39,14 @@ function QueriesTab() {
 
   //change date format
   function ChangeFormateDate(oldDate) {
+    console.log("date",oldDate)
+    if(oldDate == null){
+      return null
+    }
     return oldDate.toString().split("-").reverse().join("-");
   }
 
  
-  // function ChangeFormateDate2(date) {
-
-
-  //   var month = (1 + date.getMonth()).toString();
-  //   month = month.length > 1 ? month : '0' + month;
-  
-  //   var day = date.getDate().toString();
-  //   day = day.length > 1 ? day : '0' + day;
-    
-  //   return month + '/' + day + '/' + year;
-  // }
-
 
 
   return (
@@ -100,7 +92,7 @@ function QueriesTab() {
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td>{p.status}</td>
-                    <td>{p.exp_delivery_date}</td>
+                    <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
                     <td>
                       <Link to={`/customer/my-assingment/${p.id}`}>
                         <i class="fa fa-eye"></i>
@@ -122,3 +114,15 @@ function QueriesTab() {
 }
 
 export default QueriesTab;
+
+
+  // function ChangeFormateDate2(date) {
+  //   var month = (1 + date.getMonth()).toString();
+  //   month = month.length > 1 ? month : '0' + month;
+  
+  //   var day = date.getDate().toString();
+  //   day = day.length > 1 ? day : '0' + day;
+    
+  //   return month + '/' + day + '/' + year;
+  // }
+

@@ -32,13 +32,13 @@ function AssignmentTab() {
     getAssignmentData();
   }, []);
 
-  // change date format
+  //change date format
   function ChangeFormateDate(oldDate) {
+    console.log("date",oldDate)
+    if(oldDate == null){
+      return null
+    }
     return oldDate.toString().split("-").reverse().join("-");
-  }
-
-  function cutFun(str) {
-    console.log(str);
   }
 
   return (
@@ -78,7 +78,6 @@ function AssignmentTab() {
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-
                     <td></td>
                     <td>
                       <p style={{ fontSize: "10px" }}>{p.tname} </p>
@@ -86,7 +85,7 @@ function AssignmentTab() {
                       <p style={{ fontSize: "10px" }}>{p.email}</p>
                     </td>
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                    <td>{p.date_of_delivery}</td>
+                    <td>{ChangeFormateDate(p.date_of_delivery)}</td>
                     <td style={{ textAlign: "center" }}>
                       {p.assignment_draft_report == null ? (
                         ""

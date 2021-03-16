@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 
-function PendingAllocation({ CountPendingAllocation }) {
+function PendingAllocation({ CountPendingForAllocation }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
@@ -30,12 +30,12 @@ function PendingAllocation({ CountPendingAllocation }) {
     axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
+        CountPendingForAllocation(res.data.result.length);
         setPendingData(res.data.result);
-        localStorage.setItem(
-          "count_PFA",
-          JSON.stringify(res.data.result.length)
-        );
-        // CountPendingAllocation(res.data.result.length)
+        // localStorage.setItem(
+        //   "count_PFA",
+        //   JSON.stringify(res.data.result.length)
+        // );
       }
     });
   };
@@ -81,6 +81,10 @@ function PendingAllocation({ CountPendingAllocation }) {
 
   //change date format
   function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
     return oldDate.toString().split("-").reverse().join("-");
   }
 
@@ -211,6 +215,7 @@ function PendingAllocation({ CountPendingAllocation }) {
                   <th>Customer Name</th>
                   <th scope="col">Query No .</th>
                   <th scope="col">Query Allocation</th>
+                  <th scope="col">Query assigned</th>
                 </tr>
               </thead>
               {pendingData.map((p, i) => (
@@ -236,14 +241,6 @@ function PendingAllocation({ CountPendingAllocation }) {
                         </Link>
                       )}
                     </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td style={{ textAlign: "center" }}>
                       {p.is_assigned === "1" && (
                         <p style={{ color: "green" }}>Assigned to {p.tname}</p>
@@ -267,3 +264,13 @@ function PendingAllocation({ CountPendingAllocation }) {
 }
 
 export default PendingAllocation;
+
+// <tr>
+// <td></td>
+// <td></td>
+// <td></td>
+// <td></td>
+// <td></td>
+// <td></td>
+
+// </tr>

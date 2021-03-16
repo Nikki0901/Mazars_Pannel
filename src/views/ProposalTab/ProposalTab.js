@@ -113,10 +113,14 @@ function ProposalTab() {
       });
   };
 
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
+ //change date format
+ function ChangeFormateDate(oldDate) {
+  if(oldDate == null){
+    return null
   }
+  return oldDate.toString().split("-").reverse().join("-");
+}
+
 
   function checkOutstading(p, a) {
     console.log("paid -", p);
@@ -167,9 +171,7 @@ function ProposalTab() {
                       <td>{i + 1}</td>
                       <td>{ChangeFormateDate(p.created)}</td>
                       <td>{p.assign_no}</td>
-
                       <td>{p.status}</td>
-
                       <td>{p.ProposedAmount}</td>
                       <td>{p.negotiated_amount}</td>
                       <td>{p.accepted_amount}</td>
@@ -196,6 +198,7 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-check"
+                                      style={{color:"green"}}
                                       onClick={() => accepted(p.q_id)}
                                     ></i>
                                   </div>
@@ -203,6 +206,7 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-times"
+                                      style={{color:"red"}}
                                       onClick={() => rejected(p.q_id)}
                                     ></i>
                                   </div>

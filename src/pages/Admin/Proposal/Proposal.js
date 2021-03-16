@@ -30,7 +30,6 @@ function Proposal() {
     setPendingProposalCount(data)
   }
 
-
   const acceptedProposal = (data) => {
     setAcceptedProposalCount(data)
   }

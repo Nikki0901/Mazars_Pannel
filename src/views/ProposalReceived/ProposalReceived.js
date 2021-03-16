@@ -49,6 +49,17 @@ function ProposalReceived() {
       return "0";
     } else return a - p;
   }
+
+
+ //change date format
+ function ChangeFormateDate(oldDate) {
+  console.log("date",oldDate)
+  if(oldDate == null){
+    return null
+  }
+  return oldDate.toString().split("-").reverse().join("-");
+}
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -83,7 +94,7 @@ function ProposalReceived() {
                     <tbody>
                       <tr>
                         <th scope="row">Date</th>
-                        <td>{p.created}</td>
+                        <td>{ChangeFormateDate(p.created)}</td>
                       </tr>
                       <tr>
                         <th scope="row">Query No</th>
@@ -106,7 +117,7 @@ function ProposalReceived() {
 
                       <tr>
                         <th scope="row">Date of Proposal</th>
-                        <td>{p.DateofProposal}</td>
+                        <td>{ChangeFormateDate(p.DateofProposal)}</td>
                       </tr>
 
                       <tr>
@@ -131,7 +142,7 @@ function ProposalReceived() {
 
                       <tr>
                         <th scope="row">Date of Payment</th>
-                        <td>{p.pay_date}</td>
+                        <td>{ChangeFormateDate(p.pay_date)}</td>
                       </tr>
 
                       <tr>
@@ -142,7 +153,7 @@ function ProposalReceived() {
                       </tr>
                       <tr>
                         <th scope="row">Date of acceptance of Proposal</th>
-                        <td>{p.acpt_reject_time}</td>
+                        <td>{ChangeFormateDate(p.acpt_reject_time)}</td>
                       </tr>
                     </tbody>
                   </table>

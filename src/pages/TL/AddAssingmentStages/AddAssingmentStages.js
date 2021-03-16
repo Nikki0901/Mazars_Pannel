@@ -48,10 +48,9 @@ function AddAssingmentStages() {
       <div class="row mt-3">
         <div class="col-md-12">
           <div>
-            <h2>Add Assignment Stages (Max 5)</h2>
+            <h4>Add Assignment Stages (Max 5)</h4>
           </div>
-          <br />
-
+      
           <div class="col-md-8">
             <br />
             <form onSubmit={handleSubmit(onSubmit)}>

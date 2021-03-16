@@ -4,12 +4,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
-
+import { useHistory} from "react-router-dom";
 
 function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData }) {
   const { handleSubmit,register } = useForm();
   const alert = useAlert();
-  console.log("pay", pay);
+  const history = useHistory();
+
+  // console.log("pay", pay);
 
     const { amount, id } = pay
 
@@ -30,7 +32,9 @@ function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("pay success!");
+          alert.success("Payment Done!");
+         history.push("/customer/queries"); 
+
           getProposalData();
           paymentHandler();
         } 

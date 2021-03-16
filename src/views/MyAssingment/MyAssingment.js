@@ -78,6 +78,16 @@ function MyAssingment() {
       });
   };
 
+
+   //change date format
+   function ChangeFormateDate(oldDate) {
+    console.log("date",oldDate)
+    if(oldDate == null){
+      return null
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <div class="row mt-3">
@@ -107,7 +117,7 @@ function MyAssingment() {
                       Submitted on
                     </p>
                     <p class="m-0" style={{ fontSize: "15px" }}>
-                      : {p.created}
+                      : {ChangeFormateDate(p.created)}
                     </p>
                   </div>
                   <div class="d-flex">

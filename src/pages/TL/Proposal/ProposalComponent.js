@@ -3,8 +3,16 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-// import { Link, useParams } from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+} from "reactstrap";
 
 function ProposalComponent(props) {
   const { id } = props;
@@ -19,7 +27,7 @@ function ProposalComponent(props) {
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
 
-  // const { id } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     const getQuery = () => {
@@ -39,7 +47,6 @@ function ProposalComponent(props) {
     };
     getQuery();
   }, []);
-
 
   useEffect(() => {
     const getUser = async () => {
@@ -81,7 +88,7 @@ function ProposalComponent(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success("proposal successfully send !");
+          alert.success("proposal successfully sent !");
         }
       })
       .catch((error) => {
@@ -91,10 +98,27 @@ function ProposalComponent(props) {
 
   return (
     <>
-      <div class="col-md-8">
-        <div>
-          <h3>Send Proposal</h3>
-          <br />
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col md="5">
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </Col>
+            <Col md="7">
+              <div class="btn ml-3">
+                <h4>Send Proposal</h4>
+              </div>
+            </Col>
+          </Row>
+        </CardHeader>
+
+        <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="row">
               <div class="col-md-6">
@@ -203,8 +227,8 @@ function ProposalComponent(props) {
               </button>
             </div>
           </form>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
     </>
   );
 }
@@ -218,6 +242,18 @@ const payable = [
   { pay: "UPI" },
   { pay: "WALLET" },
 ];
+
+{
+  /* <div class="col-md-8">
+        <div>
+          <h3>Send Proposal</h3>
+          <br />
+
+          
+        
+        </div>
+      </div> */
+}
 
 // const handleImage = (e) =>{
 //   let files = e.target.files

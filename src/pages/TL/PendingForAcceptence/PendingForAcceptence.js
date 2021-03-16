@@ -13,7 +13,7 @@ import {
   Table,
 } from "reactstrap";
 
-function PendingForAcceptence() {
+function PendingForAcceptence({CountPendingForAcceptence}) {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
@@ -29,6 +29,7 @@ function PendingForAcceptence() {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
+          CountPendingForAcceptence(res.data.result.length);
           setPendingData(res.data.result);
         }
       });
@@ -50,9 +51,8 @@ function PendingForAcceptence() {
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          console.log(response.data.result);
+          alert.success("Query accepted !");
           getPendingforAcceptance();
-          alert.success("Query successfully accepted !");
         }
       })
       .catch((error) => {
@@ -76,8 +76,8 @@ function PendingForAcceptence() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          getPendingforAcceptance();
           alert.success("Query successfully rejected !");
+          getPendingforAcceptance();
         }
       })
       .catch((error) => {
@@ -85,8 +85,12 @@ function PendingForAcceptence() {
       });
   };
 
-  // change date format
+  //change date format
   function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
     return oldDate.toString().split("-").reverse().join("-");
   }
 
@@ -98,6 +102,7 @@ function PendingForAcceptence() {
           <table class="table table-bordered">
             <thead>
               <tr>
+                <th scope="col">S.No</th>
                 <th scope="col">Date.</th>
                 <th scope="col">Query No .</th>
                 <th scope="col">Customer Name</th>
@@ -111,7 +116,8 @@ function PendingForAcceptence() {
               {pendingData.length > 0 ? (
                 pendingData.map((p, i) => (
                   <tr>
-                    <td>{p.query_created}</td>
+                    <td>{i + 1}</td>
+                    <td>{ChangeFormateDate(p.query_created)}</td>
                     <th scope="row">
                       <Link to={`/teamleader/queries/${p.id}`}>
                         {p.assign_no}
@@ -119,58 +125,38 @@ function PendingForAcceptence() {
                     </th>
                     <td>{p.name}</td>
                     <td>{p.fact_case}</td>
-                    <td>{p.Exp_Delivery_Date}</td>
+                    <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>
-                      {p.accept == "1" ? (
-                        <div id="div2" class="text-center">
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-evenly",
-                              color: "#6967ce",
-                            }}
-                          >
-                            <Link to={`/teamleader/addassingment/${p.id}`}>
-                              <i class="fa fa-tasks"></i>
-                            </Link>
-
-                            <Link to={`/teamleader/queryassing/${p.id}`}>
-                              <i class="fa fa-share"></i>
-                            </Link>
-                          </div>
-                        </div>
-                      ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-evenly",
+                          color: "#6967ce",
+                          cursor: "pointer",
+                        }}
+                        id="div1"
+                      >
                         <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                            color: "#6967ce",
-                            cursor: "pointer",
-                          }}
-                          id="div1"
+                          id="accept"
+                          title="Accept Assignment"
+                          onClick={() => acceptHandler(p.id)}
                         >
-                          <div
-                            id="accept"
-                            title="Accept Assignment"
-                            onClick={() => acceptHandler(p.id)}
-                          >
-                            <i class="fa fa-check"></i>
-                          </div>
-                          <div
-                            id="reject"
-                            title="Reject Assignment"
-                            onClick={() => rejectHandler(p.id)}
-                          >
-                            <i class="fa fa-times"></i>
-                          </div>
+                          <i class="fa fa-check" style={{ color: "green" }}></i>
                         </div>
-                      )}
+                        <div
+                          id="reject"
+                          title="Reject Assignment"
+                          onClick={() => rejectHandler(p.id)}
+                        >
+                          <i class="fa fa-times" style={{ color: "red" }}></i>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6">No Records</td>
+                  <td colSpan="7">No Records</td>
                 </tr>
               )}
             </tbody>

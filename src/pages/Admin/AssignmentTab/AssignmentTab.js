@@ -29,6 +29,15 @@ function AssignmentTab() {
     getAssignmentData();
   }, []);
 
+    //change date format
+    function ChangeFormateDate(oldDate) {
+      console.log("date",oldDate)
+      if(oldDate == null){
+        return null
+      }
+      return oldDate.toString().split("-").reverse().join("-");
+    }
+
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -62,12 +71,12 @@ function AssignmentTab() {
                 <tr key={i}>
                   <td>{i + 1}</td>
                   <td>{p.assign_no}</td>
-                  <td>{p.date_of_query}</td>
+                  <td>{ChangeFormateDate(p.date_of_query)}</td>
                   <td>{p.assign_no}</td>
                   <td>{p.assignment_date}</td>
                   <td>{p.parent_id}</td>
                   <td>{p.cat_name}</td>
-                  <td>{p.Exp_Delivery_Date}</td>
+                  <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>
                       Client Discussion

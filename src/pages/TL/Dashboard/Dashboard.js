@@ -8,6 +8,8 @@ function Dashboard() {
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendindForAccepttence, setPendingForAcceptence] = useState("");
+  const [incomplete, setIncomplete] = useState("");
+
 
   useEffect(() => {
     const getPendindForAccepttence = () => {
@@ -24,7 +26,21 @@ function Dashboard() {
         });
     };
 
+    const getIncomplete = () => {
+      axios
+        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setIncomplete(res.data.result.length);
+          }
+        });
+    };
+
+
     getPendindForAccepttence();
+    getIncomplete();
+
   }, []);
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -79,7 +95,7 @@ function Dashboard() {
                   marginTop: "50px",
                 }}
               >
-                <h4></h4>
+                <h4>{incomplete}</h4>
               </div>
             </div>
           </div>
@@ -113,6 +129,8 @@ function Dashboard() {
           </div>
         </div>
       </div>
+   
+   
     </Layout>
   );
 }

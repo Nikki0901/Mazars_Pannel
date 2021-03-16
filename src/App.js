@@ -66,6 +66,8 @@ import TlPaymentStatus from './pages/TL/PaymentStatus/PaymentStatus'
 import TlAssignmentTab from './pages/TL/AssignmentTab/AssignmentTab'
 import TlSendProposal from './pages/TL/SendProposal/SendProposal'
 import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
+import TlEditProposal from './pages/TL/EditProposal/EditProposal'
+
 
 
 
@@ -164,6 +166,7 @@ function App() {
         <Route exact path="/teamleader/assignment" component={TlAssignmentTab} />
         <Route exact path="/teamleader/sendproposal/:id" component={TlSendProposal} />
         <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
+        <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
 
 
 

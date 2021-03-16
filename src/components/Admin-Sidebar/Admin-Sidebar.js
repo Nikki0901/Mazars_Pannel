@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
+import { Badge } from 'reactstrap';
+
 
 function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
   const [toggleState, setToggleState] = useState("active");
@@ -59,7 +61,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 <NavLink to={"/customer/queries"}>
                   <i class="fa fa-clone"></i>
                   <span class="menu-title" data-i18n="">
-                    Queries
+                    Queries <Badge color="secondary">New</Badge>
                   </span>
                 </NavLink>
               </li>

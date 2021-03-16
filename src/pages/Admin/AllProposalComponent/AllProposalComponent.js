@@ -27,11 +27,15 @@ function AllProposalComponent({allProposal}) {
     getProposalData();
   }, []);
 
-  // change date format
+  //change date format
   function ChangeFormateDate(oldDate) {
+    console.log("date",oldDate)
+    if(oldDate == null){
+      return null
+    }
     return oldDate.toString().split("-").reverse().join("-");
   }
-
+  
   return (
     <>
       <Card>

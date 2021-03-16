@@ -187,7 +187,19 @@ function QueriesRecevied() {
                     <tr key={i}>
                       <td>{p.additional_queries}</td>
                       <td>{p.created}</td>
-                      <td>{p.upload}</td>
+                      <td>
+                          {p.upload_doc == "" ? (
+                            ""
+                          ) : (
+                            <p>
+                              <a
+                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                              >
+                                <i class="fa fa-photo"></i>
+                              </a>
+                            </p>
+                          )}
+                        </td>
                     </tr>
                   </tbody>
                 ))}

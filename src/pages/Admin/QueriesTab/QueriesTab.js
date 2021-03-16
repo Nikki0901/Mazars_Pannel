@@ -25,6 +25,8 @@ function QueriesTab() {
   const [allQueriesCount, setAllQueriesCount] = useState('');
   const [pendingProposalCount, setPendingProposalCount] = useState('');
   const [pendingForPayment, setPendingforPayment] = useState('');
+  const [pendingForAllocation, setPendingforAllocation] = useState('');
+
 
   
 
@@ -38,6 +40,11 @@ function QueriesTab() {
 
   const CountPendingForPayment = (data) => {
     setPendingforPayment(data)
+  }
+ 
+
+  const CountPendingForAllocation = (data) => {
+    setPendingforAllocation(data)
   }
  
  
@@ -82,7 +89,8 @@ function QueriesTab() {
                     aria-controls="pills-a"
                     aria-selected="false"
                   >
-                    Pending for Allocation ({count_PFA})
+                    Pending for Allocation ({pendingForAllocation})
+                    {/* ({count_PFA}) */}
                   </a>
                 </li>
 
@@ -131,7 +139,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingForAllocation />
+                  <PendingForAllocation CountPendingForAllocation={CountPendingForAllocation}/>
                 </div>
 
                <div

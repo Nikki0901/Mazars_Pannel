@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import { useAlert } from "react-alert";
+import { Link } from "react-router-dom";
 
 function PaymentStatus() {
   const alert = useAlert();
@@ -129,6 +130,7 @@ function PaymentStatus() {
                   <th>status</th>
                   <th style={{ textAlign: "center" }}>Accept Amount</th>
                   <th>Accept as Assignment</th>
+                  <th>Assignment Stages</th> 
                 </tr>
               </thead>
               <tbody>
@@ -182,13 +184,21 @@ function PaymentStatus() {
                               ></i>
                             </div>
                           )}
+                        </div>                     
+                      </td>
+                      <td>
+                        <div style={{ cursor: "pointer" ,textAlign:"center" }}>
+                            <Link to={`/teamleader/addassingment/${p.id}`}>
+                              <i class="fa fa-tasks"></i>
+                            </Link>
                         </div>
+                           
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9">No Records</td>
+                    <td colSpan="10">No Records</td>
                   </tr>
                 )}
               </tbody>
