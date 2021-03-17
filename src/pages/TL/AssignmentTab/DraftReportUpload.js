@@ -22,13 +22,21 @@ function DraftReport({ draftModal, uploadDraftReport ,id ,getAssignmentList}) {
         }
       }).then(response => {
         console.log(response.data)
-        alert.success("draft Report uploaded !");
+        alert.success(<Msg />);
         getAssignmentList();
         uploadDraftReport();
       });
        
   };
 
+//alert msg
+  const Msg = () =>{
+    return(
+      <>
+      <p style={{fontSize:"12px"}}>draft Report uploaded</p>
+      </>
+    )
+  }
     return (
         <div>
               <Modal isOpen={draftModal} toggle={uploadDraftReport} size="md">

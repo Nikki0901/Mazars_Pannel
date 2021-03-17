@@ -11,6 +11,8 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import "./index.css";
+
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -51,7 +53,7 @@ function AssignmentTab() {
         </CardHeader>
         <CardBody>
           <table class="table table-bordered">
-            <thead>
+            <thead class="table_head">
               <tr>
                 <th>Sr. No.</th>
                 <th>Query No</th>
@@ -64,15 +66,17 @@ function AssignmentTab() {
                 <th>Assignment Stage</th>
                 <th>Status</th>
                 <th>Time taken for Completion</th>
+                <th>Draft Report</th>
+                <th>Final Report</th>
               </tr>
             </thead>
             {assignmentDisplay.map((p, i) => (
-              <tbody>
+             <tbody class="table_bdy">
                 <tr key={i}>
                   <td>{i + 1}</td>
                   <td>{p.assign_no}</td>
                   <td>{ChangeFormateDate(p.date_of_query)}</td>
-                  <td>{p.assign_no}</td>
+                  <td>{p.assignment_label_number}</td>
                   <td>{p.assignment_date}</td>
                   <td>{p.parent_id}</td>
                   <td>{p.cat_name}</td>
@@ -84,6 +88,33 @@ function AssignmentTab() {
                   </td>
                   <td> {p.client_discussion}</td>
                   <td></td>
+                  <td style={{ textAlign: "center" }}>
+                      {p.assignement_draft_report == null ? (
+                        ""
+                      ) : (
+                        <div>
+                          <a
+                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignement_draft_report}`}
+                          >
+                            <i class="fa fa-file-text"></i>
+                          </a>
+                        </div>
+                      )}
+                    </td>
+
+                    <td style={{ textAlign: "center" }}>
+                      {p.final_report == null ? (
+                        ""
+                      ) : (
+                        <div>
+                          <a
+                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
+                          >
+                            <i class="fa fa-file-text"></i>
+                          </a>
+                        </div>
+                      )}
+                    </td>
                 </tr>
                 <tr>
                   <td></td>
@@ -99,6 +130,8 @@ function AssignmentTab() {
                     <span style={{ fontWeight: "bold" }}>Draft report</span>
                   </td>
                   <td> {p.draft_report}</td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                 </tr>
 
@@ -116,6 +149,8 @@ function AssignmentTab() {
                     <span style={{ fontWeight: "bold" }}>Final Discussion</span>
                   </td>
                   <td> {p.final_discussion}</td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                 </tr>
 
@@ -135,6 +170,28 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.delivery_report}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>
+                    Others
+                    </span>
+                  </td>
+                  <td> {p.other_stage}</td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                 </tr>
               </tbody>

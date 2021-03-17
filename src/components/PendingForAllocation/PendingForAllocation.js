@@ -9,6 +9,10 @@ import {
   Row,
   Col,
   Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -21,6 +25,23 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [history, setHistory] = useState([]);
+
+  const [addModal, setAddModal] = useState(false);
+
+  const addHandler = (key) => {
+    console.log("key", key);
+    setAddModal(!addModal);
+
+    axios
+      .get(`${baseUrl}/customers/getQueryHistory?q_id=${key}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setHistory(res.data.result);
+        }
+      });
+  };
 
   useEffect(() => {
     getPendingForAllocation();
@@ -215,7 +236,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                   <th>Customer Name</th>
                   <th scope="col">Query No .</th>
                   <th scope="col">Query Allocation</th>
-                  <th scope="col">Query assigned</th>
+                  <th scope="col">History</th>
                 </tr>
               </thead>
               {pendingData.map((p, i) => (
@@ -227,36 +248,66 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     <td>{p.cat_name}</td>
                     <td>{p.name}</td>
                     <th scope="row">
-                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
+                      <Link to={`/admin/pending/${p.id}`}>{p.assign_no}</Link>
                     </th>
                     <td class="text-center">
                       {p.is_assigned === "1" ? (
                         ""
                       ) : (
-                        //    <Link to={`/admin/queryassing/${p.id}`}>
-                        //  <i class="fa fa-share" style={{color:"green"}}></i>
-                        //  </Link>
                         <Link to={`/admin/queryassing/${p.id}`}>
                           <i class="fa fa-share"></i>
                         </Link>
                       )}
                     </td>
-                    <td style={{ textAlign: "center" }}>
-                      {p.is_assigned === "1" && (
-                        <p style={{ color: "green" }}>Assigned to {p.tname}</p>
-                      )}
-
-                      {p.reject === "3" && (
-                        <p style={{ color: "red" }}>
-                          Query Rejected By {p.tname}
-                        </p>
-                      )}
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-info btn-sm"
+                        onClick={() => addHandler(p.id)}
+                      >
+                        View
+                      </button>
                     </td>
                   </tr>
                 </tbody>
               ))}
             </table>
           </div>
+
+          <Modal isOpen={addModal} toggle={addHandler} size="md">
+            <ModalHeader toggle={addHandler}>Show history</ModalHeader>
+            <ModalBody>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Titles</th>
+                    <th scope="col">Data</th>
+                  </tr>
+                </thead>
+                {history.map((p, i) => (
+                  <tbody>
+                    <tr>
+                      <th scope="row">Name</th>
+                      <td>{p.name}</td>
+                    </tr>
+
+                    <tr>
+                      <th scope="row">Date of Allocation</th>
+                      <td>{p.date_of_allocation}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Query No</th>
+                      <td>{p.assign_no}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Status</th>
+                      <td>{p.status}</td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </ModalBody>
+          </Modal>
         </CardBody>
       </Card>
     </>
@@ -265,12 +316,21 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
 export default PendingAllocation;
 
-// <tr>
-// <td></td>
-// <td></td>
-// <td></td>
-// <td></td>
-// <td></td>
-// <td></td>
+{
+  /* <td style={{ textAlign: "center" }}>
+                      {p.is_assigned === "1" && (
+                        <p style={{ color: "green" }}>
+                          <i class="fa fa-circle" 
+                          style={{fontSize:"10px" ,marginRight:"4px"}}>
+                            </i>
+                            {p.allocation_time}
+                          </p>
+                      )}
 
-// </tr>
+                      {p.reject === "3" && (
+                        <p style={{ color: "red" }}>
+                          Query Rejected By {p.tname}
+                        </p>
+                      )}
+                    </td> */
+}

@@ -97,6 +97,20 @@ function Proposal() {
                   </a>
                 </li>
 
+                {/* <li class="nav-item" role="presentation">
+                  <a
+                    class="nav-link text-white"
+                    id="pills-e-tab"
+                    data-toggle="pill"
+                    href="#e"
+                    role="tab"
+                    aria-controls="pills-e"
+                    aria-selected="false"
+                  >
+                    Accepted 
+                  </a>
+                </li> */}
+
                 <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
@@ -141,6 +155,16 @@ function Proposal() {
                 >
                   <AcceptedProposal acceptedProposal={acceptedProposal}/>
                 </div>
+
+
+                {/* <div
+                  class="tab-pane fade"
+                  id="e"
+                  role="tabpanel"
+                  aria-labelledby="pills-e-tab"
+                >
+                  eee
+                </div> */}
 
                 <div
                   class="tab-pane fade"

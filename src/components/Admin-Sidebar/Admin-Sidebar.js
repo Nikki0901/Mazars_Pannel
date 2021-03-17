@@ -61,7 +61,8 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 <NavLink to={"/customer/queries"}>
                   <i class="fa fa-clone"></i>
                   <span class="menu-title" data-i18n="">
-                    Queries <Badge color="secondary">New</Badge>
+                    Queries 
+                    {/* <Badge color="secondary">New</Badge> */}
                   </span>
                 </NavLink>
               </li>

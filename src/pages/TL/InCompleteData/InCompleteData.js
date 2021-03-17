@@ -129,6 +129,20 @@ function InCompleteData({CountIncomplete}) {
                   <td>{p.delivery_report}</td>
                   <td></td>
                 </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>
+                     Others
+                    </span>{" "}
+                  </td>
+                  <td>{p.other_stage}</td>
+                  <td></td>
+                </tr>
               </tbody>
             ))}
           </table>

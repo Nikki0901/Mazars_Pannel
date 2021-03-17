@@ -40,8 +40,10 @@ function ProposalComponent(props) {
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setAssingNo(res.data.result[0].assign_no);
-            setAssignID(res.data.result[0].id);
+           if(res.data.result.length > 0){
+              setAssingNo(res.data.result[0].assign_no);
+              setAssignID(res.data.result[0].id);
+            }           
           }
         });
     };
@@ -59,12 +61,16 @@ function ProposalComponent(props) {
     getUser();
   }, [id]);
 
-  console.log(assignId);
+
+ 
+
 
   const onSubmit = (value) => {
     console.log(value);
 
-    var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+    var todaysDate = new Date()
+
     let formData = new FormData();
 
     formData.append("assign_no", assingNo);
@@ -75,7 +81,7 @@ function ProposalComponent(props) {
     formData.append("payable", value.p_payable);
     formData.append("misc1", value.misc_1);
     formData.append("misc2", value.misc_2);
-    formData.append("payable_date", value.p_date);
+    formData.append("payable_date", todaysDate);
     formData.append("customer_id", custId);
     formData.append("assign_id", assignId);
 
@@ -88,13 +94,22 @@ function ProposalComponent(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success("proposal successfully sent !");
+          alert.success(<Msg />);
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
+
+//alert msg
+  const Msg = () =>{
+    return(
+      <>
+      <p style={{fontSize:"10px"}}>proposal successfully sent</p>
+      </>
+    )
+  }
 
   return (
     <>
@@ -206,7 +221,7 @@ function ProposalComponent(props) {
               </div>
             </div>
 
-            <div class="row">
+            {/* <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Payable by date</label>
@@ -218,7 +233,7 @@ function ProposalComponent(props) {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <br />
             <div class="form-group">

@@ -3,13 +3,25 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams } from "react-router-dom";
+import { useParams , useHistory} from "react-router-dom";
 import { useAlert } from "react-alert";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+  Tooltip,
+} from "reactstrap";
 
 function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
   const { id } = useParams();
+  // const history = useHistory();
+
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
   const [query, setQuery] = useState(true);
 
@@ -62,7 +74,6 @@ function QueryAssingment() {
     getQuery();
   }, [queryNo]);
 
-
   const getQuery = () => {
     axios
       .get(`${baseUrl}/tl/CheckIfAssigned?assignno=${queryNo}`)
@@ -79,7 +90,6 @@ function QueryAssingment() {
         }
       });
   };
-
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -110,7 +120,7 @@ function QueryAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Query successfully assigned!");
+          alert.success("assigned!");
           getQuery();
           reset();
         }
@@ -120,9 +130,10 @@ function QueryAssingment() {
       });
   };
 
- 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
+      
+
       <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12">
           <div style={{ textAlign: "center" }}>
@@ -188,7 +199,7 @@ function QueryAssingment() {
                           <option>{hideQuery.name}</option>
                         </select>
                       </td>
-                     
+
                       <td>
                         <input
                           type="text"
@@ -226,17 +237,25 @@ function QueryAssingment() {
 
 export default QueryAssingment;
 
-{
-  /* <td>
-                        <input type="date" ref={register} name="p_date" />
-                      </td> */
-}
-// name:dfd
-// timeline:dfs
-// expdeliverydate:2021-01-02
-// assignNo:dsf
-// date:2021-01-02
-// user:1
-// type:admin
-// who:1
-// types:tl
+
+
+
+// <Card>
+//         <CardHeader>
+//           <Row>
+//             <Col md="4">
+//               <button
+//                 class="btn btn-success ml-3"
+//                 onClick={() => history.goBack()}
+//               >
+//                 <i class="fas fa-arrow-left mr-2"></i>
+//                 Go Back
+//               </button>
+//             </Col>
+//             <Col md="8">
+//               <h4>Add Assignment Stages (Max 5)</h4>
+//             </Col>
+//           </Row>
+//         </CardHeader>
+//         <CardHeader></CardHeader>
+//       </Card>

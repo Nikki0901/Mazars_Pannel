@@ -10,7 +10,6 @@ function Dashboard() {
   const [pendindForAccepttence, setPendingForAcceptence] = useState("");
   const [incomplete, setIncomplete] = useState("");
 
-
   useEffect(() => {
     const getPendindForAccepttence = () => {
       axios
@@ -37,11 +36,15 @@ function Dashboard() {
         });
     };
 
-
     getPendindForAccepttence();
     getIncomplete();
-
   }, []);
+
+  var todaysDate = new Date();
+  console.log(todaysDate);
+
+ 
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div class="row mt-3">
@@ -129,10 +132,29 @@ function Dashboard() {
           </div>
         </div>
       </div>
-   
-   
     </Layout>
   );
 }
 
 export default Dashboard;
+
+// var todaysDate = new Date();
+//   console.log(todaysDate);
+// function convertDate(date) {
+//   var yyyy = date.getFullYear().toString();
+//   var mm = (date.getMonth() + 1).toString();
+//   var dd = date.getDate().toString();
+
+//   var mmChars = mm.split("");
+//   var ddChars = dd.split("");
+
+//   return (
+//     yyyy +
+//     "-" +
+//     (mmChars[1] ? mm : "0" + mmChars[0]) +
+//     "-" +
+//     (ddChars[1] ? dd : "0" + ddChars[0])
+//   );
+// }
+
+// console.log(convertDate(todaysDate));

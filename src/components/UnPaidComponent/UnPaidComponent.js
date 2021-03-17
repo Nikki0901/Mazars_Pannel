@@ -36,7 +36,7 @@ function UnPaidComponent() {
     if (p > 0 && p < a) {
       return "Partial Received ";
     } else if (p === a && p > 0) {
-      return "Full Received";
+      return "Paid";
     } else {
       return "pending";
     }

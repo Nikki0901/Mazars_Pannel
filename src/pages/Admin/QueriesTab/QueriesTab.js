@@ -47,7 +47,7 @@ function QueriesTab() {
     setPendingforAllocation(data)
   }
  
- 
+
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <div class="row mt-3">

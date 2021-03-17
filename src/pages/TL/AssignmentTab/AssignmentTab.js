@@ -15,6 +15,7 @@ import {
 import DraftReportModal from "./DraftReportUpload";
 import FinalReportUpload from "./FinalReportUpload";
 import { Link } from "react-router-dom";
+
 function AssignmentTab() {
   const userid = window.localStorage.getItem("tlkey");
 
@@ -52,21 +53,19 @@ function AssignmentTab() {
     setFinalId(id);
   };
 
-  
   function checkStatus(p, a) {
     console.log("paid -", p);
     console.log("acc -", a);
 
     if (p > 0 && p < a) {
       return "Partial Received ";
-    } else     
-    if (p === a && p > 0) {
-      return "Full Received";
+    } else if (p === a && p > 0) {
+      return "Paid";
     } else {
       return "pending";
     }
   }
-  
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
@@ -83,7 +82,7 @@ function AssignmentTab() {
             <thead>
               <tr>
                 <th>S.No</th>
-                <th>Query No</th>
+                <th>Assignment No</th>
                 <th>Customer Name</th>
                 <th>Negotiated Amount</th>
                 <th>Accepted Amount</th>
@@ -91,7 +90,7 @@ function AssignmentTab() {
                 <th>status</th>
                 <th style={{ textAlign: "center" }}>Draft Report</th>
                 <th style={{ textAlign: "center" }}>Final Report</th>
-                <th>Action</th>
+                <th style={{ textAlign: "center" }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -99,7 +98,7 @@ function AssignmentTab() {
                 assignment.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{p.assign_no}</td>
+                    <td>{p.assignment_label_number}</td>
                     <td>{p.customer_name}</td>
                     <td>{p.negotiated_amount}</td>
                     <td>{p.accepted_amount}</td>
@@ -115,7 +114,7 @@ function AssignmentTab() {
                       {p.assignement_draft_report === null ? (
                         ""
                       ) : (
-                        <div>
+                        <div title="show Draft Report">
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignement_draft_report}`}
                           >
@@ -129,7 +128,7 @@ function AssignmentTab() {
                       {p.final_report === null ? (
                         ""
                       ) : (
-                        <div>
+                        <div title="show Final Report">
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
                           >
@@ -138,29 +137,49 @@ function AssignmentTab() {
                         </div>
                       )}
                     </td>
-                    <td
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div>
-                        <p
-                          style={{ cursor: "pointer" }}
-                          onClick={() => uploadDraftReport(p.id)}
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div title="upload Draft Report">
+                          <p
+                            style={{ cursor: "pointer", color: "green" }}
+                            onClick={() => uploadDraftReport(p.id)}
+                          >
+                            <i class="fa fa-upload"></i>
+                            upload draft
+                          </p>
+                        </div>
+                        <div title="upload Final Report">
+                          <p
+                            style={{ cursor: "pointer", color: "red" }}
+                            onClick={() => uploadFinalReport(p.id)}
+                          >
+                            {p.client_discussion == "completed" &&
+                            p.delivery_report == "completed" &&
+                            p.draft_report == "completed" &&
+                            p.final_discussion == "completed" &&
+                            p.other_stage == "completed" ? (
+                              <div>
+                                <i class="fa fa-upload"></i>
+                                upload final
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </p>
+                        </div>
+                        <div
+                          title="Add Assignment stages"
+                          style={{ cursor: "pointer", textAlign: "center" }}
                         >
-                          <i class="fa fa-upload"></i>
-                          upload draft
-                        </p>
-                      </div>
-                      <div>
-                        <p
-                          style={{ cursor: "pointer" }}
-                          onClick={() => uploadFinalReport(p.id)}
-                        >
-                          <i class="fa fa-upload"></i>
-                          upload final
-                        </p>
+                          <Link to={`/teamleader/addassingment/${p.q_id}`}>
+                            <i class="fa fa-tasks"></i>
+                          </Link>
+                        </div>
                       </div>
                     </td>
                   </tr>

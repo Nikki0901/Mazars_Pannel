@@ -111,7 +111,7 @@ function QueryAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Query assigned successfully  !");
+          alert.success("assigned  !");
           getQuery();
           reset();
         }

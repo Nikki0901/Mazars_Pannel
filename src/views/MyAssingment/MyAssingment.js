@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
-import { Link, useParams ,useHistory} from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
@@ -68,7 +68,7 @@ function MyAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Additional Queries successfully added!");
+          alert.success(<Msg />);
           reset();
           getQuery();
         }
@@ -78,14 +78,22 @@ function MyAssingment() {
       });
   };
 
-
-   //change date format
-   function ChangeFormateDate(oldDate) {
-    console.log("date",oldDate)
-    if(oldDate == null){
-      return null
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
     }
     return oldDate.toString().split("-").reverse().join("-");
+  }
+
+  //alert msg
+  const Msg = () =>{
+    return(
+      <>
+      <p style={{fontSize:"10px"}}>Additional Queries added</p>
+      </>
+    )
   }
 
   return (
@@ -106,10 +114,13 @@ function MyAssingment() {
                 style={{ padding: ".5rem .1rem" }}
               >
                 <h2 class="mb-0 query">
-                <button class="btn btn-success ml-3" onClick={() => history.goBack()}>
-                <i class="fas fa-arrow-left mr-2"></i>
-                Go Back
-              </button>
+                  <button
+                    class="btn btn-success ml-3"
+                    onClick={() => history.goBack()}
+                  >
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Go Back
+                  </button>
                   <div
                     style={{ display: "flex", justifyContent: "space-evenly" }}
                   >
@@ -122,15 +133,14 @@ function MyAssingment() {
                   </div>
                   <div class="d-flex">
                     <div class="additional">
-                    <button type="button" 
-                    class="btn btn-info"
-                    onClick={addHandler}
-                    >
-                      Additional Query
+                      <button
+                        type="button"
+                        class="btn btn-info"
+                        onClick={addHandler}
+                      >
+                        Additional Query
                       </button>
-                     
                     </div>
-                    
                   </div>
                 </h2>
               </div>
@@ -144,7 +154,7 @@ function MyAssingment() {
                     </tr>
                   </thead>
                   <tbody>
-                  <tr>
+                    <tr>
                       <th scope="row">Query No</th>
                       <td>{p.assign_no}</td>
                     </tr>
@@ -233,31 +243,37 @@ function MyAssingment() {
                       <th scope="row">Query Status</th>
                       <td>{p.status}</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Assignment Status</th>
-                      <td>
-                        <tr>
-                          <th>Assignment Stage</th>
-                          <th>Status</th>
-                        </tr>
-                        <tr>
-                          <td>Client Discussion</td>
-                          <td>{p.client_discussion}</td>
-                        </tr>
-                        <tr>
-                          <td>Draft report</td>
-                          <td>{p.draft_report}</td>
-                        </tr>
-                        <tr>
-                          <td>Final Discussion</td>
-                          <td>{p.final_discussion}</td>
-                        </tr>
-                        <tr>
-                          <td> Delivery of report</td>
-                          <td>{p.draft_report}</td>
-                        </tr>
-                      </td>
-                    </tr>
+                    {p.query_status >= "9" ? (
+                      <tr>
+                        <th scope="row">Assignment Status</th>
+                        <td>
+                          <tr>
+                            <th>Assignment Stage</th>
+                            <th>Status</th>
+                          </tr>
+                          <tr>
+                            <td>Client Discussion</td>
+                            <td>{p.client_discussion}</td>
+                          </tr>
+                          <tr>
+                            <td>Draft report</td>
+                            <td>{p.draft_report}</td>
+                          </tr>
+                          <tr>
+                            <td>Final Discussion</td>
+                            <td>{p.final_discussion}</td>
+                          </tr>
+                          <tr>
+                            <td> Delivery of report</td>
+                            <td>{p.draft_report}</td>
+                          </tr>
+                          <tr>
+                            <td>Others</td>
+                            <td>{p.other_stage}</td>
+                          </tr>
+                        </td>
+                      </tr>
+                    ) : null}
                   </tbody>
                 </table>
 

@@ -48,7 +48,7 @@ function AllProposalComponent({allProposal}) {
                 <th>Date of Query</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Query No.</th>
+                <th>Proposal No.</th>
                 <th>Proposal Sent date</th>
                 <th>Proposed Amount</th>
                 <th>Proposal Status</th>
@@ -63,7 +63,7 @@ function AllProposalComponent({allProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>
+                    <td>{p.proposal_number}</td>
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
                     <td>{p.status}</td>

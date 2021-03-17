@@ -34,9 +34,9 @@ function AssignmentTab() {
 
   //change date format
   function ChangeFormateDate(oldDate) {
-    console.log("date",oldDate)
-    if(oldDate == null){
-      return null
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
@@ -58,7 +58,7 @@ function AssignmentTab() {
               <tr>
                 <th>S.No</th>
                 <th>Date of Query</th>
-                <th>Query No</th>
+                <th>Assignment No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Status</th>
@@ -75,10 +75,10 @@ function AssignmentTab() {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.assign_no}</td>
+                    <td>{p.assignment_number}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td></td>
+                    <td>{p.status <= 9 ? "In Process" : "Complete"}</td>
                     <td>
                       <p style={{ fontSize: "10px" }}>{p.tname} </p>
                       <p style={{ fontSize: "10px" }}>{p.phone}</p>

@@ -16,6 +16,7 @@ function QueriesTab() {
   const [pendingAcceptence, setPendingAcceptence] = useState("");
   const [incomplete, setIncomplete] = useState("");
 
+  
   const CountPendingForAcceptence = (data) => {
     setPendingAcceptence(data);
   };
@@ -23,6 +24,8 @@ function QueriesTab() {
   const CountIncomplete = (data) => {
     setIncomplete(data);
   };
+
+
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>

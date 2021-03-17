@@ -13,6 +13,7 @@ import {
   Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Spinner } from 'reactstrap';
 
 function QueriesTab() {
   const [queriesData, setQueriesData] = useState([]);
@@ -46,7 +47,14 @@ function QueriesTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
+ //show status by spinner
+ function showStatus(status) {
+  console.log("status",status)
+  if(status == null){
+    return null
+  }
  
+}
 
 
   return (
@@ -91,7 +99,11 @@ function QueriesTab() {
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.status}</td>
+                    <td>
+                      {/* <p>{showStatus(p.status)}</p> */}
+                      {/* <i class="fa fa-circle" style={{fontSize:"14px" ,marginRight:"4px"}}></i> */}
+                      {p.status}
+                      </td>
                     <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
                     <td>
                       <Link to={`/customer/my-assingment/${p.id}`}>

@@ -32,6 +32,15 @@ function Questionnaire(props) {
   const category = window.localStorage.getItem("category");
   const userNameId = window.localStorage.getItem("userNameId");
 
+//alert msg
+  const Msg = () =>{
+    return(
+      <>
+      <p style={{fontSize:"12px"}}>Query successfully added!</p>
+      </>
+    )
+  }
+
   const onSubmit = (value) => {
     console.log("value :", value);
     console.log("value :", Number(value.p_format_word));
@@ -71,7 +80,7 @@ function Questionnaire(props) {
           console.log("res-", response);
           if (response.data.code === 1) {
             reset();
-            alert.success("Query successfully added!");
+             alert.success(<Msg />);
             props.history.push("/customer/dashboard");
           }
         })

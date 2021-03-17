@@ -56,10 +56,13 @@ function Proposal() {
             <thead>
               <tr>
                 <th>S.No.</th>
-                <th>Query No</th>
+                <th>Proposal No</th>
                 <th>Customer Name </th>
-                <th>Send</th>
-                <th>Edit</th>
+                <th>Amount</th>
+                <th>misc1</th>
+                <th>misc2</th>
+                <th style={{ textAlign: "center" }}>Edit</th>
+                <th style={{ textAlign: "center" }}>Send</th>
               </tr>
             </thead>
             <tbody>
@@ -67,26 +70,34 @@ function Proposal() {
                 proposal.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{p.assign_no}</td>
+                    <td>{p.proposal_number}</td>
                     <td>{p.name}</td>
-                    <td>
-                      <Link to={`/teamleader/sendproposal/${p.id}`}>
-                        <i class="fa fa-mail-forward"></i>
-                      </Link>
+                    <td>{p.amount}</td>
+                     <td>{p.misc1}</td>
+                    <td>{p.misc2}</td>
+
+                    <td style={{ textAlign: "center" }}>
+                      {p.status == "4" ? (
+                        <Link to={`/teamleader/edit-proposal/${p.id}`}>
+                          <i
+                            className="fa fa-edit"
+                            style={{
+                              fontSize: 18,
+                              cursor: "pointer",
+                              marginLeft: "8px",
+                              color: "green",
+                            }}
+                          ></i>
+                        </Link>
+                      ) : null}
                     </td>
-                    <td>
-                    <Link to={`/teamleader/edit-proposal/${p.id}`}>
-                      <i
-                        className="fa fa-edit"
-                        style={{
-                          fontSize: 18,
-                          cursor: "pointer",
-                          marginLeft: "8px",
-                          color:"green"
-                        }}
-                      ></i>
-                    </Link>
-                  </td>
+                    <td style={{ textAlign: "center" }}>
+                      {p.status == "4" ? null : (
+                        <Link to={`/teamleader/sendproposal/${p.id}`}>
+                          <i class="fa fa-mail-forward"></i>
+                        </Link>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (

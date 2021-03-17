@@ -96,14 +96,12 @@ function PaymentStatus() {
 
     if (p > 0 && p < a) {
       return "Partial Received ";
-    } else     
-    if (p === a && p > 0) {
-      return "Full Received";
+    } else if (p === a && p > 0) {
+      return "Paid";
     } else {
       return "pending";
     }
   }
-
 
   return (
     <>
@@ -122,15 +120,14 @@ function PaymentStatus() {
               <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Query No</th>
+                  <th>Proposal No</th>
                   <th>Customer Name</th>
                   <th>Negotiated Amount</th>
                   <th>Accepted Amount</th>
                   <th>Paid Amount</th>
                   <th>status</th>
                   <th style={{ textAlign: "center" }}>Accept Amount</th>
-                  <th>Accept as Assignment</th>
-                  <th>Assignment Stages</th> 
+                  <th style={{ textAlign: "center" }}>Accept as Assignment</th>
                 </tr>
               </thead>
               <tbody>
@@ -138,7 +135,7 @@ function PaymentStatus() {
                   payment.map((p, i) => (
                     <tr key={i}>
                       <td>{i + 1}</td>
-                      <td>{p.assign_no}</td>
+                      <td>{p.proposal_number}</td>
                       <td>{p.name}</td>
                       <td>{p.negotiated_amount}</td>
                       <td>{p.accepted_amount}</td>
@@ -160,13 +157,15 @@ function PaymentStatus() {
                               justifyContent: "space-evenly",
                             }}
                           >
-                            <div style={{ cursor: "pointer" }}>
+                            <div
+                              title="amount Accepted"
+                              style={{ cursor: "pointer", color: "orange" }}
+                            >
                               <i
                                 class="fa fa-check"
                                 onClick={() => accepted(p.assign_id)}
                               ></i>
                             </div>
-                            
                           </div>
                         ) : (
                           ""
@@ -174,7 +173,10 @@ function PaymentStatus() {
                       </td>
 
                       <td>
-                        <div style={{ textAlign: "center" }}>
+                        <div
+                          title="Accept Assignment"
+                          style={{ cursor: "pointer", color: "green",textAlign:"center" }}
+                        >
                           {p.paid_amount > 0 && (
                             <div>
                               <i
@@ -184,15 +186,7 @@ function PaymentStatus() {
                               ></i>
                             </div>
                           )}
-                        </div>                     
-                      </td>
-                      <td>
-                        <div style={{ cursor: "pointer" ,textAlign:"center" }}>
-                            <Link to={`/teamleader/addassingment/${p.id}`}>
-                              <i class="fa fa-tasks"></i>
-                            </Link>
                         </div>
-                           
                       </td>
                     </tr>
                   ))

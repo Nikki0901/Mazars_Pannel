@@ -47,7 +47,7 @@ function DeclinedProposal({declinedProposal}) {
                 <th>Date of Query</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Query No.</th>
+                <th>Proposal No.</th>
                 <th>status</th>
                 <th>Proposed Amount</th>
               </tr>
@@ -60,7 +60,7 @@ function DeclinedProposal({declinedProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.assign_no}</td>  
+                    <td>{p.proposal_number}</td>  
                     <td>{p.status}</td>
                     <td>{p.ProposedAmount}</td>                                     
                   </tr>

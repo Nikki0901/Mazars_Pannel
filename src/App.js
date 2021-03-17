@@ -46,6 +46,8 @@ import AdminPaymentStatusTab from './pages/Admin/PaymentStatusTab/PaymentStatusT
 import AdminTeamLeaderTab from './pages/Admin/TeamLeaderTab/TeamLeaderTab'
 import AdminTaxProfessionalsTab from './pages/Admin/TaxProfessionalsTab/TaxProfessionalsTab'
 import AdminFeedbackTab from './pages/Admin/FeedbackTab/FeedbackTab'
+import AdminPendingRecevived from './pages/Admin/PendingReceived/PendingRecevived'
+
 
 
 
@@ -67,6 +69,8 @@ import TlAssignmentTab from './pages/TL/AssignmentTab/AssignmentTab'
 import TlSendProposal from './pages/TL/SendProposal/SendProposal'
 import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
 import TlEditProposal from './pages/TL/EditProposal/EditProposal'
+import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
+
 
 
 
@@ -148,6 +152,7 @@ function App() {
         <Route exact path="/admin/assignment" component={AdminAssignmentTab} />
         <Route exact path="/admin/edittl/:id" component={AdminEditTL} />
         <Route exact path="/admin/edittp/:id" component={AdminEditTP} />
+        <Route exact path="/admin/pending/:id" component={AdminPendingRecevived} />
 
 
 
@@ -167,6 +172,7 @@ function App() {
         <Route exact path="/teamleader/sendproposal/:id" component={TlSendProposal} />
         <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
         <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
+        <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
 
 
 

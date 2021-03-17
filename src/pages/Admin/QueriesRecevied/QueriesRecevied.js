@@ -14,6 +14,7 @@ import {
   Table,
 } from "reactstrap";
 
+
 function QueriesRecevied() {
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
@@ -83,6 +84,10 @@ function QueriesRecevied() {
                   </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <th scope="row">Query Status</th>
+                    <td>{p.status}</td>
+                  </tr>
                   <tr>
                     <th scope="row">Facts of the case</th>
                     <td>{p.fact_case}</td>
@@ -162,10 +167,7 @@ function QueriesRecevied() {
                       </p>
                     </td>
                   </tr>
-                  <tr>
-                    <th scope="row">Query Status</th>
-                    <td>{p.status}</td>
-                  </tr>
+                  
                 </tbody>
               </table>
 

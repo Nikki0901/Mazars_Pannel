@@ -144,11 +144,11 @@ function ProposalTab() {
         <CardBody>
           <div>
             <table class="table table-bordered ">
-              <thead class="table_head">
+              <thead>
                 <tr>
                   <th>S.No</th>
                   <th>Date</th>
-                  <th>Query No</th>
+                  <th>Proposal No</th>
 
                   <th>Status of Proposal</th>
 
@@ -166,11 +166,11 @@ function ProposalTab() {
 
               {proposalDisplay.length > 0 ? (
                 proposalDisplay.map((p, i) => (
-                  <tbody class="table_bdy">
+                  <tbody>
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{ChangeFormateDate(p.created)}</td>
-                      <td>{p.assign_no}</td>
+                      <td>{p.proposal_number}</td>
                       <td>{p.status}</td>
                       <td>{p.ProposedAmount}</td>
                       <td>{p.negotiated_amount}</td>

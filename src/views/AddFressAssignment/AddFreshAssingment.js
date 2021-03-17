@@ -23,6 +23,17 @@ function AddFreshAssingment(props) {
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
 
+
+const Msg = () =>{
+  return(
+    <>
+    <p style={{fontSize:"12px"}}>Query successfully added!</p>
+    </>
+  )
+}
+
+
+
   const onSubmit = (value) => {
     console.log("value :", value);
     console.log("value :", Number(value.p_format_word));
@@ -54,7 +65,7 @@ function AddFreshAssingment(props) {
           console.log("res-", response);
           if (response.data.code === 1) {
             reset();
-            alert.success("Query successfully added!");
+            alert.success(<Msg />);
             props.history.push("/customer/queries");
           }
         })

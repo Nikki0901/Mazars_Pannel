@@ -28,8 +28,10 @@ function ProposalComponent() {
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setAssingNo(res.data.result[0].assign_no);
-            setAssignID(res.data.result[0].id);
+            if (res.data.result.length > 0) {
+              setAssingNo(res.data.result[0].assign_no);
+              setAssignID(res.data.result[0].id);
+            }
           }
         });
     };
@@ -74,13 +76,23 @@ function ProposalComponent() {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success("proposal successfully sent !");
+          alert.success(<Msg />);
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
+
+
+//alert msg
+const Msg = () =>{
+  return(
+    <>
+    <p style={{fontSize:"10px"}}>proposal successfully sent</p>
+    </>
+  )
+}
 
   return (
     <>
