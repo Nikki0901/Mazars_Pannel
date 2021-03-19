@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+} from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import {
@@ -13,11 +16,14 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Button,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+// import History from "./History";
+
 
 function PendingAllocation({ CountPendingForAllocation }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -25,23 +31,34 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  // const [key, setKey] = useState(null);
   const [history, setHistory] = useState([]);
 
-  const [addModal, setAddModal] = useState(false);
-
-  const addHandler = (key) => {
+  const [modal, setModal] = useState(false);
+  const toggle = (key) => {
     console.log("key", key);
-    setAddModal(!addModal);
+    setModal(!modal);
 
-    axios
-      .get(`${baseUrl}/customers/getQueryHistory?q_id=${key}`)
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setHistory(res.data.result);
-        }
-      });
+    fetch(
+      `${baseUrl}/customers/getQueryHistory?q_id=${key}`,
+      {
+        method: "GET",
+        headers: new Headers({
+          Accept: "application/vnd.github.cloak-preview"
+        })
+      }
+    )
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        setHistory(response.result);
+      })
+      .catch(error => console.log(error));
   };
+
+ 
+
+
 
   useEffect(() => {
     getPendingForAllocation();
@@ -102,7 +119,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
   //change date format
   function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
+    // console.log("date", oldDate);
     if (oldDate == null) {
       return null;
     }
@@ -252,7 +269,10 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     </th>
                     <td class="text-center">
                       {p.is_assigned === "1" ? (
-                        ""
+                        <p style={{ color: "green", fontSize: "10px" }}>
+                          {/* <i class="fa fa-share"></i> */}
+                          Assign to {p.tname} on {p.allocation_time}
+                        </p>
                       ) : (
                         <Link to={`/admin/queryassing/${p.id}`}>
                           <i class="fa fa-share"></i>
@@ -263,7 +283,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                       <button
                         type="button"
                         class="btn btn-info btn-sm"
-                        onClick={() => addHandler(p.id)}
+                        onClick={() => toggle(p.id)}
                       >
                         View
                       </button>
@@ -274,8 +294,8 @@ function PendingAllocation({ CountPendingForAllocation }) {
             </table>
           </div>
 
-          <Modal isOpen={addModal} toggle={addHandler} size="md">
-            <ModalHeader toggle={addHandler}>Show history</ModalHeader>
+          <Modal isOpen={modal} fade={false} toggle={toggle}>
+            <ModalHeader toggle={toggle}>History</ModalHeader>
             <ModalBody>
               <table class="table table-bordered">
                 <thead>
@@ -284,30 +304,40 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     <th scope="col">Data</th>
                   </tr>
                 </thead>
-                {history.map((p, i) => (
-                  <tbody>
-                    <tr>
-                      <th scope="row">Name</th>
-                      <td>{p.name}</td>
-                    </tr>
 
-                    <tr>
-                      <th scope="row">Date of Allocation</th>
-                      <td>{p.date_of_allocation}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Query No</th>
-                      <td>{p.assign_no}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Status</th>
-                      <td>{p.status}</td>
-                    </tr>
-                  </tbody>
-                ))}
+                {history.length > 0
+                  ? history.map((p, i) => (
+                      <tbody>
+                        <tr>
+                          <th scope="row">Name</th>
+                          <td>{p.name}</td>
+                        </tr>
+
+                        <tr>
+                          <th scope="row">Date of Allocation</th>
+                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Query No</th>
+                          <td>{p.assign_no}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Status</th>
+                          <td>{p.status}</td>
+                        </tr>
+                      </tbody>
+                    ))
+                  : null}
               </table>
             </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button>
+            </ModalFooter>
           </Modal>
+
+      
         </CardBody>
       </Card>
     </>
@@ -316,8 +346,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
 export default PendingAllocation;
 
-{
-  /* <td style={{ textAlign: "center" }}>
+/* <td style={{ textAlign: "center" }}>
                       {p.is_assigned === "1" && (
                         <p style={{ color: "green" }}>
                           <i class="fa fa-circle" 
@@ -333,4 +362,41 @@ export default PendingAllocation;
                         </p>
                       )}
                     </td> */
-}
+
+//   <Modal isOpen={addModal} toggle={addHandler} size="md">
+//   <ModalHeader toggle={addHandler}>Show history</ModalHeader>
+//   <ModalBody>
+// <table class="table table-bordered">
+//   <thead>
+//     <tr>
+//       <th scope="col">Titles</th>
+//       <th scope="col">Data</th>
+//     </tr>
+//   </thead>
+
+//   {history.length > 0
+//     ? history.map((p, i) => (
+//         <tbody>
+//           <tr>
+//             <th scope="row">Name</th>
+//             <td>{p.name}</td>
+//           </tr>
+
+//           <tr>
+//             <th scope="row">Date of Allocation</th>
+//             <td>{ChangeFormateDate(p.date_of_allocation)}</td>
+//           </tr>
+//           <tr>
+//             <th scope="row">Query No</th>
+//             <td>{p.assign_no}</td>
+//           </tr>
+//           <tr>
+//             <th scope="row">Status</th>
+//             <td>{p.status}</td>
+//           </tr>
+//         </tbody>
+//       ))
+//     : null}
+// </table>
+//   </ModalBody>
+// </Modal>

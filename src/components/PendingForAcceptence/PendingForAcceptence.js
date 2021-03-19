@@ -19,7 +19,7 @@ function PendingForAcceptence({pendingProposal}) {
   useEffect(() => {
 
     const getPendingAcceptedProposal = () => {
-      axios.get(`${baseUrl}/admin/getProposals?&status=2  `).then((res) => {
+      axios.get(`${baseUrl}/admin/getProposals?&status=4`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);

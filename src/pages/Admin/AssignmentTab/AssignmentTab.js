@@ -65,7 +65,7 @@ function AssignmentTab() {
                 <th>Proposed date of Completion</th>
                 <th>Assignment Stage</th>
                 <th>Status</th>
-                <th>Time taken for Completion</th>
+                {/* <th>Time taken for Completion</th> */}
                 <th>Draft Report</th>
                 <th>Final Report</th>
               </tr>
@@ -87,7 +87,7 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.client_discussion}</td>
-                  <td></td>
+                  {/* <td></td> */}
                   <td style={{ textAlign: "center" }}>
                       {p.assignement_draft_report == null ? (
                         ""
@@ -130,7 +130,7 @@ function AssignmentTab() {
                     <span style={{ fontWeight: "bold" }}>Draft report</span>
                   </td>
                   <td> {p.draft_report}</td>
-                  <td></td>
+                  {/* <td></td> */}
                   <td></td>
                   <td></td>
                 </tr>
@@ -149,7 +149,7 @@ function AssignmentTab() {
                     <span style={{ fontWeight: "bold" }}>Final Discussion</span>
                   </td>
                   <td> {p.final_discussion}</td>
-                  <td></td>
+                  {/* <td></td> */}
                   <td></td>
                   <td></td>
                 </tr>
@@ -170,7 +170,7 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.delivery_report}</td>
-                  <td></td>
+                  {/* <td></td> */}
                   <td></td>
                   <td></td>
                 </tr>
@@ -190,7 +190,7 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.other_stage}</td>
-                  <td></td>
+                  {/* <td></td> */}
                   <td></td>
                   <td></td>
                 </tr>

@@ -3,14 +3,26 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams } from "react-router-dom";
+import { useParams ,useHistory} from "react-router-dom";
 import { useAlert } from "react-alert";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+  Tooltip,
+} from "reactstrap";
 
 function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
   const { id } = useParams();
+  const history = useHistory();
+
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [hideQuery, setHideQuery] = useState({
     name: "",
@@ -125,13 +137,29 @@ function QueryAssingment() {
 
   return (
     <Layout TLDashboard="TLDashboard">
-      <div class="row mt-3">
+       <Card>
+        <CardHeader>
+          <Row>
+            <Col md="4">
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </Col>
+            <Col md="4">
+              <div style={{ textAlign: "center" }}>
+                <h2>Query Allocation</h2>
+              </div>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardHeader>
+        <div class="row mt-3">
         <div class="col-xl-12 col-lg-12 col-md-12">
-          <div style={{ textAlign: "center" }}>
-            <h2>Query Allocation</h2>
-          </div>
-          <br />
-          <br />
+         
           <div class="col-md-12">
             <form onSubmit={handleSubmit(onSubmit)}>
               <table class="table">
@@ -151,7 +179,7 @@ function QueryAssingment() {
                       <th scope="row">{queryNo}</th>
                       <td>
                         <select
-                          class="form-control w-75 p-0"
+                          class="form-control"
                           name="p_taxprof"
                           ref={register}
                         >
@@ -172,10 +200,16 @@ function QueryAssingment() {
                           ref={register}
                           name="p_timelines"
                           value={timelines}
+                          class="form-control"
                         />
                       </td>
                       <td>
-                        <input type="date" ref={register} name="p_expdeldate" />
+                        <input
+                         type="date" 
+                         ref={register} 
+                         name="p_expdeldate" 
+                         class="form-control"
+                         />
                       </td>
 
                       <td>
@@ -192,14 +226,7 @@ function QueryAssingment() {
                           <option>{hideQuery.name}</option>
                         </select>
                       </td>
-                      {/* <td>
-                        <input
-                          type="date"
-                          id="date"
-                          value={hideQuery.date_allocation}
-                          disabled
-                        />
-                      </td> */}
+                      
                       <td>
                         <input
                           type="text"
@@ -207,6 +234,7 @@ function QueryAssingment() {
                           name="p_timelines"
                           value={hideQuery.timeline}
                           disabled
+                          class="form-control"
                         />
                       </td>
                       <td>
@@ -216,6 +244,7 @@ function QueryAssingment() {
                           name="p_expdeldate"
                           value={hideQuery.expdeliverydate}
                           disabled
+                          class="form-control"
                         />
                       </td>
 
@@ -232,6 +261,9 @@ function QueryAssingment() {
           </div>
         </div>
       </div>
+        </CardHeader>
+        </Card>
+     
     </Layout>
   );
 }

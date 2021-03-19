@@ -42,29 +42,29 @@ function ProposalComponent() {
   });
   const { query, name, amount,misc1,misc2 ,payable_through} = proposal;
 
-  useEffect(() => {
-    const getQuery = () => {
-      axios
-        .get(
-          `${baseUrl}/tl/getProposalDetail?id=${id}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setProposal({
-              name: res.data.result.name,
-              query: res.data.result.assign_no,
-              amount: res.data.result.amount,
-              misc1: res.data.result.misc1,
-              misc2: res.data.result.misc2,
-              payable_through: res.data.result.payable_through,
-            });
-          }
-        });
-    };
+  useEffect(() => {  
     getQuery();
   }, []);
 
+  const getQuery = () => {
+    axios
+      .get(
+        `${baseUrl}/tl/getProposalDetail?id=${id}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setProposal({
+            name: res.data.result.name,
+            query: res.data.result.assign_no,
+            amount: res.data.result.amount,
+            misc1: res.data.result.misc1,
+            misc2: res.data.result.misc2,
+            payable_through: res.data.result.payable_through,
+          });
+        }
+      });
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -109,7 +109,8 @@ function ProposalComponent() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          reset();
+          // reset();
+          getQuery();
           alert.success(<Msg />);
         }
       })

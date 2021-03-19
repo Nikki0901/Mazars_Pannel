@@ -156,7 +156,6 @@ function ProposalTab() {
                   <th>Negotiated Amount</th>
                   <th>Amount Accepted</th>
                   <th>Amount Paid</th>
-
                   <th>Amount Outstanding</th>
 
                   <th>Action</th>
@@ -213,6 +212,7 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-file-text"
+                                      style={{color:"orange"}}
                                       onClick={() => acceptedHandler(p.up_id)}
                                     ></i>
                                   </div>
@@ -229,6 +229,7 @@ function ProposalTab() {
                                 <div style={{ cursor: "pointer" }}>
                                   <i
                                     class="fa fa-credit-card"
+                                    style={{color:"green"}}
                                     onClick={() => paymentHandler(p)}
                                   ></i>
                                 </div>

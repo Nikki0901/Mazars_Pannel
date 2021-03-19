@@ -15,8 +15,9 @@ function QueriesTab() {
 
   const [pendingAcceptence, setPendingAcceptence] = useState("");
   const [incomplete, setIncomplete] = useState("");
+  const [complete, setComplete] = useState("");
 
-  
+
   const CountPendingForAcceptence = (data) => {
     setPendingAcceptence(data);
   };
@@ -25,6 +26,9 @@ function QueriesTab() {
     setIncomplete(data);
   };
 
+  const CountComplete = (data) => {
+    setComplete(data);
+  };
 
 
   return (
@@ -73,7 +77,7 @@ function QueriesTab() {
                 aria-controls="pills-complete"
                 aria-selected="false"
               >
-                Complete
+                Complete ({complete})
               </a>
             </li>
           </ul>
@@ -104,7 +108,7 @@ function QueriesTab() {
               role="tabpanel"
               aria-labelledby="pills-complete-tab"
             >
-              <CompleteData />
+              <CompleteData CountComplete={CountComplete}/>
             </div>
           </div>
         </div>
@@ -115,11 +119,9 @@ function QueriesTab() {
 
 export default QueriesTab;
 
-{
-  /* {pendingData.map((p, i) => ( */
-}
-// <PendingForAcceptence
-// p={p}
-// getPendingforAcceptance={getPendingforAcceptance}
-// />
-// {/* // ))}
+//  {pendingData.map((p, i) => (
+
+//  <PendingForAcceptence
+//  p={p}
+//  getPendingforAcceptance={getPendingforAcceptance}/>
+//  ))}

@@ -62,7 +62,8 @@ function PendingRecevied() {
     let formData = new FormData();
     formData.append("set", 1);
     formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", key);
+    formData.append("assignment_id", key.id);
+    formData.append("allocation_id", key.allocation_id);
 
     axios({
       method: "POST",
@@ -72,7 +73,7 @@ function PendingRecevied() {
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          alert.success("Query accepted !");
+          alert.success("Query accepted");
           history.goBack()
         }
       })
@@ -87,7 +88,8 @@ function PendingRecevied() {
     let formData = new FormData();
     formData.append("set", 0);
     formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", key);
+    formData.append("assignment_id", key.id);
+    formData.append("allocation_id", key.allocation_id);
 
     axios({
       method: "POST",
@@ -97,7 +99,7 @@ function PendingRecevied() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Query successfully rejected !");
+          alert.success("Query rejected");
           history.goBack()
         }
       })
@@ -238,14 +240,14 @@ function PendingRecevied() {
                         <div
                           id="accept"
                           title="Accept Assignment"
-                          onClick={() => acceptHandler(p.id)}
+                          onClick={() => acceptHandler(p)}
                         >
                           <i class="fa fa-check" style={{ color: "green" }}></i>
                         </div>
                         <div
                           id="reject"
                           title="Reject Assignment"
-                          onClick={() => rejectHandler(p.id)}
+                          onClick={() => rejectHandler(p)}
                         >
                           <i class="fa fa-times" style={{ color: "red" }}></i>
                         </div>

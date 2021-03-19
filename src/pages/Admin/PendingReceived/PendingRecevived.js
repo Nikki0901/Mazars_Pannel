@@ -170,12 +170,12 @@ function PendingRecevied() {
                   <tr>
                     <th scope="row">Action</th>
                     <td>
-                    {p.is_assigned === "1" ? (
-                        ""
-                      ) : (                  
+                    {p.allocation_status == "0" || p.allocation_status == "3"  ? (
                         <Link to={`/admin/queryassing/${p.id}`}>
-                          <i class="fa fa-share"></i>
-                        </Link>
+                        <i class="fa fa-share"></i>
+                      </Link>
+                      ) : (                  
+                       null
                       )}
                     </td>
                   </tr>

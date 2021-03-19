@@ -65,7 +65,7 @@ function FeedbackTab() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No Records</td>
+                    <td colSpan="4">No Records</td>
                   </tr>
                 )}
               </tbody>

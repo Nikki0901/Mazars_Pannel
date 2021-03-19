@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams , useHistory} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -20,7 +20,7 @@ function QueryAssingment() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
   const { id } = useParams();
-  // const history = useHistory();
+  const history = useHistory();
 
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
   const [query, setQuery] = useState(true);
@@ -132,113 +132,130 @@ function QueryAssingment() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
-      
-
-      <div class="row mt-3">
-        <div class="col-xl-12 col-lg-12 col-md-12">
-          <div style={{ textAlign: "center" }}>
-            <h2>Query Allocation</h2>
-          </div>
-          <br />
-          <br />
-          <div class="col-md-12">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Query No.</th>
-                    <th scope="col">Team Leaders</th>
-                    <th scope="col">Expected Timeline</th>
-                    <th scope="col">Exp. Delivery Date</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {query ? (
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col md="4">
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </Col>
+            <Col md="4">
+              <div style={{ textAlign: "center" }}>
+                <h2>Query Allocation</h2>
+              </div>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardHeader>
+          <div class="row mt-3">
+            <div class="col-md-12">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <table class="table">
+                  <thead>
                     <tr>
-                      <th scope="row">{queryNo}</th>
-                      <td>
-                        <select
-                          class="form-control w-75 p-0"
-                          name="p_taxprof"
-                          ref={register}
-                          // onChange={(e) => setTeamLeader(e.target.value)}
-                        >
-                          <option value="">-select-</option>
-                          {taxLeaderDisplay.map((p, index) => (
-                            <option key={index} value={p.name}>
-                              {p.name}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-
-                      <td>
-                        <input
-                          type="text"
-                          ref={register}
-                          name="p_timelines"
-                          value={timelines}
-                        />
-                      </td>
-                      <td>
-                        <input type="date" ref={register} name="p_expdeldate" />
-                      </td>
-
-                      <td>
-                        <button type="submit" class="btn btn-success">
-                          Assign
-                        </button>
-                      </td>
+                      <th scope="col">Query No.</th>
+                      <th scope="col">Team Leaders</th>
+                      <th scope="col">Expected Timeline</th>
+                      <th scope="col">Exp. Delivery Date</th>
+                      <th scope="col">Action</th>
                     </tr>
-                  ) : (
-                    <tr>
-                      <th scope="row">{queryNo}</th>
-                      <td>
-                        <select class="form-control w-75 p-0" disabled>
-                          <option>{hideQuery.name}</option>
-                        </select>
-                      </td>
+                  </thead>
+                  <tbody>
+                    {query ? (
+                      <tr>
+                        <th scope="row">{queryNo}</th>
+                        <td>
+                          <select
+                            class="form-control"
+                            name="p_taxprof"
+                            ref={register}
+                          >
+                            <option value="">-select-</option>
+                            {taxLeaderDisplay.map((p, index) => (
+                              <option key={index} value={p.name}>
+                                {p.name}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
 
-                      <td>
-                        <input
-                          type="text"
-                          ref={register}
-                          name="p_timelines"
-                          value={hideQuery.timeline}
-                          disabled
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="date"
-                          ref={register}
-                          name="p_expdeldate"
-                          value={hideQuery.expdeliverydate}
-                          disabled
-                        />
-                      </td>
-                      <td>
-                        <button class="btn btn-success" disabled>
-                          Assigned
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </form>
+                        <td>
+                          <input
+                            type="text"
+                            ref={register}
+                            name="p_timelines"
+                            value={timelines}
+                            class="form-control"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="date"
+                            ref={register}
+                            name="p_expdeldate"
+                            class="form-control"
+                          />
+                        </td>
+
+                        <td>
+                          <button type="submit" class="btn btn-success">
+                            Assign
+                          </button>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <th scope="row">{queryNo}</th>
+                        <td>
+                          <select class="form-control w-75 p-0" disabled>
+                            <option>{hideQuery.name}</option>
+                          </select>
+                        </td>
+
+                        <td>
+                          <input
+                            type="text"
+                            ref={register}
+                            name="p_timelines"
+                            class="form-control"
+                            value={hideQuery.timeline}
+                            disabled
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="date"
+                            ref={register}
+                            name="p_expdeldate"
+                            class="form-control"
+                            value={hideQuery.expdeliverydate}
+                            disabled
+                          />
+                        </td>
+                        <td>
+                          <button class="btn btn-success" disabled>
+                            Assigned
+                          </button>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </form>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardHeader>
+      </Card>
     </Layout>
   );
 }
 
 export default QueryAssingment;
-
-
-
 
 // <Card>
 //         <CardHeader>

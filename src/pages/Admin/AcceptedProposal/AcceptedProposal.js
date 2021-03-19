@@ -18,7 +18,7 @@ function AcceptedProposal({acceptedProposal}) {
   useEffect(() => {
 
     const getAcceptedProposal = () => {
-      axios.get(`${baseUrl}/admin/getProposals?&status=5,7`).then((res) => {
+      axios.get(`${baseUrl}/admin/getProposals?&status=5,7,8`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
@@ -42,7 +42,7 @@ function AcceptedProposal({acceptedProposal}) {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th>Sr. No.</th>
+                <th>S.No.</th>
                 <th>Date of Query</th>
                 <th>Category</th>
                 <th>Sub Category</th>

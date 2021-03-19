@@ -56,6 +56,7 @@ function Proposal() {
             <thead>
               <tr>
                 <th>S.No.</th>
+                <th>Query No.</th>
                 <th>Proposal No</th>
                 <th>Customer Name </th>
                 <th>Amount</th>
@@ -70,6 +71,7 @@ function Proposal() {
                 proposal.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
+                    <td>{p.assign_no}</td>
                     <td>{p.proposal_number}</td>
                     <td>{p.name}</td>
                     <td>{p.amount}</td>
@@ -77,7 +79,7 @@ function Proposal() {
                     <td>{p.misc2}</td>
 
                     <td style={{ textAlign: "center" }}>
-                      {p.status == "4" ? (
+                      {(p.status >= "4" && p.status < "5") ? (
                         <Link to={`/teamleader/edit-proposal/${p.id}`}>
                           <i
                             className="fa fa-edit"
@@ -92,7 +94,7 @@ function Proposal() {
                       ) : null}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {p.status == "4" ? null : (
+                      {p.status >= "4" ? null : (
                         <Link to={`/teamleader/sendproposal/${p.id}`}>
                           <i class="fa fa-mail-forward"></i>
                         </Link>

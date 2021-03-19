@@ -93,7 +93,7 @@ function Proposal() {
                     aria-controls="pills-b"
                     aria-selected="false"
                   >
-                    Accepted / Pending Payment  ({acceptedProposalCount})
+                    Accepted  ({acceptedProposalCount})
                   </a>
                 </li>
 

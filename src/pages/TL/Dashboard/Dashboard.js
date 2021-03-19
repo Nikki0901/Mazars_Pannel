@@ -9,6 +9,7 @@ function Dashboard() {
 
   const [pendindForAccepttence, setPendingForAcceptence] = useState("");
   const [incomplete, setIncomplete] = useState("");
+  const [complete, setcomplete] = useState("");
 
   useEffect(() => {
     const getPendindForAccepttence = () => {
@@ -36,8 +37,22 @@ function Dashboard() {
         });
     };
 
+    const getComplete = () => {
+      axios
+        .get(`${baseUrl}/tl/getCompleteQues?id=${JSON.parse(userid)}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setcomplete(res.data.result.length);
+          }
+        });
+    };
+
+
     getPendindForAccepttence();
     getIncomplete();
+    getComplete();
+
   }, []);
 
   var todaysDate = new Date();
@@ -126,7 +141,7 @@ function Dashboard() {
                   marginTop: "50px",
                 }}
               >
-                <h4></h4>
+                <h4>{complete}</h4>
               </div>
             </div>
           </div>

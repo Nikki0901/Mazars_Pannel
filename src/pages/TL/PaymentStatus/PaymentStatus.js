@@ -103,6 +103,16 @@ function PaymentStatus() {
     }
   }
 
+
+
+  function checkOutstading(p, a) {
+    console.log("paid -", p);
+    console.log("acc -", a);
+    if (p == 0) {
+      return "0";
+    } else return a - p;
+  }
+  
   return (
     <>
       <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -122,9 +132,11 @@ function PaymentStatus() {
                   <th>Sr. No.</th>
                   <th>Proposal No</th>
                   <th>Customer Name</th>
+                  <th>Proposed Amount</th>
                   <th>Negotiated Amount</th>
                   <th>Accepted Amount</th>
                   <th>Paid Amount</th>
+                <th>Amount Outstanding</th>
                   <th>status</th>
                   <th style={{ textAlign: "center" }}>Accept Amount</th>
                   <th style={{ textAlign: "center" }}>Accept as Assignment</th>
@@ -137,9 +149,13 @@ function PaymentStatus() {
                       <td>{i + 1}</td>
                       <td>{p.proposal_number}</td>
                       <td>{p.name}</td>
+                      <td>{p.amount}</td>
                       <td>{p.negotiated_amount}</td>
                       <td>{p.accepted_amount}</td>
                       <td>{p.paid_amount}</td>
+                      <td>
+                    {checkOutstading(p.paid_amount, p.accepted_amount)}
+                    </td>
                       <td>
                         {checkStatus(
                           Number(p.paid_amount),

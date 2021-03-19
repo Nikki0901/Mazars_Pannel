@@ -10,6 +10,10 @@ import {
   Row,
   Col,
   Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,Button
 } from "reactstrap";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
@@ -21,6 +25,31 @@ function PendingForProposals({ CountPendingProposal }) {
 
   const [nonpendingData, setNonPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+
+  const [history, setHistory] = useState([]);
+  const [modal, setModal] = useState(false);
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(
+      `${baseUrl}/customers/getQueryHistory?q_id=${key}`,
+      {
+        method: "GET",
+        headers: new Headers({
+          Accept: "application/vnd.github.cloak-preview"
+        })
+      }
+    )
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        setHistory(response.result);
+      })
+      .catch(error => console.log(error));
+  };
+
+
 
   useEffect(() => {
     getPendingForProposals();
@@ -212,7 +241,7 @@ function PendingForProposals({ CountPendingProposal }) {
                   <th scope="col">Sub Category</th>
                   <th scope="col">Customer Name</th>
                   <th scope="col">Facts of the Case</th>
-                  <th scope="col">Accepted by</th>
+                  <th scope="col">History</th>
                 </tr>
               </thead>
               {nonpendingData.map((p, i) => (
@@ -227,16 +256,70 @@ function PendingForProposals({ CountPendingProposal }) {
                     <td>{p.cat_name}</td>
                     <td>{p.name}</td>
                     <td>{p.fact_case}</td>
-                    <td class="text-center">
+                    {/* <td class="text-center">
                       <p style={{ color: "green" }}>
                         Query accepted by {p.tname}
                       </p>
+                    </td> */}
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-info btn-sm"
+                        onClick={() => toggle(p.id)}
+                      >
+                        View
+                      </button>
                     </td>
                   </tr>
                 </tbody>
               ))}
             </table>
           </div>
+
+
+          <Modal isOpen={modal} fade={false} toggle={toggle}>
+            <ModalHeader toggle={toggle}>History</ModalHeader>
+            <ModalBody>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Titles</th>
+                    <th scope="col">Data</th>
+                  </tr>
+                </thead>
+
+                {history.length > 0
+                  ? history.map((p, i) => (
+                      <tbody>
+                        <tr>
+                          <th scope="row">Name</th>
+                          <td>{p.name}</td>
+                        </tr>
+
+                        <tr>
+                          <th scope="row">Date of Allocation</th>
+                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Query No</th>
+                          <td>{p.assign_no}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Status</th>
+                          <td>{p.status}</td>
+                        </tr>
+                      </tbody>
+                    ))
+                  : null}
+              </table>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+
         </CardBody>
       </Card>
     </>

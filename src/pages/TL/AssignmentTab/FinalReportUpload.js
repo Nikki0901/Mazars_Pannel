@@ -7,14 +7,17 @@ import { useAlert } from "react-alert";
 
 function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
   const alert = useAlert();
-
   const { handleSubmit, register, reset } = useForm();
+
+
+  console.log("id-",id)
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
     formData.append("final_report", value.p_final[0]);
-    formData.append("id", id);
+    formData.append("id", id.id);
+    formData.append("q_id", id.q_id);
 
     axios
       .post(`${baseUrl}/tl/UploadReport`, formData, {

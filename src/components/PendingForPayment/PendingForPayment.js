@@ -32,13 +32,13 @@ function PendingForPayment({CountPendingForPayment}) {
   }, []);
 
 
-  function checkOutstading(p, a) {
-    console.log("paid -", p);
-    console.log("acc -", a);
-    if (p == 0) {
-      return "0";
-    } else return a - p;
-  }
+  // function checkOutstading(p, a) {
+  //   console.log("paid -", p);
+  //   console.log("acc -", a);
+  //   if (p == 0) {
+  //     return "0";
+  //   } else return a - p;
+  // }
 
 
   return (
@@ -57,11 +57,13 @@ function PendingForPayment({CountPendingForPayment}) {
           <thead>
               <tr>
               <th>Sr. No.</th>
-                <th>Assignment No</th>
-                <th>Amount Accepted</th>
-                <th>Payment Terms</th>
-                <th>Payments Received</th>
-                <th>Outstanding payment</th>
+                <th>Query No</th>
+                <th>Proposal No</th>
+                <th>Status</th>
+                <th>Proposed Amount</th>
+                <th>Amount Accepted</th>            
+                {/* <th>Payments Received</th>
+                <th>Outstanding payment</th> */}
               </tr>
             </thead>
             <tbody>
@@ -70,15 +72,18 @@ function PendingForPayment({CountPendingForPayment}) {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{p.assign_no}</td>
+                    <td>{p.proposal_number}</td>
+                    <td>{p.status}</td>
+                    <td>{p.ProposedAmount}</td>
                     <td>{p.accepted_amount}</td>
-                    <td></td>
+{/*   
                     <td>{p.paid_amount}</td>
-                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td>
+                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td> */}
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6">No Records</td>
+                  <td colSpan="9">No Records</td>
                 </tr>
               )}
             </tbody>

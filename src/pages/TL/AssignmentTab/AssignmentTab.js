@@ -48,7 +48,9 @@ function AssignmentTab() {
 
   // final modal
   const [fianlModal, setFianlModal] = useState(false);
+  
   const uploadFinalReport = (id) => {
+    console.log(id)
     setFianlModal(!fianlModal);
     setFinalId(id);
   };
@@ -144,7 +146,7 @@ function AssignmentTab() {
                           justifyContent: "space-between",
                         }}
                       >
-                        <div title="upload Draft Report">
+                        <div title="upload Pdf">
                           <p
                             style={{ cursor: "pointer", color: "green" }}
                             onClick={() => uploadDraftReport(p.id)}
@@ -153,10 +155,10 @@ function AssignmentTab() {
                             upload draft
                           </p>
                         </div>
-                        <div title="upload Final Report">
+                        <div title="upload Pdf">
                           <p
                             style={{ cursor: "pointer", color: "red" }}
-                            onClick={() => uploadFinalReport(p.id)}
+                            onClick={() => uploadFinalReport(p)}
                           >
                             {p.client_discussion == "completed" &&
                             p.delivery_report == "completed" &&

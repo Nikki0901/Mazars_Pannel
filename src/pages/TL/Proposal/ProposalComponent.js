@@ -50,6 +50,7 @@ function ProposalComponent(props) {
     getQuery();
   }, []);
 
+
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);

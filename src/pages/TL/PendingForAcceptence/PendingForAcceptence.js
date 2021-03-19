@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { Link , useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -13,13 +13,12 @@ import {
   Table,
 } from "reactstrap";
 
-function PendingForAcceptence({CountPendingForAcceptence}) {
+function PendingForAcceptence({ CountPendingForAcceptence }) {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendingData, setPendingData] = useState([]);
-  const history = useHistory();
-
+  // const history = useHistory();
 
   useEffect(() => {
     getPendingforAcceptance();
@@ -31,13 +30,11 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          CountPendingForAcceptence(res.data.result.length);
           setPendingData(res.data.result);
-        }
+          CountPendingForAcceptence(res.data.result.length);
+        }   
       });
   };
-
-
 
   
   const acceptHandler = (key) => {
@@ -46,7 +43,8 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
     let formData = new FormData();
     formData.append("set", 1);
     formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", key);
+    formData.append("assignment_id", key.id);
+    formData.append("allocation_id", key.allocation_id);
 
     axios({
       method: "POST",
@@ -57,7 +55,7 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
         console.log("response-", response);
         if (response.data.code === 1) {
           alert.success("Query accepted !");
-          getPendingforAcceptance();          
+          getPendingforAcceptance();
         }
       })
       .catch((error) => {
@@ -71,7 +69,8 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
     let formData = new FormData();
     formData.append("set", 0);
     formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", key);
+    formData.append("assignment_id", key.id);
+    formData.append("allocation_id", key.allocation_id);
 
     axios({
       method: "POST",
@@ -90,7 +89,6 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
       });
   };
 
-
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);
@@ -99,7 +97,6 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
-
 
   return (
     <>
@@ -146,14 +143,14 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
                         <div
                           id="accept"
                           title="Accept Assignment"
-                          onClick={() => acceptHandler(p.id)}
+                          onClick={() => acceptHandler(p)}
                         >
                           <i class="fa fa-check" style={{ color: "green" }}></i>
                         </div>
                         <div
                           id="reject"
                           title="Reject Assignment"
-                          onClick={() => rejectHandler(p.id)}
+                          onClick={() => rejectHandler(p)}
                         >
                           <i class="fa fa-times" style={{ color: "red" }}></i>
                         </div>
@@ -175,3 +172,14 @@ function PendingForAcceptence({CountPendingForAcceptence}) {
 }
 
 export default PendingForAcceptence;
+
+// http://13.232.121.233/mazarapi/v1/tl/AcceptRejectQuery
+
+// axios.post(`${baseUrl}/tl/AcceptRejectQuery`, formData)
+// .then(res => {
+//   console.log(res);
+//   if (res.data.code === 1) {
+//     alert.success("Query rejected!");
+//     getPendingforAcceptance();
+//   }
+// });
