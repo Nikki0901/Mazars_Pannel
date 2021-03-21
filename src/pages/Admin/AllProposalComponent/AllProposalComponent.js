@@ -67,16 +67,15 @@ function AllProposalComponent({allProposal}) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setProposalDisplay(res.data.result);
-  
             }
           }
         });
     };
 
-    
+  
   //change date format
   function ChangeFormateDate(oldDate) {
-    console.log("date",oldDate)
+    // console.log("date",oldDate)
     if(oldDate == null){
       return null
     }
