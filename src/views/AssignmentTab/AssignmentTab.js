@@ -11,27 +11,30 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
+
 
 function AssignmentTab() {
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
 
   useEffect(() => {
-    const getAssignmentData = () => {
-      axios
-        .get(
-          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setAssignmentDisplay(res.data.result);
-          }
-        });
-    };
+    
     getAssignmentData();
   }, []);
 
+  const getAssignmentData = () => {
+    axios
+      .get(
+        `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setAssignmentDisplay(res.data.result);
+        }
+      });
+  };
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);
@@ -52,6 +55,16 @@ function AssignmentTab() {
             <Col md="5"></Col>
           </Row>
         </CardHeader>
+
+        <CardHeader>
+          <CustomerFilter
+            setData={setAssignmentDisplay}
+            getData={getAssignmentData}
+            id={userId}
+            assignment="assignment"
+          />
+        </CardHeader>
+
         <CardBody>
           <Table responsive="sm" bordered>
             <thead>

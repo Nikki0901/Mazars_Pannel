@@ -19,8 +19,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
-import Filter from '../Search-Filter/SearchFilter'
-
+// import Filter from "../Search-Filter/SearchFilter";
 
 function PendingAllocation({ CountPendingForAllocation }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -69,42 +68,42 @@ function PendingAllocation({ CountPendingForAllocation }) {
   };
 
   //search filter
-  // const handleChange = (value) => {
-  //   console.log(`selected ${value}`);
-  //   setSelectedData(value);
-  //   getPendingForAllocation();
-  // };
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    getPendingForAllocation();
+  };
 
   //reset date
-  // const resetData = () => {
-  //   console.log("resetData ..");
-  //   reset();
-  //   getPendingForAllocation();
-  // };
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getPendingForAllocation();
+  };
 
   //reset category
-  // const resetCategory = () => {
-  //   console.log("resetData ..");
-  //   setSelectedData([]);
-  //   getPendingForAllocation();
-  // };
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getPendingForAllocation();
+  };
 
-  // const onSubmit = (data) => {
-  //   console.log("data :", data);
-  //   console.log("selectedData :", selectedData);
-  //   axios
-  //     .get(
-  //       `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.data.code === 1) {
-  //         if (res.data.result) {
-  //           setPendingData(res.data.result);
-  //         }
-  //       }
-  //     });
-  // };
+  const onSubmit = (data) => {
+    console.log("data :", data);
+    console.log("selectedData :", selectedData);
+    axios
+      .get(
+        `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          if (res.data.result) {
+            setPendingData(res.data.result);
+          }
+        }
+      });
+  };
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -119,13 +118,13 @@ function PendingAllocation({ CountPendingForAllocation }) {
     <>
       <Card>
         <CardHeader>
-        <Filter 
-       setPendingData={setPendingData}
-       getPendingForAllocation={getPendingForAllocation}
-       pendingAllocation="pendingAllocation"
-         />
+          {/* <Filter
+            setData={setPendingData}
+            getData={getPendingForAllocation}
+            pendingAllocation="pendingAllocation"
+          /> */}
 
-          {/* <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -234,7 +233,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                 </button>
               </div>
             </div>
-          </div> */}
+          </div>
         </CardHeader>
         <CardBody>
           <div>
@@ -265,8 +264,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     <td class="text-center">
                       {p.is_assigned === "1" ? (
                         <p style={{ color: "green", fontSize: "10px" }}>
-                        
-                          Assign to {p.tname} on 
+                          Assign to {p.tname} on
                           {/* <i class="fa fa-share"></i> */}
                           {p.allocation_time}
                         </p>

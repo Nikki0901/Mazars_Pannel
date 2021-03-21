@@ -13,12 +13,18 @@ import {
 } from "reactstrap";
 import { useAlert } from "react-alert";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import "antd/dist/antd.css";
+import { Select } from "antd";
 
 function PaymentStatus() {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
   const cust_id = window.localStorage.getItem("userid");
 
+  const { handleSubmit, register, errors, reset } = useForm();
+  const { Option, OptGroup } = Select;
+  const [selectedData, setSelectedData] = useState([]);
   const [payment, setPayment] = useState([]);
 
   useEffect(() => {
@@ -103,7 +109,43 @@ function PaymentStatus() {
     }
   }
 
+  //search filter
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    getPaymentStatus();
+  };
 
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getPaymentStatus();
+  };
+
+  //reset category
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getPaymentStatus();
+  };
+
+  const onSubmit = (data) => {
+    console.log("data :", data);
+    console.log("selectedData :", selectedData);
+    axios
+      .get(
+        `${baseUrl}/tl/getUploadedProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          if (res.data.result) {
+            setPayment(res.data.result);
+          }
+        }
+      });
+  };
 
   function checkOutstading(p, a) {
     console.log("paid -", p);
@@ -112,7 +154,7 @@ function PaymentStatus() {
       return "0";
     } else return a - p;
   }
-  
+
   return (
     <>
       <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -125,6 +167,119 @@ function PaymentStatus() {
               <Col md="5"></Col>
             </Row>
           </CardHeader>
+          <CardHeader>
+            <div className="row">
+              <div class="col-sm-3 d-flex">
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="Select Category"
+                  defaultValue={[]}
+                  onChange={handleChange}
+                  optionLabelProp="label"
+                  value={selectedData}
+                >
+                  <OptGroup label="Direct Tax">
+                    <Option value="3" label="Compilance">
+                      <div className="demo-option-label-item">Compliance</div>
+                    </Option>
+                    <Option value="4" label="Assessment">
+                      <div className="demo-option-label-item">Assessment</div>
+                    </Option>
+                    <Option value="5" label="Appeals">
+                      <div className="demo-option-label-item">Appeals</div>
+                    </Option>
+                    <Option value="6" label="Advisory/opinion">
+                      <div className="demo-option-label-item">
+                        Advisory/opinion
+                      </div>
+                    </Option>
+                    <Option value="7" label="Transfer Pricing">
+                      <div className="demo-option-label-item">
+                        Transfer Pricing
+                      </div>
+                    </Option>
+                    <Option value="8" label="Others">
+                      <div className="demo-option-label-item">Others</div>
+                    </Option>
+                  </OptGroup>
+
+                  <OptGroup label="Indirect Tax">
+                    <Option value="9" label="Compilance">
+                      <div className="demo-option-label-item">Compliance</div>
+                    </Option>
+                    <Option value="10" label="Assessment">
+                      <div className="demo-option-label-item">Assessment</div>
+                    </Option>
+                    <Option value="11" label="Appeals">
+                      <div className="demo-option-label-item">Appeals</div>
+                    </Option>
+                    <Option value="12" label="Advisory/opinion">
+                      <div className="demo-option-label-item">
+                        Advisory/opinion
+                      </div>
+                    </Option>
+                    <Option value="13" label="Others">
+                      <div className="demo-option-label-item">Others</div>
+                    </Option>
+                  </OptGroup>
+                </Select>
+
+                <div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary mb-2 ml-3"
+                    onClick={resetCategory}
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
+
+              <div className="col-sm-9 d-flex">
+                <div>
+                  <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label className="form-select form-control">From</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <input
+                        type="date"
+                        name="p_dateFrom"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label className="form-select form-control">To</label>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <input
+                        type="date"
+                        name="p_dateTo"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">
+                      Search
+                    </button>
+                  </form>
+                </div>
+
+                <div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary mb-2 ml-3"
+                    onClick={resetData}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
           <CardBody>
             <table class="table table-bordered">
               <thead>
@@ -134,9 +289,9 @@ function PaymentStatus() {
                   <th>Customer Name</th>
                   <th>Proposed Amount</th>
                   <th>Negotiated Amount</th>
-                  <th style={{color:"#21a3ce"}}>Accepted Amount</th>
-                  <th  style={{color:"#064606"}}>Paid Amount</th>
-                <th style={{color:"darkred"}}>Amount Outstanding</th>
+                  <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
+                  <th style={{ color: "#064606" }}>Paid Amount</th>
+                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
                   <th>status</th>
                   <th style={{ textAlign: "center" }}>Accept Amount</th>
                   <th style={{ textAlign: "center" }}>Accept as Assignment</th>
@@ -151,14 +306,11 @@ function PaymentStatus() {
                       <td>{p.name}</td>
                       <td>{p.amount}</td>
                       <td>{p.negotiated_amount}</td>
-                      <td style={{color:"#21a3ce"}}>
-                        {p.accepted_amount}
-                        </td>
-                        <td style={{color:"#064606"}}>
-                        {p.paid_amount}</td>
-                        <td style={{color:"darkred"}}>
-                    {checkOutstading(p.paid_amount, p.accepted_amount)}
-                    </td>
+                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
+                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
+                      <td style={{ color: "darkred" }}>
+                        {checkOutstading(p.paid_amount, p.accepted_amount)}
+                      </td>
                       <td>
                         {checkStatus(
                           Number(p.paid_amount),
@@ -194,7 +346,11 @@ function PaymentStatus() {
                       <td>
                         <div
                           title="Accept Assignment"
-                          style={{ cursor: "pointer", color: "green",textAlign:"center" }}
+                          style={{
+                            cursor: "pointer",
+                            color: "green",
+                            textAlign: "center",
+                          }}
                         >
                           {p.paid_amount > 0 && (
                             <div>

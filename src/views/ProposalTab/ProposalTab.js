@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import AcceptModal from "./AcceptModal";
 import PaymentModal from "./PaymentModal";
 import "./index.css";
+import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 
 function ProposalTab() {
   const alert = useAlert();
@@ -139,6 +140,14 @@ function ProposalTab() {
             </Col>
             <Col md="5"></Col>
           </Row>
+        </CardHeader>
+        <CardHeader>
+          <CustomerFilter
+            setData={setProposalDisplay}
+            getData={getProposalData}
+            id={userId}
+            proposal="proposal"
+          />
         </CardHeader>
         <CardBody>
           <div>

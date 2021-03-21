@@ -14,16 +14,14 @@ import {
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
-import Filter from '../Search-Filter/SearchFilter'
-
-
+// import Filter from "../Search-Filter/SearchFilter";
 
 function AllQueriesData({ CountAllQuery }) {
-  // const { handleSubmit, register, errors, reset } = useForm();
-  // const { Option, OptGroup } = Select;
-
-  const [allQueriesData, setAllQueriesData] = useState([]);
+  const { handleSubmit, register, errors, reset } = useForm();
+  const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  
+  const [allQueriesData, setAllQueriesData] = useState([]);
 
   useEffect(() => {
     getAllQueriesData();
@@ -39,45 +37,44 @@ function AllQueriesData({ CountAllQuery }) {
     });
   };
 
-
   //search filter
-  // const handleChange = (value) => {
-  //   console.log(`selected ${value}`);
-  //   setSelectedData(value);
-  //   getAllQueriesData();
-  // };
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    getAllQueriesData();
+  };
 
   //reset date
-  // const resetData = () => {
-  //   console.log("resetData ..");
-  //   reset();
-  //   getAllQueriesData();
-  // };
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getAllQueriesData();
+  };
 
   //reset category
-  // const resetCategory = () => {
-  //   console.log("resetData ..");
-  //   setSelectedData([]);
-  //   getAllQueriesData();
-  // };
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getAllQueriesData();
+  };
 
-  // const onSubmit = (data) => {
-  //   console.log("data :", data);
-  //   console.log("selectedData :", selectedData);
-  //   axios
-  //     .get(
-  //       `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.data.code === 1) {
-  //         if (res.data.result) {
-  //           setAllQueriesData(res.data.result);
-           
-  //         }
-  //       }
-  //     });
-  // };
+  const onSubmit = (data) => {
+    console.log("data :", data);
+    console.log("selectedData :", selectedData);
+    axios
+      .get(
+        `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          if (res.data.result) {
+            setAllQueriesData(res.data.result);
+
+          }
+        }
+      });
+  };
 
   // change date format
   function ChangeFormateDate(oldDate) {
@@ -88,14 +85,13 @@ function AllQueriesData({ CountAllQuery }) {
     <>
       <Card>
         <CardHeader>
+          {/* <Filter
+            setData={setAllQueriesData}
+            getData={getAllQueriesData}
+            allquery="allquery"
+          /> */}
 
-        <Filter 
-        setAllQueriesData={setAllQueriesData}
-         getAllQueriesData={getAllQueriesData}
-         allquery="allquery"
-         />
-
-          {/* <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -205,7 +201,7 @@ function AllQueriesData({ CountAllQuery }) {
                 </button>
               </div>
             </div>
-          </div> */}
+          </div> 
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
@@ -251,37 +247,3 @@ function AllQueriesData({ CountAllQuery }) {
 }
 
 export default AllQueriesData;
-
-// {allQueriesData.map((p, i) => (
-//   <div>
-//     <table class="table table-bordered" key={i}>
-//       <thead>
-//         <tr>
-//           <th scope="col">Sr. No.</th>
-//           <th scope="col">Date</th>
-//           <th scope="col">Category</th>
-//           <th scope="col">Sub Category</th>
-//           <th scope="col">Query No .</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         <tr>
-//           <td>{i + 1}</td>
-//           <td>{p.created}</td>
-//           <td>{p.parent_id} </td>
-//           <td>{p.cat_name}</td>
-//           <th scope="row">
-//             <Link to={`/admin/queries/${p.id}`}>{p.AssignNo}</Link>
-//           </th>
-//         </tr>
-//         <tr>
-//           <td></td>
-//           <td></td>
-//           <td></td>
-//           <td></td>
-//           <td></td>
-//         </tr>
-//       </tbody>
-//     </table>
-//   </div>
-// ))}

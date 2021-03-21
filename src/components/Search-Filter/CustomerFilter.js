@@ -5,13 +5,12 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { useForm } from "react-hook-form";
 
-function SearchFilter(props) {
+function CustomerFilter(props) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
-
   const [selectedData, setSelectedData] = useState([]);
 
-  const { setData, getData, allquery, pendingAllocation } = props;
+  const { setData, getData, id, query, proposal, assignment } = props;
 
   //search filter
   const handleChange = (value) => {
@@ -34,16 +33,16 @@ function SearchFilter(props) {
     getData();
   };
 
-
-  
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
 
-    if (allquery == "allquery") {
+    if (query == "query") {
       axios
         .get(
-          `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
+            id
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
         .then((res) => {
           console.log(res);
@@ -55,10 +54,29 @@ function SearchFilter(props) {
         });
     }
 
-    if (pendingAllocation == "pendingAllocation") {
+    if (proposal == "proposal") {
       axios
         .get(
-          `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
+            id
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
+    if (assignment == "assignment") {
+      axios
+        .get(
+          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(
+            id
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
         .then((res) => {
           console.log(res);
@@ -182,4 +200,6 @@ function SearchFilter(props) {
   );
 }
 
-export default SearchFilter;
+export default CustomerFilter;
+
+// http://13.232.121.233/mazarapi/v1/customers/incompleteAssignments?user=93&cat_id=&from=2021-03-20&to=2021-03-20
