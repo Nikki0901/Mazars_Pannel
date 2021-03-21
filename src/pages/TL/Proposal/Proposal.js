@@ -63,7 +63,7 @@ function Proposal() {
                 <th>misc1</th>
                 <th>misc2</th>
                 <th style={{ textAlign: "center" }}>Edit</th>
-                <th style={{ textAlign: "center" }}>Send</th>
+                <th style={{ textAlign: "center" }}>Prepare</th>
               </tr>
             </thead>
             <tbody>

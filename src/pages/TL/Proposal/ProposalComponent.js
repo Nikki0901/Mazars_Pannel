@@ -128,7 +128,7 @@ function ProposalComponent(props) {
             </Col>
             <Col md="7">
               <div class="btn ml-3">
-                <h4>Send Proposal</h4>
+                <h4>Prepare Proposal</h4>
               </div>
             </Col>
           </Row>

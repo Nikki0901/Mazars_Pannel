@@ -134,9 +134,9 @@ function PaymentStatus() {
                   <th>Customer Name</th>
                   <th>Proposed Amount</th>
                   <th>Negotiated Amount</th>
-                  <th>Accepted Amount</th>
-                  <th>Paid Amount</th>
-                <th>Amount Outstanding</th>
+                  <th style={{color:"#21a3ce"}}>Accepted Amount</th>
+                  <th  style={{color:"#064606"}}>Paid Amount</th>
+                <th style={{color:"darkred"}}>Amount Outstanding</th>
                   <th>status</th>
                   <th style={{ textAlign: "center" }}>Accept Amount</th>
                   <th style={{ textAlign: "center" }}>Accept as Assignment</th>
@@ -151,9 +151,12 @@ function PaymentStatus() {
                       <td>{p.name}</td>
                       <td>{p.amount}</td>
                       <td>{p.negotiated_amount}</td>
-                      <td>{p.accepted_amount}</td>
-                      <td>{p.paid_amount}</td>
-                      <td>
+                      <td style={{color:"#21a3ce"}}>
+                        {p.accepted_amount}
+                        </td>
+                        <td style={{color:"#064606"}}>
+                        {p.paid_amount}</td>
+                        <td style={{color:"darkred"}}>
                     {checkOutstading(p.paid_amount, p.accepted_amount)}
                     </td>
                       <td>
@@ -208,7 +211,7 @@ function PaymentStatus() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="10">No Records</td>
+                    <td colSpan="11">No Records</td>
                   </tr>
                 )}
               </tbody>

@@ -4,17 +4,19 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData }) {
-  const { handleSubmit,register } = useForm();
+function PaymentModal({
+  addPaymentModal,
+  paymentHandler,
+  pay,
+  getProposalData,
+}) {
+  const { handleSubmit, register } = useForm();
   const alert = useAlert();
   const history = useHistory();
 
-  // console.log("pay", pay);
-
-    const { amount, id } = pay
-
+  const { id, amount } = pay;
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -33,11 +35,11 @@ function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData })
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Payment Done!");
-         history.push("/customer/queries"); 
+          history.push("/customer/queries");
 
           getProposalData();
           paymentHandler();
-        } 
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -51,14 +53,14 @@ function PaymentModal({ addPaymentModal, paymentHandler, pay, getProposalData })
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
-            <input
-                    type="text"
-                    name="p_amount"
-                    ref={register}
-                    className="form-control"
-                    defaultvalue={amount}
-                    placeholder="enter amount"
-                  />
+              <input
+                type="text"
+                name="p_amount"
+                ref={register}
+                className="form-control"
+                defaultValue={amount}
+                placeholder="enter amount"
+              />
             </div>
             <div class="modal-footer">
               <button type="submit" className="btn btn-primary">

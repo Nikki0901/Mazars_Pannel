@@ -87,8 +87,8 @@ function AssignmentTab() {
                 <th>Assignment No</th>
                 <th>Customer Name</th>
                 <th>Negotiated Amount</th>
-                <th>Accepted Amount</th>
-                <th>Paid Amount</th>
+                <th style={{color:"#21a3ce"}}>Accepted Amount</th>
+                  <th style={{color:"#064606"}}>Paid Amount</th>
                 <th>status</th>
                 <th style={{ textAlign: "center" }}>Draft Report</th>
                 <th style={{ textAlign: "center" }}>Final Report</th>
@@ -103,8 +103,8 @@ function AssignmentTab() {
                     <td>{p.assignment_label_number}</td>
                     <td>{p.customer_name}</td>
                     <td>{p.negotiated_amount}</td>
-                    <td>{p.accepted_amount}</td>
-                    <td>{p.paid_amount}</td>
+                    <td style={{color:"#21a3ce"}}>{p.accepted_amount}</td>
+                    <td style={{color:"#064606"}}>{p.paid_amount}</td>
                     <td>
                       {checkStatus(
                         Number(p.paid_amount),
@@ -120,7 +120,7 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignement_draft_report}`}
                           >
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
                           </a>
                         </div>
                       )}
@@ -134,7 +134,7 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
                           >
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
                           </a>
                         </div>
                       )}
@@ -143,6 +143,7 @@ function AssignmentTab() {
                       <div
                         style={{
                           display: "flex",
+                          flexDirection:"column",
                           justifyContent: "space-between",
                         }}
                       >
@@ -151,8 +152,8 @@ function AssignmentTab() {
                             style={{ cursor: "pointer", color: "green" }}
                             onClick={() => uploadDraftReport(p.id)}
                           >
-                            <i class="fa fa-upload"></i>
-                            upload draft
+                            <i class="fa fa-upload" style={{fontSize:"16px" }}></i>
+                             draft
                           </p>
                         </div>
                         <div title="upload Pdf">
@@ -166,23 +167,24 @@ function AssignmentTab() {
                             p.final_discussion == "completed" &&
                             p.other_stage == "completed" ? (
                               <div>
-                                <i class="fa fa-upload"></i>
-                                upload final
+                                <i class="fa fa-upload" style={{fontSize:"16px" }}></i>
+                                 final
                               </div>
                             ) : (
                               ""
                             )}
                           </p>
                         </div>
-                        <div
+                       
+                      </div>
+                      {/* <div
                           title="Add Assignment stages"
                           style={{ cursor: "pointer", textAlign: "center" }}
                         >
                           <Link to={`/teamleader/addassingment/${p.q_id}`}>
                             <i class="fa fa-tasks"></i>
                           </Link>
-                        </div>
-                      </div>
+                        </div> */}
                     </td>
                   </tr>
                 ))
@@ -214,6 +216,8 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+
+
 // http://13.232.121.233/mazarapi/assets/upload/report/{dra}
 
 // {Number(p.paid_amount) > 0 &&

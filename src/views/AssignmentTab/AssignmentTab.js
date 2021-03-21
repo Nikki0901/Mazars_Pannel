@@ -94,7 +94,7 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
                           >
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
                           </a>
                         </div>
                       )}
@@ -108,7 +108,7 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
                           >
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
                           </a>
                         </div>
                       )}

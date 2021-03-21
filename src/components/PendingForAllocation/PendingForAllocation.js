@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import {
@@ -22,7 +19,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
-// import History from "./History";
+import Filter from '../Search-Filter/SearchFilter'
 
 
 function PendingAllocation({ CountPendingForAllocation }) {
@@ -31,34 +28,27 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
-  // const [key, setKey] = useState(null);
   const [history, setHistory] = useState([]);
 
   const [modal, setModal] = useState(false);
+
   const toggle = (key) => {
     console.log("key", key);
     setModal(!modal);
 
-    fetch(
-      `${baseUrl}/customers/getQueryHistory?q_id=${key}`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Accept: "application/vnd.github.cloak-preview"
-        })
-      }
-    )
-      .then(res => res.json())
-      .then(response => {
-        console.log(response)
+    fetch(`${baseUrl}/customers/getQueryHistory?q_id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
         setHistory(response.result);
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
-
- 
-
-
 
   useEffect(() => {
     getPendingForAllocation();
@@ -79,43 +69,42 @@ function PendingAllocation({ CountPendingForAllocation }) {
   };
 
   //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getPendingForAllocation();
-  };
+  // const handleChange = (value) => {
+  //   console.log(`selected ${value}`);
+  //   setSelectedData(value);
+  //   getPendingForAllocation();
+  // };
 
   //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    // setSelectedData([])
-    getPendingForAllocation();
-  };
+  // const resetData = () => {
+  //   console.log("resetData ..");
+  //   reset();
+  //   getPendingForAllocation();
+  // };
 
   //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getPendingForAllocation();
-  };
+  // const resetCategory = () => {
+  //   console.log("resetData ..");
+  //   setSelectedData([]);
+  //   getPendingForAllocation();
+  // };
 
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setPendingData(res.data.result);
-          }
-        }
-      });
-  };
+  // const onSubmit = (data) => {
+  //   console.log("data :", data);
+  //   console.log("selectedData :", selectedData);
+  //   axios
+  //     .get(
+  //       `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.data.code === 1) {
+  //         if (res.data.result) {
+  //           setPendingData(res.data.result);
+  //         }
+  //       }
+  //     });
+  // };
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -130,7 +119,13 @@ function PendingAllocation({ CountPendingForAllocation }) {
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+        <Filter 
+       setPendingData={setPendingData}
+       getPendingForAllocation={getPendingForAllocation}
+       pendingAllocation="pendingAllocation"
+         />
+
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -239,7 +234,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <div>
@@ -270,8 +265,10 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     <td class="text-center">
                       {p.is_assigned === "1" ? (
                         <p style={{ color: "green", fontSize: "10px" }}>
+                        
+                          Assign to {p.tname} on 
                           {/* <i class="fa fa-share"></i> */}
-                          Assign to {p.tname} on {p.allocation_time}
+                          {p.allocation_time}
                         </p>
                       ) : (
                         <Link to={`/admin/queryassing/${p.id}`}>
@@ -300,8 +297,11 @@ function PendingAllocation({ CountPendingForAllocation }) {
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col">Titles</th>
-                    <th scope="col">Data</th>
+                    <th scope="row">S.No</th>
+                    <th scope="row">Name</th>
+                    <th scope="row">Query No</th>
+                    <th scope="row">Status</th>
+                    <th scope="row">Date of Allocation</th>
                   </tr>
                 </thead>
 
@@ -309,21 +309,11 @@ function PendingAllocation({ CountPendingForAllocation }) {
                   ? history.map((p, i) => (
                       <tbody>
                         <tr>
-                          <th scope="row">Name</th>
+                          <td>{i + 1}</td>
                           <td>{p.name}</td>
-                        </tr>
-
-                        <tr>
-                          <th scope="row">Date of Allocation</th>
-                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Query No</th>
                           <td>{p.assign_no}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Status</th>
                           <td>{p.status}</td>
+                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
                         </tr>
                       </tbody>
                     ))
@@ -336,8 +326,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
               </Button>
             </ModalFooter>
           </Modal>
-
-      
         </CardBody>
       </Card>
     </>

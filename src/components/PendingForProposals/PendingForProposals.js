@@ -13,7 +13,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,Button
+  ModalFooter,
+  Button,
 } from "reactstrap";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
@@ -32,24 +33,19 @@ function PendingForProposals({ CountPendingProposal }) {
     console.log("key", key);
     setModal(!modal);
 
-    fetch(
-      `${baseUrl}/customers/getQueryHistory?q_id=${key}`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Accept: "application/vnd.github.cloak-preview"
-        })
-      }
-    )
-      .then(res => res.json())
-      .then(response => {
-        console.log(response)
+    fetch(`${baseUrl}/customers/getQueryHistory?q_id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
         setHistory(response.result);
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
-
-
 
   useEffect(() => {
     getPendingForProposals();
@@ -106,9 +102,9 @@ function PendingForProposals({ CountPendingProposal }) {
 
   //change date format
   function ChangeFormateDate(oldDate) {
-    console.log("date",oldDate)
-    if(oldDate == null){
-      return null
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
@@ -276,15 +272,17 @@ function PendingForProposals({ CountPendingProposal }) {
             </table>
           </div>
 
-
           <Modal isOpen={modal} fade={false} toggle={toggle}>
             <ModalHeader toggle={toggle}>History</ModalHeader>
             <ModalBody>
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col">Titles</th>
-                    <th scope="col">Data</th>
+                    <th scope="row">S.No</th>
+                    <th scope="row">Name</th>
+                    <th scope="row">Query No</th>
+                    <th scope="row">Status</th>
+                    <th scope="row">Date of Allocation</th>
                   </tr>
                 </thead>
 
@@ -292,21 +290,11 @@ function PendingForProposals({ CountPendingProposal }) {
                   ? history.map((p, i) => (
                       <tbody>
                         <tr>
-                          <th scope="row">Name</th>
+                          <td>{i + 1}</td>
                           <td>{p.name}</td>
-                        </tr>
-
-                        <tr>
-                          <th scope="row">Date of Allocation</th>
-                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Query No</th>
                           <td>{p.assign_no}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Status</th>
                           <td>{p.status}</td>
+                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
                         </tr>
                       </tbody>
                     ))
@@ -319,7 +307,6 @@ function PendingForProposals({ CountPendingProposal }) {
               </Button>
             </ModalFooter>
           </Modal>
-
         </CardBody>
       </Card>
     </>

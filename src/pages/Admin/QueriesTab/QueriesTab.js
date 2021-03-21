@@ -70,7 +70,7 @@ function QueriesTab() {
                     class="nav-link text-white active"
                     id="pills-d-tab"
                     data-toggle="pill"
-                    href="#d"
+                    href="#d" 
                     role="tab"
                     aria-controls="pills-d"
                     aria-selected="true"

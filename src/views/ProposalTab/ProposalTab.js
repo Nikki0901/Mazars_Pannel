@@ -113,14 +113,13 @@ function ProposalTab() {
       });
   };
 
- //change date format
- function ChangeFormateDate(oldDate) {
-  if(oldDate == null){
-    return null
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
   }
-  return oldDate.toString().split("-").reverse().join("-");
-}
-
 
   function checkOutstading(p, a) {
     console.log("paid -", p);
@@ -154,9 +153,9 @@ function ProposalTab() {
 
                   <th>Proposed Amount</th>
                   <th>Negotiated Amount</th>
-                  <th>Amount Accepted</th>
-                  <th>Amount Paid</th>
-                  <th>Amount Outstanding</th>
+                  <th style={{ color: "#21a3ce" }}>Amount Accepted</th>
+                  <th style={{ color: "#064606" }}>Amount Paid</th>
+                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
 
                   <th>Action</th>
                   <th>View</th>
@@ -173,10 +172,10 @@ function ProposalTab() {
                       <td>{p.status}</td>
                       <td>{p.ProposedAmount}</td>
                       <td>{p.negotiated_amount}</td>
-                      <td>{p.accepted_amount}</td>
-                      <td>{p.paid_amount}</td>
+                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
+                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
 
-                      <td>
+                      <td style={{ color: "darkred" }}>
                         {checkOutstading(p.paid_amount, p.accepted_amount)}
                       </td>
 
@@ -197,7 +196,10 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-check"
-                                      style={{color:"green"}}
+                                      style={{
+                                        color: "green",
+                                        fontSize: "16px",
+                                      }}
                                       onClick={() => accepted(p.q_id)}
                                     ></i>
                                   </div>
@@ -205,14 +207,14 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-times"
-                                      style={{color:"red"}}
+                                      style={{ color: "red" ,  fontSize: "16px",}}
                                       onClick={() => rejected(p.q_id)}
                                     ></i>
                                   </div>
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-file-text"
-                                      style={{color:"orange"}}
+                                      style={{ color: "orange" ,  fontSize: "16px",}}
                                       onClick={() => acceptedHandler(p.up_id)}
                                     ></i>
                                   </div>
@@ -229,7 +231,7 @@ function ProposalTab() {
                                 <div style={{ cursor: "pointer" }}>
                                   <i
                                     class="fa fa-credit-card"
-                                    style={{color:"green"}}
+                                    style={{ color: "green",  fontSize: "16px", }}
                                     onClick={() => paymentHandler(p)}
                                   ></i>
                                 </div>
@@ -242,7 +244,7 @@ function ProposalTab() {
                       </td>
                       <td>
                         <Link to={`/customer/proposal-received/${p.id}`}>
-                          <i class="fa fa-eye"></i>
+                          <i class="fa fa-eye" style={{fontSize:"16px" }}></i>
                         </Link>
                       </td>
                     </tr>

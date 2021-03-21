@@ -107,7 +107,7 @@ function QueriesTab() {
                     <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
                     <td>
                       <Link to={`/customer/my-assingment/${p.id}`}>
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye" style={{fontSize:"16px"}}></i>
                       </Link>
                     </td>
                   </tr>

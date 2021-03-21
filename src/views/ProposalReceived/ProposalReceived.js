@@ -97,8 +97,8 @@ function ProposalReceived() {
                         <td>{ChangeFormateDate(p.created)}</td>
                       </tr>
                       <tr>
-                        <th scope="row">Query No</th>
-                        <td>{p.assign_no}</td>
+                        <th scope="row">Proposal No</th>
+                        <td>{p.proposal_number}</td>
                       </tr>
                       <tr>
                         <th scope="row">Category</th>

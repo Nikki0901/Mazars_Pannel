@@ -36,7 +36,7 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
       });
   };
 
-  
+
   const acceptHandler = (key) => {
     console.log("acceptHandler", key);
 
@@ -145,14 +145,14 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
                           title="Accept Assignment"
                           onClick={() => acceptHandler(p)}
                         >
-                          <i class="fa fa-check" style={{ color: "green" }}></i>
+                          <i class="fa fa-check" style={{ color: "green",fontSize:"16px" }}></i>
                         </div>
                         <div
                           id="reject"
                           title="Reject Assignment"
                           onClick={() => rejectHandler(p)}
                         >
-                          <i class="fa fa-times" style={{ color: "red" }}></i>
+                          <i class="fa fa-times" style={{ color: "red",fontSize:"16px" }}></i>
                         </div>
                       </div>
                     </td>
@@ -183,3 +183,9 @@ export default PendingForAcceptence;
 //     getPendingforAcceptance();
 //   }
 // });
+
+
+// set: 1
+// tlid: 128
+// assignment_id: 11
+// allocation_id: 36

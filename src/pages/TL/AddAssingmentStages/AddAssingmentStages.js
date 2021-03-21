@@ -79,7 +79,7 @@ function AddAssingmentStages() {
               </button>
             </Col>
             <Col md="8">
-              <h4>Add Assignment Stages (Max 5)</h4>
+              <h4>Assignment Stages</h4>
             </Col>
           </Row>
         </CardHeader>

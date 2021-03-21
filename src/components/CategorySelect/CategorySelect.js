@@ -72,7 +72,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
             <div class="form-group">
               <label>Category</label>
               <select
-                className="form-select form-control"
+                className="form-control"
                 name="p_tax"
                 ref={register}
                 onChange={(e) => setStore(e.target.value)}

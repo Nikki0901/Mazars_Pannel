@@ -65,13 +65,13 @@ function UnPaidComponent() {
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Sr. No.</th>
+                <th>S.No.</th>
                 <th>Proposal No</th>
                 <th>Customer Name</th>
                 <th>Negotiated Amount</th>
-                <th>Accepted Amount</th>
-                <th>Paid Amount</th>
-                <th>Amount Outstanding</th>
+                <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
+                <th style={{ color: "#064606" }}>Paid Amount</th>
+                <th style={{ color: "darkred" }}>Amount Outstanding</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -83,10 +83,10 @@ function UnPaidComponent() {
                     <td>{p.proposal_number}</td>
                     <td>{p.name}</td>
                     <td>{p.negotiated_amount}</td>
-                    <td>{p.accepted_amount}</td>
-                    <td>{p.paid_amount}</td>
-                    <td>
-                    {checkOutstading(p.paid_amount, p.accepted_amount)}
+                    <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
+                    <td style={{ color: "#064606" }}>{p.paid_amount}</td>
+                    <td style={{ color: "darkred" }}>
+                      {checkOutstading(p.paid_amount, p.accepted_amount)}
                     </td>
                     <td>
                       {checkStatus(
