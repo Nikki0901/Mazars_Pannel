@@ -14,12 +14,12 @@ function AcceptModal({ acceptedModal, acceptedHandler, id,getProposalData}) {
       console.log("value :", value);
 
       let formData = new FormData();
-      formData.append("amount", value.p_amount);
+      formData.append("revised_text", value.p_text);
       formData.append("id", id);
     
       axios({
         method: "POST",
-        url: `${baseUrl}/customers/updateamount`,
+        url: `${baseUrl}/customers/updateRevisedText`,
         data: formData,
       })
         .then(function (response) {
@@ -38,17 +38,17 @@ function AcceptModal({ acceptedModal, acceptedHandler, id,getProposalData}) {
 
     return (
         <div>
-              <Modal isOpen={acceptedModal} toggle={acceptedHandler} size="sm">
-              <ModalHeader toggle={acceptedHandler}>Revised Amount</ModalHeader>
+              <Modal isOpen={acceptedModal} toggle={acceptedHandler} size="md">
+              <ModalHeader toggle={acceptedHandler}>Add message</ModalHeader>
               <ModalBody>
                    <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mb-3">
                     <input
                       type="text"
                       className="form-control"
-                      name="p_amount"
+                      name="p_text"
                       ref={register}
-                      placeholder="enter amount"
+                      placeholder="enter message"
                     />
                   </div>
                   <div class="modal-footer">

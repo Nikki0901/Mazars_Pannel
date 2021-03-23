@@ -33,7 +33,7 @@ function Dashboard() {
 
     const getProposal = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
+        .get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {

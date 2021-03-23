@@ -18,6 +18,7 @@ import {
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
+  const [tlCount, setTlCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function TeamLeaderTab() {
       console.log(res);
       if (res.data.code === 1) {
         setData(res.data.result);
+        setTlCount(res.data.result.length);
       }
     });
   };
@@ -51,73 +53,83 @@ function TeamLeaderTab() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-       <Card>
-          <CardHeader>
-            <Row>
-              <Col md="10">
-                <CardTitle tag="h4">Team Leaders</CardTitle>
-              </Col>
-              <Col md="2">
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col md="10">
+              <CardTitle tag="h4">Team Leaders ({tlCount})</CardTitle>
+            </Col>
+            <Col md="2">
               <Link to={"/admin/addnewtl"} class="btn btn-primary">
-              Add New
-            </Link>
-              </Col>
-            </Row>
-          </CardHeader>
-          <CardBody>
-            <Table responsive="sm" bordered>
+                Add New
+              </Link>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th scope="col">No.</th>
                 <th scope="col">Name</th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone No.</th>
                 <th scope="col">Edit</th>
                 <th scope="col">Delete</th>
               </tr>
             </thead>
-              <tbody>
+            <tbody>
               {data.map((p, i) => (
-              <tr>
-                <th scope="row">{i + 1}</th>
-                <td>{p.name}</td>
-                <td>{p.email}</td>
-                <td>{p.phone}</td>
-                <td>
-                  <Link to={`/admin/edittl/${p.id}`}>
+                <tr>
+                  <th scope="row">{i + 1}</th>
+                  <td>{p.name}</td>
+                  <td>{p.parent_id}</td>
+                  <td>{p.cat_name}</td>
+                  <td>{p.email}</td>
+                  <td>{p.phone}</td>
+                  <td>
+                    <Link to={`/admin/edittl/${p.id}`}>
+                      <i
+                        className="fa fa-edit"
+                        style={{
+                          fontSize: 18,
+                          cursor: "pointer",
+                          marginLeft: "8px",
+                        }}
+                      ></i>
+                    </Link>
+                  </td>
+                  <td onClick={() => del(p.id)}>
                     <i
-                      className="fa fa-edit"
-                      style={{ fontSize: 18, cursor: "pointer", marginLeft:"8px" }}
+                      className="fa fa-trash"
+                      style={{
+                        fontSize: 22,
+                        cursor: "pointer",
+                        marginLeft: "8px",
+                      }}
                     ></i>
-                  </Link>
-                </td>
-                <td             
-                onClick={() => del(p.id)}>
-                  <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
-                  </i>
-                </td>
-              </tr>
-            ))}   
-              </tbody>
-
-            </Table>
-          </CardBody>
-          </Card>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
     </Layout>
   );
 }
 
 export default TeamLeaderTab;
 
-
-
 // <div class="row mt-3">
 //         <div class="col-md-12">
 //           <div class="schedule">
 //             <h3>Team Leaders</h3>
-            // <Link to={"/admin/addnew"} class="btn btn-primary">
-            //   Add New
-            // </Link>
+// <Link to={"/admin/addnew"} class="btn btn-primary">
+//   Add New
+// </Link>
 //           </div>
 //         </div>
 //         <br />
@@ -126,37 +138,37 @@ export default TeamLeaderTab;
 //         <br />
 //         <div class="col-md-12">
 //           <table class="table">
-            // <thead>
-            //   <tr>
-            //     <th scope="col">No.</th>
-            //     <th scope="col">Name</th>
-            //     <th scope="col">Email</th>
-            //     <th scope="col">Phone No.</th>
-            //     <th scope="col">Edit</th>
-            //     <th scope="col">Delete</th>
-            //   </tr>
-            // </thead>
-            // {data.map((p, i) => (
-            //   <tr>
-            //     <th scope="row">{i + 1}</th>
-            //     <td>{p.name}</td>
-            //     <td>{p.email}</td>
-            //     <td>{p.Phone}</td>
-            //     <td>
-            //       <Link to={`/admin/edit/${p.id}`}>
-            //         <i
-            //           className="fa fa-edit"
-            //           style={{ fontSize: 18, cursor: "pointer", marginLeft:"8px" }}
-            //         ></i>
-            //       </Link>
-            //     </td>
-            //     <td             
-            //     onClick={() => del(p.id)}>
-            //       <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
-            //       </i>
-            //     </td>
-            //   </tr>
-            // ))}
+// <thead>
+//   <tr>
+//     <th scope="col">No.</th>
+//     <th scope="col">Name</th>
+//     <th scope="col">Email</th>
+//     <th scope="col">Phone No.</th>
+//     <th scope="col">Edit</th>
+//     <th scope="col">Delete</th>
+//   </tr>
+// </thead>
+// {data.map((p, i) => (
+//   <tr>
+//     <th scope="row">{i + 1}</th>
+//     <td>{p.name}</td>
+//     <td>{p.email}</td>
+//     <td>{p.Phone}</td>
+//     <td>
+//       <Link to={`/admin/edit/${p.id}`}>
+//         <i
+//           className="fa fa-edit"
+//           style={{ fontSize: 18, cursor: "pointer", marginLeft:"8px" }}
+//         ></i>
+//       </Link>
+//     </td>
+//     <td
+//     onClick={() => del(p.id)}>
+//       <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
+//       </i>
+//     </td>
+//   </tr>
+// ))}
 //           </table>
 //         </div>
 //       </div>

@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
-// import './index.css'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-
-
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+  Tooltip,
+} from "reactstrap";
+import { useHistory } from "react-router-dom";
 
 function AddNew() {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
   const [teamleader, setTeamLeader] = useState([]);
   const userid = window.localStorage.getItem("adminkey");
+
+  const history = useHistory();
 
   useEffect(() => {
     const getTeamLeader = () => {
@@ -57,90 +67,97 @@ function AddNew() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <div class="text-center">
-            <h3>Add New Tax Professionals</h3>
-          </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-        <div class="col-lg-8 col-xl-8 col-md-12">
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_name"
-                      ref={register}
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      name="p_email"
-                      ref={register}
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Phone Number</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_phone"
-                      ref={register}
-                    />
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Select teamleader</label>
-                    <select
-                      name="p_teamleader"
-                      class="form-control"
-                      ref={register}
-                    >
-                      <option value="">--select--</option>
-                      {teamleader.map((p) => (
-                        <option key={p.Id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
+      <Card>
+        <CardHeader>
+          <div class="col-md-12 d-flex">
+            <div>
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
               </button>
-            </form>
+            </div>
+            <div class="text-center ml-5">
+              <h4>Add New Tax Professionals</h4>
+            </div>
           </div>
-        </div>
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-      </div>
+        </CardHeader>
+
+        <CardHeader>
+          <div class="row mt-3">
+            <div class="col-lg-2 col-xl-2 col-md-12"></div>
+            <div class="col-lg-8 col-xl-8 col-md-12">
+              <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_name"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="p_email"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Phone Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_phone"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Select teamleader</label>
+                        <select
+                          name="p_teamleader"
+                          class="form-control"
+                          ref={register}
+                        >
+                          <option value="">--select--</option>
+                          {teamleader.map((p) => (
+                            <option key={p.Id} value={p.id}>
+                              {p.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
     </Layout>
   );
 }
 
 export default AddNew;
-
-
-
-
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required name"),

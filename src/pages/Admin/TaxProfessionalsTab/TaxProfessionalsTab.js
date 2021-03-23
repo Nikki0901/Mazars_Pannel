@@ -17,6 +17,7 @@ import { useAlert } from "react-alert";
 function TaxProfessionalsTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
+  const [tpCount, setTpCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function TaxProfessionalsTab() {
       console.log(res);
       if (res.data.code === 1) {
         setData(res.data.result);
+        setTpCount(res.data.result.length);
       }
     });
   };
@@ -55,7 +57,7 @@ function TaxProfessionalsTab() {
         <CardHeader>
           <Row>
             <Col md="10">
-              <CardTitle tag="h4">Tax Professionals</CardTitle>
+              <CardTitle tag="h4">Tax Professionals ({tpCount})</CardTitle>
             </Col>
             <Col md="2">
               <Link to={"/admin/addnewtp"} class="btn btn-primary">

@@ -1,12 +1,12 @@
-/* .table_head th{
-    font-size: 11px;
-    padding: 3.5px;
+.table_head_Proposal th {
+  font-size: 11px;
+  padding: 3.5px;
 }
 
-.table_bdy td{
-    font-size: 12px;
-} */
-
+.table_bdy_proposal td {
+  font-size: 10px;
+  padding: 2px;
+}
 
 /* 
 

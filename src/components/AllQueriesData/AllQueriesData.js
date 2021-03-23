@@ -211,6 +211,7 @@ function AllQueriesData({ CountAllQuery }) {
                 <th scope="col">Query No</th>
                 <th scope="col">Category</th>
                 <th scope="col">Sub Category</th>
+                <th>Customer Name</th>
                 <th>status</th>
               </tr>
             </thead>
@@ -225,6 +226,7 @@ function AllQueriesData({ CountAllQuery }) {
                     </th>
                     <td>{p.parent_id} </td>
                     <td>{p.cat_name}</td>
+                    <td>{p.name}</td>
                     <td>{p.status}</td>
                   </tr>
                 ))

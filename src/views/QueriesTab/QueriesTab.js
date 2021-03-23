@@ -17,6 +17,8 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 
 function QueriesTab() {
   const [queriesData, setQueriesData] = useState([]);
+  const [queriesCount, setCountQueries] = useState("");
+
   const userId = window.localStorage.getItem("userid");
 
   useEffect(() => {
@@ -32,6 +34,7 @@ function QueriesTab() {
         console.log(res);
         if (res.data.code === 1) {
           setQueriesData(res.data.result);
+          setCountQueries(res.data.result.length);
         }
       });
   };
@@ -59,7 +62,7 @@ function QueriesTab() {
         <CardHeader>
           <Row>
             <Col md="9">
-              <CardTitle tag="h4">Queries</CardTitle>
+              <CardTitle tag="h4">Queries ({queriesCount})</CardTitle>
             </Col>
             <Col md="3">
               <div style={{ display: "flex", justifyContent: "space-around" }}>

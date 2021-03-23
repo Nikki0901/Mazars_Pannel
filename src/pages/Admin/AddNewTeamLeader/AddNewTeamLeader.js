@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,15 +6,59 @@ import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-
-
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+  Tooltip,
+} from "reactstrap";
+import { useHistory } from "react-router-dom";
 
 function AddNew() {
   const alert = useAlert();
+  const history = useHistory();
+
   const { handleSubmit, register, errors, reset } = useForm();
 
-
   const userid = window.localStorage.getItem("adminkey");
+
+  const [tax, setTax] = useState([]);
+  const [tax2, setTax2] = useState([]);
+
+  const [store, setStore] = useState("");
+  const [store2, setStore2] = useState(null);
+
+  useEffect(() => {
+    const getCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax(res.data.result);
+        }
+      });
+    };
+
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
+
+  console.log("store2", store2);
+
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -22,6 +66,7 @@ function AddNew() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
+    formData.append("cat_id", store2);
     formData.append("type", "tl");
 
     axios({
@@ -30,10 +75,10 @@ function AddNew() {
       data: formData,
     })
       .then(function (response) {
-        console.log("res-", response);     
+        console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TL created  !");
-          reset();
+          // reset();
         }
       })
       .catch((error) => {
@@ -41,77 +86,124 @@ function AddNew() {
       });
   };
 
-
-
   return (
-    <Layout adminDashboard="adminDashboard"  adminUserId={userid}>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <div class="text-center">
-            <h3>Add New Team Leader</h3>
+    <Layout adminDashboard="adminDashboard" adminUserId={userid}>
+      <Card>
+        <CardHeader>
+          <div class="col-md-12 d-flex">
+            <div>
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </div>
+            <div class="text-center ml-5">
+              <h4>Add New Team Leader</h4>
+            </div>
           </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-        <div class="col-lg-8 col-xl-8 col-md-12">
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>   
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_name"
-                      ref={register}
-                    />
-                   
+        </CardHeader>
+
+        <CardHeader>
+          <div class="row mt-3">
+            <div class="col-lg-2 col-xl-2 col-md-12"></div>
+            <div class="col-lg-8 col-xl-8 col-md-12">
+              <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_name"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="p_email"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      name="p_email"
-                    ref={register}
-                    />
-                    
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Category</label>
+                        <select
+                          className="form-control"
+                          name="p_tax"
+                          ref={register}
+                          onChange={(e) => setStore(e.target.value)}
+                        >
+                          <option value="">--Select Category--</option>
+                          {tax.map((p, index) => (
+                            <option key={index} value={p.id}>
+                              {p.details}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Sub Category</label>
+                        <select
+                          className="form-select form-control"
+                          name="p_tax2"
+                          ref={register}
+                          onChange={(e) => setStore2(e.target.value)}
+                        >
+                          <option value="">--Select Sub-Category--</option>
+                          {tax2.map((p, index) => (
+                            <option key={index} value={p.id}>
+                              {p.details}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Phone Number</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_phone"
-                      ref={register}
-                    />
-                     
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Phone Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_phone"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                </form>
               </div>
-              <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-            </form>
+            </div>
+            <div class="col-lg-2 col-xl-2 col-md-12"></div>
           </div>
-        </div>
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-      </div>
+        </CardHeader>
+      </Card>
     </Layout>
   );
 }
 
 export default AddNew;
-
-
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required name"),
@@ -123,4 +215,3 @@ export default AddNew;
 //   .min(10, "Must be exactly 10 digits")
 //   .max(20, "max 20 digits"),
 // });
-

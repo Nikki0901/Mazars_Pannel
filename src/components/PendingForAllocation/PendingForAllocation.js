@@ -245,6 +245,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                   <th scope="col">Query No</th>
                   <th scope="col">Category</th>
                   <th scope="col">Sub Category</th>
+                  <th>Customer Name</th>
                   <th scope="col">Query Allocation</th>
                   <th scope="col">History</th>
                 </tr>
@@ -258,6 +259,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                       <Link to={`/admin/pending/${p.id}`}>{p.assign_no}</Link>
                     </th>
                     <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
                     <td>{p.name}</td>
                     <td class="text-center">
                       {p.is_assigned === "1" ? (

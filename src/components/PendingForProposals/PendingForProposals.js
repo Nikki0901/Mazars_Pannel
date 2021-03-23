@@ -235,6 +235,7 @@ function PendingForProposals({ CountPendingProposal }) {
                   <th scope="col">Query No</th>
                   <th scope="col">Category</th>
                   <th scope="col">Sub Category</th>
+                  <th>Customer Name</th>
                   <th scope="col">History</th>
                 </tr>
               </thead>
@@ -249,7 +250,6 @@ function PendingForProposals({ CountPendingProposal }) {
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td>{p.name}</td>
-                    <td>{p.fact_case}</td>
                     <td>
                       <button
                         type="button"

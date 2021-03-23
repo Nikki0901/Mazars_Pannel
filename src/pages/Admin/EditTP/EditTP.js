@@ -6,13 +6,26 @@ import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import { useParams } from "react-router-dom";
+import { useParams ,useHistory} from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+  Tooltip,
+} from "reactstrap";
+
 
 function EditTP() {
   const { id } = useParams();
+  const history = useHistory();
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
   const userid = window.localStorage.getItem("adminkey");
+  const [teamleader, setTeamLeader] = useState([]);
 
   const [user, setUser] = useState({
     name: "",
@@ -22,7 +35,7 @@ function EditTP() {
   const { name, email, phone } = user;
 
   useEffect(() => {
-    const getTeamLeader = () => {
+    const getTaxProfessional = () => {
       axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -35,9 +48,20 @@ function EditTP() {
       });
     };
 
-    getTeamLeader();
+    getTaxProfessional();
   }, [id]);
 
+  useEffect(() => {
+    const getTeamLeader = () => {
+      axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTeamLeader(res.data.result);
+        }
+      });
+    };
+    getTeamLeader();
+  }, []);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -46,6 +70,7 @@ function EditTP() {
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
     formData.append("id", id);
+    formData.append("tp_id", value.p_teamleader);
 
     axios({
       method: "POST",
@@ -65,66 +90,94 @@ function EditTP() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <div class="text-center">
-            <h3>Edit Tax Professional</h3>
-          </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-        <div class="col-lg-8 col-xl-8 col-md-12">
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_name"
-                      defaultValue={name}
-                      ref={register}
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      class="form-control"
-                      name="p_email"
-                      defaultValue={email}
-                      ref={register}
-                    />
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Phone Number</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="p_phone"
-                      defaultValue={phone}
-                      ref={register}
-                    />
-                  </div>
-                </div>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
+      <Card>
+        <CardHeader>
+          <div class="col-md-12 d-flex">
+            <div>
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
               </button>
-            </form>
+            </div>
+            <div class="text-center ml-5">
+              <h4>Edit Tax Professional</h4>
+            </div>
           </div>
-        </div>
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-      </div>
+        </CardHeader>
+
+        <CardHeader>
+          <div class="row mt-3">
+            <div class="col-lg-2 col-xl-2 col-md-12"></div>
+            <div class="col-lg-8 col-xl-8 col-md-12">
+              <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_name"
+                          defaultValue={name}
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="p_email"
+                          defaultValue={email}
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Phone Number</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="p_phone"
+                          defaultValue={phone}
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Select teamleader</label>
+                        <select
+                          name="p_teamleader"
+                          class="form-control"
+                          ref={register}
+                        >
+                          <option value="">--select--</option>
+                          {teamleader.map((p) => (
+                            <option key={p.Id} value={p.id}>
+                              {p.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
     </Layout>
   );
 }

@@ -13,16 +13,15 @@ import {
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { Link } from "react-router-dom";
 
-
-function AllProposalComponent({allProposal}) {
+function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
-    
     getProposalData();
   }, []);
 
@@ -31,63 +30,63 @@ function AllProposalComponent({allProposal}) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
-        allProposal(res.data.result.length)
+        allProposal(res.data.result.length);
       }
     });
   };
-    //search filter
-    const handleChange = (value) => {
-      console.log(`selected ${value}`);
-      setSelectedData(value);
-      getProposalData();
-    };
-  
-    //reset date
-    const resetData = () => {
-      console.log("resetData ..");
-      reset();
-      getProposalData();
-    };
-  
-    //reset category
-    const resetCategory = () => {
-      console.log("resetData ..");
-      setSelectedData([]);
-      getProposalData();
-    };
-  
-    const onSubmit = (data) => {
-      console.log("data :", data);
-      console.log("selectedData :", selectedData);
-      axios
-        .get(
-          `${baseUrl}/admin/getProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setProposalDisplay(res.data.result);
-            }
-          }
-        });
-    };
+  //search filter
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    getProposalData();
+  };
 
-  
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getProposalData();
+  };
+
+  //reset category
+  const resetCategory = () => {
+    console.log("resetData ..");
+    setSelectedData([]);
+    getProposalData();
+  };
+
+  const onSubmit = (data) => {
+    console.log("data :", data);
+    console.log("selectedData :", selectedData);
+    axios
+      .get(
+        `${baseUrl}/admin/getProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          if (res.data.result) {
+            setProposalDisplay(res.data.result);
+          }
+        }
+      });
+  };
+
+
   //change date format
   function ChangeFormateDate(oldDate) {
     // console.log("date",oldDate)
-    if(oldDate == null){
-      return null
+    if (oldDate == null) {
+      return null;
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
-  
+
   return (
     <>
       <Card>
         <CardHeader>
-        <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -197,21 +196,23 @@ function AllProposalComponent({allProposal}) {
                 </button>
               </div>
             </div>
-          </div> 
+          </div>
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th>Sr. No.</th>
-                <th>Date of Query</th>
+                <th>S.No</th>
+                <th>Date</th>
                 <th>Category</th>
                 <th>Sub Category</th>
+                <th>Query No</th>
                 <th>Proposal No.</th>
                 <th>Proposal Sent date</th>
                 <th>Proposed Amount</th>
                 <th>Proposal Status</th>
                 <th>Amount Accepted</th>
+                <th>Assignment Number</th>
               </tr>
             </thead>
             <tbody>
@@ -222,13 +223,17 @@ function AllProposalComponent({allProposal}) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
+                    <th>
+                      <Link to={`/admin/queries/${p.q_id}`}>
+                        {p.assign_no}
+                        </Link>
+                    </th>
                     <td>{p.proposal_number}</td>
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
                     <td>{p.status}</td>
                     <td>{p.accepted_amount}</td>
-
-                  
+                    <td></td>
                   </tr>
                 ))
               ) : (

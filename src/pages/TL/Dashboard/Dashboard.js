@@ -3,6 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const userid = window.localStorage.getItem("tlkey");
@@ -73,7 +74,9 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 
@@ -101,7 +104,9 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 
@@ -129,7 +134,9 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 

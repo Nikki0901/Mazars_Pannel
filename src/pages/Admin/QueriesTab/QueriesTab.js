@@ -23,7 +23,7 @@ function QueriesTab() {
   const count_PFA = window.localStorage.getItem("count_PFA");
   
   const [allQueriesCount, setAllQueriesCount] = useState('');
-  const [pendingProposalCount, setPendingProposalCount] = useState('');
+  // const [pendingProposalCount, setPendingProposalCount] = useState('');
   const [pendingForPayment, setPendingforPayment] = useState('');
   const [pendingForAllocation, setPendingforAllocation] = useState('');
 
@@ -34,9 +34,9 @@ function QueriesTab() {
     setAllQueriesCount(data)
   }
   
-  const CountPendingProposal = (data) => {
-    setPendingProposalCount(data)
-  }
+  // const CountPendingProposal = (data) => {
+  //   setPendingProposalCount(data)
+  // }
 
   const CountPendingForPayment = (data) => {
     setPendingforPayment(data)
@@ -94,7 +94,7 @@ function QueriesTab() {
                   </a>
                 </li>
 
-                <li class="nav-item" role="presentation">
+                {/* <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
                     id="pills-b-tab"
@@ -106,7 +106,7 @@ function QueriesTab() {
                   >
                     Pending for Proposal ({pendingProposalCount})
                   </a>
-                </li>
+                </li> */}
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -142,14 +142,14 @@ function QueriesTab() {
                   <PendingForAllocation CountPendingForAllocation={CountPendingForAllocation}/>
                 </div>
 
-               <div
+               {/* <div
                   class="tab-pane fade"
                   id="b"
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
                   <PendingForProposals CountPendingProposal={CountPendingProposal}/>
-                </div> 
+                </div>  */}
 
                 <div
                   class="tab-pane fade"

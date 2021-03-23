@@ -1,13 +1,12 @@
 import React from "react";
 import Layout from "../../../components/Layout/Layout";
 import PaidComponent from "../../../components/PaidComponent/PaidComponent";
-import UnPaidComponent from "../../../components/UnPaidComponent/UnPaidComponent";
 
 function PaymentStatusTab() {
   const userid = window.localStorage.getItem("adminkey");
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <UnPaidComponent />
+      <PaidComponent />
     </Layout>
   );
 }

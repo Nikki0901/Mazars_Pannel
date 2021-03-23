@@ -13,6 +13,7 @@ import { baseUrl } from "../../../config/config";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { Link } from "react-router-dom";
 
 function DeclinedProposal({ declinedProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -195,13 +196,17 @@ function DeclinedProposal({ declinedProposal }) {
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th>Sr. No.</th>
-                <th>Date of Query</th>
+                <th>S.No</th>
+                <th>Date</th>
                 <th>Category</th>
                 <th>Sub Category</th>
+                <th>Query No</th>
                 <th>Proposal No.</th>
-                <th>status</th>
+                <th>Proposal Sent date</th>
                 <th>Proposed Amount</th>
+                <th>Proposal Status</th>
+                <th>Amount Accepted</th>
+                <th>Assignment Number</th>
               </tr>
             </thead>
             <tbody>
@@ -212,9 +217,15 @@ function DeclinedProposal({ declinedProposal }) {
                     <td>{ChangeFormateDate(p.created)}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
+                    <th>
+                      <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
+                    </th>
                     <td>{p.proposal_number}</td>
-                    <td>{p.status}</td>
+                    <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>
+                    <td>{p.status}</td>
+                    <td>{p.accepted_amount}</td>
+                    <td></td>
                   </tr>
                 ))
               ) : (
