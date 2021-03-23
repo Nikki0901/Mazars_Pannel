@@ -155,38 +155,46 @@ function ProposalTab() {
               <thead>
                 <tr>
                   <th>S.No</th>
-                  <th>Date</th>
-                  <th>Proposal No</th>
-
+                  <th>Date of Query</th>
+                  <th>Query No</th>
+                  <th>Category</th>
+                  <th>Sub Category</th>
+                  <th>Date of Proposal</th>
+                  <th>Date of acceptance of Proposal</th>
                   <th>Status of Proposal</th>
-
-                  <th>Proposed Amount</th>
-                  <th>Negotiated Amount</th>
+                  <th style={{ color: "#21a3ce" }}>Proposed Amout</th>
                   <th style={{ color: "#21a3ce" }}>Amount Accepted</th>
                   <th style={{ color: "#064606" }}>Amount Paid</th>
+                  <th>Date of Payment</th>
                   <th style={{ color: "darkred" }}>Amount Outstanding</th>
-
+                  <th>Date of Completion</th>
                   <th>Action</th>
-                  <th>View</th>
                 </tr>
               </thead>
-
               {proposalDisplay.length > 0 ? (
                 proposalDisplay.map((p, i) => (
                   <tbody>
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{ChangeFormateDate(p.created)}</td>
-                      <td>{p.proposal_number}</td>
-                      <td>{p.status}</td>
+                      <th>
+                        <Link to={`/customer/my-assingment/${p.id}`}>
+                          {p.assign_no}
+                        </Link>
+                      </th>
+                      <td>{p.parent_id}</td>
+                      <td>{p.cat_name}</td>
+                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
+                      <td></td>
+                      <td></td>
                       <td>{p.ProposedAmount}</td>
-                      <td>{p.negotiated_amount}</td>
                       <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
                       <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-
+                      <td></td>
                       <td style={{ color: "darkred" }}>
                         {checkOutstading(p.paid_amount, p.accepted_amount)}
                       </td>
+                      <td></td>
 
                       <td>
                         <div
@@ -216,14 +224,17 @@ function ProposalTab() {
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-times"
-                                      style={{ color: "red" ,  fontSize: "16px",}}
+                                      style={{ color: "red", fontSize: "16px" }}
                                       onClick={() => rejected(p.q_id)}
                                     ></i>
                                   </div>
                                   <div style={{ cursor: "pointer" }}>
                                     <i
                                       class="fa fa-file-text"
-                                      style={{ color: "orange" ,  fontSize: "16px",}}
+                                      style={{
+                                        color: "orange",
+                                        fontSize: "16px",
+                                      }}
                                       onClick={() => acceptedHandler(p.up_id)}
                                     ></i>
                                   </div>
@@ -240,7 +251,7 @@ function ProposalTab() {
                                 <div style={{ cursor: "pointer" }}>
                                   <i
                                     class="fa fa-credit-card"
-                                    style={{ color: "green",  fontSize: "16px", }}
+                                    style={{ color: "green", fontSize: "16px" }}
                                     onClick={() => paymentHandler(p)}
                                   ></i>
                                 </div>
@@ -250,11 +261,6 @@ function ProposalTab() {
                             </div>
                           )}
                         </div>
-                      </td>
-                      <td>
-                        <Link to={`/customer/proposal-received/${p.id}`}>
-                          <i class="fa fa-eye" style={{fontSize:"16px" }}></i>
-                        </Link>
                       </td>
                     </tr>
                   </tbody>

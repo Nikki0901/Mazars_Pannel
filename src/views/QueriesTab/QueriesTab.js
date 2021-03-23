@@ -89,30 +89,23 @@ function QueriesTab() {
                 <th>Sub Category</th>
                 <th>Status</th>
                 <th>Expected Delivery Date</th>
-                <th>View</th>
               </tr>
             </thead>
-            {/* style="height: 10px !important; overflow: scroll; " */}
             <tbody style={{ height: "400px", overflowY: "scroll" }}>
               {queriesData.length > 0 ? (
                 queriesData.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.assign_no}</td>
+                    <th>
+                      <Link to={`/customer/my-assingment/${p.id}`}>
+                        {p.assign_no}
+                      </Link>
+                    </th>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>
-                      {/* <p>{showStatus(p.status)}</p> */}
-                      {/* <i class="fa fa-circle" style={{fontSize:"14px" ,marginRight:"4px"}}></i> */}
-                      {p.status}
-                    </td>
-                    <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
-                    <td>
-                      <Link to={`/customer/my-assingment/${p.id}`}>
-                        <i class="fa fa-eye" style={{ fontSize: "16px" }}></i>
-                      </Link>
-                    </td>
+                    <td>{p.status}</td>
+                    <td>{ChangeFormateDate(p.exp_delivery_date)}</td>               
                   </tr>
                 ))
               ) : (

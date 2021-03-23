@@ -142,22 +142,19 @@ const Msg = () =>{
                     type="file"
                     name="p_document1"
                     ref={register}
-                    className="form-control-file"
-                    multiple={true}
+                    className="form-control-file"                
                   />
                   <input
                     type="file"
                     name="p_document2"
                     ref={register}
-                    className="form-control-file"
-                    multiple={true}
+                    className="form-control-file"                 
                   />
                   <input
                     type="file"
                     name="p_document3"
                     ref={register}
-                    className="form-control-file"
-                    multiple={true}
+                    className="form-control-file"                
                   />
                 </div>
               </div>

@@ -230,13 +230,11 @@ function PendingForProposals({ CountPendingProposal }) {
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th scope="col">Sr. No.</th>
+                  <th scope="col">S.No</th>
                   <th scope="col">Date</th>
-                  <th scope="col">Query No .</th>
+                  <th scope="col">Query No</th>
                   <th scope="col">Category</th>
                   <th scope="col">Sub Category</th>
-                  <th scope="col">Customer Name</th>
-                  <th scope="col">Facts of the Case</th>
                   <th scope="col">History</th>
                 </tr>
               </thead>
@@ -252,11 +250,6 @@ function PendingForProposals({ CountPendingProposal }) {
                     <td>{p.cat_name}</td>
                     <td>{p.name}</td>
                     <td>{p.fact_case}</td>
-                    {/* <td class="text-center">
-                      <p style={{ color: "green" }}>
-                        Query accepted by {p.tname}
-                      </p>
-                    </td> */}
                     <td>
                       <button
                         type="button"
@@ -314,3 +307,10 @@ function PendingForProposals({ CountPendingProposal }) {
 }
 
 export default PendingForProposals;
+{
+  /* <td class="text-center">
+                      <p style={{ color: "green" }}>
+                        Query accepted by {p.tname}
+                      </p>
+                    </td> */
+}

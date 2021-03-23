@@ -4,15 +4,7 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-} from "reactstrap";
+
 
 function Dashboard() {
   const userId = window.localStorage.getItem("userid");
@@ -85,7 +77,9 @@ function Dashboard() {
                   <h5 class="text-muted info position-absolute p-1">Queries</h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  <Link to={`/customer/queries/`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 
@@ -113,7 +107,9 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  <Link to={`/customer/proposal/`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 
@@ -140,7 +136,9 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  <Link to={`/customer/assignment/`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
               </div>
 

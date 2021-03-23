@@ -240,12 +240,11 @@ function PendingAllocation({ CountPendingForAllocation }) {
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th scope="col">Sr. No.</th>
+                  <th scope="col">S.No</th>
                   <th scope="col">Date</th>
+                  <th scope="col">Query No</th>
                   <th scope="col">Category</th>
                   <th scope="col">Sub Category</th>
-                  <th>Customer Name</th>
-                  <th scope="col">Query No .</th>
                   <th scope="col">Query Allocation</th>
                   <th scope="col">History</th>
                 </tr>
@@ -255,17 +254,15 @@ function PendingAllocation({ CountPendingForAllocation }) {
                   <tr>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.name}</td>
                     <th scope="row">
                       <Link to={`/admin/pending/${p.id}`}>{p.assign_no}</Link>
                     </th>
+                    <td>{p.parent_id}</td>
+                    <td>{p.name}</td>
                     <td class="text-center">
                       {p.is_assigned === "1" ? (
                         <p style={{ color: "green", fontSize: "10px" }}>
                           Assign to {p.tname} on
-                          {/* <i class="fa fa-share"></i> */}
                           {p.allocation_time}
                         </p>
                       ) : (

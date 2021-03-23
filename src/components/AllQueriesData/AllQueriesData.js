@@ -20,7 +20,7 @@ function AllQueriesData({ CountAllQuery }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
-  
+
   const [allQueriesData, setAllQueriesData] = useState([]);
 
   useEffect(() => {
@@ -70,7 +70,6 @@ function AllQueriesData({ CountAllQuery }) {
         if (res.data.code === 1) {
           if (res.data.result) {
             setAllQueriesData(res.data.result);
-
           }
         }
       });
@@ -201,19 +200,18 @@ function AllQueriesData({ CountAllQuery }) {
                 </button>
               </div>
             </div>
-          </div> 
+          </div>
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th scope="col">Sr. No.</th>
+                <th scope="col">S.No.</th>
                 <th scope="col">Date</th>
+                <th scope="col">Query No</th>
                 <th scope="col">Category</th>
                 <th scope="col">Sub Category</th>
                 <th>status</th>
-                <th scope="col">Query No .</th>
-                <th>View</th>
               </tr>
             </thead>
             <tbody>
@@ -222,15 +220,12 @@ function AllQueriesData({ CountAllQuery }) {
                   <tr>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
+                    <th>
+                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
+                    </th>
                     <td>{p.parent_id} </td>
                     <td>{p.cat_name}</td>
                     <td>{p.status}</td>
-                    <td scope="row">{p.assign_no}</td>
-                    <td>
-                      <Link to={`/admin/queries/${p.id}`}>
-                        <i class="fa fa-eye"></i>
-                      </Link>
-                    </td>
                   </tr>
                 ))
               ) : (

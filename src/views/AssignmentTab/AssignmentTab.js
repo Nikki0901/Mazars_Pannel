@@ -12,14 +12,13 @@ import {
   Table,
 } from "reactstrap";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-
+import { Link } from "react-router-dom";
 
 function AssignmentTab() {
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
 
   useEffect(() => {
-    
     getAssignmentData();
   }, []);
 
@@ -71,15 +70,14 @@ function AssignmentTab() {
               <tr>
                 <th>S.No</th>
                 <th>Date of Query</th>
-                <th>Assignment No</th>
+                <th>Query No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Status</th>
-                <th>Assigned to</th>
                 <th>Expected date of delivery</th>
                 <th>Actual date of delivery</th>
-                <th>Draft Report</th>
-                <th>Final Report</th>
+                <th>Deliverable</th>
+                <th>Team Leader name and contact number, email</th>
               </tr>
             </thead>
             {assignmentDisplay.length > 0 ? (
@@ -88,17 +86,17 @@ function AssignmentTab() {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.assignment_number}</td>
+                    <th>
+                      <Link to={`/customer/my-assingment/${p.id}`}>
+                        {p.assign_no}
+                      </Link>
+                    </th>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.status <= 9 ? "In Process" : "Complete"}</td>
-                    <td>
-                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
-                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
-                      <p style={{ fontSize: "10px" }}>{p.email}</p>
-                    </td>
+                    <td>{p.status <= 9 ? "In Process" : "Complete"} </td>
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>{ChangeFormateDate(p.date_of_delivery)}</td>
+
                     <td style={{ textAlign: "center" }}>
                       {p.assignment_draft_report == null ? (
                         ""
@@ -107,13 +105,13 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
                           >
-                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
+                            <i
+                              class="fa fa-file-text"
+                              style={{ fontSize: "16px" }}
+                            ></i>
                           </a>
                         </div>
                       )}
-                    </td>
-
-                    <td style={{ textAlign: "center" }}>
                       {p.final_report == null ? (
                         ""
                       ) : (
@@ -121,10 +119,19 @@ function AssignmentTab() {
                           <a
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
                           >
-                            <i class="fa fa-file-text" style={{fontSize:"16px" }}></i>
+                            <i
+                              class="fa fa-file-text"
+                              style={{ fontSize: "16px" }}
+                            ></i>
                           </a>
                         </div>
                       )}
+                    </td>
+
+                    <td>
+                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
+                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
+                      <p style={{ fontSize: "10px" }}>{p.email}</p>
                     </td>
                   </tr>
                 </tbody>
@@ -142,28 +149,3 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
-
-{
-  /* <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Client Discussion :
-                        </span>
-                        {p.client_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                        {p.draft_report}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Final Discussion :
-                        </span>
-                        {p.final_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Delivery of report :
-                        </span> 
-                        {p.delivery_report}
-                      </p> */
-}
