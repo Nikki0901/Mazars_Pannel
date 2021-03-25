@@ -13,6 +13,7 @@ import {
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { Link, useParams } from "react-router-dom";
 
 function PendingForPayment({ CountPendingForPayment }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -72,13 +73,13 @@ function PendingForPayment({ CountPendingForPayment }) {
       });
   };
 
-  // function checkOutstading(p, a) {
-  //   console.log("paid -", p);
-  //   console.log("acc -", a);
-  //   if (p == 0) {
-  //     return "0";
-  //   } else return a - p;
-  // }
+  function checkOutstading(p, a) {
+    console.log("paid -", p);
+    console.log("acc -", a);
+    if (p == 0) {
+      return "0";
+    } else return a - p;
+  }
 
   return (
     <>
@@ -201,6 +202,10 @@ function PendingForPayment({ CountPendingForPayment }) {
             <thead>
               <tr>
                 <th>S.No</th>
+                <th>Date</th>
+                <th>Query No.</th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th>Assignment No</th>
                 <th>Amount Accepted</th>
                 <th>Payment Terms</th>
@@ -214,19 +219,23 @@ function PendingForPayment({ CountPendingForPayment }) {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td></td>
+                    <th>
+                      <Link to={`/teamleader/queries/${p.id}`}>
+                        {p.assign_no}
+                      </Link>
+                    </th>
+                    <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
                     <td></td>
+                    <td>{p.accepted_amount}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-
-                    {/*   
                     <td>{p.paid_amount}</td>
-                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td> */}
+                    <td>{checkOutstading(p.paid_amount, p.accepted_amount)}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9">No Records</td>
+                  <td colSpan="10">No Records</td>
                 </tr>
               )}
             </tbody>
@@ -238,7 +247,3 @@ function PendingForPayment({ CountPendingForPayment }) {
 }
 
 export default PendingForPayment;
-
-{
-  /* <td>{p.accepted_amount - p.paid_amount}</td> */
-}

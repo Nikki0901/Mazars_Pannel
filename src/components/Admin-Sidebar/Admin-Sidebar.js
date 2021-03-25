@@ -4,7 +4,7 @@ import { Badge } from 'reactstrap';
 
 
 function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
-  const [toggleState, setToggleState] = useState("active");
+  const [toggleState, setToggleState] = useState(false);
 
   const toggleTab = (index) => {
     console.log(index);
@@ -45,7 +45,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               id="main-menu-navigation"
               data-menu="menu-navigation"
             >
-              <li class={toggleState === "active" ? "active " : "nav-item"}>
+               <li class="nav-item active">
                 <NavLink to={"/customer/dashboard"}>
                   <i class="fa fa-home"></i>
                   <span class="menu-title" data-i18n="">
@@ -55,8 +55,8 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               </li>
 
               <li
-                class={toggleState === "query" && "active nav-item"}
-                onClick={() => toggleTab("query")}
+                class={ toggleState && ''}
+                onClick={() => toggleTab("active")}
               >
                 <NavLink to={"/customer/queries"}>
                   <i class="fa fa-clone"></i>

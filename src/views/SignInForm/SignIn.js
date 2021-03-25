@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React , {useState , useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import "../../assets/css/style.css";
@@ -9,14 +9,13 @@ import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
-
-
+import { Link } from "react-router-dom";
 
 function SignIn(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -34,20 +33,13 @@ function SignIn(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Login successfully !");
-          localStorage.setItem(
-            "userid",
-            JSON.stringify(response.data.user_id)
-          );
-          localStorage.setItem(
-            "name",
-            JSON.stringify(response.data.name)
-          );
-          props.history.push("/customer/dashboard");  
+          localStorage.setItem("userid", JSON.stringify(response.data.user_id));
+          localStorage.setItem("name", JSON.stringify(response.data.name));
+          props.history.push("/customer/dashboard");
+        } else if (response.data.code === 0) {
+          console.log(response.data.result);
+          setError(response.data.result);
         }
-        else if (response.data.code === 0) {
-          console.log(response.data.result)
-          setError(response.data.result)
-          }
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -56,17 +48,16 @@ function SignIn(props) {
 
   return (
     <>
-        <Header cust_sign="cust_sign"/>
+      <Header cust_sign="cust_sign" />
       <div className="container">
         <div className="form">
           <div className="heading">
             <h2>Customer Login</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-        
             <div className="row">
               <div className="col-md-12">
-              <div className="mb-3">
+                <div className="mb-3">
                   <label className="form-label">User Id</label>
                   <input
                     type="text"
@@ -75,9 +66,7 @@ function SignIn(props) {
                     ref={register}
                     placeholder="Enter Email"
                   />
-                 
                 </div>
-                
               </div>
               <div className="col-md-12">
                 <div className="mb-3">
@@ -89,13 +78,16 @@ function SignIn(props) {
                     placeholder="Enter Password"
                     ref={register}
                   />
-                 
                 </div>
               </div>
             </div>
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+
+            <div style={{display:"flex" , flexDirection:"row-reverse"}}>
+              <Link to={`/customer/forget-password`}>Forget Password</Link>
+            </div>
           </form>
         </div>
       </div>

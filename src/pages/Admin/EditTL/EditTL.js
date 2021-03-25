@@ -33,7 +33,7 @@ function EditTL() {
     category: "",
     sub_category: "",
   });
-  const { name, email, phone, category } = user;
+  const { name, email, phone, category ,sub_category } = user;
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -85,6 +85,8 @@ function EditTL() {
     getSubCategory();
   }, [store]);
 
+
+  
   const onSubmit = (value) => {
     console.log("value :", value);
     let formData = new FormData();
@@ -93,7 +95,7 @@ function EditTL() {
     formData.append("phone", value.p_phone);
     formData.append("cat_id", store2);
     formData.append("id", id);
-
+    
     axios({
       method: "POST",
       url: `${baseUrl}/tl/updateTeamLeader`,
@@ -109,6 +111,9 @@ function EditTL() {
         console.log("erroror - ", error);
       });
   };
+
+  // console.log(category)
+  // console.log(sub_category)
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>

@@ -13,6 +13,7 @@ import { baseUrl } from "../../../config/config";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { Link } from "react-router-dom";
 
 function CompleteData({ CountComplete }) {
   const [completeData, setCompleteData] = useState([]);
@@ -22,8 +23,6 @@ function CompleteData({ CountComplete }) {
   const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
-    
-
     getCompleteAssingment();
   }, []);
 
@@ -42,7 +41,6 @@ function CompleteData({ CountComplete }) {
   function ChangeFormateDate(oldDate) {
     return oldDate.toString().split("-").reverse().join("-");
   }
-
 
   //search filter
   const handleChange = (value) => {
@@ -70,25 +68,25 @@ function CompleteData({ CountComplete }) {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}//tl/getCompleteQues?id=${JSON.parse(userid)}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}//tl/getCompleteQues?id=${JSON.parse(
+          userid
+        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           if (res.data.result) {
             setCompleteData(res.data.result);
-
           }
         }
       });
   };
 
-
   return (
     <>
       <Card>
         <CardHeader>
-        <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -198,15 +196,19 @@ function CompleteData({ CountComplete }) {
                 </button>
               </div>
             </div>
-          </div> 
+          </div>
         </CardHeader>
         <CardBody>
           <table class="table table-bordered">
             <thead>
               <tr>
                 <th scope="col">S.No</th>
-                <th scope="col">Query No .</th>
+                <th scope="col">Date</th>
+                <th scope="col">Query No</th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th scope="col">Customer Name</th>
+
                 <th scope="col">Delivery Date</th>
                 <th scope="col">Assignment Stage</th>
                 <th scope="col">Status</th>
@@ -217,7 +219,14 @@ function CompleteData({ CountComplete }) {
               <tbody>
                 <tr>
                   <td>{i + 1}</td>
-                  <th>{p.assign_no}</th>
+                  <td>{ChangeFormateDate(p.query_date)}</td>
+                  <th>
+                    <Link to={`/teamleader/queries/${p.id}`}>
+                      {p.assign_no}
+                    </Link>
+                  </th>
+                  <td>{p.parent_id}</td>
+                  <td>{p.cat_name}</td>
                   <td>{p.name}</td>
                   <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                   <td>
@@ -231,9 +240,12 @@ function CompleteData({ CountComplete }) {
                 <tr>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
 
-                  <td></td>
-                  <td></td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>Draft report </span>
                   </td>
@@ -243,9 +255,12 @@ function CompleteData({ CountComplete }) {
                 <tr>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
 
-                  <td></td>
-                  <td></td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>Final Discussion</span>
                   </td>
@@ -258,6 +273,9 @@ function CompleteData({ CountComplete }) {
 
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>
                       Delivery of report
@@ -268,9 +286,12 @@ function CompleteData({ CountComplete }) {
                 <tr>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
 
-                  <td></td>
-                  <td></td>
                   <td>
                     <span style={{ fontWeight: "bold" }}>Others</span>{" "}
                   </td>

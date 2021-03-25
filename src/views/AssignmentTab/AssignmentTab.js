@@ -36,6 +36,7 @@ function AssignmentTab() {
         }
       });
   };
+
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);
@@ -97,7 +98,8 @@ function AssignmentTab() {
                     <td>{p.assign_no}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
-                    <td>{p.status <= 9 ? "In Process" : "Complete"} </td>
+                    <td>{p.status}</td>
+                    {/* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */}
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>{ChangeFormateDate(p.date_of_delivery)}</td>
 

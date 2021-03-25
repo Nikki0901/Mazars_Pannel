@@ -22,6 +22,7 @@ function PaidComponent() {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  const [paymentcount, setPaymentCount] = useState("");
 
   useEffect(() => {
     getPaymentStatus();
@@ -32,6 +33,7 @@ function PaidComponent() {
       console.log(res);
       if (res.data.code === 1) {
         setPayment(res.data.result);
+        setPaymentCount(res.data.result.length);
       }
     });
   };
@@ -62,7 +64,7 @@ function PaidComponent() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getUploadedProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/tl/getUploadedProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -74,18 +76,18 @@ function PaidComponent() {
       });
   };
 
-  function checkStatus(p, a) {
-    console.log("paid -", p);
-    console.log("acc -", a);
+  // function checkStatus(p, a) {
+  //   console.log("paid -", p);
+  //   console.log("acc -", a);
 
-    if (p > 0 && p < a) {
-      return "Partial Received ";
-    } else if (p === a && p > 0) {
-      return "Paid";
-    } else {
-      return "pending";
-    }
-  }
+  //   if (p > 0 && p < a) {
+  //     return "Partial Received ";
+  //   } else if (p === a && p > 0) {
+  //     return "Paid";
+  //   } else {
+  //     return "pending";
+  //   }
+  // }
 
   function checkOutstading(p, a) {
     console.log("paid -", p);
@@ -110,11 +112,12 @@ function PaidComponent() {
         <CardHeader>
           <Row>
             <Col md="7">
-              <CardTitle tag="h4">Payment status</CardTitle>
+              <CardTitle tag="h4">Payment status ({paymentcount})</CardTitle>
             </Col>
             <Col md="5"></Col>
           </Row>
         </CardHeader>
+
         <CardHeader>
           <div className="row">
             <div class="col-sm-3 d-flex">
@@ -178,19 +181,20 @@ function PaidComponent() {
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
                   onClick={resetCategory}
+                  style={{padding :"4px 9px"}}
                 >
                   X
                 </button>
               </div>
             </div>
 
-            <div className="col-sm-9 d-flex">
+            <div className="col-sm-9 d-flex p-0">
               <div>
                 <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2">
                     <label className="form-select form-control">From</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateFrom"
@@ -199,10 +203,10 @@ function PaidComponent() {
                     />
                   </div>
 
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <label className="form-select form-control">To</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateTo"
@@ -210,8 +214,22 @@ function PaidComponent() {
                       ref={register}
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
+
+                  <div class="form-group mb-2 ml-2">
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Unpaid</option>
+                      <option value="2">Paid</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mb-2 ml-2">
+                    <i class="fa fa-search"></i>
                   </button>
                 </form>
               </div>
@@ -228,15 +246,16 @@ function PaidComponent() {
             </div>
           </div>
         </CardHeader>
+
         <CardBody>
           <table class="table table-bordered">
             <thead>
               <tr>
                 <th>S.No</th>
                 <th>Date</th>
+                <th>Query No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Query No</th>
                 <th>Proposal No</th>
                 <th>Customer Name</th>
                 <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
@@ -251,11 +270,12 @@ function PaidComponent() {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
                     <th>
                       <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
                     </th>
+                    <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
+
                     <td>{p.proposal_number}</td>
                     <td>{p.name}</td>
                     <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
@@ -264,10 +284,11 @@ function PaidComponent() {
                       {checkOutstading(p.paid_amount, p.accepted_amount)}
                     </td>
                     <td>
-                      {checkStatus(
+                      {p.status}
+                      {/* {checkStatus(
                         Number(p.paid_amount),
                         Number(p.accepted_amount)
-                      )}
+                      )} */}
                     </td>
                   </tr>
                 ))

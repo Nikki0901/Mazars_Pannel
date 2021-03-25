@@ -25,6 +25,10 @@ import QueriesTab from './views/QueriesTab/QueriesTab'
 import ProposalTab from './views/ProposalTab/ProposalTab'
 import AssignmentTab from './views/AssignmentTab/AssignmentTab'
 import ProposalReceived from './views/ProposalReceived/ProposalReceived'
+import ForgetPassword from './views/ForgetPassword/ForgetPassword'
+import NewPassword from './views/NewPassword/NewPassword'
+
+
 
 
 
@@ -130,6 +134,9 @@ function App() {
         <Route exact path="/customer/proposal" component={ProposalTab} />
         <Route exact path="/customer/assignment" component={AssignmentTab} />
         <Route exact path="/customer/proposal-received/:id" component={ProposalReceived} />
+        <Route exact path="/customer/forget-password" component={ForgetPassword} />
+        <Route exact path="/customer/new-password" component={NewPassword} />
+
 
 
 

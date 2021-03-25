@@ -198,9 +198,9 @@ function AcceptedProposal({ acceptedProposal }) {
               <tr>
                 <th>S.No</th>
                 <th>Date</th>
+                <th>Query No</th>
                 <th>Category</th>
                 <th>Sub Category</th>
-                <th>Query No</th>
                 <th>Proposal No.</th>
                 <th>Proposal Sent date</th>
                 <th>Proposed Amount</th>
@@ -215,11 +215,12 @@ function AcceptedProposal({ acceptedProposal }) {
                   <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
                     <th>
                       <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
                     </th>
+                    <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
+
                     <td>{p.proposal_number}</td>
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
                     <td>{p.ProposedAmount}</td>

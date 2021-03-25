@@ -202,51 +202,61 @@ function ProposalTab() {
                       <td></td>
 
                       <td>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div style={{ cursor: "pointer" }}>
-                            <i
-                              class="fa fa-check"
-                              style={{
-                                color: "green",
-                                fontSize: "16px",
-                              }}
-                              onClick={() => accepted(p.q_id)}
-                            ></i>
-                          </div>
+                        {p.statuscode === "6" ? null : (
+                          <div>
+                            {p.negotiated_amount === "0" &&
+                            p.accepted_amount === "0" ? (
+                              <div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-check"
+                                    style={{
+                                      color: "green",
+                                      fontSize: "16px",
+                                    }}
+                                    onClick={() => accepted(p.q_id)}
+                                  ></i>
+                                </div>
 
-                          <div style={{ cursor: "pointer" }}>
-                            <i
-                              class="fa fa-times"
-                              style={{ color: "red", fontSize: "16px" }}
-                              onClick={() => rejected(p.q_id)}
-                            ></i>
-                          </div>
-                          <div style={{ cursor: "pointer" }}>
-                            <i
-                              class="fa fa-file-text"
-                              style={{
-                                color: "orange",
-                                fontSize: "16px",
-                              }}
-                              onClick={() => acceptedHandler(p.up_id)}
-                            ></i>
-                          </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-times"
+                                    style={{ color: "red", fontSize: "16px" }}
+                                    onClick={() => rejected(p.q_id)}
+                                  ></i>
+                                </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-file-text"
+                                    style={{
+                                      color: "orange",
+                                      fontSize: "16px",
+                                    }}
+                                    onClick={() => acceptedHandler(p.up_id)}
+                                  ></i>
+                                </div>
+                              </div>
+                            ) : (
+                              (p.negotiated_amount === "0" ||
+                                p.accepted_amount) &&
+                              ""
+                            )}
 
-                          <div style={{ cursor: "pointer" }}>
-                            <i
-                              class="fa fa-credit-card"
-                              style={{ color: "green", fontSize: "16px" }}
-                              onClick={() => paymentHandler(p)}
-                            ></i>
+                            {p.statuscode == 5 ||
+                            p.statuscode == 7 ||
+                            p.statuscode == 8 ? (
+                              <div style={{ cursor: "pointer" }}>
+                                <i
+                                  class="fa fa-credit-card"
+                                  style={{ color: "green", fontSize: "16px" }}
+                                  onClick={() => paymentHandler(p)}
+                                ></i>
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </div>
-                        </div>
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -279,59 +289,3 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
-
-// {p.statuscode === "6" ? null : (
-//   <div>
-//     {p.negotiated_amount === "0" &&
-//     p.accepted_amount === "0" ? (
-//       <div>
-//         <div style={{ cursor: "pointer" }}>
-//           <i
-//             class="fa fa-check"
-//             style={{
-//               color: "green",
-//               fontSize: "16px",
-//             }}
-//             onClick={() => accepted(p.q_id)}
-//           ></i>
-//         </div>
-
-//         <div style={{ cursor: "pointer" }}>
-//           <i
-//             class="fa fa-times"
-//             style={{ color: "red", fontSize: "16px" }}
-//             onClick={() => rejected(p.q_id)}
-//           ></i>
-//         </div>
-//         <div style={{ cursor: "pointer" }}>
-//           <i
-//             class="fa fa-file-text"
-//             style={{
-//               color: "orange",
-//               fontSize: "16px",
-//             }}
-//             onClick={() => acceptedHandler(p.up_id)}
-//           ></i>
-//         </div>
-//       </div>
-//     ) : (
-//       (p.negotiated_amount === "0" ||
-//         p.accepted_amount) &&
-//       ""
-//     )}
-
-//     {p.statuscode == 5 ||
-//     p.statuscode == 7 ||
-//     p.statuscode == 8 ? (
-//       <div style={{ cursor: "pointer" }}>
-//         <i
-//           class="fa fa-credit-card"
-//           style={{ color: "green", fontSize: "16px" }}
-//           onClick={() => paymentHandler(p)}
-//         ></i>
-//       </div>
-//     ) : (
-//       ""
-//     )}
-//   </div>
-// )}

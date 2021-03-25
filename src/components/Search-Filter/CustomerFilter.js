@@ -26,23 +26,26 @@ function CustomerFilter(props) {
     getData();
   };
 
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getData();
-  };
+  // //reset category
+  // const resetCategory = () => {
+  //   console.log("resetData ..");
+  //   setSelectedData([]);
+  //   getData();
+  // };
 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
+    console.log("proposal :", data.p_status);
 
     if (query == "query") {
       axios
         .get(
           `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
             id
-          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${
+            data.p_dateTo
+          }&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -59,7 +62,9 @@ function CustomerFilter(props) {
         .get(
           `${baseUrl}/customers/getProposals?uid=${JSON.parse(
             id
-          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${
+            data.p_dateTo
+          }&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -76,7 +81,9 @@ function CustomerFilter(props) {
         .get(
           `${baseUrl}/customers/completeAssignments?user=${JSON.parse(
             id
-          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${
+            data.p_dateTo
+          }&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -90,9 +97,9 @@ function CustomerFilter(props) {
   };
 
   return (
-    <div>
+    <>
       <div className="row">
-        <div class="col-sm-3 d-flex">
+        <div class="col-sm-4 d-flex">
           <Select
             mode="multiple"
             style={{ width: "100%" }}
@@ -101,6 +108,7 @@ function CustomerFilter(props) {
             onChange={handleChange}
             optionLabelProp="label"
             value={selectedData}
+            allowClear
           >
             <OptGroup label="Direct Tax">
               <Option value="3" label="Compilance">
@@ -142,45 +150,92 @@ function CustomerFilter(props) {
             </OptGroup>
           </Select>
 
-          <div>
+          {/* <div>
             <button
               type="submit"
               class="btn btn-primary mb-2 ml-3"
               onClick={resetCategory}
+              style={{ padding: "4px 9px" }}
             >
               X
             </button>
-          </div>
+          </div> */}
         </div>
 
-        <div className="col-sm-9 d-flex">
+        <div className="col-sm-8 d-flex p-0">
           <div>
             <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-              <div class="form-group mx-sm-3 mb-2">
+              <div class="form-group mb-2">
                 <label className="form-select form-control">From</label>
               </div>
-              <div class="form-group mx-sm-3 mb-2">
+              <div class="form-group mb-2 ml-1">
                 <input
                   type="date"
                   name="p_dateFrom"
                   className="form-select form-control"
                   ref={register}
+                  style={{width:"90%"}}
                 />
               </div>
 
-              <div class="form-group mx-sm-3 mb-2">
+              <div class="form-group mb-2 ml-1">
                 <label className="form-select form-control">To</label>
               </div>
-              <div class="form-group mx-sm-3 mb-2">
+              <div class="form-group mb-2 ml-1">
                 <input
                   type="date"
                   name="p_dateTo"
                   className="form-select form-control"
                   ref={register}
+                  style={{width:"90%"}}
+
                 />
               </div>
-              <button type="submit" class="btn btn-primary mb-2">
-                Search
+
+              <div class="form-group mb-2 ml-1">
+              {query == "query" && (
+                  <select
+                    className="form-select form-control"
+                    name="p_status"
+                    ref={register}
+                    style={{ height: "33px" }}
+                  >
+                    <option value="">--select--</option>
+                    <option value="1">Inprogress</option>
+                    <option value="2">Progress</option>
+                    <option value="3">Complete</option>
+                  </select>
+                )}
+
+                {assignment == "assignment" && (
+                  <select
+                    className="form-select form-control"
+                    name="p_status"
+                    ref={register}
+                    style={{ height: "33px" }}
+                  >
+                    <option value="">--select--</option>
+                    <option value="1">InProgress</option>
+                    <option value="2">Complete</option>
+                  </select>
+                )}
+                {proposal == "proposal" && (
+                  <select
+                    className="form-select form-control"
+                    name="p_status"
+                    ref={register}
+                    style={{ height: "33px" }}
+                  >
+                    <option value="">--select--</option>
+                    <option value="1">Pending</option>
+                    <option value="2">Accepted</option>
+                    <option value="3">Declined</option>
+                  </select>
+                )}
+              </div>
+
+              <button type="submit" class="btn btn-primary mb-2 ml-1">
+                <i class="fa fa-search"></i>
               </button>
             </form>
           </div>
@@ -188,15 +243,15 @@ function CustomerFilter(props) {
           <div>
             <button
               type="submit"
-              class="btn btn-primary mb-2 ml-3"
+              class="btn btn-primary mb-2 ml-2"
               onClick={resetData}
             >
-              Reset
+            <i class="fa fa-refresh"></i>
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

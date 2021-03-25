@@ -69,7 +69,9 @@ function InCompleteData({ CountIncomplete }) {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+          userid
+        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
@@ -80,6 +82,15 @@ function InCompleteData({ CountIncomplete }) {
         }
       });
   };
+
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
 
   return (
     <>
@@ -202,9 +213,11 @@ function InCompleteData({ CountIncomplete }) {
             <thead>
               <tr>
                 <th scope="col">S.No</th>
-                <th scope="col">Query No .</th>
+                <th scope="col">Date</th>
+                <th scope="col">Query No</th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th scope="col">Customer Name</th>
-                <th scope="col">Facts of the Case</th>
                 <th scope="col">Exp. Delivery Date</th>
                 <th>Query Allocation</th>
               </tr>
@@ -214,13 +227,16 @@ function InCompleteData({ CountIncomplete }) {
               <tbody>
                 <tr>
                   <td>{i + 1}</td>
+                  <td>{ChangeFormateDate(p.query_date)}</td>
                   <th>
                     <Link to={`/teamleader/queries/${p.id}`}>
                       {p.assign_no}
                     </Link>
                   </th>
+                  <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
                   <td>{p.name}</td>
-                  <td>{p.fact_case}</td>
+
                   <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
 
                   <td>

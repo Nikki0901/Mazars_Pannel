@@ -51,12 +51,12 @@ function AllQueriesData({ CountAllQuery }) {
     getAllQueriesData();
   };
 
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getAllQueriesData();
-  };
+  // //reset category
+  // const resetCategory = () => {
+  //   console.log("resetData ..");
+  //   setSelectedData([]);
+  //   getAllQueriesData();
+  // };
 
   const onSubmit = (data) => {
     console.log("data :", data);
@@ -100,6 +100,7 @@ function AllQueriesData({ CountAllQuery }) {
                 onChange={handleChange}
                 optionLabelProp="label"
                 value={selectedData}
+                allowClear
               >
                 <OptGroup label="Direct Tax">
                   <Option value="3" label="Compilance">
@@ -147,7 +148,7 @@ function AllQueriesData({ CountAllQuery }) {
                 </OptGroup>
               </Select>
 
-              <div>
+              {/* <div>
                 <button
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
@@ -155,7 +156,7 @@ function AllQueriesData({ CountAllQuery }) {
                 >
                   X
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div className="col-sm-9 d-flex">

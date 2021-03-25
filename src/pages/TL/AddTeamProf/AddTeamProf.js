@@ -18,7 +18,7 @@ import { useAlert } from "react-alert";
 function AddTeamProf() {
   const alert = useAlert();
   const [data, setData] = useState([]);
-
+  const [count, setCount] = useState("");
   const userid = window.localStorage.getItem("tlkey");
 
   useEffect(() => {
@@ -32,6 +32,7 @@ function AddTeamProf() {
         console.log(res);
         if (res.data.code === 1) {
           setData(res.data.result);
+          setCount(res.data.result.length);
         }
       });
   };
@@ -51,13 +52,14 @@ function AddTeamProf() {
         console.log("erroror - ", error);
       });
   };
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
         <CardHeader>
           <Row>
             <Col md="10">
-              <CardTitle tag="h4">Tax Professionals</CardTitle>
+              <CardTitle tag="h4">Tax Professionals ({count})</CardTitle>
             </Col>
             <Col md="2"></Col>
           </Row>

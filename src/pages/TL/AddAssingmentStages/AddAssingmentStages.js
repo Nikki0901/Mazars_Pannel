@@ -19,9 +19,26 @@ import {
 function AddAssingmentStages() {
   const alert = useAlert();
   const { register, handleSubmit, errors, reset } = useForm();
+  const [assignmentStages, setAssignmentstages] = useState([]);
   const userid = window.localStorage.getItem("tlkey");
   const { id } = useParams();
   const history = useHistory();
+
+  useEffect(() => {
+    getAssignmentList();
+  }, []);
+
+  const getAssignmentList = () => {
+    axios
+      .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+        reset(res.data.result[0]);
+       
+        }
+      });
+};
 
 
 
@@ -33,11 +50,11 @@ function AddAssingmentStages() {
     // formData.append("user", JSON.parse(userid));
     formData.append("q_id", id);
     formData.append("user_id", JSON.parse(userid));
-    formData.append("stage_1_status", value.status_1);
-    formData.append("stage_2_status", value.status_2);
-    formData.append("stage_3_status", value.status_3);
-    formData.append("stage_4_status", value.status_4);
-    formData.append("stage_5_status", value.status_5);
+    formData.append("stage_1_status", value.client_discussion);
+    formData.append("stage_2_status", value.draft_report);
+    formData.append("stage_3_status", value.final_discussion);
+    formData.append("stage_4_status", value.delivery_report);
+    formData.append("stage_5_status", value.other_stage);
 
     axios({
       method: "POST",
@@ -48,7 +65,7 @@ function AddAssingmentStages() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success(<Msg />);
-          reset();
+          getAssignmentList()
         }
       })
       .catch((error) => {
@@ -99,7 +116,7 @@ function AddAssingmentStages() {
                             paddingTop: "30px",
                           }}
                         >
-                            Client Discussion
+                          Client Discussion
                         </label>
                       </div>
                     </div>
@@ -108,9 +125,9 @@ function AddAssingmentStages() {
                         <select
                           class="form-control"
                           ref={register}
-                          name="status_1"
+                          name="client_discussion"
                           // onChange={(e) => setAssing(e.target.value)}
-                        >
+                        >                      
                           <option value="pending">Pending</option>
                           <option value="completed">Completed</option>
                           <option value="notApplicable">Not Applicable</option>
@@ -138,9 +155,10 @@ function AddAssingmentStages() {
                         <select
                           class="form-control"
                           ref={register}
-                          name="status_2"
+                          name="draft_report"
                           // onChange={(e) => setAssing(e.target.value)}
                         >
+                        
                           <option value="pending">Pending</option>
                           <option value="completed">Completed</option>
                           <option value="notApplicable">Not Applicable</option>
@@ -168,9 +186,10 @@ function AddAssingmentStages() {
                         <select
                           class="form-control"
                           ref={register}
-                          name="status_3"
+                          name="final_discussion"
                           // onChange={(e) => setAssing(e.target.value)}
                         >
+                        
                           <option value="pending">Pending</option>
                           <option value="completed">Completed</option>
                           <option value="notApplicable">Not Applicable</option>
@@ -198,9 +217,10 @@ function AddAssingmentStages() {
                         <select
                           class="form-control"
                           ref={register}
-                          name="status_4"
+                          name="delivery_report"
                           // onChange={(e) => setAssing(e.target.value)}
                         >
+                        
                           <option value="pending">Pending</option>
                           <option value="completed">Completed</option>
                           <option value="notApplicable">Not Applicable</option>
@@ -219,7 +239,7 @@ function AddAssingmentStages() {
                             paddingTop: "30px",
                           }}
                         >
-                          Others
+                          Complete
                         </label>
                       </div>
                     </div>
@@ -228,12 +248,12 @@ function AddAssingmentStages() {
                         <select
                           class="form-control"
                           ref={register}
-                          name="status_5"
+                          name="other_stage"
                           // onChange={(e) => setAssing(e.target.value)}
                         >
+                        
                           <option value="pending">Pending</option>
                           <option value="completed">Completed</option>
-                          <option value="notApplicable">Not Applicable</option>
                         </select>
                       </div>
                     </div>
@@ -257,15 +277,14 @@ function AddAssingmentStages() {
 
 export default AddAssingmentStages;
 
- // {
-        //   Object.keys(obj).map((key, i) => (
-        //     console.log(key,i ) 
-        //     // setSubmitData(key[0])  
-                            
-        //   )
-        //   )
-        // }
+// {
+//   Object.keys(obj).map((key, i) => (
+//     console.log(key,i )
+//     // setSubmitData(key[0])
 
+//   )
+//   )
+// }
 
 {
   /* <div class="mb-1">
@@ -345,54 +364,49 @@ export default AddAssingmentStages;
             </form> */
 }
 
-
-
-
 // const keyValue = (input) => Object.entries(input).forEach(([key,value]) => {
 //   console.log(key)
-  
+
 // })
 // keyValue(res.data.result[0])
 
+// const [submitData, setSubmitData] = useState({
+//   client_discussion: "",
+//   draft_report: "",
+//   final_discussion: "",
+//   delivery_report: "",
+//   other: "",
+// });
 
+// const { client_discussion, draft_report, final_discussion,delivery_report } = submitData;
 
-  // const [submitData, setSubmitData] = useState({
-  //   client_discussion: "",
-  //   draft_report: "",
-  //   final_discussion: "",
-  //   delivery_report: "",
-  //   other: "",
-  // });
+// const [submitData, setSubmitData] = useState({})
 
-  // const { client_discussion, draft_report, final_discussion,delivery_report } = submitData;
-  
-  // const [submitData, setSubmitData] = useState({})
+// useEffect(() => {
+//   getAssignmentStages();
+// }, []);
 
-  // useEffect(() => {
-  //   getAssignmentStages();
-  // }, []);
+// const getAssignmentStages = () => {
+//   axios.get(`${baseUrl}/tl/GetQueryDetails?id=34`).then((res) => {
+//     console.log(res);
+//     console.log("check",  res.data.result[0])
+//     if (res.data.code === 1) {
+//       var obj = res.data.result[0]
+//       var arr = []
+//       for (const key in obj) {
+//         console.log(key , " --", obj[key]);
+//           arr.push(key)
+//       }
+//       console.log(arr)
+//       setSubmitData({
+//         client_discussion:arr[17] ,
+//         draft_report:arr[18] ,
+//         final_discussion:arr[19] ,
+//         delivery_report:arr[20] ,
+//       });
 
-  // const getAssignmentStages = () => {
-  //   axios.get(`${baseUrl}/tl/GetQueryDetails?id=34`).then((res) => {
-  //     console.log(res);
-  //     console.log("check",  res.data.result[0])
-  //     if (res.data.code === 1) {
-  //       var obj = res.data.result[0]
-  //       var arr = []
-  //       for (const key in obj) {
-  //         console.log(key , " --", obj[key]);
-  //           arr.push(key)  
-  //       }
-  //       console.log(arr)
-  //       setSubmitData({
-  //         client_discussion:arr[17] ,
-  //         draft_report:arr[18] ,
-  //         final_discussion:arr[19] ,
-  //         delivery_report:arr[20] ,        
-  //       });
-       
-  //     }
-  //   });
-  // };
+//     }
+//   });
+// };
 
-  // console.log("setSubmitData ----",submitData)
+// console.log("setSubmitData ----",submitData)

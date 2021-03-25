@@ -23,8 +23,9 @@ function Proposal() {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  const [count, setCount] = useState("");
+
   useEffect(() => {
-   
     getProposalList();
   }, []);
   const getProposalList = () => {
@@ -34,6 +35,7 @@ function Proposal() {
         console.log(res);
         if (res.data.code === 1) {
           setProposal(res.data.result);
+          setCount(res.data.result.length);
         }
       });
   };
@@ -64,7 +66,11 @@ function Proposal() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+          userid
+        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${
+          data.p_dateTo
+        }&status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -82,7 +88,7 @@ function Proposal() {
         <CardHeader>
           <Row>
             <Col md="9">
-              <CardTitle tag="h4">List of Proposals</CardTitle>
+              <CardTitle tag="h4">List of Proposals ({count})</CardTitle>
             </Col>
             <Col md="3">
               <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -96,7 +102,7 @@ function Proposal() {
           </Row>
         </CardHeader>
         <CardHeader>
-        <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -158,19 +164,20 @@ function Proposal() {
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
                   onClick={resetCategory}
+                  style={{ padding: "4px 9px" }}
                 >
                   X
                 </button>
               </div>
             </div>
 
-            <div className="col-sm-9 d-flex">
+            <div className="col-sm-9 d-flex p-0">
               <div>
                 <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2">
                     <label className="form-select form-control">From</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateFrom"
@@ -179,10 +186,10 @@ function Proposal() {
                     />
                   </div>
 
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <label className="form-select form-control">To</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateTo"
@@ -190,8 +197,24 @@ function Proposal() {
                       ref={register}
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
+
+                  <div class="form-group mb-2 ml-2">
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">tl Accepted</option>
+                      <option value="2">Pending</option>
+                      <option value="3">Accepted</option>
+                      <option value="4">Declined</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mb-2 ml-2">
+                    <i class="fa fa-search"></i>
                   </button>
                 </form>
               </div>
@@ -206,7 +229,7 @@ function Proposal() {
                 </button>
               </div>
             </div>
-          </div> 
+          </div>
         </CardHeader>
         <CardBody>
           <Table responsive="sm" bordered>
@@ -214,11 +237,14 @@ function Proposal() {
               <tr>
                 <th>S.No.</th>
                 <th>Query No.</th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th>Proposal No</th>
                 <th>Customer Name </th>
                 <th>Amount</th>
                 <th>misc1</th>
                 <th>misc2</th>
+                <th>Status</th>
                 <th style={{ textAlign: "center" }}>Edit</th>
                 <th style={{ textAlign: "center" }}>Prepare</th>
               </tr>
@@ -228,15 +254,21 @@ function Proposal() {
                 proposal.map((p, i) => (
                   <tr key={i}>
                     <td>{i + 1}</td>
-                    <td>{p.assign_no}</td>
+                    <th>
+                      <Link to={`/teamleader/queries/${p.id}`}>
+                        {p.assign_no}
+                      </Link>
+                    </th>
+                    <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
                     <td>{p.proposal_number}</td>
                     <td>{p.name}</td>
                     <td>{p.amount}</td>
-                     <td>{p.misc1}</td>
+                    <td>{p.misc1}</td>
                     <td>{p.misc2}</td>
-
+                    <td>{p.status}</td>
                     <td style={{ textAlign: "center" }}>
-                      {(p.status >= "4" && p.status < "5") ? (
+                      {p.status >= "4" && p.status < "5" ? (
                         <Link to={`/teamleader/edit-proposal/${p.id}`}>
                           <i
                             className="fa fa-edit"
@@ -250,12 +282,13 @@ function Proposal() {
                         </Link>
                       ) : null}
                     </td>
+
                     <td style={{ textAlign: "center" }}>
-                      {p.status >= "4" ? null : (
+                      {p.status == null ? (
                         <Link to={`/teamleader/sendproposal/${p.id}`}>
                           <i class="fa fa-mail-forward"></i>
                         </Link>
-                      )}
+                      ) : null}
                     </td>
                   </tr>
                 ))

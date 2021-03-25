@@ -15,6 +15,7 @@ import "./index.css";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import { Link } from "react-router-dom";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -74,7 +75,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/tl/getAssignments?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -97,6 +98,7 @@ function AssignmentTab() {
             <Col md="5"></Col>
           </Row>
         </CardHeader>
+
         <CardHeader>
           <div className="row">
             <div class="col-sm-3 d-flex">
@@ -160,19 +162,20 @@ function AssignmentTab() {
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
                   onClick={resetCategory}
+                  style={{ padding: "4px 9px" }}
                 >
                   X
                 </button>
               </div>
             </div>
 
-            <div className="col-sm-9 d-flex">
+            <div className="col-sm-9 d-flex p-0">
               <div>
                 <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2">
                     <label className="form-select form-control">From</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateFrom"
@@ -181,10 +184,10 @@ function AssignmentTab() {
                     />
                   </div>
 
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <label className="form-select form-control">To</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateTo"
@@ -192,8 +195,22 @@ function AssignmentTab() {
                       ref={register}
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
+
+                  <div class="form-group mb-2 ml-2">
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">InProgress</option>
+                      <option value="2">Complete</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mb-2 ml-2">
+                    <i class="fa fa-search"></i>
                   </button>
                 </form>
               </div>
@@ -210,13 +227,14 @@ function AssignmentTab() {
             </div>
           </div>
         </CardHeader>
+
         <CardBody>
           <table class="table table-bordered">
             <thead class="table_head">
               <tr>
                 <th>S.No</th>
-                <th>Query No</th>
                 <th>Date of Query</th>
+                <th>Query No</th>
                 <th>Assignment No</th>
                 <th>Assignment Date</th>
                 <th>Category</th>
@@ -232,8 +250,10 @@ function AssignmentTab() {
               <tbody class="table_bdy">
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{p.assign_no}</td>
                   <td>{ChangeFormateDate(p.date_of_query)}</td>
+                  <th>
+                    <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
+                  </th>
                   <td>{p.assignment_label_number}</td>
                   <td>{p.assignment_date}</td>
                   <td>{p.parent_id}</td>
@@ -245,7 +265,7 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.client_discussion}</td>
-                  <td></td>
+                  <td>{p.time_taken_for_delivery}</td>
                   <td style={{ textAlign: "center" }}>
                     {!p.final_report == "" ? (
                       <div>
@@ -273,7 +293,6 @@ function AssignmentTab() {
                       </div>
                     ) : null}
                   </td>
-                  
                 </tr>
                 <tr>
                   <td></td>

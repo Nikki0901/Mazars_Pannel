@@ -33,7 +33,7 @@ function SignUp(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
-  // const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const [states, setStates] = useState([]);
   const [city, setCity] = useState([]);
   const [name, setName] = useState('');
@@ -98,8 +98,9 @@ function SignUp(props) {
           props.history.push("/customer/questionnaire-page");
           reset();
         } else if (response.data.code === 0) {
-          console.log(response.data.result);
-          // setError(response.data.message);
+          console.log("res -",response.data.result);
+          setError(response.data.result);
+          reset();
         }
       })
       .catch((error) => {
@@ -120,6 +121,8 @@ const getID = (key) =>{
   })
 }
 
+console.log("error",error)
+
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -128,6 +131,9 @@ const getID = (key) =>{
           <div className="heading">
             <h2>Customer Register</h2>
           </div>
+          
+            {error && <p style={{color:"red"}}>{error}</p>}
+            
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">

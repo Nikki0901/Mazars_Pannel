@@ -268,9 +268,10 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
               <tr>
                 <th scope="col">S.No</th>
                 <th scope="col">Date.</th>
-                <th scope="col">Query No .</th>
+                <th scope="col">Query No </th>
+                <th>Category</th>
+                <th>Sub Category</th>
                 <th scope="col">Customer Name</th>
-                <th scope="col">Facts of the Case</th>
                 <th scope="col">Exp. Delivery Date</th>
                 <th scope="col">Accept / Reject</th>
               </tr>
@@ -287,8 +288,9 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
                         {p.assign_no}
                       </Link>
                     </th>
-                    <td>{p.name}</td>
-                    <td>{p.fact_case}</td>
+                    <td>{p.parent_id}</td>
+                    <td>{p.cat_name}</td>
+                    <td>{p.name}</td>                  
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>
                       <div

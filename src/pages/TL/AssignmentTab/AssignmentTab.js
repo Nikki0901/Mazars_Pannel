@@ -24,7 +24,7 @@ function AssignmentTab() {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
-
+  const [count, setCount] = useState("");
   const [assignment, setAssignment] = useState([]);
   const [id, setId] = useState("");
   const [finalId, setFinalId] = useState("");
@@ -40,6 +40,7 @@ function AssignmentTab() {
         console.log(res);
         if (res.data.code === 1) {
           setAssignment(res.data.result);
+          setCount(res.data.result.length);
         }
       });
   };
@@ -102,7 +103,9 @@ function AssignmentTab() {
       .get(
         `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
           userid
-        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${
+          data.p_dateTo
+        }&status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -114,17 +117,27 @@ function AssignmentTab() {
       });
   };
 
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
         <CardHeader>
           <Row>
             <Col md="7">
-              <CardTitle tag="h4">Assignment</CardTitle>
+              <CardTitle tag="h4">Assignment ({count})</CardTitle>
             </Col>
             <Col md="5"></Col>
           </Row>
         </CardHeader>
+
         <CardHeader>
           <div className="row">
             <div class="col-sm-3 d-flex">
@@ -188,19 +201,20 @@ function AssignmentTab() {
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
                   onClick={resetCategory}
+                  style={{ padding: "4px 9px" }}
                 >
                   X
                 </button>
               </div>
             </div>
 
-            <div className="col-sm-9 d-flex">
+            <div className="col-sm-9 d-flex p-0">
               <div>
                 <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2">
                     <label className="form-select form-control">From</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateFrom"
@@ -209,10 +223,10 @@ function AssignmentTab() {
                     />
                   </div>
 
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <label className="form-select form-control">To</label>
                   </div>
-                  <div class="form-group mx-sm-3 mb-2">
+                  <div class="form-group mb-2 ml-2">
                     <input
                       type="date"
                       name="p_dateTo"
@@ -220,8 +234,22 @@ function AssignmentTab() {
                       ref={register}
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
+
+                  <div class="form-group mb-2 ml-2">
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Incomplete</option>
+                      <option value="2">Complete</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary mb-2 ml-2">
+                    <i class="fa fa-search"></i>
                   </button>
                 </form>
               </div>
@@ -238,132 +266,198 @@ function AssignmentTab() {
             </div>
           </div>
         </CardHeader>
+
         <CardBody>
           <Table responsive="sm" bordered>
-            <thead>
+            <thead class="table_head">
               <tr>
                 <th>S.No</th>
+                <th>Date of Query</th>
+                <th>Query No</th>
                 <th>Assignment No</th>
-                <th>Customer Name</th>
-                <th>Negotiated Amount</th>
-                <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
-                <th style={{ color: "#064606" }}>Paid Amount</th>
-                <th>status</th>
-                <th style={{ textAlign: "center" }}>Draft Report</th>
-                <th style={{ textAlign: "center" }}>Final Report</th>
-                <th style={{ textAlign: "center" }}>Action</th>
+                <th>Assignment Date</th>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Proposed date of Completion</th>
+                {/* <th>Assignment Stage</th> */}
+                <th>Status</th>
+                <th>Time taken for Completion</th>
+                <th> Report</th>
+                <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              {assignment.length > 0 ? (
-                assignment.map((p, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{p.assignment_label_number}</td>
-                    <td>{p.customer_name}</td>
-                    <td>{p.negotiated_amount}</td>
-                    <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
-                    <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-                    <td>
-                      {checkStatus(
-                        Number(p.paid_amount),
-                        Number(p.accepted_amount)
-                      )}
-                    </td>
+            {assignment.map((p, i) => (
+              <tbody class="table_bdy">
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{ChangeFormateDate(p.date_of_query)}</td>
+                  <th>
+                    <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
+                  </th>
+                  <td>{p.assignment_number}</td>
+                  <td>{p.assignment_date}</td>
+                  <td>{p.parent_id}</td>
+                  <td>{p.cat_name}</td>
+                  <td></td>
+                  {/* <td>
+                    <span style={{ fontWeight: "bold" }}>
+                      Client Discussion
+                    </span>
+                  </td> */}
+                  <td>{p.status}</td>
+                  <td></td>
 
-                    <td style={{ textAlign: "center" }}>
-                      {p.assignement_draft_report === null ? (
-                        ""
-                      ) : (
-                        <div title="show Draft Report">
-                          <a
-                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignement_draft_report}`}
-                          >
-                            <i
-                              class="fa fa-file-text"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                          </a>
-                        </div>
-                      )}
-                    </td>
+                  <td style={{ textAlign: "center" }}>
+                    {!p.final_report == "" ? (
+                      <div>
+                        <a
+                          href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
+                        >
+                          <i
+                            class="fa fa-file-text"
+                            style={{ fontSize: "16px" }}
+                          ></i>{" "}
+                          final
+                        </a>
+                      </div>
+                    ) : p.assignement_draft_report ? (
+                      <div>
+                        <a
+                          href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
+                        >
+                          <i
+                            class="fa fa-file-text"
+                            style={{ fontSize: "16px" }}
+                          ></i>{" "}
+                          draft
+                        </a>
+                      </div>
+                    ) : null}
+                  </td>
+                  <td>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div title="upload Pdf">
+                        <p
+                          style={{ cursor: "pointer", color: "green" }}
+                          onClick={() => uploadDraftReport(p.id)}
+                        >
+                          <i
+                            class="fa fa-upload"
+                            style={{ fontSize: "16px" }}
+                          ></i>
+                          draft
+                        </p>
+                      </div>
 
-                    <td style={{ textAlign: "center" }}>
-                      {p.final_report === null ? (
-                        ""
-                      ) : (
-                        <div title="show Final Report">
-                          <a
-                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
-                          >
-                            <i
-                              class="fa fa-file-text"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                          </a>
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div title="upload Pdf">
-                          <p
-                            style={{ cursor: "pointer", color: "green" }}
-                            onClick={() => uploadDraftReport(p.id)}
-                          >
-                            <i
-                              class="fa fa-upload"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                            draft
-                          </p>
-                        </div>
-                        <div title="upload Pdf">
-                          <p
-                            style={{ cursor: "pointer", color: "red" }}
-                            onClick={() => uploadFinalReport(p)}
-                          >
-                            {p.client_discussion == "completed" &&
-                            p.delivery_report == "completed" &&
-                            p.draft_report == "completed" &&
-                            p.final_discussion == "completed" &&
-                            p.other_stage == "completed" ? (
-                              <div>
-                                <i
-                                  class="fa fa-upload"
-                                  style={{ fontSize: "16px" }}
-                                ></i>
-                                final
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </p>
-                        </div>
+                      <div title="upload Pdf">
+                        <p
+                          style={{ cursor: "pointer", color: "red" }}
+                          onClick={() => uploadFinalReport(p)}
+                        >
+                          {p.client_discussion == "completed" &&
+                          p.delivery_report == "completed" &&
+                          p.draft_report == "completed" &&
+                          p.final_discussion == "completed" ? (
+                            <div>
+                              <i
+                                class="fa fa-upload"
+                                style={{ fontSize: "16px" }}
+                              ></i>
+                              final
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </p>
                       </div>
-                      <div
-                        title="Add Assignment stages"
-                        style={{ cursor: "pointer", textAlign: "center" }}
-                      >
-                        <Link to={`/teamleader/addassingment/${p.q_id}`}>
-                          <i class="fa fa-tasks"></i>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="10">No Records</td>
+                    </div>
+                  </td>
                 </tr>
-              )}
-            </tbody>
+                {/* <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>Draft report</span>
+                  </td>
+                  <td> {p.draft_report}</td>
+
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>Final Discussion</span>
+                  </td>
+                  <td> {p.final_discussion}</td>
+
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>
+                      Delivery of report
+                    </span>
+                  </td>
+                  <td> {p.delivery_report}</td>
+
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span style={{ fontWeight: "bold" }}>Complete</span>
+                  </td>
+                  <td> {p.other_stage}</td>
+
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                */}
+              </tbody>
+            ))}
           </Table>
 
           <DraftReportModal

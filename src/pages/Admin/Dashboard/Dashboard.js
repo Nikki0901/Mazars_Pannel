@@ -11,7 +11,7 @@ function Dashboard() {
   const [allQueries, setAllQueries] = useState("");
   const [allProposal, setAllProposal] = useState("");
   const [allPendingForAllocation, setPendingForAllocation] = useState("");
-  const [allPendingForProposal, setPendingForProposal] = useState("");
+  const [allPendingForPayment, setPendingForPayment] = useState("");
   const [allAcceptedProposal, setAcceptedProposal] = useState("");
   const [allDeclinedProposal, setDeclinedProposal] = useState("");
 
@@ -58,13 +58,13 @@ function Dashboard() {
         });
     };
 
-    const getPendingForProposal = () => {
+    const getPendingForPayment = () => {
       axios
-        .get(`${baseUrl}/admin/pendingProposal`)
+        .get(`${baseUrl}/admin/getProposals?&status=5,7`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
-            setPendingForProposal(response.data.result.length);
+            setPendingForPayment(response.data.result.length);
           }
         })
         .catch((error) => {
@@ -102,7 +102,7 @@ function Dashboard() {
 
     getAllQueries();
     getPendingForAllocation();
-    getPendingForProposal();
+    getPendingForPayment();
     getAllProposal();
     getAcceptedProposal();
     getDeclinedProposal();
@@ -170,13 +170,14 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   <h5 class="text-muted info position-absolute p-1">
-                    Pending For Proposal
+                    Pending For Payment
                   </h5>
                 </div>
                 <div>
@@ -194,7 +195,7 @@ function Dashboard() {
                   marginTop: "50px",
                 }}
               >
-                <h4>{allPendingForProposal}</h4>
+                <h4>{allPendingForPayment}</h4>
               </div>
             </div>
           </div>

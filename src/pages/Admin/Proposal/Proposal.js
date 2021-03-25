@@ -9,34 +9,29 @@ import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
 // import PendingForPaymentProposal from "../PendingForPaymentProposal/PendingForPaymentProposal";
 
-
-
 function Proposal() {
- 
-  const [allProposalCount, setAllProposalCount] = useState('');
-  const [pendingProposalCount, setPendingProposalCount] = useState('');
-  const [acceptedProposalCount, setAcceptedProposalCount] = useState('');
-  const [declinedProposalCount, setDeclinedProposalCount] = useState('');
+  const [allProposalCount, setAllProposalCount] = useState("");
+  const [pendingProposalCount, setPendingProposalCount] = useState("");
+  const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
+  const [declinedProposalCount, setDeclinedProposalCount] = useState("");
 
   const userid = window.localStorage.getItem("adminkey");
-  
-  
 
   const allProposal = (data) => {
-    setAllProposalCount(data)
-  }
+    setAllProposalCount(data);
+  };
 
   const pendingProposal = (data) => {
-    setPendingProposalCount(data)
-  }
+    setPendingProposalCount(data);
+  };
 
   const acceptedProposal = (data) => {
-    setAcceptedProposalCount(data)
-  }
+    setAcceptedProposalCount(data);
+  };
 
   const declinedProposal = (data) => {
-    setDeclinedProposalCount(data)
-  }
+    setDeclinedProposalCount(data);
+  };
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -93,23 +88,9 @@ function Proposal() {
                     aria-controls="pills-b"
                     aria-selected="false"
                   >
-                    Accepted  ({acceptedProposalCount})
+                    Accepted ({acceptedProposalCount})
                   </a>
                 </li>
-
-                {/* <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-e-tab"
-                    data-toggle="pill"
-                    href="#e"
-                    role="tab"
-                    aria-controls="pills-e"
-                    aria-selected="false"
-                  >
-                    Accepted 
-                  </a>
-                </li> */}
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -121,11 +102,9 @@ function Proposal() {
                     aria-controls="pills-c"
                     aria-selected="false"
                   >
-                    Declined  ({declinedProposalCount})
+                    Declined ({declinedProposalCount})
                   </a>
                 </li>
-
-               
               </ul>
 
               <div class="tab-content" id="pills-tabContent">
@@ -135,7 +114,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-d-tab"
                 >
-                  <AllProposalComponent allProposal={allProposal}/>
+                  <AllProposalComponent allProposal={allProposal} />
                 </div>
 
                 <div
@@ -144,7 +123,7 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingForAcceptence pendingProposal={pendingProposal}/>
+                  <PendingForAcceptence pendingProposal={pendingProposal} />
                 </div>
 
                 <div
@@ -153,18 +132,8 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
-                  <AcceptedProposal acceptedProposal={acceptedProposal}/>
+                  <AcceptedProposal acceptedProposal={acceptedProposal} />
                 </div>
-
-
-                {/* <div
-                  class="tab-pane fade"
-                  id="e"
-                  role="tabpanel"
-                  aria-labelledby="pills-e-tab"
-                >
-                  eee
-                </div> */}
 
                 <div
                   class="tab-pane fade"
@@ -172,10 +141,8 @@ function Proposal() {
                   role="tabpanel"
                   aria-labelledby="pills-c-tab"
                 >
-                  <DeclinedPropoal declinedProposal={declinedProposal}/>
+                  <DeclinedPropoal declinedProposal={declinedProposal} />
                 </div>
-
-              
               </div>
             </div>
           </div>
