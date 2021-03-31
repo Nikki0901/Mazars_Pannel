@@ -268,7 +268,7 @@ function Proposal() {
                     <td>{p.misc2}</td>
                     <td>{p.status}</td>
                     <td style={{ textAlign: "center" }}>
-                      {p.status >= "4" && p.status < "5" ? (
+                      {(p.status == "Accepted" || p.status == "Pending" ) ? (
                         <Link to={`/teamleader/edit-proposal/${p.id}`}>
                           <i
                             className="fa fa-edit"
@@ -284,7 +284,7 @@ function Proposal() {
                     </td>
 
                     <td style={{ textAlign: "center" }}>
-                      {p.status == null ? (
+                      {p.status == "TL Accepted" ? (
                         <Link to={`/teamleader/sendproposal/${p.id}`}>
                           <i class="fa fa-mail-forward"></i>
                         </Link>

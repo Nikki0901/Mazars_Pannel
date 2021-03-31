@@ -208,6 +208,7 @@ function DeclinedProposal({ declinedProposal }) {
                 <th>Proposal Status</th>
                 <th>Amount Accepted</th>
                 <th>Assignment Number</th>
+                <th>TL name</th>
               </tr>
             </thead>
             <tbody>
@@ -228,6 +229,7 @@ function DeclinedProposal({ declinedProposal }) {
                     <td>{p.status}</td>
                     <td>{p.accepted_amount}</td>
                     <td></td>
+                    <td>{p.tl_name}</td>
                   </tr>
                 ))
               ) : (

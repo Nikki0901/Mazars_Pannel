@@ -363,7 +363,8 @@ function AssignmentTab() {
                           {p.client_discussion == "completed" &&
                           p.delivery_report == "completed" &&
                           p.draft_report == "completed" &&
-                          p.final_discussion == "completed" ? (
+                          p.final_discussion == "completed" &&
+                          p.amount == p.paid_amount ? (
                             <div>
                               <i
                                 class="fa fa-upload"

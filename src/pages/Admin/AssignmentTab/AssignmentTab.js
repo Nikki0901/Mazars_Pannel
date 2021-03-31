@@ -244,6 +244,7 @@ function AssignmentTab() {
                 <th>Status</th>
                 <th>Time taken for Completion</th>
                 <th> Report</th>
+                <th>TL name</th>
               </tr>
             </thead>
             {assignmentDisplay.map((p, i) => (
@@ -293,6 +294,7 @@ function AssignmentTab() {
                       </div>
                     ) : null}
                   </td>
+                  <td>{p.tl_name}</td>
                 </tr>
                 <tr>
                   <td></td>
@@ -308,6 +310,7 @@ function AssignmentTab() {
                   </td>
                   <td> {p.draft_report}</td>
 
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
@@ -326,6 +329,7 @@ function AssignmentTab() {
                   </td>
                   <td> {p.final_discussion}</td>
 
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>
@@ -348,6 +352,7 @@ function AssignmentTab() {
 
                   <td></td>
                   <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td></td>
@@ -363,6 +368,7 @@ function AssignmentTab() {
                   </td>
                   <td> {p.other_stage}</td>
 
+                  <td></td>
                   <td></td>
                   <td></td>
                 </tr>

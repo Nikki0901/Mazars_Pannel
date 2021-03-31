@@ -181,7 +181,7 @@ function PaidComponent() {
                   type="submit"
                   class="btn btn-primary mb-2 ml-3"
                   onClick={resetCategory}
-                  style={{padding :"4px 9px"}}
+                  style={{ padding: "4px 9px" }}
                 >
                   X
                 </button>
@@ -262,6 +262,7 @@ function PaidComponent() {
                 <th style={{ color: "#064606" }}>Paid Amount</th>
                 <th style={{ color: "darkred" }}>Amount Outstanding</th>
                 <th>Status</th>
+                <th>TL name</th>
               </tr>
             </thead>
             <tbody>
@@ -290,6 +291,7 @@ function PaidComponent() {
                         Number(p.accepted_amount)
                       )} */}
                     </td>
+                    <td>{p.tl_name}</td>
                   </tr>
                 ))
               ) : (

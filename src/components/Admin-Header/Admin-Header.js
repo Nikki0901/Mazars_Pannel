@@ -45,7 +45,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         sty
       >
         {custUserId && (
-          <NavWrapper color="#5E96AE" logout={custLogout} name={name} />
+          <NavWrapper color="#5E96AE" logout={custLogout} name={name} cust="cust"/>
         )}
 
         {adminUserId && (

@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function NavWrapper(props) {
-  const { color, logout, name } = props;
+  const { color, logout, name, cust } = props;
 
   return (
     <>
@@ -61,10 +62,14 @@ function NavWrapper(props) {
 
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="arrow_box_right">
-                    {/* <p class="dropdown-item" style={{ cursor: "pointer" }}>
-                 <i class="fa fa-sign-out"></i>
-                 Change Password
-               </p> */}
+                    {cust && (
+                      <p class="dropdown-item" style={{ cursor: "pointer" }}>
+                        <i class="fa fa-sign-out"></i>
+                        <Link to="/customer/change-password">
+                          Change Password
+                        </Link>
+                      </p>
+                    )}
 
                     <p
                       class="dropdown-item"

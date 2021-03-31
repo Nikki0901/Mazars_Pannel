@@ -42,7 +42,6 @@ function PaymentStatus() {
     });
   };
 
-
   // accepted proposal
   const accepted = (key) => {
     console.log("acc", key);
@@ -304,6 +303,7 @@ function PaymentStatus() {
               <thead>
                 <tr>
                   <th>Sr. No.</th>
+                  <th>Query No</th>
                   <th>Proposal No</th>
                   <th>Customer Name</th>
                   <th>Proposed Amount</th>
@@ -320,6 +320,7 @@ function PaymentStatus() {
                   payment.map((p, i) => (
                     <tr key={i}>
                       <td>{i + 1}</td>
+                      <td>{p.assign_no}</td>
                       <td>{p.proposal_number}</td>
                       <td>{p.name}</td>
                       <td>{p.amount}</td>
@@ -339,7 +340,7 @@ function PaymentStatus() {
                             textAlign: "center",
                           }}
                         >
-                          {p.paid_amount > 0 && p.status < 9 && (
+                          {p.paid_amount > 0 && p.sid < 9 && (
                             <div>
                               <i
                                 class="fa fa-check"
@@ -354,9 +355,11 @@ function PaymentStatus() {
                           title="Add Assignment stages"
                           style={{ cursor: "pointer", textAlign: "center" }}
                         >
-                          <Link to={`/teamleader/addassingment/${p.id}`}>
-                            <i class="fa fa-tasks"></i>
-                          </Link>
+                          {p.sid > 8 && (
+                            <Link to={`/teamleader/addassingment/${p.id}`}>
+                              <i class="fa fa-tasks"></i>
+                            </Link>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -3,7 +3,7 @@ import {HashRouter  as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { positions, Provider, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
-
+import "./components/FontawsomeIcons/index";
 
 
 //user routes
@@ -27,6 +27,7 @@ import AssignmentTab from './views/AssignmentTab/AssignmentTab'
 import ProposalReceived from './views/ProposalReceived/ProposalReceived'
 import ForgetPassword from './views/ForgetPassword/ForgetPassword'
 import NewPassword from './views/NewPassword/NewPassword'
+import ChangePassword from './views/ChangePassword/ChangePassword'
 
 
 
@@ -74,9 +75,6 @@ import TlSendProposal from './pages/TL/SendProposal/SendProposal'
 import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
 import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
-
-
-
 
 
 
@@ -136,7 +134,7 @@ function App() {
         <Route exact path="/customer/proposal-received/:id" component={ProposalReceived} />
         <Route exact path="/customer/forget-password" component={ForgetPassword} />
         <Route exact path="/customer/new-password" component={NewPassword} />
-
+        <Route exact path="/customer/change-password" component={ChangePassword} />
 
 
 

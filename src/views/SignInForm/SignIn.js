@@ -11,9 +11,16 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { Link } from "react-router-dom";
 
+const Schema = yup.object().shape({
+  p_name: yup.string().required("required user id"),
+  p_password: yup.string().required("required password"),
+});
+
 function SignIn(props) {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, reset, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const [error, setError] = useState("");
 
@@ -22,7 +29,7 @@ function SignIn(props) {
 
     let formData = new FormData();
     formData.append("user_id", value.p_name);
-    formData.append("password", value.password);
+    formData.append("password", value.p_password);
 
     axios({
       method: "POST",
@@ -54,6 +61,8 @@ function SignIn(props) {
           <div className="heading">
             <h2>Customer Login</h2>
           </div>
+          <p className="error">
+            {error && error}</p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-12">
@@ -66,6 +75,9 @@ function SignIn(props) {
                     ref={register}
                     placeholder="Enter Email"
                   />
+                  <p className="error">
+                    {errors.p_name && errors.p_name.message}
+                  </p>
                 </div>
               </div>
               <div className="col-md-12">
@@ -74,10 +86,13 @@ function SignIn(props) {
                   <input
                     type="password"
                     className="form-control"
-                    name="password"
+                    name="p_password"
                     placeholder="Enter Password"
                     ref={register}
                   />
+                  <p className="error">
+                    {errors.p_password && errors.p_password.message}
+                  </p>
                 </div>
               </div>
             </div>
@@ -85,7 +100,7 @@ function SignIn(props) {
               Submit
             </button>
 
-            <div style={{display:"flex" , flexDirection:"row-reverse"}}>
+            <div style={{ display: "flex", flexDirection: "row-reverse" }}>
               <Link to={`/customer/forget-password`}>Forget Password</Link>
             </div>
           </form>

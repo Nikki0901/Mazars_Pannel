@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
@@ -14,12 +14,28 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
+import TableHeader from "../../components/DataTable/Header/index";
+
 
 function QueriesTab() {
-  const [queriesData, setQueriesData] = useState([]);
+  // const [queriesData, setQueriesData] = useState([]);
   const [queriesCount, setCountQueries] = useState("");
-
+  const [query, setQuery] = useState([]);
   const userId = window.localStorage.getItem("userid");
+
+  const [sorting, setSorting] = useState({ field: "", order: "" });
+  const headers = [
+    { name: "S.no", sortable: true },
+    { name: "Date", field: "created", sortable: true },
+    { name: "Query No", field: "assign_no", sortable: true },
+    { name: "Category", field: "parent_id", sortable: true },
+    { name: "Sub Category", field: "cat_name", sortable: true },
+    { name: "Status", field: "status", sortable: true },
+    {
+      name: "Expected Delivery Date",
+      field: "exp_delivery_date",
+    },
+  ];
 
   useEffect(() => {
     getQueriesData();
@@ -33,11 +49,25 @@ function QueriesTab() {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          setQueriesData(res.data.result);
+          setQuery(res.data.result);
           setCountQueries(res.data.result.length);
         }
       });
   };
+
+  const queryData = useMemo(() => {
+    let computedData = query;
+
+    //Sorting comments
+    if (sorting.field) {
+      const reversed = sorting.order === "asc" ? 1 : -1;
+      computedData = computedData.sort(
+        (a, b) => reversed * a[sorting.field].localeCompare(b[sorting.field])
+      );
+    }
+    return computedData;
+  }, [query, sorting]);
+
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -75,14 +105,56 @@ function QueriesTab() {
         </CardHeader>
         <CardHeader>
           <CustomerFilter
-            setData={setQueriesData}
+            setData={setQuery}
             getData={getQueriesData}
             id={userId}
             query="query"
           />
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+        <Table responsive="sm" bordered>
+            <TableHeader
+              headers={headers}
+              onSorting={(field, order) => setSorting({ field, order })}
+            />
+            <tbody>
+              {queryData.map((p, i) => (
+                <tr>
+                  <td>{i + 1}</td>
+                  <td>{ChangeFormateDate(p.created)}</td>
+                  <th>
+                    <Link to={`/customer/my-assingment/${p.id}`}>
+                      {p.assign_no}
+                    </Link>
+                  </th>
+                  <td>{p.parent_id}</td>
+                  <td>{p.cat_name}</td>
+                  <td>{p.status}</td>
+                  <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
+
+export default QueriesTab;
+
+// function ChangeFormateDate2(date) {
+//   var month = (1 + date.getMonth()).toString();
+//   month = month.length > 1 ? month : '0' + month;
+
+//   var day = date.getDate().toString();
+//   day = day.length > 1 ? day : '0' + day;
+
+//   return month + '/' + day + '/' + year;
+// }
+
+{
+  /* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th>S.No</th>
@@ -117,21 +189,26 @@ function QueriesTab() {
                 </tr>
               )}
             </tbody>
-          </Table>
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </Table> */
 }
 
-export default QueriesTab;
+//   <MaterialTable
+//   title={false}
+//   columns={columns}
+//   data={queriesData}
+//   options={{
+//     sorting: true,
+//     search: false,
+//   }}
 
-// function ChangeFormateDate2(date) {
-//   var month = (1 + date.getMonth()).toString();
-//   month = month.length > 1 ? month : '0' + month;
+// />
 
-//   var day = date.getDate().toString();
-//   day = day.length > 1 ? day : '0' + day;
-
-//   return month + '/' + day + '/' + year;
-// }
+// const columns = [
+//   { title: "S.No", field: "s_no" },
+//   { title: "Date", field: "created" },
+//   { title: "Query No", field: "assign_no" },
+//   { title: "Category", field: "parent_id" },
+//   { title: "Sub Category", field: "cat_name" },
+//   { title: "Status", field: "status" },
+//   { title: "Expected Delivery Date", field: "exp_delivery_date" },
+// ];

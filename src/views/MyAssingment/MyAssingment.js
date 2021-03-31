@@ -16,13 +16,45 @@ function MyAssingment() {
   const [displayQuery, setDisplayQuery] = useState([]);
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
 
+  const [diaplayProposal, setDisplayProposal] = useState({
+    amount: "",
+    accepted_amount: "",
+    payment_received: "",
+    cust_accept_date: "",
+    proposal_date: "",
+  });
+
+  const [diaplayAssignment, setDisplayAssignment] = useState([
+    {
+      assignment_number: "",
+      assignment_date: "",
+    },
+  ]);
+
+  const [diaplayHistory, setDisplayHistory] = useState([
+    {
+      tlname: "",
+      date_of_allocation: "",
+    },
+  ]);
+
   const [addModal, setAddModal] = useState(false);
   const addHandler = () => setAddModal(!addModal);
 
   const { id } = useParams();
   const history = useHistory();
-
   const userId = window.localStorage.getItem("userid");
+
+  const {
+    amount,
+    accepted_amount,
+    payment_received,
+    cust_accept_date,
+    proposal_date,
+  } = diaplayProposal;
+
+  const { assignment_number, assignment_date } = diaplayAssignment;
+  const { tlname, date_of_allocation } = diaplayHistory;
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
@@ -32,6 +64,30 @@ function MyAssingment() {
           setSubmitData(res.data.result);
           setDisplaySpecific(res.data.additional_queries);
           setAssingmentNo(res.data.result[0].assign_no);
+
+          if (res.data.proposal_queries.length > 0) {
+            setDisplayProposal({
+              accepted_amount: res.data.proposal_queries[0].accepted_amount,
+              payment_received: res.data.proposal_queries[0].paid_amount,
+              amount: res.data.proposal_queries[0].amount,
+              cust_accept_date: res.data.proposal_queries[0].cust_accept_date,
+              proposal_date: res.data.proposal_queries[0].created,
+            });
+          }
+
+          if (res.data.assignment.length > 0) {
+            setDisplayAssignment({
+              assignment_number: res.data.assignment[0].assignment_number,
+              assignment_date: res.data.assignment[0].created,
+            });
+          }
+          if (res.data.history_queries.length > 0) {
+            setDisplayHistory({
+              tlname: res.data.history_queries[0].tname,
+              date_of_allocation:
+                res.data.history_queries[0].date_of_allocation,
+            });
+          }
         }
       });
     };
@@ -39,7 +95,7 @@ function MyAssingment() {
     getSubmittedAssingment();
   }, [assingNo]);
 
-  console.log(diaplaySpecific);
+  // console.log(diaplaySpecific);
 
   const getQuery = () => {
     axios
@@ -88,14 +144,15 @@ function MyAssingment() {
   }
 
   //alert msg
-  const Msg = () =>{
-    return(
+  const Msg = () => {
+    return (
       <>
-      <p style={{fontSize:"10px"}}>Additional Queries added</p>
+        <p style={{ fontSize: "10px" }}>Additional Queries added</p>
       </>
-    )
-  }
+    );
+  };
 
+  // console.log("diaplayProposal -", amount);
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <div class="row mt-3">
@@ -148,6 +205,12 @@ function MyAssingment() {
               <div class="card-body">
                 <table class="table table-bordered">
                   <thead>
+                    {/* <tr>
+                     
+                     <p style={{ fontSize: "20px", textAlign: "center" }}>
+                        BASIC INFORMATION
+                      </p>                                      
+                    </tr> */}
                     <tr>
                       <th scope="col">Titles</th>
                       <th scope="col">Data</th>
@@ -159,31 +222,35 @@ function MyAssingment() {
                       <td>{p.assign_no}</td>
                     </tr>
                     <tr>
-                      <th scope="row">Facts of the case</th>
+                      <th scope="row">Query Date</th>
+                      <td>{p.created}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Customer ID</th>
+                      <td>{p.user_id}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Category</th>
+                      <td>{p.cat_name}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Sub- Category</th>
+                      <td>{p.sub_cat_name}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Name of the Case</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Assessment Year</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fact of the Case</th>
                       <td>{p.fact_case}</td>
                     </tr>
-
                     <tr>
-                      <th scope="row">Purpose for which Opinion is sought</th>
-                      <td colspan="1">{p.purpose_opinion}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        Timelines within which Opinion is Required
-                      </th>
-                      <td colspan="1">{p.Timelines}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">specific questions</th>
-                      <td colspan="1">
-                        {diaplaySpecific.map((p, i) => (
-                          <p>{p.text}</p>
-                        ))}
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <th scope="row">Documents</th>
+                      <th scope="row">Uploaded Documents</th>
                       <td>
                         {p.upload_doc_1 == null ? (
                           ""
@@ -223,6 +290,18 @@ function MyAssingment() {
                       </td>
                     </tr>
                     <tr>
+                      <th scope="row">specific questions</th>
+                      <td colspan="1">
+                        {diaplaySpecific.map((p, i) => (
+                          <p>{p.text}</p>
+                        ))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Purpose for which Opinion is sought</th>
+                      <td colspan="1">{p.purpose_opinion}</td>
+                    </tr>
+                    <tr>
                       <th scope="row">Format in which Opinion is required</th>
                       <td colspan="1">
                         <p>
@@ -240,8 +319,100 @@ function MyAssingment() {
                       </td>
                     </tr>
                     <tr>
+                      <th scope="row">
+                        Timelines within which Opinion is Required
+                      </th>
+                      <td colspan="1">{p.Timelines}</td>
+                    </tr>
+                    {/* <tr>
                       <th scope="row">Query Status</th>
                       <td>{p.status}</td>
+                    </tr> */}
+                  </tbody>
+                </table>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Titles</th>
+                      <th scope="col">Data</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Date of Allocation</th>
+                      <td>{date_of_allocation}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Name of Team Leader</th>
+                      <td>{tlname}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Name of Tax Professional(s)</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Date of Proposal</th>
+                      <td>{proposal_date}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Proposal Description</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Proposed Amount</th>
+                      <td>{amount}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Proposal Status</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Amount Accepted</th>
+                      <td>{accepted_amount}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Date of Acceptance</th>
+                      <td>{cust_accept_date}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Payment Terms</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Payment Received</th>
+                      <td>{payment_received}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Payment Due</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Payment Outstanding</th>
+                      <td>{accepted_amount - payment_received}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">Titles</th>
+                      <th scope="col">Data</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Assignment Number</th>
+                      <td>{assignment_number}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Assignment Date</th>
+                      <td>{assignment_date}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Proposed Date of Completion</th>
+                      <td></td>
                     </tr>
                     {p.query_status >= "9" ? (
                       <tr>
@@ -274,6 +445,10 @@ function MyAssingment() {
                         </td>
                       </tr>
                     ) : null}
+                    <tr>
+                      <th scope="row">Time taken to complete the assignment</th>
+                      <td></td>
+                    </tr>
                   </tbody>
                 </table>
 

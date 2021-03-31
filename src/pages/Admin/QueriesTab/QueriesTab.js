@@ -17,36 +17,30 @@ import PendingForProposals from "../../../components/PendingForProposals/Pending
 import PendingForPayment from "../../../components/PendingForPayment/PendingForPayment";
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
 
-
 function QueriesTab() {
   const userid = window.localStorage.getItem("adminkey");
   const count_PFA = window.localStorage.getItem("count_PFA");
-  
-  const [allQueriesCount, setAllQueriesCount] = useState('');
-  // const [pendingProposalCount, setPendingProposalCount] = useState('');
-  const [pendingForPayment, setPendingforPayment] = useState('');
-  const [pendingForAllocation, setPendingforAllocation] = useState('');
 
-
-  
+  const [allQueriesCount, setAllQueriesCount] = useState("");
+  const [pendingProposalCount, setPendingProposalCount] = useState("");
+  const [pendingForPayment, setPendingforPayment] = useState("");
+  const [pendingForAllocation, setPendingforAllocation] = useState("");
 
   const CountAllQuery = (data) => {
-    setAllQueriesCount(data)
-  }
-  
-  // const CountPendingProposal = (data) => {
-  //   setPendingProposalCount(data)
-  // }
+    setAllQueriesCount(data);
+  };
+
+  const CountPendingProposal = (data) => {
+    setPendingProposalCount(data);
+  };
 
   const CountPendingForPayment = (data) => {
-    setPendingforPayment(data)
-  }
- 
+    setPendingforPayment(data);
+  };
 
   const CountPendingForAllocation = (data) => {
-    setPendingforAllocation(data)
-  }
- 
+    setPendingforAllocation(data);
+  };
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -70,7 +64,7 @@ function QueriesTab() {
                     class="nav-link text-white active"
                     id="pills-d-tab"
                     data-toggle="pill"
-                    href="#d" 
+                    href="#d"
                     role="tab"
                     aria-controls="pills-d"
                     aria-selected="true"
@@ -94,7 +88,7 @@ function QueriesTab() {
                   </a>
                 </li>
 
-                {/* <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
                     id="pills-b-tab"
@@ -106,7 +100,7 @@ function QueriesTab() {
                   >
                     Pending for Proposal ({pendingProposalCount})
                   </a>
-                </li> */}
+                </li>
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -130,7 +124,7 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-d-tab"
                 >
-                  <AllQueriesData CountAllQuery={CountAllQuery}/>
+                  <AllQueriesData CountAllQuery={CountAllQuery} />
                 </div>
 
                 <div
@@ -139,17 +133,21 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-a-tab"
                 >
-                  <PendingForAllocation CountPendingForAllocation={CountPendingForAllocation}/>
+                  <PendingForAllocation
+                    CountPendingForAllocation={CountPendingForAllocation}
+                  />
                 </div>
 
-               {/* <div
+                <div
                   class="tab-pane fade"
                   id="b"
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
-                  <PendingForProposals CountPendingProposal={CountPendingProposal}/>
-                </div>  */}
+                  <PendingForProposals
+                    CountPendingProposal={CountPendingProposal}
+                  />
+                </div>
 
                 <div
                   class="tab-pane fade"
@@ -157,7 +155,9 @@ function QueriesTab() {
                   role="tabpanel"
                   aria-labelledby="pills-c-tab"
                 >
-                  <PendingForPayment CountPendingForPayment={CountPendingForPayment}/>
+                  <PendingForPayment
+                    CountPendingForPayment={CountPendingForPayment}
+                  />
                 </div>
               </div>
             </div>

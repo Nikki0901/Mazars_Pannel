@@ -225,16 +225,6 @@ function ProposalTab() {
                                     onClick={() => rejected(p.q_id)}
                                   ></i>
                                 </div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-file-text"
-                                    style={{
-                                      color: "orange",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={() => acceptedHandler(p.up_id)}
-                                  ></i>
-                                </div>
                               </div>
                             ) : (
                               (p.negotiated_amount === "0" ||
@@ -245,12 +235,24 @@ function ProposalTab() {
                             {p.statuscode == 5 ||
                             p.statuscode == 7 ||
                             p.statuscode == 8 ? (
-                              <div style={{ cursor: "pointer" }}>
-                                <i
-                                  class="fa fa-credit-card"
-                                  style={{ color: "green", fontSize: "16px" }}
-                                  onClick={() => paymentHandler(p)}
-                                ></i>
+                              <div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-credit-card"
+                                    style={{ color: "green", fontSize: "16px" }}
+                                    onClick={() => paymentHandler(p)}
+                                  ></i>
+                                </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-file-text"
+                                    style={{
+                                      color: "orange",
+                                      fontSize: "16px",
+                                    }}
+                                    onClick={() => acceptedHandler(p.up_id)}
+                                  ></i>
+                                </div>
                               </div>
                             ) : (
                               ""

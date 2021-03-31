@@ -55,6 +55,9 @@ const Msg = () =>{
       formData.append("softcopy_digitally_assigned",Number(value.p_format_digital) );
       formData.append("printout_physically_assigned",Number(value.p_format_physically));
 
+      formData.append("case_name", value.p_case_name);
+      formData.append("assessment_year", value.p_assessment_year);
+
       
       axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
         headers: {
@@ -133,6 +136,30 @@ const Msg = () =>{
                     </div>
                   ))}
                   
+              </div>
+              
+
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Case name</label>
+                  <input
+                    type="text"
+                    name="p_case_name"
+                    ref={register}
+                    className="form-control"                
+                  />             
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Assessment year</label>
+                  <input
+                    type="text"
+                    name="p_assessment_year"
+                    ref={register}
+                    className="form-control"             
+                  />             
+                </div>
               </div>
 
               <div className="col-md-6">

@@ -54,7 +54,6 @@ function PendingForAcceptence({ pendingProposal }) {
     getPendingAcceptedProposal();
   };
 
-
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
@@ -196,18 +195,19 @@ function PendingForAcceptence({ pendingProposal }) {
         <CardBody>
           <Table responsive="sm" bordered>
             <thead>
-            <tr>
+              <tr>
                 <th>S.No</th>
                 <th>Date</th>
                 <th>Category</th>
                 <th>Sub Category</th>
                 <th>Query No</th>
                 <th>Proposal No.</th>
-                <th>Proposal Sent date</th>                                   
+                <th>Proposal Sent date</th>
                 <th>Proposed Amount</th>
                 <th>Proposal Status</th>
                 <th>Amount Accepted</th>
                 <th>Assignment Number</th>
+                <th>TL name</th>
               </tr>
             </thead>
             <tbody>
@@ -219,9 +219,7 @@ function PendingForAcceptence({ pendingProposal }) {
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <th>
-                      <Link to={`/admin/queries/${p.q_id}`}>
-                        {p.assign_no}
-                        </Link>
+                      <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
                     </th>
                     <td>{p.proposal_number}</td>
                     <td>{ChangeFormateDate(p.DateofProposal)}</td>
@@ -229,11 +227,12 @@ function PendingForAcceptence({ pendingProposal }) {
                     <td>{p.status}</td>
                     <td>{p.accepted_amount}</td>
                     <td></td>
+                    <td>{p.tl_name}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="10">No Records</td>
+                  <td colSpan="12">No Records</td>
                 </tr>
               )}
             </tbody>

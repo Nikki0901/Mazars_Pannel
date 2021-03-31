@@ -7,49 +7,48 @@ import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
+import Layout from "../../components/Layout/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required user id"),
-  p_email: yup.string().email("invalid email").required("required email"),
-  p_code: yup.string().required("required otp "),
   p_password: yup.string().required("required password"),
   p_confirm_password: yup.string().required("required confirm password"),
 });
 
-function NewPassword(props) {
+function ChangePassword(props) {
+  const userId = window.localStorage.getItem("userid");
+
   const alert = useAlert();
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
   const [error, setError] = useState("");
-  
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
+    formData.append("id", JSON.parse(userId));
     formData.append("user_id", value.p_name);
-    formData.append("email", value.p_email);
-    formData.append("code", value.p_code);
-    formData.append("password", value.p_password);
-    formData.append("rpassword", value.p_confirm_password);
+    formData.append("password", value.password);
+    formData.append("rpassword", value.confirm_password);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/resetpassword`,
+      url: `${baseUrl}/customers/passChange`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("reset password successfully!");
+          alert.success("change password successfully!");
           reset();
-          props.history.push("/customer/signin");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           setError(response.data.result);
+          reset();
         }
       })
       .catch((error) => {
@@ -58,14 +57,13 @@ function NewPassword(props) {
   };
 
   return (
-    <>
-      <Header cust_sign="cust_sign" />
+    <Layout custDashboard="custDashboard" custUserId={userId}>
       <div className="container">
         <div className="form">
-          <div className="heading">
-            <h2>Reset Password</h2>
+        <div className="heading">
+            <h2>Change Password</h2>
           </div>
-          <p className="error">{error && error}</p>
+        <p className="error">{error && error}</p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <div className="mb-3">
@@ -77,36 +75,11 @@ function NewPassword(props) {
                   ref={register}
                   placeholder="Enter user id"
                 />
-                <p className="error">
+                 <p className="error">
                   {errors.p_name && errors.p_name.message}
                 </p>
               </div>
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="p_email"
-                  ref={register}
-                  placeholder="Enter Email"
-                />
-                <p className="error">
-                  {errors.p_email && errors.p_email.message}
-                </p>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Enter code</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="p_code"
-                  ref={register}
-                  placeholder="Enter code"
-                />
-                <p className="error">
-                  {errors.p_code && errors.p_code.message}
-                </p>
-              </div>
+
               <label className="form-label">New Password</label>
               <input
                 type="text"
@@ -116,9 +89,9 @@ function NewPassword(props) {
                 name="p_password"
                 ref={register}
               />
-              <p className="error">
-                {errors.p_password && errors.p_password.message}
-              </p>
+               <p className="error">
+                  {errors.p_password && errors.p_password.message}
+                </p>
             </div>
 
             <div className="form-group">
@@ -131,9 +104,9 @@ function NewPassword(props) {
                 name="p_confirm_password"
                 ref={register}
               />
-              <p className="error">
-                {errors.p_confirm_password && errors.p_confirm_password.message}
-              </p>
+               <p className="error">
+                  {errors.p_confirm_password && errors.p_confirm_password.message}
+                </p>
             </div>
 
             <button type="submit" className="btn btn-primary">
@@ -142,9 +115,8 @@ function NewPassword(props) {
           </form>
         </div>
       </div>
-      <Footer />
-    </>
+    </Layout>
   );
 }
 
-export default NewPassword;
+export default ChangePassword;
