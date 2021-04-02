@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 // import Filter from "../Search-Filter/SearchFilter";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AllQueriesData({ CountAllQuery }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -36,6 +37,85 @@ function AllQueriesData({ CountAllQuery }) {
       }
     });
   };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/admin/queries/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+  ];
 
   //search filter
   const handleChange = (value) => {
@@ -204,7 +284,16 @@ function AllQueriesData({ CountAllQuery }) {
           </div>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+
+        <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={allQueriesData}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th scope="col">S.No.</th>
@@ -237,7 +326,7 @@ function AllQueriesData({ CountAllQuery }) {
                 </tr>
               )}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </>

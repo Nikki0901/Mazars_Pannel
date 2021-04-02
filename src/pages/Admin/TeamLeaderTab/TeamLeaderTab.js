@@ -14,8 +14,7 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
-
+import BootstrapTable from "react-bootstrap-table-next";
 
 function TeamLeaderTab() {
   const alert = useAlert();
@@ -23,39 +22,67 @@ function TeamLeaderTab() {
   const [tlCount, setTlCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
 
-  // const actionButton = () =>{}
-
-
-  var hashValueGetter = function (params) {
-    return params.node.rowIndex + 1;
-  };
-
-  const column = [
+  const columns = [
     {
-      headerName: "S.No",
-      field: "",
-      valueGetter: hashValueGetter,
-      sortable: true,
-      width: 70,
+      dataField: "",
+      text: "S.No",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px" ,width:"50px"};
+      },
     },
-    { headerName: "Name", field: "name", sortable: true, width: 140 },
-    { headerName: "Category", field: "parent_id", sortable: true, width: 140 },
     {
-      headerName: "Sub Category",
-      field: "cat_name",
-      sortable: true,
-      width: 160,
+      dataField: "name",
+      text: "Name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
     },
-    { headerName: "Email", field: "email", sortable: true, width: 160 },
-    { headerName: "Phone", field: "phone", sortable: true, width: 130 },
     {
-      headerName: "Edit",
-      field: "id",
-      width: 70,
-      cellRendererFramework: (params) => {
+      dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "email",
+      text: "Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "phone",
+      text: "Phone",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "",
+      text: "Edit",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
         return (
-          <div>
-            <Link to={`/admin/edittl/${params.data.id}`}>
+          <>
+            <Link to={`/admin/edittl/${row.id}`}>
               <i
                 className="fa fa-edit"
                 style={{
@@ -65,30 +92,29 @@ function TeamLeaderTab() {
                 }}
               ></i>
             </Link>
-          </div>
+          </>
         );
       },
     },
     {
-      headerName: "Edit",
-      field: "id",
-      width: 70,
-      cellRendererFramework: (params) => (
-        <div>
-          <i
-            className="fa fa-trash"
-            style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
-            onClick={() => del(params.data.id)}
-          ></i>
-        </div>
-      ),
+      dataField: "phone",
+      text: "Delete",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <i
+              className="fa fa-trash"
+              style={{ fontSize: 20, cursor: "pointer", marginLeft: "8px" }}
+              onClick={() => del(row.id)}
+            ></i>
+          </>
+        );
+      },
     },
   ];
-
-  // const onGridReady = (params) => {
-  //   setGridApi(params.api);
-  //   setGridColumnApi(params.columnApi);
-  // };
 
   useEffect(() => {
     getTeamLeader();
@@ -103,7 +129,6 @@ function TeamLeaderTab() {
       }
     });
   };
-
 
   // delete data
   const del = (id) => {
@@ -121,7 +146,6 @@ function TeamLeaderTab() {
       });
   };
 
-  
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -138,9 +162,13 @@ function TeamLeaderTab() {
           </Row>
         </CardHeader>
         <CardBody>
-          <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
-            <AgGridReact rowData={data} columnDefs={column} />
-          </div>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={data}
+            columns={columns}
+            rowIndex
+          />
         </CardBody>
       </Card>
     </Layout>

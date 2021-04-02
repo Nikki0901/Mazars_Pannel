@@ -5,9 +5,6 @@ import { positions, Provider, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import "./components/FontawsomeIcons/index";
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 

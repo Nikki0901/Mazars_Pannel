@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function PaymentStatus() {
   const alert = useAlert();
@@ -41,6 +42,152 @@ function PaymentStatus() {
       }
     });
   };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Proposal No",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Proposed Amount",
+      dataField: "amount",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Accepted Amount",
+      dataField: "accepted_amount",
+      sort: true,
+      style: {
+        color: "#21a3ce" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", color: "#21a3ce" };
+      },
+    },
+    {
+      text: "Paid Amount",
+      dataField: "paid_amount",
+      sort: true,
+      style: {
+        color: "#064606" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", color: "#064606" };
+      },
+    },
+    {
+      text: "Amount Outstanding",
+      dataField: "",
+      sort: true,
+      style: {
+        color: "darkred" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", color: "darkred" };
+      },
+      formatter: function amountOutstading(cell, row) {
+        console.log("dt", row.paid_amount);
+        console.log("dt", row.accepted_amount);
+        var p = row.paid_amount;
+        var a = row.accepted_amount;
+        if (p == 0) {
+          return "0";
+        } else return a - p;
+      },
+    },
+    {
+      text: "status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+
+    {
+      text: "Accept as Assignment",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              title="Accept Assignment"
+              style={{
+                cursor: "pointer",
+                color: "green",
+                textAlign: "center",
+              }}
+            >
+              {row.paid_amount > 0 && row.sid < 9 && (
+                <div>
+                  <i
+                    class="fa fa-check"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => makeAssignment(row)}
+                  ></i>
+                </div>
+              )}
+            </div>
+
+            <div
+              title="Add Assignment stages"
+              style={{ cursor: "pointer", textAlign: "center" }}
+            >
+              {row.sid > 8 && (
+                <Link to={`/teamleader/addassingment/${row.assign_id}`}>
+                  <i class="fa fa-tasks"></i>
+                </Link>
+              )}
+            </div>
+          </>
+        );
+      },
+    },
+  ];
 
   // accepted proposal
   const accepted = (key) => {
@@ -299,6 +446,14 @@ function PaymentStatus() {
           </CardHeader>
 
           <CardBody>
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={payment}
+              columns={columns}
+              rowIndex
+            />
+            {/* 
             <table class="table table-bordered">
               <thead>
                 <tr>
@@ -311,7 +466,7 @@ function PaymentStatus() {
                   <th style={{ color: "#064606" }}>Paid Amount</th>
                   <th style={{ color: "darkred" }}>Amount Outstanding</th>
                   <th>status</th>
-                  {/* <th style={{ textAlign: "center" }}>Accept Amount</th> */}
+                 
                   <th style={{ textAlign: "center" }}>Accept as Assignment</th>
                 </tr>
               </thead>
@@ -372,7 +527,7 @@ function PaymentStatus() {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </table> */}
           </CardBody>
         </Card>
       </Layout>

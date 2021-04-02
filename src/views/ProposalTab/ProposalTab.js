@@ -101,6 +101,16 @@ function ProposalTab() {
       headerStyle: () => {
         return { fontSize: "11px" };
       },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/customer/my-assingment/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
     },
     {
       text: "Proposal No",
@@ -194,9 +204,10 @@ function ProposalTab() {
       sort: true,
       style: {
         fontSize: "11px",
+        color: "#21a3ce"
       },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "11px" , color: "#21a3ce" };
       },
     },
     {
@@ -205,9 +216,10 @@ function ProposalTab() {
       sort: true,
       style: {
         fontSize: "11px",
+        color: "#064606"
       },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "11px" , color: "#064606"  };
       },
     },
     {
@@ -227,9 +239,10 @@ function ProposalTab() {
       sort: true,
       style: {
         fontSize: "11px",
+        color: "darkred"
       },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "11px" ,color: "darkred" };
       },
       formatter: function amountOutstading(cell, row) {
         console.log("dt", row.paid_amount);

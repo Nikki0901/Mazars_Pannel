@@ -9,23 +9,21 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import classNames from "classnames";
+import Swal from "sweetalert2";
 
-const Schema = yup.object().shape({
-  p_name: yup.string().required("required user id"),
-  p_email: yup.string().email("invalid email").required("required email"),
-  p_code: yup.string().required("required otp "),
-  p_password: yup.string().required("required password"),
-  p_confirm_password: yup.string().required("required confirm password"),
-});
+// const Schema = yup.object().shape({
+//   p_name: yup.string().required("required user id"),
+//   p_email: yup.string().email("invalid email").required("required email"),
+//   p_code: yup.string().required("required otp "),
+//   // p_password: yup.string().required("required password"),
+//   // p_confirm_password: yup.string().required("required confirm password"),
+// });
 
 function NewPassword(props) {
   const alert = useAlert();
-  const { handleSubmit, register, reset, errors } = useForm({
-    resolver: yupResolver(Schema),
-  });
+  const { register, handleSubmit, errors, getValues, reset } = useForm();
 
-  const [error, setError] = useState("");
-  
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -49,7 +47,8 @@ function NewPassword(props) {
           props.history.push("/customer/signin");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          setError(response.data.result);
+          // alert.error(response.data.result);
+          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
         }
       })
       .catch((error) => {
@@ -65,60 +64,93 @@ function NewPassword(props) {
           <div className="heading">
             <h2>Reset Password</h2>
           </div>
-          <p className="error">{error && error}</p>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <div className="mb-3">
                 <label className="form-label">User Id</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.p_name,
+                  })}
                   name="p_name"
-                  ref={register}
                   placeholder="Enter user id"
+                  ref={register({
+                    required: "This field is required",
+                  })}
                 />
-                <p className="error">
-                  {errors.p_name && errors.p_name.message}
-                </p>
+                {errors.p_name && (
+                  <div className="invalid-feedback">
+                    {errors.p_name.message}
+                  </div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label">Email</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.p_email,
+                  })}
                   name="p_email"
-                  ref={register}
                   placeholder="Enter Email"
+                  ref={register({
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Please enter valid email address",
+                    },
+                  })}
                 />
-                <p className="error">
-                  {errors.p_email && errors.p_email.message}
-                </p>
+                {errors.p_email && (
+                  <div className="invalid-feedback">
+                    {errors.p_email.message}
+                  </div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label">Enter code</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.p_code,
+                  })}
                   name="p_code"
-                  ref={register}
                   placeholder="Enter code"
+                  ref={register({
+                    required: "This field is required",
+                  })}
                 />
-                <p className="error">
-                  {errors.p_code && errors.p_code.message}
-                </p>
+                {errors.p_code && (
+                  <div className="invalid-feedback">
+                    {errors.p_code.message}
+                  </div>
+                )}
               </div>
               <label className="form-label">New Password</label>
               <input
                 type="text"
                 id="password"
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_password,
+                })}
                 placeholder="Enter Your Password"
                 name="p_password"
-                ref={register}
+                ref={register({
+                  required: "This field is required",
+                  pattern: {
+                    value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                    message:
+                      "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
+                  },
+                })}
               />
-              <p className="error">
-                {errors.p_password && errors.p_password.message}
-              </p>
+              {errors.p_password && (
+                <div className="invalid-feedback">
+                  {errors.p_password.message}
+                </div>
+              )}
             </div>
 
             <div className="form-group">
@@ -126,14 +158,23 @@ function NewPassword(props) {
               <input
                 type="text"
                 id="password"
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_confirm_password,
+                })}
                 placeholder="Confirm Password"
                 name="p_confirm_password"
-                ref={register}
+                ref={register({
+                  required: "This field is required",
+                  validate: (value) =>
+                    value === getValues("p_password") ||
+                    "password doesn 't match",
+                })}
               />
-              <p className="error">
-                {errors.p_confirm_password && errors.p_confirm_password.message}
-              </p>
+              {errors.p_confirm_password && (
+                <div className="invalid-feedback">
+                  {errors.p_confirm_password.message}
+                </div>
+              )}
             </div>
 
             <button type="submit" className="btn btn-primary">

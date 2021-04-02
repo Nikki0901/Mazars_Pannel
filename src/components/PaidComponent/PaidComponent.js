@@ -17,6 +17,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import BootstrapTable from "react-bootstrap-table-next";
 
 
 function PaidComponent() {
@@ -39,7 +40,141 @@ function PaidComponent() {
       }
     });
   };
-
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/admin/queries/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Proposal No",
+      dataField: "proposal_number",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Accepted Amount",
+      dataField: "accepted_amount",
+      sort: true,
+      style: {
+        color: "#21a3ce" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px",color: "#21a3ce" };
+      },
+    },{
+      text: "Paid Amount",
+      dataField: "paid_amount",
+      sort: true,
+      style: {
+        color: "#064606" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", color: "#064606" };
+      },
+    },
+    {
+      text: "Amount Outstanding",
+      dataField: "",
+      sort: true,
+      style: {
+        color: "darkred" 
+      },
+      headerStyle: () => {
+        return { fontSize: "12px" , color: "darkred"};
+      },
+      formatter: function amountOutstading(cell, row) {
+        console.log("dt", row.paid_amount);
+        console.log("dt", row.accepted_amount);
+        var p = row.paid_amount;
+        var a = row.accepted_amount;
+        if (p == 0) {
+          return "0";
+        } else return a - p;
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "TL name",
+      dataField: "tl_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+  ];
   
   //search filter
   const handleChange = (value) => {
@@ -79,19 +214,7 @@ function PaidComponent() {
       });
   };
 
-  // function checkStatus(p, a) {
-  //   console.log("paid -", p);
-  //   console.log("acc -", a);
-
-  //   if (p > 0 && p < a) {
-  //     return "Partial Received ";
-  //   } else if (p === a && p > 0) {
-  //     return "Paid";
-  //   } else {
-  //     return "pending";
-  //   }
-  // }
-
+  
   function checkOutstading(p, a) {
     console.log("paid -", p);
     console.log("acc -", a);
@@ -251,7 +374,16 @@ function PaidComponent() {
         </CardHeader>
 
         <CardBody>
-          <table class="table table-bordered">
+
+        <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={payment}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <table class="table table-bordered">
             <thead>
               <tr>
                 <th>S.No</th>
@@ -289,10 +421,7 @@ function PaidComponent() {
                     </td>
                     <td>
                       {p.status}
-                      {/* {checkStatus(
-                        Number(p.paid_amount),
-                        Number(p.accepted_amount)
-                      )} */}
+                     
                     </td>
                     <td>{p.tl_name}</td>
                   </tr>
@@ -303,7 +432,7 @@ function PaidComponent() {
                 </tr>
               )}
             </tbody>
-          </table>
+          </table> */}
         </CardBody>
       </Card>
     </div>
@@ -311,3 +440,19 @@ function PaidComponent() {
 }
 
 export default PaidComponent;
+// function checkStatus(p, a) {
+  //   console.log("paid -", p);
+  //   console.log("acc -", a);
+
+  //   if (p > 0 && p < a) {
+  //     return "Partial Received ";
+  //   } else if (p === a && p > 0) {
+  //     return "Paid";
+  //   } else {
+  //     return "pending";
+  //   }
+  // }
+ {/* {checkStatus(
+                        Number(p.paid_amount),
+                        Number(p.accepted_amount)
+                      )} */}

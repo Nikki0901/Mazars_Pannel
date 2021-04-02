@@ -14,28 +14,13 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-import TableHeader from "../../components/DataTable/Header/index";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function QueriesTab() {
   // const [queriesData, setQueriesData] = useState([]);
   const [queriesCount, setCountQueries] = useState("");
   const [query, setQuery] = useState([]);
   const userId = window.localStorage.getItem("userid");
-
-  const [sorting, setSorting] = useState({ field: "", order: "" });
-  const headers = [
-    { name: "S.no", sortable: true },
-    { name: "Date", field: "created", sortable: true },
-    { name: "Query No", field: "assign_no", sortable: true },
-    { name: "Category", field: "parent_id", sortable: true },
-    { name: "Sub Category", field: "cat_name", sortable: true },
-    { name: "Status", field: "status", sortable: true },
-    {
-      name: "Expected Delivery Date",
-      field: "exp_delivery_date",
-      sortable: false,
-    },
-  ];
 
   useEffect(() => {
     getQueriesData();
@@ -55,22 +40,92 @@ function QueriesTab() {
       });
   };
 
-
-  const queryData = useMemo(() => {
-    let computedData = query;
-
-    //Sorting comments
-    if (sorting.field) {
-      const reversed = sorting.order === "asc" ? 1 : -1;
-
-      computedData = computedData.sort(
-        (a, b) => reversed * a[sorting.field].localeCompare(b[sorting.field])
-      );
-    }
-
-    return computedData;
-  }, [query, sorting]);
-  
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/customer/my-assingment/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Expected Delivery Date",
+      dataField: "exp_delivery_date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.exp_delivery_date);
+        var oldDate = row.exp_delivery_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+  ];
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -79,14 +134,6 @@ function QueriesTab() {
       return null;
     }
     return oldDate.toString().split("-").reverse().join("-");
-  }
-
-  //show status by spinner
-  function showStatus(status) {
-    console.log("status", status);
-    if (status == null) {
-      return null;
-    }
   }
 
   return (
@@ -115,7 +162,15 @@ function QueriesTab() {
           />
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={query}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <Table responsive="sm" bordered>
             <TableHeader
               headers={headers}
               onSorting={(field, order) => setSorting({ field, order })}
@@ -137,7 +192,7 @@ function QueriesTab() {
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </Layout>

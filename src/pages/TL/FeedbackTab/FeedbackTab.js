@@ -11,7 +11,8 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+
+import BootstrapTable from "react-bootstrap-table-next";
 
 function FeedbackTab() {
   const userid = window.localStorage.getItem("tlkey");
@@ -32,27 +33,44 @@ function FeedbackTab() {
     getFeedback();
   }, []);
 
-  var hashValueGetter = function (params) {
-    return params.node.rowIndex + 1;
-  };
-
-  const column = [
+  const columns = [
     {
-      headerName: "S.No",
-      field: "",
-      valueGetter: hashValueGetter,
-      sortable: true,
-      width: 120,
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
     },
-    { headerName: "Query No", field: "assign_no", sortable: true, width: 230 },
-    { headerName: "Customer Name", field: "name", sortable: true, width: 230 },
     {
-      headerName: "Details of feedback",
-      field: "feedback",
-      sortable: true,
-      width: 360,
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Details of feedback",
+      dataField: "feedback",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
     },
   ];
+
   return (
     <>
       <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -66,13 +84,13 @@ function FeedbackTab() {
             </Row>
           </CardHeader>
           <CardBody>
-            <div
-              className="ag-theme-alpine"
-              style={{ height: 400, width: 950 }}
-            >
-              <AgGridReact rowData={feedbackData} columnDefs={column} />
-            </div>
-
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={feedbackData}
+              columns={columns}
+              rowIndex
+            />
             {/* <table class="table table-bordered">
               <thead>
                 <tr>

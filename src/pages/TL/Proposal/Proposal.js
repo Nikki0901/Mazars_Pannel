@@ -15,6 +15,7 @@ import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
@@ -28,6 +29,7 @@ function Proposal() {
   useEffect(() => {
     getProposalList();
   }, []);
+
   const getProposalList = () => {
     axios
       .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
@@ -39,6 +41,143 @@ function Proposal() {
         }
       });
   };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Proposal No",
+      dataField: "proposal_number",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Amount",
+      dataField: "amount",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "misc1",
+      dataField: "misc1",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "misc2",
+      dataField: "misc2",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Edit",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            {row.status == "Accepted" || row.status == "Pending" ? (
+              <Link to={`/teamleader/edit-proposal/${row.id}`}>
+                <i
+                  className="fa fa-edit"
+                  style={{
+                    fontSize: 18,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    color: "green",
+                  }}
+                ></i>
+              </Link>
+            ) : null}
+          </>
+        );
+      },
+    },
+    {
+      text: "Prepare",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            {row.status == "TL Accepted" ? (
+              <Link to={`/teamleader/sendproposal/${row.id}`}>
+                <i class="fa fa-mail-forward"></i>
+              </Link>
+            ) : null}
+          </>
+        );
+      },
+    },
+  ];
 
   //search filter
   const handleChange = (value) => {
@@ -232,7 +371,15 @@ function Proposal() {
           </div>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={proposal}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th>S.No.</th>
@@ -298,7 +445,7 @@ function Proposal() {
                 </tr>
               )}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </Layout>

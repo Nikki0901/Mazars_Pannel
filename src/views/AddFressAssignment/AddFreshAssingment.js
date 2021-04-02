@@ -8,8 +8,6 @@ import { baseUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
 
-
-
 function AddFreshAssingment(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset, control } = useForm();
@@ -19,20 +17,16 @@ function AddFreshAssingment(props) {
     name: "users",
   });
 
-
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
 
-
-const Msg = () =>{
-  return(
-    <>
-    <p style={{fontSize:"12px"}}>Query successfully added!</p>
-    </>
-  )
-}
-
-
+  const Msg = () => {
+    return (
+      <>
+        <p style={{ fontSize: "12px" }}>Query successfully added!</p>
+      </>
+    );
+  };
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -40,56 +34,60 @@ const Msg = () =>{
     console.log("value :", Number(value.p_format_digital));
     console.log("value :", Number(value.p_format_physically));
 
-   
-      let formData = new FormData();
-      formData.append("fact", value.p_fact);
-      formData.append("specific", JSON.stringify(value.specific));
-      formData.append("upload_1", value.p_document1[0]);
-      formData.append("upload_2", value.p_document2[0]);
-      formData.append("upload_3", value.p_document3[0]);
-      formData.append("purpose", value.p_purpose);
-      formData.append("timelines", value.p_timelines);
-      formData.append("user", JSON.parse(userId));
-      formData.append("cid", JSON.parse(category));
-      formData.append("softcopy_word",Number(value.p_format_word) );
-      formData.append("softcopy_digitally_assigned",Number(value.p_format_digital) );
-      formData.append("printout_physically_assigned",Number(value.p_format_physically));
+    let formData = new FormData();
+    formData.append("fact", value.p_fact);
+    formData.append("specific", JSON.stringify(value.specific));
+    formData.append("upload_1", value.p_document1[0]);
+    formData.append("upload_2", value.p_document2[0]);
+    formData.append("upload_3", value.p_document3[0]);
+    formData.append("purpose", value.p_purpose);
+    formData.append("timelines", value.p_timelines);
+    formData.append("user", JSON.parse(userId));
+    formData.append("cid", JSON.parse(category));
+    formData.append("softcopy_word", Number(value.p_format_word));
+    formData.append(
+      "softcopy_digitally_assigned",
+      Number(value.p_format_digital)
+    );
+    formData.append(
+      "printout_physically_assigned",
+      Number(value.p_format_physically)
+    );
 
-      formData.append("case_name", value.p_case_name);
-      formData.append("assessment_year", value.p_assessment_year);
+    formData.append("case_name", value.p_case_name);
+    formData.append("assessment_year", value.p_assessment_year);
 
-      
-      axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
+    axios
+      .post(`${baseUrl}/customers/PostQuestion`, formData, {
         headers: {
-          'content-type': 'multipart/form-data'
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          reset();
+          alert.success(<Msg />);
+          props.history.push("/customer/queries");
         }
       })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
-            reset();
-            alert.success(<Msg />);
-            props.history.push("/customer/queries");
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    };
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <div class="row mt-3">
         <div class="col-md-12">
-        <div class="schedule">
+          <div class="schedule">
             <h3>Add Fresh Assignment</h3>
           </div>
           <br />
         </div>
-        
+
         <div class="col-xl-8 col-lg-8 col-md-12">
-        
-        <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-6">
                 <div className="mb-3">
@@ -135,9 +133,7 @@ const Msg = () =>{
                       </div>
                     </div>
                   ))}
-                  
               </div>
-              
 
               <div className="col-md-6">
                 <div className="mb-3">
@@ -146,19 +142,35 @@ const Msg = () =>{
                     type="text"
                     name="p_case_name"
                     ref={register}
-                    className="form-control"                
-                  />             
+                    className="form-control"
+                  />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">Assessment year</label>
-                  <input
-                    type="text"
+                 
+                  <select
+                    className="form-select form-control"
                     name="p_assessment_year"
+                    aria-label="Default select example"
                     ref={register}
-                    className="form-control"             
-                  />             
+                  >
+                    <option value="">--select--</option>
+                    <option value="2010">2010</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                  </select>
                 </div>
               </div>
 
@@ -169,19 +181,19 @@ const Msg = () =>{
                     type="file"
                     name="p_document1"
                     ref={register}
-                    className="form-control-file"                
+                    className="form-control-file"
                   />
                   <input
                     type="file"
                     name="p_document2"
                     ref={register}
-                    className="form-control-file"                 
+                    className="form-control-file"
                   />
                   <input
                     type="file"
                     name="p_document3"
                     ref={register}
-                    className="form-control-file"                
+                    className="form-control-file"
                   />
                 </div>
               </div>
@@ -220,8 +232,7 @@ const Msg = () =>{
                       className="form-check-input"
                       type="checkbox"
                       name="p_format_word"
-                      ref={register}    
-                                 
+                      ref={register}
                     />
                     <label className="form-check-label">
                       Softcopy - Word/ Pdf
@@ -233,7 +244,6 @@ const Msg = () =>{
                       type="checkbox"
                       name="p_format_digital"
                       ref={register}
-                 
                     />
                     <label className="form-check-label">
                       SoftCopy- Digitally Signed
@@ -287,8 +297,6 @@ const Msg = () =>{
               Submit
             </button>
           </form>
-
-         
         </div>
       </div>
     </Layout>

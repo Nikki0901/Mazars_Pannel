@@ -13,7 +13,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { AgGridReact } from "ag-grid-react";
+
+import BootstrapTable from "react-bootstrap-table-next";
 
 
 function TaxProfessionalsTab() {
@@ -36,29 +37,101 @@ function TaxProfessionalsTab() {
     });
   };
 
-  var hashValueGetter = function (params) {
-    return params.node.rowIndex + 1;
-  };
 
-  const column = [
+
+  // const column = [
+  //   {
+  //     headerName: "S.No",
+  //     field: "",
+  //     valueGetter: hashValueGetter,
+  //     sortable: true,
+  //     width: 90,
+  //   },
+  //   { headerName: "Name", field: "name", sortable: true, width: 170 },
+  //   { headerName: "Email", field: "email", sortable: true, width: 190 },
+  //   { headerName: "Phone", field: "phone", sortable: true, width: 190 },
+  //   {
+  //     headerName: "Edit",
+  //     field: "id",
+  //     width: 150,
+  //     cellRendererFramework: (params) => {
+  //       return (
+  //         <div>
+  //           <Link to={`/admin/edittp/${params.data.id}`}>
+  //             <i
+  //               className="fa fa-edit"
+  //               style={{
+  //                 fontSize: 18,
+  //                 cursor: "pointer",
+  //                 marginLeft: "8px",
+  //               }}
+  //             ></i>
+  //           </Link>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     headerName: "Edit",
+  //     field: "id",
+  //     width: 150,
+  //     cellRendererFramework: (params) => (
+  //       <div>
+  //         <i
+  //           className="fa fa-trash"
+  //           style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
+  //           onClick={() => del(params.data.id)}
+  //         ></i>
+  //       </div>
+  //     ),
+  //   },
+  // ];
+
+  const columns = [
     {
-      headerName: "S.No",
-      field: "",
-      valueGetter: hashValueGetter,
-      sortable: true,
-      width: 90,
+      dataField: "",
+      text: "S.No",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px" ,width:"50px"};
+      },
     },
-    { headerName: "Name", field: "name", sortable: true, width: 170 },
-    { headerName: "Email", field: "email", sortable: true, width: 190 },
-    { headerName: "Phone", field: "phone", sortable: true, width: 190 },
     {
-      headerName: "Edit",
-      field: "id",
-      width: 150,
-      cellRendererFramework: (params) => {
+      dataField: "name",
+      text: "Name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "email",
+      text: "Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "phone",
+      text: "Phone",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "",
+      text: "Edit",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
         return (
-          <div>
-            <Link to={`/admin/edittp/${params.data.id}`}>
+          <>
+            <Link to={`/admin/edittp/${row.id}`}>
               <i
                 className="fa fa-edit"
                 style={{
@@ -68,23 +141,27 @@ function TaxProfessionalsTab() {
                 }}
               ></i>
             </Link>
-          </div>
+          </>
         );
       },
     },
     {
-      headerName: "Edit",
-      field: "id",
-      width: 150,
-      cellRendererFramework: (params) => (
-        <div>
-          <i
-            className="fa fa-trash"
-            style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
-            onClick={() => del(params.data.id)}
-          ></i>
-        </div>
-      ),
+      dataField: "phone",
+      text: "Delete",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <i
+              className="fa fa-trash"
+              style={{ fontSize: 20, cursor: "pointer", marginLeft: "8px" }}
+              onClick={() => del(row.id)}
+            ></i>
+          </>
+        );
+      },
     },
   ];
 
@@ -118,10 +195,14 @@ function TaxProfessionalsTab() {
             </Col>
           </Row>
         </CardHeader>
-        <CardBody>
-          <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
-            <AgGridReact rowData={data} columnDefs={column} />
-          </div>
+        <CardBody>    
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={data}
+            columns={columns}
+            rowIndex
+          />
         </CardBody>
       </Card>
     </Layout>

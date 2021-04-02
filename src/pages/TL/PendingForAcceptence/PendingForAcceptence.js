@@ -15,6 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function PendingForAcceptence({ CountPendingForAcceptence }) {
   const alert = useAlert();
@@ -37,11 +38,139 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
         if (res.data.code === 1) {
           setPendingData(res.data.result);
           CountPendingForAcceptence(res.data.result.length);
-        }   
+        }
       });
   };
 
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "query_created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.query_created);
+        var oldDate = row.query_created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/teamleader/pending/${row.id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "	Exp. Delivery Date",
+      dataField: "Exp_Delivery_Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Accept / Reject",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                color: "#6967ce",
+                cursor: "pointer",
+              }}
+              id="div1"
+            >
+              <div
+                id="accept"
+                title="Accept Assignment"
+                onClick={() => acceptHandler(row)}
+              >
+                <i
+                  class="fa fa-check"
+                  style={{ color: "green", fontSize: "16px" }}
+                ></i>
+              </div>
+              <div
+                id="reject"
+                title="Reject Assignment"
+                onClick={() => rejectHandler(row)}
+              >
+                <i
+                  class="fa fa-times"
+                  style={{ color: "red", fontSize: "16px" }}
+                ></i>
+              </div>
+            </div>
+          </>
+        );
+      },
+    },
+  ];
 
+  
   const acceptHandler = (key) => {
     console.log("acceptHandler", key);
 
@@ -103,9 +232,6 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-
-
-
   //search filter
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -132,25 +258,25 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/tl/pendingQues?id=${JSON.parse(
+          userid
+        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           if (res.data.result) {
             setPendingData(res.data.result);
-
           }
         }
       });
   };
 
-
   return (
     <>
       <Card>
         <CardHeader>
-        <div className="row">
+          <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -260,10 +386,18 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
                 </button>
               </div>
             </div>
-          </div> 
+          </div>
         </CardHeader>
         <CardBody>
-          <table class="table table-bordered">
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={pendingData}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <table class="table table-bordered">
             <thead>
               <tr>
                 <th scope="col">S.No</th>
@@ -326,7 +460,7 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
                 </tr>
               )}
             </tbody>
-          </table>
+          </table> */}
         </CardBody>
       </Card>
     </>
@@ -345,7 +479,6 @@ export default PendingForAcceptence;
 //     getPendingforAcceptance();
 //   }
 // });
-
 
 // set: 1
 // tlid: 128

@@ -10,11 +10,14 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
+import Swal from 'sweetalert2';
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required user id"),
   p_password: yup.string().required("required password"),
 });
+
 
 function SignIn(props) {
   const alert = useAlert();
@@ -45,7 +48,9 @@ function SignIn(props) {
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          setError(response.data.result);
+          // alert.error(response.data.result);
+          Swal.fire('Oops...',"Errorr : "+response.data.result,'error')
+          // Swal.fire(`oops : ${response.data.result}`)
         }
       })
       .catch((error) => {
@@ -61,8 +66,8 @@ function SignIn(props) {
           <div className="heading">
             <h2>Customer Login</h2>
           </div>
-          <p className="error">
-            {error && error}</p>
+          {/* <p className="error">
+            {error && error}</p> */}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-12">
@@ -70,14 +75,16 @@ function SignIn(props) {
                   <label className="form-label">User Id</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_name,
+                    })}
                     name="p_name"
                     ref={register}
                     placeholder="Enter Email"
                   />
-                  <p className="error">
-                    {errors.p_name && errors.p_name.message}
-                  </p>
+                 {errors.p_name && (
+                <div className="invalid-feedback">{errors.p_name.message}</div>
+              )}
                 </div>
               </div>
               <div className="col-md-12">
@@ -85,14 +92,16 @@ function SignIn(props) {
                   <label className="form-label">Password</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_password,
+                    })}
                     name="p_password"
                     placeholder="Enter Password"
                     ref={register}
                   />
-                  <p className="error">
-                    {errors.p_password && errors.p_password.message}
-                  </p>
+                  {errors.p_password && (
+                <div className="invalid-feedback">{errors.p_password.message}</div>
+              )}
                 </div>
               </div>
             </div>

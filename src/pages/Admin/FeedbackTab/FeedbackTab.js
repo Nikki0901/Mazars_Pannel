@@ -11,24 +11,58 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import BootstrapTable from "react-bootstrap-table-next";
+import { Link } from "react-router-dom";
 
 function FeedbackTab() {
-    const userid = window.localStorage.getItem("adminkey");
+  const userid = window.localStorage.getItem("adminkey");
 
+  const [feedbackData, setFeedBackData] = useState([]);
 
-    const [feedbackData, setFeedBackData] = useState([]);
+  useEffect(() => {
+    const getFeedback = () => {
+      axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setFeedBackData(res.data.result);
+        }
+      });
+    };
+    getFeedback();
+  }, []);
 
-    useEffect(() => {
-      const getFeedback = () => {
-        axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setFeedBackData(res.data.result);
-          }
-        });
-      };
-      getFeedback();
-    }, []);
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return <>{row.assign_no}</>;
+      },
+    },
+    {
+      text: "Details of feedback",
+      dataField: "feedback",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+  ];
 
   return (
     <>
@@ -43,7 +77,15 @@ function FeedbackTab() {
             </Row>
           </CardHeader>
           <CardBody>
-            <table class="table table-bordered">
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={feedbackData}
+              columns={columns}
+              rowIndex
+            />
+
+            {/* <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Sr. No.</th>
@@ -67,7 +109,7 @@ function FeedbackTab() {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </table> */}
           </CardBody>
         </Card>
       </Layout>

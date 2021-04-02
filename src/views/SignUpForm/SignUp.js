@@ -9,34 +9,37 @@ import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
+import classNames from "classnames";
+import Swal from 'sweetalert2';
 
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required name"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_profession: yup.string().required("required proffesion"),
-//   p_state: yup.string().required("required state"),
-//   p_city: yup.string().required("required city"),
-//   p_phone: yup
-//     .string()
-//     .required("required phone no")
-//     .matches(/^[0-9]+$/, "Must be only digits")
-//     .min(10, "Must be exactly 10 digits")
-//     .max(20, "max 20 digits"),
-//   p_password: yup
-//     .string()
-//     .required("required password")
-//     .min(5, "at least 5 digits")
-//     .max(20, "max 20 digits"),
-// });
+const Schema = yup.object().shape({
+  p_name: yup.string().required("required name"),
+  p_email: yup.string().email("invalid email").required("required email"),
+  p_profession: yup.string().required("required proffesion"),
+  p_state: yup.string().required("required state"),
+  p_city: yup.string().required("required city"),
+  p_phone: yup
+    .string()
+    .required("required phone no")
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(10, "Must be exactly 10 digits")
+    .max(20, "max 20 digits"),
+  p_password: yup
+    .string()
+    .required("required password")
+    .min(5, "at least 5 digits")
+    .max(20, "max 20 digits"),
+});
 
 function SignUp(props) {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, reset, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
-  const [error, setError] = useState("");
   const [states, setStates] = useState([]);
   const [city, setCity] = useState([]);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   const [store, setStore] = useState(0);
 
@@ -44,7 +47,6 @@ function SignUp(props) {
     const getStates = () => {
       // console.log(`${baseUrl}/customers/getState`)
       axios.get(`${baseUrl}/customers/getState`).then((res) => {
-        
         console.log(res);
         if (res.data.code === 1) {
           setStates(res.data.result);
@@ -54,20 +56,20 @@ function SignUp(props) {
     getStates();
   }, []);
 
-  
   useEffect(() => {
     const getCity = () => {
-      axios.get(`${baseUrl}/customers/getCity?state_id=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setCity(res.data.result);
-        }
-      });
+      axios
+        .get(`${baseUrl}/customers/getCity?state_id=${store}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setCity(res.data.result);
+          }
+        });
     };
 
     getCity();
   }, [store]);
-
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -93,13 +95,16 @@ function SignUp(props) {
         if (response.data.code === 1) {
           alert.success("signup successfully !");
           localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem("userNameId", JSON.stringify(response.data.user_id));
+          localStorage.setItem(
+            "userNameId",
+            JSON.stringify(response.data.user_id)
+          );
           localStorage.setItem("name", JSON.stringify(response.data.name));
           props.history.push("/customer/questionnaire-page");
           reset();
         } else if (response.data.code === 0) {
-          console.log("res -",response.data.result);
-          setError(response.data.result);
+          console.log("res -", response.data.result);
+          Swal.fire('Oops...',"Errorr : "+response.data.result,'error')
           reset();
         }
       })
@@ -108,20 +113,17 @@ function SignUp(props) {
       });
   };
 
+  const getID = (key) => {
+    setStore(key);
 
-const getID = (key) =>{
-  setStore(key)
-
-  states.filter((data)=>{
-    if(data.Id == key){
-      console.log('Name', data.name);
-      setName(data.name)
-      // document.getElementById('state').value=data.Name;
-    }
-  })
-}
-
-console.log("error",error)
+    states.filter((data) => {
+      if (data.Id == key) {
+        console.log("Name", data.name);
+        setName(data.name);
+        // document.getElementById('state').value=data.Name;
+      }
+    });
+  };
 
   return (
     <>
@@ -131,10 +133,6 @@ console.log("error",error)
           <div className="heading">
             <h2>Customer Register</h2>
           </div>
-          
-            {error && <p style={{color:"red"}}>{error}</p>}
-            
-
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-6">
@@ -142,11 +140,18 @@ console.log("error",error)
                   <label className="form-label">Name</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_name,
+                    })}
                     name="p_name"
                     ref={register}
                     placeholder="Enter Name"
                   />
+                  {errors.p_name && (
+                    <div className="invalid-feedback">
+                      {errors.p_name.message}{" "}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
@@ -154,11 +159,18 @@ console.log("error",error)
                   <label className="form-label">Email</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_email,
+                    })}
                     name="p_email"
                     ref={register}
                     placeholder="Enter Email"
                   />
+                  {errors.p_email && (
+                    <div className="invalid-feedback">
+                      {errors.p_email.message}{" "}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
@@ -166,11 +178,18 @@ console.log("error",error)
                   <label className="form-label">Phone number</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_phone,
+                    })}
                     name="p_phone"
                     ref={register}
                     placeholder="Phone number"
                   />
+                  {errors.p_phone && (
+                    <div className="invalid-feedback">
+                      {errors.p_phone.message}{" "}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -179,7 +198,9 @@ console.log("error",error)
                   <label className="form-label">Occupation/ Profession</label>
                   <br />
                   <select
-                    className="form-select form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_profession,
+                    })}
                     name="p_profession"
                     aria-label="Default select example"
                     ref={register}
@@ -191,6 +212,11 @@ console.log("error",error)
                       </option>
                     ))}
                   </select>
+                  {errors.p_profession && (
+                    <div className="invalid-feedback">
+                      {errors.p_profession.message}{" "}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -200,10 +226,11 @@ console.log("error",error)
                   <select
                     id="state"
                     name="p_state"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_state,
+                    })}
                     ref={register}
-                    // onClick={(e) => storeValue(e.target.value)}
-                    onChange={(e) =>getID(e.target.value)}                         
+                    onChange={(e) => getID(e.target.value)}
                   >
                     <option value="">--select--</option>
                     {states.map((p) => (
@@ -212,13 +239,24 @@ console.log("error",error)
                       </option>
                     ))}
                   </select>
+                  {errors.p_state && (
+                    <div className="invalid-feedback">
+                      {errors.p_state.message}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">City</label>
 
-                  <select className="form-control" name="p_city" ref={register}>
+                  <select
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_city,
+                    })}
+                    name="p_city"
+                    ref={register}
+                  >
                     <option value="">--select--</option>
                     {city.map((p, index) => (
                       <option key={index} value={p.city}>
@@ -226,6 +264,11 @@ console.log("error",error)
                       </option>
                     ))}
                   </select>
+                  {errors.p_city && (
+                    <div className="invalid-feedback">
+                      {errors.p_city.message}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -234,11 +277,18 @@ console.log("error",error)
                   <label className="form-label">Password</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_password,
+                    })}
                     name="p_password"
                     ref={register}
                     placeholder="Enter Password"
                   />
+                  {errors.p_password && (
+                    <div className="invalid-feedback">
+                      {errors.p_password.message}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -39,6 +40,199 @@ function AssignmentTab() {
       }
     });
   };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date of Query",
+      dataField: "date_of_query",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.date_of_query);
+        var oldDate = row.date_of_query;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Assignment No",
+      dataField: "assignment_label_number",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Assignment Date",
+      dataField: "assignment_date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+
+    {
+      text: "Proposed date of Completion",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px", width: "160px" };
+      },
+      formatter: function AssignmentStage(cell, row) {
+        console.log("status - ", row);
+        return (
+          <>
+            <div style={{ fontSize: "9px" ,fontWeight:"bold" }}>
+              <tr>
+                <td>Client Discussion</td>
+                <td>{row.client_discussion}</td>
+              </tr>
+              <tr>
+                <td>Draft report</td>
+                <td>{row.draft_report}</td>
+              </tr>
+              <tr>
+                <td>Final Discussion</td>
+                <td>{row.final_discussion}</td>
+              </tr>
+              <tr>
+                <td> Delivery of report</td>
+                <td>{row.delivery_report}</td>
+              </tr>
+              <tr>
+                <td>Complete</td>
+                <td>{row.other_stage}</td>
+              </tr>
+            </div>
+
+            {/* <div style={{ display: "flex", fontSize: "10px" }}>
+              <p style={{ fontWeight: "bold" }}>Client Discussion</p>
+              <p>{row.client_discussion} </p>
+            </div>
+            <div style={{ display: "flex", fontSize: "10px" }}>
+              <p style={{ fontWeight: "bold" }}>Draft report</p>
+              <p>{row.draft_report} </p>
+            </div>
+            <div style={{ display: "flex", fontSize: "10px" }}>
+              <p style={{ fontWeight: "bold" }}>Final Discussion</p>
+              <p>{row.final_discussion} </p>
+            </div>
+            <div style={{ display: "flex", fontSize: "10px" }}>
+              <p style={{ fontWeight: "bold" }}>Delivery of report</p>
+              <p>{row.delivery_report} </p>
+            </div>
+            <div style={{ display: "flex", fontSize: "10px" }}>
+              <p style={{ fontWeight: "bold" }}>Complete</p>
+              <p>{row.other_stage} </p>
+            </div> */}
+          </>
+        );
+      },
+    },
+
+    {
+      text: "Time taken for Completion",
+      dataField: "days_taken",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Report",
+      dataField: "",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            {!row.final_report == "" ? (
+              <div>
+                <a
+                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.final_report}`}
+                >
+                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                  final
+                </a>
+              </div>
+            ) : row.assignement_draft_report ? (
+              <div>
+                <a
+                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                >
+                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                  draft
+                </a>
+              </div>
+            ) : null}
+          </>
+        );
+      },
+    },
+    {
+      text: "TL name",
+      dataField: "tl_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+  ];
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -229,7 +423,15 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardBody>
-          <table class="table table-bordered">
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={assignmentDisplay}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <table class="table table-bordered">
             <thead class="table_head">
               <tr>
                 <th>S.No</th>
@@ -374,7 +576,7 @@ function AssignmentTab() {
                 </tr>
               </tbody>
             ))}
-          </table>
+          </table> */}
         </CardBody>
       </Card>
     </Layout>
@@ -383,6 +585,13 @@ function AssignmentTab() {
 
 export default AssignmentTab;
 
+{
+  /*            
+            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
+            <p style={{ fontSize: "10px" }}>{row.final_discussion}</p>
+            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
+            <p style={{ fontSize: "10px" }}>{row.other_stage}</p> */
+}
 {
   /* <div>
                       <p>

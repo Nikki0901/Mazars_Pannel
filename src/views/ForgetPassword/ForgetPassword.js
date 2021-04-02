@@ -10,6 +10,8 @@ import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 // import NewPassword from "../NewPassword/NewPassword";
+import classNames from "classnames";
+import Swal from "sweetalert2";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required user id"),
@@ -43,7 +45,8 @@ function ForgetPassword(props) {
           props.history.push("/customer/new-password");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          setError(response.data.result);
+          // setError(response.data.result);
+          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
         }
       })
       .catch((error) => {
@@ -62,25 +65,31 @@ function ForgetPassword(props) {
               <label className="form-label">User Id</label>
               <input
                 type="text"
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_name,
+                })}
                 name="p_name"
                 ref={register}
                 placeholder="Enter user id"
               />
-              <p className="error">{errors.p_name && errors.p_name.message}</p>
+              {errors.p_name && (
+                <div className="invalid-feedback">{errors.p_name.message}</div>
+              )}
             </div>
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
                 type="text"
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_email,
+                })}
                 name="p_email"
                 ref={register}
                 placeholder="Enter Email"
               />
-              <p className="error">
-                {errors.p_email && errors.p_email.message}
-              </p>
+              {errors.p_email && (
+                <div className="invalid-feedback">{errors.p_email.message}</div>
+              )}
             </div>
 
             <button type="submit" className="btn btn-primary">

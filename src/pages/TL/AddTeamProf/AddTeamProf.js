@@ -14,7 +14,7 @@ import {
   Table,
 } from "reactstrap";
 import { useAlert } from "react-alert";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AddTeamProf() {
   const alert = useAlert();
@@ -38,23 +38,42 @@ function AddTeamProf() {
       });
   };
 
-  var hashValueGetter = function (params) {
-    return params.node.rowIndex + 1;
-  };
-
-  const column = [
+  const columns = [
     {
-      headerName: "S.No",
-      field: "",
-      valueGetter: hashValueGetter,
-      sortable: true,
-      width: 130,
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
     },
-    { headerName: "Name", field: "name", sortable: true, width: 250 },
-    { headerName: "Email", field: "email", sortable: true, width: 250 },
-    { headerName: "Phone", field: "phone", sortable: true, width: 250 },
+    {
+      text: "Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Email",
+      dataField: "email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Phone",
+      dataField: "phone",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
   ];
-
   // delete data
   const del = (id) => {
     console.log("del", id);
@@ -83,9 +102,14 @@ function AddTeamProf() {
           </Row>
         </CardHeader>
         <CardBody>
-        <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
-            <AgGridReact rowData={data} columnDefs={column} />
-          </div>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={data}
+            columns={columns}
+            rowIndex
+          />
+
           {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
