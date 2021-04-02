@@ -320,7 +320,9 @@ function PaymentStatus() {
                   payment.map((p, i) => (
                     <tr key={i}>
                       <td>{i + 1}</td>
-                      <td>{p.assign_no}</td>
+                      <th>
+                    <Link to={`/teamleader/queries/${p.id}`}>{p.assign_no}</Link>
+                  </th>
                       <td>{p.proposal_number}</td>
                       <td>{p.name}</td>
                       <td>{p.amount}</td>
@@ -356,7 +358,7 @@ function PaymentStatus() {
                           style={{ cursor: "pointer", textAlign: "center" }}
                         >
                           {p.sid > 8 && (
-                            <Link to={`/teamleader/addassingment/${p.id}`}>
+                            <Link to={`/teamleader/addassingment/${p.assign_id}`}>
                               <i class="fa fa-tasks"></i>
                             </Link>
                           )}

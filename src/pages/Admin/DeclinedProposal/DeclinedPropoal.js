@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function DeclinedProposal({ declinedProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -33,6 +34,116 @@ function DeclinedProposal({ declinedProposal }) {
       }
     });
   };
+
+  const columns = [
+    {
+      dataField: "",
+      text: "S.No",
+      // sort: true,
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: ChangeFormateDate("created"),
+      text: "Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "assign_no",
+      text: "Query No",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "proposal_number",
+      text: "Proposal number",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "DateofProposal",
+      text: "Proposal Sent date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "proposal_number",
+      text: "Proposed Amount",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "status",
+      text: "Proposal Status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "accepted_amount",
+      text: "Amount Accepted",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "DateofProposal",
+      text: "Assignment Number",
+      sort: true,
+      style: {
+        fontSize: '13px'
+      },
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "tl_name",                                        
+      text: "TL name",
+      sort: true,
+    },
+  ];
 
   //search filter
   const handleChange = (value) => {
@@ -193,8 +304,15 @@ function DeclinedProposal({ declinedProposal }) {
           </div>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
-            <thead>
+        <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={proposalDisplay}
+            columns={columns}
+            rowIndex
+          />
+          {/* <Table responsive="sm" bordered>
+          <thead class="table_head">
               <tr>
                 <th>S.No</th>
                 <th>Date</th>
@@ -211,7 +329,7 @@ function DeclinedProposal({ declinedProposal }) {
                 <th>TL name</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="table_bdy">
               {proposalDisplay.length > 0 ? (
                 proposalDisplay.map((p, i) => (
                   <tr key={i}>
@@ -238,7 +356,7 @@ function DeclinedProposal({ declinedProposal }) {
                 </tr>
               )}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </>

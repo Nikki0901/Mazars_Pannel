@@ -17,6 +17,7 @@ import AcceptModal from "./AcceptModal";
 import PaymentModal from "./PaymentModal";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function ProposalTab() {
   const alert = useAlert();
@@ -56,6 +57,274 @@ function ProposalTab() {
         }
       });
   };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      style: {
+        fontSize: "11px",
+      },
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "11px", width: "50px" };
+      },
+    },
+    {
+      text: "Date of Query",
+      dataField: "created",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Proposal No",
+      dataField: "proposal_number",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Date of Proposal",
+      dataField: "DateofProposal",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.DateofProposal);
+        var oldDate = row.DateofProposal;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Date of acceptance of Proposal",
+      dataField: "cust_accept_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Proposed Amout",
+      dataField: "ProposedAmount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Amount Accepted",
+      dataField: "accepted_amount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Amount Paid",
+      dataField: "paid_amount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Date of Payment",
+      dataField: "cust_paid_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Amount Outstanding",
+      dataField: "",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function amountOutstading(cell, row) {
+        console.log("dt", row.paid_amount);
+        console.log("dt", row.accepted_amount);
+        var p = row.paid_amount;
+        var a = row.accepted_amount;
+        if (p == 0) {
+          return "0";
+        } else return a - p;
+      },
+    },
+    {
+      text: "Date of Completion",
+      dataField: "",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Action",
+      dataField: "",
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function (cell, row) {
+        // console.log(row.final_report);
+        return (
+          <>
+            {row.statuscode === "6" ? null : (
+              <div>
+                {row.negotiated_amount === "0" &&
+                row.accepted_amount === "0" ? (
+                  <div>
+                    <div style={{ cursor: "pointer" }}>
+                      <i
+                        class="fa fa-check"
+                        style={{
+                          color: "green",
+                          fontSize: "16px",
+                        }}
+                        onClick={() => accepted(row.q_id)}
+                      ></i>
+                    </div>
+
+                    <div style={{ cursor: "pointer" }}>
+                      <i
+                        class="fa fa-times"
+                        style={{ color: "red", fontSize: "16px" }}
+                        onClick={() => rejected(row.q_id)}
+                      ></i>
+                    </div>
+                  </div>
+                ) : (
+                  (row.negotiated_amount === "0" || row.accepted_amount) && ""
+                )}
+
+                {row.statuscode == 5 ||
+                row.statuscode == 7 ||
+                row.statuscode == 8 ? (
+                  <div>
+                    <div style={{ cursor: "pointer" }}>
+                      <i
+                        class="fa fa-credit-card"
+                        style={{ color: "green", fontSize: "16px" }}
+                        onClick={() => paymentHandler(row)}
+                      ></i>
+                    </div>
+                    <div style={{ cursor: "pointer" }}>
+                      <i
+                        class="fa fa-file-text"
+                        style={{
+                          color: "orange",
+                          fontSize: "16px",
+                        }}
+                        onClick={() => acceptedHandler(row.up_id)}
+                      ></i>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            )}
+          </>
+        );
+      },
+    },
+  ];
 
   const paymentHandler = (key) => {
     console.log(key);
@@ -153,14 +422,21 @@ function ProposalTab() {
           />
         </CardHeader>
         <CardBody>
-          <div>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={proposalDisplay}
+            columns={columns}
+            rowIndex
+          />
+          {/* <div>
             <table class="table table-bordered ">
               <thead class="table_head_Proposal">
                 <tr>
                   <th>S.No</th>
                   <th>Date of Query</th>
                   <th>Query No</th>
-                  <th>Assignment No</th>
+                  <th>Proposal No</th>
                   <th>Category</th>
                   <th>Sub Category</th>
                   <th>Date of Proposal</th>
@@ -186,7 +462,7 @@ function ProposalTab() {
                           {p.assign_no}
                         </Link>
                       </th>
-                      <td>{p.assignment_number}</td>
+                      <td>{p.proposal_number}</td>
                       <td>{p.parent_id}</td>
                       <td>{p.cat_name}</td>
                       <td>{ChangeFormateDate(p.DateofProposal)}</td>
@@ -269,21 +545,24 @@ function ProposalTab() {
                 </tr>
               )}
 
-              <AcceptModal
-                acceptedModal={acceptedModal}
-                acceptedHandler={acceptedHandler}
-                id={id}
-                getProposalData={getProposalData}
-              />
-
-              <PaymentModal
-                paymentHandler={paymentHandler}
-                addPaymentModal={addPaymentModal}
-                pay={pay}
-                getProposalData={getProposalData}
-              />
+              
             </table>
-          </div>
+
+          </div> */}
+
+          <AcceptModal
+            acceptedModal={acceptedModal}
+            acceptedHandler={acceptedHandler}
+            id={id}
+            getProposalData={getProposalData}
+          />
+
+          <PaymentModal
+            paymentHandler={paymentHandler}
+            addPaymentModal={addPaymentModal}
+            pay={pay}
+            getProposalData={getProposalData}
+          />
         </CardBody>
       </Card>
     </Layout>

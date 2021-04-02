@@ -293,7 +293,7 @@ function CompleteData({ CountComplete }) {
                   <td></td>
 
                   <td>
-                    <span style={{ fontWeight: "bold" }}>Others</span>{" "}
+                    <span style={{ fontWeight: "bold" }}>Complete</span>{" "}
                   </td>
                   <td>{p.other_stage}</td>
                 </tr>

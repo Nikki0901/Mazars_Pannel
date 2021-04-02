@@ -35,6 +35,7 @@ function MyAssingment() {
     {
       tlname: "",
       date_of_allocation: "",
+      date_of_delivery: "",
     },
   ]);
 
@@ -53,7 +54,11 @@ function MyAssingment() {
     proposal_date,
   } = diaplayProposal;
 
-  const { assignment_number, assignment_date } = diaplayAssignment;
+  const {
+    assignment_number,
+    assignment_date,
+    date_of_delivery,
+  } = diaplayAssignment;
   const { tlname, date_of_allocation } = diaplayHistory;
 
   useEffect(() => {
@@ -79,6 +84,7 @@ function MyAssingment() {
             setDisplayAssignment({
               assignment_number: res.data.assignment[0].assignment_number,
               assignment_date: res.data.assignment[0].created,
+              date_of_delivery: res.data.assignment[0].date_of_delivery,
             });
           }
           if (res.data.history_queries.length > 0) {
@@ -152,6 +158,15 @@ function MyAssingment() {
     );
   };
 
+  function proposalStatus(accepted) {
+    console.log("accepted", accepted);
+    if (accepted == 1) {
+      return "accepted";
+    } else {
+      return "Pending";
+    }
+  }
+
   // console.log("diaplayProposal -", amount);
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -203,277 +218,89 @@ function MyAssingment() {
               </div>
 
               <div class="card-body">
-                <table class="table table-bordered">
-                  <thead>
-                    {/* <tr>
-                     
-                     <p style={{ fontSize: "20px", textAlign: "center" }}>
-                        BASIC INFORMATION
-                      </p>                                      
-                    </tr> */}
-                    <tr>
-                      <th scope="col">Titles</th>
-                      <th scope="col">Data</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Query No</th>
-                      <td>{p.assign_no}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Query Date</th>
-                      <td>{p.created}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Customer ID</th>
-                      <td>{p.user_id}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Category</th>
-                      <td>{p.cat_name}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Sub- Category</th>
-                      <td>{p.sub_cat_name}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Name of the Case</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Assessment Year</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Fact of the Case</th>
-                      <td>{p.fact_case}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Uploaded Documents</th>
-                      <td>
-                        {p.upload_doc_1 == null ? (
-                          ""
-                        ) : (
-                          <p>
-                            <a
-                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
-                            >
-                              <i class="fa fa-photo"></i>
-                            </a>
-                          </p>
-                        )}
-
-                        {p.upload_doc_2 == null ? (
-                          ""
-                        ) : (
-                          <p>
-                            <a
-                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
-                            >
-                              <i class="fa fa-photo"></i>
-                            </a>
-                          </p>
-                        )}
-
-                        {p.upload_doc_3 == null ? (
-                          ""
-                        ) : (
-                          <p>
-                            <a
-                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
-                            >
-                              <i class="fa fa-photo"></i>
-                            </a>
-                          </p>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">specific questions</th>
-                      <td colspan="1">
-                        {diaplaySpecific.map((p, i) => (
-                          <p>{p.text}</p>
-                        ))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Purpose for which Opinion is sought</th>
-                      <td colspan="1">{p.purpose_opinion}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Format in which Opinion is required</th>
-                      <td colspan="1">
-                        <p>
-                          {p.softcopy_word === "1" && "Softcopy - Word/ Pdf"}
-                        </p>
-                        <p>
-                          {p.softcopy_digitally_assigned === "1" &&
-                            "SoftCopy- Digitally Signed"}
-                        </p>
-
-                        <p>
-                          {p.printout_physically_assigned === "1" &&
-                            "Printout- Physically Signed"}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">
-                        Timelines within which Opinion is Required
-                      </th>
-                      <td colspan="1">{p.Timelines}</td>
-                    </tr>
-                    {/* <tr>
-                      <th scope="row">Query Status</th>
-                      <td>{p.status}</td>
-                    </tr> */}
-                  </tbody>
-                </table>
-
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col">Titles</th>
-                      <th scope="col">Data</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Date of Allocation</th>
-                      <td>{date_of_allocation}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Name of Team Leader</th>
-                      <td>{tlname}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Name of Tax Professional(s)</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Date of Proposal</th>
-                      <td>{proposal_date}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Proposal Description</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Proposed Amount</th>
-                      <td>{amount}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Proposal Status</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Amount Accepted</th>
-                      <td>{accepted_amount}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Date of Acceptance</th>
-                      <td>{cust_accept_date}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Payment Terms</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Payment Received</th>
-                      <td>{payment_received}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Payment Due</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Payment Outstanding</th>
-                      <td>{accepted_amount - payment_received}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col">Titles</th>
-                      <th scope="col">Data</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Assignment Number</th>
-                      <td>{assignment_number}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Assignment Date</th>
-                      <td>{assignment_date}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Proposed Date of Completion</th>
-                      <td></td>
-                    </tr>
-                    {p.query_status >= "9" ? (
+                <div>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "black",
+                      fontSize: "18px",
+                    }}
+                  >
+                    BASIC INFORMATION{" "}
+                  </p>
+                  <table class="table table-bordered">
+                    <thead>
                       <tr>
-                        <th scope="row">Assignment Status</th>
-                        <td>
-                          <tr>
-                            <th>Assignment Stage</th>
-                            <th>Status</th>
-                          </tr>
-                          <tr>
-                            <td>Client Discussion</td>
-                            <td>{p.client_discussion}</td>
-                          </tr>
-                          <tr>
-                            <td>Draft report</td>
-                            <td>{p.draft_report}</td>
-                          </tr>
-                          <tr>
-                            <td>Final Discussion</td>
-                            <td>{p.final_discussion}</td>
-                          </tr>
-                          <tr>
-                            <td> Delivery of report</td>
-                            <td>{p.draft_report}</td>
-                          </tr>
-                          <tr>
-                            <td>Others</td>
-                            <td>{p.other_stage}</td>
-                          </tr>
-                        </td>
+                        <th scope="col">Titles</th>
+                        <th scope="col">Data</th>
                       </tr>
-                    ) : null}
-                    <tr>
-                      <th scope="row">Time taken to complete the assignment</th>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col" style={{ width: "33.3%" }}>
-                        Additional Queries
-                      </th>
-                      <th scope="col">Date Submission</th>
-                      <th scope="col">Documents</th>
-                    </tr>
-                  </thead>
-                  {displayQuery.map((p, i) => (
+                    </thead>
                     <tbody>
-                      <tr key={i}>
-                        <td>{p.additional_queries}</td>
+                      <tr>
+                        <th scope="row">Query No</th>
+                        <td>{p.assign_no}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Query Date</th>
                         <td>{p.created}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Customer ID</th>
+                        <td>{p.user_id}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Category</th>
+                        <td>{p.cat_name}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Sub- Category</th>
+                        <td>{p.sub_cat_name}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Name of the Case</th>
+                        <td>{p.case_name}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Assessment Year</th>
+                        <td>{p.assessment_year}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Fact of the Case</th>
+                        <td>{p.fact_case}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Uploaded Documents</th>
                         <td>
-                          {p.upload_doc == "" ? (
+                          {p.upload_doc_1 == null ? (
                             ""
                           ) : (
                             <p>
                               <a
-                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                              >
+                                <i class="fa fa-photo"></i>
+                              </a>
+                            </p>
+                          )}
+
+                          {p.upload_doc_2 == null ? (
+                            ""
+                          ) : (
+                            <p>
+                              <a
+                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                              >
+                                <i class="fa fa-photo"></i>
+                              </a>
+                            </p>
+                          )}
+
+                          {p.upload_doc_3 == null ? (
+                            ""
+                          ) : (
+                            <p>
+                              <a
+                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
                               >
                                 <i class="fa fa-photo"></i>
                               </a>
@@ -481,9 +308,232 @@ function MyAssingment() {
                           )}
                         </td>
                       </tr>
+                      <tr>
+                        <th scope="row">specific questions</th>
+                        <td colspan="1">
+                          {diaplaySpecific.map((p, i) => (
+                            <p>{p.text}</p>
+                          ))}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Purpose for which Opinion is sought</th>
+                        <td colspan="1">{p.purpose_opinion}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Format in which Opinion is required</th>
+                        <td colspan="1">
+                          <p>
+                            {p.softcopy_word === "1" && "Softcopy - Word/ Pdf"}
+                          </p>
+                          <p>
+                            {p.softcopy_digitally_assigned === "1" &&
+                              "SoftCopy- Digitally Signed"}
+                          </p>
+
+                          <p>
+                            {p.printout_physically_assigned === "1" &&
+                              "Printout- Physically Signed"}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          Timelines within which Opinion is Required
+                        </th>
+                        <td colspan="1">{p.Timelines}</td>
+                      </tr>
                     </tbody>
-                  ))}
-                </table>
+                  </table>
+                </div>
+
+                <div>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "black",
+                      fontSize: "18px",
+                    }}
+                  >
+                    PROCESSING OF QUERY
+                  </p>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">Titles</th>
+                        <th scope="col">Data</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Date of Allocation</th>
+                        <td>{date_of_allocation}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Name of Team Leader</th>
+                        <td>{tlname}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Name of Tax Professional(s)</th>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Date of Proposal</th>
+                        <td>{proposal_date}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Proposal Description</th>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Proposed Amount</th>
+                        <td>{amount}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Proposal Status</th>
+                        <td>{proposalStatus(p.accept)}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Amount Accepted</th>
+                        <td>{accepted_amount}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Date of Acceptance</th>
+                        <td>{cust_accept_date}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Payment Terms</th>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Payment Received</th>
+                        <td>{payment_received}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Payment Due</th>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Payment Outstanding</th>
+                        <td>{accepted_amount - payment_received}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "black",
+                      fontSize: "18px",
+                    }}
+                  >
+                    PROCESSING OF ASSIGNMENT
+                  </p>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">Titles</th>
+                        <th scope="col">Data</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Assignment Number</th>
+                        <td>{assignment_number}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Assignment Date</th>
+                        <td>{assignment_date}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Proposed Date of Completion</th>
+                        <td>{date_of_delivery}</td>
+                      </tr>
+                      {p.query_status >= 9 ? (
+                        <tr>
+                          <th scope="row">Assignment Status</th>
+                          <td>
+                            <tr>
+                              <th>Assignment Stage</th>
+                              <th>Status</th>
+                            </tr>
+                            <tr>
+                              <td>Client Discussion</td>
+                              <td>{p.client_discussion}</td>
+                            </tr>
+                            <tr>
+                              <td>Draft report</td>
+                              <td>{p.draft_report}</td>
+                            </tr>
+                            <tr>
+                              <td>Final Discussion</td>
+                              <td>{p.final_discussion}</td>
+                            </tr>
+                            <tr>
+                              <td> Delivery of report</td>
+                              <td>{p.draft_report}</td>
+                            </tr>
+                            <tr>
+                              <td>Complete</td>
+                              <td>{p.other_stage}</td>
+                            </tr>
+                          </td>
+                        </tr>
+                      ) : null}
+                      <tr>
+                        <th scope="row">
+                          Time taken to complete the assignment
+                        </th>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "black",
+                      fontSize: "18px",
+                    }}
+                  >
+                    ADDITIONAL QUERIES
+                  </p>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col" style={{ width: "33.3%" }}>
+                          Additional Queries
+                        </th>
+                        <th scope="col">Date Submission</th>
+                        <th scope="col">Documents</th>
+                      </tr>
+                    </thead>
+                    {displayQuery.map((p, i) => (
+                      <tbody>
+                        <tr key={i}>
+                          <td>{p.additional_queries}</td>
+                          <td>{p.created}</td>
+                          <td>
+                            {p.upload_doc == "" ? (
+                              ""
+                            ) : (
+                              <p>
+                                <a
+                                  href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                                >
+                                  <i class="fa fa-photo"></i>
+                                </a>
+                              </p>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                  </table>
+                </div>
               </div>
             </div>
           ))}

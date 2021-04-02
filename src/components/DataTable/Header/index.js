@@ -25,6 +25,7 @@ const Header = ({ headers, onSorting }) => {
                     >
                         {name}
 
+
                         {sortingField && sortingField === field && (
                             <FontAwesomeIcon
                                 icon={

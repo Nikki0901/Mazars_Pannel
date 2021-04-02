@@ -243,7 +243,7 @@ function AssignmentTab() {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Incomplete</option>
+                      <option value="1">Inprogress</option>
                       <option value="2">Complete</option>
                     </select>
                   </div>
@@ -292,13 +292,15 @@ function AssignmentTab() {
                   <td>{i + 1}</td>
                   <td>{ChangeFormateDate(p.date_of_query)}</td>
                   <th>
-                    <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
+                    <Link to={`/teamleader/queries/${p.q_id}`}>
+                      {p.assign_no}
+                    </Link>
                   </th>
                   <td>{p.assignment_number}</td>
                   <td>{p.assignment_date}</td>
                   <td>{p.parent_id}</td>
                   <td>{p.cat_name}</td>
-                  <td></td>
+                  <td>{p.days_taken}</td>
                   {/* <td>
                     <span style={{ fontWeight: "bold" }}>
                       Client Discussion
@@ -342,18 +344,7 @@ function AssignmentTab() {
                         justifyContent: "space-between",
                       }}
                     >
-                      <div title="upload Pdf">
-                        <p
-                          style={{ cursor: "pointer", color: "green" }}
-                          onClick={() => uploadDraftReport(p.id)}
-                        >
-                          <i
-                            class="fa fa-upload"
-                            style={{ fontSize: "16px" }}
-                          ></i>
-                          draft
-                        </p>
-                      </div>
+                      {/* <div title="upload Pdf"></div> */}
 
                       <div title="upload Pdf">
                         <p
@@ -373,7 +364,18 @@ function AssignmentTab() {
                               final
                             </div>
                           ) : (
-                            ""
+                            <div title="upload Pdf">
+                              <p
+                                style={{ cursor: "pointer", color: "green" }}
+                                onClick={() => uploadDraftReport(p.id)}
+                              >
+                                <i
+                                  class="fa fa-upload"
+                                  style={{ fontSize: "16px" }}
+                                ></i>
+                                draft
+                              </p>
+                            </div>
                           )}
                         </p>
                       </div>

@@ -128,8 +128,15 @@ border-radius: 15px;
   padding: 0 !important;
 }
 
-
-
+/* 
+.ag-theme-alpine .ag-cell, .ag-theme-alpine .ag-full-width-row .ag-cell-wrapper.ag-row-group{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.ag-theme-alpine .ag-header-cell, .ag-theme-alpine .ag-header-group-cell{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+} */
 
 
 

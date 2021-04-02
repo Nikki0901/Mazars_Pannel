@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import { Link } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AssignmentTab() {
   const userId = window.localStorage.getItem("userid");
@@ -37,6 +38,176 @@ function AssignmentTab() {
       });
   };
 
+  const columns = [
+    {
+      dataField: "",
+      text: "S.No",
+      // sort: true,
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      dataField: "created",
+      text: "Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      dataField: "assign_no",
+      text: "Query No",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/customer/my-assingment/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      dataField: "assignment_number",
+      text: "Assignment No",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "Exp_Delivery_Date",
+      text: "Expected date of delivery",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      dataField: "date_of_delivery",
+      text: "Actual date of delivery",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      dataField: "",
+      text: "Deliverable",
+      // sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        // console.log(row.final_report);
+        return (
+          <>
+            {!row.final_report == "" ? (
+              <div>
+                <a
+                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.final_report}`}
+                >
+                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                  final
+                </a>
+              </div>
+            ) : row.assignment_draft_report ? (
+              <div>
+                <a
+                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.assignment_draft_report}`}
+                >
+                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                  draft
+                </a>
+              </div>
+            ) : null}
+          </>
+        );
+      },
+    },
+    {
+      dataField: "",
+      text: "Team Leader name and contact number, email",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: priceFormatter,
+    },
+  ];
+
+  //tl,phone,email
+  function priceFormatter(cell, row) {
+    console.log("row", row);
+    if (row) {
+      return (
+        <>
+          <p style={{ fontSize: "10px" }}>{row.tname} </p>
+          <p style={{ fontSize: "10px" }}>{row.phone}</p>
+          <p style={{ fontSize: "10px" }}>{row.email}</p>
+        </>
+      );
+    }
+
+    return null;
+  }
+
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);
@@ -46,6 +217,7 @@ function AssignmentTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
+  
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -68,7 +240,14 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardBody>
-          <Table responsive="sm" bordered>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={assignmentDisplay}
+            columns={columns}
+            rowIndex
+          />
+          {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th>S.No</th>
@@ -95,11 +274,11 @@ function AssignmentTab() {
                         {p.assign_no}
                       </Link>
                     </th>
-                    <td>{p.assign_no}</td>
+                    <td>{p.assignment_number}</td>
                     <td>{p.parent_id}</td>
                     <td>{p.cat_name}</td>
                     <td>{p.status}</td>
-                    {/* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */}
+                    
                     <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
                     <td>{ChangeFormateDate(p.date_of_delivery)}</td>
 
@@ -144,7 +323,7 @@ function AssignmentTab() {
                 <td colSpan="11">No Records</td>
               </tr>
             )}
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </Layout>
@@ -152,3 +331,24 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+{
+  /* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */
+}
+
+// classes: 'hidden-xs',
+// headerClasses: 'hidden-xs',
+
+// function priceFormatter(cell, row) {
+//   console.log("row", row);
+//   if (row) {
+//     return (
+//       <>
+//         <p style={{ fontSize: "10px" }}>{row.tname} </p>
+//         <p style={{ fontSize: "10px" }}>{row.phone}</p>
+//         <p style={{ fontSize: "10px" }}>{row.email}</p>
+//       </>
+//     );
+//   }
+
+//   return null;
+// }

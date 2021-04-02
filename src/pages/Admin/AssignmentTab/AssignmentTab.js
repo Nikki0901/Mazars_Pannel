@@ -266,7 +266,7 @@ function AssignmentTab() {
                     </span>
                   </td>
                   <td> {p.client_discussion}</td>
-                  <td>{p.time_taken_for_delivery}</td>
+                  <td>{p.days_taken}</td>
                   <td style={{ textAlign: "center" }}>
                     {!p.final_report == "" ? (
                       <div>

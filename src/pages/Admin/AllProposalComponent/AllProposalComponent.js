@@ -13,13 +13,16 @@ import {
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+
 
   useEffect(() => {
     getProposalData();
@@ -34,6 +37,121 @@ function AllProposalComponent({ allProposal }) {
       }
     });
   };
+
+
+  const columns = [
+    {
+      dataField: "",
+      text: "S.No",
+      // sort: true,
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "created",
+      text: "Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+      
+    },
+    {
+      dataField: "assign_no",
+      text: "Query No",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+          </>
+        );
+      },
+    },
+    {
+      dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "proposal_number",
+      text: "Proposal number",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "DateofProposal",
+      text: "Proposal Sent date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "proposal_number",
+      text: "Proposed Amount",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "status",
+      text: "Proposal Status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "accepted_amount",
+      text: "Amount Accepted",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "DateofProposal",
+      text: "Assignment Number",
+      sort: true,
+      style: {
+        fontSize: '13px'
+      },
+      headerStyle: () => {
+        return { fontSize: '12px' };
+      },
+    },
+    {
+      dataField: "tl_name",                                        
+      text: "TL name",
+      sort: true,
+    },
+  ];
+
+  
+
   //search filter
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -81,6 +199,8 @@ function AllProposalComponent({ allProposal }) {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
+  // Label columns
+  const headerHeight = 50;
   return (
     <>
       <Card>
@@ -198,8 +318,17 @@ function AllProposalComponent({ allProposal }) {
           </div>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
-            <thead>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={proposalDisplay}
+            columns={columns}
+            // defaultSorted={defaultSorted}
+            // rowEvents={ rowEvents }
+            rowIndex
+          />
+          {/* <Table responsive="sm" bordered>
+            <thead class="table_head">
               <tr>
                 <th>S.No</th>
                 <th>Date</th>
@@ -215,7 +344,7 @@ function AllProposalComponent({ allProposal }) {
                 <th>TL name</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="table_bdy">
               {proposalDisplay.length > 0 ? (
                 proposalDisplay.map((p, i) => (
                   <tr key={i}>
@@ -242,7 +371,7 @@ function AllProposalComponent({ allProposal }) {
                 </tr>
               )}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </>
@@ -250,3 +379,35 @@ function AllProposalComponent({ allProposal }) {
 }
 
 export default AllProposalComponent;
+
+// headerStyle: () => {
+//   return { width: "100px", textAlign: "center" };
+// },
+
+// events: {
+//   onClick: (e, column, columnIndex, row, rowIndex) => {
+//     console.log("cellContent", row);
+//     console.log("cellContent", row.q_id);
+//     return (
+//       <div>
+//         <Link to={`/admin/queries/${row.q_id}`}>{row.q_id}</Link>
+//       </div>
+//     );
+//   },
+// },
+
+
+// const defaultSorted = [
+  //   {
+  //     dataField: "assign_no",
+  //     order: "desc",
+  //   },
+  // ];
+
+  // const rowEvents = {
+  //   onClick: (e, row, rowIndex) => {
+  //     console.log(`clicked on row with index: ${rowIndex}`);
+  //     console.log(`clicked on row with index: ${e}`);
+  //     console.log(`clicked on row with index: ${row}`);
+  //   },
+  // };

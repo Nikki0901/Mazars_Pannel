@@ -14,12 +14,81 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+
 
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tlCount, setTlCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
+
+  // const actionButton = () =>{}
+
+
+  var hashValueGetter = function (params) {
+    return params.node.rowIndex + 1;
+  };
+
+  const column = [
+    {
+      headerName: "S.No",
+      field: "",
+      valueGetter: hashValueGetter,
+      sortable: true,
+      width: 70,
+    },
+    { headerName: "Name", field: "name", sortable: true, width: 140 },
+    { headerName: "Category", field: "parent_id", sortable: true, width: 140 },
+    {
+      headerName: "Sub Category",
+      field: "cat_name",
+      sortable: true,
+      width: 160,
+    },
+    { headerName: "Email", field: "email", sortable: true, width: 160 },
+    { headerName: "Phone", field: "phone", sortable: true, width: 130 },
+    {
+      headerName: "Edit",
+      field: "id",
+      width: 70,
+      cellRendererFramework: (params) => {
+        return (
+          <div>
+            <Link to={`/admin/edittl/${params.data.id}`}>
+              <i
+                className="fa fa-edit"
+                style={{
+                  fontSize: 18,
+                  cursor: "pointer",
+                  marginLeft: "8px",
+                }}
+              ></i>
+            </Link>
+          </div>
+        );
+      },
+    },
+    {
+      headerName: "Edit",
+      field: "id",
+      width: 70,
+      cellRendererFramework: (params) => (
+        <div>
+          <i
+            className="fa fa-trash"
+            style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
+            onClick={() => del(params.data.id)}
+          ></i>
+        </div>
+      ),
+    },
+  ];
+
+  // const onGridReady = (params) => {
+  //   setGridApi(params.api);
+  //   setGridColumnApi(params.columnApi);
+  // };
 
   useEffect(() => {
     getTeamLeader();
@@ -34,6 +103,7 @@ function TeamLeaderTab() {
       }
     });
   };
+
 
   // delete data
   const del = (id) => {
@@ -51,6 +121,7 @@ function TeamLeaderTab() {
       });
   };
 
+  
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -67,10 +138,22 @@ function TeamLeaderTab() {
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+          <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
+            <AgGridReact rowData={data} columnDefs={column} />
+          </div>
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
+
+export default TeamLeaderTab;
+
+{
+  /* <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th scope="col">No.</th>
+                <th scope="col">S.No.</th>
                 <th scope="col">Name</th>
                 <th>Category</th>
                 <th>Sub Category</th>
@@ -114,14 +197,8 @@ function TeamLeaderTab() {
                 </tr>
               ))}
             </tbody>
-          </Table>
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </Table> */
 }
-
-export default TeamLeaderTab;
 
 // <div class="row mt-3">
 //         <div class="col-md-12">
@@ -164,11 +241,17 @@ export default TeamLeaderTab;
 //     </td>
 //     <td
 //     onClick={() => del(p.id)}>
-//       <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
-//       </i>
+// <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
+// </i>
 //     </td>
 //   </tr>
 // ))}
 //           </table>
 //         </div>
 //       </div>
+
+// cellRenderer:  (params)=> {
+//   return <Link to={`/?info=${params.data.Id}`}>"+{params.value}+"</Link>,
+
+// const [gridApi, setGridApi] = useState(null);
+// const [gridColumnApi, setGridColumnApi] = useState(null);

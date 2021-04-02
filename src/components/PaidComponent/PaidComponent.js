@@ -16,6 +16,8 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+
 
 function PaidComponent() {
   const [payment, setPayment] = useState([]);
@@ -38,6 +40,7 @@ function PaidComponent() {
     });
   };
 
+  
   //search filter
   const handleChange = (value) => {
     console.log(`selected ${value}`);

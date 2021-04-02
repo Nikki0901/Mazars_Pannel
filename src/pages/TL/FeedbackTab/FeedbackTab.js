@@ -11,6 +11,7 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
 function FeedbackTab() {
   const userid = window.localStorage.getItem("tlkey");
@@ -31,6 +32,27 @@ function FeedbackTab() {
     getFeedback();
   }, []);
 
+  var hashValueGetter = function (params) {
+    return params.node.rowIndex + 1;
+  };
+
+  const column = [
+    {
+      headerName: "S.No",
+      field: "",
+      valueGetter: hashValueGetter,
+      sortable: true,
+      width: 120,
+    },
+    { headerName: "Query No", field: "assign_no", sortable: true, width: 230 },
+    { headerName: "Customer Name", field: "name", sortable: true, width: 230 },
+    {
+      headerName: "Details of feedback",
+      field: "feedback",
+      sortable: true,
+      width: 360,
+    },
+  ];
   return (
     <>
       <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -44,7 +66,14 @@ function FeedbackTab() {
             </Row>
           </CardHeader>
           <CardBody>
-            <table class="table table-bordered">
+            <div
+              className="ag-theme-alpine"
+              style={{ height: 400, width: 950 }}
+            >
+              <AgGridReact rowData={feedbackData} columnDefs={column} />
+            </div>
+
+            {/* <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Sr. No.</th>
@@ -69,7 +98,7 @@ function FeedbackTab() {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </table> */}
           </CardBody>
         </Card>
       </Layout>

@@ -13,6 +13,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { AgGridReact } from "ag-grid-react";
+
 
 function TaxProfessionalsTab() {
   const alert = useAlert();
@@ -24,7 +26,6 @@ function TaxProfessionalsTab() {
     getTaxProf();
   }, []);
 
-
   const getTaxProf = () => {
     axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
       console.log(res);
@@ -35,6 +36,57 @@ function TaxProfessionalsTab() {
     });
   };
 
+  var hashValueGetter = function (params) {
+    return params.node.rowIndex + 1;
+  };
+
+  const column = [
+    {
+      headerName: "S.No",
+      field: "",
+      valueGetter: hashValueGetter,
+      sortable: true,
+      width: 90,
+    },
+    { headerName: "Name", field: "name", sortable: true, width: 170 },
+    { headerName: "Email", field: "email", sortable: true, width: 190 },
+    { headerName: "Phone", field: "phone", sortable: true, width: 190 },
+    {
+      headerName: "Edit",
+      field: "id",
+      width: 150,
+      cellRendererFramework: (params) => {
+        return (
+          <div>
+            <Link to={`/admin/edittp/${params.data.id}`}>
+              <i
+                className="fa fa-edit"
+                style={{
+                  fontSize: 18,
+                  cursor: "pointer",
+                  marginLeft: "8px",
+                }}
+              ></i>
+            </Link>
+          </div>
+        );
+      },
+    },
+    {
+      headerName: "Edit",
+      field: "id",
+      width: 150,
+      cellRendererFramework: (params) => (
+        <div>
+          <i
+            className="fa fa-trash"
+            style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
+            onClick={() => del(params.data.id)}
+          ></i>
+        </div>
+      ),
+    },
+  ];
 
   // delete data
   const del = (id) => {
@@ -61,13 +113,25 @@ function TaxProfessionalsTab() {
             </Col>
             <Col md="2">
               <Link to={"/admin/addnewtp"} class="btn btn-primary">
-              Add New
-            </Link>
-              </Col>
+                Add New
+              </Link>
+            </Col>
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+          <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
+            <AgGridReact rowData={data} columnDefs={column} />
+          </div>
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
+
+export default TaxProfessionalsTab;
+
+{
+  /* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th scope="col">No.</th>
@@ -112,11 +176,5 @@ function TaxProfessionalsTab() {
                 </tr>
               ))}
             </tbody>
-          </Table>
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </Table> */
 }
-
-export default TaxProfessionalsTab;

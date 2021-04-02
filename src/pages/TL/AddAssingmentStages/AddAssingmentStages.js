@@ -33,14 +33,18 @@ function AddAssingmentStages() {
       .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}`)
       .then((res) => {
         console.log(res);
+        console.log(res.data.result);
+        // if (res.data.code === 1) {
+        //   if (res.data.result) {
+        //     setAssignmentstages(res.data.result);
+        //   }
+        // }
         if (res.data.code === 1) {
-        reset(res.data.result[0]);
-       
+          setAssignmentstages(res.data.result);
+          reset(res.data.result[0]);
         }
       });
-};
-
-
+  };
 
   const onSubmit = (value) => {
     console.log(value);
@@ -65,7 +69,7 @@ function AddAssingmentStages() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success(<Msg />);
-          getAssignmentList()
+          getAssignmentList();
         }
       })
       .catch((error) => {
@@ -81,6 +85,8 @@ function AddAssingmentStages() {
       </>
     );
   };
+
+  console.log("assignmentStages", assignmentStages);
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
@@ -102,172 +108,334 @@ function AddAssingmentStages() {
         </CardHeader>
         <CardHeader>
           <div class="row mt-3">
-            <div class="col-md-12">
-              <div class="col-md-8">
-                <br />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "500",
-                            paddingTop: "30px",
-                          }}
-                        >
-                          Client Discussion
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="client_discussion"
-                          // onChange={(e) => setAssing(e.target.value)}
-                        >                      
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                          <option value="notApplicable">Not Applicable</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+            {assignmentStages.map((p, i) => (
+              <>
+                {p.client_discussion == "completed" &&
+                p.delivery_report == "completed" &&
+                p.draft_report == "completed" &&
+                p.final_discussion == "completed" &&
+                p.other_stage == "completed" ? (
+                  <div class="col-md-12">
+                    <div class="col-md-8">
+                      <br />
+                      <form onSubmit={handleSubmit(onSubmit)}>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Client Discussion
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}                             
+                                disabled
+                              >
+                                <option>{p.client_discussion}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "500",
-                            paddingTop: "30px",
-                          }}
-                        >
-                          Draft Report
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="draft_report"
-                          // onChange={(e) => setAssing(e.target.value)}
-                        >
-                        
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                          <option value="notApplicable">Not Applicable</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Draft Report
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                               
+                                disabled
+                              >
+                                <option>{p.draft_report}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "500",
-                            paddingTop: "30px",
-                          }}
-                        >
-                          Final Discussion
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="final_discussion"
-                          // onChange={(e) => setAssing(e.target.value)}
-                        >
-                        
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                          <option value="notApplicable">Not Applicable</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Final Discussion
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                               
+                                disabled
+                              >
+                               <option>{p.final_discussion}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "500",
-                            paddingTop: "30px",
-                          }}
-                        >
-                          Delivery of report
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="delivery_report"
-                          // onChange={(e) => setAssing(e.target.value)}
-                        >
-                        
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                          <option value="notApplicable">Not Applicable</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Delivery of report
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                               
+                                disabled
+                              >
+                                <option>{p.delivery_report}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          style={{
-                            fontSize: "20px",
-                            fontWeight: "500",
-                            paddingTop: "30px",
-                          }}
-                        >
-                          Complete
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="other_stage"
-                          // onChange={(e) => setAssing(e.target.value)}
-                        >
-                        
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Complete
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                              
+                                disabled
+                              >
+                                <option>{p.other_stage}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
-                  <br />
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
-                      Submit
-                    </button>
+                        <br />
+                        <div class="form-group">
+                          <button type="submit" class="btn btn-primary" disabled>
+                            Submit
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                </form>
-              </div>
-            </div>
+                ) : (
+                  <div class="col-md-12">
+                    <div class="col-md-8">
+                      <br />
+                      <form onSubmit={handleSubmit(onSubmit)}>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Client Discussion
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="client_discussion"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="notApplicable">
+                                  Not Applicable
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Draft Report
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="draft_report"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="notApplicable">
+                                  Not Applicable
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Final Discussion
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="final_discussion"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="notApplicable">
+                                  Not Applicable
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Delivery of report
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="delivery_report"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="notApplicable">
+                                  Not Applicable
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Complete
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="other_stage"
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <br />
+                        <div class="form-group">
+                          <button type="submit" class="btn btn-primary">
+                            Submit
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+              </>
+            ))}
           </div>
         </CardHeader>
       </Card>
@@ -277,6 +445,20 @@ function AddAssingmentStages() {
 
 export default AddAssingmentStages;
 
+{
+  /* {assignmentStages.map((p, i) => {
+            <div>
+              {p.client_discussion == "completed" &&
+              p.delivery_report == "completed" &&
+              p.draft_report == "completed" &&
+              p.final_discussion == "completed" &&
+              p.other_stage == "completed"
+                ? " kjghldf"
+                : "B"}
+             
+            </div>;
+          })} */
+}
 // {
 //   Object.keys(obj).map((key, i) => (
 //     console.log(key,i )

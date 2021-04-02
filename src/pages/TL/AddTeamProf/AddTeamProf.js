@@ -14,6 +14,7 @@ import {
   Table,
 } from "reactstrap";
 import { useAlert } from "react-alert";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
 function AddTeamProf() {
   const alert = useAlert();
@@ -36,6 +37,23 @@ function AddTeamProf() {
         }
       });
   };
+
+  var hashValueGetter = function (params) {
+    return params.node.rowIndex + 1;
+  };
+
+  const column = [
+    {
+      headerName: "S.No",
+      field: "",
+      valueGetter: hashValueGetter,
+      sortable: true,
+      width: 130,
+    },
+    { headerName: "Name", field: "name", sortable: true, width: 250 },
+    { headerName: "Email", field: "email", sortable: true, width: 250 },
+    { headerName: "Phone", field: "phone", sortable: true, width: 250 },
+  ];
 
   // delete data
   const del = (id) => {
@@ -65,7 +83,10 @@ function AddTeamProf() {
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+        <div className="ag-theme-alpine" style={{ height: 400, width: 950 }}>
+            <AgGridReact rowData={data} columnDefs={column} />
+          </div>
+          {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th scope="col">S.No</th>
@@ -84,7 +105,7 @@ function AddTeamProf() {
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </Layout>
