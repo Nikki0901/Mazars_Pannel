@@ -140,15 +140,6 @@ function MyAssingment() {
       });
   };
 
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
   //alert msg
   const Msg = () => {
     return (
@@ -165,6 +156,27 @@ function MyAssingment() {
     } else {
       return "Pending";
     }
+  }
+
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
+
+  //remove time with date
+  function RemoveTime(oldDate) {
+    console.log("RemoveTime - ", oldDate);
+
+    var updatedate = oldDate.split(" ")[0];
+    console.log(updatedate);
+    if (updatedate == null) {
+      return null;
+    }
+    return updatedate.toString().split("-").reverse().join("-");
   }
 
   // console.log("diaplayProposal -", amount);
@@ -242,7 +254,7 @@ function MyAssingment() {
                       </tr>
                       <tr>
                         <th scope="row">Query Date</th>
-                        <td>{p.created}</td>
+                        <td>{ChangeFormateDate(p.created)}</td>
                       </tr>
                       <tr>
                         <th scope="row">Customer ID</th>
@@ -367,7 +379,7 @@ function MyAssingment() {
                     <tbody>
                       <tr>
                         <th scope="row">Date of Allocation</th>
-                        <td>{date_of_allocation}</td>
+                        <td>{ChangeFormateDate(date_of_allocation)}</td>
                       </tr>
                       <tr>
                         <th scope="row">Name of Team Leader</th>
@@ -515,7 +527,7 @@ function MyAssingment() {
                       <tbody>
                         <tr key={i}>
                           <td>{p.additional_queries}</td>
-                          <td>{p.created}</td>
+                          <td>{ChangeFormateDate(p.created)}</td>
                           <td>
                             {p.upload_doc == "" ? (
                               ""

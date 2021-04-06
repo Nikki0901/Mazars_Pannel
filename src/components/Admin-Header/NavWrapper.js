@@ -1,8 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
+import { Link, useHistory } from "react-router-dom";
+// import CustomerNotification from "./CustomerNotification";
 
 function NavWrapper(props) {
   const { color, logout, name, cust } = props;
+  const history = useHistory();
+  const userId = window.localStorage.getItem("userid");
+  const [notification, setNotification] = useState([]);
+  const [countNotification, setCountNotification] = useState("");
+
+  useEffect(() => {
+    getNotification();
+  }, []);
+
+  const getNotification = () => {
+    axios
+      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setNotification(res.data.result);
+          setCountNotification(res.data.result.length);
+        }
+      });
+  };
+
+  // readnotification
+  const readNotification = (id) => {
+    axios
+      .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
+      .then(function (response) {
+        console.log("delete-", response);
+        if (response.data.code === 1) {
+          console.log(response.data.result);
+          history.push("/customer/proposal");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   return (
     <>
@@ -43,6 +82,42 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
+              {cust && (
+                <li class="dropdown dropdown-notification nav-item">
+                  {countNotification ? (
+                    <div>
+                      <a
+                        class="nav-link nav-link-label"
+                        href="#"
+                        data-toggle="dropdown"
+                      >
+                        <span class="badge badge-light">
+                          <i class="fa fa-bell" style={{ fontSize: "16px" }}>
+                            {countNotification}
+                          </i>
+                        </span>
+                      </a>
+
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <div class="arrow_box_right">
+                          {notification.map((p, i) => (
+                            <div class="dropdown-item">
+                              <p
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => readNotification(p.id)}
+                              >
+                                {p.message}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </li>
+              )}
+
               <li class="dropdown dropdown-user nav-item">
                 <a
                   class="dropdown-toggle nav-link dropdown-user-link"

@@ -398,7 +398,14 @@ function ProposalTab() {
       });
   };
 
-  
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

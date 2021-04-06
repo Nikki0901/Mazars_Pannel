@@ -110,7 +110,14 @@ function PendingRecevied() {
 
  
 
-  
+     //change date format
+     function ChangeFormateDate(oldDate) {
+      console.log("date", oldDate);
+      if (oldDate == null) {
+        return null;
+      }
+      return oldDate.toString().split("-").reverse().join("-");
+    }
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
@@ -126,7 +133,7 @@ function PendingRecevied() {
               <p style={{ fontSize: "20px" }}>Query Details</p>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "flex-end" }}>
-              <p>{assingNo}</p>
+              {/* <p>{assingNo}</p> */}
             </Col>
           </Row>
         </CardHeader>
@@ -141,6 +148,10 @@ function PendingRecevied() {
                   </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <th scope="row">Query No</th>
+                    <td>{p.assign_no}</td>
+                  </tr>
                 <tr>
                     <th scope="row">Query Status</th>
                     <td>{p.status}</td>
@@ -274,7 +285,7 @@ function PendingRecevied() {
                   <tbody>
                     <tr key={i}>
                       <td>{p.additional_queries}</td>
-                      <td>{p.created}</td>
+                      <td>{ChangeFormateDate(p.created)}</td>
                       <td>
                         {p.upload_doc == "" ? (
                           ""

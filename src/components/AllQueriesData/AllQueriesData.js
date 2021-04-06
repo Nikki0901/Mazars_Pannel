@@ -42,11 +42,16 @@ function AllQueriesData({ CountAllQuery }) {
     {
       text: "S.No",
       dataField: "",
-      formatter: (cellContent, row, rowIndex) => {
-        return rowIndex + 1;
-      },
+      sort: true,
       headerStyle: () => {
         return { fontSize: "12px", width: "50px" };
+      },
+      // dataFormat: function (cell, row, enumObject, index) {
+      //   return <div>{index + 1}</div>;
+      // },
+      formatter: (cellContent, row, rowIndex, index) => {
+        console.log("rowIndex : ", index);
+        return <div>{rowIndex + 1}</div>;
       },
     },
     {
@@ -57,7 +62,6 @@ function AllQueriesData({ CountAllQuery }) {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
         var oldDate = row.created;
         if (oldDate == null) {
           return null;
@@ -73,12 +77,9 @@ function AllQueriesData({ CountAllQuery }) {
         return { fontSize: "12px" };
       },
       formatter: function nameFormatter(cell, row) {
-        console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.id}`}>
-              {row.assign_no}
-            </Link>
+            <Link to={`/admin/queries/${row.id}`}>{row.assign_no}</Link>
           </>
         );
       },
@@ -284,13 +285,15 @@ function AllQueriesData({ CountAllQuery }) {
           </div>
         </CardHeader>
         <CardBody>
-
-        <BootstrapTable
+          <BootstrapTable
             bootstrap4
             keyField="id"
             data={allQueriesData}
             columns={columns}
             rowIndex
+            wrapperClasses="table-responsive"
+            classes="table-hover table-responsive"
+            // headerClasses="header-class"
           />
 
           {/* <Table responsive="sm" bordered>

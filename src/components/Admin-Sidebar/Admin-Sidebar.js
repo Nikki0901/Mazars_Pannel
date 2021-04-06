@@ -244,6 +244,16 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
+
+              <li class="nav-item">
+                <NavLink to={"/teamleader/queriestab2"}>
+                  <i class="fa fa-clone"></i>
+                  <span class="menu-title" data-i18n="">
+                    Queries test
+                  </span>
+                </NavLink>
+              </li>
+
             </ul>
           )}
 

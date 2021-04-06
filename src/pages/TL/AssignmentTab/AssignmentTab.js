@@ -104,6 +104,15 @@ function AssignmentTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.assignment_date);
+        var updatedate = row.assignment_date.split(" ")[0];
+        console.log(updatedate);
+        if (updatedate == null) {
+          return null;
+        }
+        return updatedate.toString().split("-").reverse().join("-");
+      },
     },
     {
       text: "Category",
@@ -135,7 +144,7 @@ function AssignmentTab() {
       dataField: "status",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", };
+        return { fontSize: "12px" };
       },
     },
 
@@ -196,6 +205,16 @@ function AssignmentTab() {
             >
               <div title="upload Pdf">
                 <p
+                  style={{ cursor: "pointer", color: "green" }}
+                  onClick={() => uploadDraftReport(row.id)}
+                >
+                  <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                  draft
+                </p>
+              </div>
+
+              <div title="upload Pdf">
+                <p
                   style={{ cursor: "pointer", color: "red" }}
                   onClick={() => uploadFinalReport(row)}
                 >
@@ -208,20 +227,7 @@ function AssignmentTab() {
                       <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
                       final
                     </div>
-                  ) : (
-                    <div title="upload Pdf">
-                      <p
-                        style={{ cursor: "pointer", color: "green" }}
-                        onClick={() => uploadDraftReport(row.id)}
-                      >
-                        <i
-                          class="fa fa-upload"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                        draft
-                      </p>
-                    </div>
-                  )}
+                  ) : null}
                 </p>
               </div>
             </div>

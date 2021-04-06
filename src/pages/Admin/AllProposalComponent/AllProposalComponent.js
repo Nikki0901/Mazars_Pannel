@@ -58,6 +58,14 @@ function AllProposalComponent({ allProposal }) {
       headerStyle: () => {
         return { fontSize: '12px' };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
       
     },
     {
@@ -107,9 +115,18 @@ function AllProposalComponent({ allProposal }) {
       headerStyle: () => {
         return { fontSize: '12px' };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.DateofProposal);
+        var oldDate = row.DateofProposal;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+      
     },
     {
-      dataField: "proposal_number",
+      dataField: "ProposedAmount",
       text: "Proposed Amount",
       sort: true,
       headerStyle: () => {
@@ -133,7 +150,7 @@ function AllProposalComponent({ allProposal }) {
       },
     },
     {
-      dataField: "DateofProposal",
+      dataField: "",
       text: "Assignment Number",
       sort: true,
       style: {

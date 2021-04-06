@@ -19,7 +19,6 @@ import { Link } from "react-router-dom";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import BootstrapTable from "react-bootstrap-table-next";
 
-
 function PaidComponent() {
   const [payment, setPayment] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
@@ -60,11 +59,12 @@ function PaidComponent() {
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.created);
-        var oldDate = row.created;
-        if (oldDate == null) {
+        var updatedate = row.created.split(" ")[0];
+        console.log(updatedate);
+        if (updatedate == null) {
           return null;
         }
-        return oldDate.toString().split("-").reverse().join("-");
+        return updatedate.toString().split("-").reverse().join("-");
       },
     },
     {
@@ -78,9 +78,7 @@ function PaidComponent() {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.id}`}>
-              {row.assign_no}
-            </Link>
+            <Link to={`/admin/queries/${row.id}`}>{row.assign_no}</Link>
           </>
         );
       },
@@ -122,17 +120,18 @@ function PaidComponent() {
       dataField: "accepted_amount",
       sort: true,
       style: {
-        color: "#21a3ce" 
+        color: "#21a3ce",
       },
       headerStyle: () => {
-        return { fontSize: "12px",color: "#21a3ce" };
+        return { fontSize: "12px", color: "#21a3ce" };
       },
-    },{
+    },
+    {
       text: "Paid Amount",
       dataField: "paid_amount",
       sort: true,
       style: {
-        color: "#064606" 
+        color: "#064606",
       },
       headerStyle: () => {
         return { fontSize: "12px", color: "#064606" };
@@ -143,10 +142,10 @@ function PaidComponent() {
       dataField: "",
       sort: true,
       style: {
-        color: "darkred" 
+        color: "darkred",
       },
       headerStyle: () => {
-        return { fontSize: "12px" , color: "darkred"};
+        return { fontSize: "12px", color: "darkred" };
       },
       formatter: function amountOutstading(cell, row) {
         console.log("dt", row.paid_amount);
@@ -175,7 +174,7 @@ function PaidComponent() {
       },
     },
   ];
-  
+
   //search filter
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -214,7 +213,6 @@ function PaidComponent() {
       });
   };
 
-  
   function checkOutstading(p, a) {
     console.log("paid -", p);
     console.log("acc -", a);
@@ -374,8 +372,7 @@ function PaidComponent() {
         </CardHeader>
 
         <CardBody>
-
-        <BootstrapTable
+          <BootstrapTable
             bootstrap4
             keyField="id"
             data={payment}
@@ -441,18 +438,20 @@ function PaidComponent() {
 
 export default PaidComponent;
 // function checkStatus(p, a) {
-  //   console.log("paid -", p);
-  //   console.log("acc -", a);
+//   console.log("paid -", p);
+//   console.log("acc -", a);
 
-  //   if (p > 0 && p < a) {
-  //     return "Partial Received ";
-  //   } else if (p === a && p > 0) {
-  //     return "Paid";
-  //   } else {
-  //     return "pending";
-  //   }
-  // }
- {/* {checkStatus(
+//   if (p > 0 && p < a) {
+//     return "Partial Received ";
+//   } else if (p === a && p > 0) {
+//     return "Paid";
+//   } else {
+//     return "pending";
+//   }
+// }
+{
+  /* {checkStatus(
                         Number(p.paid_amount),
                         Number(p.accepted_amount)
-                      )} */}
+                      )} */
+}

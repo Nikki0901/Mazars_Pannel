@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from "reactstrap";
 
+
 function AddAssingmentStages() {
   const alert = useAlert();
   const { register, handleSubmit, errors, reset } = useForm();
@@ -34,11 +35,7 @@ function AddAssingmentStages() {
       .then((res) => {
         console.log(res);
         console.log(res.data.result);
-        // if (res.data.code === 1) {
-        //   if (res.data.result) {
-        //     setAssignmentstages(res.data.result);
-        //   }
-        // }
+       
         if (res.data.code === 1) {
           setAssignmentstages(res.data.result);
           reset(res.data.result[0]);
@@ -445,6 +442,11 @@ function AddAssingmentStages() {
 
 export default AddAssingmentStages;
 
+ // if (res.data.code === 1) {
+        //   if (res.data.result) {
+        //     setAssignmentstages(res.data.result);
+        //   }
+        // }
 {
   /* {assignmentStages.map((p, i) => {
             <div>

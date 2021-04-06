@@ -77,6 +77,7 @@ import TlSendProposal from './pages/TL/SendProposal/SendProposal'
 import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
 import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
+import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
 
 
 
@@ -180,7 +181,7 @@ function App() {
         <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
         <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
         <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
-
+        <Route exact path="/teamleader/queriestab2" component={TlQueryTab2} />
 
 
         <Route exact path="/taxprofessional/start" component={TpStart} />

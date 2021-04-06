@@ -48,11 +48,19 @@ function AcceptedProposal({ acceptedProposal }) {
       },
     },
     {
-      dataField: ChangeFormateDate("created"),
+      dataField: "created",
       text: "Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: '12px' };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.DateofProposal);
+        var oldDate = row.DateofProposal;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
       },
     },
     {
@@ -102,9 +110,17 @@ function AcceptedProposal({ acceptedProposal }) {
       headerStyle: () => {
         return { fontSize: '12px' };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.DateofProposal);
+        var oldDate = row.DateofProposal;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
     },
     {
-      dataField: "proposal_number",
+      dataField: "ProposedAmount",
       text: "Proposed Amount",
       sort: true,
       headerStyle: () => {
@@ -128,7 +144,7 @@ function AcceptedProposal({ acceptedProposal }) {
       },
     },
     {
-      dataField: "DateofProposal",
+      dataField: "",
       text: "Assignment Number",
       sort: true,
       style: {

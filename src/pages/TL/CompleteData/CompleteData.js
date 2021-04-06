@@ -60,11 +60,12 @@ function CompleteData({ CountComplete }) {
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.query_date);
-        var oldDate = row.query_date;
-        if (oldDate == null) {
+        var updatedate = row.query_date.split(" ")[0];
+        console.log(updatedate);
+        if (updatedate == null) {
           return null;
         }
-        return oldDate.toString().split("-").reverse().join("-");
+        return updatedate.toString().split("-").reverse().join("-");
       },
     },
     {

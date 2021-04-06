@@ -99,6 +99,15 @@ function AssignmentTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter: function (cell, row) {
+        console.log("dt", row.assignment_date);
+        var updatedate = row.assignment_date.split(" ")[0];
+        console.log(updatedate);
+        if (updatedate == null) {
+          return null;
+        }
+        return updatedate.toString().split("-").reverse().join("-");
+      },
     },
     {
       text: "Category",

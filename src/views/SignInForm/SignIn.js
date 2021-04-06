@@ -25,7 +25,7 @@ function SignIn(props) {
     resolver: yupResolver(Schema),
   });
 
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const onSubmit = (value) => {
     console.log("value :", value);
