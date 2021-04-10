@@ -30,7 +30,7 @@ import ProposalReceived from './views/ProposalReceived/ProposalReceived'
 import ForgetPassword from './views/ForgetPassword/ForgetPassword'
 import NewPassword from './views/NewPassword/NewPassword'
 import ChangePassword from './views/ChangePassword/ChangePassword'
-
+import EditQuery from './views/EditQuery/EditQuery'
 
 
 
@@ -138,9 +138,7 @@ function App() {
         <Route exact path="/customer/forget-password" component={ForgetPassword} />
         <Route exact path="/customer/new-password" component={NewPassword} />
         <Route exact path="/customer/change-password" component={ChangePassword} />
-
-
-
+        <Route exact path="/customer/edit-query/:id" component={EditQuery} />
 
 
 

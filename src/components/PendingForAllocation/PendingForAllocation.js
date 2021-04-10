@@ -159,7 +159,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
       },
     },
     {
-      text: "View",
+      text: "History",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -172,7 +172,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
               class="btn btn-info btn-sm"
               onClick={() => toggle(row.id)}
             >
-              View
+              History
             </button>
           </>
         );

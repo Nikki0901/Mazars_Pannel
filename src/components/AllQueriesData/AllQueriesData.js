@@ -23,6 +23,11 @@ function AllQueriesData({ CountAllQuery }) {
   const [selectedData, setSelectedData] = useState([]);
 
   const [allQueriesData, setAllQueriesData] = useState([]);
+  const [tax, setTax] = useState([]);
+  const [tax2, setTax2] = useState([]);
+
+  const [store, setStore] = useState("");
+  const [store2, setStore2] = useState(null);
 
   useEffect(() => {
     getAllQueriesData();
@@ -38,11 +43,37 @@ function AllQueriesData({ CountAllQuery }) {
     });
   };
 
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+
+  const getCategory = () => {
+    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setTax(res.data.result);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
+
+
   const columns = [
     {
       text: "S.No",
       dataField: "",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px", width: "50px" };
       },
@@ -118,12 +149,6 @@ function AllQueriesData({ CountAllQuery }) {
     },
   ];
 
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getAllQueriesData();
-  };
 
   //reset date
   const resetData = () => {
@@ -132,19 +157,14 @@ function AllQueriesData({ CountAllQuery }) {
     getAllQueriesData();
   };
 
-  // //reset category
-  // const resetCategory = () => {
-  //   console.log("resetData ..");
-  //   setSelectedData([]);
-  //   getAllQueriesData();
-  // };
 
   const onSubmit = (data) => {
     console.log("data :", data);
-    console.log("selectedData :", selectedData);
+    console.log("store2 :", store2);
+
     axios
       .get(
-        `${baseUrl}/admin/getAllQueries?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
@@ -165,122 +185,81 @@ function AllQueriesData({ CountAllQuery }) {
     <>
       <Card>
         <CardHeader>
-          {/* <Filter
-            setData={setAllQueriesData}
-            getData={getAllQueriesData}
-            allquery="allquery"
-          /> */}
-
           <div className="row">
-            <div class="col-sm-3 d-flex">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-                value={selectedData}
-                allowClear
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
+            <div className="col-sm-12 d-flex">
+              <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
+                <div class="form-group mb-2">
+                  <select
+                    className="form-select form-control"
+                    name="p_tax"
+                    ref={register}
+                    style={{ height: "35px" }}
+                    onChange={(e) => setStore(e.target.value)}
+                  >
+                    <option value="">--Select Category--</option>
+                    {tax.map((p, index) => (
+                      <option key={index} value={p.id}>
+                        {p.details}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
+                <div class="form-group mx-sm-1  mb-2">
+                  <select
+                    className="form-select form-control"
+                    name="p_tax2"
+                    ref={register}
+                    style={{ height: "35px" }}
+                    onChange={(e) => setStore2(e.target.value)}
+                  >
+                    <option value="">--Select Sub-Category--</option>
+                    {tax2.map((p, index) => (
+                      <option key={index} value={p.id}>
+                        {p.details}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              {/* <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetCategory}
-                >
-                  X
+                <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control">From</label>
+                </div>
+
+                <div class="form-group mx-sm-1  mb-2">
+                  <input
+                    type="date"
+                    name="p_dateFrom"
+                    className="form-select form-control"
+                    ref={register}
+                  />
+                </div>
+
+                <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control">To</label>
+                </div>
+
+                <div class="form-group mx-sm-1  mb-2">
+                  <input
+                    type="date"
+                    name="p_dateTo"
+                    className="form-select form-control"
+                    ref={register}
+                  />
+                </div>
+
+                <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
+                  <i class="fa fa-search"></i>
                 </button>
-              </div> */}
-            </div>
 
-            <div className="col-sm-9 d-flex">
-              <div>
-                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">From</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateFrom"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">To</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateTo"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
-                  </button>
-                </form>
-              </div>
-
-              <div>
                 <button
                   type="submit"
-                  class="btn btn-primary mb-2 ml-3"
+                  class="btn btn-primary mx-sm-1 mb-2"
                   onClick={resetData}
                 >
-                  Reset
+                  <i class="fa fa-refresh"></i>
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </CardHeader>
@@ -292,11 +271,77 @@ function AllQueriesData({ CountAllQuery }) {
             columns={columns}
             rowIndex
             wrapperClasses="table-responsive"
-            classes="table-hover table-responsive"
+            // classes="table-responsive"
             // headerClasses="header-class"
           />
+        </CardBody>
+      </Card>
+    </>
+  );
+}
 
-          {/* <Table responsive="sm" bordered>
+export default AllQueriesData;
+
+{
+  /* <Select
+mode="multiple"
+style={{ width: "100%" }}
+placeholder="Select Category"
+defaultValue={[]}
+onChange={handleChange}
+optionLabelProp="label"
+value={selectedData}
+allowClear
+>
+<OptGroup label="Direct Tax">
+  <Option value="3" label="Compilance">
+    <div className="demo-option-label-item">Compliance</div>
+  </Option>
+  <Option value="4" label="Assessment">
+    <div className="demo-option-label-item">Assessment</div>
+  </Option>
+  <Option value="5" label="Appeals">
+    <div className="demo-option-label-item">Appeals</div>
+  </Option>
+  <Option value="6" label="Advisory/opinion">
+    <div className="demo-option-label-item">
+      Advisory/opinion
+    </div>
+  </Option>
+  <Option value="7" label="Transfer Pricing">
+    <div className="demo-option-label-item">
+      Transfer Pricing
+    </div>
+  </Option>
+  <Option value="8" label="Others">
+    <div className="demo-option-label-item">Others</div>
+  </Option>
+</OptGroup>
+
+<OptGroup label="Indirect Tax">
+  <Option value="9" label="Compilance">
+    <div className="demo-option-label-item">Compliance</div>
+  </Option>
+  <Option value="10" label="Assessment">
+    <div className="demo-option-label-item">Assessment</div>
+  </Option>
+  <Option value="11" label="Appeals">
+    <div className="demo-option-label-item">Appeals</div>
+  </Option>
+  <Option value="12" label="Advisory/opinion">
+    <div className="demo-option-label-item">
+      Advisory/opinion
+    </div>
+  </Option>
+  <Option value="13" label="Others">
+    <div className="demo-option-label-item">Others</div>
+  </Option>
+</OptGroup>
+</Select> */
+}
+
+{
+  /* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th scope="col">S.No.</th>
@@ -329,11 +374,5 @@ function AllQueriesData({ CountAllQuery }) {
                 </tr>
               )}
             </tbody>
-          </Table> */}
-        </CardBody>
-      </Card>
-    </>
-  );
+          </Table> */
 }
-
-export default AllQueriesData;

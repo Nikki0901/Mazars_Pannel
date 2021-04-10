@@ -70,14 +70,7 @@ function PaymentStatus() {
         );
       },
     },
-    {
-      text: "Proposal No",
-      dataField: "parent_id",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
+
     {
       text: "Customer Name",
       dataField: "name",

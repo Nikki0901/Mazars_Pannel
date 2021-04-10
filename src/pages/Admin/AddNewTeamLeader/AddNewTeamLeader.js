@@ -124,13 +124,14 @@ function AddNew() {
                         />
                       </div>
                     </div>
+
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Email</label>
+                        <label>Phone Number</label>
                         <input
-                          type="email"
+                          type="text"
                           class="form-control"
-                          name="p_email"
+                          name="p_phone"
                           ref={register}
                         />
                       </div>
@@ -179,11 +180,11 @@ function AddNew() {
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Phone Number</label>
+                        <label>Email</label>
                         <input
-                          type="text"
+                          type="email"
                           class="form-control"
-                          name="p_phone"
+                          name="p_email"
                           ref={register}
                         />
                       </div>

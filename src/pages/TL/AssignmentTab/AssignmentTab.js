@@ -133,7 +133,7 @@ function AssignmentTab() {
 
     {
       text: "Proposed date of Completion",
-      dataField: "name",
+      dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -196,13 +196,7 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
+            {/* {row.final_report || row.assignement_draft_report ? (
               <div title="upload Pdf">
                 <p
                   style={{ cursor: "pointer", color: "green" }}
@@ -212,24 +206,65 @@ function AssignmentTab() {
                   draft
                 </p>
               </div>
-
+            ) : row.client_discussion == "completed" &&
+              row.delivery_report == "completed" &&
+              row.draft_report == "completed" &&
+              row.final_discussion == "completed" &&
+              row.amount == row.paid_amount ? (
               <div title="upload Pdf">
                 <p
                   style={{ cursor: "pointer", color: "red" }}
                   onClick={() => uploadFinalReport(row)}
                 >
-                  {row.client_discussion == "completed" &&
-                  row.delivery_report == "completed" &&
-                  row.draft_report == "completed" &&
-                  row.final_discussion == "completed" &&
-                  row.amount == row.paid_amount ? (
-                    <div>
-                      <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                      final
-                    </div>
-                  ) : null}
+                  <div>
+                    <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                    final
+                  </div>
                 </p>
               </div>
+            ) : null} */}
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              {row.assignement_draft_report || row.final_report ? null : (
+                <div title="upload Pdf">
+                  <p
+                    style={{ cursor: "pointer", color: "green" }}
+                    onClick={() => uploadDraftReport(row.id)}
+                  >
+                    <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                    draft
+                  </p>
+                </div>
+              )}
+
+              {row.final_report ? null : (
+                <div title="upload Pdf">
+                  <p
+                    style={{ cursor: "pointer", color: "red" }}
+                    onClick={() => uploadFinalReport(row)}
+                  >
+                    {row.client_discussion == "completed" &&
+                    row.delivery_report == "completed" &&
+                    row.draft_report == "completed" &&
+                    row.final_discussion == "completed" &&
+                    row.amount == row.paid_amount ? (
+                      <div>
+                        <i
+                          class="fa fa-upload"
+                          style={{ fontSize: "16px" }}
+                        ></i>
+                        final
+                      </div>
+                    ) : null}
+                  </p>
+                </div>
+              )}
             </div>
           </>
         );
@@ -623,3 +658,39 @@ export default AssignmentTab;
                             href={`http://13.232.121.233/mazarapi/assets/upload/report/draft_210311120314_6049c472265c6_csv`}
                           > */
 }
+
+// <div
+//               style={{
+//                 display: "flex",
+//                 flexDirection: "column",
+//                 justifyContent: "space-between",
+//               }}
+//             >
+//               <div title="upload Pdf">
+//                 <p
+//                   style={{ cursor: "pointer", color: "green" }}
+//                   onClick={() => uploadDraftReport(row.id)}
+//                 >
+//                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+//                   draft
+//                 </p>
+//               </div>
+
+//               <div title="upload Pdf">
+//                 <p
+//                   style={{ cursor: "pointer", color: "red" }}
+//                   onClick={() => uploadFinalReport(row)}
+//                 >
+//                   {row.client_discussion == "completed" &&
+//                   row.delivery_report == "completed" &&
+//                   row.draft_report == "completed" &&
+//                   row.final_discussion == "completed" &&
+//                   row.amount == row.paid_amount ? (
+//                     <div>
+//                       <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+//                       final
+//                     </div>
+//                   ) : null}
+//                 </p>
+//               </div>
+//             </div>

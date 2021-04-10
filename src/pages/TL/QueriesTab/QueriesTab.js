@@ -64,7 +64,7 @@ function QueriesTab() {
                 aria-controls="pills-incomplete"
                 aria-selected="false"
               >
-                Incomplete ({incomplete})
+                Inprogress ({incomplete})
               </a>
             </li>
             <li class="nav-item" role="presentation">

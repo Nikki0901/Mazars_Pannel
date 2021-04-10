@@ -12,13 +12,6 @@ import * as yup from "yup";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required user id"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_code: yup.string().required("required otp "),
-//   // p_password: yup.string().required("required password"),
-//   // p_confirm_password: yup.string().required("required confirm password"),
-// });
 
 function NewPassword(props) {
   const alert = useAlert();
@@ -28,7 +21,7 @@ function NewPassword(props) {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("user_id", value.p_name);
+    // formData.append("user_id", value.p_name);
     formData.append("email", value.p_email);
     formData.append("code", value.p_code);
     formData.append("password", value.p_password);
@@ -67,25 +60,7 @@ function NewPassword(props) {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
-              <div className="mb-3">
-                <label className="form-label">User Id</label>
-                <input
-                  type="text"
-                  className={classNames("form-control", {
-                    "is-invalid": errors.p_name,
-                  })}
-                  name="p_name"
-                  placeholder="Enter user id"
-                  ref={register({
-                    required: "This field is required",
-                  })}
-                />
-                {errors.p_name && (
-                  <div className="invalid-feedback">
-                    {errors.p_name.message}
-                  </div>
-                )}
-              </div>
+             
               <div className="mb-3">
                 <label className="form-label">Email</label>
                 <input
@@ -110,14 +85,14 @@ function NewPassword(props) {
                 )}
               </div>
               <div className="mb-3">
-                <label className="form-label">Enter code</label>
+                <label className="form-label">OTP</label>
                 <input
                   type="text"
                   className={classNames("form-control", {
                     "is-invalid": errors.p_code,
                   })}
                   name="p_code"
-                  placeholder="Enter code"
+                  placeholder="Enter otp"
                   ref={register({
                     required: "This field is required",
                   })}
@@ -189,3 +164,12 @@ function NewPassword(props) {
 }
 
 export default NewPassword;
+
+
+// const Schema = yup.object().shape({
+//   p_name: yup.string().required("required user id"),
+//   p_email: yup.string().email("invalid email").required("required email"),
+//   p_code: yup.string().required("required otp "),
+//   // p_password: yup.string().required("required password"),
+//   // p_confirm_password: yup.string().required("required confirm password"),
+// });

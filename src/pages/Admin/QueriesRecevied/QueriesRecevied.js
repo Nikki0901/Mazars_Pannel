@@ -25,6 +25,7 @@ function QueriesRecevied() {
 
   const userid = window.localStorage.getItem("adminkey");
 
+
   useEffect(() => {
     const getSubmittedAssingment = () => {
       axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
@@ -43,6 +44,7 @@ function QueriesRecevied() {
 
   console.log(assingNo);
 
+  
   const getQuery = () => {
     axios
       .get(`${baseUrl}/tl/GetAdditionalQueries?assignno=${assingNo}`)
@@ -79,7 +81,6 @@ function QueriesRecevied() {
               <p style={{fontSize:"20px"}}>Query Details</p>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "flex-end" }}>
-              {/* <p>{assingNo}</p> */}
             </Col>
           </Row>
         </CardHeader>

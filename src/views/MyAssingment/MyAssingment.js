@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
@@ -61,6 +61,7 @@ function MyAssingment() {
   } = diaplayAssignment;
   const { tlname, date_of_allocation } = diaplayHistory;
 
+  
   useEffect(() => {
     const getSubmittedAssingment = () => {
       axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
@@ -238,7 +239,7 @@ function MyAssingment() {
                       fontSize: "18px",
                     }}
                   >
-                    BASIC INFORMATION{" "}
+                    BASIC INFORMATION
                   </p>
                   <table class="table table-bordered">
                     <thead>
@@ -503,6 +504,7 @@ function MyAssingment() {
                     </tbody>
                   </table>
                 </div>
+
                 <div>
                   <p
                     style={{

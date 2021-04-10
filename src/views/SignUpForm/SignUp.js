@@ -10,7 +10,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -104,7 +104,19 @@ function SignUp(props) {
           reset();
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
-          Swal.fire('Oops...',"Errorr : "+response.data.result,'error')
+
+          Swal.fire(
+            "Oops",
+            `error : 
+          
+          ${response.data.message[0] ? response.data.message[0] : ""} 
+
+          ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
+
+            ${response.data.message[1] ? response.data.message[1] : ""} 
+            `,
+            "error"
+          );
           reset();
         }
       })
@@ -316,3 +328,11 @@ const professionName = [
   { city: "TAX PROFESSIONAL" },
   { city: "OTHERS" },
 ];
+
+// Swal.fire(
+//   'Oops...',
+//   "Errorr : <br/>"
+//  +response.data.message[0]+
+//   "<br/>"
+//   +response.data.message[1] ,
+//   'error')

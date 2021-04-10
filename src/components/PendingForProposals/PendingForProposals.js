@@ -123,7 +123,7 @@ function PendingForProposals({ CountPendingProposal }) {
       },
     },
     {
-      text: "View",
+      text: "History",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -136,7 +136,7 @@ function PendingForProposals({ CountPendingProposal }) {
               class="btn btn-info btn-sm"
               onClick={() => toggle(row.id)}
             >
-              View
+              History
             </button>
           </>
         );

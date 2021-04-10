@@ -128,7 +128,7 @@ function AssignmentTab() {
 
     {
       text: "Proposed date of Completion",
-      dataField: "name",
+      dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };

@@ -58,6 +58,7 @@ function ProposalTab() {
       });
   };
 
+
   const columns = [
     {
       text: "S.No",
@@ -112,17 +113,17 @@ function ProposalTab() {
         );
       },
     },
-    {
-      text: "Proposal No",
-      dataField: "proposal_number",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
+    // {
+    //   text: "Proposal No",
+    //   dataField: "proposal_number",
+    //   sort: true,
+    //   style: {
+    //     fontSize: "11px",
+    //   },
+    //   headerStyle: () => {
+    //     return { fontSize: "11px" };
+    //   },
+    // },
     {
       text: "Category",
       dataField: "parent_id",
@@ -174,6 +175,14 @@ function ProposalTab() {
       headerStyle: () => {
         return { fontSize: "11px" };
       },
+      // formatter: function dateFormat(cell, row) {
+      //   console.log("dt", row.cust_accept_date);
+      //   var oldDate = row.cust_accept_date;
+      //   if (oldDate == null) {
+      //     return null;
+      //   }
+      //   return oldDate.toString().split("-").reverse().join("-");
+      // },
     },
     {
       text: "Status",
@@ -398,8 +407,14 @@ function ProposalTab() {
       });
   };
 
-  
-
+  //change date format
+  function ChangeFormateDate(oldDate) {
+    console.log("date", oldDate);
+    if (oldDate == null) {
+      return null;
+    }
+    return oldDate.toString().split("-").reverse().join("-");
+  }
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -448,6 +463,126 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
+
+{
+  /* <div>
+            <table class="table table-bordered ">
+              <thead class="table_head_Proposal">
+                <tr>
+                  <th>S.No</th>
+                  <th>Date of Query</th>
+                  <th>Query No</th>
+                  <th>Proposal No</th>
+                  <th>Category</th>
+                  <th>Sub Category</th>
+                  <th>Date of Proposal</th>
+                  <th>Date of acceptance of Proposal</th>
+                  <th>Status</th>
+                  <th>Proposed Amout</th>
+                  <th style={{ color: "#21a3ce" }}>Amount Accepted</th>
+                  <th style={{ color: "#064606" }}>Amount Paid</th>
+                  <th>Date of Payment</th>
+                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
+                  <th>Date of Completion</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              {proposalDisplay.length > 0 ? (
+                proposalDisplay.map((p, i) => (
+                  <tbody class="table_bdy_proposal">
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>{ChangeFormateDate(p.created)}</td>
+                      <th>
+                        <Link to={`/customer/my-assingment/${p.id}`}>
+                          {p.assign_no}
+                        </Link>
+                      </th>
+                      <td>{p.proposal_number}</td>
+                      <td>{p.parent_id}</td>
+                      <td>{p.cat_name}</td>
+                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
+                      <td>{ChangeFormateDate(p.cust_accept_date)}</td>
+                      <td>{p.status}</td>
+                      <td>{p.ProposedAmount}</td>
+                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
+                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
+                      <td>{ChangeFormateDate(p.cust_paid_date)}</td>
+                      <td style={{ color: "darkred" }}>
+                        {checkOutstading(p.paid_amount, p.accepted_amount)}
+                      </td>
+                      <td></td>
+
+                      <td>
+                        {p.statuscode === "6" ? null : (
+                          <div>
+                            {p.negotiated_amount === "0" &&
+                            p.accepted_amount === "0" ? (
+                              <div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-check"
+                                    style={{
+                                      color: "green",
+                                      fontSize: "16px",
+                                    }}
+                                    onClick={() => accepted(p.q_id)}
+                                  ></i>
+                                </div>
+
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-times"
+                                    style={{ color: "red", fontSize: "16px" }}
+                                    onClick={() => rejected(p.q_id)}
+                                  ></i>
+                                </div>
+                              </div>
+                            ) : (
+                              (p.negotiated_amount === "0" ||
+                                p.accepted_amount) &&
+                              ""
+                            )}
+
+                            {p.statuscode == 5 ||
+                            p.statuscode == 7 ||
+                            p.statuscode == 8 ? (
+                              <div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-credit-card"
+                                    style={{ color: "green", fontSize: "16px" }}
+                                    onClick={() => paymentHandler(p)}
+                                  ></i>
+                                </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i
+                                    class="fa fa-file-text"
+                                    style={{
+                                      color: "orange",
+                                      fontSize: "16px",
+                                    }}
+                                    onClick={() => acceptedHandler(p.up_id)}
+                                  ></i>
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="16">No Records</td>
+                </tr>
+              )}
+            </table>
+          </div> */
+}
 
 {
   /* <div>

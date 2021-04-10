@@ -25,6 +25,11 @@ function AddNew() {
   const userid = window.localStorage.getItem("adminkey");
 
   const history = useHistory();
+  const [tax, setTax] = useState([]);
+  const [tax2, setTax2] = useState([]);
+
+  const [store, setStore] = useState("");
+  const [store2, setStore2] = useState(null);
 
   useEffect(() => {
     const getTeamLeader = () => {
@@ -37,6 +42,31 @@ function AddNew() {
     };
     getTeamLeader();
   }, []);
+
+  useEffect(() => {
+    const getCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax(res.data.result);
+        }
+      });
+    };
+
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -105,22 +135,23 @@ function AddNew() {
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          name="p_email"
-                          ref={register}
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
                         <label>Phone Number</label>
                         <input
                           type="text"
                           class="form-control"
                           name="p_phone"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="p_email"
                           ref={register}
                         />
                       </div>
@@ -138,6 +169,45 @@ function AddNew() {
                           {teamleader.map((p) => (
                             <option key={p.Id} value={p.id}>
                               {p.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Category</label>
+                        <select
+                          className="form-control"
+                          name="p_tax"
+                          ref={register}
+                          onChange={(e) => setStore(e.target.value)}
+                        >
+                          <option value="">--Select Category--</option>
+                          {tax.map((p, index) => (
+                            <option key={index} value={p.id}>
+                              {p.details}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Sub Category</label>
+                        <select
+                          className="form-select form-control"
+                          name="p_tax2"
+                          ref={register}
+                          onChange={(e) => setStore2(e.target.value)}
+                        >
+                          <option value="">--Select Sub-Category--</option>
+                          {tax2.map((p, index) => (
+                            <option key={index} value={p.id}>
+                              {p.details}
                             </option>
                           ))}
                         </select>

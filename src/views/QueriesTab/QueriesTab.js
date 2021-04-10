@@ -17,7 +17,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 
 function QueriesTab() {
-  // const [queriesData, setQueriesData] = useState([]);
+  const alert = useAlert();
   const [queriesCount, setCountQueries] = useState("");
   const [query, setQuery] = useState([]);
   const userId = window.localStorage.getItem("userid");
@@ -125,7 +125,71 @@ function QueriesTab() {
         return oldDate.toString().split("-").reverse().join("-");
       },
     },
+    {
+      text: "Edit",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <Link to={`/customer/edit-query/${row.id}`}>
+              {row.status_code < 5 ? (
+                <i
+                  className="fa fa-edit"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                  }}
+                ></i>
+              ) : null}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Delete",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+          
+            <i
+              className="fa fa-trash"
+              style={{ fontSize: 16, cursor: "pointer", marginLeft: "8px" }}
+              onClick={() => del(row.id)}
+            ></i>
+          </>
+        );
+      },
+    },
   ];
+
+  const del = (id) => {
+    console.log("del", id);
+
+    let formData = new FormData();
+    formData.append("uid", JSON.parse(userId));
+    formData.append("id", id);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/deleteQuery`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        alert.success("successfully deleted ");
+        getQueriesData();
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -169,8 +233,15 @@ function QueriesTab() {
             columns={columns}
             rowIndex
           />
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
 
-          {/* <Table responsive="sm" bordered>
+export default QueriesTab;
+{
+  /* <Table responsive="sm" bordered>
             <TableHeader
               headers={headers}
               onSorting={(field, order) => setSorting({ field, order })}
@@ -192,15 +263,8 @@ function QueriesTab() {
                 </tr>
               ))}
             </tbody>
-          </Table> */}
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </Table> */
 }
-
-export default QueriesTab;
-
 // function ChangeFormateDate2(date) {
 //   var month = (1 + date.getMonth()).toString();
 //   month = month.length > 1 ? month : '0' + month;

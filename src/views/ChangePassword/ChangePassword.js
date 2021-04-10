@@ -8,6 +8,7 @@ import { useAlert } from "react-alert";
 import Layout from "../../components/Layout/Layout";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required user id"),
 //   p_password: yup.string().required("required password"),
@@ -30,7 +31,7 @@ function ChangePassword(props) {
 
     let formData = new FormData();
     formData.append("id", JSON.parse(userId));
-    formData.append("user_id", value.p_name);
+    formData.append("user_id", value.p_email);
     formData.append("password", value.password);
     formData.append("rpassword", value.confirm_password);
 
@@ -46,7 +47,7 @@ function ChangePassword(props) {
           reset();
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-         
+
           Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
           reset();
         }
@@ -63,30 +64,31 @@ function ChangePassword(props) {
           <div className="heading">
             <h2>Change Password</h2>
           </div>
-          {/* <p className="error">{error && error}</p> */}
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
               <div className="mb-3">
-                <label className="form-label">User Id</label>
+                <label className="form-label">Email </label>
                 <input
                   type="text"
                   className={classNames("form-control", {
-                    "is-invalid": errors.p_name,
+                    "is-invalid": errors.p_email,
                   })}
-                  name="p_name"
-                  placeholder="Enter user id"
+                  name="p_email"
+                  placeholder="Enter email id"
                   ref={register({
                     required: "This field is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Please enter valid email address",
+                    },
                   })}
                 />
-                {errors.p_name && (
+                {errors.p_email && (
                   <div className="invalid-feedback">
-                    {errors.p_name.message}{" "}
+                    {errors.p_email.message}{" "}
                   </div>
                 )}
-                {/* <p className="error">
-                  {errors.p_name && errors.p_name.message}
-                </p> */}
               </div>
 
               <label className="form-label">New Password</label>
@@ -112,9 +114,6 @@ function ChangePassword(props) {
                   {errors.p_password.message}
                 </div>
               )}
-              {/* <p className="error">
-                  {errors.p_password && errors.p_password.message}
-                </p> */}
             </div>
 
             <div className="form-group">
@@ -139,9 +138,6 @@ function ChangePassword(props) {
                   {errors.p_confirm_password.message}
                 </div>
               )}
-              {/* <p className="error">
-                  {errors.p_confirm_password && errors.p_confirm_password.message}
-                </p> */}
             </div>
 
             <button type="submit" className="btn btn-primary">

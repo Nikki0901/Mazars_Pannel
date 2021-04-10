@@ -51,7 +51,7 @@ function Questionnaire(props) {
     formData.append("specific", JSON.stringify(value.specific));
     formData.append("upload_1", value.p_document1[0]);
     formData.append("upload_2", value.p_document2[0]);
-    formData.append("upload_3", value.p_document3[0]);
+    formData.append("upload_3", value.p_document3[0]);                    
     formData.append("purpose", value.p_purpose);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
@@ -61,22 +61,13 @@ function Questionnaire(props) {
       "softcopy_digitally_assigned",
       Number(value.p_format_digital)
     );
-    formData.append(
+    formData.append(                            
       "printout_physically_assigned",
       Number(value.p_format_physically)
     );
 
     formData.append("case_name", value.p_case_name);
     formData.append("assessment_year", value.p_assessment_year);
-
-    // axios({
-    //   method: "POST",
-    //   url: `${baseUrl}/customers/PostQuestion`,
-    //   data: formData,
-    //   headers: {
-    //     'content-type': 'multipart/form-data'
-    //   }
-    // })
 
     axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
@@ -97,19 +88,28 @@ function Questionnaire(props) {
       });
   };
 
+
   const SuccessMesg = () => {
     return (
       <>
         <Modal isOpen={modal} toggle={toggle} size="sm">
-          <ModalHeader toggle={toggle}></ModalHeader>
+          <ModalHeader toggle={toggle}>    
+          </ModalHeader>
 
+          <div style={{textAlign:"center" , paddingTop:"5px" ,fontWeight:"bold" ,
+          background:"green"}}>
+            <h2>User ID</h2>
+          </div>
+         
           <ModalBody>
+            <br/>
             <div class="modal-body">
               <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                UserId : {JSON.parse(userNameId)}
+                 {JSON.parse(userNameId)}
               </h1>
             </div>
           </ModalBody>
+          
         </Modal>
       </>
     );
@@ -143,7 +143,7 @@ function Questionnaire(props) {
               <div className="col-md-6">
                 <div className="question_query mb-2">
                   <label className="form-label">
-                    Specific Query (ies) for advisory
+                    Specific Questions for advisory
                   </label>
                   <div
                     className="btn btn-primary"
@@ -217,9 +217,9 @@ function Questionnaire(props) {
                     <option value="">--select--</option>
                     <option value="Assessment">Assessment</option>
                     <option value="Appeal">Appeal</option>
-                    <option value="Internal">Internal records</option>
-                    <option value="Production">
-                      Production before other Authorities
+                    <option value="Court">Filing before any Court</option>
+                    <option value="Authority">
+                    Filing before any Authority
                     </option>
                     <option value="Others">Others</option>
                   </select>

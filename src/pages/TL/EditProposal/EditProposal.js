@@ -112,6 +112,7 @@ function ProposalComponent() {
           // reset();
           getQuery();
           alert.success(<Msg />);
+          history.push('/teamleader/proposal')
         }
       })
       .catch((error) => {

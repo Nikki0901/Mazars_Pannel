@@ -14,7 +14,7 @@ import classNames from "classnames";
 import Swal from 'sweetalert2';
 
 const Schema = yup.object().shape({
-  p_name: yup.string().required("required user id"),
+  p_email: yup.string().email("invalid email").required("required email"),
   p_password: yup.string().required("required password"),
 });
 
@@ -25,13 +25,12 @@ function SignIn(props) {
     resolver: yupResolver(Schema),
   });
 
-  // const [error, setError] = useState("");
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("user_id", value.p_name);
+    formData.append("user_id", value.p_email);
     formData.append("password", value.p_password);
 
     axios({
@@ -72,18 +71,18 @@ function SignIn(props) {
             <div className="row">
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">User Id</label>
+                  <label className="form-label">Email</label>
                   <input
                     type="text"
                     className={classNames("form-control", {
-                      "is-invalid": errors.p_name,
+                      "is-invalid": errors.p_email,
                     })}
-                    name="p_name"
+                    name="p_email"
                     ref={register}
                     placeholder="Enter Email"
                   />
-                 {errors.p_name && (
-                <div className="invalid-feedback">{errors.p_name.message}</div>
+                 {errors.p_email && (
+                <div className="invalid-feedback">{errors.p_email.message}</div>
               )}
                 </div>
               </div>
@@ -110,7 +109,7 @@ function SignIn(props) {
             </button>
 
             <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-              <Link to={`/customer/forget-password`}>Forget Password</Link>
+              <Link to={`/customer/forget-password`}>Forgot Password</Link>
             </div>
           </form>
         </div>

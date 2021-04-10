@@ -14,10 +14,10 @@ function Dashboard() {
   const [allPendingForPayment, setPendingForPayment] = useState("");
   const [allAcceptedProposal, setAcceptedProposal] = useState("");
   const [allDeclinedProposal, setDeclinedProposal] = useState("");
+  const [pendingForAcceptence, setPendingForAcceptence] = useState("");
 
   const [inprogress, setInprogress] = useState([]);
   const [completeQuery, setComplete] = useState([]);
-
 
   // const { total_inprogress, total_complete } = inprogress;
 
@@ -85,9 +85,9 @@ function Dashboard() {
           console.log("code---", response);
           if (response.data.code === 1) {
             console.log("res", response.data.result[0]);
-            console.log("res", response.data.result[1]);                   
-            setInprogress( response.data.result[1]);
-            setComplete( response.data.result[0]);       
+            console.log("res", response.data.result[1]);
+            setInprogress(response.data.result[1]);
+            setComplete(response.data.result[0]);
           }
         })
         .catch((error) => {
@@ -99,7 +99,7 @@ function Dashboard() {
 
     const getAcceptedProposal = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals?&status=5,7`)
+        .get(`${baseUrl}/admin/getProposals?&status=5,7,8`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
@@ -125,12 +125,27 @@ function Dashboard() {
         });
     };
 
+    const getPendingForAcceptence = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?&status=4`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPendingForAcceptence(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
     getAllQueries();
     getPendingForAllocation();
     getPendingForPayment();
     getAllProposal();
     getAcceptedProposal();
     getDeclinedProposal();
+    getPendingForAcceptence();
     getInProgress();
   }, []);
 
@@ -196,6 +211,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
@@ -220,7 +236,39 @@ function Dashboard() {
                   marginTop: "50px",
                 }}
               >
-             <h4>{completeQuery.total_complete}</h4>
+                <h4>{completeQuery.total_complete}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Pending For Allocation
+                  </h5>
+                </div>
+                <div>
+                  <Link to={`/admin/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4>{allPendingForAllocation}</h4>
               </div>
             </div>
           </div>
@@ -325,11 +373,11 @@ function Dashboard() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   <h5 class="text-muted info position-absolute p-1">
-                    Pending For Allocation
+                    Pending For Acceptence
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/queriestab`}>
+                  <Link to={`/admin/proposal`}>
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -343,11 +391,14 @@ function Dashboard() {
                   marginTop: "50px",
                 }}
               >
-                <h4>{allPendingForAllocation}</h4>
+                <h4>{pendingForAcceptence}</h4>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="row mt-3">
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
@@ -358,7 +409,7 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/proposal`}>
+                  <Link to={`/admin/queriestab`}>
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -383,9 +434,9 @@ function Dashboard() {
 }
 
 export default Dashboard;
-  // {
-            //   Object.keys(response.data.result[0]).map((key, i ,value) => (
-            //     console.log(key,i,value)
-            //   )
-            //   )
-            // }
+// {
+//   Object.keys(response.data.result[0]).map((key, i ,value) => (
+//     console.log(key,i,value)
+//   )
+//   )
+// }

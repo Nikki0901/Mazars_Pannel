@@ -30,6 +30,7 @@ function Proposal() {
     getProposalList();
   }, []);
 
+
   const getProposalList = () => {
     axios
       .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
@@ -80,14 +81,6 @@ function Proposal() {
     {
       text: "Sub Category",
       dataField: "cat_name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Proposal No",
-      dataField: "proposal_number",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -345,9 +338,9 @@ function Proposal() {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">tl Accepted</option>
+                      <option value="1">Accepted</option>
                       <option value="2">Pending</option>
-                      <option value="3">Accepted</option>
+                      <option value="3">Cust Accepted</option>
                       <option value="4">Declined</option>
                     </select>
                   </div>

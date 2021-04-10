@@ -33,7 +33,7 @@ function EditTL() {
     category: "",
     sub_category: "",
   });
-  const { name, email, phone, category ,sub_category } = user;
+  const { name, email, phone, category, sub_category } = user;
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -85,8 +85,6 @@ function EditTL() {
     getSubCategory();
   }, [store]);
 
-
-  
   const onSubmit = (value) => {
     console.log("value :", value);
     let formData = new FormData();
@@ -95,7 +93,7 @@ function EditTL() {
     formData.append("phone", value.p_phone);
     formData.append("cat_id", store2);
     formData.append("id", id);
-    
+
     axios({
       method: "POST",
       url: `${baseUrl}/tl/updateTeamLeader`,
@@ -156,12 +154,12 @@ function EditTL() {
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Email</label>
+                        <label>Phone Number</label>
                         <input
-                          type="email"
+                          type="text"
                           class="form-control"
-                          name="p_email"
-                          defaultValue={email}
+                          name="p_phone"
+                          defaultValue={phone}
                           ref={register}
                         />
                       </div>
@@ -211,12 +209,12 @@ function EditTL() {
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Phone Number</label>
+                        <label>Email</label>
                         <input
-                          type="text"
+                          type="email"
                           class="form-control"
-                          name="p_phone"
-                          defaultValue={phone}
+                          name="p_email"
+                          defaultValue={email}
                           ref={register}
                         />
                       </div>

@@ -73,7 +73,7 @@ function AllProposalComponent({ allProposal }) {
       text: "Query No",
       sort: true,
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: '12px'};
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
@@ -138,7 +138,7 @@ function AllProposalComponent({ allProposal }) {
       text: "Proposal Status",
       sort: true,
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: '12px',width:"140px" };
       },
     },
     {
@@ -340,9 +340,7 @@ function AllProposalComponent({ allProposal }) {
             keyField="id"
             data={proposalDisplay}
             columns={columns}
-            // defaultSorted={defaultSorted}
-            // rowEvents={ rowEvents }
-            rowIndex
+            wrapperClasses="table-responsive"
           />
           {/* <Table responsive="sm" bordered>
             <thead class="table_head">
