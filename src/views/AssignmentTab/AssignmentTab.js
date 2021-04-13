@@ -42,7 +42,6 @@ function AssignmentTab() {
     {
       dataField: "",
       text: "S.No",
-      // sort: true,
       formatter: (cellContent, row, rowIndex) => {
         return rowIndex + 1;
       },
@@ -82,14 +81,6 @@ function AssignmentTab() {
             </Link>
           </>
         );
-      },
-    },
-    {
-      dataField: "assignment_number",
-      text: "Assignment No",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
       },
     },
     {

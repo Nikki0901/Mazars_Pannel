@@ -16,6 +16,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 // import Filter from "../Search-Filter/SearchFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import AdminFilter from "../../components/Search-Filter/AdminFilter";
 
 function AllQueriesData({ CountAllQuery }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -47,7 +48,6 @@ function AllQueriesData({ CountAllQuery }) {
     getCategory();
   }, []);
 
-
   const getCategory = () => {
     axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
       console.log(res);
@@ -68,7 +68,6 @@ function AllQueriesData({ CountAllQuery }) {
     };
     getSubCategory();
   }, [store]);
-
 
   const columns = [
     {
@@ -149,14 +148,12 @@ function AllQueriesData({ CountAllQuery }) {
     },
   ];
 
-
   //reset date
   const resetData = () => {
     console.log("resetData ..");
     reset();
     getAllQueriesData();
   };
-
 
   const onSubmit = (data) => {
     console.log("data :", data);
@@ -176,92 +173,119 @@ function AllQueriesData({ CountAllQuery }) {
       });
   };
 
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
+ 
+
+  const Reset = () => {
+    return (
+      <>
+        <button
+          type="submit"
+          class="btn btn-primary mx-sm-1 mb-2"
+          onClick={() => resetData()}
+        >
+          Reset
+        </button>
+      </>
+    );
+  };
 
   return (
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+        <AdminFilter
+            setData={setAllQueriesData}
+            getData={getAllQueriesData}
+            allQueries="allQueries"
+          />
+          {/* <div className="row">
             <div className="col-sm-12 d-flex">
-              <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-group mb-2">
-                  <select
-                    className="form-select form-control"
-                    name="p_tax"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore(e.target.value)}
-                  >
-                    <option value="">--Select Category--</option>
-                    {tax.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="form-inline">
+                    <div class="form-group mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore(e.target.value)}
+                      >
+                        <option value="">--Select Category--</option>
+                        {tax.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <select
-                    className="form-select form-control"
-                    name="p_tax2"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore2(e.target.value)}
-                  >
-                    <option value="">--Select Sub-Category--</option>
-                    {tax2.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax2"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore2(e.target.value)}
+                      >
+                        <option value="">--Select Sub-Category--</option>
+                        {tax2.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <label className="form-select form-control">From</label>
-                </div>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">From</label>
+                    </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <input
-                    type="date"
-                    name="p_dateFrom"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateFrom"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <label className="form-select form-control">To</label>
-                </div>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">To</label>
+                    </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <input
-                    type="date"
-                    name="p_dateTo"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateTo"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
 
-                <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                  <i class="fa fa-search"></i>
-                </button>
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_status"
+                        ref={register}
+                        style={{ height: "33px" }}
+                      >
+                        <option value="">--select--</option>
+                        <option value="1">Progress</option>
+                        <option value="3">Complete</option>
+                      </select>
+                    </div>
+                  </div>
 
-                <button
-                  type="submit"
-                  class="btn btn-primary mx-sm-1 mb-2"
-                  onClick={resetData}
-                >
-                  <i class="fa fa-refresh"></i>
-                </button>
-              </form>
+                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
+                    Search
+                  </button>
+
+                  <Reset />
+                </form>
+              </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable

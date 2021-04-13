@@ -4,18 +4,29 @@ import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { Select } from "antd";
 
-function CustomerFilter(props) {
+function AdminFilter(props) {
   const { Option } = Select;
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const { setData, getData, id, query, proposal, assignment } = props;
-  const [selectedData, setSelectedData] = useState([]);
+  const {
+    setData,
+    getData,
+    acceptedProposal,
+    pendingAcceptedProposal,
+    declinedProposal,
+    pendingPayment,
+    pendingForProposal,
+    pendingAlloation,
+    allQueries,
+    assignment,
+    paymentStatus,
+  } = props;
 
+  const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
- 
-
+  //get category
   useEffect(() => {
     const getSubCategory = () => {
       axios
@@ -50,25 +61,21 @@ function CustomerFilter(props) {
     getData();
   };
 
- //reset date
- const resetData = () => {
-  console.log("resetData ..");
-  reset();
-  getData();
-};
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getData();
+  };
 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("store2 :", store2);
 
-    if (query == "query") {
+    if (acceptedProposal == "acceptedProposal") {
       axios
         .get(
-          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
-            id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
+          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
         .then((res) => {
           console.log(res);
@@ -80,14 +87,10 @@ function CustomerFilter(props) {
         });
     }
 
-    if (proposal == "proposal") {
+    if (pendingAcceptedProposal == "pendingAcceptedProposal") {
       axios
         .get(
-          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
-            id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
+          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
         .then((res) => {
           console.log(res);
@@ -99,14 +102,98 @@ function CustomerFilter(props) {
         });
     }
 
+    if (declinedProposal == "declinedProposal") {
+      axios
+        .get(
+          `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
+    if (pendingPayment == "pendingPayment") {
+      axios
+        .get(
+          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
+    if (pendingForProposal == "pendingForProposal") {
+      axios
+        .get(
+          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
+    if (allQueries == "allQueries") {
+      axios
+        .get(
+          `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
+    if (pendingAlloation == "pendingAlloation") {
+      axios
+        .get(
+          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+    if (paymentStatus == "paymentStatus") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
     if (assignment == "assignment") {
       axios
         .get(
-          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(
-            id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
+          `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -129,6 +216,61 @@ function CustomerFilter(props) {
         >
           Reset
         </button>
+      </>
+    );
+  };
+
+
+  const SelectComponent = () => {
+    return (
+      <>
+        <div>
+          {(allQueries == "allQueries" ||
+            pendingAlloation == "pendingAlloation" ||
+            assignment == "assignment") && (
+            <select
+              className="form-select form-control"
+              name="p_status"
+              ref={register}
+              style={{ height: "33px" }}
+            >
+              <option value="">--select--</option>
+              <option value="1">InProgress</option>
+              <option value="2">Complete</option>
+            </select>
+          )}
+
+          {(acceptedProposal == "acceptedProposal" ||
+            pendingAcceptedProposal == "pendingAcceptedProposal" ||
+            declinedProposal == "declinedProposal" ||
+            pendingPayment == "pendingPayment" ||
+            pendingForProposal == "pendingForProposal") && (
+            <select
+              className="form-select form-control"
+              name="p_status"
+              ref={register}
+              style={{ height: "33px" }}
+            >
+              <option value="">--select--</option>
+              <option value="1">Pending</option>
+              <option value="2">Accepted</option>
+              <option value="3">Declined</option>
+            </select>
+          )}
+
+          {paymentStatus == "paymentStatus" && (
+            <select
+              className="form-select form-control"
+              name="p_status"
+              ref={register}
+              style={{ height: "33px" }}
+            >
+              <option value="">--select--</option>
+              <option value="1">UnPaid</option>
+              <option value="2">Piad</option>
+            </select>
+          )}
+        </div>
       </>
     );
   };
@@ -174,7 +316,6 @@ function CustomerFilter(props) {
                     ))}
                   </Select>
                 </div>
-
                 <div>
                   <button
                     type="submit"
@@ -212,48 +353,13 @@ function CustomerFilter(props) {
                 </div>
 
                 <div class="form-group mx-sm-1  mb-2">
-                  {query == "query" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Progress</option>
-                      <option value="3">Complete</option>
-                    </select>
-                  )}
-
-                  {assignment == "assignment" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">InProgress</option>
-                      <option value="2">Complete</option>
-                    </select>
-                  )}
-                  {proposal == "proposal" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Pending</option>
-                      <option value="2">Accepted</option>
-                      <option value="3">Declined</option>
-                    </select>
-                  )}
+                <SelectComponent />
                 </div>
+
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>
+
                 <Reset />
               </div>
             </form>
@@ -264,53 +370,4 @@ function CustomerFilter(props) {
   );
 }
 
-export default CustomerFilter;
-
-// http://13.232.121.233/mazarapi/v1/customers/incompleteAssignments?user=93&cat_id=&from=2021-03-20&to=2021-03-20
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore(e.target.value)}
-                  >
-                    <option value="">--Select Category--</option>
-                    {tax.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax2"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore2(e.target.value)}
-                  >
-                    <option value="">--Select Sub-Category--</option>
-                    {tax2.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-// useEffect(() => {
-// getCategory();
-// }, []);
-
-// const getCategory = () => {
-//   axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//     console.log(res);
-//     if (res.data.code === 1) {
-//       setTax(res.data.result);
-//     }
-//   });
-// };
-
-// const [store, setStore] = useState("");
-// const [tax, setTax] = useState([]);
+export default AdminFilter;

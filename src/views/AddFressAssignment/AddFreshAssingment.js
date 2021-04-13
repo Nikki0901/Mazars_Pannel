@@ -17,25 +17,26 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import _ from 'lodash';
+import _ from "lodash";
 
 function AddFreshAssingment(props) {
   const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
-  const { handleSubmit, register, errors, reset, control } = useForm();
+  const { handleSubmit, register, errors, reset, control } = useForm({
+    defaultValues: {
+      users: [{ query: "" }],
+    },
+  });
 
   const { append, remove, fields } = useFieldArray({
     control,
     name: "users",
-    // name: "upload",
   });
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
-
-  const [selectedData, setSelectedData] = useState('');
-  const [multipleFiles, setMultipleFiles] = useState('');
+  const [selectedData, setSelectedData] = useState("");
 
   function handleChange(value) {
     console.log(`selected ${value}`);
@@ -45,31 +46,14 @@ function AddFreshAssingment(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    console.log("multi :", value.p_document1);
-    // console.log("upload :", value.upload[0].pics[0]);
-    
-    setMultipleFiles(value.p_document1)
-    console.log("multipleFiles",multipleFiles)
+
     let formData = new FormData();
 
-    var arr = [];
-     var jsonString='';
-
-      for(var i=0;i<value.upload.length;i++){
-
-        console.log('pics',value.upload[i].pics[0])
-
-        let a =value.upload[i].pics[0]
-        // arr.push(a)
-        formData.append("upload_1", a);
+    for (var i = 0; i < value.upload.length; i++) {
+      console.log("pics", value.upload[i].pics[0]);
+      let a = value.upload[i].pics[0];
+      formData.append("upload_1[]", a);
     }
-
-    // console.log("arr",arr);
-
-    // for (let i = 0; i < multipleFiles.length; i++) {
-    //   formData.append('upload_1', multipleFiles[i]);                      
-    // }
- 
 
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.users));
@@ -211,14 +195,6 @@ function AddFreshAssingment(props) {
                 </div>
 
                 <div className="col-md-6">
-                {/* <input
-                    type="file"
-                    name="p_document1"
-                    ref={register}
-                    className="form-control-file"
-                    multiple
-                  /> */}
-
                   <ImageUploads register={register} control={control} />
                 </div>
 
@@ -338,6 +314,36 @@ const Opinion = [
 
 const assessment_year = [
   {
+    year: "2010-11",
+  },
+  {
+    year: "2011-12",
+  },
+  {
+    year: "2012-13",
+  },
+  {
+    year: "2013-14",
+  },
+  {
+    year: "2014-15",
+  },
+  {
+    year: "2015-16",
+  },
+  {
+    year: "2016-17",
+  },
+  {
+    year: "2017-18",
+  },
+  {
+    year: "2018-19",
+  },
+  {
+    year: "2019-20",
+  },
+  {
     year: "2020-21",
   },
   {
@@ -395,6 +401,11 @@ const ImageUploads = ({ register, control }) => {
   );
 };
 
+// console.log("arr",arr);
+
+// for (let i = 0; i < multipleFiles.length; i++) {
+//   formData.append('upload_1', multipleFiles[i]);
+// }
 
 {
   /* <div className="question_query mb-2">

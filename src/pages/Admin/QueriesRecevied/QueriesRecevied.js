@@ -13,18 +13,38 @@ import {
   Col,
   Table,
 } from "reactstrap";
-
+import QueryDetails from "../../../components/QueryDetails/QueryDetails";
 
 function QueriesRecevied() {
+  const { id } = useParams();
+  const userid = window.localStorage.getItem("adminkey");
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
   const [displayQuery, setDisplayQuery] = useState([]);
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
-  const { id } = useParams();
-  const history = useHistory();
 
-  const userid = window.localStorage.getItem("adminkey");
+  const [diaplayProposal, setDisplayProposal] = useState({
+    amount: "",
+    accepted_amount: "",
+    payment_received: "",
+    cust_accept_date: "",
+    proposal_date: "",
+  });
 
+  const [diaplayAssignment, setDisplayAssignment] = useState([
+    {
+      assignment_number: "",
+      assignment_date: "",
+    },
+  ]);
+
+  const [diaplayHistory, setDisplayHistory] = useState([
+    {
+      tlname: "",
+      date_of_allocation: "",
+      date_of_delivery: "",
+    },
+  ]);
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
@@ -34,17 +54,38 @@ function QueriesRecevied() {
           setSubmitData(res.data.result);
           setDisplaySpecific(res.data.additional_queries);
           setAssingmentNo(res.data.result[0].assign_no);
+
+          if (res.data.proposal_queries.length > 0) {
+            setDisplayProposal({
+              accepted_amount: res.data.proposal_queries[0].accepted_amount,
+              payment_received: res.data.proposal_queries[0].paid_amount,
+              amount: res.data.proposal_queries[0].amount,
+              cust_accept_date: res.data.proposal_queries[0].cust_accept_date,
+              proposal_date: res.data.proposal_queries[0].created,
+            });
+          }
+
+          if (res.data.assignment.length > 0) {
+            setDisplayAssignment({
+              assignment_number: res.data.assignment[0].assignment_number,
+              assignment_date: res.data.assignment[0].created,
+              date_of_delivery: res.data.assignment[0].date_of_delivery,
+            });
+          }
+          if (res.data.history_queries.length > 0) {
+            setDisplayHistory({
+              tlname: res.data.history_queries[0].tname,
+              date_of_allocation:
+                res.data.history_queries[0].date_of_allocation,
+            });
+          }
         }
       });
     };
-
-    getSubmittedAssingment();
     getQuery();
+    getSubmittedAssingment();
   }, [assingNo]);
 
-  console.log(assingNo);
-
-  
   const getQuery = () => {
     axios
       .get(`${baseUrl}/tl/GetAdditionalQueries?assignno=${assingNo}`)
@@ -56,19 +97,38 @@ function QueriesRecevied() {
       });
   };
 
-   //change date format
-   function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
-
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <Card>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <div class="schedule">
+            <h3>Query Detail</h3>
+          </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12">
+          {submitData.map((p, index) => (
+            <QueryDetails
+              p={p}
+              key={index}
+              diaplaySpecific={diaplaySpecific}
+              diaplayProposal={diaplayProposal}
+              diaplayHistory={diaplayHistory}
+              diaplayAssignment={diaplayAssignment}
+              displayQuery={displayQuery}
+              getQuery={getQuery}
+              assingNo={assingNo}
+            />
+          ))}
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+export default QueriesRecevied;
+
+{
+  /* <Card>
         <CardHeader>
           <Row>
             <Col md="4">
@@ -224,15 +284,22 @@ function QueriesRecevied() {
             </div>
           ))}
         </CardBody>
-      </Card>
-    </Layout>
-  );
+      </Card> */
 }
+// useEffect(() => {
+//   const getSubmittedAssingment = () => {
+//     axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
+//       console.log(res);
+//       if (res.data.code === 1) {
+//         setSubmitData(res.data.result);
+//         setDisplaySpecific(res.data.additional_queries);
+//         setAssingmentNo(res.data.result[0].assign_no);
+//       }
+//     });
+//   };
 
-export default QueriesRecevied;
+//   getSubmittedAssingment();
+//   getQuery();
+// }, [assingNo]);
 
-// <div class="row mt-3">
-// <div class="col-xl-12 col-lg-12 col-md-12">
-
-// </div>
-// </div>
+// console.log(assingNo);

@@ -100,7 +100,7 @@ function Dashboard() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   <h5 class="text-muted info position-absolute p-1">
-                    Incomplete
+                    Inprogress
                   </h5>
                 </div>
                 <div>

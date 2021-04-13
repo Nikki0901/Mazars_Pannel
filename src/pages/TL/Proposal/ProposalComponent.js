@@ -40,16 +40,15 @@ function ProposalComponent(props) {
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-           if(res.data.result.length > 0){
+            if (res.data.result.length > 0) {
               setAssingNo(res.data.result[0].assign_no);
               setAssignID(res.data.result[0].id);
-            }           
+            }
           }
         });
     };
     getQuery();
   }, []);
-
 
   useEffect(() => {
     const getUser = async () => {
@@ -62,15 +61,11 @@ function ProposalComponent(props) {
     getUser();
   }, [id]);
 
-
- 
-
-
   const onSubmit = (value) => {
     console.log(value);
 
     // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-    var todaysDate = new Date()
+    var todaysDate = new Date();
 
     let formData = new FormData();
 
@@ -96,7 +91,7 @@ function ProposalComponent(props) {
         if (response.data.code === 1) {
           reset();
           alert.success(<Msg />);
-          history.push('/teamleader/proposal')
+          history.push("/teamleader/proposal");
         }
       })
       .catch((error) => {
@@ -104,14 +99,14 @@ function ProposalComponent(props) {
       });
   };
 
-//alert msg
-  const Msg = () =>{
-    return(
+  //alert msg
+  const Msg = () => {
+    return (
       <>
-      <p style={{fontSize:"10px"}}>proposal successfully sent</p>
+        <p style={{ fontSize: "10px" }}>proposal successfully sent</p>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -212,13 +207,14 @@ function ProposalComponent(props) {
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Misc 2</label>
-                  <input
-                    type="text"
+                  <label>Proposal Description</label>
+                  <textarea
+                    className="form-control"
+                    id="textarea"
+                    rows="3"
                     name="misc_2"
-                    class="form-control"
                     ref={register}
-                  />
+                  ></textarea>
                 </div>
               </div>
             </div>

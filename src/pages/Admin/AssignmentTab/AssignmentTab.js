@@ -17,6 +17,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -41,6 +42,36 @@ function AssignmentTab() {
     });
   };
 
+  const [tax, setTax] = useState([]);
+  const [tax2, setTax2] = useState([]);
+
+  const [store, setStore] = useState("");
+  const [store2, setStore2] = useState("");
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  const getCategory = () => {
+    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setTax(res.data.result);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
+
   const columns = [
     {
       text: "S.No",
@@ -53,7 +84,7 @@ function AssignmentTab() {
       },
     },
     {
-      text: "Date of Query",
+      text: "Date",
       dataField: "date_of_query",
       sort: true,
       headerStyle: () => {
@@ -85,31 +116,6 @@ function AssignmentTab() {
       },
     },
     {
-      text: "Assignment No",
-      dataField: "assignment_label_number",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Assignment Date",
-      dataField: "assignment_date",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        console.log("dt", row.assignment_date);
-        var updatedate = row.assignment_date.split(" ")[0];
-        console.log(updatedate);
-        if (updatedate == null) {
-          return null;
-        }
-        return updatedate.toString().split("-").reverse().join("-");
-      },
-    },
-    {
       text: "Category",
       dataField: "parent_id",
       sort: true,
@@ -125,83 +131,48 @@ function AssignmentTab() {
         return { fontSize: "12px" };
       },
     },
-
     {
-      text: "Proposed date of Completion",
-      dataField: "Exp_Delivery_Date",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
+      dataField: "status",
       text: "Status",
-      dataField: "",
-      headerStyle: () => {
-        return { fontSize: "12px", width: "160px" };
-      },
-      formatter: function AssignmentStage(cell, row) {
-        console.log("status - ", row);
-        return (
-          <>
-            <div style={{ fontSize: "9px" ,fontWeight:"bold" }}>
-              <tr>
-                <td>Client Discussion</td>
-                <td>{row.client_discussion}</td>
-              </tr>
-              <tr>
-                <td>Draft report</td>
-                <td>{row.draft_report}</td>
-              </tr>
-              <tr>
-                <td>Final Discussion</td>
-                <td>{row.final_discussion}</td>
-              </tr>
-              <tr>
-                <td> Delivery of report</td>
-                <td>{row.delivery_report}</td>
-              </tr>
-              <tr>
-                <td>Complete</td>
-                <td>{row.other_stage}</td>
-              </tr>
-            </div>
-
-            {/* <div style={{ display: "flex", fontSize: "10px" }}>
-              <p style={{ fontWeight: "bold" }}>Client Discussion</p>
-              <p>{row.client_discussion} </p>
-            </div>
-            <div style={{ display: "flex", fontSize: "10px" }}>
-              <p style={{ fontWeight: "bold" }}>Draft report</p>
-              <p>{row.draft_report} </p>
-            </div>
-            <div style={{ display: "flex", fontSize: "10px" }}>
-              <p style={{ fontWeight: "bold" }}>Final Discussion</p>
-              <p>{row.final_discussion} </p>
-            </div>
-            <div style={{ display: "flex", fontSize: "10px" }}>
-              <p style={{ fontWeight: "bold" }}>Delivery of report</p>
-              <p>{row.delivery_report} </p>
-            </div>
-            <div style={{ display: "flex", fontSize: "10px" }}>
-              <p style={{ fontWeight: "bold" }}>Complete</p>
-              <p>{row.other_stage} </p>
-            </div> */}
-          </>
-        );
-      },
-    },
-
-    {
-      text: "Time taken for Completion",
-      dataField: "days_taken",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
     {
-      text: "Report",
+      dataField: "Exp_Delivery_Date",
+      text: "Expected date of delivery",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      dataField: "date_of_delivery",
+      text: "Actual date of delivery",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Deliverable",
       dataField: "",
       sort: true,
       headerStyle: () => {
@@ -252,24 +223,10 @@ function AssignmentTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getAssignmentData();
-  };
-
   //reset date
   const resetData = () => {
     console.log("resetData ..");
     reset();
-    getAssignmentData();
-  };
-
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
     getAssignmentData();
   };
 
@@ -278,7 +235,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -288,6 +245,20 @@ function AssignmentTab() {
           }
         }
       });
+  };
+
+  const Reset = () => {
+    return (
+      <>
+        <button
+          type="submit"
+          class="btn btn-primary mx-sm-1 mb-2"
+          onClick={() => resetData()}
+        >
+          Reset
+        </button>
+      </>
+    );
   };
 
   return (
@@ -303,132 +274,99 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardHeader>
-          <div className="row">
-            <div class="col-sm-3 d-flex">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-                value={selectedData}
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
-
+          <AdminFilter
+            setData={setAssignmentDisplay}
+            getData={getAssignmentData}
+            assignment="assignment"
+          />
+          {/* <div className="row">
+            <div className="col-sm-12 d-flex">
               <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetCategory}
-                  style={{ padding: "4px 9px" }}
-                >
-                  X
-                </button>
-              </div>
-            </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="form-inline">
+                    <div class="form-group mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore(e.target.value)}
+                      >
+                        <option value="">--Select Category--</option>
+                        {tax.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-            <div className="col-sm-9 d-flex p-0">
-              <div>
-                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mb-2">
-                    <label className="form-select form-control">From</label>
-                  </div>
-                  <div class="form-group mb-2 ml-2">
-                    <input
-                      type="date"
-                      name="p_dateFrom"
-                      className="form-select form-control"
-                      ref={register}
-                    />
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax2"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore2(e.target.value)}
+                      >
+                        <option value="">--Select Sub-Category--</option>
+                        {tax2.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">From</label>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateFrom"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">To</label>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateTo"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_status"
+                        ref={register}
+                        style={{ height: "33px" }}
+                      >
+                        <option value="">--select--</option>
+                        <option value="1">InProgress</option>
+                        <option value="2">Complete</option>
+                      </select>
+                    </div>
                   </div>
 
-                  <div class="form-group mb-2 ml-2">
-                    <label className="form-select form-control">To</label>
-                  </div>
-                  <div class="form-group mb-2 ml-2">
-                    <input
-                      type="date"
-                      name="p_dateTo"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-
-                  <div class="form-group mb-2 ml-2">
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">InProgress</option>
-                      <option value="2">Complete</option>
-                    </select>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mb-2 ml-2">
-                    <i class="fa fa-search"></i>
+                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
+                    Search
                   </button>
+
+                  <Reset />
                 </form>
               </div>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetData}
-                >
-                  Reset
-                </button>
-              </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
 
         <CardBody>

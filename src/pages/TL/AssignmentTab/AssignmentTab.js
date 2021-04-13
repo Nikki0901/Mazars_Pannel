@@ -58,7 +58,7 @@ function AssignmentTab() {
       },
     },
     {
-      text: "Date of Query",
+      text: "Date",
       dataField: "date_of_query",
       sort: true,
       headerStyle: () => {
@@ -90,31 +90,6 @@ function AssignmentTab() {
       },
     },
     {
-      text: "Assignment No",
-      dataField: "assignment_label_number",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Assignment Date",
-      dataField: "assignment_date",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.assignment_date);
-        var updatedate = row.assignment_date.split(" ")[0];
-        console.log(updatedate);
-        if (updatedate == null) {
-          return null;
-        }
-        return updatedate.toString().split("-").reverse().join("-");
-      },
-    },
-    {
       text: "Category",
       dataField: "parent_id",
       sort: true,
@@ -130,15 +105,6 @@ function AssignmentTab() {
         return { fontSize: "12px" };
       },
     },
-
-    {
-      text: "Proposed date of Completion",
-      dataField: "Exp_Delivery_Date",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
     {
       text: "Status",
       dataField: "status",
@@ -147,9 +113,16 @@ function AssignmentTab() {
         return { fontSize: "12px" };
       },
     },
-
     {
-      text: "Time taken for Completion",
+      text: "Expected date of delivery",
+      dataField: "Exp_Delivery_Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Actual date of delivery",
       dataField: "days_taken",
       sort: true,
       headerStyle: () => {
@@ -157,7 +130,7 @@ function AssignmentTab() {
       },
     },
     {
-      text: "Report",
+      text: "Deliverable",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -196,34 +169,6 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            {/* {row.final_report || row.assignement_draft_report ? (
-              <div title="upload Pdf">
-                <p
-                  style={{ cursor: "pointer", color: "green" }}
-                  onClick={() => uploadDraftReport(row.id)}
-                >
-                  <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                  draft
-                </p>
-              </div>
-            ) : row.client_discussion == "completed" &&
-              row.delivery_report == "completed" &&
-              row.draft_report == "completed" &&
-              row.final_discussion == "completed" &&
-              row.amount == row.paid_amount ? (
-              <div title="upload Pdf">
-                <p
-                  style={{ cursor: "pointer", color: "red" }}
-                  onClick={() => uploadFinalReport(row)}
-                >
-                  <div>
-                    <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                    final
-                  </div>
-                </p>
-              </div>
-            ) : null} */}
-
             <div
               style={{
                 display: "flex",

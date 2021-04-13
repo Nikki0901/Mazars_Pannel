@@ -3,17 +3,17 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import { useHistory , useParams} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Layout from "../../../components/Layout/Layout";
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardTitle,
-    Row,
-    Col,
-    Table,
-  } from "reactstrap";
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Table,
+} from "reactstrap";
 
 function ProposalComponent() {
   // const { id } = props;
@@ -28,42 +28,38 @@ function ProposalComponent() {
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
 
-   const history = useHistory();
-   const { id } = useParams();
+  const history = useHistory();
+  const { id } = useParams();
 
-    const [proposal, setProposal] = useState({
+  const [proposal, setProposal] = useState({
     query: "",
     name: "",
     amount: "",
     payable: "",
     misc1: "",
     misc2: "",
-    payable_through:""
+    payable_through: "",
   });
-  const { query, name, amount,misc1,misc2 ,payable_through} = proposal;
+  const { query, name, amount, misc1, misc2, payable_through } = proposal;
 
-  useEffect(() => {  
+  useEffect(() => {
     getQuery();
   }, []);
 
   const getQuery = () => {
-    axios
-      .get(
-        `${baseUrl}/tl/getProposalDetail?id=${id}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setProposal({
-            name: res.data.result.name,
-            query: res.data.result.assign_no,
-            amount: res.data.result.amount,
-            misc1: res.data.result.misc1,
-            misc2: res.data.result.misc2,
-            payable_through: res.data.result.payable_through,
-          });
-        }
-      });
+    axios.get(`${baseUrl}/tl/getProposalDetail?id=${id}`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setProposal({
+          name: res.data.result.name,
+          query: res.data.result.assign_no,
+          amount: res.data.result.amount,
+          misc1: res.data.result.misc1,
+          misc2: res.data.result.misc2,
+          payable_through: res.data.result.payable_through,
+        });
+      }
+    });
   };
 
   useEffect(() => {
@@ -76,17 +72,13 @@ function ProposalComponent() {
     getUser();
   }, [id]);
 
-
-
   console.log(assignId);
-
-
 
   const onSubmit = (value) => {
     console.log(value);
 
     // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-    var todaysDate = new Date()
+    var todaysDate = new Date();
     let formData = new FormData();
 
     formData.append("assign_no", value.p_assingment);
@@ -112,7 +104,7 @@ function ProposalComponent() {
           // reset();
           getQuery();
           alert.success(<Msg />);
-          history.push('/teamleader/proposal')
+          history.push("/teamleader/proposal");
         }
       })
       .catch((error) => {
@@ -120,37 +112,39 @@ function ProposalComponent() {
       });
   };
 
-
-//alert msg
-const Msg = () =>{
-  return(
-    <>
-    <p style={{fontSize:"10px"}}>proposal updated</p>
-    </>
-  )
-}
+  //alert msg
+  const Msg = () => {
+    return (
+      <>
+        <p style={{ fontSize: "10px" }}>proposal updated</p>
+      </>
+    );
+  };
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
-         <Card>
+      <Card>
         <CardHeader>
           <Row>
             <Col md="5">
-            <button class="btn btn-success ml-3" onClick={() => history.goBack()}>
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
                 <i class="fas fa-arrow-left mr-2"></i>
                 Go Back
               </button>
             </Col>
             <Col md="7">
-            <div class="btn ml-3">               
+              <div class="btn ml-3">
                 <h4>Edit Proposal</h4>
               </div>
             </Col>
           </Row>
         </CardHeader>
-        
+
         <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -229,14 +223,15 @@ const Msg = () =>{
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Misc 2</label>
-                  <input
-                    type="text"
+                  <label>Proposal Description</label>
+                  <textarea
+                    className="form-control"
+                    id="textarea"
+                    rows="3"
                     name="misc_2"
-                    class="form-control"
-                    ref={register}
                     defaultValue={misc2}
-                  />
+                    ref={register}
+                  ></textarea>
                 </div>
               </div>
             </div>
@@ -263,8 +258,7 @@ const Msg = () =>{
             </div>
           </form>
         </CardBody>
-        </Card>
-    
+      </Card>
     </Layout>
   );
 }
@@ -278,7 +272,3 @@ const payable = [
   { pay: "UPI" },
   { pay: "WALLET" },
 ];
-
-
-
-

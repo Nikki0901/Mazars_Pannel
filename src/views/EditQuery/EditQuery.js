@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
-import { useHistory,useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -8,110 +8,111 @@ import { baseUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
 import { Select } from "antd";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-} from "reactstrap";
-
-
-  // const defaultValues = {
-  //   firstName: "bill",
-  //   lastName: "luo",
-  //   email: "test@test.com",
-  //   isDeveloper: true
-  // }
-
+import { Card, CardHeader, Row, Col } from "reactstrap";
 
 function EditQuery(props) {
   const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
   const { id } = useParams();
-  const { handleSubmit, register, errors, reset, control } = useForm();
 
-  const { append, remove, fields } = useFieldArray(
-    {
+
+  const { handleSubmit, register, errors, reset, control, setValue } = useForm({
+    defaultValues: {
+      users: [{ query: "" }],
+    },
+  });
+
+  const { append, remove, fields } = useFieldArray({
     control,
     name: "users",
-  },
-);
+  });
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
 
-  const [selectedData, setSelectedData] = useState([]);
-  const [assessment_year, setAssementYear] = useState(null);
-
-  const [user, setUser] = useState({
-    fact: "",
-    case_assement: "",
-    p_Softcopy_word: "",
-    p_Softcopy_digital: "",
-    p_Softcopy_physical: "",
-  });
-  const { fact, case_assement, p_Softcopy_word,  p_Softcopy_physical } = user;
-
-
-
+  const [selectedData, setSelectedData] = useState("");
+  const [assessmentYear, setAssementYear] = useState([]);
 
   useEffect(() => {
     getQuery();
   }, []);
 
+  var arr = [];
+
   const getQuery = () => {
     axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
-      console.log(res);  
-      console.log("result",res.data.result[0]);  
-      console.log("result",res.data.result[0].assessment_year);  
-      setAssementYear(res.data.result[0].assessment_year)
-      reset(res.data.result[0])    
-      // setUser({
-      //   fact:res.data.result[0]
-      // })
+      console.log(res);
+      console.log("result", res.data.result[0]);
+      console.log("result", res.data.result[0].assessment_year);
+      // var allData = res.data.result[0];
+
+      var specific = res.data.result[0].specific_query;
+      if (specific == "undefined") {
+      } else var sepData = JSON.parse(specific);
+      reset({
+        users: sepData,
+      });
+
+      var value = res.data.result[0].assessment_year;
+      const usingSplit = value.split(",");
+      console.log("value :", usingSplit);
+      setAssementYear(usingSplit);
+
+      arr = ["a", "b", "c", "2021"];
+      console.log("arr", arr);
+
+      setValue("fact_case", res.data.result[0].fact_case);
+      setValue("case_name", res.data.result[0].case_name);
+      setValue("purpose_opinion", res.data.result[0].purpose_opinion);
+      setValue("p_Softcopy_word", Boolean(+res.data.result[0].softcopy_word));
+      setValue(
+        "p_Softcopy_digital",
+        Boolean(+res.data.result[0].softcopy_digitally_assigned)
+      );
+      setValue(
+        "p_Softcopy_physical",
+        Boolean(+res.data.result[0].printout_physically_assigned)
+      );
+      setValue("p_timelines", res.data.result[0].Timelines);
     });
   };
 
-console.log(assessment_year)
+  console.log("arr4", arr);
 
   function handleChange(value) {
-    console.log(`selected ${value}`);
     setSelectedData(value);
-    console.log("setSelectedData :", selectedData);
   }
 
-
-
-
   const onSubmit = (value) => {
-    console.log("value",value);
+    console.log("value", value);
 
     let formData = new FormData();
 
+    for (var i = 0; i < value.upload.length; i++) {
+      console.log("pics", value.upload[i].pics[0]);
+
+      let a = value.upload[i].pics[0];
+      // arr.push(a)
+      formData.append("upload_1", a);
+    }
     formData.append("fact", value.fact_case);
     formData.append("specific", JSON.stringify(value.specific));
-    formData.append("upload_1", value.p_document1[0]);
-    formData.append("upload_2", value.p_document2[0]);
-    formData.append("upload_3", value.p_document3[0]);                    
     formData.append("purpose", value.purpose_opinion);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
     formData.append("cid", JSON.parse(category));
-    formData.append("softcopy_word", Number(value.p_format_word));
+    formData.append("softcopy_word", Number(value.p_Softcopy_word));
     formData.append(
       "softcopy_digitally_assigned",
-      Number(value.p_format_digital)
+      Number(value.p_Softcopy_digital)
     );
-    formData.append(                            
+    formData.append(
       "printout_physically_assigned",
-      Number(value.p_format_physically)
+      Number(value.p_Softcopy_physical)
     );
     formData.append("case_name", value.case_name);
-    formData.append("assessment_year", value.selectedData);
+    formData.append("assessment_year", selectedData);
     formData.append("id", id);
 
     axios
@@ -122,7 +123,7 @@ console.log(assessment_year)
       })
       .then(function (response) {
         console.log("res-", response);
-        if (response.data.code === 1) {         
+        if (response.data.code === 1) {
           alert.success("updated");
           props.history.push("/customer/queries");
         }
@@ -162,7 +163,6 @@ console.log(assessment_year)
                       rows="6"
                       name="fact_case"
                       ref={register}
-                      // defaultValue={fact.fact_case}
                     ></textarea>
                   </div>
                 </div>
@@ -180,24 +180,24 @@ console.log(assessment_year)
                     </div>
                   </div>
 
-                  {fields.length > 0 &&
-                    fields.map((item, index) => (
-                      <div className="question_query_field mb-2" key={index}>
-                        <input
-                          type="text"
-                          className="form-control"
-                          ref={register}
-                          name={`specific[${index}].query`}
-                          placeholder="Specify your query"
-                        />
-                        <div
-                          className="btn btn-primary ml-2"
-                          onClick={() => remove(index)}
-                        >
-                          -
-                        </div>
+                  {fields.map((item, index) => (
+                    <div className="question_query_field mb-2" key={index}>
+                      <input
+                        type="text"
+                        className="form-control"
+                        ref={register}
+                        name={`specific[${index}].query`}
+                        defaultValue={`${item.query}`}
+                        placeholder="Specify your query"
+                      />
+                      <div
+                        className="btn btn-primary ml-2"
+                        onClick={() => remove(index)}
+                      >
+                        -
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="col-md-6">
@@ -208,10 +208,9 @@ console.log(assessment_year)
                       name="case_name"
                       ref={register}
                       className="form-control"
-                      
                     />
                   </div>
-                </div>  
+                </div>
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label className="form-label">Assessment year</label>
@@ -219,7 +218,7 @@ console.log(assessment_year)
                       mode="tags"
                       style={{ width: "100%" }}
                       onChange={handleChange}
-                      // defaultValue={['a10',`${JSON.stringify(assessment_year)}`]}
+                      defaultValue={arr}
                       allowClear
                     >
                       {cars.map((p, i) => (
@@ -227,29 +226,12 @@ console.log(assessment_year)
                       ))}
                     </Select>
                   </div>
+                  <p>{arr}</p>
                 </div>
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Upload Your Document</label>
-                    <input
-                      type="file"
-                      name="p_document1"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                    <input
-                      type="file"
-                      name="p_document2"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                    <input
-                      type="file"
-                      name="p_document3"
-                      ref={register}
-                      className="form-control-file"
-                    />
+                    <ImageUploads register={register} control={control} />
                   </div>
                 </div>
 
@@ -262,14 +244,14 @@ console.log(assessment_year)
                       className="form-select form-control"
                       name="purpose_opinion"
                       aria-label="Default select example"
-                      ref={register}                      
+                      ref={register}
                     >
                       <option value="">--select--</option>
                       {Opinion.map((p, i) => (
-                      <option key={i} value={p.sought}>
-                        {p.sought}
-                      </option>
-                    ))}        
+                        <option key={i} value={p.sought}>
+                          {p.sought}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -284,7 +266,7 @@ console.log(assessment_year)
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        name="p_format_word"
+                        name="p_Softcopy_word"
                         ref={register}
                       />
                       <label className="form-check-label">
@@ -295,9 +277,8 @@ console.log(assessment_year)
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        name="p_format_digital"
-                        {...register("isDeveloper")}
-                        // defaultValue={defaultValues.isDeveloper}
+                        name="p_Softcopy_digital"
+                        ref={register}
                       />
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
@@ -307,7 +288,7 @@ console.log(assessment_year)
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        name="p_format_physically"
+                        name="p_Softcopy_physical"
                         ref={register}
                       />
                       <label className="form-check-label">
@@ -328,8 +309,7 @@ console.log(assessment_year)
                         type="radio"
                         name="p_timelines"
                         ref={register}
-                        value="Urgent,(4-5 Working Days)"
-                        defaultChecked
+                        value="Urgent, (4-5 Working Days)"
                       />
                       <label>Urgent, (4-5 Working Days)</label>
                     </div>
@@ -358,15 +338,45 @@ console.log(assessment_year)
   );
 }
 
-
 export default EditQuery;
+const ImageUploads = ({ register, control }) => {
+  const { append, fields, remove } = useFieldArray({
+    control,
+    name: "upload",
+  });
+  return (
+    <>
+      <div className="question_query mb-2">
+        <label className="form-label">Upload Your Document</label>
+        <div className="btn btn-primary" onClick={() => append({ pics: "" })}>
+          +
+        </div>
+      </div>
+
+      {fields.map((item, index) => (
+        <div className="question_query_field mb-2" key={index}>
+          <input
+            type="file"
+            name={`upload[${index}].pics`}
+            ref={register()}
+            className="form-control-file"
+            defaultValue={item.pics}
+          />
+          <div className="btn btn-primary ml-2" onClick={() => remove(index)}>
+            -
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
 const Opinion = [
   { sought: "Assessment" },
   { sought: "Appeal" },
   { sought: "Filing before any Court" },
   { sought: "Filing before any Authority" },
-  { sought: "Others" },  
+  { sought: "Others" },
 ];
 const cars = [
   {
@@ -394,3 +404,21 @@ const cars = [
     year: "2027-28",
   },
 ];
+
+// console.log("value :", value);
+
+// console.log("arr", arr);
+// const [user, setUser] = useState({
+//   fact: "",
+//   case_assement: "",
+//   p_Softcopy_word: "",
+//   p_Softcopy_digital: "",
+//   p_Softcopy_physical: "",
+// });
+// const {
+//   fact,
+//   case_assement,
+//   p_Softcopy_word,
+//   p_Softcopy_digital,
+//   p_Softcopy_physical,
+// } = user;

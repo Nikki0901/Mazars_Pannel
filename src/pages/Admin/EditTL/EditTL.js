@@ -23,7 +23,7 @@ function EditTL() {
   const history = useHistory();
 
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset, setValue } = useForm();
   const userid = window.localStorage.getItem("adminkey");
 
   const [user, setUser] = useState({
@@ -46,6 +46,8 @@ function EditTL() {
       axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
+          // setValue("p_name", res.data.result[0].name);
+          // setValue("p_email", res.data.result[0].email);
           setUser({
             name: res.data.result[0].name,
             email: res.data.result[0].email,

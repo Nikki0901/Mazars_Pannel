@@ -6,8 +6,8 @@ import { Link, useHistory } from "react-router-dom";
 
 function NavWrapper(props) {
   const { color, logout, name, cust } = props;
-  const history = useHistory();
-  const userId = window.localStorage.getItem("userid");
+  // const history = useHistory();
+  // const userId = window.localStorage.getItem("userid");
   
   // const [notification, setNotification] = useState([]);
   // const [countNotification, setCountNotification] = useState("");

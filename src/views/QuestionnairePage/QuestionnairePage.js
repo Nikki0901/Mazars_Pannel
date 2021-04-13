@@ -8,6 +8,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAlert } from "react-alert";
+import { Form, Input, Button, Space, Select } from "antd";
 
 // const Schema = yup.object().shape({
 //   p_sought: yup.string().required("required sought"),
@@ -16,7 +17,11 @@ import { useAlert } from "react-alert";
 
 function Questionnaire(props) {
   const alert = useAlert();
+  const { Option } = Select;
   const { handleSubmit, register, errors, reset, control } = useForm();
+
+  const [selectedData, setSelectedData] = useState("");
+  const [multipleFiles, setMultipleFiles] = useState("");
 
   // const [id, setId] = useState('');
   const [modal, setModal] = useState(true);
@@ -40,18 +45,31 @@ function Questionnaire(props) {
     );
   };
 
+
+
+  function handleChange(value) {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+    console.log("setSelectedData :", selectedData);
+  }
+
   const onSubmit = (value) => {
     console.log("value :", value);
-    console.log("value :", Number(value.p_format_word));
-    console.log("value :", Number(value.p_format_digital));
-    console.log("value :", Number(value.p_format_physically));
+    setMultipleFiles(value.p_document1);
 
     let formData = new FormData();
+    for (var i = 0; i < value.upload.length; i++) {
+      console.log("pics", value.upload[i].pics[0]);
+
+      let a = value.upload[i].pics[0];
+      formData.append("upload_1", a);
+    }
+
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.specific));
-    formData.append("upload_1", value.p_document1[0]);
-    formData.append("upload_2", value.p_document2[0]);
-    formData.append("upload_3", value.p_document3[0]);                    
+    // formData.append("upload_1", value.p_document1[0]);
+    // formData.append("upload_2", value.p_document2[0]);
+    // formData.append("upload_3", value.p_document3[0]);
     formData.append("purpose", value.p_purpose);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
@@ -61,7 +79,7 @@ function Questionnaire(props) {
       "softcopy_digitally_assigned",
       Number(value.p_format_digital)
     );
-    formData.append(                            
+    formData.append(
       "printout_physically_assigned",
       Number(value.p_format_physically)
     );
@@ -88,28 +106,31 @@ function Questionnaire(props) {
       });
   };
 
-
   const SuccessMesg = () => {
     return (
       <>
         <Modal isOpen={modal} toggle={toggle} size="sm">
-          <ModalHeader toggle={toggle}>    
-          </ModalHeader>
+          <ModalHeader toggle={toggle}></ModalHeader>
 
-          <div style={{textAlign:"center" , paddingTop:"5px" ,fontWeight:"bold" ,
-          background:"green"}}>
+          <div
+            style={{
+              textAlign: "center",
+              paddingTop: "5px",
+              fontWeight: "bold",
+              background: "green",
+            }}
+          >
             <h2>User ID</h2>
           </div>
-         
+
           <ModalBody>
-            <br/>
+            <br />
             <div class="modal-body">
               <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                 {JSON.parse(userNameId)}
+                {JSON.parse(userNameId)}
               </h1>
             </div>
           </ModalBody>
-          
         </Modal>
       </>
     );
@@ -178,29 +199,7 @@ function Questionnaire(props) {
               </div>
 
               <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Upload Your Document</label>
-                  <input
-                    type="file"
-                    name="p_document1"
-                    ref={register}
-                    className="form-control-file"
-                  />
-                  <input
-                    type="file"
-                    name="p_document2"
-                    ref={register}
-                    className="form-control-file"
-                    multiple={true}
-                  />
-                  <input
-                    type="file"
-                    name="p_document3"
-                    ref={register}
-                    className="form-control-file"
-                    multiple={true}
-                  />
-                </div>
+                <ImageUploads register={register} control={control} />
               </div>
 
               <div className="col-md-6">
@@ -215,13 +214,11 @@ function Questionnaire(props) {
                     ref={register}
                   >
                     <option value="">--select--</option>
-                    <option value="Assessment">Assessment</option>
-                    <option value="Appeal">Appeal</option>
-                    <option value="Court">Filing before any Court</option>
-                    <option value="Authority">
-                    Filing before any Authority
-                    </option>
-                    <option value="Others">Others</option>
+                    {Opinion.map((p, i) => (
+                      <option key={i} value={p.sought}>
+                        {p.sought}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -237,31 +234,20 @@ function Questionnaire(props) {
                   />
                 </div>
               </div>
+
               <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">Assessment year</label>
-
-                  <select
-                    className="form-select form-control"
-                    name="p_assessment_year"
-                    aria-label="Default select example"
-                    ref={register}
+                  <Select
+                    mode="tags"
+                    style={{ width: "100%" }}
+                    onChange={handleChange}
+                    allowClear
                   >
-                    <option value="">--select--</option>
-                    <option value="2010">2010</option>
-                    <option value="2011">2011</option>
-                    <option value="2012">2012</option>
-                    <option value="2013">2013</option>
-                    <option value="2014">2014</option>
-                    <option value="2015">2015</option>
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                  </select>
+                    {assessment_year.map((p, i) => (
+                      <Option key={p.year}>{p.year}</Option>
+                    ))}
+                  </Select>
                 </div>
               </div>
 
@@ -352,6 +338,102 @@ function Questionnaire(props) {
 }
 
 export default Questionnaire;
+
+const Opinion = [
+  { sought: "Assessment" },
+  { sought: "Appeal" },
+  { sought: "Filing before any Court" },
+  { sought: "Filing before any Authority" },
+  { sought: "Others" },
+];
+const assessment_year = [
+  {
+    year: "2010-11",
+  },
+  {
+    year: "2011-12",
+  },
+  {
+    year: "2012-13",
+  },
+  {
+    year: "2013-14",
+  },
+  {
+    year: "2014-15",
+  },
+  {
+    year: "2015-16",
+  },
+  {
+    year: "2016-17",
+  },
+  {
+    year: "2017-18",
+  },
+  {
+    year: "2018-19",
+  },
+  {
+    year: "2019-20",
+  },
+  {
+    year: "2020-21",
+  },
+  {
+    year: "2021-22",
+  },
+  {
+    year: "2022-23",
+  },
+  {
+    year: "2023-24",
+  },
+  {
+    year: "2024-25",
+  },
+  {
+    year: "2025-26",
+  },
+  {
+    year: "2026-27",
+  },
+  {
+    year: "2027-28",
+  },
+];
+
+const ImageUploads = ({ register, control }) => {
+  const { append, fields, remove } = useFieldArray({
+    control,
+    name: "upload",
+  });
+  return (
+    <>
+      <div className="question_query mb-2">
+        <label className="form-label">Upload Your Document</label>
+        <div className="btn btn-primary" onClick={() => append({ pics: "" })}>
+          +
+        </div>
+      </div>
+
+      {fields.map((item, index) => (
+        <div className="question_query_field mb-2" key={index}>
+          <input
+            type="file"
+            name={`upload[${index}].pics`}
+            ref={register()}
+            className="form-control-file"
+            defaultValue={item.pics}
+          />
+          <div className="btn btn-primary ml-2" onClick={() => remove(index)}>
+            -
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
 //   const onSubmit = (value) => {
 //     console.log("value :", value);

@@ -18,6 +18,7 @@ import PaymentModal from "./PaymentModal";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import CommonServices from "../../common/common";
 
 function ProposalTab() {
   const alert = useAlert();
@@ -58,7 +59,6 @@ function ProposalTab() {
       });
   };
 
-
   const columns = [
     {
       text: "S.No",
@@ -74,7 +74,7 @@ function ProposalTab() {
       },
     },
     {
-      text: "Date of Query",
+      text: "Date",
       dataField: "created",
       sort: true,
       style: {
@@ -83,7 +83,7 @@ function ProposalTab() {
       headerStyle: () => {
         return { fontSize: "11px" };
       },
-      formatter: function dateFormat(cell, row) {
+      formatter: function (cell, row) {
         console.log("dt", row.created);
         var oldDate = row.created;
         if (oldDate == null) {
@@ -113,17 +113,6 @@ function ProposalTab() {
         );
       },
     },
-    // {
-    //   text: "Proposal No",
-    //   dataField: "proposal_number",
-    //   sort: true,
-    //   style: {
-    //     fontSize: "11px",
-    //   },
-    //   headerStyle: () => {
-    //     return { fontSize: "11px" };
-    //   },
-    // },
     {
       text: "Category",
       dataField: "parent_id",
@@ -175,14 +164,14 @@ function ProposalTab() {
       headerStyle: () => {
         return { fontSize: "11px" };
       },
-      // formatter: function dateFormat(cell, row) {
-      //   console.log("dt", row.cust_accept_date);
-      //   var oldDate = row.cust_accept_date;
-      //   if (oldDate == null) {
-      //     return null;
-      //   }
-      //   return oldDate.toString().split("-").reverse().join("-");
-      // },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_accept_date);
+        var oldDate = row.cust_accept_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
     },
     {
       text: "Status",
@@ -207,7 +196,7 @@ function ProposalTab() {
       },
     },
     {
-      text: "Amount Accepted",
+      text: "Accepted Amount",
       dataField: "accepted_amount",
       sort: true,
       style: {
@@ -231,17 +220,6 @@ function ProposalTab() {
       },
     },
     {
-      text: "Date of Payment",
-      dataField: "cust_paid_date",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
       text: "Amount Outstanding",
       dataField: "",
       sort: true,
@@ -260,6 +238,25 @@ function ProposalTab() {
         if (p == 0) {
           return "0";
         } else return a - p;
+      },
+    },
+    {
+      text: "Date of Payment",
+      dataField: "cust_paid_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_paid_date);
+        var oldDate = row.cust_paid_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -415,6 +412,7 @@ function ProposalTab() {
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>

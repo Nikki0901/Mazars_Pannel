@@ -15,6 +15,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 
 function DeclinedProposal({ declinedProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -35,24 +36,62 @@ function DeclinedProposal({ declinedProposal }) {
     });
   };
 
+  const [tax, setTax] = useState([]);
+  const [tax2, setTax2] = useState([]);
+
+  const [store, setStore] = useState("");
+  const [store2, setStore2] = useState("");
+
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  const getCategory = () => {
+    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setTax(res.data.result);
+      }
+    });
+  };
+
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
+
+
   const columns = [
     {
       dataField: "",
       text: "S.No",
-      // sort: true,
       formatter: (cellContent, row, rowIndex) => {
         return rowIndex + 1;
       },
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
     },
     {
       dataField: "created",
       text: "Date",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.created);
@@ -67,8 +106,11 @@ function DeclinedProposal({ declinedProposal }) {
       dataField: "assign_no",
       text: "Query No",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
@@ -83,32 +125,33 @@ function DeclinedProposal({ declinedProposal }) {
       dataField: "parent_id",
       text: "Category",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
     },
     {
       dataField: "cat_name",
       text: "Sub Category",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
     },
     {
-      dataField: "proposal_number",
-      text: "Proposal number",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: '12px' };
-      },
-    },
-    {
+      text: "Date of Proposal",
       dataField: "DateofProposal",
-      text: "Proposal Sent date",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.DateofProposal);
@@ -120,53 +163,135 @@ function DeclinedProposal({ declinedProposal }) {
       },
     },
     {
-      dataField: "ProposedAmount",
-      text: "Proposed Amount",
+      text: "Date of acceptance of Proposal",
+      dataField: "cust_accept_date",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_accept_date);
+        var oldDate = row.cust_accept_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
+      text: "Status",
       dataField: "status",
-      text: "Proposal Status",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      dataField: "ProposedAmount",
+      text: "Proposed Amount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
       },
     },
     {
       dataField: "accepted_amount",
-      text: "Amount Accepted",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: '12px' };
-      },
-    },
-    {
-      dataField: "",
-      text: "Assignment Number",
+      text: "Accepted Amount ",
       sort: true,
       style: {
-        fontSize: '13px'
+        fontSize: "11px",
+        color: "#21a3ce",
       },
       headerStyle: () => {
-        return { fontSize: '12px' };
+        return { fontSize: "11px", color: "#21a3ce" };
       },
     },
     {
-      dataField: "tl_name",                                        
+      text: "Amount Paid",
+      dataField: "paid_amount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+        color: "#064606",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px", color: "#064606" };
+      },
+    },
+
+    {
+      text: "Amount Outstanding",
+      dataField: "",
+      sort: true,
+      style: {
+        fontSize: "11px",
+        color: "darkred",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px", color: "darkred" };
+      },
+      formatter: function amountOutstading(cell, row) {
+        console.log("dt", row.paid_amount);
+        console.log("dt", row.accepted_amount);
+        var p = row.paid_amount;
+        var a = row.accepted_amount;
+        if (p == 0) {
+          return "0";
+        } else return a - p;
+      },
+    },
+    {
+      text: "Date of Payment",
+      dataField: "cust_paid_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_paid_date);
+        var oldDate = row.cust_paid_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Date of Completion",
+      dataField: "",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      dataField: "tl_name",
       text: "TL name",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
     },
   ];
 
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getDeclinedProposal();
-  };
 
   //reset date
   const resetData = () => {
@@ -175,19 +300,14 @@ function DeclinedProposal({ declinedProposal }) {
     getDeclinedProposal();
   };
 
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getDeclinedProposal();
-  };
+ 
 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/admin/getProposals?&status=6&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
@@ -199,125 +319,118 @@ function DeclinedProposal({ declinedProposal }) {
       });
   };
 
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
+  const Reset = () => {
+    return (
+      <>
+        <button
+          type="submit"
+          class="btn btn-primary mx-sm-1 mb-2"
+          onClick={() => resetData()}
+        >
+          Reset
+        </button>
+      </>
+    );
+  };
   return (
     <>
       <Card>
-        <CardHeader>
-          <div className="row">
-            <div class="col-sm-3 d-flex">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-                value={selectedData}
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
+      <CardHeader>
+      <AdminFilter
+            setData={setProposalDisplay}
+            getData={getDeclinedProposal}
+            declinedProposal="declinedProposal"
+          />
 
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
-
+          {/* <div className="row">
+            <div className="col-sm-12 d-flex">
               <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetCategory}
-                >
-                  X
-                </button>
-              </div>
-            </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="form-inline">
+                    <div class="form-group mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore(e.target.value)}
+                      >
+                        <option value="">--Select Category--</option>
+                        {tax.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-            <div className="col-sm-9 d-flex">
-              <div>
-                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">From</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateFrom"
-                      className="form-select form-control"
-                      ref={register}
-                    />
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_tax2"
+                        ref={register}
+                        style={{ height: "35px" }}
+                        onChange={(e) => setStore2(e.target.value)}
+                      >
+                        <option value="">--Select Sub-Category--</option>
+                        {tax2.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">From</label>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateFrom"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">To</label>
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <input
+                        type="date"
+                        name="p_dateTo"
+                        className="form-select form-control"
+                        ref={register}
+                      />
+                    </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <select
+                        className="form-select form-control"
+                        name="p_status"
+                        ref={register}
+                        style={{ height: "33px" }}
+                      >
+                        <option value="">--select--</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Accepted</option>
+                        <option value="3">Declined</option>
+                      </select>
+                    </div>
                   </div>
 
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">To</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateTo"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary mb-2">
+                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                     Search
                   </button>
+
+                  <Reset />
                 </form>
               </div>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetData}
-                >
-                  Reset
-                </button>
-              </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
         <BootstrapTable
@@ -325,7 +438,7 @@ function DeclinedProposal({ declinedProposal }) {
             keyField="id"
             data={proposalDisplay}
             columns={columns}
-            rowIndex
+            classes="table-responsive"
           />
           {/* <Table responsive="sm" bordered>
           <thead class="table_head">

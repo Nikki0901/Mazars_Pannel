@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Swal from "sweetalert2";
 
 function QueriesTab() {
   const alert = useAlert();
@@ -157,12 +158,13 @@ function QueriesTab() {
       formatter: function (cell, row) {
         return (
           <>
-          
-            <i
-              className="fa fa-trash"
-              style={{ fontSize: 16, cursor: "pointer", marginLeft: "8px" }}
-              onClick={() => del(row.id)}
-            ></i>
+            {row.status_code < 5 ? (
+              <i
+                className="fa fa-trash"
+                style={{ fontSize: 16, cursor: "pointer", marginLeft: "8px" }}
+                onClick={() => del(row.id)}
+              ></i>
+            ) : null}
           </>
         );
       },
@@ -172,6 +174,22 @@ function QueriesTab() {
   const del = (id) => {
     console.log("del", id);
 
+    Swal.fire({
+      title: "Are you sure?",
+      text: "It will permanently deleted !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteCliente(id);
+      }
+    });
+  };
+
+  const deleteCliente = (id) => {
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
     formData.append("id", id);
@@ -183,22 +201,18 @@ function QueriesTab() {
     })
       .then(function (response) {
         console.log("res-", response);
-        alert.success("successfully deleted ");
-        getQueriesData();
+        if (response.data.code === 1) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          getQueriesData();
+        } else {
+          Swal.fire("Oops...", "Errorr ", "error");
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
 
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
