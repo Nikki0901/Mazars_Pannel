@@ -5,7 +5,6 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import QueryDetails from "../../components/QueryDetails/QueryDetails";
 
-
 function MyAssingment() {
   const { id } = useParams();
   const userId = window.localStorage.getItem("userid");
@@ -14,6 +13,9 @@ function MyAssingment() {
   const [assingNo, setAssingmentNo] = useState();
   const [displayQuery, setDisplayQuery] = useState([]);
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
+  const [queryDocs, setQueryDocs] = useState([]);
+  // const [statusCode, setStatusCode] = useState('');
+
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -21,7 +23,7 @@ function MyAssingment() {
     payment_received: "",
     cust_accept_date: "",
     proposal_date: "",
-    misc2:"",
+    misc2: "",
   });
 
   const [diaplayAssignment, setDisplayAssignment] = useState([
@@ -38,7 +40,6 @@ function MyAssingment() {
       date_of_delivery: "",
     },
   ]);
-
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
@@ -74,14 +75,17 @@ function MyAssingment() {
                 res.data.history_queries[0].date_of_allocation,
             });
           }
+          if (res.data.queries_document) {
+            if (res.data.queries_document.length > 0) {
+              setQueryDocs(res.data.queries_document);
+            }
+          }
         }
       });
     };
     getQuery();
     getSubmittedAssingment();
   }, [assingNo]);
-
-
 
   const getQuery = () => {
     axios
@@ -94,10 +98,8 @@ function MyAssingment() {
       });
   };
 
+  console.log("queryDocs -", queryDocs);
 
-
-
-  // console.log("diaplayProposal -", amount);
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <div class="row mt-3">
@@ -119,6 +121,7 @@ function MyAssingment() {
               getQuery={getQuery}
               assingNo={assingNo}
               customerQuery="customerQuery"
+              queryDocs={queryDocs}
             />
           ))}
         </div>

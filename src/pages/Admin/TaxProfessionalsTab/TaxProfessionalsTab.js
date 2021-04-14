@@ -13,9 +13,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
-
+import Swal from "sweetalert2";
 import BootstrapTable from "react-bootstrap-table-next";
-
 
 function TaxProfessionalsTab() {
   const alert = useAlert();
@@ -37,56 +36,6 @@ function TaxProfessionalsTab() {
     });
   };
 
-
-
-  // const column = [
-  //   {
-  //     headerName: "S.No",
-  //     field: "",
-  //     valueGetter: hashValueGetter,
-  //     sortable: true,
-  //     width: 90,
-  //   },
-  //   { headerName: "Name", field: "name", sortable: true, width: 170 },
-  //   { headerName: "Email", field: "email", sortable: true, width: 190 },
-  //   { headerName: "Phone", field: "phone", sortable: true, width: 190 },
-  //   {
-  //     headerName: "Edit",
-  //     field: "id",
-  //     width: 150,
-  //     cellRendererFramework: (params) => {
-  //       return (
-  //         <div>
-  //           <Link to={`/admin/edittp/${params.data.id}`}>
-  //             <i
-  //               className="fa fa-edit"
-  //               style={{
-  //                 fontSize: 18,
-  //                 cursor: "pointer",
-  //                 marginLeft: "8px",
-  //               }}
-  //             ></i>
-  //           </Link>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     headerName: "Edit",
-  //     field: "id",
-  //     width: 150,
-  //     cellRendererFramework: (params) => (
-  //       <div>
-  //         <i
-  //           className="fa fa-trash"
-  //           style={{ fontSize: 22, cursor: "pointer", marginLeft: "8px" }}
-  //           onClick={() => del(params.data.id)}
-  //         ></i>
-  //       </div>
-  //     ),
-  //   },
-  // ];
-
   const columns = [
     {
       dataField: "",
@@ -95,12 +44,28 @@ function TaxProfessionalsTab() {
         return rowIndex + 1;
       },
       headerStyle: () => {
-        return { fontSize: "12px" ,width:"50px"};
+        return { fontSize: "12px", width: "50px" };
       },
     },
     {
       dataField: "name",
       text: "Name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -165,15 +130,38 @@ function TaxProfessionalsTab() {
     },
   ];
 
-  // delete data
+  //check
   const del = (id) => {
+    console.log("del", id);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "It will permanently deleted !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteCliente(id);
+      }
+    });
+  };
+
+  // delete data
+  const deleteCliente = (id) => {
     console.log("del", id);
     axios
       .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
       .then(function (response) {
         console.log("delete-", response);
-        alert.success("successfully deleted ");
-        getTaxProf();
+        if (response.data.code === 1) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          getTaxProf();
+        } else {
+          Swal.fire("Oops...", "Errorr ", "error");
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -195,7 +183,7 @@ function TaxProfessionalsTab() {
             </Col>
           </Row>
         </CardHeader>
-        <CardBody>    
+        <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"

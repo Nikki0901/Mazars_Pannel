@@ -12,14 +12,16 @@ import {
   Table,
 } from "reactstrap";
 import { useAlert } from "react-alert";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function PaymentStatus() {
   const alert = useAlert();
+  const { id } = useParams();
   const userid = window.localStorage.getItem("tlkey");
   const cust_id = window.localStorage.getItem("userid");
 
@@ -65,7 +67,9 @@ function PaymentStatus() {
         console.log(row);
         return (
           <>
-            <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link>
+            <Link to={`/teamleader/queries/${row.assign_id}`}>
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -92,7 +96,7 @@ function PaymentStatus() {
       dataField: "accepted_amount",
       sort: true,
       style: {
-        color: "#21a3ce" 
+        color: "#21a3ce",
       },
       headerStyle: () => {
         return { fontSize: "12px", color: "#21a3ce" };
@@ -103,7 +107,7 @@ function PaymentStatus() {
       dataField: "paid_amount",
       sort: true,
       style: {
-        color: "#064606" 
+        color: "#064606",
       },
       headerStyle: () => {
         return { fontSize: "12px", color: "#064606" };
@@ -114,7 +118,7 @@ function PaymentStatus() {
       dataField: "",
       sort: true,
       style: {
-        color: "darkred" 
+        color: "darkred",
       },
       headerStyle: () => {
         return { fontSize: "12px", color: "darkred" };
@@ -148,6 +152,15 @@ function PaymentStatus() {
         return (
           <>
             <div
+              title="Add Assignment stages"
+              style={{ cursor: "pointer", textAlign: "center" }}
+            >
+              <Link to={`/teamleader/addassingment/${row.assign_id}`}>
+                <i class="fa fa-tasks"></i>
+              </Link>
+            </div>
+
+            {/* <div
               title="Accept Assignment"
               style={{
                 cursor: "pointer",
@@ -164,18 +177,7 @@ function PaymentStatus() {
                   ></i>
                 </div>
               )}
-            </div>
-
-            <div
-              title="Add Assignment stages"
-              style={{ cursor: "pointer", textAlign: "center" }}
-            >
-              {row.sid > 8 && (
-                <Link to={`/teamleader/addassingment/${row.assign_id}`}>
-                  <i class="fa fa-tasks"></i>
-                </Link>
-              )}
-            </div>
+            </div> */}
           </>
         );
       },
@@ -310,7 +312,12 @@ function PaymentStatus() {
             </Row>
           </CardHeader>
           <CardHeader>
-            <div className="row">
+            <TeamFilter
+              setData={setPayment}
+              getData={getPaymentStatus}
+              paymentStatus="paymentStatus"
+            />
+            {/* <div className="row">
               <div class="col-sm-3 d-flex">
                 <Select
                   mode="multiple"
@@ -435,7 +442,7 @@ function PaymentStatus() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </CardHeader>
 
           <CardBody>

@@ -1,7 +1,7 @@
 import React from "react";
 import CommonServices from "../../common/common";
 
-function ProposalDetails({ diaplayProposal, diaplayHistory }) {
+function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
   const {
     amount,
     accepted_amount,
@@ -13,6 +13,7 @@ function ProposalDetails({ diaplayProposal, diaplayHistory }) {
 
   const { tlname, date_of_allocation } = diaplayHistory;
 
+  console.log("p", p.query_status);
   // CommonServices.removeTime(proposal_date);
   return (
     <>
@@ -60,7 +61,11 @@ function ProposalDetails({ diaplayProposal, diaplayHistory }) {
             </tr>
             <tr>
               <th scope="row">Proposal Status</th>
-              <td></td>
+              <td>
+                {p.query_status < "5" && "pending"}
+                {p.query_status == "6" && "Declined"}
+                {(p.query_status == "5" || p.query_status > "6" ) && "Accepted"}
+              </td>
             </tr>
             <tr>
               <th scope="row">Amount Accepted</th>
@@ -89,7 +94,7 @@ function ProposalDetails({ diaplayProposal, diaplayHistory }) {
             </tr>
             <tr>
               <th scope="row">Payment Due</th>
-              <td></td>
+              <td>{payment_received}</td>
             </tr>
             <tr>
               <th scope="row">Payment Outstanding</th>

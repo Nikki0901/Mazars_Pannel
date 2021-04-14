@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
@@ -234,7 +235,12 @@ function Proposal() {
           </Row>
         </CardHeader>
         <CardHeader>
-          <div className="row">
+        <TeamFilter
+            setData={setProposal}
+            getData={getProposalList}
+            proposal="proposal"
+          />
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -361,7 +367,7 @@ function Proposal() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable

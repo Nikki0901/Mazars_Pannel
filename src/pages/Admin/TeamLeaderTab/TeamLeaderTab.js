@@ -15,7 +15,7 @@ import {
   Table,
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-
+import Swal from "sweetalert2";
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
@@ -130,21 +130,46 @@ function TeamLeaderTab() {
     });
   };
 
-  // delete data
+
+//check
   const del = (id) => {
     console.log("del", id);
 
+    Swal.fire({
+      title: "Are you sure?",
+      text: "It will permanently deleted !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteCliente(id);
+      }
+    });
+  };
+
+  // delete data
+  const deleteCliente = (id) => {
     axios
       .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
       .then(function (response) {
         console.log("delete-", response);
-        alert.success("successfully deleted ");
-        getTeamLeader();
+        if (response.data.code === 1) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          getTeamLeader();
+        } else {
+          Swal.fire("Oops...", "Errorr ", "error");
+        }
+        
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
+
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>

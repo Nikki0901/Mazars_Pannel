@@ -136,7 +136,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/pending/${row.id}`}>{row.assign_no}</Link>
+            <Link to={`/admin/queries/${row.id}`}>{row.assign_no}</Link>
           </>
         );
       },

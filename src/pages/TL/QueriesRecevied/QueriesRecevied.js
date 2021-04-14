@@ -13,6 +13,7 @@ function QueriesRecevied() {
   const [assingNo, setAssingmentNo] = useState();
   const [displayQuery, setDisplayQuery] = useState([]);
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
+  const [queryDocs, setQueryDocs] = useState([]);
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -37,9 +38,10 @@ function QueriesRecevied() {
     },
   ]);
 
+
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/tl/GetQueryDetails?id=${id}`).then((res) => {
+      axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
@@ -53,6 +55,7 @@ function QueriesRecevied() {
               amount: res.data.proposal_queries[0].amount,
               cust_accept_date: res.data.proposal_queries[0].cust_accept_date,
               proposal_date: res.data.proposal_queries[0].created,
+              misc2: res.data.proposal_queries[0].misc2,
             });
           }
 
@@ -69,6 +72,11 @@ function QueriesRecevied() {
               date_of_allocation:
                 res.data.history_queries[0].date_of_allocation,
             });
+          }
+          if (res.data.queries_document) {
+            if (res.data.queries_document.length > 0) {
+              setQueryDocs(res.data.queries_document);
+            }
           }
         }
       });
@@ -108,6 +116,7 @@ function QueriesRecevied() {
               displayQuery={displayQuery}
               getQuery={getQuery}
               assingNo={assingNo}
+              queryDocs={queryDocs}
             />
           ))}
         </div>

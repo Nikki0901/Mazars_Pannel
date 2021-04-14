@@ -1,7 +1,7 @@
 import React from "react";
 import CommonServices from "../../common/common";
 
-function BasicQuery({ p, diaplaySpecific }) {
+function BasicQuery({ p, diaplaySpecific, queryDocs }) {
   return (
     <>
       <div>
@@ -57,41 +57,15 @@ function BasicQuery({ p, diaplaySpecific }) {
             <tr>
               <th scope="row">Uploaded Documents</th>
               <td>
-                {p.upload_doc_1 == null ? (
-                  ""
-                ) : (
+                {queryDocs.map((p, i) => (
                   <p>
                     <a
-                      href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                      href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
                     >
                       <i class="fa fa-photo"></i>
                     </a>
                   </p>
-                )}
-
-                {p.upload_doc_2 == null ? (
-                  ""
-                ) : (
-                  <p>
-                    <a
-                      href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
-                    >
-                      <i class="fa fa-photo"></i>
-                    </a>
-                  </p>
-                )}
-
-                {p.upload_doc_3 == null ? (
-                  ""
-                ) : (
-                  <p>
-                    <a
-                      href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
-                    >
-                      <i class="fa fa-photo"></i>
-                    </a>
-                  </p>
-                )}
+                ))}
               </td>
             </tr>
             <tr>

@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function InCompleteData({ CountIncomplete }) {
   const [incompleteData, setInCompleteData] = useState([]);
@@ -57,15 +58,15 @@ function InCompleteData({ CountIncomplete }) {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.query_date);
-        var updatedate = row.query_date.split(" ")[0];
-        console.log(updatedate);
-        if (updatedate == null) {
-          return null;
-        }
-        return updatedate.toString().split("-").reverse().join("-");
-      },
+      // formatter: function dateFormat(cell, row) {
+      //   console.log("dt", row.query_date);
+      //   var updatedate = row.query_date.split(" ")[0];
+      //   console.log(updatedate);
+      //   if (updatedate == null) {
+      //     return null;
+      //   }
+      //   return updatedate.toString().split("-").reverse().join("-");
+      // },
     },
     {
       text: "Query No",
@@ -207,7 +208,14 @@ function InCompleteData({ CountIncomplete }) {
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+
+        <TeamFilter
+            setData={setInCompleteData}
+            getData={getInCompleteAssingment}
+            inCompleteQuery="inCompleteQuery"
+          />
+
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -317,7 +325,7 @@ function InCompleteData({ CountIncomplete }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable

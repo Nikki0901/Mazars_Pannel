@@ -4,17 +4,25 @@ import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { Select } from "antd";
 
-function CustomerFilter(props) {
+function TeamFilter(props) {
   const { Option } = Select;
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const { setData, getData, id, query, proposal, assignment } = props;
-  const [selectedData, setSelectedData] = useState([]);
+  const {
+    setData,
+    getData,
+    pendingForAcceptence,
+    inCompleteQuery,
+    completeAssignment,
+    proposal,
+    paymentStatus,
+    assignment,
+  } = props;
+  const userid = window.localStorage.getItem("tlkey");
 
+  const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
-
- 
 
   useEffect(() => {
     const getSubCategory = () => {
@@ -50,25 +58,55 @@ function CustomerFilter(props) {
     getData();
   };
 
- //reset date
- const resetData = () => {
-  console.log("resetData ..");
-  reset();
-  getData();
-};
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    getData();
+  };
 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("store2 :", store2);
 
-    if (query == "query") {
+    if (pendingForAcceptence == "pendingForAcceptence") {
       axios
         .get(
-          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
-            id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
+          `${baseUrl}/tl/pendingQues?id=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+    if (inCompleteQuery == "inCompleteQuery") {
+      axios
+        .get(
+          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+    if (completeAssignment == "completeAssignment") {
+      axios
+        .get(
+          `${baseUrl}//tl/getCompleteQues?id=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
         .then((res) => {
           console.log(res);
@@ -83,8 +121,8 @@ function CustomerFilter(props) {
     if (proposal == "proposal") {
       axios
         .get(
-          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
-            id
+          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+            userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
           }&status=${data.p_status}`
@@ -99,11 +137,26 @@ function CustomerFilter(props) {
         });
     }
 
+    if (paymentStatus == "paymentStatus") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+            }
+          }
+        });
+    }
+
     if (assignment == "assignment") {
       axios
         .get(
-          `${baseUrl}/customers/completeAssignments?user=${JSON.parse(
-            id
+          `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
+            userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
           }&status=${data.p_status}`
@@ -212,7 +265,7 @@ function CustomerFilter(props) {
                 </div>
 
                 <div class="form-group mx-sm-1  mb-2">
-                  {query == "query" && (
+                  {proposal == "proposal" && (
                     <select
                       className="form-select form-control"
                       name="p_status"
@@ -220,8 +273,23 @@ function CustomerFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Progress</option>
-                      <option value="3">Complete</option>
+                      <option value="1">Accepted</option>
+                      <option value="2">Pending</option>
+                      <option value="3">Cust Accepted</option>
+                      <option value="4">Declined</option>
+                    </select>
+                  )}
+
+                  {paymentStatus == "paymentStatus" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Unpaid</option>
+                      <option value="2">Paid</option>
                     </select>
                   )}
 
@@ -233,24 +301,12 @@ function CustomerFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Progress</option>
+                      <option value="1">Inprogress</option>
                       <option value="2">Complete</option>
                     </select>
                   )}
-                  {proposal == "proposal" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Pending</option>
-                      <option value="2">Accepted</option>
-                      <option value="3">Declined</option>
-                    </select>
-                  )}
                 </div>
+
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>
@@ -264,53 +320,4 @@ function CustomerFilter(props) {
   );
 }
 
-export default CustomerFilter;
-
-// http://13.232.121.233/mazarapi/v1/customers/incompleteAssignments?user=93&cat_id=&from=2021-03-20&to=2021-03-20
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore(e.target.value)}
-                  >
-                    <option value="">--Select Category--</option>
-                    {tax.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax2"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore2(e.target.value)}
-                  >
-                    <option value="">--Select Sub-Category--</option>
-                    {tax2.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-// useEffect(() => {
-// getCategory();
-// }, []);
-
-// const getCategory = () => {
-//   axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//     console.log(res);
-//     if (res.data.code === 1) {
-//       setTax(res.data.result);
-//     }
-//   });
-// };
-
-// const [store, setStore] = useState("");
-// const [tax, setTax] = useState([]);
+export default TeamFilter;

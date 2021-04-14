@@ -14,11 +14,29 @@ import {
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import PaymentModal from "./PaymentModal";
 
 function AssignmentTab() {
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
+
+  const [pay, setPay] = useState({
+    pay: "",
+    amount: "",
+  });
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+
+  const paymentHandler = (key) => {
+    console.log("key", key);
+
+    setPaymentModal(!addPaymentModal);
+    setPay({
+      amount: key.accepted_amount,
+      id: key.id,
+    });
+  };
 
   useEffect(() => {
     getAssignmentData();
@@ -181,6 +199,25 @@ function AssignmentTab() {
       },
       formatter: priceFormatter,
     },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ cursor: "pointer" }}>
+              <i
+                class="fa fa-credit-card"
+                style={{ color: "green", fontSize: "16px" }}
+                onClick={() => paymentHandler(row)}
+              ></i>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   //tl,phone,email
@@ -208,7 +245,6 @@ function AssignmentTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-  
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -238,7 +274,42 @@ function AssignmentTab() {
             columns={columns}
             rowIndex
           />
-          {/* <Table responsive="sm" bordered>
+          <PaymentModal
+            paymentHandler={paymentHandler}
+            addPaymentModal={addPaymentModal}
+            pay={pay}
+            getProposalData={getAssignmentData}
+          />
+        </CardBody>
+      </Card>
+    </Layout>
+  );
+}
+
+export default AssignmentTab;
+{
+  /* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */
+}
+
+// classes: 'hidden-xs',
+// headerClasses: 'hidden-xs',
+
+// function priceFormatter(cell, row) {
+//   console.log("row", row);
+//   if (row) {
+//     return (
+//       <>
+//         <p style={{ fontSize: "10px" }}>{row.tname} </p>
+//         <p style={{ fontSize: "10px" }}>{row.phone}</p>
+//         <p style={{ fontSize: "10px" }}>{row.email}</p>
+//       </>
+//     );
+//   }
+
+//   return null;
+// }
+{
+  /* <Table responsive="sm" bordered>
             <thead>
               <tr>
                 <th>S.No</th>
@@ -314,32 +385,5 @@ function AssignmentTab() {
                 <td colSpan="11">No Records</td>
               </tr>
             )}
-          </Table> */}
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </Table> */
 }
-
-export default AssignmentTab;
-{
-  /* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */
-}
-
-// classes: 'hidden-xs',
-// headerClasses: 'hidden-xs',
-
-// function priceFormatter(cell, row) {
-//   console.log("row", row);
-//   if (row) {
-//     return (
-//       <>
-//         <p style={{ fontSize: "10px" }}>{row.tname} </p>
-//         <p style={{ fontSize: "10px" }}>{row.phone}</p>
-//         <p style={{ fontSize: "10px" }}>{row.email}</p>
-//       </>
-//     );
-//   }
-
-//   return null;
-// }

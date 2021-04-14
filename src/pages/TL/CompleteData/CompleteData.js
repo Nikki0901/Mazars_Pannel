@@ -15,6 +15,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function CompleteData({ CountComplete }) {
   const [completeData, setCompleteData] = useState([]);
@@ -212,7 +213,12 @@ function CompleteData({ CountComplete }) {
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+        <TeamFilter
+            setData={setCompleteData}
+            getData={getCompleteAssingment}
+            completeAssignment="completeAssignment"
+          />
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -322,7 +328,7 @@ function CompleteData({ CountComplete }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
         <BootstrapTable

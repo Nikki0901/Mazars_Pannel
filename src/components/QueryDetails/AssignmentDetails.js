@@ -62,7 +62,7 @@ function AssignmentDetails({ p, diaplayAssignment }) {
                   </tr>
                   <tr>
                     <td> Delivery of report</td>
-                    <td>{p.draft_report}</td>
+                    <td>{p.delivery_report}</td>
                   </tr>
                   <tr>
                     <td>Complete</td>

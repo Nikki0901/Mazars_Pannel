@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("tlkey");
@@ -84,7 +85,7 @@ function AssignmentTab() {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link>
           </>
         );
       },
@@ -311,7 +312,12 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardHeader>
-          <div className="row">
+          <TeamFilter
+            setData={setAssignment}
+            getData={getAssignmentList}
+            assignment="assignment"
+          />
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -436,7 +442,7 @@ function AssignmentTab() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
 
         <CardBody>

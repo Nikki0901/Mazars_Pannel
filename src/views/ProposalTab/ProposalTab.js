@@ -35,13 +35,21 @@ function ProposalTab() {
   });
 
   // accept modal
-  const [acceptedModal, setAcceptedModal] = useState(false);
-  const acceptedHandler = (id) => {
-    setAcceptedModal(!acceptedModal);
-    setId(id);
-  };
+  // const [acceptedModal, setAcceptedModal] = useState(false);
+  // const acceptedHandler = (id) => {
+  //   setAcceptedModal(!acceptedModal);
+  //   setId(id);
+  // };
 
   const [addPaymentModal, setPaymentModal] = useState(false);
+  const paymentHandler = (key) => {
+    console.log(key);
+    setPaymentModal(!addPaymentModal);
+    setPay({
+      amount: key.accepted_amount,
+      id: key.q_id,
+    });
+  };
 
   useEffect(() => {
     getProposalData();
@@ -58,6 +66,62 @@ function ProposalTab() {
         }
       });
   };
+
+
+
+  // accepted proposal
+  const accepted = (key) => {
+    console.log("acc", key);
+
+    let formData = new FormData();
+    formData.append("id", key);
+    formData.append("status", 5);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/ProposalAccept`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          getProposalData();
+          alert.success("proposal accepted !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
+  // rejected proposal
+  const rejected = (key) => {
+    console.log("rej", key);
+
+    let formData = new FormData();
+    formData.append("id", key);
+    formData.append("status", 6);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/ProposalAccept`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          setRejected(false);
+          getProposalData();
+          alert.success("proposal rejected !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
 
   const columns = [
     {
@@ -280,7 +344,6 @@ function ProposalTab() {
         return { fontSize: "11px" };
       },
       formatter: function (cell, row) {
-        // console.log(row.final_report);
         return (
           <>
             {row.statuscode === "6" ? null : (
@@ -307,11 +370,13 @@ function ProposalTab() {
                       ></i>
                     </div>
                   </div>
-                ) : (
+                ) :
+                
+                (
                   (row.negotiated_amount === "0" || row.accepted_amount) && ""
                 )}
 
-                {row.statuscode == 5 ||
+                {/* {row.statuscode == 5 ||
                 row.statuscode == 7 ||
                 row.statuscode == 8 ? (
                   <div>
@@ -322,20 +387,10 @@ function ProposalTab() {
                         onClick={() => paymentHandler(row)}
                       ></i>
                     </div>
-                    <div style={{ cursor: "pointer" }}>
-                      <i
-                        class="fa fa-file-text"
-                        style={{
-                          color: "orange",
-                          fontSize: "16px",
-                        }}
-                        onClick={() => acceptedHandler(row.up_id)}
-                      ></i>
-                    </div>
                   </div>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
             )}
           </>
@@ -344,74 +399,6 @@ function ProposalTab() {
     },
   ];
 
-  const paymentHandler = (key) => {
-    console.log(key);
-    setPaymentModal(!addPaymentModal);
-    setPay({
-      amount: key.accepted_amount,
-      id: key.q_id,
-    });
-  };
-
-  // accepted proposal
-  const accepted = (key) => {
-    console.log("acc", key);
-
-    let formData = new FormData();
-    formData.append("id", key);
-    formData.append("status", 5);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/ProposalAccept`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          getProposalData();
-          alert.success("proposal accepted !");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-  // rejected proposal
-  const rejected = (key) => {
-    console.log("rej", key);
-
-    let formData = new FormData();
-    formData.append("id", key);
-    formData.append("status", 6);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/ProposalAccept`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          setRejected(false);
-          getProposalData();
-          alert.success("proposal rejected !");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -441,13 +428,6 @@ function ProposalTab() {
             classes="table-responsive"
           />
 
-          <AcceptModal
-            acceptedModal={acceptedModal}
-            acceptedHandler={acceptedHandler}
-            id={id}
-            getProposalData={getProposalData}
-          />
-
           <PaymentModal
             paymentHandler={paymentHandler}
             addPaymentModal={addPaymentModal}
@@ -461,6 +441,29 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
+
+
+{
+  /* <AcceptModal
+            acceptedModal={acceptedModal}
+            acceptedHandler={acceptedHandler}
+            id={id}
+            getProposalData={getProposalData}
+          /> */
+}
+
+{
+  /* <div style={{ cursor: "pointer" }}>
+                      <i
+                        class="fa fa-file-text"
+                        style={{
+                          color: "orange",
+                          fontSize: "16px",
+                        }}
+                        onClick={() => acceptedHandler(row.up_id)}
+                      ></i>
+                    </div> */
+}
 
 {
   /* <div>

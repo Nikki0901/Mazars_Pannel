@@ -34,7 +34,7 @@ function Questionnaire(props) {
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
-  const userNameId = window.localStorage.getItem("userNameId");
+  const userNameId = window.localStorage.getItem("name");
 
   //alert msg
   const Msg = () => {
@@ -67,9 +67,6 @@ function Questionnaire(props) {
 
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.specific));
-    // formData.append("upload_1", value.p_document1[0]);
-    // formData.append("upload_2", value.p_document2[0]);
-    // formData.append("upload_3", value.p_document3[0]);
     formData.append("purpose", value.p_purpose);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
@@ -85,7 +82,7 @@ function Questionnaire(props) {
     );
 
     formData.append("case_name", value.p_case_name);
-    formData.append("assessment_year", value.p_assessment_year);
+    formData.append("assessment_year", selectedData);
 
     axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
@@ -346,6 +343,7 @@ const Opinion = [
   { sought: "Filing before any Authority" },
   { sought: "Others" },
 ];
+
 const assessment_year = [
   {
     year: "2010-11",
@@ -402,6 +400,7 @@ const assessment_year = [
     year: "2027-28",
   },
 ];
+
 
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({

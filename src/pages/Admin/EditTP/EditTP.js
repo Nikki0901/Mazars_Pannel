@@ -99,6 +99,8 @@ function EditTP() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
+    formData.append("pcat_id",value.p_tax);
+    formData.append("cat_id", value.p_tax2);
     formData.append("id", id);
     formData.append("tp_id", value.p_teamleader);
 
@@ -110,7 +112,8 @@ function EditTP() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TL updated  !");
+          alert.success("TP updated  !");
+          history.goBack();
         }
       })
       .catch((error) => {
@@ -240,7 +243,7 @@ function EditTP() {
                     </div>
                   </div>
                   <button type="submit" className="btn btn-primary">
-                    Submit
+                  Update
                   </button>
                 </form>
               </div>

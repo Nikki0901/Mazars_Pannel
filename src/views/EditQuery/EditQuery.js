@@ -9,13 +9,13 @@ import * as yup from "yup";
 import { useAlert } from "react-alert";
 import { Select } from "antd";
 import { Card, CardHeader, Row, Col } from "reactstrap";
+// import ImageUploads from "./ImageUploads";
 
 function EditQuery(props) {
   const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
   const { id } = useParams();
-
 
   const { handleSubmit, register, errors, reset, control, setValue } = useForm({
     defaultValues: {
@@ -32,6 +32,7 @@ function EditQuery(props) {
   const category = window.localStorage.getItem("category");
 
   const [selectedData, setSelectedData] = useState("");
+  const [queryDocs, setQueryDocs] = useState([]);
   const [assessmentYear, setAssementYear] = useState([]);
 
   useEffect(() => {
@@ -75,10 +76,11 @@ function EditQuery(props) {
         Boolean(+res.data.result[0].printout_physically_assigned)
       );
       setValue("p_timelines", res.data.result[0].Timelines);
+      setQueryDocs(res.data.queries_document);
     });
   };
 
-  console.log("arr4", arr);
+  console.log("queryDocs", queryDocs);
 
   function handleChange(value) {
     setSelectedData(value);
@@ -86,15 +88,13 @@ function EditQuery(props) {
 
   const onSubmit = (value) => {
     console.log("value", value);
-
     let formData = new FormData();
-
-    for (var i = 0; i < value.upload.length; i++) {
+    var uploadImg = value.upload;
+    for (var i = 0; i < uploadImg.length; i++) {
       console.log("pics", value.upload[i].pics[0]);
 
       let a = value.upload[i].pics[0];
-      // arr.push(a)
-      formData.append("upload_1", a);
+      formData.append("upload_1[]", a);
     }
     formData.append("fact", value.fact_case);
     formData.append("specific", JSON.stringify(value.specific));
@@ -221,7 +221,7 @@ function EditQuery(props) {
                       defaultValue={arr}
                       allowClear
                     >
-                      {cars.map((p, i) => (
+                      {assessment_year.map((p, i) => (
                         <Option key={p.year}>{p.year}</Option>
                       ))}
                     </Select>
@@ -325,10 +325,43 @@ function EditQuery(props) {
                     </div>
                   </div>
                 </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Display Documents</label>
+                    <br />
+
+                    <>
+                      <div>
+                        <table class="table table-bordered">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">View</th>
+                          </tr>
+                          {queryDocs.map((p, i) => (
+                            <tr>
+                              <td>{i + 1}</td>
+                              <td>
+                                <a
+                                  href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
+                                >
+                                  <i
+                                    class="fa fa-photo"
+                                    style={{ width: "50", height: "20" }}
+                                  ></i>
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+                        </table>
+                      </div>
+                    </>
+                  </div>
+                </div>
               </div>
 
               <button type="submit" className="btn btn-primary">
-                Submit
+                Update
               </button>
             </form>
           </div>
@@ -339,11 +372,13 @@ function EditQuery(props) {
 }
 
 export default EditQuery;
+
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
     name: "upload",
   });
+
   return (
     <>
       <div className="question_query mb-2">
@@ -378,7 +413,38 @@ const Opinion = [
   { sought: "Filing before any Authority" },
   { sought: "Others" },
 ];
-const cars = [
+
+const assessment_year = [
+  {
+    year: "2010-11",
+  },
+  {
+    year: "2011-12",
+  },
+  {
+    year: "2012-13",
+  },
+  {
+    year: "2013-14",
+  },
+  {
+    year: "2014-15",
+  },
+  {
+    year: "2015-16",
+  },
+  {
+    year: "2016-17",
+  },
+  {
+    year: "2017-18",
+  },
+  {
+    year: "2018-19",
+  },
+  {
+    year: "2019-20",
+  },
   {
     year: "2020-21",
   },

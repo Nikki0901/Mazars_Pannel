@@ -75,7 +75,7 @@ function AdminFilter(props) {
     if (acceptedProposal == "acceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -90,7 +90,7 @@ function AdminFilter(props) {
     if (pendingAcceptedProposal == "pendingAcceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -105,7 +105,7 @@ function AdminFilter(props) {
     if (declinedProposal == "declinedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -120,7 +120,7 @@ function AdminFilter(props) {
     if (pendingPayment == "pendingPayment") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -135,7 +135,7 @@ function AdminFilter(props) {
     if (pendingForProposal == "pendingForProposal") {
       axios
         .get(
-          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&status1=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -150,7 +150,7 @@ function AdminFilter(props) {
     if (allQueries == "allQueries") {
       axios
         .get(
-          `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -165,7 +165,7 @@ function AdminFilter(props) {
     if (pendingAlloation == "pendingAlloation") {
       axios
         .get(
-          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&status=${data.p_status}`
         )
         .then((res) => {
           console.log(res);
@@ -176,6 +176,7 @@ function AdminFilter(props) {
           }
         });
     }
+
     if (paymentStatus == "paymentStatus") {
       axios
         .get(
@@ -190,6 +191,7 @@ function AdminFilter(props) {
           }
         });
     }
+
     if (assignment == "assignment") {
       axios
         .get(
@@ -216,61 +218,6 @@ function AdminFilter(props) {
         >
           Reset
         </button>
-      </>
-    );
-  };
-
-
-  const SelectComponent = () => {
-    return (
-      <>
-        <div>
-          {(allQueries == "allQueries" ||
-            pendingAlloation == "pendingAlloation" ||
-            assignment == "assignment") && (
-            <select
-              className="form-select form-control"
-              name="p_status"
-              ref={register}
-              style={{ height: "33px" }}
-            >
-              <option value="">--select--</option>
-              <option value="1">InProgress</option>
-              <option value="2">Complete</option>
-            </select>
-          )}
-
-          {(acceptedProposal == "acceptedProposal" ||
-            pendingAcceptedProposal == "pendingAcceptedProposal" ||
-            declinedProposal == "declinedProposal" ||
-            pendingPayment == "pendingPayment" ||
-            pendingForProposal == "pendingForProposal") && (
-            <select
-              className="form-select form-control"
-              name="p_status"
-              ref={register}
-              style={{ height: "33px" }}
-            >
-              <option value="">--select--</option>
-              <option value="1">Pending</option>
-              <option value="2">Accepted</option>
-              <option value="3">Declined</option>
-            </select>
-          )}
-
-          {paymentStatus == "paymentStatus" && (
-            <select
-              className="form-select form-control"
-              name="p_status"
-              ref={register}
-              style={{ height: "33px" }}
-            >
-              <option value="">--select--</option>
-              <option value="1">UnPaid</option>
-              <option value="2">Piad</option>
-            </select>
-          )}
-        </div>
       </>
     );
   };
@@ -353,7 +300,73 @@ function AdminFilter(props) {
                 </div>
 
                 <div class="form-group mx-sm-1  mb-2">
-                <SelectComponent />
+                  {allQueries == "allQueries" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Progress</option>
+                      <option value="2">Complete</option>
+                    </select>
+                  )}
+
+                  {pendingAlloation == "pendingAlloation" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Progress</option>
+                      <option value="3"> Rejected</option>
+                    </select>
+                  )}
+
+                  {assignment == "assignment" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Progress</option>
+                      <option value="2">Complete</option>
+                    </select>
+                  )}
+
+                  {(                              
+                    pendingPayment == "pendingPayment" ||
+                    pendingForProposal == "pendingForProposal") && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Pending</option>
+                      <option value="2">Accepted</option>
+                      <option value="3">Declined</option>
+                    </select>
+                  )}
+
+                  {paymentStatus == "paymentStatus" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">UnPaid</option>
+                      <option value="2">Paid</option>
+                    </select>
+                  )}
                 </div>
 
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">

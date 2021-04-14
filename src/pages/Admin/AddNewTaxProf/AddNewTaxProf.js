@@ -75,6 +75,8 @@ function AddNew() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
+    formData.append("pcat_id",value.p_tax);
+    formData.append("cat_id", value.p_tax2);
     formData.append("type", "tp");
     formData.append("tp_id", value.p_teamleader);
 
@@ -87,7 +89,7 @@ function AddNew() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TP created  !");
-          reset();
+          history.goBack()
         }
       })
       .catch((error) => {

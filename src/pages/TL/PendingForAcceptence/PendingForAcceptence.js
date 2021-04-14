@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function PendingForAcceptence({ CountPendingForAcceptence }) {
   const alert = useAlert();
@@ -80,7 +81,7 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
         console.log(row);
         return (
           <>
-            <Link to={`/teamleader/pending/${row.id}`}>{row.assign_no}</Link>
+            <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link>
           </>
         );
       },
@@ -272,11 +273,17 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
       });
   };
 
+
   return (
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+        <TeamFilter
+            setData={setPendingData}
+            getData={getPendingforAcceptance}
+            pendingForAcceptence="pendingForAcceptence"
+          />
+          {/* <div className="row">
             <div class="col-sm-3 d-flex">
               <Select
                 mode="multiple"
@@ -386,7 +393,7 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable

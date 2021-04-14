@@ -23,6 +23,7 @@ function AddFreshAssingment(props) {
   const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
+  
   const { handleSubmit, register, errors, reset, control } = useForm({
     defaultValues: {
       users: [{ query: "" }],
@@ -49,7 +50,8 @@ function AddFreshAssingment(props) {
 
     let formData = new FormData();
 
-    for (var i = 0; i < value.upload.length; i++) {
+    var uploadImg = value.upload;
+    for (var i = 0; i < uploadImg.length; i++) {
       console.log("pics", value.upload[i].pics[0]);
       let a = value.upload[i].pics[0];
       formData.append("upload_1[]", a);
@@ -369,6 +371,7 @@ const assessment_year = [
   },
 ];
 
+
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -400,6 +403,7 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
+
 
 // console.log("arr",arr);
 

@@ -115,7 +115,7 @@ function QueriesTab() {
       dataField: "exp_delivery_date",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px",};
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.exp_delivery_date);
@@ -127,44 +127,42 @@ function QueriesTab() {
       },
     },
     {
-      text: "Edit",
+      text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px" ,textAlign:"center"  };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <Link to={`/customer/edit-query/${row.id}`}>
-              {row.status_code < 5 ? (
-                <i
-                  className="fa fa-edit"
-                  style={{
-                    fontSize: 16,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                  }}
-                ></i>
-              ) : null}
-            </Link>
-          </>
-        );
-      },
-    },
-    {
-      text: "Delete",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            {row.status_code < 5 ? (
-              <i
-                className="fa fa-trash"
-                style={{ fontSize: 16, cursor: "pointer", marginLeft: "8px" }}
-                onClick={() => del(row.id)}
-              ></i>
-            ) : null}
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div  title="Update Query">
+                <Link to={`/customer/edit-query/${row.id}`}>
+                  {row.status_code < 5 ? (
+                    <i
+                      className="fa fa-edit"
+                      style={{
+                        fontSize: 16,
+                        cursor: "pointer",
+                        marginLeft: "8px",
+                      }}
+                    ></i>
+                  ) : null}
+                </Link>
+              </div>
+              <div  title="Delete Query">
+                {row.status_code < 5 ? (
+                  <i
+                    className="fa fa-trash"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                    }}
+                    onClick={() => del(row.id)}
+                  ></i>
+                ) : null}
+              </div>
+            </div>
           </>
         );
       },
@@ -212,7 +210,6 @@ function QueriesTab() {
         console.log("erroror - ", error);
       });
   };
-
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

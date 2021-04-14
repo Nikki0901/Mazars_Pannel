@@ -66,7 +66,8 @@ function AddNew() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("cat_id", store2);
+    formData.append("pcat_id",value.p_tax);
+    formData.append("cat_id", value.p_tax2);
     formData.append("type", "tl");
 
     axios({
@@ -78,7 +79,7 @@ function AddNew() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TL created  !");
-          // reset();
+          history.goBack()
         }
       })
       .catch((error) => {

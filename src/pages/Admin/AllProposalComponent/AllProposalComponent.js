@@ -15,8 +15,8 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
-
 import BootstrapTable from "react-bootstrap-table-next";
+
 
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -54,7 +54,7 @@ function AllProposalComponent({ allProposal }) {
     getSubCategory();
   }, [selectedData]);
 
-  
+
   const columns = [
     {
       dataField: "",
@@ -278,6 +278,7 @@ function AllProposalComponent({ allProposal }) {
     },
   ];
 
+
   //handleCategory
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
@@ -305,11 +306,12 @@ function AllProposalComponent({ allProposal }) {
     getProposalData();
   };
 
+
   const onSubmit = (data) => {
     console.log("data :", data);
     axios
       .get(
-        `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+        `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}`
       )
       .then((res) => {
         console.log(res);

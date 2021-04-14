@@ -87,13 +87,15 @@ function EditTL() {
     getSubCategory();
   }, [store]);
 
+
   const onSubmit = (value) => {
     console.log("value :", value);
     let formData = new FormData();
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("cat_id", store2);
+    formData.append("pcat_id",value.p_tax);
+    formData.append("cat_id", value.p_tax2);
     formData.append("id", id);
 
     axios({
@@ -105,6 +107,7 @@ function EditTL() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TL updated  !");
+          history.goBack()
         }
       })
       .catch((error) => {
@@ -112,8 +115,7 @@ function EditTL() {
       });
   };
 
-  // console.log(category)
-  // console.log(sub_category)
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -223,7 +225,7 @@ function EditTL() {
                     </div>
                   </div>
                   <button type="submit" className="btn btn-primary">
-                    Submit
+                    Update
                   </button>
                 </form>
               </div>
