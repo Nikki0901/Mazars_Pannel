@@ -31,7 +31,6 @@ function Proposal() {
     getProposalList();
   }, []);
 
-
   const getProposalList = () => {
     axios
       .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
@@ -53,6 +52,19 @@ function Proposal() {
       },
       headerStyle: () => {
         return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      dataField: "query_date",
+      text: "Date",
+      sort: true,
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.query_date);
+        var oldDate = row.query_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -90,30 +102,6 @@ function Proposal() {
     {
       text: "Customer Name",
       dataField: "name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Amount",
-      dataField: "amount",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "misc1",
-      dataField: "misc1",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "misc2",
-      dataField: "misc2",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -235,7 +223,7 @@ function Proposal() {
           </Row>
         </CardHeader>
         <CardHeader>
-        <TeamFilter
+          <TeamFilter
             setData={setProposal}
             getData={getProposalList}
             proposal="proposal"

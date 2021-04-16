@@ -28,7 +28,7 @@ function PendingForPayment({ CountPendingForPayment }) {
   }, []);
 
   const getPendingForPayment = () => {
-    axios.get(`${baseUrl}/admin/getProposals?&status=5,7`).then((res) => {
+    axios.get(`${baseUrl}/admin/pendingPaymentProposals`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
@@ -238,14 +238,10 @@ function PendingForPayment({ CountPendingForPayment }) {
         return { fontSize: "11px", color: "darkred" };
       },
       formatter: function amountOutstading(cell, row) {
-        console.log("dt", row.paid_amount);
-        console.log("dt", row.accepted_amount);
-        var p = row.paid_amount;
         var a = row.accepted_amount;
-        if (p == 0) {
-          return "0";
-        } else return a - p;
-      },
+        var p = row.paid_amount;
+        return a - p;
+      }
     },
     {
       text: "Date of Payment",

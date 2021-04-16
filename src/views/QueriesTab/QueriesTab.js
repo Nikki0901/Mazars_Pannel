@@ -115,7 +115,7 @@ function QueriesTab() {
       dataField: "exp_delivery_date",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px",};
+        return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.exp_delivery_date);
@@ -129,13 +129,13 @@ function QueriesTab() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px" ,textAlign:"center"  };
+        return { fontSize: "12px", textAlign: "center" };
       },
       formatter: function (cell, row) {
         return (
           <>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <div  title="Update Query">
+              <div title="Update Query">
                 <Link to={`/customer/edit-query/${row.id}`}>
                   {row.status_code < 5 ? (
                     <i
@@ -149,7 +149,7 @@ function QueriesTab() {
                   ) : null}
                 </Link>
               </div>
-              <div  title="Delete Query">
+              <div title="Delete Query">
                 {row.status_code < 5 ? (
                   <i
                     className="fa fa-trash"
@@ -169,6 +169,7 @@ function QueriesTab() {
     },
   ];
 
+  //check
   const del = (id) => {
     console.log("del", id);
 
@@ -251,97 +252,3 @@ function QueriesTab() {
 }
 
 export default QueriesTab;
-{
-  /* <Table responsive="sm" bordered>
-            <TableHeader
-              headers={headers}
-              onSorting={(field, order) => setSorting({ field, order })}
-            />
-            <tbody>
-              {queryData.map((p, i) => (
-                <tr>
-                  <td>{i + 1}</td>
-                  <td>{ChangeFormateDate(p.created)}</td>
-                  <th>
-                    <Link to={`/customer/my-assingment/${p.id}`}>
-                      {p.assign_no}
-                    </Link>
-                  </th>
-                  <td>{p.parent_id}</td>
-                  <td>{p.cat_name}</td>
-                  <td>{p.status}</td>
-                  <td>{ChangeFormateDate(p.exp_delivery_date)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table> */
-}
-// function ChangeFormateDate2(date) {
-//   var month = (1 + date.getMonth()).toString();
-//   month = month.length > 1 ? month : '0' + month;
-
-//   var day = date.getDate().toString();
-//   day = day.length > 1 ? day : '0' + day;
-
-//   return month + '/' + day + '/' + year;
-// }
-
-{
-  /* <Table responsive="sm" bordered>
-            <thead>
-              <tr>
-                <th>S.No</th>
-                <th>Date</th>
-                <th>Query No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Status</th>
-                <th>Expected Delivery Date</th>
-              </tr>
-            </thead>
-            <tbody style={{ height: "400px", overflowY: "scroll" }}>
-              {queriesData.length > 0 ? (
-                queriesData.map((p, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <th>
-                      <Link to={`/customer/my-assingment/${p.id}`}>
-                        {p.assign_no}
-                      </Link>
-                    </th>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.status}</td>
-                    <td>{ChangeFormateDate(p.exp_delivery_date)}</td>               
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9">No Records</td>
-                </tr>
-              )}
-            </tbody>
-          </Table> */
-}
-
-//   <MaterialTable
-//   title={false}
-//   columns={columns}
-//   data={queriesData}
-//   options={{
-//     sorting: true,
-//     search: false,
-//   }}
-
-// />
-
-// const columns = [
-//   { title: "S.No", field: "s_no" },
-//   { title: "Date", field: "created" },
-//   { title: "Query No", field: "assign_no" },
-//   { title: "Category", field: "parent_id" },
-//   { title: "Sub Category", field: "cat_name" },
-//   { title: "Status", field: "status" },
-//   { title: "Expected Delivery Date", field: "exp_delivery_date" },
-// ];

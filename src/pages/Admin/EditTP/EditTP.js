@@ -17,6 +17,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import TaxProffesionalService from "../../../config/services/TaxProffesional";
 
 function EditTP() {
   const { id } = useParams();
@@ -39,10 +40,15 @@ function EditTP() {
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
 
+
   useEffect(() => {
-    const getTaxProfessional = () => {
-      axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
-        console.log(res);
+    getTutorial(id);
+  }, [id]);
+  
+  const getTutorial = (id) => {
+    TaxProffesionalService.get(id)
+      .then((res) => {
+        console.log(res.data);
         if (res.data.code === 1) {
           setUser({
             name: res.data.result[0].name,
@@ -50,11 +56,13 @@ function EditTP() {
             phone: res.data.result[0].phone,
           });
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
-    };
+  };
 
-    getTaxProfessional();
-  }, [id]);
+
 
   useEffect(() => {
     const getTeamLeader = () => {
@@ -99,7 +107,7 @@ function EditTP() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("pcat_id",value.p_tax);
+    formData.append("pcat_id", value.p_tax);
     formData.append("cat_id", value.p_tax2);
     formData.append("id", id);
     formData.append("tp_id", value.p_teamleader);
@@ -243,7 +251,7 @@ function EditTP() {
                     </div>
                   </div>
                   <button type="submit" className="btn btn-primary">
-                  Update
+                    Update
                   </button>
                 </form>
               </div>
@@ -256,3 +264,19 @@ function EditTP() {
 }
 
 export default EditTP;
+// useEffect(() => {
+//   const getTaxProfessional = () => {
+//     axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
+//       console.log(res);
+//       if (res.data.code === 1) {
+//         setUser({
+//           name: res.data.result[0].name,
+//           email: res.data.result[0].email,
+//           phone: res.data.result[0].phone,
+//         });
+//       }
+//     });
+//   };
+
+//   getTaxProfessional();
+// }, [id]);

@@ -18,6 +18,8 @@ import {
   Tooltip,
 } from "reactstrap";
 
+import Reset from "./Reset";
+
 function EditTL() {
   const { id } = useParams();
   const history = useHistory();
@@ -33,6 +35,7 @@ function EditTL() {
     category: "",
     sub_category: "",
   });
+
   const { name, email, phone, category, sub_category } = user;
 
   const [tax, setTax] = useState([]);
@@ -46,15 +49,11 @@ function EditTL() {
       axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          // setValue("p_name", res.data.result[0].name);
-          // setValue("p_email", res.data.result[0].email);
-          setUser({
-            name: res.data.result[0].name,
-            email: res.data.result[0].email,
-            phone: res.data.result[0].phone,
-            category: res.data.result[0].parent_id,
-            sub_category: res.data.result[0].cat_name,
-          });
+          setValue("p_name", res.data.result[0].name);
+          setValue("p_email", res.data.result[0].email);
+          setValue("p_phone", res.data.result[0].phone);
+          setValue("p_tax", res.data.result[0].parent_id);
+          setValue("p_tax2", res.data.result[0].cat_name);
         }
       });
     };
@@ -87,14 +86,13 @@ function EditTL() {
     getSubCategory();
   }, [store]);
 
-
   const onSubmit = (value) => {
     console.log("value :", value);
     let formData = new FormData();
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("pcat_id",value.p_tax);
+    formData.append("pcat_id", value.p_tax);
     formData.append("cat_id", value.p_tax2);
     formData.append("id", id);
 
@@ -107,15 +105,13 @@ function EditTL() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TL updated  !");
-          history.goBack()
+          history.goBack();
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
-
-
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -137,6 +133,7 @@ function EditTL() {
           </div>
         </CardHeader>
 
+        {/* <Reset uid={id}/> */}
         <CardHeader>
           <div class="row mt-3">
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
@@ -238,3 +235,12 @@ function EditTL() {
 }
 
 export default EditTL;
+// setValue("p_name", res.data.result[0].name);
+// setValue("p_email", res.data.result[0].email);
+// setUser({
+//   name: res.data.result[0].name,
+//   email: res.data.result[0].email,
+//   phone: res.data.result[0].phone,
+//   category: res.data.result[0].parent_id,
+//   sub_category: res.data.result[0].cat_name,
+// });

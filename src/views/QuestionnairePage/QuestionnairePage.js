@@ -21,9 +21,7 @@ function Questionnaire(props) {
   const { handleSubmit, register, errors, reset, control } = useForm();
 
   const [selectedData, setSelectedData] = useState("");
-  const [multipleFiles, setMultipleFiles] = useState("");
 
-  // const [id, setId] = useState('');
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
 
@@ -45,8 +43,6 @@ function Questionnaire(props) {
     );
   };
 
-
-
   function handleChange(value) {
     console.log(`selected ${value}`);
     setSelectedData(value);
@@ -55,19 +51,27 @@ function Questionnaire(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    setMultipleFiles(value.p_document1);
 
+    var item = [
+      { purpose: value.p_assessment },
+      { purpose: value.p_appeal },
+      { purpose: value.p_court },
+      { purpose: value.p_authority },
+      { purpose: value.p_others },
+    ];
     let formData = new FormData();
-    for (var i = 0; i < value.upload.length; i++) {
-      console.log("pics", value.upload[i].pics[0]);
 
-      let a = value.upload[i].pics[0];
-      formData.append("upload_1", a);
+    var uploadImg = value.upload;
+    if (uploadImg) {
+      for (var i = 0; i < uploadImg.length; i++) {
+        console.log("pics", value.upload[i].pics[0]);
+        let a = value.upload[i].pics[0];
+        formData.append("upload_1[]", a);
+      }
     }
 
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.specific));
-    formData.append("purpose", value.p_purpose);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
     formData.append("cid", JSON.parse(category));
@@ -83,7 +87,7 @@ function Questionnaire(props) {
 
     formData.append("case_name", value.p_case_name);
     formData.append("assessment_year", selectedData);
-
+    formData.append("purpose", JSON.stringify(item));
     axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
         headers: {
@@ -201,27 +205,6 @@ function Questionnaire(props) {
 
               <div className="col-md-6">
                 <div className="mb-3">
-                  <label className="form-label">
-                    Purpose for which Opinion is sought
-                  </label>
-                  <select
-                    className="form-select form-control"
-                    name="p_purpose"
-                    aria-label="Default select example"
-                    ref={register}
-                  >
-                    <option value="">--select--</option>
-                    {Opinion.map((p, i) => (
-                      <option key={i} value={p.sought}>
-                        {p.sought}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="mb-3">
                   <label className="form-label">Case name</label>
                   <input
                     type="text"
@@ -321,6 +304,70 @@ function Questionnaire(props) {
                   </div>
                 </div>
               </div>
+
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">
+                    Purpose for which Opinion is sought
+                  </label>
+                  <br />
+
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="p_assessment"
+                      ref={register}
+                      value="Assessment"
+                    />
+                    <label className="form-check-label">Assessment</label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="p_appeal"
+                      ref={register}
+                      value="Appeal"
+                    />
+                    <label className="form-check-label">Appeal</label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="p_court"
+                      ref={register}
+                      value="Filing before any Court"
+                    />
+                    <label className="form-check-label">
+                      Filing before any Court
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="p_authority"
+                      ref={register}
+                      value="Filing before any Authority"
+                    />
+                    <label className="form-check-label">
+                      Filing before any Authority
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="p_others"
+                      ref={register}
+                      value="Others"
+                    />
+                    <label className="form-check-label">Others</label>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <button type="submit" className="btn btn-primary">
@@ -401,7 +448,6 @@ const assessment_year = [
   },
 ];
 
-
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -434,133 +480,25 @@ const ImageUploads = ({ register, control }) => {
   );
 };
 
-//   const onSubmit = (value) => {
-//     console.log("value :", value);
-
-//     let formData = new FormData();
-//     formData.append("draft_report", value.p_draft[0]);
-
-//     axios.post(`${baseUrl}/customers/PostQuestion`, formData, {
-//       headers: {
-//         'content-type': 'multipart/form-data'
-//       }
-//     }).then(response => {
-//       console.log(response.data)
-//       alert.success("draft Report uploaded !");
-//     });
-
-// };
-
-// let reader = new FileReader();
-// reader.readAsDataURL(value.p_document[0]);
-
-// reader.onload = (e) => {
-// console.log(e.target.result)
-// files = e.target.result
-// }
-
 {
-  /* <div className="mb-3">
-            <label className="form-label"> Specific Questions</label>
-            <input
-              type="text"
-              className="form-control"
-              name="p_specific"
-              ref={register}
-              placeholder="Enter Purpose"
-            />
-            </div> */
-}
-
-// function onFileUpload(event) {
-//   event.preventDefault();
-//   // Get the file Id
-//   let id = event.target.id;
-//   // Create an instance of FileReader API
-//   let file_reader = new FileReader();
-//   // Get the actual file itself
-//   let file = event.target.files[0];
-//   file_reader.onload = () => {
-//   // After uploading the file
-//   // appending the file to our state array
-//   // set the object keys and values accordingly
-//     setFiles([...files, { file_id: id, uploaded_file: file_reader.result }]);
-//   };
-//  // reading the actual uploaded file
-//   file_reader.readAsDataURL(file);
-// }
-
-// const file = data.image[0];
-//     const storageRef = app.storage().ref();
-//     const fileRef = storageRef.child(file.name);
-//     fileRef.put(file).then(() => {
-//       console.log("Uploaded a file");
-//     });
-
-{
-  /* <div className="mb-3">
-                <div className="question_query mb-2">
+  /* <div className="col-md-6">
+                <div className="mb-3">
                   <label className="form-label">
-                    Specific Query (ies) for advisory
+                    Purpose for which Opinion is sought
                   </label>
-                  <div
-                    className="btn btn-primary"
-                    onClick={() => append({ query: "" })}
+                  <select
+                    className="form-select form-control"
+                    name="p_purpose"
+                    aria-label="Default select example"
+                    ref={register}
                   >
-                    +
-                  </div>
+                    <option value="">--select--</option>
+                    {Opinion.map((p, i) => (
+                      <option key={i} value={p.sought}>
+                        {p.sought}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-
-                {fields.map((item, index) => (
-                  <div className="question_query_field mb-2" key={index}>
-                    <input
-                      type="text"
-                      className="form-control"
-                      ref={register}
-                      name={`users[${index}].query`}
-                      placeholder="Specify your query"
-                    />
-                    <div
-                      className="btn btn-primary ml-2"
-                      onClick={() => remove(index)}
-                    >
-                      -
-                    </div>
-                  </div>
-                ))}
               </div> */
 }
-
-//   <div className="form-check">
-//   <input
-//     className="form-check-input"
-//     type="radio"
-//     name="p_format"
-//     ref={register}
-//     value="Softcopy - Word/ Pdf"
-//     defaultChecked
-//   />
-//   <label>Softcopy - Word/ Pdf</label>
-// </div>
-// <div className="form-check">
-//   <input
-//     className="form-check-input"
-//     type="radio"
-//     name="p_format"
-//     ref={register}
-//     value="SoftCopy- Digitally Signed"
-//   />
-
-//   <label>SoftCopy- Digitally Signed</label>
-// </div>
-// <div className="form-check">
-//   <input
-//     className="form-check-input"
-//     type="radio"
-//     name="p_format"
-//     ref={register}
-//     value="Printout- Physically Signed"
-//   />
-
-//   <label>Printout- Physically Signed</label>
-// </div>

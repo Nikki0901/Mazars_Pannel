@@ -38,7 +38,7 @@ function AssignmentDetails({ p, diaplayAssignment }) {
             </tr>
             <tr>
               <th scope="row">Proposed Date of Completion</th>
-              <td>{CommonServices.removeTime(date_of_delivery)}</td>
+              <td>{CommonServices.removeTime(p.Exp_Delivery_Date)}</td>
             </tr>
             {/* {p.query_status >= 9 ? ( */}
               <tr>

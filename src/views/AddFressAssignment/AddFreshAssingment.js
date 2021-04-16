@@ -17,13 +17,12 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import _ from "lodash";
 
 function AddFreshAssingment(props) {
   const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
-  
+
   const { handleSubmit, register, errors, reset, control } = useForm({
     defaultValues: {
       users: [{ query: "" }],
@@ -48,18 +47,27 @@ function AddFreshAssingment(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
+    var item = [
+      {purpose: value.p_assessment},
+      {purpose: value.p_appeal},
+      {purpose: value.p_court},
+      {purpose: value.p_authority},
+      {purpose: value.p_others},
+    ]
+
     let formData = new FormData();
 
     var uploadImg = value.upload;
-    for (var i = 0; i < uploadImg.length; i++) {
-      console.log("pics", value.upload[i].pics[0]);
-      let a = value.upload[i].pics[0];
-      formData.append("upload_1[]", a);
+    if (uploadImg) {
+      for (var i = 0; i < uploadImg.length; i++) {
+        console.log("pics", value.upload[i].pics[0]);
+        let a = value.upload[i].pics[0];
+        formData.append("upload_1[]", a);
+      }
     }
 
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.users));
-    formData.append("purpose", value.p_purpose);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
     formData.append("cid", JSON.parse(category));
@@ -74,6 +82,8 @@ function AddFreshAssingment(props) {
     );
     formData.append("case_name", value.p_case_name);
     formData.append("assessment_year", selectedData);
+
+    formData.append("purpose", JSON.stringify(item));
 
     axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
@@ -203,27 +213,6 @@ function AddFreshAssingment(props) {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label className="form-label">
-                      Purpose for which Opinion is sought
-                    </label>
-                    <select
-                      className="form-select form-control"
-                      name="p_purpose"
-                      aria-label="Default select example"
-                      ref={register}
-                    >
-                      <option value="">--select--</option>
-                      {Opinion.map((p, i) => (
-                        <option key={i} value={p.sought}>
-                          {p.sought}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">
                       Format in which Opinion is required
                     </label>
                     <br />
@@ -288,6 +277,71 @@ function AddFreshAssingment(props) {
                         value="Regular (10-12 Working Days)"
                       />
                       <label>Regular (10-12 Working Days)</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Purpose for which Opinion is sought
+                    </label>
+                    <br />
+
+                    
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_assessment"
+                        ref={register}
+                        value="Assessment"
+                      />
+                      <label className="form-check-label">Assessment</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_appeal"
+                        ref={register}
+                        value="Appeal"
+                      />
+                      <label className="form-check-label">Appeal</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_court"
+                        ref={register}
+                        value="Filing before any Court"
+                      />
+                      <label className="form-check-label">
+                        Filing before any Court
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_authority"
+                        ref={register}
+                        value="Filing before any Authority"
+                      />
+                      <label className="form-check-label">
+                        Filing before any Authority
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_others"
+                        ref={register}
+                        value="Others"
+                      />
+                      <label className="form-check-label">Others</label>
                     </div>
                   </div>
                 </div>
@@ -371,7 +425,6 @@ const assessment_year = [
   },
 ];
 
-
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -403,8 +456,7 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
-
-
+// formData.append("purpose", value.p_purpose);
 // console.log("arr",arr);
 
 // for (let i = 0; i < multipleFiles.length; i++) {
@@ -521,4 +573,19 @@ const ImageUploads = ({ register, control }) => {
       </div>
    
     */
+}
+{
+  /* <select
+                      className="form-select form-control"
+                      name="p_purpose"
+                      aria-label="Default select example"
+                      ref={register}
+                    >
+                      <option value="">--select--</option>
+                      {Opinion.map((p, i) => (
+                        <option key={i} value={p.sought}>
+                          {p.sought}
+                        </option>
+                      ))}
+                    </select> */
 }

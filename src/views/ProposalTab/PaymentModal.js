@@ -35,7 +35,7 @@ function PaymentModal({
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Payment Done!");
-          history.push("/customer/queries");
+          // history.push("/customer/queries");
 
           getProposalData();
           paymentHandler();

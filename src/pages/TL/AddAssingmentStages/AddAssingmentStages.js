@@ -67,7 +67,7 @@ function AddAssingmentStages() {
         if (response.data.code === 1) {
           alert.success(<Msg />);
           getAssignmentList();
-          history.push('/teamleader/paymentstatus')
+          history.push('/teamleader/assignment')
         }
       })
       .catch((error) => {

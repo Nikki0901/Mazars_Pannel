@@ -19,7 +19,6 @@ import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
 import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-import Questionnaire from './views/Quesionnaire/Questionnaire'
 import Feedback from './views/Feedback/Feedback'
 import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
@@ -124,7 +123,6 @@ function App() {
         <Route exact path="/customer/verify-otp" component={VerifyOtp} />
         <Route exact path="/customer/otp" component={VerifyOtpLogin} />
         <Route exact path="/customer/questionnaire-page" component={QuestionnairePage} />
-        <Route exact path="/customer/questionnaire" component={Questionnaire} />
         <Route exact path="/customer/feedback" component={Feedback} />
         <Route exact path="/customer/dashboard" component={Dashboard} />
         <Route exact path="/customer/my-assingment/:id" component={MyAssingment} />

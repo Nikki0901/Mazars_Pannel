@@ -11,13 +11,13 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import "./index.css";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Statusfilter from "./Statusfilter";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -25,8 +25,12 @@ function AssignmentTab() {
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
-  const [selectedData, setSelectedData] = useState([]);
   const [assignmentCount, setCountAssignment] = useState("");
+
+  const [selectedData, setSelectedData] = useState([]);
+  const [status, setStatus] = useState([]);
+  const [tax2, setTax2] = useState([]);
+  const [store2, setStore2] = useState([]);
 
   useEffect(() => {
     getAssignmentData();
@@ -42,35 +46,54 @@ function AssignmentTab() {
     });
   };
 
-  const [tax, setTax] = useState([]);
-  const [tax2, setTax2] = useState([]);
-
-  const [store, setStore] = useState("");
-  const [store2, setStore2] = useState("");
-  useEffect(() => {
-    getCategory();
-  }, []);
-
-  const getCategory = () => {
-    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTax(res.data.result);
-      }
-    });
-  };
-
+  //get category
   useEffect(() => {
     const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
+      axios
+        .get(`${baseUrl}/customers/getCategory?pid=${selectedData}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setTax2(res.data.result);
+          }
+        });
     };
     getSubCategory();
-  }, [store]);
+  }, [selectedData]);
+
+  //handleCategory
+  const handleCategory = (value) => {
+    console.log(`selected ${value}`);
+    setSelectedData(value);
+  };
+
+  //handleSubCategory
+  const handleSubCategory = (value) => {
+    console.log(`selected ${value}`);
+    setStore2(value);
+  };
+
+  //reset category
+  const resetCategory = () => {
+    console.log("resetCategory ..");
+    setSelectedData([]);
+    setStore2([]);
+    getAssignmentData();
+  };
+
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    setStatus([]);
+    getAssignmentData();
+  };
+
+  //assingmentStatus
+  const assingmentStatus = (value) => {
+    console.log(`selected ${value}`);
+    setStatus(value);
+  };
 
   const columns = [
     {
@@ -135,8 +158,39 @@ function AssignmentTab() {
       dataField: "status",
       text: "Status",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "200px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Client Discussion :</span>
+                {row.client_discussion}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Draft report :</span>
+                {row.draft_report}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Final Discussion :</span>
+                {row.final_discussion}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Delivery of report :</span>
+                {row.delivery_report}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bold" }}>Complete :</span>
+                {row.other_stage}
+              </p>
+            </div>
+          </>
+        );
       },
     },
     {
@@ -156,19 +210,19 @@ function AssignmentTab() {
       },
     },
     {
-      dataField: "date_of_delivery",
+      dataField: "final_date",
       text: "Actual date of delivery",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
-        var oldDate = row.created;
-        if (oldDate == null) {
+        console.log("dt", row.final_date);
+        var oldDate = row.final_date;
+        if (oldDate == null || oldDate == "0000-00-00 00:00:00") {
           return null;
         }
-        return oldDate.toString().split("-").reverse().join("-");
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -223,19 +277,12 @@ function AssignmentTab() {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getAssignmentData();
-  };
-
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&assignment_status=${status}`
       )
       .then((res) => {
         console.log(res);
@@ -274,99 +321,119 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardHeader>
-          <AdminFilter
-            setData={setAssignmentDisplay}
-            getData={getAssignmentData}
-            assignment="assignment"
-          />
-          {/* <div className="row">
-            <div className="col-sm-12 d-flex">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-inline">
-                    <div class="form-group mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore(e.target.value)}
-                      >
-                        <option value="">--Select Category--</option>
-                        {tax.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax2"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore2(e.target.value)}
-                      >
-                        <option value="">--Select Sub-Category--</option>
-                        {tax2.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">InProgress</option>
-                        <option value="2">Complete</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                    Search
-                  </button>
-
-                  <Reset />
-                </form>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div class="form-inline">
+              <div class="form-group mb-2">
+                <Select
+                  style={{ width: 130 }}
+                  placeholder="Select Category"
+                  defaultValue={[]}
+                  onChange={handleCategory}
+                  value={selectedData}
+                >
+                  <Option value="1" label="Compilance">
+                    <div className="demo-option-label-item">Direct Tax</div>
+                  </Option>
+                  <Option value="2" label="Compilance">
+                    <div className="demo-option-label-item">Indirect Tax</div>
+                  </Option>
+                </Select>
               </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <Select
+                  mode="multiple"
+                  style={{ width: 250 }}
+                  placeholder="Select Sub Category"
+                  defaultValue={[]}
+                  onChange={handleSubCategory}
+                  value={store2}
+                  allowClear
+                >
+                  {tax2.map((p, index) => (
+                    <Option value={p.id} key={index}>
+                      {p.details}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mb-2 ml-3"
+                  onClick={resetCategory}
+                >
+                  X
+                </button>
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <label className="form-select form-control">From</label>
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <input
+                  type="date"
+                  name="p_dateFrom"
+                  className="form-select form-control"
+                  ref={register}
+                />
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <label className="form-select form-control">To</label>
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <input
+                  type="date"
+                  name="p_dateTo"
+                  className="form-select form-control"
+                  ref={register}
+                />
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <Select
+                  mode="multiple"
+                  style={{ width: 210 }}
+                  placeholder="Select stages"
+                  defaultValue={[]}
+                  onChange={assingmentStatus}
+                  value={status}
+                  allowClear
+                >
+                  <Option value="Client_Discussion" label="Compilance">
+                    <div className="demo-option-label-item">
+                      Client Discussion
+                    </div>
+                  </Option>
+                  <Option value="Draft_Report" label="Compilance">
+                    <div className="demo-option-label-item">Draft report</div>
+                  </Option>
+                  <Option value="Final_Discussion" label="Compilance">
+                    <div className="demo-option-label-item">
+                      Final Discussion
+                    </div>
+                  </Option>
+                  <Option value="Delivery_of_report" label="Compilance">
+                    <div className="demo-option-label-item">
+                      Delivery of report
+                    </div>
+                  </Option>
+                  <Option value="Completed" label="Compilance">
+                    <div className="demo-option-label-item">Completed</div>
+                  </Option>
+                </Select>
+              </div>
+
+              <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
+                Search
+              </button>
+
+              <Reset />
             </div>
-          </div> */}
+          </form>
         </CardHeader>
 
         <CardBody>
@@ -377,153 +444,6 @@ function AssignmentTab() {
             columns={columns}
             rowIndex
           />
-
-          {/* <table class="table table-bordered">
-            <thead class="table_head">
-              <tr>
-                <th>S.No</th>
-                <th>Date of Query</th>
-                <th>Query No</th>
-                <th>Assignment No</th>
-                <th>Assignment Date</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Proposed date of Completion</th>
-                <th>Assignment Stage</th>
-                <th>Status</th>
-                <th>Time taken for Completion</th>
-                <th> Report</th>
-                <th>TL name</th>
-              </tr>
-            </thead>
-            {assignmentDisplay.map((p, i) => (
-              <tbody class="table_bdy">
-                <tr key={i}>
-                  <td>{i + 1}</td>
-                  <td>{ChangeFormateDate(p.date_of_query)}</td>
-                  <th>
-                    <Link to={`/admin/queries/${p.q_id}`}>{p.assign_no}</Link>
-                  </th>
-                  <td>{p.assignment_label_number}</td>
-                  <td>{p.assignment_date}</td>
-                  <td>{p.parent_id}</td>
-                  <td>{p.cat_name}</td>
-                  <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                  <td>
-                    <span style={{ fontWeight: "bold" }}>
-                      Client Discussion
-                    </span>
-                  </td>
-                  <td> {p.client_discussion}</td>
-                  <td>{p.days_taken}</td>
-                  <td style={{ textAlign: "center" }}>
-                    {!p.final_report == "" ? (
-                      <div>
-                        <a
-                          href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
-                        >
-                          <i
-                            class="fa fa-file-text"
-                            style={{ fontSize: "16px" }}
-                          ></i>{" "}
-                          final
-                        </a>
-                      </div>
-                    ) : p.assignement_draft_report ? (
-                      <div>
-                        <a
-                          href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
-                        >
-                          <i
-                            class="fa fa-file-text"
-                            style={{ fontSize: "16px" }}
-                          ></i>{" "}
-                          draft
-                        </a>
-                      </div>
-                    ) : null}
-                  </td>
-                  <td>{p.tl_name}</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <span style={{ fontWeight: "bold" }}>Draft report</span>
-                  </td>
-                  <td> {p.draft_report}</td>
-
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <span style={{ fontWeight: "bold" }}>Final Discussion</span>
-                  </td>
-                  <td> {p.final_discussion}</td>
-
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <span style={{ fontWeight: "bold" }}>
-                      Delivery of report
-                    </span>
-                  </td>
-                  <td> {p.delivery_report}</td>
-
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <span style={{ fontWeight: "bold" }}>Complete</span>
-                  </td>
-                  <td> {p.other_stage}</td>
-
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            ))}
-          </table> */}
         </CardBody>
       </Card>
     </Layout>
@@ -578,3 +498,8 @@ export default AssignmentTab;
                         <option >Delivery of report : {p.delivery_report}</option>                                         
                       </select>
                     </div> */
+//  {/* <AdminFilter
+//             setData={setAssignmentDisplay}
+//             getData={getAssignmentData}
+//             assignment="assignment"
+//           />

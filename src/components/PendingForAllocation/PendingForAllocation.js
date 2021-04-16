@@ -185,7 +185,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
             {row.is_assigned === "1" ? (
               <p style={{ color: "green", fontSize: "10px" }}>
                 Assign to {row.tname} on
-                {row.allocation_time}
+                <p>{row.allocation_time}</p>
               </p>
             ) : (
               <Link to={`/admin/queryassing/${row.id}`}>
@@ -218,29 +218,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
     },
   ];
 
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getPendingForAllocation();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setPendingData(res.data.result);
-          }
-        }
-      });
-  };
+ 
 
   //change date format
   function ChangeFormateDate(oldDate) {
@@ -251,19 +229,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-  const Reset = () => {
-    return (
-      <>
-        <button
-          type="submit"
-          class="btn btn-primary mx-sm-1 mb-2"
-          onClick={() => resetData()}
-        >
-          Reset
-        </button>
-      </>
-    );
-  };
 
   return (
     <>
@@ -274,94 +239,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
             getData={getPendingForAllocation}
             pendingAlloation="pendingAlloation"
           />
-          {/* <div className="row">
-            <div className="col-sm-12 d-flex">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-inline">
-                    <div class="form-group mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore(e.target.value)}
-                      >
-                        <option value="">--Select Category--</option>
-                        {tax.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax2"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore2(e.target.value)}
-                      >
-                        <option value="">--Select Sub-Category--</option>
-                        {tax2.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">Progress</option>
-                        <option value="2">Complete</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                    Search
-                  </button>
-
-                  <Reset />
-                </form>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable
@@ -370,60 +247,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
             data={pendingData}
             columns={columns}
             rowIndex
-          />
-
-          {/* <div>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Query No</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Sub Category</th>
-                  <th>Customer Name</th>
-                  <th scope="col">Query Allocation</th>
-                  <th scope="col">History</th>
-                </tr>
-              </thead>
-              {pendingData.map((p, i) => (
-                <tbody key={i}>
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <th scope="row">
-                      <Link to={`/admin/pending/${p.id}`}>{p.assign_no}</Link>
-                    </th>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.name}</td>
-                    <td class="text-center">
-                      {p.is_assigned === "1" ? (
-                        <p style={{ color: "green", fontSize: "10px" }}>
-                          Assign to {p.tname} on
-                          {p.allocation_time}
-                        </p>
-                      ) : (
-                        <Link to={`/admin/queryassing/${p.id}`}>
-                          <i class="fa fa-share"></i>
-                        </Link>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-info btn-sm"
-                        onClick={() => toggle(p.id)}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
-          </div> */}
-
+          />    
           <Modal isOpen={modal} fade={false} toggle={toggle}>
             <ModalHeader toggle={toggle}>History</ModalHeader>
             <ModalBody>

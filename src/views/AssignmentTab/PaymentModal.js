@@ -15,7 +15,7 @@ function PaymentModal({
   const { handleSubmit, register } = useForm();
   const alert = useAlert();
   const history = useHistory();
-  const { id, amount } = pay;
+  const { id, amount, accepted_amount, paid_amount } = pay;
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -34,7 +34,6 @@ function PaymentModal({
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Payment Done!");
-          history.push("/customer/queries");
           getProposalData();
           paymentHandler();
         }
@@ -49,22 +48,36 @@ function PaymentModal({
       <Modal isOpen={addPaymentModal} toggle={paymentHandler} size="sm">
         <ModalHeader toggle={paymentHandler}>Payment</ModalHeader>
         <ModalBody>
+          <table class="table table-bordered">
+            <tr>
+              <th>Accepted Amount</th>
+              <td>{accepted_amount}</td>
+            </tr>
+            <tr>
+              <th>Paid Amount</th>
+              <td>{paid_amount}</td>
+            </tr>
+          </table>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="p_amount"
-                ref={register}
-                className="form-control"
-                defaultValue={amount}
-                placeholder="enter amount"
-              />
-            </div>
-            <div class="modal-footer">
-              <button type="submit" className="btn btn-primary">
-                Pay
-              </button>
-            </div>
+            {+accepted_amount == +paid_amount ? null : (
+              <div>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="p_amount"
+                    ref={register}
+                    className="form-control"
+                    defaultValue={accepted_amount - paid_amount}
+                    placeholder="enter amount"
+                  />
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" className="btn btn-primary">
+                    Pay
+                  </button>
+                </div>
+              </div>
+            )}
           </form>
         </ModalBody>
       </Modal>

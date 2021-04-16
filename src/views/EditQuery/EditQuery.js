@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useAlert } from "react-alert";
 import { Select } from "antd";
 import { Card, CardHeader, Row, Col } from "reactstrap";
-// import ImageUploads from "./ImageUploads";
+import SelectComponent from "./SelectComponent";
 
 function EditQuery(props) {
   const { Option } = Select;
@@ -34,67 +34,115 @@ function EditQuery(props) {
   const [selectedData, setSelectedData] = useState("");
   const [queryDocs, setQueryDocs] = useState([]);
   const [assessmentYear, setAssementYear] = useState([]);
+  const [purpose, setPurpose] = useState([]);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     getQuery();
   }, []);
 
-  var arr = [];
+  // var arr = [];
+  // arr = ["a", "b", "c", "2021"];
 
   const getQuery = () => {
     axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
       console.log(res);
       console.log("result", res.data.result[0]);
-      console.log("result", res.data.result[0].assessment_year);
-      // var allData = res.data.result[0];
+      console.log("result", res.data.result[0].purpose_opinion);
 
-      var specific = res.data.result[0].specific_query;
-      if (specific == "undefined") {
-      } else var sepData = JSON.parse(specific);
-      reset({
-        users: sepData,
-      });
+      var purposeItem = res.data.result[0].purpose_opinion;
+      console.log("purposeItem-", typeof purposeItem);
 
-      var value = res.data.result[0].assessment_year;
-      const usingSplit = value.split(",");
-      console.log("value :", usingSplit);
-      setAssementYear(usingSplit);
+      if (res) {
+        setLoad(true);
+        try {
+          var myObj = JSON.parse(purposeItem);
+          var arr = [];
+          myObj.forEach((p) => {
+            if (!p.purpose == false) {
+              p.purpose = true;
+              console.log("p 1 -", p);
+            }
 
-      arr = ["a", "b", "c", "2021"];
-      console.log("arr", arr);
+            arr.push(p.purpose);
+            console.log("arr -", arr);
+          });
+          setPurpose(arr);
+        } catch (e) {
+          return false;
+        }
 
-      setValue("fact_case", res.data.result[0].fact_case);
-      setValue("case_name", res.data.result[0].case_name);
-      setValue("purpose_opinion", res.data.result[0].purpose_opinion);
-      setValue("p_Softcopy_word", Boolean(+res.data.result[0].softcopy_word));
-      setValue(
-        "p_Softcopy_digital",
-        Boolean(+res.data.result[0].softcopy_digitally_assigned)
-      );
-      setValue(
-        "p_Softcopy_physical",
-        Boolean(+res.data.result[0].printout_physically_assigned)
-      );
-      setValue("p_timelines", res.data.result[0].Timelines);
-      setQueryDocs(res.data.queries_document);
+        var specific = res.data.result[0].specific_query;
+        if (specific == "undefined") {
+        } else var sepData = JSON.parse(specific);
+        reset({
+          users: sepData,
+        });
+
+        var value = res.data.result[0].assessment_year;
+        try {
+          const usingSplit = value.split(",");
+          console.log("value :", usingSplit);
+          setAssementYear(usingSplit);
+        } catch (e) {
+          return false;
+        }
+
+        console.log("purpose", purpose);
+        console.log("purpose[0]", purpose[0]);
+        setValue("fact_case", res.data.result[0].fact_case);
+        setValue("case_name", res.data.result[0].case_name);
+        setValue("p_Softcopy_word", Boolean(+res.data.result[0].softcopy_word));
+        setValue(
+          "p_Softcopy_digital",
+          Boolean(+res.data.result[0].softcopy_digitally_assigned)
+        );
+        setValue(
+          "p_Softcopy_physical",
+          Boolean(+res.data.result[0].printout_physically_assigned)
+        );
+        setValue("p_timelines", res.data.result[0].Timelines);
+        setQueryDocs(res.data.queries_document);
+
+        handleChange();
+      }
     });
   };
 
-  console.log("queryDocs", queryDocs);
+  const handleChange = () => {
+    setValue("p_assessment", purpose[0]);
+    setValue("p_appeal", purpose[1]);
+    setValue("p_court", purpose[2]);
+    setValue("p_authority", purpose[3]);
+    setValue("p_others", purpose[4]);
+  };
 
-  function handleChange(value) {
+  const updateValue = (value) => {
     setSelectedData(value);
-  }
+  };
 
+  console.log("assessmentYear",assessmentYear)
+  
   const onSubmit = (value) => {
     console.log("value", value);
-    let formData = new FormData();
-    var uploadImg = value.upload;
-    for (var i = 0; i < uploadImg.length; i++) {
-      console.log("pics", value.upload[i].pics[0]);
+    var item = [
+      { purpose: value.p_assessment },
+      { purpose: value.p_appeal },
+      { purpose: value.p_court },
+      { purpose: value.p_authority },
+      { purpose: value.p_others },
+    ];
 
-      let a = value.upload[i].pics[0];
-      formData.append("upload_1[]", a);
+    let formData = new FormData();
+
+    var uploadImg = value.upload;
+    if (uploadImg) {
+      for (var i = 0; i < uploadImg.length; i++) {
+        console.log("pics", value.upload[i].pics[0]);
+
+        let a = value.upload[i].pics[0];
+        formData.append("upload_1[]", a);
+      }
     }
     formData.append("fact", value.fact_case);
     formData.append("specific", JSON.stringify(value.specific));
@@ -113,6 +161,7 @@ function EditQuery(props) {
     );
     formData.append("case_name", value.case_name);
     formData.append("assessment_year", selectedData);
+    formData.append("purpose", JSON.stringify(item));
     formData.append("id", id);
 
     axios
@@ -151,220 +200,283 @@ function EditQuery(props) {
         </CardHeader>
 
         <CardHeader>
-          <div class="col-xl-8 col-lg-8 col-md-12 py-4">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Facts of the case</label>
-                    <textarea
-                      className="form-control"
-                      id="textarea"
-                      rows="6"
-                      name="fact_case"
-                      ref={register}
-                    ></textarea>
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="question_query mb-2">
-                    <label className="form-label">
-                      Specific Questions for advisory
-                    </label>
-                    <div
-                      className="btn btn-primary"
-                      onClick={() => append({ query: "" })}
-                    >
-                      +
+          {load ? (
+            <div class="col-xl-8 col-lg-8 col-md-12 py-4">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Facts of the case</label>
+                      <textarea
+                        className="form-control"
+                        id="textarea"
+                        rows="6"
+                        name="fact_case"
+                        ref={register}
+                      ></textarea>
                     </div>
                   </div>
 
-                  {fields.map((item, index) => (
-                    <div className="question_query_field mb-2" key={index}>
+                  <div className="col-md-6">
+                    <div className="question_query mb-2">
+                      <label className="form-label">
+                        Specific Questions for advisory
+                      </label>
+                      <div
+                        className="btn btn-primary"
+                        onClick={() => append({ query: "" })}
+                      >
+                        +
+                      </div>
+                    </div>
+
+                    {fields.map((item, index) => (
+                      <div className="question_query_field mb-2" key={index}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          ref={register}
+                          name={`specific[${index}].query`}
+                          defaultValue={`${item.query}`}
+                          placeholder="Specify your query"
+                        />
+                        <div
+                          className="btn btn-primary ml-2"
+                          onClick={() => remove(index)}
+                        >
+                          -
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Case name</label>
                       <input
                         type="text"
+                        name="case_name"
+                        ref={register}
                         className="form-control"
-                        ref={register}
-                        name={`specific[${index}].query`}
-                        defaultValue={`${item.query}`}
-                        placeholder="Specify your query"
                       />
-                      <div
-                        className="btn btn-primary ml-2"
-                        onClick={() => remove(index)}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Assessment year</label>
+                      <SelectComponent
+                        assessmentYear={assessmentYear}
+                        updateValue={updateValue}
+                      />
+                    </div>
+                    {/* <p>{assessmentYear}</p> */}
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <ImageUploads register={register} control={control} />
+                    </div>
+                  </div>
+
+                  {/* <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Purpose for which Opinion is sought
+                      </label>
+                      <select
+                        className="form-select form-control"
+                        name="purpose_opinion"
+                        aria-label="Default select example"
+                        ref={register}
                       >
-                        -
+                        <option value="">--select--</option>
+                        {Opinion.map((p, i) => (
+                          <option key={i} value={p.sought}>
+                            {p.sought}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div> */}
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Format in which Opinion is required
+                      </label>
+                      <br />
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_Softcopy_word"
+                          ref={register}
+                        />
+                        <label className="form-check-label">
+                          Softcopy - Word/ Pdf
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_Softcopy_digital"
+                          ref={register}
+                        />
+                        <label className="form-check-label">
+                          SoftCopy- Digitally Signed
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_Softcopy_physical"
+                          ref={register}
+                        />
+                        <label className="form-check-label">
+                          Printout- Physically Signed
+                        </label>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Case name</label>
-                    <input
-                      type="text"
-                      name="case_name"
-                      ref={register}
-                      className="form-control"
-                    />
                   </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Assessment year</label>
-                    <Select
-                      mode="tags"
-                      style={{ width: "100%" }}
-                      onChange={handleChange}
-                      defaultValue={arr}
-                      allowClear
-                    >
-                      {assessment_year.map((p, i) => (
-                        <Option key={p.year}>{p.year}</Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <p>{arr}</p>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <ImageUploads register={register} control={control} />
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Purpose for which Opinion is sought
-                    </label>
-                    <select
-                      className="form-select form-control"
-                      name="purpose_opinion"
-                      aria-label="Default select example"
-                      ref={register}
-                    >
-                      <option value="">--select--</option>
-                      {Opinion.map((p, i) => (
-                        <option key={i} value={p.sought}>
-                          {p.sought}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Format in which Opinion is required
-                    </label>
-                    <br />
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_Softcopy_word"
-                        ref={register}
-                      />
-                      <label className="form-check-label">
-                        Softcopy - Word/ Pdf
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Timelines within which Opinion is Required
                       </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_Softcopy_digital"
-                        ref={register}
-                      />
-                      <label className="form-check-label">
-                        SoftCopy- Digitally Signed
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_Softcopy_physical"
-                        ref={register}
-                      />
-                      <label className="form-check-label">
-                        Printout- Physically Signed
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">
-                      Timelines within which Opinion is Required
-                    </label>
-                    <br />
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="p_timelines"
-                        ref={register}
-                        value="Urgent, (4-5 Working Days)"
-                      />
-                      <label>Urgent, (4-5 Working Days)</label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="p_timelines"
-                        ref={register}
-                        value="Regular (10-12 Working Days)"
-                      />
-                      <label>Regular (10-12 Working Days)</label>
+                      <br />
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="p_timelines"
+                          ref={register}
+                          value="Urgent, (4-5 Working Days)"
+                          disabled
+                        />
+                        <label>Urgent, (4-5 Working Days)</label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="p_timelines"
+                          ref={register}
+                          value="Regular (10-12 Working Days)"
+                          disabled
+                        />
+                        <label>Regular (10-12 Working Days)</label>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Display Documents</label>
-                    <br />
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Display Documents</label>
+                      <br />
 
-                    <>
-                      <div>
-                        <table class="table table-bordered">
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">View</th>
-                          </tr>
-                          {queryDocs.map((p, i) => (
+                      <>
+                        <div>
+                          <table class="table table-bordered">
                             <tr>
-                              <td>{i + 1}</td>
-                              <td>
-                                <a
-                                  href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
-                                >
-                                  <i
-                                    class="fa fa-photo"
-                                    style={{ width: "50", height: "20" }}
-                                  ></i>
-                                </a>
-                              </td>
+                              <th scope="col">#</th>
+                              <th scope="col">View</th>
                             </tr>
-                          ))}
-                        </table>
+                            {queryDocs.map((p, i) => (
+                              <tr>
+                                <td>{i + 1}</td>
+                                <td>
+                                  <a
+                                    href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
+                                  >
+                                    <i
+                                      class="fa fa-photo"
+                                      style={{ width: "50", height: "20" }}
+                                    ></i>
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </table>
+                        </div>
+                      </>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">
+                        Purpose for which Opinion is sought
+                      </label>
+                      <br />
+
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_assessment"
+                          ref={register}
+                          value="Assessment"
+                        />
+                        <label className="form-check-label">Assessment</label>
                       </div>
-                    </>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_appeal"
+                          ref={register}
+                          value="Appeal"
+                        />
+                        <label className="form-check-label">Appeal</label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_court"
+                          ref={register}
+                          value="Filing before any Court"
+                        />
+                        <label className="form-check-label">
+                          Filing before any Court
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_authority"
+                          ref={register}
+                          value="Filing before any Authority"
+                        />
+                        <label className="form-check-label">
+                          Filing before any Authority
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_others"
+                          ref={register}
+                          value="Others"
+                        />
+                        <label className="form-check-label">Others</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <button type="submit" className="btn btn-primary">
-                Update
-              </button>
-            </form>
-          </div>
+                <button type="submit" className="btn btn-primary">
+                  Update
+                </button>
+              </form>
+            </div>
+          ) : (
+            <p>loading..</p>
+          )}
         </CardHeader>
       </Card>
     </Layout>
@@ -406,13 +518,7 @@ const ImageUploads = ({ register, control }) => {
   );
 };
 
-const Opinion = [
-  { sought: "Assessment" },
-  { sought: "Appeal" },
-  { sought: "Filing before any Court" },
-  { sought: "Filing before any Authority" },
-  { sought: "Others" },
-];
+
 
 const assessment_year = [
   {

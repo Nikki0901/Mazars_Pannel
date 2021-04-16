@@ -121,13 +121,29 @@ function AssignmentTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
     },
     {
       text: "Actual date of delivery",
-      dataField: "days_taken",
+      dataField: "final_date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.final_date);
+        var oldDate = row.final_date;
+        if (oldDate == null || oldDate == "0000-00-00 00:00:00") {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -158,6 +174,26 @@ function AssignmentTab() {
                 </a>
               </div>
             ) : null}
+          </>
+        );
+      },
+    },
+    {
+      text: "Assignment Stage",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              title="Add Assignment stages"
+              style={{ cursor: "pointer", textAlign: "center" }}
+            >
+              <Link to={`/teamleader/addassingment/${row.q_id}`}>
+                <i class="fa fa-tasks"></i>
+              </Link>
+            </div>
           </>
         );
       },

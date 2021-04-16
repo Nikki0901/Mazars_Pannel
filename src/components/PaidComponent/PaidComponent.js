@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import Layout from "../Layout/Layout";
 import {
   Card,
   CardHeader,
@@ -9,22 +8,26 @@ import {
   CardTitle,
   Row,
   Col,
-  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from "reactstrap";
-import { useAlert } from "react-alert";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
-
+import CommonServices from "../../common/common";
 function PaidComponent() {
   const [payment, setPayment] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
   const [paymentcount, setPaymentCount] = useState("");
+  const [pay, setPay] = useState([]);
 
   useEffect(() => {
     getPaymentStatus();
@@ -40,35 +43,24 @@ function PaidComponent() {
     });
   };
 
-  const [tax, setTax] = useState([]);
-  const [tax2, setTax2] = useState([]);
+  const [modal, setModal] = useState(false);
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
 
-  const [store, setStore] = useState("");
-  const [store2, setStore2] = useState("");
-  useEffect(() => {
-    getCategory();
-  }, []);
-
-  const getCategory = () => {
-    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTax(res.data.result);
-      }
-    });
+    fetch(`${baseUrl}//admin/getPaymentDetail?id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setPay(response.payment_detail);
+      })
+      .catch((error) => console.log(error));
   };
-
-  useEffect(() => {
-    const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
-    };
-    getSubCategory();
-  }, [store]);
 
   const columns = [
     {
@@ -85,7 +77,7 @@ function PaidComponent() {
       },
     },
     {
-      dataField: "created",
+      dataField: "query_created_date",
       text: "Date",
       sort: true,
       style: {
@@ -95,12 +87,12 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
-        var oldDate = row.created;
+        console.log("dt", row.query_created_date);
+        var oldDate = row.query_created_date;
         if (oldDate == null) {
           return null;
         }
-        return oldDate.toString().split("-").reverse().join("-");
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -117,7 +109,7 @@ function PaidComponent() {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link to={`/admin/queries/${row.assign_id}`}>{row.assign_no}</Link>
           </>
         );
       },
@@ -146,7 +138,7 @@ function PaidComponent() {
     },
     {
       text: "Date of Proposal",
-      dataField: "DateofProposal",
+      dataField: "created",
       sort: true,
       style: {
         fontSize: "11px",
@@ -155,12 +147,12 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.DateofProposal);
-        var oldDate = row.DateofProposal;
+        console.log("dt", row.created);
+        var oldDate = row.created;
         if (oldDate == null) {
           return null;
         }
-        return oldDate.toString().split("-").reverse().join("-");
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -194,7 +186,7 @@ function PaidComponent() {
       },
     },
     {
-      dataField: "ProposedAmount",
+      dataField: "amount",
       text: "Proposed Amount",
       sort: true,
       style: {
@@ -245,9 +237,7 @@ function PaidComponent() {
         console.log("dt", row.accepted_amount);
         var p = row.paid_amount;
         var a = row.accepted_amount;
-        if (p == 0) {
-          return "0";
-        } else return a - p;
+        return a - p;
       },
     },
     {
@@ -271,13 +261,21 @@ function PaidComponent() {
     },
     {
       text: "Date of Completion",
-      dataField: "",
+      dataField: "final_date",
       sort: true,
       style: {
         fontSize: "11px",
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.final_date);
+        var oldDate = row.final_date;
+        if (oldDate == null || oldDate == "0000-00-00 00:00:00") {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -291,62 +289,31 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
     },
+    {
+      text: "Action",
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ cursor: "pointer" }}>
+              <i
+                class="fa fa-credit-card"
+                style={{ color: "green", fontSize: "16px" }}
+                onClick={() => toggle(row.assign_id)}
+              ></i>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getPaymentStatus();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setPayment(res.data.result);
-          }
-        }
-      });
-  };
-
-  function checkOutstading(p, a) {
-    console.log("paid -", p);
-    console.log("acc -", a);
-    if (p == 0) {
-      return "0";
-    } else return a - p;
-  }
-
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    // console.log("date",oldDate)
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
-  const Reset = () => {
-    return (
-      <>
-        <button
-          type="submit"
-          class="btn btn-primary mx-sm-1 mb-2"
-          onClick={() => resetData()}
-        >
-          Reset
-        </button>
-      </>
-    );
-  };
+  console.log("pay", pay);
 
   return (
     <div>
@@ -361,100 +328,11 @@ function PaidComponent() {
         </CardHeader>
 
         <CardHeader>
-        <AdminFilter
+          <AdminFilter
             setData={setPayment}
             getData={getPaymentStatus}
             paymentStatus="paymentStatus"
           />
-
-          {/* <div className="row">
-            <div className="col-sm-12 d-flex">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-inline">
-                    <div class="form-group mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore(e.target.value)}
-                      >
-                        <option value="">--Select Category--</option>
-                        {tax.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax2"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore2(e.target.value)}
-                      >
-                        <option value="">--Select Sub-Category--</option>
-                        {tax2.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">UnPaid</option>
-                        <option value="2">Piad</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                    Search
-                  </button>
-
-                  <Reset />
-                </form>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable
@@ -465,56 +343,36 @@ function PaidComponent() {
             classes="table-responsive"
           />
 
-          {/* <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>S.No</th>
-                <th>Date</th>
-                <th>Query No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Proposal No</th>
-                <th>Customer Name</th>
-                <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
-                <th style={{ color: "#064606" }}>Paid Amount</th>
-                <th style={{ color: "darkred" }}>Amount Outstanding</th>
-                <th>Status</th>
-                <th>TL name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payment.length > 0 ? (
-                payment.map((p, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <th>
-                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
-                    </th>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-
-                    <td>{p.proposal_number}</td>
-                    <td>{p.name}</td>
-                    <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
-                    <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-                    <td style={{ color: "darkred" }}>
-                      {checkOutstading(p.paid_amount, p.accepted_amount)}
-                    </td>
-                    <td>
-                      {p.status}
-                     
-                    </td>
-                    <td>{p.tl_name}</td>
+          <Modal isOpen={modal} fade={false} toggle={toggle}>
+            <ModalHeader toggle={toggle}>History</ModalHeader>
+            <ModalBody>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="row">S.No</th>
+                    <th scope="row">Date</th>
+                    <th scope="row">Amount</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9">No Records</td>
-                </tr>
-              )}
-            </tbody>
-          </table> */}
+                </thead>
+                {pay.length > 0
+                  ? pay.map((p, i) => (
+                      <tbody>
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{CommonServices.removeTime(p.payment_date)}</td>
+                          <td>{p.paid_amount}</td>
+                        </tr>
+                      </tbody>
+                    ))
+                  : null}
+              </table>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
         </CardBody>
       </Card>
     </div>
@@ -522,21 +380,3 @@ function PaidComponent() {
 }
 
 export default PaidComponent;
-// function checkStatus(p, a) {
-//   console.log("paid -", p);
-//   console.log("acc -", a);
-
-//   if (p > 0 && p < a) {
-//     return "Partial Received ";
-//   } else if (p === a && p > 0) {
-//     return "Paid";
-//   } else {
-//     return "pending";
-//   }
-// }
-{
-  /* {checkStatus(
-                        Number(p.paid_amount),
-                        Number(p.accepted_amount)
-                      )} */
-}

@@ -23,6 +23,8 @@ function QueriesRecevied() {
   const [displayQuery, setDisplayQuery] = useState([]);
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
   const [queryDocs, setQueryDocs] = useState([]);
+  const [paymentDetails, setPaymentDetails] = useState([]);
+  const [purpose, setPurpose] = useState([]);
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -54,7 +56,17 @@ function QueriesRecevied() {
         if (res.data.code === 1) {
           setSubmitData(res.data.result);
           setDisplaySpecific(res.data.additional_queries);
+          setPaymentDetails(res.data.payment_detail);
           setAssingmentNo(res.data.result[0].assign_no);
+
+          var purposeItem = res.data.result[0].purpose_opinion;
+          console.log("purposeItem-", typeof purposeItem);
+          try {
+            var myObj = JSON.parse(purposeItem);
+            setPurpose(myObj);
+          } catch (e) {
+            return false;
+          }
 
           if (res.data.proposal_queries.length > 0) {
             setDisplayProposal({
@@ -125,6 +137,8 @@ function QueriesRecevied() {
               getQuery={getQuery}
               assingNo={assingNo}
               queryDocs={queryDocs}
+              purpose={purpose}
+              paymentDetails={paymentDetails}
             />
           ))}
         </div>

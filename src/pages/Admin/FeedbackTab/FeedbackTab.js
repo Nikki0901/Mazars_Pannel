@@ -12,7 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-import { Link } from "react-router-dom";
+import FeedbackService from "../../../config/services/QueryDetails";
 
 function FeedbackTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -20,16 +20,19 @@ function FeedbackTab() {
   const [feedbackData, setFeedBackData] = useState([]);
 
   useEffect(() => {
-    const getFeedback = () => {
-      axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setFeedBackData(res.data.result);
-        }
-      });
-    };
     getFeedback();
   }, []);
+
+  const getFeedback = () => {
+    FeedbackService.getAll()
+      .then((response) => {
+        setFeedBackData(response.data.result);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const columns = [
     {
@@ -84,32 +87,6 @@ function FeedbackTab() {
               columns={columns}
               rowIndex
             />
-
-            {/* <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>Query No</th>
-                  <th>Details of feedback</th>
-                </tr>
-              </thead>
-              <tbody>
-                {feedbackData.length > 0 ? (
-                  feedbackData.map((p, i) => (
-                    <tr key={i}>
-                      <td>{i+1}</td>                 
-                      <td>{p.assign_no}</td>
-                      <td>{p.feedback}</td>                   
-                                        
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="3">No Records</td>
-                  </tr>
-                )}
-              </tbody>
-            </table> */}
           </CardBody>
         </Card>
       </Layout>
@@ -118,3 +95,11 @@ function FeedbackTab() {
 }
 
 export default FeedbackTab;
+// const getFeedback = () => {
+//   axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
+//     console.log(res);
+//     if (res.data.code === 1) {
+//       setFeedBackData(res.data.result);
+//     }
+//   });
+// };

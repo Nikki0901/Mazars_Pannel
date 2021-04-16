@@ -67,7 +67,9 @@ function ProposalTab() {
       });
   };
 
-
+  const refreshList = () => {
+    getProposalData();
+  };
 
   // accepted proposal
   const accepted = (key) => {
@@ -84,16 +86,13 @@ function ProposalTab() {
     })
       .then(function (response) {
         console.log("res-", response);
-        if (response.data.code === 1) {
-          getProposalData();
-          alert.success("proposal accepted !");
-        }
+        refreshList();
+        alert.success("proposal accepted !");
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
-
 
   // rejected proposal
   const rejected = (key) => {
@@ -120,8 +119,6 @@ function ProposalTab() {
         console.log("erroror - ", error);
       });
   };
-
-
 
   const columns = [
     {
@@ -295,14 +292,10 @@ function ProposalTab() {
         return { fontSize: "11px", color: "darkred" };
       },
       formatter: function amountOutstading(cell, row) {
-        console.log("dt", row.paid_amount);
-        console.log("dt", row.accepted_amount);
-        var p = row.paid_amount;
         var a = row.accepted_amount;
-        if (p == 0) {
-          return "0";
-        } else return a - p;
-      },
+        var p = row.paid_amount;
+        return a - p;
+      }
     },
     {
       text: "Date of Payment",
@@ -370,9 +363,7 @@ function ProposalTab() {
                       ></i>
                     </div>
                   </div>
-                ) :
-                
-                (
+                ) : (
                   (row.negotiated_amount === "0" || row.accepted_amount) && ""
                 )}
 
@@ -398,7 +389,6 @@ function ProposalTab() {
       },
     },
   ];
-
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -443,6 +433,15 @@ function ProposalTab() {
 export default ProposalTab;
 
 
+// formatter: function amountOutstading(cell, row) {
+//   console.log("dt", row.paid_amount);
+//   console.log("dt", row.accepted_amount);
+//   var p = row.paid_amount;
+//   var a = row.accepted_amount;
+//   if (p == 0) {
+//     return "0";
+//   } else return a - p;
+// },
 {
   /* <AcceptModal
             acceptedModal={acceptedModal}

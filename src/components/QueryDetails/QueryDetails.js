@@ -17,7 +17,9 @@ function QueryDetails({
   assingNo,
   getQuery,
   customerQuery,
-  queryDocs
+  queryDocs,
+  purpose,
+  paymentDetails
 }) {
   console.log("p", p);
   const history = useHistory();
@@ -34,13 +36,15 @@ function QueryDetails({
           style={{ padding: ".5rem .1rem" }}
         >
           <h2 class="mb-0 query">
-            <button
-              class="btn btn-success ml-3"
-              onClick={() => history.goBack()}
-            >
-              <i class="fas fa-arrow-left mr-2"></i>
-              Go Back
-            </button>
+            <div>
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                Go Back
+              </button>
+            </div>
+
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               <p class="m-0" style={{ fontSize: "15px" }}>
                 Submitted on
@@ -66,10 +70,16 @@ function QueryDetails({
         </div>
 
         <div class="card-body">
-          <BasicQuery p={p} diaplaySpecific={diaplaySpecific} queryDocs={queryDocs}/>
+          <BasicQuery
+            p={p}
+            diaplaySpecific={diaplaySpecific}
+            purpose={purpose}
+            queryDocs={queryDocs}
+          />
           <ProposalDetails
             diaplayProposal={diaplayProposal}
             diaplayHistory={diaplayHistory}
+            paymentDetails={paymentDetails}
             p={p}
           />
           <AssignmentDetails diaplayAssignment={diaplayAssignment} p={p} />

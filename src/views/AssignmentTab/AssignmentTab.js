@@ -24,10 +24,12 @@ function AssignmentTab() {
   const [pay, setPay] = useState({
     pay: "",
     amount: "",
+    accepted_amount: "",
+    paid_amount: "",
+
   });
 
-  const [addPaymentModal, setPaymentModal] = useState(false);
-
+  const [addPaymentModal, setPaymentModal] = useState(false)
   const paymentHandler = (key) => {
     console.log("key", key);
 
@@ -35,6 +37,8 @@ function AssignmentTab() {
     setPay({
       amount: key.accepted_amount,
       id: key.id,
+      accepted_amount: key.accepted_amount,
+      paid_amount: key.paid_amount,
     });
   };
 
@@ -142,16 +146,16 @@ function AssignmentTab() {
       },
     },
     {
-      dataField: "date_of_delivery",
+      dataField: "final_date",
       text: "Actual date of delivery",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
-        var oldDate = row.created;
-        if (oldDate == null) {
+        console.log("dt", row.final_date);
+        var oldDate = row.final_date;
+        if (oldDate == null || oldDate == "0000-00-00") {
           return null;
         }
         return oldDate.toString().split("-").reverse().join("-");
@@ -272,7 +276,6 @@ function AssignmentTab() {
             keyField="id"
             data={assignmentDisplay}
             columns={columns}
-            rowIndex
           />
           <PaymentModal
             paymentHandler={paymentHandler}

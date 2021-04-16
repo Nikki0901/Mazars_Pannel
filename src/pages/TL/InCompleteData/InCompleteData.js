@@ -58,15 +58,14 @@ function InCompleteData({ CountIncomplete }) {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      // formatter: function dateFormat(cell, row) {
-      //   console.log("dt", row.query_date);
-      //   var updatedate = row.query_date.split(" ")[0];
-      //   console.log(updatedate);
-      //   if (updatedate == null) {
-      //     return null;
-      //   }
-      //   return updatedate.toString().split("-").reverse().join("-");
-      // },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.query_date);
+        var oldDate = row.query_date.split(" ")[0];
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
     },
     {
       text: "Query No",

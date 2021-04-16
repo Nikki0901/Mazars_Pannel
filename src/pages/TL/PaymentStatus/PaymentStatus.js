@@ -9,13 +9,15 @@ import {
   CardTitle,
   Row,
   Col,
-  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from "reactstrap";
 import { useAlert } from "react-alert";
 import { Link, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import "antd/dist/antd.css";
-import { Select } from "antd";
+import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
@@ -25,11 +27,10 @@ function PaymentStatus() {
   const userid = window.localStorage.getItem("tlkey");
   const cust_id = window.localStorage.getItem("userid");
 
-  const { handleSubmit, register, errors, reset } = useForm();
-  const { Option, OptGroup } = Select;
-  const [selectedData, setSelectedData] = useState([]);
+  const [pay, setPay] = useState([]);
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     getPaymentStatus();
@@ -45,23 +46,65 @@ function PaymentStatus() {
     });
   };
 
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(`${baseUrl}//admin/getPaymentDetail?id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setPay(response.payment_detail);
+      })
+      .catch((error) => console.log(error));
+  };
   const columns = [
     {
-      text: "S.No",
       dataField: "",
+      text: "S.No",
       formatter: (cellContent, row, rowIndex) => {
         return rowIndex + 1;
       },
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: "12px", width: "50px" };
+        return { fontSize: "11px" };
       },
     },
     {
-      text: "Query No",
-      dataField: "assign_no",
+      dataField: "query_created_date",
+      text: "Date",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.query_created_date);
+        var oldDate = row.query_created_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      dataField: "assign_no",
+      text: "Query No",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
@@ -74,230 +117,193 @@ function PaymentStatus() {
         );
       },
     },
-
     {
-      text: "Customer Name",
-      dataField: "name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Proposed Amount",
-      dataField: "amount",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      text: "Accepted Amount",
-      dataField: "accepted_amount",
+      dataField: "parent_id",
+      text: "Category",
       sort: true,
       style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      dataField: "cat_name",
+      text: "Sub Category",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Date of Proposal",
+      dataField: "created",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Date of acceptance of Proposal",
+      dataField: "cust_accept_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_accept_date);
+        var oldDate = row.cust_accept_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      dataField: "amount",
+      text: "Proposed Amount",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+    },
+    {
+      dataField: "accepted_amount",
+      text: "Accepted Amount ",
+      sort: true,
+      style: {
+        fontSize: "11px",
         color: "#21a3ce",
       },
       headerStyle: () => {
-        return { fontSize: "12px", color: "#21a3ce" };
+        return { fontSize: "11px", color: "#21a3ce" };
       },
     },
     {
-      text: "Paid Amount",
+      text: "Amount Paid",
       dataField: "paid_amount",
       sort: true,
       style: {
+        fontSize: "11px",
         color: "#064606",
       },
       headerStyle: () => {
-        return { fontSize: "12px", color: "#064606" };
+        return { fontSize: "11px", color: "#064606" };
       },
     },
+
     {
       text: "Amount Outstanding",
       dataField: "",
       sort: true,
       style: {
+        fontSize: "11px",
         color: "darkred",
       },
       headerStyle: () => {
-        return { fontSize: "12px", color: "darkred" };
+        return { fontSize: "11px", color: "darkred" };
       },
       formatter: function amountOutstading(cell, row) {
         console.log("dt", row.paid_amount);
         console.log("dt", row.accepted_amount);
         var p = row.paid_amount;
         var a = row.accepted_amount;
-        if (p == 0) {
-          return "0";
-        } else return a - p;
+        return a - p;
       },
     },
     {
-      text: "status",
-      dataField: "status",
+      text: "Date of Payment",
+      dataField: "cust_paid_date",
       sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.cust_paid_date);
+        var oldDate = row.cust_paid_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
-
     {
-      text: "Accept as Assignment",
-      dataField: "",
+      text: "Date of Completion",
+      dataField: "final_date",
+      sort: true,
+      style: {
+        fontSize: "11px",
+      },
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "11px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.final_date);
+        var oldDate = row.final_date;
+        if (oldDate == null || oldDate == "0000-00-00 00:00:00") {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Action",
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div
-              title="Add Assignment stages"
-              style={{ cursor: "pointer", textAlign: "center" }}
-            >
-              <Link to={`/teamleader/addassingment/${row.assign_id}`}>
-                <i class="fa fa-tasks"></i>
-              </Link>
+            <div style={{ cursor: "pointer" }}>
+              <i
+                class="fa fa-credit-card"
+                style={{ color: "green", fontSize: "16px" }}
+                onClick={() => toggle(row.assign_id)}
+              ></i>
             </div>
-
-            {/* <div
-              title="Accept Assignment"
-              style={{
-                cursor: "pointer",
-                color: "green",
-                textAlign: "center",
-              }}
-            >
-              {row.paid_amount > 0 && row.sid < 9 && (
-                <div>
-                  <i
-                    class="fa fa-check"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => makeAssignment(row)}
-                  ></i>
-                </div>
-              )}
-            </div> */}
           </>
         );
       },
     },
   ];
-
-  // accepted proposal
-  const accepted = (key) => {
-    console.log("acc", key);
-
-    let formData = new FormData();
-    formData.append("id", key);
-    formData.append("status", 7);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/ProposalAccept`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          getPaymentStatus();
-          alert.success("accepted !");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-  // rejected proposal
-  // const rejected = (key) => {
-  //   console.log("rej", key);
-  // };
-
-  const makeAssignment = (key) => {
-    console.log("makeAssignment", key);
-
-    let formData = new FormData();
-    formData.append("proposal_id", key.id);
-    formData.append("q_id", key.assign_id);
-    formData.append("tl_id", JSON.parse(userid));
-    formData.append("customer_id", JSON.parse(cust_id));
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/MakeAssignment`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          getPaymentStatus();
-          alert.success("accepted assignment!");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-  function checkStatus(p, a) {
-    console.log("paid -", p);
-    console.log("acc -", a);
-
-    if (p > 0 && p < a) {
-      return "Partial Received ";
-    } else if (p === a && p > 0) {
-      return "Paid";
-    } else {
-      return "pending";
-    }
-  }
-
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getPaymentStatus();
-  };
-
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getPaymentStatus();
-  };
-
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getPaymentStatus();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/tl/getUploadedProposals?cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setPayment(res.data.result);
-          }
-        }
-      });
-  };
-
-  function checkOutstading(p, a) {
-    console.log("paid -", p);
-    console.log("acc -", a);
-    if (p == 0) {
-      return "0";
-    } else return a - p;
-  }
 
   return (
     <>
@@ -317,132 +323,6 @@ function PaymentStatus() {
               getData={getPaymentStatus}
               paymentStatus="paymentStatus"
             />
-            {/* <div className="row">
-              <div class="col-sm-3 d-flex">
-                <Select
-                  mode="multiple"
-                  style={{ width: "100%" }}
-                  placeholder="Select Category"
-                  defaultValue={[]}
-                  onChange={handleChange}
-                  optionLabelProp="label"
-                  value={selectedData}
-                >
-                  <OptGroup label="Direct Tax">
-                    <Option value="3" label="Compilance">
-                      <div className="demo-option-label-item">Compliance</div>
-                    </Option>
-                    <Option value="4" label="Assessment">
-                      <div className="demo-option-label-item">Assessment</div>
-                    </Option>
-                    <Option value="5" label="Appeals">
-                      <div className="demo-option-label-item">Appeals</div>
-                    </Option>
-                    <Option value="6" label="Advisory/opinion">
-                      <div className="demo-option-label-item">
-                        Advisory/opinion
-                      </div>
-                    </Option>
-                    <Option value="7" label="Transfer Pricing">
-                      <div className="demo-option-label-item">
-                        Transfer Pricing
-                      </div>
-                    </Option>
-                    <Option value="8" label="Others">
-                      <div className="demo-option-label-item">Others</div>
-                    </Option>
-                  </OptGroup>
-
-                  <OptGroup label="Indirect Tax">
-                    <Option value="9" label="Compilance">
-                      <div className="demo-option-label-item">Compliance</div>
-                    </Option>
-                    <Option value="10" label="Assessment">
-                      <div className="demo-option-label-item">Assessment</div>
-                    </Option>
-                    <Option value="11" label="Appeals">
-                      <div className="demo-option-label-item">Appeals</div>
-                    </Option>
-                    <Option value="12" label="Advisory/opinion">
-                      <div className="demo-option-label-item">
-                        Advisory/opinion
-                      </div>
-                    </Option>
-                    <Option value="13" label="Others">
-                      <div className="demo-option-label-item">Others</div>
-                    </Option>
-                  </OptGroup>
-                </Select>
-
-                <div>
-                  <button
-                    type="submit"
-                    class="btn btn-primary mb-2 ml-3"
-                    onClick={resetCategory}
-                    style={{ padding: "4px 9px" }}
-                  >
-                    X
-                  </button>
-                </div>
-              </div>
-
-              <div className="col-sm-9 d-flex p-0">
-                <div>
-                  <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                    <div class="form-group mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-                    <div class="form-group mb-2 ml-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mb-2 ml-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-                    <div class="form-group mb-2 ml-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mb-2 ml-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">Unpaid</option>
-                        <option value="2">Paid</option>
-                      </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mb-2 ml-2">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </form>
-                </div>
-
-                <div>
-                  <button
-                    type="submit"
-                    class="btn btn-primary mb-2 ml-3"
-                    onClick={resetData}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </div> */}
           </CardHeader>
 
           <CardBody>
@@ -451,83 +331,38 @@ function PaymentStatus() {
               keyField="id"
               data={payment}
               columns={columns}
-              rowIndex
+              classes="table-responsive"
             />
-            {/* 
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>Query No</th>
-                  <th>Proposal No</th>
-                  <th>Customer Name</th>
-                  <th>Proposed Amount</th>
-                  <th style={{ color: "#21a3ce" }}>Accepted Amount</th>
-                  <th style={{ color: "#064606" }}>Paid Amount</th>
-                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
-                  <th>status</th>
-                 
-                  <th style={{ textAlign: "center" }}>Accept as Assignment</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payment.length > 0 ? (
-                  payment.map((p, i) => (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <th>
-                    <Link to={`/teamleader/queries/${p.id}`}>{p.assign_no}</Link>
-                  </th>
-                      <td>{p.proposal_number}</td>
-                      <td>{p.name}</td>
-                      <td>{p.amount}</td>
-                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
-                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-                      <td style={{ color: "darkred" }}>
-                        {checkOutstading(p.paid_amount, p.accepted_amount)}
-                      </td>
-                      <td>{p.status}</td>
-
-                      <td>
-                        <div
-                          title="Accept Assignment"
-                          style={{
-                            cursor: "pointer",
-                            color: "green",
-                            textAlign: "center",
-                          }}
-                        >
-                          {p.paid_amount > 0 && p.sid < 9 && (
-                            <div>
-                              <i
-                                class="fa fa-check"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => makeAssignment(p)}
-                              ></i>
-                            </div>
-                          )}
-                        </div>
-
-                        <div
-                          title="Add Assignment stages"
-                          style={{ cursor: "pointer", textAlign: "center" }}
-                        >
-                          {p.sid > 8 && (
-                            <Link to={`/teamleader/addassingment/${p.assign_id}`}>
-                              <i class="fa fa-tasks"></i>
-                            </Link>
-                          )}
-                        </div>
-                      </td>
+            <Modal isOpen={modal} fade={false} toggle={toggle}>
+              <ModalHeader toggle={toggle}>History</ModalHeader>
+              <ModalBody>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="row">S.No</th>
+                      <th scope="row">Date</th>
+                      <th scope="row">Amount</th>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="11">No Records</td>
-                  </tr>
-                )}
-              </tbody>
-            </table> */}
+                  </thead>
+                  {pay.length > 0
+                    ? pay.map((p, i) => (
+                        <tbody>
+                          <tr>
+                            <td>{i + 1}</td>
+                            <td>{CommonServices.removeTime(p.payment_date)}</td>
+                            <td>{p.paid_amount}</td>
+                          </tr>
+                        </tbody>
+                      ))
+                    : null}
+                </table>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
           </CardBody>
         </Card>
       </Layout>
@@ -536,67 +371,3 @@ function PaymentStatus() {
 }
 
 export default PaymentStatus;
-
-/* <tbody>
-              <tr>
-                  <td>1</td>
-                  <td>123</td>
-                  <td>Net banking</td>
-                  <td>
-                  <div style={{display:"flex", justifyContent:"space-evenly"}}>
-                     <div>A</div>
-                     <div>B</div>
-                  </div>  
-                  </td>               
-                </tr>
-              </tbody> */
-
-// {p.negotiated_amount === "0" ? (
-// <div
-//   style={{
-//     display: "flex",
-//     justifyContent: "space-evenly",
-//   }}
-// >
-//   <div style={{ cursor: "pointer" }}>
-//     <i
-//       class="fa fa-check"
-//       onClick={() => accepted(p.assign_id)}
-//     ></i>
-//   </div>
-//   <div style={{ cursor: "pointer" }}>
-//     <i
-//       class="fa fa-times"
-//       onClick={() => rejected(p.assign_id)}
-//     ></i>
-//   </div>
-// </div>
-// ) : null}
-
-{
-  /* <td>
-                        {p.negotiated_amount === "0" &&
-                        p.accepted_amount === "0" ? (
-                          ""
-                        ) : p.negotiated_amount && p.accepted_amount === "0" ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-evenly",
-                            }}
-                          >
-                            <div
-                              title="amount Accepted"
-                              style={{ cursor: "pointer", color: "orange" }}
-                            >
-                              <i
-                                class="fa fa-check"
-                                onClick={() => accepted(p.assign_id)}
-                              ></i>
-                            </div>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </td> */
-}

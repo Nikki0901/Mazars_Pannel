@@ -1,7 +1,13 @@
 import React from "react";
 import CommonServices from "../../common/common";
 
-function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
+
+function ProposalDetails({
+  diaplayProposal,
+  diaplayHistory,
+  paymentDetails,
+  p,
+}) {
   const {
     amount,
     accepted_amount,
@@ -14,7 +20,9 @@ function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
   const { tlname, date_of_allocation } = diaplayHistory;
 
   console.log("p", p.query_status);
+
   // CommonServices.removeTime(proposal_date);
+
   return (
     <>
       <div>
@@ -62,9 +70,9 @@ function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
             <tr>
               <th scope="row">Proposal Status</th>
               <td>
-                {p.query_status < "5" && "pending"}
+                {p.query_status == "4" && "pending"}
                 {p.query_status == "6" && "Declined"}
-                {(p.query_status == "5" || p.query_status > "6" ) && "Accepted"}
+                {(p.query_status == "5" || p.query_status > 6) && "Accepted"}
               </td>
             </tr>
             <tr>
@@ -82,10 +90,12 @@ function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
                   <th>Date</th>
                   <th>Amount</th>
                 </tr>
-                <tr>
-                  <td>{CommonServices.removeTime(cust_accept_date)}</td>
-                  <td>{payment_received}</td>
-                </tr>
+                {paymentDetails.map((pay, i) => (
+                  <tr>
+                    <td>{CommonServices.removeTime(pay.payment_date)}</td>
+                    <td>{pay.paid_amount}</td>
+                  </tr>
+                ))}
               </td>
             </tr>
             <tr>
@@ -94,7 +104,7 @@ function ProposalDetails({ diaplayProposal, diaplayHistory, p }) {
             </tr>
             <tr>
               <th scope="row">Payment Due</th>
-              <td>{payment_received}</td>
+              <td>{accepted_amount - payment_received}</td>
             </tr>
             <tr>
               <th scope="row">Payment Outstanding</th>
