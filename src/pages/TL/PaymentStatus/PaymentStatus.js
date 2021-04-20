@@ -37,7 +37,7 @@ function PaymentStatus() {
   }, []);
 
   const getPaymentStatus = () => {
-    axios.get(`${baseUrl}/tl/getUploadedProposals`).then((res) => {
+    axios.get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userid)}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPayment(res.data.result);

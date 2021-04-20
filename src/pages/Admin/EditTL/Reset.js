@@ -4,7 +4,7 @@ import { Select, Form, Input, Button } from "antd";
 import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { baseUrl } from "../../../config/config";
-import { values } from "lodash";
+
 
 function Reset({ uid }) {
   const { Option } = Select;
@@ -22,6 +22,7 @@ function Reset({ uid }) {
     category: "",
     sub_category: "",
   });
+
 
   const { name, email, phone, category, sub_category } = user;
   const handleChange = (value) => {
@@ -75,6 +76,7 @@ console.log("data",data)
     console.log(values);
   };
 
+
   return (
     <>
       <div class="container">
@@ -84,7 +86,7 @@ console.log("data",data)
             <Input defaultValue={data}/>
           </Form.Item>
           <Form.Item name={["query", "email"]} label="email ">
-            <Input defaultValue="mysite"/>
+            <Input defaultValue={data}/>
           </Form.Item>
 
           <Form.Item name={["query", "phone"]} label="phone">
@@ -124,3 +126,53 @@ export default Reset;
 
 // <Option value="3">Assessment</Option>
 // <Option value="4">others</Option>
+
+
+
+// import React from "react";
+// import ReactDOM from "react-dom";
+// import Select from "react-select";
+// import { useForm, Controller } from "react-hook-form";
+// import { Checkbox, Input } from "@material-ui/core";
+// import { Input as AntdInput } from "antd";
+
+// import "./styles.css";
+
+// const App = () => {
+//   const { control, handleSubmit } = useForm();
+
+//   const onSubmit = data => {
+//     alert(JSON.stringify(data));
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit(onSubmit)}>
+     
+  
+//       <label>Ice Cream Preference</label>
+//       <Controller
+//         name="iceCreamType"
+//         as={Select}
+//         options={[
+//           { value: "chocolate", label: "Chocolate" },
+//           { value: "strawberry", label: "Strawberry" },
+//           { value: "vanilla", label: "Vanilla" }
+//         ]}
+//         control={control}
+//         defaultValue={[{ value: "vanilla", label: "Vanilla" }]}
+//       />
+    
+
+//       <input type="submit" />
+//     </form>
+//   );
+// };
+
+// const rootElement = document.getElementById("root");
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   rootElement
+// );

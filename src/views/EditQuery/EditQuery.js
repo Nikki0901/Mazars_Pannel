@@ -7,12 +7,13 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
-import { Select } from "antd";
+// import { Select } from "antd";
 import { Card, CardHeader, Row, Col } from "reactstrap";
 import SelectComponent from "./SelectComponent";
+import Select from "react-select";
 
 function EditQuery(props) {
-  const { Option } = Select;
+  // const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
   const { id } = useParams();
@@ -31,18 +32,15 @@ function EditQuery(props) {
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
 
-  const [selectedData, setSelectedData] = useState("");
+  // const [selectedData, setSelectedData] = useState("");
   const [queryDocs, setQueryDocs] = useState([]);
-  const [assessmentYear, setAssementYear] = useState([]);
-  const [purpose, setPurpose] = useState([]);
   const [load, setLoad] = useState(false);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [purposeOption, setPurposeOption] = useState([]);
 
   useEffect(() => {
     getQuery();
   }, []);
-
-  // var arr = [];
-  // arr = ["a", "b", "c", "2021"];
 
   const getQuery = () => {
     axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
@@ -50,27 +48,11 @@ function EditQuery(props) {
       console.log("result", res.data.result[0]);
       console.log("result", res.data.result[0].purpose_opinion);
 
-      var purposeItem = res.data.result[0].purpose_opinion;
-      console.log("purposeItem-", typeof purposeItem);
+      // var purposeItem = res.data.result[0].purpose_opinion;
+      // console.log("purposeItem-", typeof purposeItem);
 
       if (res) {
         setLoad(true);
-        try {
-          var myObj = JSON.parse(purposeItem);
-          var arr = [];
-          myObj.forEach((p) => {
-            if (!p.purpose == false) {
-              p.purpose = true;
-              console.log("p 1 -", p);
-            }
-
-            arr.push(p.purpose);
-            console.log("arr -", arr);
-          });
-          setPurpose(arr);
-        } catch (e) {
-          return false;
-        }
 
         var specific = res.data.result[0].specific_query;
         if (specific == "undefined") {
@@ -80,10 +62,15 @@ function EditQuery(props) {
         });
 
         var value = res.data.result[0].assessment_year;
+        var purposeItem = res.data.result[0].purpose_opinion;
+
+        console.log("assem", value);
         try {
-          const usingSplit = value.split(",");
-          console.log("value :", usingSplit);
-          setAssementYear(usingSplit);
+          var myObj = JSON.parse(value);
+          var myPurpose = JSON.parse(purposeItem);
+
+          setSelectedOption(myObj);
+          setPurposeOption(myPurpose);
         } catch (e) {
           return false;
         }
@@ -103,35 +90,12 @@ function EditQuery(props) {
         );
         setValue("p_timelines", res.data.result[0].Timelines);
         setQueryDocs(res.data.queries_document);
-
-        handleChange();
       }
     });
   };
 
-  const handleChange = () => {
-    setValue("p_assessment", purpose[0]);
-    setValue("p_appeal", purpose[1]);
-    setValue("p_court", purpose[2]);
-    setValue("p_authority", purpose[3]);
-    setValue("p_others", purpose[4]);
-  };
-
-  const updateValue = (value) => {
-    setSelectedData(value);
-  };
-
-  console.log("assessmentYear",assessmentYear)
-  
   const onSubmit = (value) => {
     console.log("value", value);
-    var item = [
-      { purpose: value.p_assessment },
-      { purpose: value.p_appeal },
-      { purpose: value.p_court },
-      { purpose: value.p_authority },
-      { purpose: value.p_others },
-    ];
 
     let formData = new FormData();
 
@@ -146,9 +110,9 @@ function EditQuery(props) {
     }
     formData.append("fact", value.fact_case);
     formData.append("specific", JSON.stringify(value.specific));
-    formData.append("purpose", value.purpose_opinion);
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
+    formData.append("id", id);
     formData.append("cid", JSON.parse(category));
     formData.append("softcopy_word", Number(value.p_Softcopy_word));
     formData.append(
@@ -160,9 +124,8 @@ function EditQuery(props) {
       Number(value.p_Softcopy_physical)
     );
     formData.append("case_name", value.case_name);
-    formData.append("assessment_year", selectedData);
-    formData.append("purpose", JSON.stringify(item));
-    formData.append("id", id);
+    formData.append("assessment_year", JSON.stringify(selectedOption));
+    formData.append("purpose", JSON.stringify(purposeOption));
 
     axios
       .post(`${baseUrl}/customers/PostEditQuestion`, formData, {
@@ -264,12 +227,15 @@ function EditQuery(props) {
                   <div className="col-md-6">
                     <div className="mb-3">
                       <label className="form-label">Assessment year</label>
-                      <SelectComponent
-                        assessmentYear={assessmentYear}
-                        updateValue={updateValue}
+
+                      <Select
+                        closeMenuOnSelect={false}
+                        onChange={setSelectedOption}
+                        value={selectedOption}
+                        isMulti
+                        options={assessment_year}
                       />
                     </div>
-                    {/* <p>{assessmentYear}</p> */}
                   </div>
 
                   <div className="col-md-6">
@@ -277,27 +243,6 @@ function EditQuery(props) {
                       <ImageUploads register={register} control={control} />
                     </div>
                   </div>
-
-                  {/* <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Purpose for which Opinion is sought
-                      </label>
-                      <select
-                        className="form-select form-control"
-                        name="purpose_opinion"
-                        aria-label="Default select example"
-                        ref={register}
-                      >
-                        <option value="">--select--</option>
-                        {Opinion.map((p, i) => (
-                          <option key={i} value={p.sought}>
-                            {p.sought}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div> */}
 
                   <div className="col-md-6">
                     <div className="mb-3">
@@ -409,62 +354,13 @@ function EditQuery(props) {
                       <label className="form-label">
                         Purpose for which Opinion is sought
                       </label>
-                      <br />
-
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="p_assessment"
-                          ref={register}
-                          value="Assessment"
-                        />
-                        <label className="form-check-label">Assessment</label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="p_appeal"
-                          ref={register}
-                          value="Appeal"
-                        />
-                        <label className="form-check-label">Appeal</label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="p_court"
-                          ref={register}
-                          value="Filing before any Court"
-                        />
-                        <label className="form-check-label">
-                          Filing before any Court
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="p_authority"
-                          ref={register}
-                          value="Filing before any Authority"
-                        />
-                        <label className="form-check-label">
-                          Filing before any Authority
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="p_others"
-                          ref={register}
-                          value="Others"
-                        />
-                        <label className="form-check-label">Others</label>
-                      </div>
+                      <Select
+                        closeMenuOnSelect={false}
+                        onChange={setPurposeOption}
+                        value={purposeOption}
+                        isMulti
+                        options={purpose}
+                      />
                     </div>
                   </div>
                 </div>
@@ -518,63 +414,90 @@ const ImageUploads = ({ register, control }) => {
   );
 };
 
-
-
 const assessment_year = [
   {
-    year: "2010-11",
+    value: "2010-11",
+    label: "2010-11",
   },
   {
-    year: "2011-12",
+    value: "2011-12",
+    label: "2011-12",
   },
   {
-    year: "2012-13",
+    value: "2012-13",
+    label: "2012-13",
   },
   {
-    year: "2013-14",
+    value: "2013-14",
+    label: "2013-14",
   },
   {
-    year: "2014-15",
+    value: "2014-15",
+    label: "2014-15",
   },
   {
-    year: "2015-16",
+    value: "2015-16",
+    label: "2015-16",
   },
   {
-    year: "2016-17",
+    value: "2016-17",
+    label: "2016-17",
   },
   {
-    year: "2017-18",
+    value: "2017-18",
+    label: "2017-18",
   },
   {
-    year: "2018-19",
+    value: "2018-19",
+    label: "2018-19",
   },
   {
-    year: "2019-20",
+    value: "2019-20",
+    label: "2019-20",
   },
   {
-    year: "2020-21",
+    value: "2020-21",
+    label: "2020-21",
   },
   {
-    year: "2021-22",
+    value: "2021-22",
+    label: "2021-22",
   },
   {
-    year: "2022-23",
+    value: "2022-23",
+    label: "2022-23",
   },
   {
-    year: "2023-24",
+    value: "2023-24",
+    label: "2023-24",
   },
   {
-    year: "2024-25",
+    value: "2024-25",
+    label: "2024-25",
   },
   {
-    year: "2025-26",
+    value: "2025-26",
+    label: "2025-26",
   },
   {
-    year: "2026-27",
+    value: "2026-27",
+    label: "2026-27",
   },
   {
-    year: "2027-28",
+    value: "2027-28",
+    label: "2027-28",
   },
+];
+
+const purpose = [
+  { value: "Assessment", label: "Assessment" },
+  { value: "Appeal", label: "Appeal" },
+  { value: "Filing before any Court", label: "Filing before any Court" },
+  {
+    value: "Filing before any Authority",
+    label: "Filing before any Authority",
+  },
+  { value: "Others", label: "Others" },
 ];
 
 // console.log("value :", value);
@@ -594,3 +517,9 @@ const assessment_year = [
 //   p_Softcopy_digital,
 //   p_Softcopy_physical,
 // } = user;
+{
+  /* <SelectComponent
+                        assessmentYear={assessmentYear}
+                        updateValue={updateValue}
+                      /> */
+}

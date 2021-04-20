@@ -19,7 +19,8 @@ function QueryDetails({
   customerQuery,
   queryDocs,
   purpose,
-  paymentDetails
+  paymentDetails,
+  year
 }) {
   console.log("p", p);
   const history = useHistory();
@@ -75,6 +76,7 @@ function QueryDetails({
             diaplaySpecific={diaplaySpecific}
             purpose={purpose}
             queryDocs={queryDocs}
+            year={year}
           />
           <ProposalDetails
             diaplayProposal={diaplayProposal}
@@ -82,7 +84,10 @@ function QueryDetails({
             paymentDetails={paymentDetails}
             p={p}
           />
-          <AssignmentDetails diaplayAssignment={diaplayAssignment} p={p} />
+          <AssignmentDetails diaplayAssignment={diaplayAssignment} 
+          p={p} 
+          diaplayProposal={diaplayProposal}
+          />
           <AdditionalQuery displayQuery={displayQuery} />
         </div>
 

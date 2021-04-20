@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CommonServices from "../../common/common";
 
-function BasicQuery({ p, diaplaySpecific, queryDocs ,purpose}) {
-  console.log(purpose)
-
- 
+function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
+  console.log("purpose", purpose);
 
   return (
     <>
@@ -52,7 +50,11 @@ function BasicQuery({ p, diaplaySpecific, queryDocs ,purpose}) {
             </tr>
             <tr>
               <th scope="row">Assessment Year</th>
-              <td>{p.assessment_year}</td>
+              <td>
+                {year.map((p, i) => (
+                  <p key={i}>{p.value}</p>
+                ))}
+              </td>
             </tr>
             <tr>
               <th scope="row">Fact of the Case</th>
@@ -83,12 +85,11 @@ function BasicQuery({ p, diaplaySpecific, queryDocs ,purpose}) {
             <tr>
               <th scope="row">Purpose for which Opinion is sought</th>
               <td colspan="1">
-                {
-                  purpose.map((p,i)=>(
-                    <p>{p.purpose}</p>
-                  ))
-                }
+                {purpose.map((p, i) => (
+                  <p key={i}>{p.value}</p>
+                ))}
               </td>
+             
             </tr>
             <tr>
               <th scope="row">Format in which Opinion is required</th>

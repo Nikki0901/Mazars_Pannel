@@ -19,7 +19,7 @@ import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
 import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-import Feedback from './views/Feedback/Feedback'
+import Feedback from './views/Frsh/Fresh'
 import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
@@ -77,6 +77,7 @@ import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
 import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
 import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
+import TlAssignmentForm from './pages/TL/AssignmentForm/AssignmentForm'
 
 
 
@@ -178,6 +179,8 @@ function App() {
         <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
         <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
         <Route exact path="/teamleader/queriestab2" component={TlQueryTab2} />
+        <Route exact path="/teamleader/assignment-form" component={TlAssignmentForm} />
+
 
 
         <Route exact path="/taxprofessional/start" component={TpStart} />

@@ -16,6 +16,7 @@ function QueriesRecevied() {
   const [queryDocs, setQueryDocs] = useState([]);
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
+  const [year, setYear] = useState([]);
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -51,10 +52,14 @@ function QueriesRecevied() {
           setAssingmentNo(res.data.result[0].assign_no);
 
           var purposeItem = res.data.result[0].purpose_opinion;
+          var assementItem = res.data.result[0].assessment_year;
+
           console.log("purposeItem-", typeof purposeItem);
           try {
-            var myObj = JSON.parse(purposeItem);
-            setPurpose(myObj);
+            var myPurpose = JSON.parse(purposeItem);
+            var myYear = JSON.parse(assementItem);
+            setPurpose(myPurpose);
+            setYear(myYear);
           } catch (e) {
             return false;
           }
@@ -128,8 +133,9 @@ function QueriesRecevied() {
               getQuery={getQuery}
               assingNo={assingNo}
               queryDocs={queryDocs}
-              purpose={purpose}
               paymentDetails={paymentDetails}
+              purpose={purpose}
+              year={year}
             />
           ))}
         </div>

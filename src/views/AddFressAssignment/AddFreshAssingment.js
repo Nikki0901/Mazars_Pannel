@@ -7,7 +7,6 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
-import { Form, Input, Button, Space, Select } from "antd";
 import {
   Card,
   CardHeader,
@@ -17,9 +16,9 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import Select from "react-select";
 
 function AddFreshAssingment(props) {
-  const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
 
@@ -36,31 +35,18 @@ function AddFreshAssingment(props) {
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
-  const [selectedData, setSelectedData] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [purposeOption, setPurposeOption] = useState([]);
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    console.log("setSelectedData :", selectedData);
-  }
 
   const onSubmit = (value) => {
     console.log("value :", value);
-
-    var item = [
-      {purpose: value.p_assessment},
-      {purpose: value.p_appeal},
-      {purpose: value.p_court},
-      {purpose: value.p_authority},
-      {purpose: value.p_others},
-    ]
 
     let formData = new FormData();
 
     var uploadImg = value.upload;
     if (uploadImg) {
       for (var i = 0; i < uploadImg.length; i++) {
-        console.log("pics", value.upload[i].pics[0]);
         let a = value.upload[i].pics[0];
         formData.append("upload_1[]", a);
       }
@@ -81,9 +67,8 @@ function AddFreshAssingment(props) {
       Number(value.p_format_physically)
     );
     formData.append("case_name", value.p_case_name);
-    formData.append("assessment_year", selectedData);
-
-    formData.append("purpose", JSON.stringify(item));
+    formData.append("assessment_year", JSON.stringify(selectedOption));
+    formData.append("purpose", JSON.stringify(purposeOption));
 
     axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
@@ -194,15 +179,11 @@ function AddFreshAssingment(props) {
                   <div className="mb-3">
                     <label className="form-label">Assessment year</label>
                     <Select
-                      mode="tags"
-                      style={{ width: "100%" }}
-                      onChange={handleChange}
-                      allowClear
-                    >
-                      {assessment_year.map((p, i) => (
-                        <Option key={p.year}>{p.year}</Option>
-                      ))}
-                    </Select>
+                      closeMenuOnSelect={false}
+                      onChange={setSelectedOption}
+                      isMulti
+                      options={assessment_year}
+                    />
                   </div>
                 </div>
 
@@ -286,63 +267,12 @@ function AddFreshAssingment(props) {
                     <label className="form-label">
                       Purpose for which Opinion is sought
                     </label>
-                    <br />
-
-                    
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_assessment"
-                        ref={register}
-                        value="Assessment"
-                      />
-                      <label className="form-check-label">Assessment</label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_appeal"
-                        ref={register}
-                        value="Appeal"
-                      />
-                      <label className="form-check-label">Appeal</label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_court"
-                        ref={register}
-                        value="Filing before any Court"
-                      />
-                      <label className="form-check-label">
-                        Filing before any Court
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_authority"
-                        ref={register}
-                        value="Filing before any Authority"
-                      />
-                      <label className="form-check-label">
-                        Filing before any Authority
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="p_others"
-                        ref={register}
-                        value="Others"
-                      />
-                      <label className="form-check-label">Others</label>
-                    </div>
+                    <Select
+                      closeMenuOnSelect={false}
+                      onChange={setPurposeOption}
+                      isMulti
+                      options={purpose}
+                    />
                   </div>
                 </div>
               </div>
@@ -360,71 +290,91 @@ function AddFreshAssingment(props) {
 
 export default AddFreshAssingment;
 
-const Opinion = [
-  { sought: "Assessment" },
-  { sought: "Appeal" },
-  { sought: "Filing before any Court" },
-  { sought: "Filing before any Authority" },
-  { sought: "Others" },
+const purpose = [
+  { value: "Assessment", label: "Assessment" },
+  { value: "Appeal", label: "Appeal" },
+  { value: "Filing before any Court", label: "Filing before any Court" },
+  {
+    value: "Filing before any Authority",
+    label: "Filing before any Authority",
+  },
+  { value: "Others", label: "Others" },
 ];
 
 const assessment_year = [
   {
-    year: "2010-11",
+    value: "2010-11",
+    label: "2010-11",
   },
   {
-    year: "2011-12",
+    value: "2011-12",
+    label: "2011-12",
   },
   {
-    year: "2012-13",
+    value: "2012-13",
+    label: "2012-13",
   },
   {
-    year: "2013-14",
+    value: "2013-14",
+    label: "2013-14",
   },
   {
-    year: "2014-15",
+    value: "2014-15",
+    label: "2014-15",
   },
   {
-    year: "2015-16",
+    value: "2015-16",
+    label: "2015-16",
   },
   {
-    year: "2016-17",
+    value: "2016-17",
+    label: "2016-17",
   },
   {
-    year: "2017-18",
+    value: "2017-18",
+    label: "2017-18",
   },
   {
-    year: "2018-19",
+    value: "2018-19",
+    label: "2018-19",
   },
   {
-    year: "2019-20",
+    value: "2019-20",
+    label: "2019-20",
   },
   {
-    year: "2020-21",
+    value: "2020-21",
+    label: "2020-21",
   },
   {
-    year: "2021-22",
+    value: "2021-22",
+    label: "2021-22",
   },
   {
-    year: "2022-23",
+    value: "2022-23",
+    label: "2022-23",
   },
   {
-    year: "2023-24",
+    value: "2023-24",
+    label: "2023-24",
   },
   {
-    year: "2024-25",
+    value: "2024-25",
+    label: "2024-25",
   },
   {
-    year: "2025-26",
+    value: "2025-26",
+    label: "2025-26",
   },
   {
-    year: "2026-27",
+    value: "2026-27",
+    label: "2026-27",
   },
   {
-    year: "2027-28",
+    value: "2027-28",
+    label: "2027-28",
   },
 ];
-
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -456,6 +406,7 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
+
 // formData.append("purpose", value.p_purpose);
 // console.log("arr",arr);
 
@@ -514,78 +465,72 @@ const ImageUploads = ({ register, control }) => {
                    
                   </select> */
 }
-
 {
-  /* <div className="mb-3">
-                    <label className="form-label">Upload Your Document</label>
-                    <input
-                      type="file"
-                      name="p_document1"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                    <input
-                      type="file"
-                      name="p_document2"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                    <input
-                      type="file"
-                      name="p_document3"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                  </div> */
-}
-{
-  /* <div className="card mb-4">
-        {fields.map((item, index) => (
-          <div className="form-row form-group" key={item.id}>
-            <div className="col">
-              <input
-                type="file"
-                name={`upload[${index}].pics`}
-                ref={register()}
-                className="form-control-file"
-                defaultValue={item.pics}
-              />
-            </div>
-
-            <div className="col">
-              <button className="btn btn-danger" onClick={() => remove(index)}>
-                -
-              </button>
-            </div>
-          </div>
-        ))}
-
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            append({
-              pics: "",
-            })
-          }
-        >
-          +
-        </button>
-      </div>
-   
-    */
-}
-{
-  /* <select
-                      className="form-select form-control"
-                      name="p_purpose"
-                      aria-label="Default select example"
-                      ref={register}
+  /* <Select
+                      mode="tags"
+                      style={{ width: "100%" }}
+                      onChange={handleChange}
+                      allowClear
                     >
-                      <option value="">--select--</option>
-                      {Opinion.map((p, i) => (
-                        <option key={i} value={p.sought}>
-                          {p.sought}
-                        </option>
+                      {assessment_year.map((p, i) => (
+                        <Option key={p.year}>{p.year}</Option>
                       ))}
-                    </select> */
+                    </Select> */
 }
+{
+  /* <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_assessment"
+                        ref={register}
+                        value="Assessment"
+                      />
+                      <label className="form-check-label">Assessment</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_appeal"
+                        ref={register}
+                        value="Appeal"
+                      />
+                      <label className="form-check-label">Appeal</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_court"
+                        ref={register}
+                        value="Filing before any Court"
+                      />
+                      <label className="form-check-label">
+                        Filing before any Court
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_authority"
+                        ref={register}
+                        value="Filing before any Authority"
+                      />
+                      <label className="form-check-label">
+                        Filing before any Authority
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_others"
+                        ref={register}
+                        value="Others"
+                      />
+                      <label className="form-check-label">Others</label>
+                    </div> */
+}
+// defaultValue={[...yearOption]}

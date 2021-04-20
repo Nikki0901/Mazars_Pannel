@@ -16,9 +16,14 @@ const remove = (id) => {
   return http.delete(`/tl/deleteTeamLeader?id=${id}`);
 };
 
+const editTL = (id) => {
+  return http.get(`/tl/getTeamLeader?id=212`);
+};
+
 export default {
   getAll,
   get,
   create,
   remove,
+  editTL
 };

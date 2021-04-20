@@ -48,7 +48,7 @@ function SignIn(props) {
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           // alert.error(response.data.result);
-          Swal.fire('Oops...',"Errorr : "+response.data.result,'error')
+          Swal.fire('Oops...',"Errorr : Incorrect Email and password",'error')
           // Swal.fire(`oops : ${response.data.result}`)
         }
       })

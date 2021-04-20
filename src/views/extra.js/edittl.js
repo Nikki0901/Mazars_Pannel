@@ -18,45 +18,53 @@ import {
   Tooltip,
 } from "reactstrap";
 import Select from "react-select";
-import Check from "./Check";
+import Reset from "./Reset";
 
 function EditTL() {
   const { id } = useParams();
   const history = useHistory();
 
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset, setValue } = useForm();
+  const { handleSubmit, register, errors, reset, setValue } = useForm({
+    defaultValues: {
+      activitiesbefore: "mmmm",
+    },
+  });
   const userid = window.localStorage.getItem("adminkey");
 
-  const [interest, setInterest] = useState("Direct Tax");
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    category: "",
+    sub_category: "",
+  });
 
+  const { name, email, phone, category, sub_category } = user;
   const [selectedOption, setSelectedOption] = useState([]);
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
 
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
-
   useEffect(() => {
-    getTeamLeader();
-  }, []);
+    const getTeamLeader = () => {
+      axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
+        console.log(res);
+        console.log(res.data.result[0]);
+        if (res.data.code === 1) {
+          // reset(res.data.result[0]);
+          setValue("p_name", res.data.result[0].name);
+          setValue("p_email", res.data.result[0].email);
+          setValue("p_phone", res.data.result[0].phone);
+          setValue("p_tax", res.data.result[0].parent_id);
+          setValue("p_tax2", res.data.result[0].cat_name);
+        }
+      });
+    };
 
-  const getTeamLeader = () => {
-    axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
-      console.log(res);
-      console.log(res.data.result[0]);
-      if (res.data.code === 1) {
-        // setSelectedOption(res.data.result);
-        // setInterest(res.data.result[0].parent_id)
-        reset(res.data.result[0]);
-        // setValue("p_name", res.data.result[0].name);
-        // setValue("p_email", res.data.result[0].email);
-        // setValue("p_phone", res.data.result[0].phone);
-        // setValue("p_tax", res.data.result[0].parent_id);
-        // setValue("p_tax2", res.data.result[0].cat_name);
-      }
-    });
-  };
+    getTeamLeader();
+  }, [id]);
 
   useEffect(() => {
     const getCategory = () => {
@@ -110,10 +118,6 @@ function EditTL() {
       });
   };
 
-  function getFormData(e) {
-    console.warn(interest);
-    e.preventDefault();
-  }
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -134,8 +138,6 @@ function EditTL() {
           </div>
         </CardHeader>
 
-        {/* <Check uid={id} selectedOption={selectedOption}/> */}
-
         <CardHeader>
           <div class="row mt-3">
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
@@ -150,6 +152,7 @@ function EditTL() {
                           type="text"
                           class="form-control"
                           name="p_name"
+                          defaultValue={name}
                           ref={register}
                         />
                       </div>
@@ -161,6 +164,7 @@ function EditTL() {
                           type="text"
                           class="form-control"
                           name="p_phone"
+                          defaultValue={phone}
                           ref={register}
                         />
                       </div>
@@ -171,14 +175,6 @@ function EditTL() {
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Category</label>
-                        <select
-                          class="form-control"
-                          ref={register}
-                          name="name"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>                      
-                        </select>
 
                         <select
                           className="form-control"
@@ -225,6 +221,7 @@ function EditTL() {
                           type="email"
                           class="form-control"
                           name="p_email"
+                          defaultValue={email}
                           ref={register}
                         />
                       </div>
@@ -244,6 +241,7 @@ function EditTL() {
 }
 
 export default EditTL;
+
 // setValue("p_name", res.data.result[0].name);
 // setValue("p_email", res.data.result[0].email);
 // setUser({
@@ -253,12 +251,16 @@ export default EditTL;
 //   category: res.data.result[0].parent_id,
 //   sub_category: res.data.result[0].cat_name,
 // });
-// const [user, setUser] = useState({
-//   name: "",
-//   email: "",
-//   phone: "",
-//   category: "",
-//   sub_category: "",
-// });
-
-// const { name, email, phone, category, sub_category } = user;
+{
+  /* <Select
+                          closeMenuOnSelect={false}
+                          onChange={(e) => setStore(e.target.value)}
+                        >
+                          <option value="">--Select Category--</option>
+                          {tax.map((p, index) => (
+                            <option key={index} value={p.id}>
+                              {p.details}
+                            </option>
+                          ))}
+                        </Select> */
+}

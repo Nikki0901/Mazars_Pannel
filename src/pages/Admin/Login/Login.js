@@ -50,7 +50,7 @@ function Login(props) {
           props.history.push("/admin/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Swal.fire('Oops...',"Errorr : Incorrect Email and password",'error')
         }
       })
       .catch((error) => {
