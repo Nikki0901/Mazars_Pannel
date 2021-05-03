@@ -3,9 +3,8 @@ import {HashRouter  as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { positions, Provider, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
-import "./components/FontawsomeIcons/index";
-
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+// import 'bulma/css/bulma.css'
 
 
 //user routes
@@ -19,7 +18,7 @@ import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
 import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-import Feedback from './views/Frsh/Fresh'
+import Feedback from './views/Feedback/Feedback'
 import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
@@ -30,7 +29,8 @@ import ForgetPassword from './views/ForgetPassword/ForgetPassword'
 import NewPassword from './views/NewPassword/NewPassword'
 import ChangePassword from './views/ChangePassword/ChangePassword'
 import EditQuery from './views/EditQuery/EditQuery'
-
+import VideoCall from './views/VideoCall/VideoCall'
+import MeetingComponent from './views/MeetingComponent/MeetingComponent'
 
 
 
@@ -78,6 +78,8 @@ import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
 import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
 import TlAssignmentForm from './pages/TL/AssignmentForm/AssignmentForm'
+import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
+
 
 
 
@@ -90,6 +92,8 @@ import TpDashboard from './pages/TP/Dashboard/Dashboard'
 import TpProposal from './pages/TP/Proposal/Proposal'
 import TpQueriesRecevied from './pages/TP/QueriesRecevied/QueriesRecevied'
 import TpSendProposal from './pages/TP/SendProposal/SendProposal'
+
+
 
 
 
@@ -138,6 +142,9 @@ function App() {
         <Route exact path="/customer/new-password" component={NewPassword} />
         <Route exact path="/customer/change-password" component={ChangePassword} />
         <Route exact path="/customer/edit-query/:id" component={EditQuery} />
+        <Route exact path="/customer/video-call" component={VideoCall} />
+        <Route exact path="/customer/meeting" component={MeetingComponent} />
+
 
 
 
@@ -179,7 +186,8 @@ function App() {
         <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
         <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
         <Route exact path="/teamleader/queriestab2" component={TlQueryTab2} />
-        <Route exact path="/teamleader/assignment-form" component={TlAssignmentForm} />
+        <Route exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
+        <Route exact path="/teamleader/meeting" component={TlMeetingComponent} />
 
 
 
@@ -190,8 +198,11 @@ function App() {
         <Route exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
         <Route exact path="/taxprofessional/sendproposal/:id" component={TpSendProposal} />
 
+
+
+
       
-    
+
         </Switch>
       </Router>
       </Provider>

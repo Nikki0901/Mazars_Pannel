@@ -10,22 +10,22 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
 
   const { cust_accept_date } = diaplayProposal;
 
-  // const timeTaken = (a,b) =>{
+  const timeTaken = (a, b) => {
+    var date2 = CommonServices.removeTime(a);
+    var date1 = CommonServices.removeTime(b);
 
-  //   const date2 = CommonServices.removeTime(a);
-  //   const date1 = CommonServices.removeTime(b);
+    console.log("a", date2);
+    console.log("b", date1);
 
-  //   console.log("a",date2)
-  //   console.log("b",date1)
+    // var difference = Math.abs(date2 - date1);
+    // var days = difference / (1000 * 3600 * 24);
+    var difference =  Math.round((date2-date1)/(1000*60*60*24));
+    console.log(difference);
+    // var difference = date2.getTime() - date1.getTime();
+    // return difference;
+  };
 
-  //   const diffTime = Math.abs(date2 - date1);
-  //   console.log("diffTime",diffTime)
 
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  //   console.log("diffDays",diffDays)
-  //   console.log(diffTime + " milliseconds");
-  //   console.log(diffDays + " days");
-  // }
   return (
     <>
       <div>
@@ -115,3 +115,18 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
 export default AssignmentDetails;
 
 // {timeTaken(p.final_date,cust_accept_date)}
+
+
+
+// function parseDate(str) {
+//   var mdy = str.split('/');
+//   return new Date(mdy[2], mdy[0]-1, mdy[1]);
+// }
+
+// function datediff(first, second) {
+//   // Take the difference between the dates and divide by milliseconds per day.
+//   // Round to nearest whole number to deal with DST.
+//   return Math.round((second-first)/(1000*60*60*24));
+// }
+
+// alert(datediff(parseDate(first.value), parseDate(second.value)));

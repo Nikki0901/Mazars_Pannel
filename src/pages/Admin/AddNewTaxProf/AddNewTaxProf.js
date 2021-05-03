@@ -43,6 +43,7 @@ function AddNew() {
     getTeamLeader();
   }, []);
 
+  
   useEffect(() => {
     const getCategory = () => {
       axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
@@ -121,7 +122,7 @@ function AddNew() {
           <div class="row mt-3">
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
             <div class="col-lg-8 col-xl-8 col-md-12">
-              <div>
+              
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div class="row">
                     <div class="col-md-6">
@@ -220,7 +221,7 @@ function AddNew() {
                     Submit
                   </button>
                 </form>
-              </div>
+            
             </div>
           </div>
         </CardHeader>

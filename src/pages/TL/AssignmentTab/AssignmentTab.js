@@ -14,14 +14,16 @@ import {
 } from "reactstrap";
 import DraftReportModal from "./DraftReportUpload";
 import FinalReportUpload from "./FinalReportUpload";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import * as Cookies from "js-cookie";
 
 function AssignmentTab() {
+  const history = useHistory();
   const userid = window.localStorage.getItem("tlkey");
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
@@ -34,6 +36,11 @@ function AssignmentTab() {
   const [status, setStatus] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
+
+  const [baseMode, SetbaseMode] = useState("avc");
+  const [transcode, SetTranscode] = useState("interop");
+  const [attendeeMode, SetAttendeeMode] = useState("video");
+  const [videoProfile, SetVideoProfile] = useState("480p_4");
 
   useEffect(() => {
     getAssignmentList();
@@ -337,7 +344,39 @@ function AssignmentTab() {
         );
       },
     },
+    {
+      dataField: "",
+      text: "Video Call",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ cursor: "pointer" }}>
+              <i
+                class="fa fa-credit-card"
+                style={{ color: "red", fontSize: "16px" }}
+                onClick={() => handleJoin(row.q_id)}
+              ></i>
+            </div>
+          </>
+        );
+      },
+    },
   ];
+
+  //handleJoin
+  const handleJoin = (id) => {
+    console.log("id", id);
+
+    Cookies.set("channel_2", id);
+    Cookies.set("baseMode_2", baseMode);
+    Cookies.set("transcode_2", transcode);
+    Cookies.set("attendeeMode_2", attendeeMode);
+    Cookies.set("videoProfile_2", videoProfile);
+    history.push("/teamleader/meeting");
+  };
 
   // draft modal
   const [draftModal, setDraftModal] = useState(false);
@@ -548,60 +587,3 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
-
-// http://13.232.121.233/mazarapi/assets/upload/report/{dra}
-
-// {Number(p.paid_amount) > 0 &&
-//   Number(p.accepted_amount) > Number(p.paid_amount)
-//     ? "Partial Received"
-//     : Number(p.accepted_amount) == Number(p.paid_amount)
-//     ? "Full Received"
-//     : "pending"}
-
-{
-  /* <Link to={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignement_draft_report}`}>
-                          <i class="fa fa-file-text"></i>
-                      </Link> */
-}
-
-{
-  /* <a
-                            href={`http://13.232.121.233/mazarapi/assets/upload/report/draft_210311120314_6049c472265c6_csv`}
-                          > */
-}
-
-// <div
-//               style={{
-//                 display: "flex",
-//                 flexDirection: "column",
-//                 justifyContent: "space-between",
-//               }}
-//             >
-//               <div title="upload Pdf">
-//                 <p
-//                   style={{ cursor: "pointer", color: "green" }}
-//                   onClick={() => uploadDraftReport(row.id)}
-//                 >
-//                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-//                   draft
-//                 </p>
-//               </div>
-
-//               <div title="upload Pdf">
-//                 <p
-//                   style={{ cursor: "pointer", color: "red" }}
-//                   onClick={() => uploadFinalReport(row)}
-//                 >
-//                   {row.client_discussion == "completed" &&
-//                   row.delivery_report == "completed" &&
-//                   row.draft_report == "completed" &&
-//                   row.final_discussion == "completed" &&
-//                   row.amount == row.paid_amount ? (
-//                     <div>
-//                       <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-//                       final
-//                     </div>
-//                   ) : null}
-//                 </p>
-//               </div>
-//             </div>

@@ -8,7 +8,7 @@ function NavWrapper(props) {
   const { color, logout, name, cust } = props;
   // const history = useHistory();
   // const userId = window.localStorage.getItem("userid");
-  
+
   // const [notification, setNotification] = useState([]);
   // const [countNotification, setCountNotification] = useState("");
 
@@ -80,6 +80,10 @@ function NavWrapper(props) {
                   </li>
                 </ul>
               </li>
+
+              <li>
+                <h4 class="brand-text text-white">{name}</h4>
+              </li>
             </ul>
 
             <ul class="nav navbar-nav float-right">
@@ -126,7 +130,7 @@ function NavWrapper(props) {
                   data-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span class="pr-2">{name}</span>
+                  {/* <span class="pr-2">{name}</span> */}
                   <span class="avatar avatar-online">
                     <img
                       src="https://cdn1.vectorstock.com/i/1000x1000/40/30/user-glyph-icon-web-and-mobile-admin-sign-vector-18444030.jpg"

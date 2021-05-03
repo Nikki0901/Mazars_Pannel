@@ -66,7 +66,7 @@ function AddNew() {
     formData.append("email", value.p_email);
     formData.append("name", value.p_name);
     formData.append("phone", value.p_phone);
-    formData.append("pcat_id",value.p_tax);
+    formData.append("pcat_id", value.p_tax);
     formData.append("cat_id", value.p_tax2);
     formData.append("type", "tl");
 
@@ -79,7 +79,7 @@ function AddNew() {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("TL created  !");
-          history.goBack()
+          history.goBack();
         }
       })
       .catch((error) => {
@@ -111,91 +111,89 @@ function AddNew() {
           <div class="row mt-3">
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
             <div class="col-lg-8 col-xl-8 col-md-12">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_name"
-                          ref={register}
-                        />
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Phone Number</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_phone"
-                          ref={register}
-                        />
-                      </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="p_name"
+                        ref={register}
+                      />
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Category</label>
-                        <select
-                          className="form-control"
-                          name="p_tax"
-                          ref={register}
-                          onChange={(e) => setStore(e.target.value)}
-                        >
-                          <option value="">--Select Category--</option>
-                          {tax.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Sub Category</label>
-                        <select
-                          className="form-select form-control"
-                          name="p_tax2"
-                          ref={register}
-                          onChange={(e) => setStore2(e.target.value)}
-                        >
-                          <option value="">--Select Sub-Category--</option>
-                          {tax2.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Phone Number</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="p_phone"
+                        ref={register}
+                      />
                     </div>
                   </div>
+                </div>
 
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          name="p_email"
-                          ref={register}
-                        />
-                      </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Category</label>
+                      <select
+                        className="form-control"
+                        name="p_tax"
+                        ref={register}
+                        onChange={(e) => setStore(e.target.value)}
+                      >
+                        <option value="">--Select Category--</option>
+                        {tax.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
-                </form>
-              </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Sub Category</label>
+                      <select
+                        className="form-select form-control"
+                        name="p_tax2"
+                        ref={register}
+                        onChange={(e) => setStore2(e.target.value)}
+                      >
+                        <option value="">--Select Sub-Category--</option>
+                        {tax2.map((p, index) => (
+                          <option key={index} value={p.id}>
+                            {p.details}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        name="p_email"
+                        ref={register}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </form>
             </div>
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
           </div>

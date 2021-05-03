@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
-import { useParams, useHistory,Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
@@ -15,7 +15,6 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
-
 
 function AddAssingmentStages() {
   const alert = useAlert();
@@ -297,13 +296,21 @@ function AddAssingmentStages() {
                             </select>
                           </div>
                         </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <div>
-                            <Link to={`/teamleader/assignment-form`}>Add</Link>
+                        {p.client_discussion == "completed" ? (
+                          null
+                        ) : (
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <div>
+                                <Link
+                                  to={`/teamleader/assignment-form/${p.assign_id}`}
+                                >
+                                  Add Details
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       <div class="row">
@@ -337,7 +344,7 @@ function AddAssingmentStages() {
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <div>Add</div>
+                            <div></div>
                           </div>
                         </div>
                       </div>
@@ -373,7 +380,7 @@ function AddAssingmentStages() {
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <div>Add</div>
+                            <div></div>
                           </div>
                         </div>
                       </div>
@@ -409,7 +416,7 @@ function AddAssingmentStages() {
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <div>Add</div>
+                            <div></div>
                           </div>
                         </div>
                       </div>
@@ -442,7 +449,7 @@ function AddAssingmentStages() {
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <div>Add</div>
+                            <div></div>
                           </div>
                         </div>
                       </div>

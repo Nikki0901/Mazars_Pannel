@@ -45,16 +45,25 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         sty
       >
         {custUserId && (
-          <NavWrapper color="#5E96AE" logout={custLogout} name={name} cust="cust"/>
+          <NavWrapper color="#5E96AE" logout={custLogout} 
+          cust="cust"
+          name="Customer"
+           />
         )}
 
         {adminUserId && (
-          <NavWrapper color="#262d47" logout={adminLogout} name="Admin" />
+          <NavWrapper color="#262d47" logout={adminLogout}
+           name="Admin"
+            />
         )}
 
-        {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout} name="Team" />}
+        {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout} 
+        name="Team Leader" 
+        />}
 
-        {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} name="Ravi" />}
+        {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} 
+        name="Tax Professional" 
+        />}
       </nav>
     </div>
   );

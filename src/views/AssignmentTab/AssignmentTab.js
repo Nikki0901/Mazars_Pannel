@@ -12,24 +12,32 @@ import {
   Table,
 } from "reactstrap";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-import { Link } from "react-router-dom";
+import { Link ,useHistory} from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
+import * as Cookies from "js-cookie";
 
 function AssignmentTab() {
+  const history = useHistory();
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
+
+  const [baseMode, SetbaseMode] = useState("avc");
+  const [transcode, SetTranscode] = useState("interop");
+  const [attendeeMode, SetAttendeeMode] = useState("video");
+  const [videoProfile, SetVideoProfile] = useState("480p_4");
+
+
 
   const [pay, setPay] = useState({
     pay: "",
     amount: "",
     accepted_amount: "",
     paid_amount: "",
-
   });
 
-  const [addPaymentModal, setPaymentModal] = useState(false)
+  const [addPaymentModal, setPaymentModal] = useState(false);
   const paymentHandler = (key) => {
     console.log("key", key);
 
@@ -164,7 +172,6 @@ function AssignmentTab() {
     {
       dataField: "",
       text: "Deliverable",
-      // sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -222,6 +229,26 @@ function AssignmentTab() {
         );
       },
     },
+    {
+      dataField: "",
+      text: "Video Call",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ cursor: "pointer" }}>
+              <i
+                class="fa fa-credit-card"
+                style={{ color: "red", fontSize: "16px" }}
+                onClick={() => handleJoin(row.id)}
+              ></i>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   //tl,phone,email
@@ -240,14 +267,16 @@ function AssignmentTab() {
     return null;
   }
 
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
+  //handleJoin
+  const handleJoin = (id) => {
+    console.log("id", id);
+    Cookies.set("channel", id); 
+    Cookies.set("baseMode", baseMode);
+    Cookies.set("transcode", transcode);
+    Cookies.set("attendeeMode", attendeeMode);
+    Cookies.set("videoProfile", videoProfile);
+    history.push("/customer/meeting");
+  };
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

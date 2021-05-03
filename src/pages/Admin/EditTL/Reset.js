@@ -5,26 +5,15 @@ import axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { baseUrl } from "../../../config/config";
 
-
-function Reset({ uid }) {
+function Reset() {
+  
   const { Option } = Select;
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState(null);
-
   const [value, setValue] = useState({});
 
 
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    category: "",
-    sub_category: "",
-  });
-
-
-  const { name, email, phone, category, sub_category } = user;
   const handleChange = (value) => {
     console.log(`selected ${value}`);
     setStore2(value);
@@ -32,31 +21,21 @@ function Reset({ uid }) {
 
   useEffect(() => {
     const getTeamLeader = () => {
-      axios.get(`${baseUrl}/tl/getTeamLeader?id=226`).then((res) => {
+      axios.get(`${baseUrl}/tl/getTeamLeader?id=243`).then((res) => {
         console.log(res);
-    
-          setValue(res.data.result[0])
-          // setUser({
-          //   name: res.data.result[0].name,
-          //   email: res.data.result[0].email,
-          //   phone: res.data.result[0].phone,
-          //   category: res.data.result[0].parent_id,
-          //   sub_category: res.data.result[0].cat_name,
-          // });
-       
+        setValue(res.data.result[0]);    
       });
     };
 
     getTeamLeader();
-  }, [uid]);
+  }, []);
 
-
-
-  console.log("value",value.name)
-
-const data = value.name
-
-console.log("data",data)
+  console.log("value -", value.name);
+  const data1 = value.name;
+  const data2 = value.email;
+  const data3 = value.phone;
+  const data4 = value.parent_id;
+  const data5 = value.cat_name;
 
   useEffect(() => {
     const getSubCategory = () => {
@@ -74,60 +53,130 @@ console.log("data",data)
 
   const onFinish = (values) => {
     console.log(values);
+
+    // let formData = new FormData();
+    // formData.append("email", value.p_email);
+    // formData.append("name", value.p_name);
+    // formData.append("phone", value.p_phone);
+    // formData.append("pcat_id", value.p_tax);
+    // formData.append("cat_id", value.p_tax2);
+    // formData.append("id", id);
+
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/tl/updateTeamLeader`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
+    //     if (response.data.code === 1) {
+    //       alert.success("TL updated  !");
+    //       history.goBack();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
   };
 
+  if (!(data1 && data2 && data3 && data4 && data5)) return <p>loading</p>;
+  else
+    return (
+      <>
+        <div class="container">
+          <Form
+            name="basic"
+            initialValues={{
+              username: `${data1}`,
+              email: `${data2}`,
+              phone: `${data3}`,
+              category: `${data4}`,
+              sub_category: `${data5}`,
+            }}
+            onFinish={onFinish}
+          >
+            <Form.Item label="Username" name="username">
+              <Input />
+            </Form.Item>
+            <Form.Item name="email" label="email ">
+              <Input />
+            </Form.Item>
 
-  return (
-    <>
-      <div class="container">
-        <Form name="nest-messages" onFinish={onFinish}>
-          <p></p>
-          <Form.Item name={["query", "name"]} label=" name">
-            <Input defaultValue={data}/>
-          </Form.Item>
-          <Form.Item name={["query", "email"]} label="email ">
-            <Input defaultValue={data}/>
-          </Form.Item>
+            <Form.Item name="category" label="Category">
+              <Select onChange={handleChange}>
+                <Option value="1">Direct</Option>
+                <Option value="2">InDirect</Option>
+              </Select>
+            </Form.Item>
 
-          <Form.Item name={["query", "phone"]} label="phone">
-            <Input defaultValue="mysite"/>
-          </Form.Item>
+            <Form.Item name="sub_category" label="Sub-category">
+              <Select>
+                <Option value="">--Select Sub-Category--</Option>
+                {tax2.map((p, index) => (
+                  <Option key={index} value={p.id}>
+                    {p.details}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-          <Form.Item name={["query", "pcat_1"]} label="Category">
-            <Select allowClear defaultValue={data} onChange={handleChange}>
-              <Option value="1">Direct</Option>
-              <Option value="2">InDirect</Option>
-            </Select>
-          </Form.Item>
+            <Form.Item name="phone" label="phone">
+              <Input/>
+            </Form.Item>
 
-          <Form.Item name={["query", "cat_1"]} label="Sub-category">
-            <Select allowClear defaultValue={data}>
-              <Option value="">--Select Sub-Category--</Option>
-              {tax2.map((p, index) => (
-                <Option key={index} value={p.id}>
-                  {p.details}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </>
-  );
+          </Form>
+
+          {/* <Form name="nest-messages" onFinish={onFinish}>
+            <Form.Item name={["query", "name"]} label=" name">
+              <Input />
+            </Form.Item>
+            <Form.Item name={["query", "email"]} label="email ">
+              <Input defaultValue={data2} />
+            </Form.Item>
+
+            <Form.Item name={["query", "phone"]} label="phone">
+              <Input defaultValue={data3} />
+            </Form.Item>
+
+            <Form.Item name={["query", "pcat_1"]} label="Category">
+              <Select onChange={handleChange}>
+                <Option value="1">Direct</Option>
+                <Option value="2">InDirect</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item name={["query", "cat_1"]} label="Sub-category">
+              <Select defaultValue={data5}>
+                <Option value="">--Select Sub-Category--</Option>
+                {tax2.map((p, index) => (
+                  <Option key={index} value={p.id}>
+                    {p.details}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form> */}
+        </div>
+      </>
+    );
 }
 
 export default Reset;
 
 // <Option value="3">Assessment</Option>
 // <Option value="4">others</Option>
-
-
 
 // import React from "react";
 // import ReactDOM from "react-dom";
@@ -147,8 +196,7 @@ export default Reset;
 
 //   return (
 //     <form onSubmit={handleSubmit(onSubmit)}>
-     
-  
+
 //       <label>Ice Cream Preference</label>
 //       <Controller
 //         name="iceCreamType"
@@ -161,7 +209,6 @@ export default Reset;
 //         control={control}
 //         defaultValue={[{ value: "vanilla", label: "Vanilla" }]}
 //       />
-    
 
 //       <input type="submit" />
 //     </form>

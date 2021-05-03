@@ -17,52 +17,43 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import { Select, Form, Input, Button } from "antd";
 import TaxProffesionalService from "../../../config/services/TaxProffesional";
 
+
 function EditTP() {
+  const { Option } = Select;
   const { id } = useParams();
   const history = useHistory();
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
-  const userid = window.localStorage.getItem("adminkey");
-  const [teamleader, setTeamLeader] = useState([]);
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const { name, email, phone } = user;
+  const userid = window.localStorage.getItem("adminkey");
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
 
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
-
+  const [value, setValue] = useState({});
+  const [teamleader, setTeamLeader] = useState([]);
 
   useEffect(() => {
     getTutorial(id);
   }, [id]);
-  
+
   const getTutorial = (id) => {
     TaxProffesionalService.get(id)
       .then((res) => {
         console.log(res.data);
         if (res.data.code === 1) {
-          setUser({
-            name: res.data.result[0].name,
-            email: res.data.result[0].email,
-            phone: res.data.result[0].phone,
-          });
+          setValue(res.data.result[0]);
+          setStore(res.data.result[0].pcat_id);
         }
       })
       .catch((e) => {
         console.log(e);
       });
   };
-
-
 
   useEffect(() => {
     const getTeamLeader = () => {
@@ -75,6 +66,19 @@ function EditTP() {
     };
     getTeamLeader();
   }, []);
+
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setStore(value);
+  };
+
+  // console.log("value -", value.name);
+  const data1 = value.name;
+  const data2 = value.email;
+  const data3 = value.phone;
+  const data4 = value.pcat_id;
+  const data5 = value.cat_id;
+  const data6 = value.tl_id;
 
   useEffect(() => {
     const getCategory = () => {
@@ -101,16 +105,18 @@ function EditTP() {
     getSubCategory();
   }, [store]);
 
-  const onSubmit = (value) => {
+
+  const onFinish = (value) => {
     console.log("value :", value);
     let formData = new FormData();
-    formData.append("email", value.p_email);
-    formData.append("name", value.p_name);
-    formData.append("phone", value.p_phone);
-    formData.append("pcat_id", value.p_tax);
-    formData.append("cat_id", value.p_tax2);
+
+    formData.append("email", value.email);
+    formData.append("name", value.name);
+    formData.append("phone", value.phone);
+    formData.append("pcat_id", value.category);
+    formData.append("cat_id", value.sub_category);
     formData.append("id", id);
-    formData.append("tp_id", value.p_teamleader);
+    formData.append("tp_id", value.select_teamleader);
 
     axios({
       method: "POST",
@@ -149,65 +155,66 @@ function EditTP() {
           </div>
         </CardHeader>
 
-        <CardHeader>
-          <div class="row mt-3">
-            <div class="col-lg-2 col-xl-2 col-md-12"></div>
-            <div class="col-lg-8 col-xl-8 col-md-12">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+        {!data1 ? (
+          <CardHeader>loading ...</CardHeader>
+        ) : (
+          <CardHeader>
+            <div class="row mt-3">
+              <div class="col-lg-2 col-xl-2 col-md-12"></div>
+              <div class="col-lg-8 col-xl-8 col-md-12">
+                <Form
+                  name="basic"
+                  initialValues={{
+                    name: `${data1}`,
+                    email: `${data2}`,
+                    phone: `${data3}`,
+                    category: `${data4}`,
+                    sub_category: `${data5}`,
+                    select_teamleader: `${data6}`,
+                  }}
+                  onFinish={onFinish}
+                >
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_name"
-                          defaultValue={name}
-                          ref={register}
-                        />
+                        <Form.Item name="name">
+                          <Input />
+                        </Form.Item>
                       </div>
                     </div>
-
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Phone Number</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_phone"
-                          defaultValue={phone}
-                          ref={register}
-                        />
+                        <Form.Item name="phone">
+                          <Input />
+                        </Form.Item>
                       </div>
                     </div>
+                  </div>
+
+                  <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          name="p_email"
-                          defaultValue={email}
-                          ref={register}
-                        />
+                        <Form.Item name="email">
+                          <Input />
+                        </Form.Item>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Select teamleader</label>
-                        <select
-                          name="p_teamleader"
-                          class="form-control"
-                          ref={register}
-                        >
-                          <option value="">--select--</option>
-                          {teamleader.map((p) => (
-                            <option key={p.Id} value={p.id}>
-                              {p.name}
-                            </option>
-                          ))}
-                        </select>
+                        <Form.Item name="select_teamleader">
+                          <Select>
+                            <Option value="">--select--</Option>
+                            {teamleader.map((p, index) => (
+                              <Option key={p.Id} value={p.id}>
+                                {p.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
                       </div>
                     </div>
                   </div>
@@ -216,54 +223,59 @@ function EditTP() {
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Category</label>
-                        <select
-                          className="form-control"
-                          name="p_tax"
-                          ref={register}
-                          onChange={(e) => setStore(e.target.value)}
-                        >
-                          <option value="">--Select Category--</option>
-                          {tax.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
+                        <Form.Item name="category">
+                          <Select onChange={handleChange}>
+                            <Option value="">--Select Category--</Option>
+                            {tax.map((p, index) => (
+                              <Option key={index} value={p.id}>
+                                {p.details}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Sub Category</label>
-                        <select
-                          className="form-select form-control"
-                          name="p_tax2"
-                          ref={register}
-                          onChange={(e) => setStore2(e.target.value)}
-                        >
-                          <option value="">--Select Sub-Category--</option>
-                          {tax2.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
+                        <Form.Item name="sub_category">
+                          <Select>
+                            <Option value="">--Select Sub-Category--</Option>
+                            {tax2.map((p, index) => (
+                              <Option key={index} value={p.id}>
+                                {p.details}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
                       </div>
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-primary">
-                    Update
-                  </button>
-                </form>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit">
+                            Update
+                          </Button>
+                        </Form.Item>
+                      </div>
+                    </div>
+                  </div>
+                </Form>
               </div>
             </div>
-          </div>
-        </CardHeader>
+          </CardHeader>
+        )}
       </Card>
     </Layout>
   );
 }
 
 export default EditTP;
+
+
 // useEffect(() => {
 //   const getTaxProfessional = () => {
 //     axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {

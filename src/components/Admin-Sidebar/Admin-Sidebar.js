@@ -28,6 +28,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   src="https://themeselection.com/demo/chameleon-free-bootstrap-admin-template/theme-assets/images/logo/logo.png"
                 />
                 <h3 class="brand-text">Mazars</h3>
+            
               </a>
             </li>
             <li class="nav-item d-md-none">
@@ -93,16 +94,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-
-              {/* <li class="nav-item">
-                <NavLink to={"/customer/proposal2"}>
-                  <i class="fa fa-envelope"></i>
-                  <span class="menu-title" data-i18n="">
-                    Proposal 2
-                  </span>
-                </NavLink>
-              </li> */}
-
             </ul>
           )}
 
@@ -290,6 +281,9 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
+
+            
+
             </ul>
           )}
         </div>
