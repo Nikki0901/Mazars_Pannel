@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import {  useParams } from "react-router-dom";
-import ProposalComponent from "../Proposal/ProposalComponent";
+import ProposalComponent from "./ProposalComponent";
 
 
 function SendProposal() {

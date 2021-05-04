@@ -46,7 +46,7 @@ function Login(props) {
             "tpkey",
             JSON.stringify(response.data["user id"])
           );
-          props.history.push("/taxprofessional/dashboard");
+          props.history.push("/taxprofessional/queriestab");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           Swal.fire("Oops...", "Errorr : " + response.data.result, "error");

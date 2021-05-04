@@ -264,14 +264,16 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               id="main-menu-navigation"
               data-menu="menu-navigation"
             >
-              <li class="active nav-item">
-                <NavLink to={"/taxprofessional/dashboard"}>
-                  <i class="fa fa-home"></i>
+           
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/queriestab"}>
+                  <i class="fa fa-clone"></i>
                   <span class="menu-title" data-i18n="">
-                    Dashboard
+                    Queries
                   </span>
                 </NavLink>
               </li>
+
 
               <li class="nav-item">
                 <NavLink to={"/taxprofessional/proposal"}>
@@ -281,8 +283,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-
-            
 
             </ul>
           )}

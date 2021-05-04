@@ -141,6 +141,12 @@ function InCompleteData({ CountIncomplete }) {
             >
               <Link to={`/teamleader/queryassing/${row.id}`}>
                 <i class="fa fa-share"></i>
+                {/* {
+                  row.status_code == "4" ?
+                  <i class="fa fa-share" style={{color:"green"}}></i>
+                  :
+                  <i class="fa fa-share"></i>
+                } */}
               </Link>
             </div>
           </>
@@ -149,182 +155,15 @@ function InCompleteData({ CountIncomplete }) {
     },
   ];
 
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getInCompleteAssingment();
-  };
-
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getInCompleteAssingment();
-  };
-
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getInCompleteAssingment();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
-          userid
-        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setInCompleteData(res.data.result);
-          }
-        }
-      });
-  };
-
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
   return (
     <>
       <Card>
         <CardHeader>
-
-        <TeamFilter
+          <TeamFilter
             setData={setInCompleteData}
             getData={getInCompleteAssingment}
             inCompleteQuery="inCompleteQuery"
           />
-
-          {/* <div className="row">
-            <div class="col-sm-3 d-flex">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-                value={selectedData}
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetCategory}
-                >
-                  X
-                </button>
-              </div>
-            </div>
-
-            <div className="col-sm-9 d-flex">
-              <div>
-                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">From</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateFrom"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">To</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateTo"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
-                  </button>
-                </form>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetData}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable
@@ -334,54 +173,6 @@ function InCompleteData({ CountIncomplete }) {
             columns={columns}
             rowIndex
           />
-
-          {/* <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">S.No</th>
-                <th scope="col">Date</th>
-                <th scope="col">Query No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th scope="col">Customer Name</th>
-                <th scope="col">Exp. Delivery Date</th>
-                <th>Query Allocation</th>
-              </tr>
-            </thead>
-
-            {incompleteData.map((p, i) => (
-              <tbody>
-                <tr>
-                  <td>{i + 1}</td>
-                  <td>{ChangeFormateDate(p.query_date)}</td>
-                  <th>
-                    <Link to={`/teamleader/queries/${p.id}`}>
-                      {p.assign_no}
-                    </Link>
-                  </th>
-                  <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                  <td>{p.name}</td>
-
-                  <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-
-                  <td>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                        color: "green",
-                      }}
-                    >
-                      <Link to={`/teamleader/queryassing/${p.id}`}>
-                        <i class="fa fa-share"></i>
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            ))}
-          </table> */}
         </CardBody>
       </Card>
     </>
@@ -389,28 +180,3 @@ function InCompleteData({ CountIncomplete }) {
 }
 
 export default InCompleteData;
-
-{
-  /* <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Client Discussion :
-                        </span>
-                        {p.client_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                        {p.draft_report}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Final Discussion :
-                        </span>
-                        {p.final_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Delivery of report :
-                        </span> 
-                        {p.delivery_report}
-                      </p> */
-}

@@ -355,7 +355,7 @@ function AssignmentTab() {
           <>
             <div style={{ cursor: "pointer" }}>
               <i
-                class="fa fa-credit-card"
+                 class="fa fa-video-camera"
                 style={{ color: "red", fontSize: "16px" }}
                 onClick={() => handleJoin(row.q_id)}
               ></i>

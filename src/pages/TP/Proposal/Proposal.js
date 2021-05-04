@@ -1,40 +1,148 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import ProposalComponent from "./ProposalComponent";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-} from "reactstrap";
-import { Link, useParams } from "react-router-dom";
+import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
+import { Link } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tpkey");
 
   const [proposal, setProposal] = useState([]);
+  const [count, setCount] = useState("");
 
   useEffect(() => {
-    const getProposalList = () => {
-      axios
-        .get(`${baseUrl}/tp/getassignedques?id=${JSON.parse(userid)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setProposal(res.data.result);
-          }
-        });
-    };
     getProposalList();
   }, []);
+
+  const getProposalList = () => {
+    axios
+      .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setProposal(res.data.result);
+          setCount(res.data.result.length);
+        }
+      });
+  };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      dataField: "query_date",
+      text: "Date",
+      sort: true,
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.query_date);
+        var oldDate = row.query_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link to={`/taxprofessional/queries/${row.id}`}>
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Edit",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <Link to={`/taxprofessional/edit-proposal/${row.id}`}>
+              <i
+                className="fa fa-edit"
+                style={{
+                  fontSize: 18,
+                  cursor: "pointer",
+                  marginLeft: "8px",
+                  color: "green",
+                }}
+              ></i>
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Prepare",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <Link to={`/taxprofessional/sendproposal/${row.id}`}>
+              <i class="fa fa-mail-forward"></i>
+            </Link>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <Layout TPDashboard="TPDashboard" TPuserId={userid}>
@@ -42,46 +150,19 @@ function Proposal() {
         <CardHeader>
           <Row>
             <Col md="9">
-              <CardTitle tag="h4">List of Proposals</CardTitle>
+              <CardTitle tag="h4">List of Proposals ({count})</CardTitle>
             </Col>
-            <Col md="3">
-              <div
-                style={{ display: "flex", justifyContent: "space-around" }}
-              ></div>
-            </Col>
+            <Col md="3"></Col>
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
-            <thead>
-              <tr>
-                <th>S.No.</th>
-                <th>Query No</th>
-                <th>Customer Name </th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proposal.length > 0 ? (
-                proposal.map((p, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{p.assign_no}</td>
-                    <td>{p.name}</td>
-                    <td>
-                      <Link to={`/taxprofessional/sendproposal/${p.id}`}>
-                        <i class="fa fa-mail-forward"></i>
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6">No Records</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={proposal}
+            columns={columns}
+            rowIndex
+          />
         </CardBody>
       </Card>
     </Layout>
@@ -89,19 +170,3 @@ function Proposal() {
 }
 
 export default Proposal;
-
-// const assingMENT = [
-//   {
-//     "assing":"8960598-76764",
-//     "id":"1"
-//   },
-//   {
-//     "assing":"8960458-76763",
-//     "id":"2"
-//   },
-//   {
-//     "assing":"8960598-76767",
-//     "id":"3"
-//   },
-
-// ];
