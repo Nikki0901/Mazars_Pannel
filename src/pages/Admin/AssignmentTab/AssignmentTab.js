@@ -238,7 +238,7 @@ function AssignmentTab() {
             {!row.final_report == "" ? (
               <div>
                 <a
-                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.final_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   final
@@ -247,7 +247,7 @@ function AssignmentTab() {
             ) : row.assignement_draft_report ? (
               <div>
                 <a
-                  href={`http://13.232.121.233/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   draft

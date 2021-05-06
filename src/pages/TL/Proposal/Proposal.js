@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-} from "reactstrap";
+import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -27,7 +20,7 @@ function Proposal() {
 
   const getProposalList = () => {
     axios
-      .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -110,7 +103,7 @@ function Proposal() {
       },
     },
     {
-      text: "Edit",
+      text: "Action",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -130,23 +123,16 @@ function Proposal() {
                   }}
                 ></i>
               </Link>
-            ) : null}
-          </>
-        );
-      },
-    },
-    {
-      text: "Prepare",
-      dataField: "",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            {row.status == "Accepted" ? (
+            ) : row.status == "Accepted" ? (
               <Link to={`/teamleader/sendproposal/${row.id}`}>
-                <i class="fa fa-mail-forward"></i>
+                <i
+                  class="fa fa-mail-forward"
+                  style={{
+                    fontSize: 14,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                  }}
+                ></i>
               </Link>
             ) : null}
           </>

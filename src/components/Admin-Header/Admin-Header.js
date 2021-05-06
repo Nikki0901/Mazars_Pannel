@@ -62,6 +62,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         />}
 
         {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} 
+        tpdashboard="tpdashboard"
         name="Tax Professional" 
         />}
       </nav>

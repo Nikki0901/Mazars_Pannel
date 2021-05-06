@@ -91,7 +91,7 @@ function ProposalComponent(props) {
         if (response.data.code === 1) {
           reset();
           alert.success(<Msg />);
-          history.push("/teamleader/proposal");
+          history.push("/taxprofessional/proposal");
         }
       })
       .catch((error) => {

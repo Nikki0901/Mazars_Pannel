@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams ,useHistory} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -39,14 +39,16 @@ function QueryAssingment() {
     queryNo: "",
     timelines: "",
     custId: "",
+    expect_dd: "",
   });
 
-  const { queryNo, timelines, custId } = queryData;
+  const { queryNo, timelines, custId, expect_dd } = queryData;
 
   useEffect(() => {
     getTaxProfession();
     getQueryData();
   }, []);
+
 
   const getTaxProfession = () => {
     axios
@@ -67,6 +69,7 @@ function QueryAssingment() {
           queryNo: res.data.result[0].assign_no,
           timelines: res.data.result[0].Timelines,
           custId: res.data.result[0].customer_id,
+          expect_dd: res.data.result[0].Exp_Delivery_Date,
         });
       }
     });
@@ -94,9 +97,13 @@ function QueryAssingment() {
       });
   };
 
+
+  console.log("exp - ",expect_dd);
+
   const onSubmit = (value) => {
     console.log("value :", value);
-    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+
+ 
     var expdeliverydate = value.p_expdeldate.replace(
       /(\d\d)\/(\d\d)\/(\d{4})/,
       "$3-$1-$2"
@@ -109,7 +116,6 @@ function QueryAssingment() {
     formData.append("type", "tl");
     formData.append("types", "tp");
     formData.append("name", value.p_taxprof);
-    // formData.append("date", date);
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
@@ -133,11 +139,10 @@ function QueryAssingment() {
       });
   };
 
-  console.log(hideQuery);
 
   return (
     <Layout TLDashboard="TLDashboard">
-       <Card>
+      <Card>
         <CardHeader>
           <Row>
             <Col md="4">
@@ -157,130 +162,113 @@ function QueryAssingment() {
           </Row>
         </CardHeader>
         <CardHeader>
-        <div class="row mt-3">
-        <div class="col-xl-12 col-lg-12 col-md-12">
-         
-          <div class="col-md-12">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Query No.</th>
-                    <th scope="col">Tax Professional</th>
-                    {/* <th scope="col">Date of Allocation</th> */}
-                    <th scope="col">Expected Timeline</th>
-                    <th scope="col">Exp. Delivery Date</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {query ? (
-                    <tr>
-                      <th scope="row">{queryNo}</th>
-                      <td>
-                        <select
-                          class="form-control"
-                          name="p_taxprof"
-                          ref={register}
-                        >
-                          <option value="">--select--</option>
-                          {taxProfessionDisplay.map((p, index) => (
-                            <option key={index} value={p.name}>
-                              {p.name}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      {/* <td>
-                        <input type="date" ref={register} name="p_date" />
-                      </td> */}
-                      <td>
-                        <input
-                          type="text"
-                          ref={register}
-                          name="p_timelines"
-                          value={timelines}
-                          class="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                         type="date" 
-                         ref={register} 
-                         name="p_expdeldate" 
-                         class="form-control"
-                         />
-                      </td>
+          <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+              <div class="col-md-12">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Query No.</th>
+                        <th scope="col">Tax Professional</th>
+                        <th scope="col">Expected Timeline</th>
+                        <th scope="col">Exp. Delivery Date</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {query ? (
+                        <tr>
+                          <th scope="row">{queryNo}</th>
+                          <td>
+                            <select
+                              class="form-control"
+                              name="p_taxprof"
+                              ref={register}
+                            >
+                              <option value="">--select--</option>
+                              {taxProfessionDisplay.map((p, index) => (
+                                <option key={index} value={p.name}>
+                                  {p.name}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
 
-                      <td>
-                        <button type="submit" class="btn btn-success">
-                          Assign
-                        </button>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr>
-                      <th scope="row">{queryNo}</th>
-                      <td>
-                        <select class="form-control w-75 p-0" disabled>
-                          <option>{hideQuery.name}</option>
-                        </select>
-                      </td>
-                      
-                      <td>
-                        <input
-                          type="text"
-                          ref={register}
-                          name="p_timelines"
-                          value={hideQuery.timeline}
-                          disabled
-                          class="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="date"
-                          ref={register}
-                          name="p_expdeldate"
-                          value={hideQuery.expdeliverydate}
-                          disabled
-                          class="form-control"
-                        />
-                      </td>
+                          <td>
+                            <input
+                              type="text"
+                              ref={register}
+                              name="p_timelines"
+                              value={timelines}
+                              class="form-control"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              ref={register}
+                              name="p_expdeldate"
+                              class="form-control"
+                              value={expect_dd}
+                            />
+                          </td>
 
-                      <td>
-                        <button class="btn btn-success" disabled>
-                          Assigned
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </form>
+                          <td>
+                            <button type="submit" class="btn btn-success">
+                              Assign
+                            </button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <th scope="row">{queryNo}</th>
+                          <td>
+                            <select class="form-control w-75 p-0" disabled>
+                              <option>{hideQuery.name}</option>
+                            </select>
+                          </td>
+
+                          <td>
+                            <input
+                              type="text"
+                              ref={register}
+                              name="p_timelines"
+                              value={hideQuery.timeline}
+                              disabled
+                              class="form-control"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="date"
+                              ref={register}
+                              name="p_expdeldate"
+                              value={hideQuery.expdeliverydate}
+                              disabled
+                              class="form-control"
+                            />
+                          </td>
+
+                          <td>
+                            <button class="btn btn-success" disabled>
+                              Assigned
+                            </button>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         </CardHeader>
-        </Card>
-     
+      </Card>
     </Layout>
   );
 }
 
 export default QueryAssingment;
 
-const taxprof = [
-  {
-    id: "1",
-    name: "harry",
-  },
-  {
-    id: "2",
-    name: "martin",
-  },
-  {
-    id: "3",
-    name: "mayur",
-  },
-];
+   // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");

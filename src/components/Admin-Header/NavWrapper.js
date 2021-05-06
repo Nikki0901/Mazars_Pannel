@@ -5,44 +5,44 @@ import { Link, useHistory } from "react-router-dom";
 // import CustomerNotification from "./CustomerNotification";
 
 function NavWrapper(props) {
-  const { color, logout, name, cust } = props;
-  // const history = useHistory();
-  // const userId = window.localStorage.getItem("userid");
+  const { color, logout, name, cust, tpdashboard } = props;
+  const history = useHistory();
+  const userId = window.localStorage.getItem("userid");
 
-  // const [notification, setNotification] = useState([]);
-  // const [countNotification, setCountNotification] = useState("");
+  const [notification, setNotification] = useState([]);
+  const [countNotification, setCountNotification] = useState("");
 
-  // useEffect(() => {
-  //   getNotification();
-  // }, []);
+  useEffect(() => {
+    getNotification();
+  }, []);
 
-  // const getNotification = () => {
-  //   axios
-  //     .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.data.code === 1) {
-  //         setNotification(res.data.result);
-  //         setCountNotification(res.data.result.length);
-  //       }
-  //     });
-  // };
+  const getNotification = () => {
+    axios
+      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setNotification(res.data.result);
+          setCountNotification(res.data.result.length);
+        }
+      });
+  };
 
-  // // readnotification
-  // const readNotification = (id) => {
-  //   axios
-  //     .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
-  //     .then(function (response) {
-  //       console.log("delete-", response);
-  //       if (response.data.code === 1) {
-  //         console.log(response.data.result);
-  //         history.push("/customer/proposal");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log("erroror - ", error);
-  //     });
-  // };
+  // readnotification
+  const readNotification = (id) => {
+    axios
+      .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
+      .then(function (response) {
+        console.log("delete-", response);
+        if (response.data.code === 1) {
+          console.log(response.data.result);
+          history.push("/customer/proposal");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   return (
     <>
@@ -87,7 +87,7 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
-              {/* {cust && (
+              {cust && (
                 <li class="dropdown dropdown-notification nav-item">
                   {countNotification ? (
                     <div>
@@ -103,10 +103,16 @@ function NavWrapper(props) {
                         </span>
                       </a>
 
-                      <div class="dropdown-menu dropdown-menu-right">
+                      <div
+                        class="dropdown-menu dropdown-menu-right"
+                        style={{ height: "300px", overflowY: "scroll" }}
+                      >
                         <div class="arrow_box_right">
                           {notification.map((p, i) => (
-                            <div class="dropdown-item">
+                            <div
+                              class="dropdown-item"
+                              style={{ padding: "0", fontSize: "12px" }}
+                            >
                               <p
                                 class="dropdown-item"
                                 style={{ cursor: "pointer" }}
@@ -121,7 +127,7 @@ function NavWrapper(props) {
                     </div>
                   ) : null}
                 </li>
-              )} */}
+              )}
 
               <li class="dropdown dropdown-user nav-item">
                 <a
@@ -146,6 +152,15 @@ function NavWrapper(props) {
                       <p class="dropdown-item" style={{ cursor: "pointer" }}>
                         <i class="fa fa-sign-out"></i>
                         <Link to="/customer/change-password">
+                          Change Password
+                        </Link>
+                      </p>
+                    )}
+
+                    {tpdashboard && (
+                      <p class="dropdown-item" style={{ cursor: "pointer" }}>
+                        <i class="fa fa-sign-out"></i>
+                        <Link to="/taxprofessional/change-password">
                           Change Password
                         </Link>
                       </p>

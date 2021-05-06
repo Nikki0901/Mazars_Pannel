@@ -4,21 +4,19 @@ import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { Select } from "antd";
 
-function TeamFilter(props) {
+
+function TaxProfessionalFilter(props) {
   const { Option } = Select;
   const { handleSubmit, register, errors, reset } = useForm();
 
   const {
     setData,
     getData,
-    pendingForAcceptence,
     inCompleteQuery,
     completeAssignment,
     proposal,
-    paymentStatus,
-    assignment,
   } = props;
-  const userid = window.localStorage.getItem("tlkey");
+  const userid = window.localStorage.getItem("tpkey");
 
   const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -69,26 +67,10 @@ function TeamFilter(props) {
     console.log("data :", data);
     console.log("store2 :", store2);
 
-    if (pendingForAcceptence == "pendingForAcceptence") {
-      axios
-        .get(
-          `${baseUrl}/tl/pendingQues?id=${JSON.parse(
-            userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setData(res.data.result);
-            }
-          }
-        });
-    }
     if (inCompleteQuery == "inCompleteQuery") {
       axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+          `${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
@@ -101,10 +83,11 @@ function TeamFilter(props) {
           }
         });
     }
+
     if (completeAssignment == "completeAssignment") {
       axios
         .get(
-          `${baseUrl}/tl/getCompleteQues?id=${JSON.parse(
+          `${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
         )
@@ -121,41 +104,7 @@ function TeamFilter(props) {
     if (proposal == "proposal") {
       axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
-            userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setData(res.data.result);
-            }
-          }
-        });
-    }
-
-    if (paymentStatus == "paymentStatus") {
-      axios
-        .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setData(res.data.result);
-            }
-          }
-        });
-    }
-
-    if (assignment == "assignment") {
-      axios
-        .get(
-          `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
+          `${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
@@ -171,6 +120,7 @@ function TeamFilter(props) {
         });
     }
   };
+
 
   const Reset = () => {
     return (
@@ -185,6 +135,7 @@ function TeamFilter(props) {
       </>
     );
   };
+
 
   return (
     <>
@@ -279,32 +230,6 @@ function TeamFilter(props) {
                       <option value="4">Declined</option>
                     </select>
                   )}
-
-                  {paymentStatus == "paymentStatus" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Unpaid</option>
-                      <option value="2">Paid</option>
-                    </select>
-                  )}
-
-                  {assignment == "assignment" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Inprogress</option>
-                      <option value="2">Complete</option>
-                    </select>
-                  )}
                 </div>
 
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
@@ -320,4 +245,5 @@ function TeamFilter(props) {
   );
 }
 
-export default TeamFilter;
+
+export default TaxProfessionalFilter;

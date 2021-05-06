@@ -5,6 +5,7 @@ import { baseUrl } from "../../../config/config";
 import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import Tpfilter from "../../../components/Search-Filter/tpfilter";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tpkey");
@@ -18,7 +19,7 @@ function Proposal() {
 
   const getProposalList = () => {
     axios
-      .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tp/getProposalTp?id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -103,7 +104,7 @@ function Proposal() {
       },
     },
     {
-      text: "Edit",
+      text: "Action",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -111,33 +112,30 @@ function Proposal() {
       formatter: function (cell, row) {
         return (
           <>
-            <Link to={`/taxprofessional/edit-proposal/${row.id}`}>
-              <i
-                className="fa fa-edit"
-                style={{
-                  fontSize: 18,
-                  cursor: "pointer",
-                  marginLeft: "8px",
-                  color: "green",
-                }}
-              ></i>
-            </Link>
-          </>
-        );
-      },
-    },
-    {
-      text: "Prepare",
-      dataField: "",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <Link to={`/taxprofessional/sendproposal/${row.id}`}>
-              <i class="fa fa-mail-forward"></i>
-            </Link>
+            {row.status == "Cust Accepted" || row.status == "Pending" ? (
+              <Link to={`/taxprofessional/edit-proposal/${row.id}`}>
+                <i
+                  className="fa fa-edit"
+                  style={{
+                    fontSize: 18,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    color: "green",
+                  }}
+                ></i>
+              </Link>
+            ) : row.status == "Accepted" ? (
+              <Link to={`/taxprofessional/sendproposal/${row.id}`}>
+                <i
+                  class="fa fa-mail-forward"
+                  style={{
+                    fontSize: 14,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                  }}
+                ></i>
+              </Link>
+            ) : null}
           </>
         );
       },
@@ -154,6 +152,13 @@ function Proposal() {
             </Col>
             <Col md="3"></Col>
           </Row>
+        </CardHeader>
+        <CardHeader>
+          <Tpfilter
+            setData={setProposal}
+            getData={getProposalList}
+            proposal="proposal"
+          />
         </CardHeader>
         <CardBody>
           <BootstrapTable

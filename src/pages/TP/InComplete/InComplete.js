@@ -12,12 +12,11 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import Tpfilter from "../../../components/Search-Filter/tpfilter";
 
 function InComplete() {
-
   const [incompleteData, setInCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tpkey");
- 
 
   useEffect(() => {
     getIncomplete();
@@ -25,11 +24,11 @@ function InComplete() {
 
   const getIncomplete = () => {
     axios
-    .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-        //   CountIncomplete(res.data.result.length);
+          //   CountIncomplete(res.data.result.length);
           setInCompleteData(res.data.result);
         }
       });
@@ -65,7 +64,9 @@ function InComplete() {
         console.log(row);
         return (
           <>
-            <Link to={`/taxprofessional/queries/${row.id}`}>{row.assign_no}</Link>
+            <Link to={`/taxprofessional/queries/${row.id}`}>
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -100,14 +101,20 @@ function InComplete() {
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
-      }
+      },
     },
-    
   ];
 
   return (
     <>
       <Card>
+        <CardHeader>
+          <Tpfilter
+            setData={setInCompleteData}
+            getData={getIncomplete}
+            inCompleteQuery="inCompleteQuery"
+          />
+        </CardHeader>
         <CardBody>
           <BootstrapTable
             bootstrap4

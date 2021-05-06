@@ -66,7 +66,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                 {queryDocs.map((p, i) => (
                   <p>
                     <a
-                      href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
+                      href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
                     >
                       <i class="fa fa-photo"></i>
                     </a>

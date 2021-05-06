@@ -140,13 +140,12 @@ function InCompleteData({ CountIncomplete }) {
               }}
             >
               <Link to={`/teamleader/queryassing/${row.id}`}>
-                <i class="fa fa-share"></i>
-                {/* {
-                  row.status_code == "4" ?
+                {
+                  row.tp_status == "1" ?
                   <i class="fa fa-share" style={{color:"green"}}></i>
                   :
                   <i class="fa fa-share"></i>
-                } */}
+                }
               </Link>
             </div>
           </>

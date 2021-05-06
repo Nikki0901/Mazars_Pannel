@@ -88,13 +88,13 @@ import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
 // TP routes
 import TpStart from './pages/TP/Start/Start'
 import TpLogin from './pages/TP/Login/Login'
-import TpDashboard from './pages/TP/Dashboard/Dashboard'
 import TpQueriesRecevied from './pages/TP/QueriesRecevied/QueriesRecevied'
 import TpQueriesTab from './pages/TP/QueriesTab/QueriesTab'
 import TpProposal from './pages/TP/Proposal/Proposal'
 import TpSendProposal from './pages/TP/SendProposal/SendProposal'
 import TpEditProposal from './pages/TP/EditProposal/EditProposal'
-
+import TpChangePassword from './pages/TP/ChangePassword/ChangePassword'
+import TpDashboard from './pages/TP/Dashboard/Dashboard'
 
 
 
@@ -197,12 +197,13 @@ function App() {
 
         <Route exact path="/taxprofessional/start" component={TpStart} />
         <Route exact path="/taxprofessional/login" component={TpLogin} />
-        <Route exact path="/taxprofessional/dashboard" component={TpDashboard} />
         <Route exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
         <Route exact path="/taxprofessional/queriestab" component={TpQueriesTab} />
         <Route exact path="/taxprofessional/proposal" component={TpProposal} />
         <Route exact path="/taxprofessional/sendproposal/:id" component={TpSendProposal} />
         <Route exact path="/taxprofessional/edit-proposal/:id" component={TpEditProposal} />
+        <Route exact path="/taxprofessional/change-password" component={TpChangePassword} />
+        <Route exact path="/taxprofessional/dashboard" component={TpDashboard} />
 
 
         </Switch>

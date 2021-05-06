@@ -12,6 +12,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import Tpfilter from "../../../components/Search-Filter/tpfilter";
 
 function Complete() {
   const [completeData, setCompleteData] = useState([]);
@@ -105,6 +106,13 @@ function Complete() {
   return (
     <>
       <Card>
+      <CardHeader>
+          <Tpfilter
+            setData={setCompleteData}
+            getData={getComplete}
+            completeAssignment="completeAssignment"
+          />
+        </CardHeader>
         <CardBody>
           <BootstrapTable
             bootstrap4

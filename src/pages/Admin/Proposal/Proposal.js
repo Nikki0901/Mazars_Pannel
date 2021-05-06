@@ -7,12 +7,12 @@ import AllProposalComponent from "../AllProposalComponent/AllProposalComponent";
 import PendingForAcceptence from "../../../components/PendingForAcceptence/PendingForAcceptence";
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
-// import PendingForPaymentProposal from "../PendingForPaymentProposal/PendingForPaymentProposal";
+
 
 function Proposal() {
   const [allProposalCount, setAllProposalCount] = useState("");
   const [pendingProposalCount, setPendingProposalCount] = useState("");
-  const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
+  // const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
   const [declinedProposalCount, setDeclinedProposalCount] = useState("");
 
   const userid = window.localStorage.getItem("adminkey");
@@ -25,9 +25,9 @@ function Proposal() {
     setPendingProposalCount(data);
   };
 
-  const acceptedProposal = (data) => {
-    setAcceptedProposalCount(data);
-  };
+  // const acceptedProposal = (data) => {
+  //   setAcceptedProposalCount(data);
+  // };
 
   const declinedProposal = (data) => {
     setDeclinedProposalCount(data);
@@ -78,7 +78,7 @@ function Proposal() {
                   </a>
                 </li>
 
-                <li class="nav-item" role="presentation">
+                {/* <li class="nav-item" role="presentation">
                   <a
                     class="nav-link text-white"
                     id="pills-b-tab"
@@ -90,7 +90,7 @@ function Proposal() {
                   >
                     Accepted ({acceptedProposalCount})
                   </a>
-                </li>
+                </li> */}
 
                 <li class="nav-item" role="presentation">
                   <a
@@ -126,14 +126,14 @@ function Proposal() {
                   <PendingForAcceptence pendingProposal={pendingProposal} />
                 </div>
 
-                <div
+                {/* <div
                   class="tab-pane fade"
                   id="b"
                   role="tabpanel"
                   aria-labelledby="pills-b-tab"
                 >
                   <AcceptedProposal acceptedProposal={acceptedProposal} />
-                </div>
+                </div> */}
 
                 <div
                   class="tab-pane fade"
