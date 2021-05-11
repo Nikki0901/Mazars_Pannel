@@ -24,6 +24,9 @@ function QueryAssingment() {
   const history = useHistory();
 
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
+  const [taxID, setTaxID] = useState(null);
+  const [teamName, setTeamName] = useState('');
+
   const [hideQuery, setHideQuery] = useState({
     name: "",
     timeline: "",
@@ -48,7 +51,6 @@ function QueryAssingment() {
     getTaxProfession();
     getQueryData();
   }, []);
-
 
   const getTaxProfession = () => {
     axios
@@ -97,25 +99,32 @@ function QueryAssingment() {
       });
   };
 
+  const handleChange= (e) =>{
+    console.log("val-",e.target.value);
+    setTaxID(e.target.value)
+    var value = taxProfessionDisplay.filter(function(item) {
+      return item.id == e.target.value
+    })
+    console.log(value[0]);
+    setTeamName(value[0].name)
+  }
 
-  console.log("exp - ",expect_dd);
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
- 
     var expdeliverydate = value.p_expdeldate.replace(
       /(\d\d)\/(\d\d)\/(\d{4})/,
       "$3-$1-$2"
     );
 
     let formData = new FormData();
-    formData.append("who", JSON.parse(tpkey));
+    formData.append("who", taxID);
     formData.append("id", id);
     formData.append("user", JSON.parse(userId));
     formData.append("type", "tl");
     formData.append("types", "tp");
-    formData.append("name", value.p_taxprof);
+    formData.append("name", teamName);
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
@@ -138,7 +147,6 @@ function QueryAssingment() {
         console.log("erroror - ", error);
       });
   };
-
 
   return (
     <Layout TLDashboard="TLDashboard">
@@ -185,10 +193,11 @@ function QueryAssingment() {
                               class="form-control"
                               name="p_taxprof"
                               ref={register}
+                              onChange={(e)=> handleChange(e)}
                             >
                               <option value="">--select--</option>
                               {taxProfessionDisplay.map((p, index) => (
-                                <option key={index} value={p.name}>
+                                <option key={index} value={p.id}>
                                   {p.name}
                                 </option>
                               ))}
@@ -271,4 +280,4 @@ function QueryAssingment() {
 
 export default QueryAssingment;
 
-   // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+// var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");

@@ -188,9 +188,11 @@ function PendingAllocation({ CountPendingForAllocation }) {
                 <p>{row.allocation_time}</p>
               </p>
             ) : (
-              <Link to={`/admin/queryassing/${row.id}`}>
-                <i class="fa fa-share"></i>
-              </Link>
+              <div title="Assign to">
+                <Link to={`/admin/queryassing/${row.id}`}>
+                  <i class="fa fa-share"></i>
+                </Link>
+              </div>
             )}
           </>
         );
@@ -218,8 +220,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
     },
   ];
 
- 
-
   //change date format
   function ChangeFormateDate(oldDate) {
     // console.log("date", oldDate);
@@ -229,12 +229,11 @@ function PendingAllocation({ CountPendingForAllocation }) {
     return oldDate.toString().split("-").reverse().join("-");
   }
 
-
   return (
     <>
       <Card>
         <CardHeader>
-        <AdminFilter
+          <AdminFilter
             setData={setPendingData}
             getData={getPendingForAllocation}
             pendingAlloation="pendingAlloation"
@@ -247,7 +246,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
             data={pendingData}
             columns={columns}
             rowIndex
-          />    
+          />
           <Modal isOpen={modal} fade={false} toggle={toggle}>
             <ModalHeader toggle={toggle}>History</ModalHeader>
             <ModalBody>

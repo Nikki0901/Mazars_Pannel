@@ -23,6 +23,8 @@ function QueryAssingment() {
   const history = useHistory();
 
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
+  const [teamID, setTeamID] = useState(null);
+  const [teamName, setTeamName] = useState('');
   const [query, setQuery] = useState(true);
 
   const [hideQuery, setHideQuery] = useState({
@@ -91,22 +93,31 @@ function QueryAssingment() {
       });
   };
 
+  const handleChange= (e) =>{
+    console.log("val-",e.target.value);
+    setTeamID(e.target.value)
+    var value = taxLeaderDisplay.filter(function(item) {
+      return item.id == e.target.value
+    })
+    console.log(value[0].name);
+    setTeamName(value[0].name)
+  }
+
+  
   const onSubmit = (value) => {
     console.log("value :", value);
-    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
     var expdeliverydate = value.p_expdeldate.replace(
       /(\d\d)\/(\d\d)\/(\d{4})/,
       "$3-$1-$2"
     );
 
     let formData = new FormData();
-    formData.append("who", JSON.parse(tlkey));
+    formData.append("who", teamID);
     formData.append("id", id);
     formData.append("user", JSON.parse(userId));
     formData.append("type", "admin");
     formData.append("types", "tl");
-    formData.append("name", value.p_taxprof);
-    // formData.append("date", date);
+    formData.append("name", teamName);
     formData.append("timeline", value.p_timelines);
     formData.append("expdeliverydate", expdeliverydate);
     formData.append("assignNo", queryNo);
@@ -129,6 +140,10 @@ function QueryAssingment() {
         console.log("erroror - ", error);
       });
   };
+
+
+
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
@@ -174,10 +189,11 @@ function QueryAssingment() {
                             class="form-control"
                             name="p_taxprof"
                             ref={register}
+                            onChange={(e)=> handleChange(e)}
                           >
                             <option value="">-select-</option>
                             {taxLeaderDisplay.map((p, index) => (
-                              <option key={index} value={p.name}>
+                              <option key={index} value={p.id}>
                                 {p.name}
                               </option>
                             ))}

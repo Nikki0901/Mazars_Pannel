@@ -6,11 +6,9 @@
   background: #2b345f;
 }
 
-
 .heading {
   padding-bottom: 2%;
 }
-
 
 .form {
   width: 60%;
@@ -84,80 +82,53 @@ footer {
   margin-bottom: 15%;
 }
 
-
-/* .content_category {
-  width: 40%;
-  margin: auto;
-  text-align: center;
-  padding: 25px;
-  border: 1px solid red;
-  margin-bottom: 15%;
-} */
-
-
-.otp{
+.otp {
   width: 50%;
-margin: auto;
-margin-top: 5%;
-margin-bottom: 5%;
-background: white;
-padding: 25px;
-padding: 3em 2em 3em;
-box-shadow: 6px 6px 10px 2px #00000075;
-border-radius: 15px;
+  margin: auto;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  background: white;
+  padding: 25px;
+  padding: 3em 2em 3em;
+  box-shadow: 6px 6px 10px 2px #00000075;
+  border-radius: 15px;
 }
 
-.error{
+.error {
   color: red;
   font-weight: bold;
 }
 
-.question_query{
+.question_query {
   display: flex;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.question_query_field{
+.question_query_field {
   display: flex;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar {
   padding: 0 !important;
 }
 
-/* 
-.ag-theme-alpine .ag-cell, .ag-theme-alpine .ag-full-width-row .ag-cell-wrapper.ag-row-group{
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-.ag-theme-alpine .ag-header-cell, .ag-theme-alpine .ag-header-group-cell{
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+
+
+/* .react-tabs__tab-list {
+  border-bottom: 0;
+  margin: 0;
+  padding: 0;
 } */
 
-
-
-
-/* 
-.a{
-    padding: 20px 25px;
-    border: 5px solid #fff;
-    background-color: #007bff!important;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    color: #fff;
-    cursor: pointer;
+/* .react-tabs__tab--selected {
+  background-color: #007bff !important;
 } */
 
-
 /* 
-.table_head th{
-  font-size: 11px;
-  padding: 3.5px;
-}
+.react-tabs__tab {
+  background-color: #8c8c8c !important;
 
-table td{
-  font-size: 12px;
 } */

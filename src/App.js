@@ -31,6 +31,7 @@ import ChangePassword from './views/ChangePassword/ChangePassword'
 import EditQuery from './views/EditQuery/EditQuery'
 import VideoCall from './views/VideoCall/VideoCall'
 import MeetingComponent from './views/MeetingComponent/MeetingComponent'
+import schedule from './views/Schedule/schedule'
 
 
 
@@ -148,6 +149,8 @@ function App() {
         <Route exact path="/customer/edit-query/:id" component={EditQuery} />
         <Route exact path="/customer/video-call" component={VideoCall} />
         <Route exact path="/customer/meeting" component={MeetingComponent} />
+        <Route exact path="/customer/schedule" component={schedule} />
+
 
 
 

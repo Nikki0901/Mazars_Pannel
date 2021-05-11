@@ -35,8 +35,6 @@ function Questionnaire(props) {
     );
   };
 
- 
-
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -94,22 +92,11 @@ function Questionnaire(props) {
         <Modal isOpen={modal} toggle={toggle} size="sm">
           <ModalHeader toggle={toggle}></ModalHeader>
 
-          <div
-            style={{
-              textAlign: "center",
-              paddingTop: "5px",
-              fontWeight: "bold",
-              background: "green",
-            }}
-          >
-            <h2>User ID</h2>
-          </div>
-
           <ModalBody>
             <br />
             <div class="modal-body">
               <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                {JSON.parse(userNameId)}
+                {JSON.parse(userNameId)} , You have successfully Registered
               </h1>
             </div>
           </ModalBody>
@@ -394,7 +381,8 @@ const assessment_year = [
     value: "2027-28",
     label: "2027-28",
   },
-];  
+];
+
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,

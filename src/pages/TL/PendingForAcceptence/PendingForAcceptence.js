@@ -18,7 +18,7 @@ import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
-function PendingForAcceptence({ CountPendingForAcceptence }) {
+function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
@@ -171,7 +171,6 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
     },
   ];
 
-  
   const acceptHandler = (key) => {
     console.log("acceptHandler", key);
 
@@ -191,6 +190,7 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
         if (response.data.code === 1) {
           alert.success("Query accepted !");
           getPendingforAcceptance();
+          updateTab(1);
         }
       })
       .catch((error) => {
@@ -224,176 +224,15 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
       });
   };
 
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getPendingforAcceptance();
-  };
-
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    getPendingforAcceptance();
-  };
-
-  //reset category
-  const resetCategory = () => {
-    console.log("resetData ..");
-    setSelectedData([]);
-    getPendingforAcceptance();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/tl/pendingQues?id=${JSON.parse(
-          userid
-        )}&cat_id=${selectedData}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setPendingData(res.data.result);
-          }
-        }
-      });
-  };
-
-
   return (
     <>
       <Card>
         <CardHeader>
-        <TeamFilter
+          <TeamFilter
             setData={setPendingData}
             getData={getPendingforAcceptance}
             pendingForAcceptence="pendingForAcceptence"
           />
-          {/* <div className="row">
-            <div class="col-sm-3 d-flex">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-                value={selectedData}
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetCategory}
-                >
-                  X
-                </button>
-              </div>
-            </div>
-
-            <div className="col-sm-9 d-flex">
-              <div>
-                <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">From</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateFrom"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label className="form-select form-control">To</label>
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <input
-                      type="date"
-                      name="p_dateTo"
-                      className="form-select form-control"
-                      ref={register}
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary mb-2">
-                    Search
-                  </button>
-                </form>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary mb-2 ml-3"
-                  onClick={resetData}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable
@@ -403,71 +242,6 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
             columns={columns}
             rowIndex
           />
-
-          {/* <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">S.No</th>
-                <th scope="col">Date.</th>
-                <th scope="col">Query No </th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th scope="col">Customer Name</th>
-                <th scope="col">Exp. Delivery Date</th>
-                <th scope="col">Accept / Reject</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {pendingData.length > 0 ? (
-                pendingData.map((p, i) => (
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.query_created)}</td>
-                    <th scope="row">
-                      <Link to={`/teamleader/pending/${p.id}`}>
-                        {p.assign_no}
-                      </Link>
-                    </th>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.name}</td>                  
-                    <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-evenly",
-                          color: "#6967ce",
-                          cursor: "pointer",
-                        }}
-                        id="div1"
-                      >
-                        <div
-                          id="accept"
-                          title="Accept Assignment"
-                          onClick={() => acceptHandler(p)}
-                        >
-                          <i class="fa fa-check" style={{ color: "green",fontSize:"16px" }}></i>
-                        </div>
-                        <div
-                          id="reject"
-                          title="Reject Assignment"
-                          onClick={() => rejectHandler(p)}
-                        >
-                          <i class="fa fa-times" style={{ color: "red",fontSize:"16px" }}></i>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7">No Records</td>
-                </tr>
-              )}
-            </tbody>
-          </table> */}
         </CardBody>
       </Card>
     </>
@@ -476,6 +250,9 @@ function PendingForAcceptence({ CountPendingForAcceptence }) {
 
 export default PendingForAcceptence;
 
+{
+  /* <button onClick={() => update(1)}>go to 1st tab</button> */
+}
 // http://13.232.121.233/mazarapi/v1/tl/AcceptRejectQuery
 
 // axios.post(`${baseUrl}/tl/AcceptRejectQuery`, formData)

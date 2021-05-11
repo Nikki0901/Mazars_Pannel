@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from "react";
-import { Badge } from 'reactstrap';
-
+import { Badge } from "reactstrap";
 
 function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
   const [toggleState, setToggleState] = useState(false);
@@ -28,7 +27,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   src="https://themeselection.com/demo/chameleon-free-bootstrap-admin-template/theme-assets/images/logo/logo.png"
                 />
                 <h3 class="brand-text">Mazars</h3>
-            
               </a>
             </li>
             <li class="nav-item d-md-none">
@@ -46,7 +44,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               id="main-menu-navigation"
               data-menu="menu-navigation"
             >
-               <li class="nav-item active">
+              <li class="nav-item active">
                 <NavLink to={"/customer/dashboard"}>
                   <i class="fa fa-home"></i>
                   <span class="menu-title" data-i18n="">
@@ -55,15 +53,11 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              <li
-                class={ toggleState && ''}
-                onClick={() => toggleTab("active")}
-              >
+              <li class={toggleState && ""} onClick={() => toggleTab("active")}>
                 <NavLink to={"/customer/queries"}>
                   <i class="fa fa-clone"></i>
                   <span class="menu-title" data-i18n="">
-                    Queries 
-                    {/* <Badge color="secondary">New</Badge> */}
+                    Queries
                   </span>
                 </NavLink>
               </li>
@@ -82,6 +76,15 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   <i class="fa fa-file"></i>
                   <span class="menu-title" data-i18n="">
                     Assignments
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/customer/schedule"}>
+                  <i class="fa fa-rss-square"></i>
+                  <span class="menu-title" data-i18n="">
+                    schedule
                   </span>
                 </NavLink>
               </li>
@@ -254,7 +257,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li> */}
-
             </ul>
           )}
 
@@ -264,7 +266,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               id="main-menu-navigation"
               data-menu="menu-navigation"
             >
-               <li class="nav-item">
+              <li class="nav-item">
                 <NavLink to={"/taxprofessional/dashboard"}>
                   <i class="fa fa-clone"></i>
                   <span class="menu-title" data-i18n="">
@@ -272,7 +274,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-           
+
               <li class="nav-item">
                 <NavLink to={"/taxprofessional/queriestab"}>
                   <i class="fa fa-clone"></i>
@@ -282,7 +284,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-
               <li class="nav-item">
                 <NavLink to={"/taxprofessional/proposal"}>
                   <i class="fa fa-envelope"></i>
@@ -291,7 +292,6 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-
             </ul>
           )}
         </div>
