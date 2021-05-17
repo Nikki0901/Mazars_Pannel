@@ -355,7 +355,7 @@ function AssignmentTab() {
           <>
             <div style={{ cursor: "pointer" }}>
               <i
-                 class="fa fa-video-camera"
+                class="fa fa-video-camera"
                 style={{ color: "red", fontSize: "16px" }}
                 onClick={() => handleJoin(row.q_id)}
               ></i>
@@ -404,7 +404,7 @@ function AssignmentTab() {
           userid
         )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
           data.p_dateTo
-        }&assignment_status=${status}`
+        }&assignment_status=${status}&stages_status=${data.p_status}`
       )
       .then((res) => {
         console.log(res);
@@ -547,6 +547,19 @@ function AssignmentTab() {
                     <div className="demo-option-label-item">Completed</div>
                   </Option>
                 </Select>
+              </div>
+
+              <div class="form-group mx-sm-1  mb-2">
+                <select
+                  className="form-select form-control"
+                  name="p_status"
+                  ref={register}
+                  style={{ height: "33px" }}
+                >
+                  <option value="">--select--</option>
+                  <option value="1">Pending</option>
+                  <option value="2">Complete</option>
+                </select>
               </div>
 
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">

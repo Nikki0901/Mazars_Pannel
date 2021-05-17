@@ -300,7 +300,7 @@ function PaidComponent() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ cursor: "pointer" }}>
+            <div style={{ cursor: "pointer" }} title="Payment History">
               <i
                 class="fa fa-credit-card"
                 style={{ color: "green", fontSize: "16px" }}

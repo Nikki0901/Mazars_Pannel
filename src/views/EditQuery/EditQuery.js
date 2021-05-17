@@ -7,9 +7,8 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
-// import { Select } from "antd";
 import { Card, CardHeader, Row, Col } from "reactstrap";
-import SelectComponent from "./SelectComponent";
+import { Spinner } from "reactstrap";
 import Select from "react-select";
 
 function EditQuery(props) {
@@ -52,7 +51,7 @@ function EditQuery(props) {
       // console.log("purposeItem-", typeof purposeItem);
 
       if (res) {
-        setLoad(true);
+        // setLoad(true);
 
         var specific = res.data.result[0].specific_query;
         if (specific == "undefined") {
@@ -96,7 +95,7 @@ function EditQuery(props) {
 
   const onSubmit = (value) => {
     console.log("value", value);
-
+    setLoad(true);
     let formData = new FormData();
 
     var uploadImg = value.upload;
@@ -138,6 +137,8 @@ function EditQuery(props) {
         if (response.data.code === 1) {
           alert.success("updated");
           props.history.push("/customer/queries");
+        } else {
+          setLoad(false);
         }
       })
       .catch((error) => {
@@ -163,8 +164,10 @@ function EditQuery(props) {
         </CardHeader>
 
         <CardHeader>
-          {load ? (
-            <div class="col-xl-8 col-lg-8 col-md-12 py-4">
+          <div class="col-xl-8 col-lg-8 col-md-12 py-4">
+            {load ? (
+              <Spinner size="sm" color="primary" />
+            ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
                   <div className="col-md-6">
@@ -369,10 +372,8 @@ function EditQuery(props) {
                   Update
                 </button>
               </form>
-            </div>
-          ) : (
-            <p>loading..</p>
-          )}
+            )}
+          </div>
         </CardHeader>
       </Card>
     </Layout>

@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import { useForm } from "react-hook-form";
+import Demo from "./demo";
 
 function Schedule() {
   const { handleSubmit, register } = useForm();
@@ -95,9 +96,17 @@ function Schedule() {
             <Col md="5"></Col>
           </Row>
         </CardHeader>
+        <Demo />
+        <CardBody></CardBody>
+      </Card>
+    </Layout>
+  );
+}
 
-        <CardBody>
-          <div className="mb-3">
+export default Schedule;
+
+{
+  /* <div className="mb-3">
             <label>Select Date</label>
             <input
               type="date"
@@ -132,9 +141,11 @@ function Schedule() {
                   ))
                 : null}
             </table>
-          </div>
+          </div> */
+}
 
-          {/* <form onSubmit={handleSubmit(onSubmit)}>
+{
+  /* <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label>Select Query No</label>
               <select name="p_id" class="form-control" ref={register}>
@@ -164,11 +175,5 @@ function Schedule() {
                 Sumbit
               </button>
             </div>
-          </form> */}
-        </CardBody>
-      </Card>
-    </Layout>
-  );
+          </form> */
 }
-
-export default Schedule;

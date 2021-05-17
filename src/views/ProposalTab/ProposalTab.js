@@ -344,7 +344,7 @@ function ProposalTab() {
                 {row.negotiated_amount === "0" &&
                 row.accepted_amount === "0" ? (
                   <div>
-                    <div style={{ cursor: "pointer" }}>
+                    <div style={{ cursor: "pointer" }} title="Accepted">
                       <i
                         class="fa fa-check"
                         style={{
@@ -355,7 +355,7 @@ function ProposalTab() {
                       ></i>
                     </div>
 
-                    <div style={{ cursor: "pointer" }}>
+                    <div style={{ cursor: "pointer" }} title="Rejected">
                       <i
                         class="fa fa-times"
                         style={{ color: "red", fontSize: "16px" }}

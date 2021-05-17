@@ -6,23 +6,32 @@ import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-  Tooltip,
-} from "reactstrap";
+import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import classNames from "classnames";
+
+
+const Schema = yup.object().shape({
+  p_name: yup.string().required("required name"),
+  p_email: yup.string().email("invalid email").required("required email"),
+  p_phone: yup
+    .string()
+    .required("required phone no")
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(10, "Must be exactly 10 digits")
+    .max(20, "max 20 digits"),
+  p_tax: yup.string().required("required category"),
+  p_tax2: yup.string().required("required sub category"),
+});
+
 
 function AddNew() {
   const alert = useAlert();
   const history = useHistory();
 
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, reset, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const userid = window.localStorage.getItem("adminkey");
 
@@ -57,7 +66,7 @@ function AddNew() {
     getSubCategory();
   }, [store]);
 
-  console.log("store2", store2);
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -118,10 +127,17 @@ function AddNew() {
                       <label>Name</label>
                       <input
                         type="text"
-                        class="form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_name,
+                        })}
                         name="p_name"
                         ref={register}
                       />
+                      {errors.p_name && (
+                        <div className="invalid-feedback">
+                          {errors.p_name.message}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -130,10 +146,17 @@ function AddNew() {
                       <label>Phone Number</label>
                       <input
                         type="text"
-                        class="form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_phone,
+                        })}
                         name="p_phone"
                         ref={register}
                       />
+                      {errors.p_phone && (
+                        <div className="invalid-feedback">
+                          {errors.p_phone.message}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -143,7 +166,9 @@ function AddNew() {
                     <div class="form-group">
                       <label>Category</label>
                       <select
-                        className="form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_tax,
+                        })}
                         name="p_tax"
                         ref={register}
                         onChange={(e) => setStore(e.target.value)}
@@ -155,13 +180,20 @@ function AddNew() {
                           </option>
                         ))}
                       </select>
+                      {errors.p_tax && (
+                        <div className="invalid-feedback">
+                          {errors.p_tax.message}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Sub Category</label>
                       <select
-                        className="form-select form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_tax2,
+                        })}
                         name="p_tax2"
                         ref={register}
                         onChange={(e) => setStore2(e.target.value)}
@@ -173,6 +205,11 @@ function AddNew() {
                           </option>
                         ))}
                       </select>
+                      {errors.p_tax2 && (
+                        <div className="invalid-feedback">
+                          {errors.p_tax2.message}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -183,10 +220,17 @@ function AddNew() {
                       <label>Email</label>
                       <input
                         type="email"
-                        class="form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email,
+                        })}
                         name="p_email"
                         ref={register}
                       />
+                      {errors.p_email && (
+                        <div className="invalid-feedback">
+                          {errors.p_email.message}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

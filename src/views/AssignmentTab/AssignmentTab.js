@@ -218,7 +218,7 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ cursor: "pointer" }}>
+            <div style={{ cursor: "pointer" }} title="Pay Amount">
               <i
                 class="fa fa-credit-card"
                 style={{ color: "green", fontSize: "16px" }}
@@ -238,7 +238,7 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ cursor: "pointer" }}>
+            <div style={{ cursor: "pointer" }} title="Video Chat">
               <i
                 class="fa fa-video-camera"
                 style={{ color: "red", fontSize: "16px" }}

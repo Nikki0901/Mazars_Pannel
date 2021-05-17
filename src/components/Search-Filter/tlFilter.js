@@ -151,25 +151,6 @@ function TeamFilter(props) {
           }
         });
     }
-
-    if (assignment == "assignment") {
-      axios
-        .get(
-          `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
-            userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
-          }&status=${data.p_status}`
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            if (res.data.result) {
-              setData(res.data.result);
-            }
-          }
-        });
-    }
   };
 
   const Reset = () => {
@@ -290,19 +271,6 @@ function TeamFilter(props) {
                       <option value="">--select--</option>
                       <option value="1">Unpaid</option>
                       <option value="2">Paid</option>
-                    </select>
-                  )}
-
-                  {assignment == "assignment" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Inprogress</option>
-                      <option value="2">Complete</option>
                     </select>
                   )}
                 </div>

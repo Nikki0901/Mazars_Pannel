@@ -11,6 +11,7 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import { Spinner } from "reactstrap";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -40,6 +41,7 @@ function SignUp(props) {
   const [states, setStates] = useState([]);
   const [city, setCity] = useState([]);
   const [name, setName] = useState("");
+  const [load, setLoad] = useState(false);
 
   const [store, setStore] = useState(0);
 
@@ -74,6 +76,7 @@ function SignUp(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
     console.log("value :", value.p_state);
+    setLoad(true);
 
     let formData = new FormData();
     formData.append("name", value.p_name);
@@ -104,6 +107,7 @@ function SignUp(props) {
           reset();
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
+          setLoad(false);
 
           Swal.fire(
             "Oops",
@@ -145,169 +149,173 @@ function SignUp(props) {
           <div className="heading">
             <h2>Customer Register</h2>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input
-                    type="text"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_name,
-                    })}
-                    name="p_name"
-                    ref={register}
-                    placeholder="Enter Name"
-                  />
-                  {errors.p_name && (
-                    <div className="invalid-feedback">
-                      {errors.p_name.message}{" "}
-                    </div>
-                  )}
+          {load ? (
+            <Spinner size="sm" color="primary" />
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Name</label>
+                    <input
+                      type="text"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_name,
+                      })}
+                      name="p_name"
+                      ref={register}
+                      placeholder="Enter Name"
+                    />
+                    {errors.p_name && (
+                      <div className="invalid-feedback">
+                        {errors.p_name.message}{" "}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="text"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_email,
-                    })}
-                    name="p_email"
-                    ref={register}
-                    placeholder="Enter Email"
-                  />
-                  {errors.p_email && (
-                    <div className="invalid-feedback">
-                      {errors.p_email.message}{" "}
-                    </div>
-                  )}
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input
+                      type="text"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_email,
+                      })}
+                      name="p_email"
+                      ref={register}
+                      placeholder="Enter Email"
+                    />
+                    {errors.p_email && (
+                      <div className="invalid-feedback">
+                        {errors.p_email.message}{" "}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Phone number</label>
-                  <input
-                    type="text"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_phone,
-                    })}
-                    name="p_phone"
-                    ref={register}
-                    placeholder="Phone number"
-                  />
-                  {errors.p_phone && (
-                    <div className="invalid-feedback">
-                      {errors.p_phone.message}{" "}
-                    </div>
-                  )}
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Phone number</label>
+                    <input
+                      type="text"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_phone,
+                      })}
+                      name="p_phone"
+                      ref={register}
+                      placeholder="Phone number"
+                    />
+                    {errors.p_phone && (
+                      <div className="invalid-feedback">
+                        {errors.p_phone.message}{" "}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Occupation/ Profession</label>
-                  <br />
-                  <select
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_profession,
-                    })}
-                    name="p_profession"
-                    aria-label="Default select example"
-                    ref={register}
-                  >
-                    <option value="">--select--</option>
-                    {professionName.map((p, index) => (
-                      <option key={index} value={p.city}>
-                        {p.city}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.p_profession && (
-                    <div className="invalid-feedback">
-                      {errors.p_profession.message}{" "}
-                    </div>
-                  )}
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Occupation/ Profession</label>
+                    <br />
+                    <select
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_profession,
+                      })}
+                      name="p_profession"
+                      aria-label="Default select example"
+                      ref={register}
+                    >
+                      <option value="">--select--</option>
+                      {professionName.map((p, index) => (
+                        <option key={index} value={p.city}>
+                          {p.city}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.p_profession && (
+                      <div className="invalid-feedback">
+                        {errors.p_profession.message}{" "}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">State</label>
-                  <select
-                    id="state"
-                    name="p_state"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_state,
-                    })}
-                    ref={register}
-                    onChange={(e) => getID(e.target.value)}
-                  >
-                    <option value="">--select--</option>
-                    {states.map((p) => (
-                      <option key={p.Id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.p_state && (
-                    <div className="invalid-feedback">
-                      {errors.p_state.message}
-                    </div>
-                  )}
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">State</label>
+                    <select
+                      id="state"
+                      name="p_state"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_state,
+                      })}
+                      ref={register}
+                      onChange={(e) => getID(e.target.value)}
+                    >
+                      <option value="">--select--</option>
+                      {states.map((p) => (
+                        <option key={p.Id} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.p_state && (
+                      <div className="invalid-feedback">
+                        {errors.p_state.message}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">City</label>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">City</label>
 
-                  <select
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_city,
-                    })}
-                    name="p_city"
-                    ref={register}
-                  >
-                    <option value="">--select--</option>
-                    {city.map((p, index) => (
-                      <option key={index} value={p.city}>
-                        {p.city}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.p_city && (
-                    <div className="invalid-feedback">
-                      {errors.p_city.message}
-                    </div>
-                  )}
+                    <select
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_city,
+                      })}
+                      name="p_city"
+                      ref={register}
+                    >
+                      <option value="">--select--</option>
+                      {city.map((p, index) => (
+                        <option key={index} value={p.city}>
+                          {p.city}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.p_city && (
+                      <div className="invalid-feedback">
+                        {errors.p_city.message}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_password,
-                    })}
-                    name="p_password"
-                    ref={register}
-                    placeholder="Enter Password"
-                  />
-                  {errors.p_password && (
-                    <div className="invalid-feedback">
-                      {errors.p_password.message}
-                    </div>
-                  )}
+                <div class="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_password,
+                      })}
+                      name="p_password"
+                      ref={register}
+                      placeholder="Enter Password"
+                    />
+                    {errors.p_password && (
+                      <div className="invalid-feedback">
+                        {errors.p_password.message}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </form>
+          )}
         </div>
       </div>
       <Footer />

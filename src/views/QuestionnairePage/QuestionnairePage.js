@@ -9,6 +9,7 @@ import { baseUrl } from "../../config/config";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAlert } from "react-alert";
 import Select from "react-select";
+import { Spinner } from "reactstrap";
 
 function Questionnaire(props) {
   const alert = useAlert();
@@ -25,6 +26,7 @@ function Questionnaire(props) {
 
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
+  const [load, setLoad] = useState(false);
 
   //alert msg
   const Msg = () => {
@@ -37,6 +39,7 @@ function Questionnaire(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoad(true);
 
     let formData = new FormData();
 
@@ -79,6 +82,8 @@ function Questionnaire(props) {
           reset();
           alert.success(<Msg />);
           props.history.push("/customer/dashboard");
+        } else {
+          setLoad(false);
         }
       })
       .catch((error) => {
@@ -96,7 +101,7 @@ function Questionnaire(props) {
             <br />
             <div class="modal-body">
               <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                {JSON.parse(userNameId)} , You have successfully Registered
+                {JSON.parse(userNameId)} , You have Successfully Registered
               </h1>
             </div>
           </ModalBody>
@@ -114,180 +119,186 @@ function Questionnaire(props) {
           <div className="heading">
             <h2>Basic Questionnaire</h2>
           </div>
-
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Facts of the case</label>
-                  <textarea
-                    className="form-control"
-                    id="textarea"
-                    rows="6"
-                    name="p_fact"
-                    ref={register}
-                  ></textarea>
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="question_query mb-2">
-                  <label className="form-label">
-                    Specific Questions for advisory
-                  </label>
-                  <div
-                    className="btn btn-primary"
-                    onClick={() => append({ query: "" })}
-                  >
-                    +
+          {load ? (
+            <Spinner size="sm" color="primary" />
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Facts of the case</label>
+                    <textarea
+                      className="form-control"
+                      id="textarea"
+                      rows="6"
+                      name="p_fact"
+                      ref={register}
+                    ></textarea>
                   </div>
                 </div>
 
-                {fields.length > 0 &&
-                  fields.map((item, index) => (
-                    <div>
-                      {fields.length < 5 ? (
-                        <div className="question_query_field mb-2" key={index}>
-                          <input
-                            type="text"
-                            className="form-control"
-                            ref={register}
-                            name={`specific[${index}].query`}
-                            placeholder="Specify your query"
-                          />
-                          <div
-                            className="btn btn-primary ml-2"
-                            onClick={() => remove(index)}
-                          >
-                            -
-                          </div>
-                        </div>
-                      ) : null}
+                <div className="col-md-6">
+                  <div className="question_query mb-2">
+                    <label className="form-label">
+                      Specific Questions for advisory
+                    </label>
+                    <div
+                      className="btn btn-primary"
+                      onClick={() => append({ query: "" })}
+                    >
+                      +
                     </div>
-                  ))}
-              </div>
+                  </div>
 
-              <div className="col-md-6">
-                <ImageUploads register={register} control={control} />
-              </div>
-
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Case name</label>
-                  <input
-                    type="text"
-                    name="p_case_name"
-                    ref={register}
-                    className="form-control"
-                  />
+                  {fields.length > 0 &&
+                    fields.map((item, index) => (
+                      <div>
+                        {fields.length < 5 ? (
+                          <div
+                            className="question_query_field mb-2"
+                            key={index}
+                          >
+                            <input
+                              type="text"
+                              className="form-control"
+                              ref={register}
+                              name={`specific[${index}].query`}
+                              placeholder="Specify your query"
+                            />
+                            <div
+                              className="btn btn-primary ml-2"
+                              onClick={() => remove(index)}
+                            >
+                              -
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                    ))}
                 </div>
-              </div>
 
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Assessment year</label>
-                  <Select
-                    closeMenuOnSelect={false}
-                    onChange={setSelectedOption}
-                    isMulti
-                    options={assessment_year}
-                  />
+                <div className="col-md-6">
+                  <ImageUploads register={register} control={control} />
                 </div>
-              </div>
 
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">
-                    Format in which Opinion is required
-                  </label>
-                  <br />
-                  <div className="form-check">
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Case name</label>
                     <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="p_format_word"
+                      type="text"
+                      name="p_case_name"
                       ref={register}
-                      // value="1"
+                      className="form-control"
                     />
-                    <label className="form-check-label">
-                      Softcopy - Word/ Pdf
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">Assessment year</label>
+                    <Select
+                      closeMenuOnSelect={false}
+                      onChange={setSelectedOption}
+                      isMulti
+                      options={assessment_year}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Format in which Opinion is required
                     </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="p_format_digital"
-                      ref={register}
-                      // value="1"
-                    />
-                    <label className="form-check-label">
-                      SoftCopy- Digitally Signed
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="p_format_physically"
-                      ref={register}
-                      // value="1"
-                    />
-                    <label className="form-check-label">
-                      Printout- Physically Signed
-                    </label>
+                    <br />
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_format_word"
+                        ref={register}
+                        // value="1"
+                      />
+                      <label className="form-check-label">
+                        Softcopy - Word/ Pdf
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_format_digital"
+                        ref={register}
+                        // value="1"
+                      />
+                      <label className="form-check-label">
+                        SoftCopy- Digitally Signed
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="p_format_physically"
+                        ref={register}
+                        // value="1"
+                      />
+                      <label className="form-check-label">
+                        Printout- Physically Signed
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">
-                    Timelines within which Opinion is Required
-                  </label>
-                  <br />
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="p_timelines"
-                      ref={register}
-                      value="Urgent, (4-5 Working Days)"
-                      defaultChecked
-                    />
-                    <label>Urgent, (4-5 Working Days)</label>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Timelines within which Opinion is Required
+                    </label>
+                    <br />
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="p_timelines"
+                        ref={register}
+                        value="Urgent, (4-5 Working Days)"
+                        defaultChecked
+                      />
+                      <label>Urgent, (4-5 Working Days)</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="p_timelines"
+                        ref={register}
+                        value="Regular (10-12 Working Days)"
+                      />
+                      <label>Regular (10-12 Working Days)</label>
+                    </div>
                   </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="p_timelines"
-                      ref={register}
-                      value="Regular (10-12 Working Days)"
+                </div>
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Purpose for which Opinion is sought
+                    </label>
+                    <Select
+                      closeMenuOnSelect={false}
+                      onChange={setPurposeOption}
+                      isMulti
+                      options={purpose}
                     />
-                    <label>Regular (10-12 Working Days)</label>
                   </div>
                 </div>
               </div>
 
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">
-                    Purpose for which Opinion is sought
-                  </label>
-                  <Select
-                    closeMenuOnSelect={false}
-                    onChange={setPurposeOption}
-                    isMulti
-                    options={purpose}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </form>
+          )}
         </div>
       </div>
       <Footer />
