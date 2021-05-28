@@ -336,7 +336,8 @@ function EditQuery(props) {
                                 <td>{i + 1}</td>
                                 <td>
                                   <a
-                                    href={`http://13.232.121.233/mazarapi/assets/image/${p.name}`}
+                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
+                                    target="_blank"
                                   >
                                     <i
                                       class="fa fa-photo"

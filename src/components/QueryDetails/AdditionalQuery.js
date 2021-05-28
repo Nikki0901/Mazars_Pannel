@@ -36,6 +36,7 @@ function AdditionalQuery({ displayQuery }) {
                     <p>
                       <a
                         href={`http://65.0.220.156/mazarapi/assets/image/${p.upload_doc}`}
+                        target="_blank"
                       >
                         <i class="fa fa-photo"></i>
                       </a>

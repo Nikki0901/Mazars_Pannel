@@ -296,9 +296,7 @@ function AddAssingmentStages() {
                             </select>
                           </div>
                         </div>
-                        {p.client_discussion == "completed" ? (
-                          null
-                        ) : (
+                        {p.client_discussion == "completed" ? null : (
                           <div class="col-md-4">
                             <div class="form-group">
                               <div>
@@ -344,7 +342,13 @@ function AddAssingmentStages() {
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <div></div>
+                            <div>
+                              <Link
+                                to={`/teamleader/view-report/${p.assign_no}`}
+                              >
+                                View Report
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>

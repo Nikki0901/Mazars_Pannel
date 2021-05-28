@@ -239,6 +239,7 @@ function AssignmentTab() {
               <div>
                 <a
                   href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                  target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   final
@@ -248,6 +249,7 @@ function AssignmentTab() {
               <div>
                 <a
                   href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                  target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   draft
@@ -268,7 +270,6 @@ function AssignmentTab() {
     },
   ];
 
- 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);

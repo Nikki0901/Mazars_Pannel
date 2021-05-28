@@ -67,6 +67,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                   <p>
                     <a
                       href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
+                      target="_blank"
                     >
                       <i class="fa fa-photo"></i>
                     </a>

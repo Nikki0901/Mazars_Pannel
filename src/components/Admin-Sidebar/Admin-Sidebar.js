@@ -232,6 +232,15 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               </li>
 
               <li class="nav-item">
+                <NavLink to={"/teamleader/schedule"}>
+                  <i class="fa fa-rss-square"></i>
+                  <span class="menu-title" data-i18n="">
+                    schedule
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
                 <NavLink to={"/teamleader/addteamprof"}>
                   <i class="fa fa-users"></i>
                   <span class="menu-title" data-i18n="">

@@ -251,6 +251,7 @@ function AssignmentTab() {
               <div>
                 <a
                   href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                  target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   final
@@ -260,6 +261,7 @@ function AssignmentTab() {
               <div>
                 <a
                   href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                  target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
                   draft
@@ -305,7 +307,14 @@ function AssignmentTab() {
                 justifyContent: "space-between",
               }}
             >
-              {row.assignement_draft_report || row.final_report ? null : (
+              {row.accepted_amount == row.paid_amount &&
+              !row.final_report &&
+              !(
+                row.client_discussion == "completed" &&
+                row.delivery_report == "completed" &&
+                row.draft_report == "completed" &&
+                row.final_discussion == "completed"
+              ) ? (
                 <div title="upload Pdf">
                   <p
                     style={{ cursor: "pointer", color: "green" }}
@@ -315,7 +324,7 @@ function AssignmentTab() {
                     draft
                   </p>
                 </div>
-              )}
+              ) : null}
 
               {row.final_report ? null : (
                 <div title="upload Pdf">
@@ -600,3 +609,21 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+
+// {row.assignement_draft_report || row.final_report ? null : (
+//   <div title="upload Pdf">
+//     <p
+//       style={{ cursor: "pointer", color: "green" }}
+//       onClick={() => uploadDraftReport(row.id)}
+//     >
+//       <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+//       draft
+//     </p>
+//   </div>
+// )}
+{
+  /* {row.accepted_amount == row.paid_amount &&
+               !row.final_report  row.assignement_draft_report ? (
+                <p>draft report</p>
+              ) : null} */
+}

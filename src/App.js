@@ -80,6 +80,8 @@ import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
 import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
 import TlAssignmentForm from './pages/TL/AssignmentForm/AssignmentForm'
 import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
+import TlViewReport from './pages/TL/ViewReport/ViewReport'
+import TlSchedule from './pages/TL/Schedule/Schedule'
 
 
 
@@ -195,6 +197,9 @@ function App() {
         <Route exact path="/teamleader/queriestab2" component={TlQueryTab2} />
         <Route exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
         <Route exact path="/teamleader/meeting" component={TlMeetingComponent} />
+        <Route exact path="/teamleader/view-report/:id" component={TlViewReport} />
+        <Route exact path="/teamleader/schedule" component={TlSchedule} />
+
 
 
 

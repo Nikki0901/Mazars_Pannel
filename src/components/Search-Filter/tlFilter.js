@@ -269,7 +269,7 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Unpaid</option>
+                      <option value="1">UnPaid</option>
                       <option value="2">Paid</option>
                     </select>
                   )}

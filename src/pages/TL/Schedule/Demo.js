@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
-import {
-  ViewState,
-  EditingState,
-  IntegratedEditing,
-} from "@devexpress/dx-react-scheduler";
+import axios from "axios";
+import { baseUrl } from "../../../config/config";
+import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { withStyles } from "@material-ui/core/styles";
 import {
   Scheduler,
+  Resources,
+  MonthView,
+  Appointments,
+  AppointmentTooltip,
+  AppointmentForm,
+  EditRecurrenceMenu,
+  DragDropProvider,
   WeekView,
   DayView,
-  Appointments,
-  Toolbar,
   DateNavigator,
   ViewSwitcher,
-  AppointmentForm,
-  AppointmentTooltip,
   TodayButton,
-  Resources,
-  EditRecurrenceMenu,
+  Toolbar,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { appointments, resourcesData } from "./appoinments";
+
 function Demo() {
   const userId = window.localStorage.getItem("userid");
   const [data, setData] = useState([]);
@@ -188,6 +190,8 @@ function Demo() {
     }
   };
 
+
+
   return (
     <Paper>
       <Scheduler data={data} height={660}>
@@ -217,3 +221,29 @@ function Demo() {
 }
 
 export default Demo;
+
+
+
+
+
+
+  // const styles = {
+  //   toolbarRoot: {
+  //     position: "relative",
+  //   },
+  //   progress: {
+  //     position: "absolute",
+  //     width: "100%",
+  //     bottom: 0,
+  //     left: 0,
+  //   },
+  // };
+
+  // const ToolbarWithLoading = withStyles(styles, { name: "Toolbar" })(
+  //   ({ children, classes, ...restProps }) => (
+  //     <div className={classes.toolbarRoot}>
+  //       <Toolbar.Root {...restProps}>{children}</Toolbar.Root>
+  //       <LinearProgress className={classes.progress} />
+  //     </div>
+  //   )
+  // );

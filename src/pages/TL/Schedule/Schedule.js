@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/Layout/Layout";
-import axios from "axios";
-import { baseUrl } from "../../config/config";
+import Layout from "../../../components/Layout/Layout";
 import {
   Card,
   CardHeader,
-  CardBody,
   CardTitle,
   Row,
   Col,
-  Table,
 } from "reactstrap";
-import Demo from "./demo";
+import Demo from "./Demo";
 
 function Schedule() {
-  const userId = window.localStorage.getItem("userid");
+    const userid = window.localStorage.getItem("tlkey");
 
-  return (
-    <Layout custDashboard="custDashboard" custUserId={userId}>
+    return (
+        <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
         <CardHeader>
           <Row>
@@ -28,10 +24,9 @@ function Schedule() {
           </Row>
         </CardHeader>
         <Demo />
-        <CardBody></CardBody>
       </Card>
     </Layout>
-  );
+    );
 }
 
 export default Schedule;

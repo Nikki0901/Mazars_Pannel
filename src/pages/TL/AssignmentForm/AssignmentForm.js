@@ -95,6 +95,7 @@ function AssignmentForm(props) {
         if (response.data.code === 1) {
           alert.success(<Msg />);
           getDetails();
+          reset();
         }
       })
       .catch((error) => {
@@ -127,7 +128,7 @@ function AssignmentForm(props) {
               </button>
             </Col>
             <Col md="8">
-              <h4>Client Discussion Form</h4>
+              <h4>Client Discussion Information</h4>
             </Col>
           </Row>
         </CardHeader>
@@ -137,7 +138,7 @@ function AssignmentForm(props) {
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label>Notes</label>
+                    <label>Titles</label>
                     <textarea
                       className="form-control"
                       id="textarea"
@@ -237,7 +238,7 @@ function AssignmentForm(props) {
                 {store == "other" && (
                   <div class="col-md-4">
                     <div class="form-group">
-                      <label>Other</label>
+                      <label>Notes info</label>
                       <input
                         type="text"
                         name="p_info"
@@ -276,9 +277,9 @@ function AssignmentForm(props) {
                 <tr>
                   <th scope="row">S.No</th>
                   <th scope="row">Documents</th>
+                  <th scope="row">Titles</th>
                   <th scope="row">Notes type</th>
-                  <th scope="row">Info</th>
-                  <th scope="row">Notes</th>
+                  <th scope="row">Notes Info</th>
                   <th scope="row">Date</th>
                   <th scope="row">send/Received</th>
                 </tr>
@@ -292,16 +293,17 @@ function AssignmentForm(props) {
                           {p.document && (
                             <p>
                               <a
-                                href={`http://13.232.121.233/mazarapi/assets/image/${p.document}`}
+                                href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.document}`}
+                                target="_blank"
                               >
                                 <i class="fa fa-photo"></i>
                               </a>
                             </p>
                           )}
                         </td>
+                        <td>{p.notes}</td>
                         <td>{p.notes_type}</td>
                         <td>{p.type_info}</td>
-                        <td>{p.notes}</td>
                         <td>{p.receive_sent_date}</td>
                         <td>{p.send_received}</td>
                       </tr>

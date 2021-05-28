@@ -87,7 +87,7 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
-              {cust && (
+              {/* {cust && (
                 <li class="dropdown dropdown-notification nav-item">
                   {countNotification ? (
                     <div>
@@ -127,7 +127,7 @@ function NavWrapper(props) {
                     </div>
                   ) : null}
                 </li>
-              )}
+              )} */}
 
               <li class="dropdown dropdown-user nav-item">
                 <a
