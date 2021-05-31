@@ -23,6 +23,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 function Demo() {
   const userId = window.localStorage.getItem("userid");
+
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -193,7 +194,7 @@ function Demo() {
       <Scheduler data={data} height={660}>
         <ViewState
           defaultCurrentDate={currentDate}
-          defaultCurrentViewName="Week"
+          defaultCurrentViewName="Week" 
         />
         <EditingState onCommitChanges={commitChanges} />
         <EditRecurrenceMenu />

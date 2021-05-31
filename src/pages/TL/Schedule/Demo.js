@@ -3,8 +3,6 @@ import Paper from "@material-ui/core/Paper";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { withStyles } from "@material-ui/core/styles";
 import {
   Scheduler,
   Resources,
@@ -24,10 +22,9 @@ import {
 import { appointments, resourcesData } from "./appoinments";
 
 function Demo() {
-  const userId = window.localStorage.getItem("userid");
+  const userId = window.localStorage.getItem("tlkey");
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   var date = new Date();
 
@@ -46,15 +43,12 @@ function Demo() {
 
   const getData = () => {
     axios
-      .get(
-        `${baseUrl}/customers/videoScheduler?customer_id=${JSON.parse(userId)}`
-      )
+      .get(`${baseUrl}/tl/videoScheduler?tl_id=${JSON.parse(userId)}`)
       .then((res) => {
         console.log("res -", res);
         console.log("result -", res.data.result.items);
         var a = res.data.result.items;
         setData(a.map(mapAppointmentData));
-        setLoading(false);
       });
   };
 
@@ -69,20 +63,21 @@ function Demo() {
 
   const getAssignmentNo = () => {
     axios
-      .get(
-        `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
-      )
+      .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           var data = res.data.result;
-          const newArrayOfObj = data.map(({ assign_no: text, ...rest }) => ({
-            text,
-            ...rest,
-          }));
+          const newArrayOfObj = data.map(
+            ({ assign_no: text, q_id: id, id: d_id, ...rest }) => ({
+              text,
+              id,
+              d_id,
+              ...rest,
+            })
+          );
           console.log("dt--", newArrayOfObj);
           setAssignmentData(newArrayOfObj);
-          setLoading(false);
         }
       });
   };
@@ -129,7 +124,7 @@ function Demo() {
         .then(function (response) {
           console.log("res post-", response);
           getData();
-          setLoading(false);
+
         })
         .catch((error) => {
           console.log("erroror - ", error);
@@ -185,12 +180,9 @@ function Demo() {
       axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
         console.log("res -", res);
         getData();
-        setLoading(false);
       });
     }
   };
-
-
 
   return (
     <Paper>
@@ -223,27 +215,23 @@ function Demo() {
 export default Demo;
 
 
+// const styles = {
+//   toolbarRoot: {
+//     position: "relative",
+//   },
+//   progress: {
+//     position: "absolute",
+//     width: "100%",
+//     bottom: 0,
+//     left: 0,
+//   },
+// };
 
-
-
-
-  // const styles = {
-  //   toolbarRoot: {
-  //     position: "relative",
-  //   },
-  //   progress: {
-  //     position: "absolute",
-  //     width: "100%",
-  //     bottom: 0,
-  //     left: 0,
-  //   },
-  // };
-
-  // const ToolbarWithLoading = withStyles(styles, { name: "Toolbar" })(
-  //   ({ children, classes, ...restProps }) => (
-  //     <div className={classes.toolbarRoot}>
-  //       <Toolbar.Root {...restProps}>{children}</Toolbar.Root>
-  //       <LinearProgress className={classes.progress} />
-  //     </div>
-  //   )
-  // );
+// const ToolbarWithLoading = withStyles(styles, { name: "Toolbar" })(
+//   ({ children, classes, ...restProps }) => (
+//     <div className={classes.toolbarRoot}>
+//       <Toolbar.Root {...restProps}>{children}</Toolbar.Root>
+//       <LinearProgress className={classes.progress} />
+//     </div>
+//   )
+// );
