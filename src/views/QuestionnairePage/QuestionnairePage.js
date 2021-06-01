@@ -9,7 +9,7 @@ import { baseUrl } from "../../config/config";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAlert } from "react-alert";
 import Select from "react-select";
-import { Spinner } from "reactstrap";
+import Loader from "react-loader-spinner";
 
 function Questionnaire(props) {
   const alert = useAlert();
@@ -26,7 +26,7 @@ function Questionnaire(props) {
 
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
-  const [load, setLoad] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //alert msg
   const Msg = () => {
@@ -39,16 +39,16 @@ function Questionnaire(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    setLoad(true);
+    setLoading(true);
 
     let formData = new FormData();
 
-    var uploadImg = value.upload;
-    if (uploadImg) {
-      for (var i = 0; i < uploadImg.length; i++) {
-        console.log("pics", value.upload[i].pics[0]);
-        let a = value.upload[i].pics[0];
-        formData.append("upload_1[]", a);
+    var uploadingImg = value.uploading;
+    if (uploadingImg) {
+      for (var i = 0; i < uploadingImg.length; i++) {
+        console.log("pics", value.uploading[i].pics[0]);
+        let a = value.uploading[i].pics[0];
+        formData.append("uploading_1[]", a);
       }
     }
 
@@ -79,11 +79,12 @@ function Questionnaire(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false);
           reset();
           alert.success(<Msg />);
           props.history.push("/customer/dashboard");
         } else {
-          setLoad(false);
+          setLoading(false);
         }
       })
       .catch((error) => {
@@ -119,8 +120,8 @@ function Questionnaire(props) {
           <div className="heading">
             <h2>Basic Questionnaire</h2>
           </div>
-          {load ? (
-            <Spinner size="sm" color="primary" />
+          {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><loadinger type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row">
@@ -178,7 +179,7 @@ function Questionnaire(props) {
                 </div>
 
                 <div className="col-md-6">
-                  <ImageUploads register={register} control={control} />
+                  <ImageUploadings register={register} control={control} />
                 </div>
 
                 <div className="col-md-6">
@@ -394,15 +395,15 @@ const assessment_year = [
   },
 ];
 
-const ImageUploads = ({ register, control }) => {
+const ImageUploadings = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
-    name: "upload",
+    name: "uploading",
   });
   return (
     <>
       <div className="question_query mb-2">
-        <label className="form-label">Upload Your Document</label>
+        <label className="form-label">Uploading Your Document</label>
         <div className="btn btn-primary" onClick={() => append({ pics: "" })}>
           +
         </div>
@@ -412,7 +413,7 @@ const ImageUploads = ({ register, control }) => {
         <div className="question_query_field mb-2" key={index}>
           <input
             type="file"
-            name={`upload[${index}].pics`}
+            name={`uploading[${index}].pics`}
             ref={register()}
             className="form-control-file"
             defaultValue={item.pics}

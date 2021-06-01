@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import QueryDetails from "../../components/QueryDetails/QueryDetails";
+import Loader from "react-loader-spinner";
 
 function MyAssingment() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ function MyAssingment() {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 
   const [diaplayProposal, setDisplayProposal] = useState({
@@ -101,6 +103,7 @@ function MyAssingment() {
             }
           }
         }
+        setLoading(false);
       });
     };
     getQuery();
@@ -128,7 +131,10 @@ function MyAssingment() {
             <h3>Query Detail</h3>
           </div>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12">
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <div class="col-xl-12 col-lg-12 col-md-12">
           {submitData.map((p, index) => (
             <QueryDetails
               p={p}
@@ -148,6 +154,7 @@ function MyAssingment() {
             />
           ))}
         </div>
+        )}
       </div>
     </Layout>
   );

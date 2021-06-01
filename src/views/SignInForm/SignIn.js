@@ -12,7 +12,8 @@ import { useAlert } from "react-alert";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Swal from "sweetalert2";
-import { Spinner } from "reactstrap";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -46,6 +47,7 @@ function SignIn(props) {
           alert.success("Login successfully !");
           localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
+          setLoad(false);
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
@@ -73,7 +75,7 @@ function SignIn(props) {
           </div>
 
           {load ? (
-            <Spinner size="sm" color="primary" />
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="Circles" color="#00BFFF" height={60} width={60}/></div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row">

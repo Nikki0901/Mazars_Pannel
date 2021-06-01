@@ -16,11 +16,13 @@ import {
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
+import Loader from "react-loader-spinner";
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tlCount, setTlCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -127,6 +129,7 @@ function TeamLeaderTab() {
         setData(res.data.result);
         setTlCount(res.data.result.length);
       }
+      setLoading(false);
     });
   };
 
@@ -157,6 +160,7 @@ function TeamLeaderTab() {
       .then(function (response) {
         console.log("delete-", response);
         if (response.data.code === 1) {
+          setLoading(true);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           getTeamLeader();
         } else {
@@ -186,7 +190,10 @@ function TeamLeaderTab() {
             </Col>
           </Row>
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -195,6 +202,7 @@ function TeamLeaderTab() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

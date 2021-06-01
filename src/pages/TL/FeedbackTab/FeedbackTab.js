@@ -13,11 +13,13 @@ import {
 } from "reactstrap";
 
 import BootstrapTable from "react-bootstrap-table-next";
+import Loader from "react-loader-spinner";
 
 function FeedbackTab() {
   const userid = window.localStorage.getItem("tlkey");
 
   const [feedbackData, setFeedBackData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getFeedback = () => {
@@ -27,6 +29,10 @@ function FeedbackTab() {
           console.log(res);
           if (res.data.code === 1) {
             setFeedBackData(res.data.result);
+            setLoading(false);
+          }
+          else if (res.data.code === 0){
+            setLoading(false);
           }
         });
     };
@@ -83,7 +89,10 @@ function FeedbackTab() {
               <Col md="5"></Col>
             </Row>
           </CardHeader>
-          <CardBody>
+          {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+          ) : (
+            <CardBody>
             <BootstrapTable
               bootstrap4
               keyField="id"
@@ -118,6 +127,7 @@ function FeedbackTab() {
               </tbody>
             </table> */}
           </CardBody>
+          )}
         </Card>
       </Layout>
     </>

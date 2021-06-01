@@ -6,12 +6,14 @@ import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Tpfilter from "../../../components/Search-Filter/tpfilter";
+import Loader from "react-loader-spinner";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tpkey");
 
   const [proposal, setProposal] = useState([]);
   const [count, setCount] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getProposalList();
@@ -26,6 +28,7 @@ function Proposal() {
           setProposal(res.data.result);
           setCount(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -160,7 +163,10 @@ function Proposal() {
             proposal="proposal"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -169,6 +175,7 @@ function Proposal() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

@@ -1,6 +1,7 @@
-import React from "react";
+  import React from "react";
 import { merge } from "lodash";
 import AgoraRTC from "agora-rtc-sdk";
+import Loader from "react-loader-spinner";
 
 import "./canvas.css";
 import "../../assets/fonts/css/icons.css";
@@ -59,6 +60,7 @@ class AgoraCanvas extends React.Component {
       streamList: [],
       readyState: false,
       stateSharing: false,
+      loading: true
     };
   }
 
@@ -252,6 +254,7 @@ class AgoraCanvas extends React.Component {
       console.log(evt);
       rt.removeStream(stream.getId());
     });
+    this.setState({loading: false});
   };
 
   removeStream = (uid) => {

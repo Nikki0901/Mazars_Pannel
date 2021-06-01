@@ -14,6 +14,7 @@ import {
   Table,
 } from "reactstrap";
 import QueryDetails from "../../../components/QueryDetails/QueryDetails";
+import Loader from "react-loader-spinner";
 
 function QueriesRecevied() {
   const { id } = useParams();
@@ -24,6 +25,7 @@ function QueriesRecevied() {
   const [diaplaySpecific, setDisplaySpecific] = useState([]);
   const [queryDocs, setQueryDocs] = useState([]);
   const [paymentDetails, setPaymentDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
@@ -105,6 +107,7 @@ function QueriesRecevied() {
             }
           }
         }
+        setLoading(false);
       });
     };
     getQuery();
@@ -119,6 +122,7 @@ function QueriesRecevied() {
         if (res.data.code === 1) {
           setDisplayQuery(res.data.result);
         }
+        setLoading(false);
       });
   };
 
@@ -130,7 +134,10 @@ function QueriesRecevied() {
             <h3>Query Detail</h3>
           </div>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12">
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>         
+        ) : (
+          <div class="col-xl-12 col-lg-12 col-md-12">
           {submitData.map((p, index) => (
             <QueryDetails
               p={p}
@@ -149,6 +156,7 @@ function QueriesRecevied() {
             />
           ))}
         </div>
+        )}
       </div>
     </Layout>
   );

@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import Statusfilter from "./Statusfilter";
+import Loader from "react-loader-spinner";
 
 function AssignmentTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -31,6 +32,7 @@ function AssignmentTab() {
   const [status, setStatus] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAssignmentData();
@@ -43,6 +45,7 @@ function AssignmentTab() {
         setAssignmentDisplay(res.data.result);
         setCountAssignment(res.data.result.length);
       }
+      setLoading(false);
     });
   };
 
@@ -429,7 +432,10 @@ function AssignmentTab() {
           </form>
         </CardHeader>
 
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -438,6 +444,7 @@ function AssignmentTab() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

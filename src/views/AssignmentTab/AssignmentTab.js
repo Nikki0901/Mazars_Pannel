@@ -16,12 +16,14 @@ import { Link ,useHistory} from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
 import * as Cookies from "js-cookie";
+import Loader from "react-loader-spinner";
 
 function AssignmentTab() {
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -65,6 +67,7 @@ function AssignmentTab() {
           setAssignmentDisplay(res.data.result);
           setAssignmentQueries(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -271,6 +274,7 @@ function AssignmentTab() {
 
   //handleJoin
   const handleJoin = (id) => {
+    setLoading(true);
     console.log("id", id);
     Cookies.set("channel", id); 
     Cookies.set("baseMode", baseMode);
@@ -301,7 +305,10 @@ function AssignmentTab() {
           />
         </CardHeader>
 
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -315,6 +322,7 @@ function AssignmentTab() {
             getProposalData={getAssignmentData}
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

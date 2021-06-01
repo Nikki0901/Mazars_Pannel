@@ -4,6 +4,7 @@ import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
+import Loader from "react-loader-spinner"
 
 function Dashboard() {
   const userId = window.localStorage.getItem("adminkey");
@@ -18,6 +19,7 @@ function Dashboard() {
 
   const [inprogress, setInprogress] = useState([]);
   const [completeQuery, setComplete] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // const { total_inprogress, total_complete } = inprogress;
 
@@ -88,6 +90,7 @@ function Dashboard() {
             console.log("res", response.data.result[1]);
             setInprogress(response.data.result[1]);
             setComplete(response.data.result[0]);
+            setLoading(false);
           }
         })
         .catch((error) => {
@@ -151,7 +154,11 @@ function Dashboard() {
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
-      <div class="row mt-3">
+      {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+      ) : (
+        <div>
+        <div class="row mt-3">
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
@@ -429,6 +436,8 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      </div>
+      )}
     </Layout>
   );
 }

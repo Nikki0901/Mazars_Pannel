@@ -16,12 +16,14 @@ import { Select } from "antd";
 import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Loader from "react-loader-spinner";
 
 
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
+  const [loading, setLoading] = useState(true);
 
  
   useEffect(() => {
@@ -35,6 +37,7 @@ function AllProposalComponent({ allProposal }) {
         setProposalDisplay(res.data.result);
         allProposal(res.data.result.length);
       }
+      setLoading(false);
     });
   };
 
@@ -440,7 +443,10 @@ function AllProposalComponent({ allProposal }) {
           </div>
         </CardHeader>
 
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -449,6 +455,7 @@ function AllProposalComponent({ allProposal }) {
             classes="table-responsive"
           />
         </CardBody>
+        )}
       </Card>
     </>
   );

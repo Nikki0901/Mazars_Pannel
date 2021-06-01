@@ -15,12 +15,14 @@ import {
 } from "reactstrap";
 import { useAlert } from "react-alert";
 import BootstrapTable from "react-bootstrap-table-next";
+import Loader from "react-loader-spinner";
 
 function AddTeamProf() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [count, setCount] = useState("");
   const userid = window.localStorage.getItem("tlkey");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTaxProf();
@@ -35,6 +37,7 @@ function AddTeamProf() {
           setData(res.data.result);
           setCount(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -101,7 +104,10 @@ function AddTeamProf() {
             <Col md="2"></Col>
           </Row>
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -131,6 +137,7 @@ function AddTeamProf() {
             </tbody>
           </Table> */}
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

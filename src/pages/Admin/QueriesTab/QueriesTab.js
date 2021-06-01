@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardBody,
   CardTitle,
-  Row,
+  Row,  
   Col,
   Table,
 } from "reactstrap";

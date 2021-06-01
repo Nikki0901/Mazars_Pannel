@@ -6,6 +6,7 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
+import Loader from "react-loader-spinner";
 
 
 // const Schema = yup.object().shape({
@@ -21,6 +22,7 @@ function Feedback() {
 
   const [assignment, setAssingment] = useState([]);
   const [teamLeader, setTeamLeader] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const userId = window.localStorage.getItem("userid");
 
@@ -54,6 +56,7 @@ function Feedback() {
 
 
   const onSubmit = (value) => {
+    setLoading(true);
     console.log("value :", value);
 
     let formData = new FormData();
@@ -71,6 +74,7 @@ function Feedback() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false);
           reset();   
           alert.success(" feedback successfully added!");      
           } 
@@ -82,7 +86,10 @@ function Feedback() {
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-      <div class="row mt-3">
+      {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+      ) : (
+        <div class="row mt-3">
         <div class="col-md-12">
           <div class="text-center">
             <h3>Feedback!!!</h3>
@@ -159,6 +166,7 @@ function Feedback() {
         </div>
         <div class="col-lg-2 col-xl-2 col-md-12"></div>
       </div>
+      )}
     </Layout>
   );
 }

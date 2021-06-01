@@ -15,6 +15,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Loader from "react-loader-spinner";
 
 function QueryAssingment() {
   const alert = useAlert();
@@ -26,6 +27,7 @@ function QueryAssingment() {
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [taxID, setTaxID] = useState(null);
   const [teamName, setTeamName] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const [hideQuery, setHideQuery] = useState({
     name: "",
@@ -73,6 +75,7 @@ function QueryAssingment() {
           custId: res.data.result[0].customer_id,
           expect_dd: res.data.result[0].Exp_Delivery_Date,
         });
+        setLoading(false);
       }
     });
   };
@@ -96,6 +99,7 @@ function QueryAssingment() {
             expdeliverydate: res.data.meta[0].expdeliverydate,
           });
         }
+        setLoading(false);
       });
   };
 
@@ -111,6 +115,7 @@ function QueryAssingment() {
 
 
   const onSubmit = (value) => {
+    setLoading(true)
     console.log("value :", value);
 
     var expdeliverydate = value.p_expdeldate.replace(
@@ -169,7 +174,10 @@ function QueryAssingment() {
             </Col>
           </Row>
         </CardHeader>
-        <CardHeader>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardHeader>
           <div class="row mt-3">
             <div class="col-xl-12 col-lg-12 col-md-12">
               <div class="col-md-12">
@@ -273,6 +281,7 @@ function QueryAssingment() {
             </div>
           </div>
         </CardHeader>
+        )}
       </Card>
     </Layout>
   );

@@ -21,12 +21,13 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import Loader from "react-loader-spinner";
 function Demo() {
   const userId = window.localStorage.getItem("userid");
 
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   var date = new Date();
 
@@ -81,7 +82,6 @@ function Demo() {
           }));
           console.log("dt--", newArrayOfObj);
           setAssignmentData(newArrayOfObj);
-          setLoading(false);
         }
       });
   };
@@ -191,7 +191,10 @@ function Demo() {
 
   return (
     <Paper>
-      <Scheduler data={data} height={660}>
+      {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+      ) : (
+        <Scheduler data={data} height={660}>
         <ViewState
           defaultCurrentDate={currentDate}
           defaultCurrentViewName="Week" 
@@ -213,6 +216,7 @@ function Demo() {
 
         <Resources data={resources} mainResourceName="question_id" />
       </Scheduler>
+      )}
     </Paper>
   );
 }

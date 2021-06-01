@@ -21,6 +21,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Loader from "react-loader-spinner";
 
 function PendingAllocation({ CountPendingForAllocation }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -31,6 +32,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
   const [history, setHistory] = useState([]);
 
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toggle = (key) => {
     console.log("key", key);
@@ -60,6 +62,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
       if (res.data.code === 1) {
         CountPendingForAllocation(res.data.result.length);
         setPendingData(res.data.result);
+        setLoading(false);
         // localStorage.setItem(
         //   "count_PFA",
         //   JSON.stringify(res.data.result.length)
@@ -239,7 +242,10 @@ function PendingAllocation({ CountPendingForAllocation }) {
             pendingAlloation="pendingAlloation"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -283,6 +289,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
             </ModalFooter>
           </Modal>
         </CardBody>
+        )}
       </Card>
     </>
   );

@@ -16,6 +16,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import Loader from "react-loader-spinner";
 
 function InCompleteData({ CountIncomplete }) {
   const [incompleteData, setInCompleteData] = useState([]);
@@ -23,6 +24,7 @@ function InCompleteData({ CountIncomplete }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getInCompleteAssingment();
@@ -37,6 +39,7 @@ function InCompleteData({ CountIncomplete }) {
           CountIncomplete(res.data.result.length);
           setInCompleteData(res.data.result);
         }
+        setLoading(false);
       });
   };
 
@@ -167,7 +170,10 @@ function InCompleteData({ CountIncomplete }) {
             inCompleteQuery="inCompleteQuery"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -176,6 +182,7 @@ function InCompleteData({ CountIncomplete }) {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </>
   );

@@ -15,6 +15,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Loader from "react-loader-spinner";
 
 function AddAssingmentStages() {
   const alert = useAlert();
@@ -23,6 +24,7 @@ function AddAssingmentStages() {
   const userid = window.localStorage.getItem("tlkey");
   const { id } = useParams();
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAssignmentList();
@@ -39,6 +41,7 @@ function AddAssingmentStages() {
           setAssignmentstages(res.data.result);
           reset(res.data.result[0]);
         }
+        setLoading(false);
       });
   };
 
@@ -103,7 +106,10 @@ function AddAssingmentStages() {
             </Col>
           </Row>
         </CardHeader>
-        <CardHeader>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardHeader>
           <div class="row mt-3">
             {assignmentStages.map((p, i) => (
               <>
@@ -471,6 +477,7 @@ function AddAssingmentStages() {
             ))}
           </div>
         </CardHeader>
+        )}
       </Card>
     </Layout>
   );

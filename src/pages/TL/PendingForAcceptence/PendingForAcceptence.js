@@ -17,6 +17,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import Loader from "react-loader-spinner";
 
 function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const alert = useAlert();
@@ -26,6 +27,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPendingforAcceptance();
@@ -40,6 +42,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
           setPendingData(res.data.result);
           CountPendingForAcceptence(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -189,6 +192,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
         console.log("response-", response);
         if (response.data.code === 1) {
           alert.success("Query accepted !");
+          setLoading(true);
           getPendingforAcceptance();
           updateTab(1);
         }
@@ -216,6 +220,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
         console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Query rejected !");
+          setLoading(true);
           getPendingforAcceptance();
         }
       })
@@ -234,7 +239,10 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             pendingForAcceptence="pendingForAcceptence"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -243,6 +251,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </>
   );

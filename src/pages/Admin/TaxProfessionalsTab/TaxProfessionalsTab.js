@@ -16,12 +16,14 @@ import { useAlert } from "react-alert";
 import Swal from "sweetalert2";
 import BootstrapTable from "react-bootstrap-table-next";
 import TaxProffesionalService from "../../../config/services/TaxProffesional";
+import Loader from "react-loader-spinner";
 
 function TaxProfessionalsTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tpCount, setTpCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTaxProf();
@@ -32,6 +34,7 @@ function TaxProfessionalsTab() {
       .then((response) => {
         setData(response.data.result);
         setTpCount(response.data.result.length);
+        setLoading(false);
         console.log(response.data);
       })
       .catch((e) => {
@@ -159,6 +162,7 @@ function TaxProfessionalsTab() {
       .then(function (response) {
         console.log("delete-", response);
         if (response.data.code === 1) {
+          setLoading(true);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           getTaxProf();
         } else {
@@ -186,7 +190,10 @@ function TaxProfessionalsTab() {
             </Col>
           </Row>
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -195,6 +202,7 @@ function TaxProfessionalsTab() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

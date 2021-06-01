@@ -20,6 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import Loader from "react-loader-spinner";
 
 function PaymentStatus() {
   const alert = useAlert();
@@ -31,6 +32,7 @@ function PaymentStatus() {
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPaymentStatus();
@@ -43,6 +45,7 @@ function PaymentStatus() {
         setPayment(res.data.result);
         setCount(res.data.result.length);
       }
+      setLoading(false);
     });
   };
 
@@ -325,7 +328,10 @@ function PaymentStatus() {
             />
           </CardHeader>
 
-          <CardBody>
+          {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+          ) : (
+            <CardBody>
             <BootstrapTable
               bootstrap4
               keyField="id"
@@ -364,6 +370,7 @@ function PaymentStatus() {
               </ModalFooter>
             </Modal>
           </CardBody>
+          )}
         </Card>
       </Layout>
     </>

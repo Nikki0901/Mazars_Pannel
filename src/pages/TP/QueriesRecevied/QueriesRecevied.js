@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useParams } from "react-router-dom";
 import QueryDetails from "../../../components/QueryDetails/QueryDetails";
+import Loader from "react-loader-spinner";
 
 
 function QueriesRecevied() {
@@ -18,6 +19,7 @@ function QueriesRecevied() {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -96,6 +98,7 @@ function QueriesRecevied() {
             }
           }
         }
+        setLoading(false);
       });
     };
     getQuery();
@@ -110,6 +113,7 @@ function QueriesRecevied() {
         if (res.data.code === 1) {
           setDisplayQuery(res.data.result);
         }
+        setLoading(false);
       });
   };
 
@@ -121,7 +125,10 @@ function QueriesRecevied() {
             <h3>Query Detail</h3>
           </div>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12">
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <div class="col-xl-12 col-lg-12 col-md-12">
           {submitData.map((p, index) => (
             <QueryDetails
               p={p}
@@ -140,6 +147,7 @@ function QueriesRecevied() {
             />
           ))}
         </div>
+        )}
       </div>
     </Layout>
   );

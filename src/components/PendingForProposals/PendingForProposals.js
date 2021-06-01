@@ -21,6 +21,7 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Loader from "react-loader-spinner";
 
 function PendingForProposals({ CountPendingProposal }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -31,6 +32,7 @@ function PendingForProposals({ CountPendingProposal }) {
 
   const [history, setHistory] = useState([]);
   const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const toggle = (key) => {
     console.log("key", key);
     setModal(!modal);
@@ -176,6 +178,7 @@ function PendingForProposals({ CountPendingProposal }) {
       if (res.data.code === 1) {
         setNonPendingData(res.data.result);
         CountPendingProposal(res.data.result.length);
+        setLoading(false);
       }
     });
   };
@@ -327,7 +330,10 @@ function PendingForProposals({ CountPendingProposal }) {
             </div>
           </div> */}
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -411,6 +417,7 @@ function PendingForProposals({ CountPendingProposal }) {
             </ModalFooter>
           </Modal>
         </CardBody>
+        )}
       </Card>
     </>
   );

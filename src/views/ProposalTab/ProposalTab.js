@@ -19,6 +19,7 @@ import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import CommonServices from "../../common/common";
+import Loader from "react-loader-spinner";
 
 function ProposalTab() {
   const alert = useAlert();
@@ -26,6 +27,7 @@ function ProposalTab() {
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const [proposalCount, setCountProposal] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [id, setId] = useState(null);
   const [reject, setRejected] = useState(true);
@@ -64,6 +66,7 @@ function ProposalTab() {
           setProposalDisplay(res.data.result);
           setCountProposal(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -111,6 +114,7 @@ function ProposalTab() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setRejected(false);
+          setLoading(true);
           getProposalData();
           alert.success("proposal rejected !");
         }
@@ -409,7 +413,10 @@ function ProposalTab() {
             proposal="proposal"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -425,6 +432,7 @@ function ProposalTab() {
             getProposalData={getProposalData}
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

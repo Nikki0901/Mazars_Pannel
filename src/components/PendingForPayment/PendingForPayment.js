@@ -16,12 +16,14 @@ import { Select } from "antd";
 import { Link, useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Loader from "react-loader-spinner";
 
 function PendingForPayment({ CountPendingForPayment }) {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPendingForPayment();
@@ -33,6 +35,7 @@ function PendingForPayment({ CountPendingForPayment }) {
       if (res.data.code === 1) {
         setPendingData(res.data.result);
         CountPendingForPayment(res.data.result.length);
+        setLoading(false);
       }
     });
   };
@@ -424,7 +427,10 @@ function PendingForPayment({ CountPendingForPayment }) {
             </div>
           </div> */}
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -476,6 +482,7 @@ function PendingForPayment({ CountPendingForPayment }) {
             </tbody>
           </Table> */}
         </CardBody>
+        )}
       </Card>
     </>
   );

@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import { Select, Form, Input, Button } from "antd";
 import TaxProffesionalService from "../../../config/services/TaxProffesional";
+import Loader from "react-loader-spinner";
 
 
 function EditTP() {
@@ -36,6 +37,7 @@ function EditTP() {
   const [store2, setStore2] = useState(null);
   const [value, setValue] = useState({});
   const [teamleader, setTeamLeader] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTutorial(id);
@@ -62,6 +64,7 @@ function EditTP() {
         if (res.data.code === 1) {
           setTeamLeader(res.data.result);
         }
+        setLoading(false);
       });
     };
     getTeamLeader();
@@ -156,7 +159,7 @@ function EditTP() {
         </CardHeader>
 
         {!data1 ? (
-          <CardHeader>loading ...</CardHeader>
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
         ) : (
           <CardHeader>
             <div class="row mt-3">

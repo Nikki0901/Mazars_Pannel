@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import Loader from "react-loader-spinner";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
 
   const [proposal, setProposal] = useState([]);
   const [count, setCount] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getProposalList();
@@ -27,6 +29,7 @@ function Proposal() {
           setProposal(res.data.result);
           setCount(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -159,7 +162,10 @@ function Proposal() {
             proposal="proposal"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -168,6 +174,7 @@ function Proposal() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

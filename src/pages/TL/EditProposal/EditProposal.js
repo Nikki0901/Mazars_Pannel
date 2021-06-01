@@ -14,6 +14,7 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import Loader from "react-loader-spinner";
 
 function ProposalComponent() {
   // const { id } = props;
@@ -27,6 +28,7 @@ function ProposalComponent() {
   const [custname, setCustName] = useState();
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
   const { id } = useParams();
@@ -59,6 +61,7 @@ function ProposalComponent() {
           payable_through: res.data.result.payable_through,
         });
       }
+      setLoading(false);
     });
   };
 
@@ -143,7 +146,10 @@ function ProposalComponent() {
           </Row>
         </CardHeader>
 
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="row">
               <div class="col-md-6">
@@ -258,6 +264,7 @@ function ProposalComponent() {
             </div>
           </form>
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

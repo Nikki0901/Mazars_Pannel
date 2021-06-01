@@ -16,12 +16,14 @@ import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
+import Loader from "react-loader-spinner";
 
 function QueriesTab() {
   const alert = useAlert();
   const [queriesCount, setCountQueries] = useState("");
   const [query, setQuery] = useState([]);
   const userId = window.localStorage.getItem("userid");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getQueriesData();
@@ -38,6 +40,7 @@ function QueriesTab() {
           setQuery(res.data.result);
           setCountQueries(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -202,6 +205,7 @@ function QueriesTab() {
         console.log("res-", response);
         if (response.data.code === 1) {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          setLoading(true);
           getQueriesData();
         } else {
           Swal.fire("Oops...", "Errorr ", "error");
@@ -237,15 +241,19 @@ function QueriesTab() {
             query="query"
           />
         </CardHeader>
-        <CardBody>
-          <BootstrapTable
-            bootstrap4
-            keyField="id"
-            data={query}
-            columns={columns}
-            rowIndex
-          />
-        </CardBody>
+          {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+          ) : (
+            <CardBody>
+              <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={query}
+              columns={columns}
+              rowIndex
+            />
+          </CardBody>
+          )}
       </Card>
     </Layout>
   );

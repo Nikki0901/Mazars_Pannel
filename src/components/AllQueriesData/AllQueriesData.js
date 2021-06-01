@@ -17,6 +17,7 @@ import { Select } from "antd";
 // import Filter from "../Search-Filter/SearchFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Loader from "react-loader-spinner";
 
 function AllQueriesData({ CountAllQuery }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -30,6 +31,8 @@ function AllQueriesData({ CountAllQuery }) {
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     getAllQueriesData();
   }, []);
@@ -40,6 +43,7 @@ function AllQueriesData({ CountAllQuery }) {
       if (res.data.code === 1) {
         setAllQueriesData(res.data.result);
         CountAllQuery(res.data.result.length);
+        setLoading(false);
       }
     });
   };
@@ -287,7 +291,10 @@ function AllQueriesData({ CountAllQuery }) {
             </div>
           </div> */}
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -299,6 +306,7 @@ function AllQueriesData({ CountAllQuery }) {
             // headerClasses="header-class"
           />
         </CardBody>
+        )}
       </Card>
     </>
   );

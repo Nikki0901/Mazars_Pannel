@@ -16,12 +16,14 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Loader from "react-loader-spinner";
 
 function DeclinedProposal({ declinedProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [selectedData, setSelectedData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getDeclinedProposal();
   }, []);
@@ -33,6 +35,7 @@ function DeclinedProposal({ declinedProposal }) {
         setProposalDisplay(res.data.result);
         declinedProposal(res.data.result.length);
       }
+      setLoading(false);
     });
   };
 
@@ -428,7 +431,10 @@ function DeclinedProposal({ declinedProposal }) {
             </div>
           </div> */}
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
         <BootstrapTable
             bootstrap4
             keyField="id"
@@ -483,6 +489,7 @@ function DeclinedProposal({ declinedProposal }) {
             </tbody>
           </Table> */}
         </CardBody>
+        )}
       </Card>
     </>
   );

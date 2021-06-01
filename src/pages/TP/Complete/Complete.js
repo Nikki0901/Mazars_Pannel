@@ -13,10 +13,12 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Tpfilter from "../../../components/Search-Filter/tpfilter";
+import Loader from "react-loader-spinner";
 
 function Complete() {
   const [completeData, setCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tpkey");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getComplete();
@@ -31,6 +33,7 @@ function Complete() {
           //   CountIncomplete(res.data.result.length);
           setCompleteData(res.data.result);
         }
+        setLoading(false);
       });
   };
 
@@ -113,7 +116,12 @@ function Complete() {
             completeAssignment="completeAssignment"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <Loader type="ThreeDots" color="#00BFFF" height={80} width={80}/>
+            </div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -122,6 +130,7 @@ function Complete() {
             rowIndex
           />
         </CardBody>
+        )}
       </Card>
     </>
   );

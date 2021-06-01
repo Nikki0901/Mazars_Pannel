@@ -4,6 +4,8 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 
 function Dashboard() {
@@ -11,6 +13,7 @@ function Dashboard() {
   const [queries, setQueries] = useState("");
   const [proposal, setProposal] = useState("");
   const [assignment, setAssignment] = useState("");
+  const [loading, setloading] = useState(true)
 
   useEffect(() => {
     const getQueries = () => {
@@ -64,12 +67,16 @@ function Dashboard() {
     getQueries();
     getProposal();
     getAssignment();
+    setloading(false);
   }, []);
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-      <div class="row mt-3">
-        <div class="col-xl-4 col-lg-6 col-md-12">
+        {loading ? (
+          <Loader type="ThreeDots" color="#00BFFF" height={80} width={80}/>
+        ):(
+          <div class="row mt-3">
+            <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-180">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -155,7 +162,9 @@ function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+          </div>
+        )}
+        
     </Layout>
   );
 }

@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import CommonServices from "../../common/common";
+import Loader from "react-loader-spinner";
 function PaidComponent() {
   const [payment, setPayment] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
@@ -28,6 +29,7 @@ function PaidComponent() {
   const [selectedData, setSelectedData] = useState([]);
   const [paymentcount, setPaymentCount] = useState("");
   const [pay, setPay] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPaymentStatus();
@@ -39,6 +41,7 @@ function PaidComponent() {
       if (res.data.code === 1) {
         setPayment(res.data.result);
         setPaymentCount(res.data.result.length);
+        setLoading(false);
       }
     });
   };
@@ -334,7 +337,10 @@ function PaidComponent() {
             paymentStatus="paymentStatus"
           />
         </CardHeader>
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -374,6 +380,7 @@ function PaidComponent() {
             </ModalFooter>
           </Modal>
         </CardBody>
+        )}
       </Card>
     </div>
   );

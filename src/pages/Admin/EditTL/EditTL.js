@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import Reset from "./Reset";
 import { Select, Form, Input, Button } from "antd";
+import Loader from "react-loader-spinner";
 
 function EditTL() {
   const { Option } = Select;
@@ -34,6 +35,7 @@ function EditTL() {
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
   const [value, setValue] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
@@ -51,6 +53,7 @@ function EditTL() {
       setValue(res.data.result[0]);
       setStore(res.data.result[0].pcat_id);
       }
+      setLoading(false);
     });
   };
   console.log("value -", value.name);
@@ -137,8 +140,8 @@ function EditTL() {
           </div>
         </CardHeader>
 
-        {!data1 ? (
-          <CardHeader>loading ...</CardHeader>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
         ) : (
           <CardHeader>
             <div class="row mt-3">

@@ -21,6 +21,7 @@ import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import * as Cookies from "js-cookie";
+import Loader from "react-loader-spinner";
 
 function AssignmentTab() {
   const history = useHistory();
@@ -42,6 +43,8 @@ function AssignmentTab() {
   const [attendeeMode, SetAttendeeMode] = useState("video");
   const [videoProfile, SetVideoProfile] = useState("480p_4");
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     getAssignmentList();
   }, []);
@@ -55,6 +58,7 @@ function AssignmentTab() {
           setAssignment(res.data.result);
           setCount(res.data.result.length);
         }
+        setLoading(false);
       });
   };
 
@@ -580,7 +584,10 @@ function AssignmentTab() {
           </form>
         </CardHeader>
 
-        <CardBody>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -603,6 +610,7 @@ function AssignmentTab() {
             id={finalId}
           />
         </CardBody>
+        )}
       </Card>
     </Layout>
   );

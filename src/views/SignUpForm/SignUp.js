@@ -11,7 +11,7 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
-import { Spinner } from "reactstrap";
+import Loader from "react-loader-spinner";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -150,7 +150,7 @@ function SignUp(props) {
             <h2>Customer Register</h2>
           </div>
           {load ? (
-            <Spinner size="sm" color="primary" />
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="Circles" color="#00BFFF" height={60} width={60}/></div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row">

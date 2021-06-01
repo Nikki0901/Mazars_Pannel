@@ -9,6 +9,7 @@ import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import Loader from "react-loader-spinner";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -26,8 +27,10 @@ function Login(props) {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (value) => {
+    setLoading(true);
     console.log("value :", value);
 
     let formData = new FormData();
@@ -47,9 +50,11 @@ function Login(props) {
             "adminkey",
             JSON.stringify(response.data["user id"])
           );
+          setLoading(false);
           props.history.push("/admin/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
+          setLoading(false);
           Swal.fire('Oops...',"Errorr : Incorrect Email and password",'error')
         }
       })
@@ -66,7 +71,10 @@ function Login(props) {
           <div class="heading">
             <h2>ADMIN LOGIN</h2>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          {loading ? (
+            <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="Circles" color="#00BFFF" height={60} width={60}/></div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-12">
                 <div className="mb-3">
@@ -111,6 +119,7 @@ function Login(props) {
               Submit
             </button>
           </form>
+          )}
         </div>
       </div>
       <Footer />

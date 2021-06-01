@@ -10,12 +10,14 @@ import { useAlert } from "react-alert";
 import { Card, CardHeader, Row, Col } from "reactstrap";
 import { Spinner } from "reactstrap";
 import Select from "react-select";
+import Loader from "react-loader-spinner";
 
 function EditQuery(props) {
   // const { Option } = Select;
   const alert = useAlert();
   const history = useHistory();
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
 
   const { handleSubmit, register, errors, reset, control, setValue } = useForm({
     defaultValues: {
@@ -90,12 +92,13 @@ function EditQuery(props) {
         setValue("p_timelines", res.data.result[0].Timelines);
         setQueryDocs(res.data.queries_document);
       }
+      setLoading(false);
     });
   };
 
   const onSubmit = (value) => {
     console.log("value", value);
-    setLoad(true);
+    setLoading(true);
     let formData = new FormData();
 
     var uploadImg = value.upload;
@@ -138,7 +141,7 @@ function EditQuery(props) {
           alert.success("updated");
           props.history.push("/customer/queries");
         } else {
-          setLoad(false);
+          setLoading(false);
         }
       })
       .catch((error) => {
@@ -163,7 +166,10 @@ function EditQuery(props) {
           </Row>
         </CardHeader>
 
-        <CardHeader>
+        {loading ? (
+          <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+        ) : (
+          <CardHeader>
           <div class="col-xl-8 col-lg-8 col-md-12 py-4">
             {load ? (
               <Spinner size="sm" color="primary" />
@@ -376,6 +382,7 @@ function EditQuery(props) {
             )}
           </div>
         </CardHeader>
+        )}
       </Card>
     </Layout>
   );

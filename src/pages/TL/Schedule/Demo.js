@@ -19,12 +19,13 @@ import {
   TodayButton,
   Toolbar,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import { appointments, resourcesData } from "./appoinments";
+import Loader from "react-loader-spinner";
 
 function Demo() {
   const userId = window.localStorage.getItem("tlkey");
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   var date = new Date();
 
@@ -49,6 +50,7 @@ function Demo() {
         console.log("result -", res.data.result.items);
         var a = res.data.result.items;
         setData(a.map(mapAppointmentData));
+        setLoading(false);
       });
   };
 
@@ -123,6 +125,7 @@ function Demo() {
       })
         .then(function (response) {
           console.log("res post-", response);
+          setLoading(true);
           getData();
 
         })
@@ -168,6 +171,7 @@ function Demo() {
       })
         .then(function (response) {
           console.log("res post-", response);
+          setLoading(true);
           getData();
         })
         .catch((error) => {
@@ -179,6 +183,7 @@ function Demo() {
       console.log("deleted f", deleted);
       axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
         console.log("res -", res);
+        setLoading(true);
         getData();
       });
     }
@@ -186,7 +191,10 @@ function Demo() {
 
   return (
     <Paper>
-      <Scheduler data={data} height={660}>
+      {loading ? (
+        <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
+      ) : (
+        <Scheduler data={data} height={660}>
         <ViewState
           defaultCurrentDate={currentDate}
           defaultCurrentViewName="Week"
@@ -208,6 +216,7 @@ function Demo() {
 
         <Resources data={resources} mainResourceName="question_id" />
       </Scheduler>
+      )}
     </Paper>
   );
 }
