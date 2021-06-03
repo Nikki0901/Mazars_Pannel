@@ -10,6 +10,7 @@ import { useAlert } from "react-alert";
 import { Card, CardHeader, Row, Col } from "reactstrap";
 import { Spinner } from "reactstrap";
 import Select from "react-select";
+import DeleteQuery from "./DeleteQuery";
 
 function EditQuery(props) {
   // const { Option } = Select;
@@ -160,6 +161,9 @@ function EditQuery(props) {
             <Col md="4" style={{ display: "flex", justifyContent: "center" }}>
               <p style={{ fontSize: "20px" }}>Update Query</p>
             </Col>
+            <Col md="4" style={{ display: "flex",justifyContent:"flex-end" }}>
+             <DeleteQuery id={id}/>
+            </Col>
           </Row>
         </CardHeader>
 
@@ -301,7 +305,7 @@ function EditQuery(props) {
                           name="p_timelines"
                           ref={register}
                           value="Urgent, (4-5 Working Days)"
-                          disabled
+                          // disabled
                         />
                         <label>Urgent, (4-5 Working Days)</label>
                       </div>
@@ -312,7 +316,7 @@ function EditQuery(props) {
                           name="p_timelines"
                           ref={register}
                           value="Regular (10-12 Working Days)"
-                          disabled
+                          // disabled
                         />
                         <label>Regular (10-12 Working Days)</label>
                       </div>

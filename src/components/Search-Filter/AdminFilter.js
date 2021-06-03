@@ -57,6 +57,7 @@ function AdminFilter(props) {
   const resetCategory = () => {
     console.log("resetCategory ..");
     setSelectedData([]);
+    setTax2([])
     setStore2([]);
     getData();
   };

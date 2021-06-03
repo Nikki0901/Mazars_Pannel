@@ -32,7 +32,7 @@ function PendingForPayment({ CountPendingForPayment }) {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
-        CountPendingForPayment(res.data.result.length);
+        // CountPendingForPayment(res.data.result.length);
       }
     });
   };

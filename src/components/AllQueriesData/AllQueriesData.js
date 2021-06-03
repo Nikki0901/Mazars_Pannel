@@ -39,7 +39,7 @@ function AllQueriesData({ CountAllQuery }) {
       console.log(res);
       if (res.data.code === 1) {
         setAllQueriesData(res.data.result);
-        CountAllQuery(res.data.result.length);
+        // CountAllQuery(res.data.result.length);
       }
     });
   };

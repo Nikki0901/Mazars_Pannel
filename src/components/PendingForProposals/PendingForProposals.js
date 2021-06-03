@@ -175,7 +175,7 @@ function PendingForProposals({ CountPendingProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setNonPendingData(res.data.result);
-        CountPendingProposal(res.data.result.length);
+        // CountPendingProposal(res.data.result.length);
       }
     });
   };

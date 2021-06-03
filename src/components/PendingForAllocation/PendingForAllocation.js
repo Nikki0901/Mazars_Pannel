@@ -58,7 +58,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
     axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
-        CountPendingForAllocation(res.data.result.length);
+        // CountPendingForAllocation(res.data.result.length);
         setPendingData(res.data.result);
         // localStorage.setItem(
         //   "count_PFA",

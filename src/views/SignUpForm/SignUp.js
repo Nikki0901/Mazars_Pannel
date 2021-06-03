@@ -34,7 +34,7 @@ const Schema = yup.object().shape({
 
 function SignUp(props) {
   const alert = useAlert();
-  const { handleSubmit, register, reset, errors } = useForm({
+  const { handleSubmit, register, errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
@@ -75,8 +75,8 @@ function SignUp(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    console.log("value :", value.p_state);
-    setLoad(true);
+  
+    // setLoad(true);
 
     let formData = new FormData();
     formData.append("name", value.p_name);
@@ -104,15 +104,12 @@ function SignUp(props) {
           );
           localStorage.setItem("name", JSON.stringify(response.data.name));
           props.history.push("/customer/questionnaire-page");
-          reset();
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
           setLoad(false);
-
           Swal.fire(
             "Oops",
-            `error : 
-          
+            `error :        
           ${response.data.message[0] ? response.data.message[0] : ""} 
 
           ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
@@ -121,7 +118,6 @@ function SignUp(props) {
             `,
             "error"
           );
-          reset();
         }
       })
       .catch((error) => {

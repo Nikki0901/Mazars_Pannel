@@ -19,14 +19,27 @@ import {
   Resources,
   EditRecurrenceMenu,
 } from "@devexpress/dx-react-scheduler-material-ui";
+import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import { Link ,useHistory} from "react-router-dom";
+import * as Cookies from "js-cookie";
+
 function Demo() {
   const userId = window.localStorage.getItem("userid");
-
+  const history = useHistory();
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const [appointmentMeta, setAppointmentMeta] = useState({
+  //   target: null,
+  //   data: {},
+  // });
+
+  const [baseMode, SetbaseMode] = useState("avc");
+  const [transcode, SetTranscode] = useState("interop");
+  const [attendeeMode, SetAttendeeMode] = useState("video");
+  const [videoProfile, SetVideoProfile] = useState("480p_4");
 
   var date = new Date();
 
@@ -189,19 +202,85 @@ function Demo() {
     }
   };
 
+  const styles = (theme) => ({
+    button: {
+      color: theme.palette.background.default,
+      padding: 0,
+    },
+    text: {
+      paddingTop: theme.spacing(1),
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    },
+  });
+
+  const AppointmentBase = ({
+    children,
+    // data,
+    onClick,
+    classes,
+    onAppointmentMetaChange,
+    ...restProps
+  }) => (
+    <Appointments.Appointment {...restProps}>
+      <div style={{ display: "flex" }}>
+        <div>{children}</div>
+        <div onClick={() => handleJoin("2")}>
+          <p style={{ fontSize: "12px", color: "#fff" }}>link</p>
+        </div>
+      </div>
+    </Appointments.Appointment>
+  );
+
+  const Appointment = withStyles(styles, { name: "Appointment" })(
+    AppointmentBase
+  );
+
+  // const onAppointmentMetaChange = () => {
+  //   setAppointmentMeta({
+  //     appointmentMeta: { data, target },
+  //   });
+  //   return(
+  //     <div>
+  //       kjghkhl
+  //     </div>
+  //   )
+  // };
+
+  const myAppointment = (props) => {
+    return (
+      <Appointment
+        {...props}
+        // onAppointmentMetaChange={onAppointmentMetaChange}
+      />
+    );
+  };
+
+  //handleJoin
+  const handleJoin = (id) => {
+    console.log("id", id);
+    Cookies.set("channel", id); 
+    Cookies.set("baseMode", baseMode);
+    Cookies.set("transcode", transcode);
+    Cookies.set("attendeeMode", attendeeMode);
+    Cookies.set("videoProfile", videoProfile);
+    history.push("/customer/meeting");
+  };
+
   return (
     <Paper>
       <Scheduler data={data} height={660}>
         <ViewState
           defaultCurrentDate={currentDate}
-          defaultCurrentViewName="Week" 
+          defaultCurrentViewName="Week"
         />
         <EditingState onCommitChanges={commitChanges} />
         <EditRecurrenceMenu />
 
         <DayView startDayHour={10} endDayHour={24} />
         <WeekView startDayHour={10} endDayHour={19} />
-        <Appointments />
+        <Appointments appointmentComponent={myAppointment} />
 
         <Toolbar />
         <DateNavigator />
@@ -210,7 +289,6 @@ function Demo() {
 
         <AppointmentTooltip showOpenButton />
         <AppointmentForm />
-
         <Resources data={resources} mainResourceName="question_id" />
       </Scheduler>
     </Paper>
@@ -218,3 +296,16 @@ function Demo() {
 }
 
 export default Demo;
+
+// function TitleComponent({ title }) {
+//   return (
+//     <div>
+//       <Link to={`/customer/queries`}>queries - {title}</Link>
+//     </div>
+//   );
+// }
+{
+  /* <Link to={`/customer/meeting`}>
+            <p style={{ fontSize: "12px",color:"#fff" }}>link</p>
+          </Link> */
+}

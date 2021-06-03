@@ -55,6 +55,7 @@ function TeamFilter(props) {
     console.log("resetCategory ..");
     setSelectedData([]);
     setStore2([]);
+    setTax2([])
     getData();
   };
 
@@ -254,9 +255,9 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Accepted</option>
+                      <option value="1">Progress</option>
                       <option value="2">Pending</option>
-                      <option value="3">Cust Accepted</option>
+                      {/* <option value="3">Cust Accepted</option> */}
                       <option value="4">Declined</option>
                     </select>
                   )}

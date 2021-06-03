@@ -7,25 +7,34 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
 } from "reactstrap";
-import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import RejectedModal from "./RejectedModal";
+
 
 function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendingData, setPendingData] = useState([]);
-  const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
-  const [selectedData, setSelectedData] = useState([]);
+  const [pay, setPay] = useState({
+    id: "", 
+    allocation_id: "",
+  });
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const rejectHandler = (key) => {
+    console.log("key", key);
+    setPaymentModal(!addPaymentModal);
+    setPay({
+      id: key.id,
+      allocation_id: key.allocation_id,
+    });
+  };
 
   useEffect(() => {
     getPendingforAcceptance();
@@ -38,7 +47,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
         console.log(res);
         if (res.data.code === 1) {
           setPendingData(res.data.result);
-          CountPendingForAcceptence(res.data.result.length);
+          // CountPendingForAcceptence(res.data.result.length);
         }
       });
   };
@@ -157,6 +166,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
               <div
                 id="reject"
                 title="Reject Assignment"
+                // onClick={() => rejectHandler(row)}
                 onClick={() => rejectHandler(row)}
               >
                 <i
@@ -198,31 +208,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
       });
   };
 
-  const rejectHandler = (key) => {
-    console.log("rejectHandler", key);
 
-    let formData = new FormData();
-    formData.append("set", 0);
-    formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", key.id);
-    formData.append("allocation_id", key.allocation_id);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/AcceptRejectQuery`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          alert.success("Query rejected !");
-          getPendingforAcceptance();
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
 
   return (
     <>
@@ -241,6 +227,12 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             data={pendingData}
             columns={columns}
             rowIndex
+          />
+           <RejectedModal
+            rejectHandler={rejectHandler}
+            addPaymentModal={addPaymentModal}
+            pay={pay}
+            getPendingforAcceptance={getPendingforAcceptance}
           />
         </CardBody>
       </Card>

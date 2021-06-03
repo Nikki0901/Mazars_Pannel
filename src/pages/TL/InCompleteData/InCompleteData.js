@@ -34,7 +34,7 @@ function InCompleteData({ CountIncomplete }) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          CountIncomplete(res.data.result.length);
+          // CountIncomplete(res.data.result.length);
           setInCompleteData(res.data.result);
         }
       });

@@ -47,6 +47,7 @@ function CustomerFilter(props) {
     console.log("resetCategory ..");
     setSelectedData([]);
     setStore2([]);
+    setTax2([])
     getData();
   };
 
@@ -68,7 +69,7 @@ function CustomerFilter(props) {
             id
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
-          }&status=${data.p_status}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -246,7 +247,7 @@ function CustomerFilter(props) {
                     >
                       <option value="">--select--</option>
                       <option value="1">Pending</option>
-                      <option value="2">Accepted</option>
+                      {/* <option value="2">Accepted</option> */}
                       <option value="3">Declined</option>
                     </select>
                   )}

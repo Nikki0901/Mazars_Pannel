@@ -34,7 +34,7 @@ function CompleteData({ CountComplete }) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          CountComplete(res.data.result.length);
+          // CountComplete(res.data.result.length);
           setCompleteData(res.data.result);
         }
       });

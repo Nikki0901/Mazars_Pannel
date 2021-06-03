@@ -13,13 +13,25 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+
+const Schema = yup.object().shape({
+  p_amount: yup.string().required("required amount"),
+  misc_1: yup.string().required("required misc_1"),
+  misc_2: yup.string().required("required proposal description"),
+  p_payable: yup.string().required("required payable"),
+});
 
 function ProposalComponent(props) {
   const { id } = props;
   console.log(id);
 
   const alert = useAlert();
-  const { register, handleSubmit, reset } = useForm();
+  const { handleSubmit, register, reset, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
   const userid = window.localStorage.getItem("tlkey");
 
   const [custId, setCustId] = useState("");
@@ -139,7 +151,9 @@ function ProposalComponent(props) {
                   <input
                     type="text"
                     name="p_assingment"
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_assingment,
+                    })}
                     value={assingNo}
                     ref={register}
                   />
@@ -152,7 +166,9 @@ function ProposalComponent(props) {
                   <input
                     type="text"
                     name="p_name"
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_name,
+                    })}
                     value={custname}
                     ref={register}
                   />
@@ -167,17 +183,26 @@ function ProposalComponent(props) {
                   <input
                     type="text"
                     name="p_amount"
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_amount,
+                    })}
                     ref={register}
                   />
+                  {errors.p_amount && (
+                    <div className="invalid-feedback">
+                      {errors.p_amount.message}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Payable by Through</label>
+                  <label>Payment Mode</label>
                   <select
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_payable,
+                    })}
                     name="p_payable"
                     aria-label="Default select example"
                     ref={register}
@@ -189,6 +214,11 @@ function ProposalComponent(props) {
                       </option>
                     ))}
                   </select>
+                  {errors.p_payable && (
+                    <div className="invalid-feedback">
+                      {errors.p_payable.message}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -200,21 +230,35 @@ function ProposalComponent(props) {
                   <input
                     type="text"
                     name="misc_1"
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.misc_1,
+                    })}
                     ref={register}
                   />
+                  {errors.misc_1 && (
+                    <div className="invalid-feedback">
+                      {errors.misc_1.message}
+                    </div>
+                  )}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Proposal Description</label>
                   <textarea
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.misc_2,
+                    })}
                     id="textarea"
                     rows="3"
                     name="misc_2"
                     ref={register}
                   ></textarea>
+                  {errors.misc_2 && (
+                    <div className="invalid-feedback">
+                      {errors.misc_2.message}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -226,7 +270,9 @@ function ProposalComponent(props) {
                   <input
                     type="date"
                     name="p_date"
-                    class="form-control"
+                    className={classNames("form-control", {
+                        "is-invalid": errors.p_email,
+                      })}
                     ref={register}
                   />
                 </div>

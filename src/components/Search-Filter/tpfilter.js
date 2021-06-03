@@ -53,6 +53,7 @@ function TaxProfessionalFilter(props) {
     console.log("resetCategory ..");
     setSelectedData([]);
     setStore2([]);
+    setTax2([])
     getData();
   };
 

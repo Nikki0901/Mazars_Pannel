@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Layout from "../../../components/Layout/Layout";
-
+import axios from "axios";
+import { baseUrl } from "../../../config/config";
 import PendingForAcceptence from "../PendingForAcceptence/PendingForAcceptence";
 import InCompleteData from "../InCompleteData/InCompleteData";
 import CompleteData from "../CompleteData/CompleteData";
@@ -10,21 +11,21 @@ function QueriesTab() {
   const userid = window.localStorage.getItem("tlkey");
   const [tabIndex, setTabIndex] = useState(0);
 
-  const [pendingAcceptence, setPendingAcceptence] = useState("");
+  const [pendindForAccepttence, setPendingForAcceptence] = useState("");
   const [incomplete, setIncomplete] = useState("");
-  const [complete, setComplete] = useState("");
+  const [complete, setcomplete] = useState("");
 
-  const CountPendingForAcceptence = (data) => {
-    setPendingAcceptence(data);
-  };
+  // const CountPendingForAcceptence = (data) => {
+  //   setPendingAcceptence(data);
+  // };
 
-  const CountIncomplete = (data) => {
-    setIncomplete(data);
-  };
+  // const CountIncomplete = (data) => {
+  //   setIncomplete(data);
+  // };
 
-  const CountComplete = (data) => {
-    setComplete(data);
-  };
+  // const CountComplete = (data) => {
+  //   setComplete(data);
+  // };
 
   const myStyle1 = {
     backgroundColor: "grey",
@@ -49,6 +50,51 @@ function QueriesTab() {
     setTabIndex(key);
   };
 
+
+
+  useEffect(() => {
+    const getPendindForAccepttence = () => {
+      axios
+        .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPendingForAcceptence(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    const getIncomplete = () => {
+      axios
+        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setIncomplete(res.data.result.length);
+          }
+        });
+    };
+
+    const getComplete = () => {
+      axios
+        .get(`${baseUrl}/tl/getCompleteQues?id=${JSON.parse(userid)}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setcomplete(res.data.result.length);
+          }
+        });
+    };
+
+    getPendindForAccepttence();
+    getIncomplete();
+    getComplete();
+  }, []);
+
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div>
@@ -61,10 +107,10 @@ function QueriesTab() {
             }}
           >
             <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
-              Pending for Acceptance ({pendingAcceptence})
+              Pending for Acceptance ({pendindForAccepttence})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Inprogress ({incomplete})
+              InProgress ({incomplete})
             </Tab>
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
               Complete ({complete})
@@ -73,15 +119,19 @@ function QueriesTab() {
 
           <TabPanel>
             <PendingForAcceptence
-              CountPendingForAcceptence={CountPendingForAcceptence}
+              // CountPendingForAcceptence={CountPendingForAcceptence}
               updateTab={updateTab}
             />
           </TabPanel>
           <TabPanel>
-            <InCompleteData CountIncomplete={CountIncomplete} />
+            <InCompleteData 
+            // CountIncomplete={CountIncomplete} 
+            />
           </TabPanel>
           <TabPanel>
-            <CompleteData CountComplete={CountComplete} />
+            <CompleteData 
+            // CountComplete={CountComplete} 
+            />
           </TabPanel>
         </Tabs>
       </div>

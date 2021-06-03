@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useLayoutEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
@@ -16,35 +16,156 @@ import PendingForAllocation from "../../../components/PendingForAllocation/Pendi
 import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
 import PendingForPayment from "../../../components/PendingForPayment/PendingForPayment";
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
+import { Tab, Tabs, TabPanel } from 'react-tabs';
 
-function QueriesTab() {
+
+
+function QueriesTab(props) {
+
+  console.log("queries tab: ",props);
   const userid = window.localStorage.getItem("adminkey");
   const count_PFA = window.localStorage.getItem("count_PFA");
+
+  // const [allQueriesCount, setAllQueriesCount] = useState("");
+  // const [pendingProposalCount, setPendingProposalCount] = useState("");
+  // const [pendingForPayment, setPendingforPayment] = useState("");
+  // const [pendingForAllocation, setPendingforAllocation] = useState("");
+
+  // const CountAllQuery = (data) => {
+  //   setAllQueriesCount(data);
+  // };
+
+  // const CountPendingProposal = (data) => {
+  //   setPendingProposalCount(data);
+  // };
+
+  // const CountPendingForPayment = (data) => {
+  //   setPendingforPayment(data);
+  // };
+
+  // const CountPendingForAllocation = (data) => {
+  //   setPendingforAllocation(data);
+  // };
+
 
   const [allQueriesCount, setAllQueriesCount] = useState("");
   const [pendingProposalCount, setPendingProposalCount] = useState("");
   const [pendingForPayment, setPendingforPayment] = useState("");
-  const [pendingForAllocation, setPendingforAllocation] = useState("");
+  const [pendingForAllocation, setPendingforAllocation] = useState();
+
+  useEffect(() =>{
+    CountPendingForAllocation();
+    CountPendingProposal();
+    CountPendingForPayment();
+  },[])
 
   const CountAllQuery = (data) => {
     setAllQueriesCount(data);
   };
 
-  const CountPendingProposal = (data) => {
-    setPendingProposalCount(data);
+  const CountPendingProposal = () => {
+    axios.get(`${baseUrl}/admin/pendingProposal`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setPendingProposalCount(res.data.result.length);
+      }
+    });
   };
 
-  const CountPendingForPayment = (data) => {
-    setPendingforPayment(data);
+  const CountPendingForPayment = () => {
+    axios.get(`${baseUrl}/admin/pendingPaymentProposals`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setPendingforPayment(res.data.result.length);
+      }
+    });
   };
 
-  const CountPendingForAllocation = (data) => {
-    setPendingforAllocation(data);
+  const CountPendingForAllocation = () => {
+    axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setPendingforAllocation(res.data.result.length);
+      }
+    });
   };
+
+  const [tabIndex, setTabIndex] = useState(0);
+    useLayoutEffect(() =>{
+        setTabIndex(props.location.index || 0);
+    },[props.location.index])
+
+
+
+    const myStyle1={
+        padding: "1rem 1.5rem",
+        backgroundColor: "#8c8c8c",
+        color: "white",
+        borderRadius: "2rem",    
+    }
+    const myStyle2={
+        padding: "1rem 1.5rem",
+        backgroundColor: "#007bff",
+        color: "white",
+        borderRadius: "2rem",   
+    }
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <div class="row mt-3">
+        <div class="col-md-12" style={{ top: "-12px" }}>
+          <Tabs
+            selectedIndex={tabIndex}
+            onSelect={(index) => setTabIndex(index)}
+          >
+            <div
+              className="tabs"
+              style={{
+                fontSize: "14px",
+                marginBottom: "1rem",
+                display: "flex",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <Tab style={tabIndex === 0 ? myStyle2 : myStyle1}>
+                All Queries ({allQueriesCount})
+              </Tab>
+              <Tab style={tabIndex === 1 ? myStyle2 : myStyle1}>
+                Pending for Allocation ({pendingForAllocation})
+              </Tab>
+              <Tab style={tabIndex === 2 ? myStyle2 : myStyle1}>
+                Pending for Proposal ({pendingProposalCount})
+              </Tab>
+              <Tab style={tabIndex === 3 ? myStyle2 : myStyle1}>
+                Pending for Payment ({pendingForPayment})
+              </Tab>
+            </div>
+            <TabPanel>
+              <AllQueriesData CountAllQuery={CountAllQuery} />
+            </TabPanel>
+
+            <TabPanel>
+              <PendingForAllocation />
+            </TabPanel>
+
+            <TabPanel>
+              <PendingForProposals />
+            </TabPanel>
+
+            <TabPanel>
+              <PendingForPayment
+                CountPendingForPayment={CountPendingForPayment}
+              />
+            </TabPanel>
+          </Tabs>
+        </div>
+      </div>
+
+
+
+
+      {/* <div class="row mt-3">
         <div class="col-md-12" style={{ top: "-12px" }}>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -84,7 +205,7 @@ function QueriesTab() {
                     aria-selected="false"
                   >
                     Pending for Allocation ({pendingForAllocation})
-                    {/* ({count_PFA}) */}
+                 
                   </a>
                 </li>
 
@@ -164,6 +285,7 @@ function QueriesTab() {
           </div>
         </div>
       </div>
+     */}
     </Layout>
   );
 }

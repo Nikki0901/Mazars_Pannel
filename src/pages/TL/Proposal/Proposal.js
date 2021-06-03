@@ -123,7 +123,7 @@ function Proposal() {
                   }}
                 ></i>
               </Link>
-            ) : row.status == "Accepted" ? (
+            ) : row.status == "Progress" ? (
               <Link to={`/teamleader/sendproposal/${row.id}`}>
                 <i
                   class="fa fa-mail-forward"

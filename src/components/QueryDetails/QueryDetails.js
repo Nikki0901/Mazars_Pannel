@@ -46,7 +46,7 @@ function QueryDetails({
               </button>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            {/* <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               <p class="m-0" style={{ fontSize: "15px" }}>
                 Submitted on
               </p>
@@ -66,7 +66,7 @@ function QueryDetails({
                   </button>
                 )}
               </div>
-            </div>
+            </div> */}
           </h2>
         </div>
 
@@ -88,15 +88,15 @@ function QueryDetails({
           p={p} 
           diaplayProposal={diaplayProposal}
           />
-          <AdditionalQuery displayQuery={displayQuery} />
+          {/* <AdditionalQuery displayQuery={displayQuery} /> */}
         </div>
 
-        <AddAdditionalQuery
+        {/* <AddAdditionalQuery
           addHandler={addHandler}
           addModal={addModal}
           assingNo={assingNo}
           getQuery={getQuery}
-        />
+        /> */}
       </div>
     </>
   );

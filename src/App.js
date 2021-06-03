@@ -202,7 +202,6 @@ function App() {
 
 
 
-
         <Route exact path="/taxprofessional/start" component={TpStart} />
         <Route exact path="/taxprofessional/login" component={TpLogin} />
         <Route exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />

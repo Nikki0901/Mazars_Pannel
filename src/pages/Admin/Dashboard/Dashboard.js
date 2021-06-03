@@ -162,7 +162,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/admin/queriestab`,
+                      index: 0,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -192,9 +197,17 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/admin/queriestab`,
+                      index: 1,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
+                  {/* <Link to={`/admin/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link> */}
                 </div>
               </div>
 
@@ -306,7 +319,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div class="col-xl-4 col-lg-6 col-md-12">
+        {/* <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -334,7 +347,8 @@ function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-white">
             <div class="card-body height-150">
@@ -409,9 +423,17 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/admin/queriestab`,
+                      index: 1,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
+                  {/* <Link to={`/admin/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link> */}
                 </div>
               </div>
 

@@ -149,7 +149,7 @@ function QueriesTab() {
                   ) : null}
                 </Link>
               </div>
-              <div title="Delete Query">
+              {/* <div title="Delete Query">
                 {row.status_code < 5 ? (
                   <i
                     className="fa fa-trash"
@@ -161,7 +161,7 @@ function QueriesTab() {
                     onClick={() => del(row.id)}
                   ></i>
                 ) : null}
-              </div>
+              </div> */}
             </div>
           </>
         );
