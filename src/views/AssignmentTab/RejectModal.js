@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { baseUrl } from "../../../config/config";
+import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -13,42 +13,35 @@ const Schema = yup.object().shape({
 });
 
 function RejectedModal({
-  addPaymentModal,
+  rejectModal,
   rejectHandler,
-  pay,
+  rejectedItem,
   getPendingforAcceptance,
 }) {
-  const userid = window.localStorage.getItem("tlkey");
+  const userId = window.localStorage.getItem("userid");
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
   const alert = useAlert();
-  const { id, allocation_id } = pay;
 
-  // console.log("pay :", pay);
+  console.log("rejectedItem :", rejectedItem);
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("set", 0);
-    formData.append("tlid", JSON.parse(userid));
-    formData.append("assignment_id", id);
-    formData.append("allocation_id", allocation_id);
-    formData.append("reject_reason", value.p_chat);
-
+    formData.append("uid", JSON.parse(userId));
+    formData.append("id", rejectedItem.id);
+    formData.append("query_no", rejectedItem.assign_no);
+    formData.append("message", value.p_chat);
+    formData.append("type", 2);
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/AcceptRejectQuery`,
+      url: `${baseUrl}/customers/draftAccept`,
       data: formData,
     })
       .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          alert.success("Query rejected !");
-          getPendingforAcceptance();
-          rejectHandler();
-        }
+        console.log("response-", response);
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -57,7 +50,7 @@ function RejectedModal({
 
   return (
     <div>
-      <Modal isOpen={addPaymentModal} toggle={rejectHandler} size="sm">
+      <Modal isOpen={rejectModal} toggle={rejectHandler} size="sm">
         <ModalHeader toggle={rejectHandler}>Rejected Reason</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>

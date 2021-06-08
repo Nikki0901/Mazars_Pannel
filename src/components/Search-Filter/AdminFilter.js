@@ -45,6 +45,7 @@ function AdminFilter(props) {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -66,6 +67,8 @@ function AdminFilter(props) {
   const resetData = () => {
     console.log("resetData ..");
     reset();
+    setSelectedData([]);
+    setStore2([]);
     getData();
   };
 
@@ -76,7 +79,7 @@ function AdminFilter(props) {
     if (acceptedProposal == "acceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -91,7 +94,7 @@ function AdminFilter(props) {
     if (pendingAcceptedProposal == "pendingAcceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -106,7 +109,7 @@ function AdminFilter(props) {
     if (declinedProposal == "declinedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=6&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -121,7 +124,7 @@ function AdminFilter(props) {
     if (pendingPayment == "pendingPayment") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -136,7 +139,7 @@ function AdminFilter(props) {
     if (pendingForProposal == "pendingForProposal") {
       axios
         .get(
-          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
+          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -151,7 +154,7 @@ function AdminFilter(props) {
     if (allQueries == "allQueries") {
       axios
         .get(
-          `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+          `${baseUrl}/admin/getAllQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -166,7 +169,7 @@ function AdminFilter(props) {
     if (pendingAlloation == "pendingAlloation") {
       axios
         .get(
-          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&status=${data.p_status}`
+          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -181,7 +184,7 @@ function AdminFilter(props) {
     if (paymentStatus == "paymentStatus") {
       axios
         .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);

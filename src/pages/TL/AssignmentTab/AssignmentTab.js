@@ -77,6 +77,7 @@ function AssignmentTab() {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -98,6 +99,8 @@ function AssignmentTab() {
     console.log("resetData ..");
     reset();
     setStatus([]);
+    setSelectedData([]);
+    setStore2([]);
     getAssignmentList();
   };
 
@@ -413,7 +416,7 @@ function AssignmentTab() {
           userid
         )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
           data.p_dateTo
-        }&assignment_status=${status}&stages_status=${data.p_status}`
+        }&assignment_status=${status}&stages_status=${data.p_status}&pcat_id=${selectedData}`
       )
       .then((res) => {
         console.log(res);

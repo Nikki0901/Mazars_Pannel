@@ -19,7 +19,10 @@ import {
   TodayButton,
   Toolbar,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import { appointments, resourcesData } from "./appoinments";
+
+import {owners}  from "./appoinments";
+
+
 
 function Demo() {
   const userId = window.localStorage.getItem("tlkey");
@@ -87,6 +90,12 @@ function Demo() {
       fieldName: "question_id",
       title: "Assignment No",
       instances: assignmentdata,
+    },
+    {
+      fieldName: 'members',
+      title: 'Members',
+      instances: owners,
+      allowMultiple: true,
     },
   ];
 

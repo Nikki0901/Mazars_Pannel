@@ -20,7 +20,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendingData, setPendingData] = useState([]);
-  const { Option, OptGroup } = Select;
+
   const [pay, setPay] = useState({
     id: "", 
     allocation_id: "",

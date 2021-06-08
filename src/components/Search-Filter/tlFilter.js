@@ -42,6 +42,7 @@ function TeamFilter(props) {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -63,6 +64,8 @@ function TeamFilter(props) {
   const resetData = () => {
     console.log("resetData ..");
     reset();
+    setSelectedData([]);
+    setStore2([]);
     getData();
   };
 
@@ -75,7 +78,7 @@ function TeamFilter(props) {
         .get(
           `${baseUrl}/tl/pendingQues?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -91,7 +94,7 @@ function TeamFilter(props) {
         .get(
           `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -107,7 +110,7 @@ function TeamFilter(props) {
         .get(
           `${baseUrl}/tl/getCompleteQues?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -126,7 +129,7 @@ function TeamFilter(props) {
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
-          }&status=${data.p_status}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -141,7 +144,7 @@ function TeamFilter(props) {
     if (paymentStatus == "paymentStatus") {
       axios
         .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);

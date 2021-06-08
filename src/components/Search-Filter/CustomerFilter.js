@@ -14,8 +14,6 @@ function CustomerFilter(props) {
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
- 
-
   useEffect(() => {
     const getSubCategory = () => {
       axios
@@ -34,11 +32,12 @@ function CustomerFilter(props) {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
   const handleSubCategory = (value) => {
-    console.log(`selected ${value}`);
+    console.log(`sub-cat ${value}`);
     setStore2(value);
   };
 
@@ -47,16 +46,18 @@ function CustomerFilter(props) {
     console.log("resetCategory ..");
     setSelectedData([]);
     setStore2([]);
-    setTax2([])
+    setTax2([]);
     getData();
   };
 
- //reset date
- const resetData = () => {
-  console.log("resetData ..");
-  reset();
-  getData();
-};
+  //reset date
+  const resetData = () => {
+    console.log("resetData ..");
+    reset();
+    setSelectedData([]);
+    setStore2([]);
+    getData();
+  };
 
   const onSubmit = (data) => {
     console.log("data :", data);
@@ -88,7 +89,7 @@ function CustomerFilter(props) {
             id
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
-          }&status=${data.p_status}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -107,7 +108,7 @@ function CustomerFilter(props) {
             id
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
-          }&status=${data.p_status}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);

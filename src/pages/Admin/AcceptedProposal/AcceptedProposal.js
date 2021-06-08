@@ -34,7 +34,7 @@ function AcceptedProposal({ acceptedProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
-        acceptedProposal(res.data.result.length);
+        // acceptedProposal(res.data.result.length);
       }
     });
   };

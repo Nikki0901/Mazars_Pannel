@@ -66,6 +66,7 @@ function AssignmentTab() {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -87,6 +88,8 @@ function AssignmentTab() {
     console.log("resetData ..");
     reset();
     setStatus([]);
+    setSelectedData([]);
+    setStore2([]);
     getAssignmentData();
   };
 
@@ -276,7 +279,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&assignment_status=${status}&stages_status=${data.p_status}`
+        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&assignment_status=${status}&stages_status=${data.p_status}&pcat_id=${selectedData}`
       )
       .then((res) => {
         console.log(res);

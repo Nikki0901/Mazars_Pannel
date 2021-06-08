@@ -40,6 +40,7 @@ function TaxProfessionalFilter(props) {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -60,6 +61,8 @@ function TaxProfessionalFilter(props) {
   //reset date
   const resetData = () => {
     console.log("resetData ..");
+    setSelectedData([]);
+    setStore2([]);
     reset();
     getData();
   };
@@ -73,7 +76,7 @@ function TaxProfessionalFilter(props) {
         .get(
           `${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -90,7 +93,7 @@ function TaxProfessionalFilter(props) {
         .get(
           `${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -109,7 +112,7 @@ function TaxProfessionalFilter(props) {
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
             data.p_dateTo
-          }&status=${data.p_status}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);

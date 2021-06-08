@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
@@ -7,7 +7,7 @@ import PendingForAcceptence from "../PendingForAcceptence/PendingForAcceptence";
 import InCompleteData from "../InCompleteData/InCompleteData";
 import CompleteData from "../CompleteData/CompleteData";
 
-function QueriesTab() {
+function QueriesTab(props) {
   const userid = window.localStorage.getItem("tlkey");
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -46,11 +46,9 @@ function QueriesTab() {
     cursor: "pointer",
   };
 
-  const updateTab = (key) => {
-    setTabIndex(key);
-  };
-
-
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
 
   useEffect(() => {
     const getPendindForAccepttence = () => {
@@ -94,7 +92,6 @@ function QueriesTab() {
     getComplete();
   }, []);
 
-
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div>
@@ -119,18 +116,18 @@ function QueriesTab() {
 
           <TabPanel>
             <PendingForAcceptence
-              // CountPendingForAcceptence={CountPendingForAcceptence}
-              updateTab={updateTab}
+            // CountPendingForAcceptence={CountPendingForAcceptence}
+            // updateTab={updateTab}
             />
           </TabPanel>
           <TabPanel>
-            <InCompleteData 
-            // CountIncomplete={CountIncomplete} 
+            <InCompleteData
+            // CountIncomplete={CountIncomplete}
             />
           </TabPanel>
           <TabPanel>
-            <CompleteData 
-            // CountComplete={CountComplete} 
+            <CompleteData
+            // CountComplete={CountComplete}
             />
           </TabPanel>
         </Tabs>
@@ -140,7 +137,6 @@ function QueriesTab() {
 }
 
 export default QueriesTab;
-
 
 // <div class="row mt-3">
 //   <div class="col-md-12">
@@ -226,11 +222,9 @@ export default QueriesTab;
   /* <button onClick={() => setTabIndex(1)}>go to 1st tab</button> */
 }
 
-
 // 9837505200
 
 // prashant kaushik
-
 
 // pwd
 

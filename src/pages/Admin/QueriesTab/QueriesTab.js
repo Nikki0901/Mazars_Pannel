@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
@@ -16,20 +16,12 @@ import PendingForAllocation from "../../../components/PendingForAllocation/Pendi
 import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
 import PendingForPayment from "../../../components/PendingForPayment/PendingForPayment";
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
-import { Tab, Tabs, TabPanel } from 'react-tabs';
-
-
+import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
 function QueriesTab(props) {
-
-  console.log("queries tab: ",props);
+  console.log("queries tab: ", props);
   const userid = window.localStorage.getItem("adminkey");
   const count_PFA = window.localStorage.getItem("count_PFA");
-
-  // const [allQueriesCount, setAllQueriesCount] = useState("");
-  // const [pendingProposalCount, setPendingProposalCount] = useState("");
-  // const [pendingForPayment, setPendingforPayment] = useState("");
-  // const [pendingForAllocation, setPendingforAllocation] = useState("");
 
   // const CountAllQuery = (data) => {
   //   setAllQueriesCount(data);
@@ -47,20 +39,25 @@ function QueriesTab(props) {
   //   setPendingforAllocation(data);
   // };
 
-
   const [allQueriesCount, setAllQueriesCount] = useState("");
   const [pendingProposalCount, setPendingProposalCount] = useState("");
   const [pendingForPayment, setPendingforPayment] = useState("");
   const [pendingForAllocation, setPendingforAllocation] = useState();
 
-  useEffect(() =>{
+  useEffect(() => {
+    CountAllQuery();
     CountPendingForAllocation();
     CountPendingProposal();
     CountPendingForPayment();
-  },[])
+  }, []);
 
   const CountAllQuery = (data) => {
-    setAllQueriesCount(data);
+    axios.get(`${baseUrl}/admin/getAllQueries`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setAllQueriesCount(res.data.result.length);
+      }
+    });
   };
 
   const CountPendingProposal = () => {
@@ -91,29 +88,80 @@ function QueriesTab(props) {
   };
 
   const [tabIndex, setTabIndex] = useState(0);
-    useLayoutEffect(() =>{
-        setTabIndex(props.location.index || 0);
-    },[props.location.index])
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
 
-
-
-    const myStyle1={
-        padding: "1rem 1.5rem",
-        backgroundColor: "#8c8c8c",
-        color: "white",
-        borderRadius: "2rem",    
-    }
-    const myStyle2={
-        padding: "1rem 1.5rem",
-        backgroundColor: "#007bff",
-        color: "white",
-        borderRadius: "2rem",   
-    }
-
+  const myStyle1 = {
+    backgroundColor: "grey",
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    color: "white",
+    cursor: "pointer",
+  };
+  const myStyle2 = {
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    backgroundColor: "blue",
+    color: "white",
+    cursor: "pointer",
+  };
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <div class="row mt-3">
+      <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              All Queries ({allQueriesCount})
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+              Pending for Allocation ({pendingForAllocation})
+            </Tab>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Pending for Proposal ({pendingProposalCount})
+            </Tab>
+
+            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+              Pending for Payment ({pendingForPayment})
+            </Tab>
+          </TabList>
+
+          <TabPanel>
+            <AllQueriesData />
+          </TabPanel>
+
+          <TabPanel>
+            <PendingForAllocation />
+          </TabPanel>
+
+          <TabPanel>
+            <PendingForProposals />
+          </TabPanel>
+
+          <TabPanel>
+            <PendingForPayment />
+          </TabPanel>
+        </Tabs>
+      </div>
+    </Layout>
+  );
+}
+
+export default QueriesTab;
+
+{
+  /* <div class="row mt-3">
         <div class="col-md-12" style={{ top: "-12px" }}>
           <Tabs
             selectedIndex={tabIndex}
@@ -161,11 +209,11 @@ function QueriesTab(props) {
           </Tabs>
         </div>
       </div>
+ */
+}
 
-
-
-
-      {/* <div class="row mt-3">
+{
+  /* <div class="row mt-3">
         <div class="col-md-12" style={{ top: "-12px" }}>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -285,9 +333,5 @@ function QueriesTab(props) {
           </div>
         </div>
       </div>
-     */}
-    </Layout>
-  );
+     */
 }
-
-export default QueriesTab;

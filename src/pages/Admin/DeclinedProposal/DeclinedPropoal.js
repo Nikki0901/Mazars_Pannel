@@ -31,7 +31,7 @@ function DeclinedProposal({ declinedProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
-        declinedProposal(res.data.result.length);
+        // declinedProposal(res.data.result.length);
       }
     });
   };

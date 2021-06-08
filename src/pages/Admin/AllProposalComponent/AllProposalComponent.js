@@ -33,7 +33,7 @@ function AllProposalComponent({ allProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
-        allProposal(res.data.result.length);
+        // allProposal(res.data.result.length);
       }
     });
   };
@@ -279,6 +279,7 @@ function AllProposalComponent({ allProposal }) {
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
     setSelectedData(value);
+    setStore2([]);
   };
 
   //handleSubCategory
@@ -299,6 +300,9 @@ function AllProposalComponent({ allProposal }) {
   const resetData = () => {
     console.log("resetData ..");
     reset();
+    // setStatus([]);
+    setSelectedData([]);
+    setStore2([]);
     getProposalData();
   };
 
@@ -307,7 +311,7 @@ function AllProposalComponent({ allProposal }) {
     console.log("data :", data);
     axios
       .get(
-        `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}`
+        `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
       )
       .then((res) => {
         console.log(res);

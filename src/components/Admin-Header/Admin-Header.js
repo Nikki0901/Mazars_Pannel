@@ -59,6 +59,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 
         {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout} 
         name="Team Leader" 
+        tl="tl"
         />}
 
         {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} 

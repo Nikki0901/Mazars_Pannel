@@ -7,12 +7,21 @@ import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import ChatHistory from "./ChatHistory";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
 
   const [proposal, setProposal] = useState([]);
   const [count, setCount] = useState("");
+  const [id, setId] = useState(null);
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const chatHandler = (key) => {
+    console.log(key);
+    setPaymentModal(!addPaymentModal);
+    setId(key.assign_no);
+  };
 
   useEffect(() => {
     getProposalList();
@@ -103,6 +112,34 @@ function Proposal() {
       },
     },
     {
+      text: "History",
+      // dataField: "revised_text",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            {row.revised_text && (
+              <div style={{ cursor: "pointer" }} title="View History">
+                {myFunction(row.revised_text)}
+
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-sm"
+                    onClick={() => chatHandler(row)}
+                  >
+                    view
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        );
+      },
+    },
+    {
       text: "Action",
       dataField: "",
       headerStyle: () => {
@@ -141,6 +178,12 @@ function Proposal() {
     },
   ];
 
+  const myFunction = (str) => {
+    var str2 = "...";
+    var res = str.slice(0, 5).concat(str2);
+    return res;
+  };
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
@@ -166,6 +209,13 @@ function Proposal() {
             data={proposal}
             columns={columns}
             rowIndex
+          />
+
+          <ChatHistory
+            chatHandler={chatHandler}
+            addPaymentModal={addPaymentModal}
+            qno={id}
+            // getProposalData={getProposalList}
           />
         </CardBody>
       </Card>

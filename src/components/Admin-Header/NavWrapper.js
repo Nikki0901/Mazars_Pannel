@@ -5,18 +5,24 @@ import { Link, useHistory } from "react-router-dom";
 // import CustomerNotification from "./CustomerNotification";
 
 function NavWrapper(props) {
-  const { color, logout, name, cust, tpdashboard } = props;
+  const { color, logout, name, cust, tl, tpdashboard } = props;
+
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
+  const tlkey = window.localStorage.getItem("tlkey");
 
   const [notification, setNotification] = useState([]);
   const [countNotification, setCountNotification] = useState("");
 
+  const [notificationTl, setNotificationTl] = useState([]);
+  const [countNotificationTl, setCountNotificationTl] = useState("");
+
   useEffect(() => {
-    getNotification();
+    getNotificationCust();
+    getNotificationTl();
   }, []);
 
-  const getNotification = () => {
+  const getNotificationCust = () => {
     axios
       .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}`)
       .then((res) => {
@@ -24,6 +30,18 @@ function NavWrapper(props) {
         if (res.data.code === 1) {
           setNotification(res.data.result);
           setCountNotification(res.data.result.length);
+        }
+      });
+  };
+
+  const getNotificationTl = () => {
+    axios
+      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(tlkey)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setNotificationTl(res.data.result);
+          setCountNotificationTl(res.data.result.length);
         }
       });
   };
@@ -36,7 +54,7 @@ function NavWrapper(props) {
         console.log("delete-", response);
         if (response.data.code === 1) {
           console.log(response.data.result);
-          history.push("/customer/proposal");
+          // history.push("/customer/proposal");
         }
       })
       .catch((error) => {
@@ -87,7 +105,7 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
-              {/* {cust && (
+              {cust && (
                 <li class="dropdown dropdown-notification nav-item">
                   {countNotification ? (
                     <div>
@@ -127,7 +145,49 @@ function NavWrapper(props) {
                     </div>
                   ) : null}
                 </li>
-              )} */}
+              )}
+
+              {tl && (
+                <li class="dropdown dropdown-notification nav-item">
+                  {countNotificationTl ? (
+                    <div>
+                      <a
+                        class="nav-link nav-link-label"
+                        href="#"
+                        data-toggle="dropdown"
+                      >
+                        <span class="badge badge-light">
+                          <i class="fa fa-bell" style={{ fontSize: "16px" }}>
+                            {countNotificationTl}
+                          </i>
+                        </span>
+                      </a>
+
+                      <div
+                        class="dropdown-menu dropdown-menu-right"
+                        style={{ height: "300px", overflowY: "scroll" }}
+                      >
+                        <div class="arrow_box_right">
+                          {notificationTl.map((p, i) => (
+                            <div
+                              class="dropdown-item"
+                              style={{ padding: "0", fontSize: "12px" }}
+                            >
+                              <p
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => readNotification(p.id)}
+                              >
+                                {p.message}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </li>
+              )}
 
               <li class="dropdown dropdown-user nav-item">
                 <a
@@ -148,7 +208,7 @@ function NavWrapper(props) {
 
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="arrow_box_right">
-                    {cust && (
+                    {name == "Customer" && (
                       <p class="dropdown-item" style={{ cursor: "pointer" }}>
                         <i class="fa fa-sign-out"></i>
                         <Link to="/customer/change-password">
@@ -157,7 +217,7 @@ function NavWrapper(props) {
                       </p>
                     )}
 
-                    {tpdashboard && (
+                    {name == "Tax Professional" && (
                       <p class="dropdown-item" style={{ cursor: "pointer" }}>
                         <i class="fa fa-sign-out"></i>
                         <Link to="/taxprofessional/change-password">

@@ -13,12 +13,11 @@ import {
   Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import AcceptModal from "./AcceptModal";
-import PaymentModal from "./PaymentModal";
+import ChatComponent from "./ChatComponent";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
-import CommonServices from "../../common/common";
+
 
 function ProposalTab() {
   const alert = useAlert();
@@ -29,11 +28,7 @@ function ProposalTab() {
 
   const [id, setId] = useState(null);
   const [reject, setRejected] = useState(true);
-  const [pay, setPay] = useState({
-    pay: "",
-    amount: "",
-  });
-
+  
   // accept modal
   // const [acceptedModal, setAcceptedModal] = useState(false);
   // const acceptedHandler = (id) => {
@@ -42,13 +37,10 @@ function ProposalTab() {
   // };
 
   const [addPaymentModal, setPaymentModal] = useState(false);
-  const paymentHandler = (key) => {
+  const chatHandler = (key) => {
     console.log(key);
     setPaymentModal(!addPaymentModal);
-    setPay({
-      amount: key.accepted_amount,
-      id: key.q_id,
-    });
+    setId(key.q_id);
   };
 
   useEffect(() => {
@@ -295,7 +287,7 @@ function ProposalTab() {
         var a = row.accepted_amount;
         var p = row.paid_amount;
         return a - p;
-      }
+      },
     },
     {
       text: "Date of Payment",
@@ -362,26 +354,16 @@ function ProposalTab() {
                         onClick={() => rejected(row.q_id)}
                       ></i>
                     </div>
-                  </div>
-                ) : (
-                  (row.negotiated_amount === "0" || row.accepted_amount) && ""
-                )}
 
-                {/* {row.statuscode == 5 ||
-                row.statuscode == 7 ||
-                row.statuscode == 8 ? (
-                  <div>
                     <div style={{ cursor: "pointer" }}>
                       <i
                         class="fa fa-credit-card"
                         style={{ color: "green", fontSize: "16px" }}
-                        onClick={() => paymentHandler(row)}
+                        onClick={() => chatHandler(row)}
                       ></i>
                     </div>
                   </div>
-                ) : (
-                  ""
-                )} */}
+                ) : null}
               </div>
             )}
           </>
@@ -418,10 +400,10 @@ function ProposalTab() {
             classes="table-responsive"
           />
 
-          <PaymentModal
-            paymentHandler={paymentHandler}
+          <ChatComponent
+            chatHandler={chatHandler}
             addPaymentModal={addPaymentModal}
-            pay={pay}
+            id={id}
             getProposalData={getProposalData}
           />
         </CardBody>
@@ -431,278 +413,3 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
-
-
-// formatter: function amountOutstading(cell, row) {
-//   console.log("dt", row.paid_amount);
-//   console.log("dt", row.accepted_amount);
-//   var p = row.paid_amount;
-//   var a = row.accepted_amount;
-//   if (p == 0) {
-//     return "0";
-//   } else return a - p;
-// },
-{
-  /* <AcceptModal
-            acceptedModal={acceptedModal}
-            acceptedHandler={acceptedHandler}
-            id={id}
-            getProposalData={getProposalData}
-          /> */
-}
-
-{
-  /* <div style={{ cursor: "pointer" }}>
-                      <i
-                        class="fa fa-file-text"
-                        style={{
-                          color: "orange",
-                          fontSize: "16px",
-                        }}
-                        onClick={() => acceptedHandler(row.up_id)}
-                      ></i>
-                    </div> */
-}
-
-{
-  /* <div>
-            <table class="table table-bordered ">
-              <thead class="table_head_Proposal">
-                <tr>
-                  <th>S.No</th>
-                  <th>Date of Query</th>
-                  <th>Query No</th>
-                  <th>Proposal No</th>
-                  <th>Category</th>
-                  <th>Sub Category</th>
-                  <th>Date of Proposal</th>
-                  <th>Date of acceptance of Proposal</th>
-                  <th>Status</th>
-                  <th>Proposed Amout</th>
-                  <th style={{ color: "#21a3ce" }}>Amount Accepted</th>
-                  <th style={{ color: "#064606" }}>Amount Paid</th>
-                  <th>Date of Payment</th>
-                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
-                  <th>Date of Completion</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              {proposalDisplay.length > 0 ? (
-                proposalDisplay.map((p, i) => (
-                  <tbody class="table_bdy_proposal">
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{ChangeFormateDate(p.created)}</td>
-                      <th>
-                        <Link to={`/customer/my-assingment/${p.id}`}>
-                          {p.assign_no}
-                        </Link>
-                      </th>
-                      <td>{p.proposal_number}</td>
-                      <td>{p.parent_id}</td>
-                      <td>{p.cat_name}</td>
-                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
-                      <td>{ChangeFormateDate(p.cust_accept_date)}</td>
-                      <td>{p.status}</td>
-                      <td>{p.ProposedAmount}</td>
-                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
-                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-                      <td>{ChangeFormateDate(p.cust_paid_date)}</td>
-                      <td style={{ color: "darkred" }}>
-                        {checkOutstading(p.paid_amount, p.accepted_amount)}
-                      </td>
-                      <td></td>
-
-                      <td>
-                        {p.statuscode === "6" ? null : (
-                          <div>
-                            {p.negotiated_amount === "0" &&
-                            p.accepted_amount === "0" ? (
-                              <div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-check"
-                                    style={{
-                                      color: "green",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={() => accepted(p.q_id)}
-                                  ></i>
-                                </div>
-
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-times"
-                                    style={{ color: "red", fontSize: "16px" }}
-                                    onClick={() => rejected(p.q_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            ) : (
-                              (p.negotiated_amount === "0" ||
-                                p.accepted_amount) &&
-                              ""
-                            )}
-
-                            {p.statuscode == 5 ||
-                            p.statuscode == 7 ||
-                            p.statuscode == 8 ? (
-                              <div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-credit-card"
-                                    style={{ color: "green", fontSize: "16px" }}
-                                    onClick={() => paymentHandler(p)}
-                                  ></i>
-                                </div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-file-text"
-                                    style={{
-                                      color: "orange",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={() => acceptedHandler(p.up_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="16">No Records</td>
-                </tr>
-              )}
-            </table>
-          </div> */
-}
-
-{
-  /* <div>
-            <table class="table table-bordered ">
-              <thead class="table_head_Proposal">
-                <tr>
-                  <th>S.No</th>
-                  <th>Date of Query</th>
-                  <th>Query No</th>
-                  <th>Proposal No</th>
-                  <th>Category</th>
-                  <th>Sub Category</th>
-                  <th>Date of Proposal</th>
-                  <th>Date of acceptance of Proposal</th>
-                  <th>Status</th>
-                  <th>Proposed Amout</th>
-                  <th style={{ color: "#21a3ce" }}>Amount Accepted</th>
-                  <th style={{ color: "#064606" }}>Amount Paid</th>
-                  <th>Date of Payment</th>
-                  <th style={{ color: "darkred" }}>Amount Outstanding</th>
-                  <th>Date of Completion</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              {proposalDisplay.length > 0 ? (
-                proposalDisplay.map((p, i) => (
-                  <tbody class="table_bdy_proposal">
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{ChangeFormateDate(p.created)}</td>
-                      <th>
-                        <Link to={`/customer/my-assingment/${p.id}`}>
-                          {p.assign_no}
-                        </Link>
-                      </th>
-                      <td>{p.proposal_number}</td>
-                      <td>{p.parent_id}</td>
-                      <td>{p.cat_name}</td>
-                      <td>{ChangeFormateDate(p.DateofProposal)}</td>
-                      <td>{ChangeFormateDate(p.cust_accept_date)}</td>
-                      <td>{p.status}</td>
-                      <td>{p.ProposedAmount}</td>
-                      <td style={{ color: "#21a3ce" }}>{p.accepted_amount}</td>
-                      <td style={{ color: "#064606" }}>{p.paid_amount}</td>
-                      <td>{ChangeFormateDate(p.cust_paid_date)}</td>
-                      <td style={{ color: "darkred" }}>
-                        {checkOutstading(p.paid_amount, p.accepted_amount)}
-                      </td>
-                      <td></td>
-
-                      <td>
-                        {p.statuscode === "6" ? null : (
-                          <div>
-                            {p.negotiated_amount === "0" &&
-                            p.accepted_amount === "0" ? (
-                              <div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-check"
-                                    style={{
-                                      color: "green",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={() => accepted(p.q_id)}
-                                  ></i>
-                                </div>
-
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-times"
-                                    style={{ color: "red", fontSize: "16px" }}
-                                    onClick={() => rejected(p.q_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            ) : (
-                              (p.negotiated_amount === "0" ||
-                                p.accepted_amount) &&
-                              ""
-                            )}
-
-                            {p.statuscode == 5 ||
-                            p.statuscode == 7 ||
-                            p.statuscode == 8 ? (
-                              <div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-credit-card"
-                                    style={{ color: "green", fontSize: "16px" }}
-                                    onClick={() => paymentHandler(p)}
-                                  ></i>
-                                </div>
-                                <div style={{ cursor: "pointer" }}>
-                                  <i
-                                    class="fa fa-file-text"
-                                    style={{
-                                      color: "orange",
-                                      fontSize: "16px",
-                                    }}
-                                    onClick={() => acceptedHandler(p.up_id)}
-                                  ></i>
-                                </div>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="16">No Records</td>
-                </tr>
-              )}
-
-              
-            </table>
-
-          </div> */
-}

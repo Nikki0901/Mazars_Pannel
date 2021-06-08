@@ -1,6 +1,8 @@
 import React from "react";
 import CommonServices from "../../common/common";
-
+import DownloadLink from "react-download-link";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
 
 function ProposalDetails({
   diaplayProposal,
@@ -19,9 +21,33 @@ function ProposalDetails({
 
   const { tlname, date_of_allocation } = diaplayHistory;
 
+  const userId = window.localStorage.getItem("userid");
+
   console.log("p", p.query_status);
 
   // CommonServices.removeTime(proposal_date);
+
+  // const url = `https://mazarsapi.multitvsolution.com/mazarapi/v1/customers/dounloadpdf?id=28`;
+
+  // const getDataFromURL = (url) =>
+  //   new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       fetch(url)
+  //         .then((response) => response.text())
+  //         .then((data) => {
+  //           console.log("res",data)
+  //           resolve(data);
+  //         });
+  //     });
+  //   }, 2000);
+
+  const getProposalData = () => {
+    axios
+      .get(`${baseUrl}/customers/dounloadpdf?id=28`)
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
   return (
     <>
@@ -35,6 +61,13 @@ function ProposalDetails({
         >
           PROCESSING OF QUERY
         </p>
+        <div>
+          <DownloadLink
+            label={"Download"}
+            filename={"filename.pdf"}
+            exportFile={getProposalData}
+          />
+        </div>
         <table class="table table-bordered">
           <thead>
             <tr>

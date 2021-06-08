@@ -267,7 +267,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/admin/queriestab`,
+                      index: 1,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -299,7 +304,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/proposal`}>
+                  <Link
+                    to={{
+                      pathname: `/admin/proposal`,
+                      index: 0,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -359,7 +369,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/proposal`}>
+                <Link
+                    to={{
+                      pathname: `/admin/proposal`,
+                      index: 2,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -391,7 +406,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                  <Link to={`/admin/proposal`}>
+                <Link
+                    to={{
+                      pathname: `/admin/proposal`,
+                      index: 1,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -426,14 +446,11 @@ function Dashboard() {
                   <Link
                     to={{
                       pathname: `/admin/queriestab`,
-                      index: 1,
+                      index: 3,
                     }}
                   >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
-                  {/* <Link to={`/admin/queriestab`}>
-                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
-                  </Link> */}
                 </div>
               </div>
 

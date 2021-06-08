@@ -21,9 +21,9 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import History from "./History";
 
 function PendingAllocation({ CountPendingForAllocation }) {
-  const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
   const [pendingData, setPendingData] = useState([]);
@@ -220,15 +220,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
     },
   ];
 
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    // console.log("date", oldDate);
-    if (oldDate == null) {
-      return null;
-    }
-    return oldDate.toString().split("-").reverse().join("-");
-  }
-
   return (
     <>
       <Card>
@@ -247,41 +238,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
             columns={columns}
             rowIndex
           />
-          <Modal isOpen={modal} fade={false} toggle={toggle}>
-            <ModalHeader toggle={toggle}>History</ModalHeader>
-            <ModalBody>
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th scope="row">S.No</th>
-                    <th scope="row">Name</th>
-                    <th scope="row">Query No</th>
-                    <th scope="row">Status</th>
-                    <th scope="row">Date of Allocation</th>
-                  </tr>
-                </thead>
-
-                {history.length > 0
-                  ? history.map((p, i) => (
-                      <tbody>
-                        <tr>
-                          <td>{i + 1}</td>
-                          <td>{p.name}</td>
-                          <td>{p.assign_no}</td>
-                          <td>{p.status}</td>
-                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
-                        </tr>
-                      </tbody>
-                    ))
-                  : null}
-              </table>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={toggle}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <History history={history} toggle={toggle} modal={modal} />
         </CardBody>
       </Card>
     </>

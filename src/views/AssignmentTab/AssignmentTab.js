@@ -12,10 +12,11 @@ import {
   Table,
 } from "reactstrap";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-import { Link ,useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
 import * as Cookies from "js-cookie";
+import RejectedModal from "./RejectModal";
 
 function AssignmentTab() {
   const history = useHistory();
@@ -28,8 +29,7 @@ function AssignmentTab() {
   const [attendeeMode, SetAttendeeMode] = useState("video");
   const [videoProfile, SetVideoProfile] = useState("480p_4");
 
-
-
+  const [rejectedItem, setRejectedItem] = useState({});
   const [pay, setPay] = useState({
     pay: "",
     amount: "",
@@ -40,7 +40,6 @@ function AssignmentTab() {
   const [addPaymentModal, setPaymentModal] = useState(false);
   const paymentHandler = (key) => {
     console.log("key", key);
-
     setPaymentModal(!addPaymentModal);
     setPay({
       amount: key.accepted_amount,
@@ -48,6 +47,13 @@ function AssignmentTab() {
       accepted_amount: key.accepted_amount,
       paid_amount: key.paid_amount,
     });
+  };
+
+  const [rejectModal, setRejectModal] = useState(false);
+  const rejectHandler = (key) => {
+    console.log("key", key);
+    setRejectModal(!rejectModal);
+    setRejectedItem(key);
   };
 
   useEffect(() => {
@@ -179,6 +185,26 @@ function AssignmentTab() {
         // console.log(row.final_report);
         return (
           <>
+            <div>
+              <div style={{ cursor: "pointer" }} title="Accepted">
+                <i
+                  class="fa fa-check"
+                  style={{
+                    color: "green",
+                    fontSize: "16px",
+                  }}
+                  onClick={() => acceptHandler(row)}
+                ></i>
+              </div>
+
+              <div style={{ cursor: "pointer" }} title="Rejected">
+                <i
+                  class="fa fa-times"
+                  style={{ color: "red", fontSize: "16px" }}
+                  onClick={() => rejectHandler(row)}
+                ></i>
+              </div>
+            </div>
             {!row.final_report == "" ? (
               <div>
                 <a
@@ -213,25 +239,6 @@ function AssignmentTab() {
       formatter: priceFormatter,
     },
     {
-      text: "Action",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div style={{ cursor: "pointer" }} title="Pay Amount">
-              <i
-                class="fa fa-credit-card"
-                style={{ color: "green", fontSize: "16px" }}
-                onClick={() => paymentHandler(row)}
-              ></i>
-            </div>
-          </>
-        );
-      },
-    },
-    {
       dataField: "",
       text: "Video Call",
       headerStyle: () => {
@@ -251,7 +258,64 @@ function AssignmentTab() {
         );
       },
     },
+    {
+      text: "Action",
+      dataField: "",
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ cursor: "pointer" }} title="Pay Amount">
+                <i
+                  class="fa fa-credit-card"
+                  style={{ color: "green", fontSize: "16px" }}
+                  onClick={() => paymentHandler(row)}
+                ></i>
+              </div>
+            </div>
+          </>
+        );
+      },
+    },
   ];
+
+  //accept handler
+  const acceptHandler = (key) => {
+    console.log("acceptHandler", key);
+
+    let formData = new FormData();
+    formData.append("uid", JSON.parse(userId));
+    formData.append("id", key.id);
+    formData.append("query_no", key.assign_no);
+    formData.append("type", 1);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/draftAccept`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("response-", response);
+        if (response.data.code === 1) {
+          alert.success("draft accepted !");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   //tl,phone,email
   function priceFormatter(cell, row) {
@@ -272,7 +336,7 @@ function AssignmentTab() {
   //handleJoin
   const handleJoin = (id) => {
     console.log("id", id);
-    Cookies.set("channel", id); 
+    Cookies.set("channel", id);
     Cookies.set("baseMode", baseMode);
     Cookies.set("transcode", transcode);
     Cookies.set("attendeeMode", attendeeMode);
@@ -314,6 +378,13 @@ function AssignmentTab() {
             pay={pay}
             getProposalData={getAssignmentData}
           />
+
+          <RejectedModal
+            rejectHandler={rejectHandler}
+            rejectModal={rejectModal}
+            rejectedItem={rejectedItem}
+            getPendingforAcceptance={getAssignmentData}
+          />
         </CardBody>
       </Card>
     </Layout>
@@ -321,103 +392,3 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
-{
-  /* <td>{p.status <= 9 ? "In Process" : "Complete"} </td> */
-}
-
-// classes: 'hidden-xs',
-// headerClasses: 'hidden-xs',
-
-// function priceFormatter(cell, row) {
-//   console.log("row", row);
-//   if (row) {
-//     return (
-//       <>
-//         <p style={{ fontSize: "10px" }}>{row.tname} </p>
-//         <p style={{ fontSize: "10px" }}>{row.phone}</p>
-//         <p style={{ fontSize: "10px" }}>{row.email}</p>
-//       </>
-//     );
-//   }
-
-//   return null;
-// }
-{
-  /* <Table responsive="sm" bordered>
-            <thead>
-              <tr>
-                <th>S.No</th>
-                <th>Date of Assignment</th>
-                <th>Query No</th>
-                <th>Assignment No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Status</th>
-                <th>Expected date of delivery</th>
-                <th>Actual date of delivery</th>
-                <th>Deliverable</th>
-                <th>Team Leader name and contact number, email</th>
-              </tr>
-            </thead>
-            {assignmentDisplay.length > 0 ? (
-              assignmentDisplay.map((p, i) => (
-                <tbody>
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.assignment_date)}</td>
-                    <th>
-                      <Link to={`/customer/my-assingment/${p.id}`}>
-                        {p.assign_no}
-                      </Link>
-                    </th>
-                    <td>{p.assignment_number}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.status}</td>
-                    
-                    <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                    <td>{ChangeFormateDate(p.date_of_delivery)}</td>
-
-                    <td style={{ textAlign: "center" }}>
-                      {!p.final_report == "" ? (
-                        <div>
-                          <a
-                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.final_report}`}
-                          >
-                            <i
-                              class="fa fa-file-text"
-                              style={{ fontSize: "16px" }}
-                            ></i>{" "}
-                            final
-                          </a>
-                        </div>
-                      ) : p.assignment_draft_report ? (
-                        <div>
-                          <a
-                            href={`http://13.232.121.233/mazarapi/assets/upload/report/${p.assignment_draft_report}`}
-                          >
-                            <i
-                              class="fa fa-file-text"
-                              style={{ fontSize: "16px" }}
-                            ></i>{" "}
-                            draft
-                          </a>
-                        </div>
-                      ) : null}
-                    </td>
-
-                    <td>
-                      <p style={{ fontSize: "10px" }}>{p.tname} </p>
-                      <p style={{ fontSize: "10px" }}>{p.phone}</p>
-                      <p style={{ fontSize: "10px" }}>{p.email}</p>
-                    </td>
-                  </tr>
-                </tbody>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="11">No Records</td>
-              </tr>
-            )}
-          </Table> */
-}

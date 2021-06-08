@@ -31,7 +31,7 @@ function PendingForAcceptence({ pendingProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
-        pendingProposal(res.data.result.length);
+        // pendingProposal(res.data.result.length);
       }
     });
   };

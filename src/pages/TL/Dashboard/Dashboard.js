@@ -49,17 +49,13 @@ function Dashboard() {
         });
     };
 
-
     getPendindForAccepttence();
     getIncomplete();
     getComplete();
-
   }, []);
 
   var todaysDate = new Date();
   console.log(todaysDate);
-
- 
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -74,9 +70,17 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                <Link to={`/teamleader/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/teamleader/queriestab`,
+                      index: 0,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
+                  {/* <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link> */}
                 </div>
               </div>
 
@@ -104,7 +108,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                <Link to={`/teamleader/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/teamleader/queriestab`,
+                      index: 1,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
@@ -134,7 +143,12 @@ function Dashboard() {
                   </h5>
                 </div>
                 <div>
-                <Link to={`/teamleader/queriestab`}>
+                  <Link
+                    to={{
+                      pathname: `/teamleader/queriestab`,
+                      index: 2,
+                    }}
+                  >
                     <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
                   </Link>
                 </div>
