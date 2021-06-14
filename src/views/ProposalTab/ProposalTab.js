@@ -355,9 +355,9 @@ function ProposalTab() {
                       ></i>
                     </div>
 
-                    <div style={{ cursor: "pointer" }}>
+                    <div style={{ cursor: "pointer" }} title="Discussion">
                       <i
-                        class="fa fa-credit-card"
+                        class="fa fa-comments-o"
                         style={{ color: "green", fontSize: "16px" }}
                         onClick={() => chatHandler(row)}
                       ></i>

@@ -38,6 +38,7 @@ function ChatHistory({ chatHandler, addPaymentModal, qno }) {
               <tr>
                 <th scope="row">S.No</th>
                 <th scope="row">Message</th>
+                <th scope="row">Date</th>
               </tr>
             </thead>
             {notification.length > 0
@@ -46,6 +47,7 @@ function ChatHistory({ chatHandler, addPaymentModal, qno }) {
                     <tr>
                       <td>{i + 1}</td>
                       <td>{p.message}</td>
+                      <td>{p.setdate}</td>
                     </tr>
                   </tbody>
                 ))

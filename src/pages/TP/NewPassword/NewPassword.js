@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import "../../assets/css/style.css";
-import "../../assets/css/media.css";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/Footer";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -52,7 +50,7 @@ function NewPassword(props) {
 
   return (
     <>
-      <Header cust_sign="cust_sign" />
+      <Header mtp="mtp" />
       <div className="container">
         <div className="form">
           <div className="heading">

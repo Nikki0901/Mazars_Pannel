@@ -31,7 +31,7 @@ function RejectedModal({
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
-    formData.append("id", rejectedItem.id);
+    formData.append("id", rejectedItem.assign_id);
     formData.append("query_no", rejectedItem.assign_no);
     formData.append("message", value.p_chat);
     formData.append("type", 2);
@@ -42,6 +42,11 @@ function RejectedModal({
     })
       .then(function (response) {
         console.log("response-", response);
+        if (response.data.code === 1) {
+          alert.success("Submitted!");
+          getPendingforAcceptance();
+          rejectHandler();
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);

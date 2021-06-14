@@ -24,7 +24,9 @@ function SignIn(props) {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+
   const [load, setLoad] = useState(false);
+  const [email, setEmail] = useState(null);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -63,6 +65,12 @@ function SignIn(props) {
       });
   };
 
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setEmail(e.target.value);
+  };
+
+  console.log("email", email);
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -88,6 +96,7 @@ function SignIn(props) {
                       name="p_email"
                       ref={register}
                       placeholder="Enter Email"
+                      onChange={(e) => handleChange(e)}
                     />
                     {errors.p_email && (
                       <div className="invalid-feedback">
@@ -121,7 +130,14 @@ function SignIn(props) {
               </button>
 
               <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-                <Link to={`/customer/forget-password`}>Forgot Password</Link>
+                <Link
+                  to={{
+                    pathname: "/customer/forget-password",
+                    email: `${email}`,
+                  }}
+                >
+                  Forgot Password
+                </Link>
               </div>
             </form>
           )}
@@ -134,3 +150,18 @@ function SignIn(props) {
 }
 
 export default SignIn;
+
+// <Link
+//   to={{
+//     pathname: "/customer/forget-password",
+//     email: `${email}`,
+//   }}
+// >
+//   Forgot Password
+// </Link>;
+
+{
+  /* <Link 
+                to={`/customer/forget-password`}
+                >Forgot Password</Link> */
+}

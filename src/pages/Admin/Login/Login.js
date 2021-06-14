@@ -9,6 +9,7 @@ import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -19,13 +20,13 @@ const Schema = yup.object().shape({
     .max(20, "max 20 digits"),
 });
 
-
 function Login(props) {
   const alert = useAlert();
 
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+  const [email, setEmail] = useState(null);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -50,14 +51,21 @@ function Login(props) {
           props.history.push("/admin/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          Swal.fire('Oops...',"Errorr : Incorrect Email and password",'error')
+          Swal.fire(
+            "Oops...",
+            "Errorr : Incorrect Email and password",
+            "error"
+          );
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
-
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setEmail(e.target.value);
+  };
   return (
     <>
       <Header admin="admin" />
@@ -79,6 +87,7 @@ function Login(props) {
                     name="p_email"
                     ref={register}
                     placeholder="Enter Email"
+                    onChange={(e) => handleChange(e)}
                   />
                   {errors.p_email && (
                     <div className="invalid-feedback">
@@ -110,6 +119,19 @@ function Login(props) {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+
+            <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Link
+                to={{
+                  pathname: "/admin/forget-password",
+                  email: `${email}`,
+                }}
+              >
+                Forgot Password
+              </Link>
+
+              {/* <Link to={`/admin/forget-password`}>Forgot Password</Link> */}
+            </div>
           </form>
         </div>
       </div>

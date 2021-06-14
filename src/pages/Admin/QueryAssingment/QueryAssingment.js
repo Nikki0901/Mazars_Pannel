@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, Link, Redirect } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -16,16 +16,17 @@ import {
   Tooltip,
 } from "reactstrap";
 
-function QueryAssingment() {
+function QueryAssingment(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
   const { id } = useParams();
-  const history = useHistory();
 
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
   const [teamID, setTeamID] = useState(null);
-  const [teamName, setTeamName] = useState('');
+  const [teamName, setTeamName] = useState("");
   const [query, setQuery] = useState(true);
+
+  const [expectedDate, setExpectedDate] = useState("");
 
   const [hideQuery, setHideQuery] = useState({
     name: "",
@@ -68,6 +69,7 @@ function QueryAssingment() {
           timelines: res.data.result[0].Timelines,
           custId: res.data.result[0].customer_id,
         });
+        // expectedDeliveryDate(res.data.result[0].Timelines);
       }
     });
   };
@@ -93,17 +95,16 @@ function QueryAssingment() {
       });
   };
 
-  const handleChange= (e) =>{
-    console.log("val-",e.target.value);
-    setTeamID(e.target.value)
-    var value = taxLeaderDisplay.filter(function(item) {
-      return item.id == e.target.value
-    })
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setTeamID(e.target.value);
+    var value = taxLeaderDisplay.filter(function (item) {
+      return item.id == e.target.value;
+    });
     console.log(value[0].name);
-    setTeamName(value[0].name)
-  }
+    setTeamName(value[0].name);
+  };
 
-  
   const onSubmit = (value) => {
     console.log("value :", value);
     var expdeliverydate = value.p_expdeldate.replace(
@@ -119,7 +120,7 @@ function QueryAssingment() {
     formData.append("types", "tl");
     formData.append("name", teamName);
     formData.append("timeline", value.p_timelines);
-    formData.append("expdeliverydate", expdeliverydate);
+    formData.append("expdeliverydate", value.p_expdeldate);
     formData.append("assignNo", queryNo);
     formData.append("customer_id", custId);
 
@@ -133,7 +134,10 @@ function QueryAssingment() {
         if (response.data.code === 1) {
           alert.success("assigned!");
           getQuery();
-          reset();
+          props.history.push({
+            pathname: `/admin/queriestab`,
+            index: 1,
+          });
         }
       })
       .catch((error) => {
@@ -141,23 +145,47 @@ function QueryAssingment() {
       });
   };
 
+  const expectedDeliveryDate = (key) => {
+    console.log("timlines : ", key);
 
+    const d = new Date();
 
+    if (key == "Urgent, (4-5 Working Days)") {
+      const d2 = new Date(d.getTime() + 432000000);
+      const new_date =
+        d2.getFullYear() + "-" + (d2.getMonth() + 1) + "-" + d2.getDate();
+      // d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear();
 
+      console.log("Urgent:", new_date);
+      setExpectedDate(new_date);
+    } else if (key == "Regular (10-12 Working Days)") {
+      const d2 = new Date(d.getTime() + 1296000000);
+      const new_date =
+        d2.getFullYear() + "-" + (d2.getMonth() + 1) + "-" + d2.getDate();
+      console.log("regular:", new_date);
+      setExpectedDate(new_date);
+    }
+  };
 
+  console.log("expectedDate",expectedDate)
+  
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
       <Card>
         <CardHeader>
           <Row>
             <Col md="4">
-              <button
-                class="btn btn-success ml-3"
-                onClick={() => history.goBack()}
+              <Link
+                to={{
+                  pathname: `/admin/queriestab`,
+                  index: 1,
+                }}
               >
-                <i class="fas fa-arrow-left mr-2"></i>
-                Go Back
-              </button>
+                <button class="btn btn-success ml-3">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  Go Back
+                </button>
+              </Link>
             </Col>
             <Col md="4">
               <div style={{ textAlign: "center" }}>
@@ -189,7 +217,7 @@ function QueryAssingment() {
                             class="form-control"
                             name="p_taxprof"
                             ref={register}
-                            onChange={(e)=> handleChange(e)}
+                            onChange={(e) => handleChange(e)}
                           >
                             <option value="">-select-</option>
                             {taxLeaderDisplay.map((p, index) => (
@@ -214,6 +242,7 @@ function QueryAssingment() {
                             type="date"
                             ref={register}
                             name="p_expdeldate"
+                            // defaultValue={expectedDate}
                             class="form-control"
                           />
                         </td>
@@ -245,7 +274,7 @@ function QueryAssingment() {
                         </td>
                         <td>
                           <input
-                            type="date"
+                            type="text"
                             ref={register}
                             name="p_expdeldate"
                             class="form-control"
@@ -292,3 +321,18 @@ export default QueryAssingment;
 //         </CardHeader>
 //         <CardHeader></CardHeader>
 //       </Card>
+
+// d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear();
+// <Link
+//   to={{
+//     pathname: `/admin/queriestab`,
+//     index: 1,
+//   }}
+// />;
+
+// <Redirect
+//   to={{
+//     pathname: `/admin/queriestab`,
+//     index: 1,
+//   }}
+// />;

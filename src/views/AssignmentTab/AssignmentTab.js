@@ -185,45 +185,50 @@ function AssignmentTab() {
         // console.log(row.final_report);
         return (
           <>
-            <div>
-              <div style={{ cursor: "pointer" }} title="Accepted">
-                <i
-                  class="fa fa-check"
-                  style={{
-                    color: "green",
-                    fontSize: "16px",
-                  }}
-                  onClick={() => acceptHandler(row)}
-                ></i>
-              </div>
-
-              <div style={{ cursor: "pointer" }} title="Rejected">
-                <i
-                  class="fa fa-times"
-                  style={{ color: "red", fontSize: "16px" }}
-                  onClick={() => rejectHandler(row)}
-                ></i>
-              </div>
+            <div style={{ textAlign:"center" }}>
+              {!row.final_report == "" ? (
+                <div>
+                  <a
+                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                    target="_blank"
+                  >
+                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    final
+                  </a>
+                </div>
+              ) : row.assignment_draft_report ? (
+                <div>
+                  <a
+                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignment_draft_report}`}
+                    target="_blank"
+                  >
+                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    draft
+                  </a>
+                </div>
+              ) : null}
             </div>
-            {!row.final_report == "" ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  final
-                </a>
-              </div>
-            ) : row.assignment_draft_report ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignment_draft_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  draft
-                </a>
+
+            {row.assignment_draft_report && !row.final_report ? (
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <div style={{ cursor: "pointer" }} title="Accepted">
+                  <i
+                    class="fa fa-check"
+                    style={{
+                      color: "green",
+                      fontSize: "16px",
+                    }}
+                    onClick={() => acceptHandler(row)}
+                  ></i>
+                </div>
+
+                <div style={{ cursor: "pointer" }} title="Rejected">
+                  <i
+                    class="fa fa-times"
+                    style={{ color: "red", fontSize: "16px" }}
+                    onClick={() => rejectHandler(row)}
+                  ></i>
+                </div>
               </div>
             ) : null}
           </>
@@ -238,26 +243,26 @@ function AssignmentTab() {
       },
       formatter: priceFormatter,
     },
-    {
-      dataField: "",
-      text: "Video Call",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div style={{ cursor: "pointer" }} title="Video Chat">
-              <i
-                class="fa fa-video-camera"
-                style={{ color: "red", fontSize: "16px" }}
-                onClick={() => handleJoin(row.id)}
-              ></i>
-            </div>
-          </>
-        );
-      },
-    },
+    // {
+    //   dataField: "",
+    //   text: "Video Call",
+    //   headerStyle: () => {
+    //     return { fontSize: "12px" };
+    //   },
+    //   formatter: function (cell, row) {
+    //     return (
+    //       <>
+    //         <div style={{ cursor: "pointer" }} title="Video Chat">
+    //           <i
+    //             class="fa fa-video-camera"
+    //             style={{ color: "red", fontSize: "16px" }}
+    //             onClick={() => handleJoin(row.id)}
+    //           ></i>
+    //         </div>
+    //       </>
+    //     );
+    //   },
+    // },
     {
       text: "Action",
       dataField: "",
@@ -284,6 +289,18 @@ function AssignmentTab() {
                   onClick={() => paymentHandler(row)}
                 ></i>
               </div>
+
+              {row.vstart < 11 &&
+              row.vend >= 0 &&
+              !(row.vstart == null && row.vend == null) ? (
+                <div style={{ cursor: "pointer" }} title="Video Chat">
+                  <i
+                    class="fa fa-video-camera"
+                    style={{ color: "red", fontSize: "16px" }}
+                    onClick={() => handleJoin(row.id)}
+                  ></i>
+                </div>
+              ) : null}
             </div>
           </>
         );
@@ -344,6 +361,40 @@ function AssignmentTab() {
     history.push("/customer/meeting");
   };
 
+  function schedultTime(cell, row) {
+    // console.log("schedultTime", row);
+    console.log("schedultTime", row.schedule_time);
+    // console.log("setSeconds", setSeconds(row.schedule_time));
+
+    var d = row.schedule_time;
+    var date = new Date(d); // some mock date
+    var milliseconds = date.getTime();
+    console.log("milliseconds - ", milliseconds);
+
+    var date2 = new Date(); // current time
+    var milliseconds2 = date2.getTime();
+    console.log("current - ", milliseconds2);
+
+    var diff = milliseconds - milliseconds2;
+    console.log("diff - ", diff);
+    var total = diff - 900000;
+    console.log("total - ", total);
+
+    if (total > 0 && 900000 > total) {
+      return (
+        <>
+          <div style={{ cursor: "pointer" }} title="Video Chat">
+            <i
+              class="fa fa-video-camera"
+              style={{ color: "red", fontSize: "16px" }}
+              onClick={() => handleJoin(row.id)}
+            ></i>
+          </div>
+        </>
+      );
+    }
+  }
+
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
       <Card>
@@ -392,3 +443,17 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+
+// var endTime = 15;
+// var startTime = converToMinutes(b);
+// var converted = parseTime(startTime - endTime);
+// console.log("time", converted);
+
+// function converToMinutes(s) {
+//   var c = s.split(".");
+//   return parseInt(c[0]) * 60 + parseInt(c[1]);
+// }
+
+// function parseTime(s) {
+//   return Math.floor(parseInt(s) / 60) + "." + (parseInt(s) % 60);
+// }

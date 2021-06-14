@@ -137,7 +137,15 @@ function AssignmentTab() {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            {/* <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link> */}
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.q_id}`,
+                routes: "assignment",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },

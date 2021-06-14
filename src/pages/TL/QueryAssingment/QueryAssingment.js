@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory,Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -154,13 +154,19 @@ function QueryAssingment() {
         <CardHeader>
           <Row>
             <Col md="4">
-              <button
-                class="btn btn-success ml-3"
-                onClick={() => history.goBack()}
+            <Link
+                to={{
+                  pathname: `/teamleader/queriestab`,
+                  index: 1,
+                }}
               >
-                <i class="fas fa-arrow-left mr-2"></i>
-                Go Back
-              </button>
+                <button
+                  class="btn btn-success ml-3"
+                >
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  Go Back
+                </button>
+              </Link>
             </Col>
             <Col md="4">
               <div style={{ textAlign: "center" }}>

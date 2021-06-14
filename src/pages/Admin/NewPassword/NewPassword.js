@@ -1,22 +1,19 @@
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import "../../assets/css/style.css";
-import "../../assets/css/media.css";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/Footer";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
+
 
 function NewPassword(props) {
   const alert = useAlert();
   const { register, handleSubmit, errors, getValues, reset } = useForm();
-  const { id } = useParams();
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -38,7 +35,7 @@ function NewPassword(props) {
         if (response.data.code === 1) {
           alert.success("reset password successfully!");
           reset();
-          props.history.push("/customer/signin");
+          props.history.push("/admin/login");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           // alert.error(response.data.result);
@@ -52,7 +49,7 @@ function NewPassword(props) {
 
   return (
     <>
-      <Header cust_sign="cust_sign" />
+       <Header admin="admin" />
       <div className="container">
         <div className="form">
           <div className="heading">
@@ -61,6 +58,7 @@ function NewPassword(props) {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
+             
               <div className="mb-3">
                 <label className="form-label">Email</label>
                 <input
@@ -70,7 +68,7 @@ function NewPassword(props) {
                   })}
                   name="p_email"
                   placeholder="Enter Email"
-                  defaultValue={id}
+                  defaultValue={props.location.email}
                   ref={register({
                     required: "This field is required",
                     pattern: {
@@ -116,8 +114,7 @@ function NewPassword(props) {
                 ref={register({
                   required: "This field is required",
                   pattern: {
-                    value:
-                      /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                    value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
                     message:
                       "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
                   },
@@ -166,6 +163,7 @@ function NewPassword(props) {
 }
 
 export default NewPassword;
+
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required user id"),

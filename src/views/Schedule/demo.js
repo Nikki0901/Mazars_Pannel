@@ -22,7 +22,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { Link ,useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import * as Cookies from "js-cookie";
 
 function Demo() {
@@ -65,8 +65,10 @@ function Demo() {
         console.log("res -", res);
         console.log("result -", res.data.result.items);
         var a = res.data.result.items;
-        setData(a.map(mapAppointmentData));
-        setLoading(false);
+        if (a) {
+          setData(a.map(mapAppointmentData));
+          setLoading(false);
+        }
       });
   };
 
@@ -227,7 +229,10 @@ function Demo() {
       <div style={{ display: "flex" }}>
         <div>{children}</div>
         <div onClick={() => handleJoin("2")}>
-          <p style={{ fontSize: "12px", color: "#fff" }}>link</p>
+          <i
+            class="fa fa-mail-forward"
+            style={{ fontSize: "12px", color: "#fff" }}
+          ></i>
         </div>
       </div>
     </Appointments.Appointment>
@@ -260,7 +265,7 @@ function Demo() {
   //handleJoin
   const handleJoin = (id) => {
     console.log("id", id);
-    Cookies.set("channel", id); 
+    Cookies.set("channel", id);
     Cookies.set("baseMode", baseMode);
     Cookies.set("transcode", transcode);
     Cookies.set("attendeeMode", attendeeMode);
@@ -280,6 +285,7 @@ function Demo() {
 
         <DayView startDayHour={10} endDayHour={24} />
         <WeekView startDayHour={10} endDayHour={19} />
+
         <Appointments appointmentComponent={myAppointment} />
 
         <Toolbar />

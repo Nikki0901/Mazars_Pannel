@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import Header from "../../../components/Header/Header";
 import Footer from "../../../components/Footer/Footer";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,7 +8,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -24,7 +25,7 @@ function Login(props) {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
-
+  const [email, setEmail] = useState(null);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -40,75 +41,95 @@ function Login(props) {
       data: formData,
     })
       .then(function (response) {
-        console.log("res-", response);     
+        console.log("res-", response);
         if (response.data.code === 1) {
           alert.success("Login successfully !");
           localStorage.setItem(
             "tlkey",
             JSON.stringify(response.data["user id"])
           );
-          props.history.push("/teamleader/dashboard");  
-        } else
-         if (response.data.code === 0) {
-          console.log(response.data.result)
-          Swal.fire('Oops...',"Errorr : Incorrect Email and password",'error')
-          }
+          props.history.push("/teamleader/dashboard");
+        } else if (response.data.code === 0) {
+          console.log(response.data.result);
+          Swal.fire(
+            "Oops...",
+            "Errorr : Incorrect Email and password",
+            "error"
+          );
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
 
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setEmail(e.target.value);
+  };
   return (
     <>
-      <Header mtl="mtl"/>
+      <Header mtl="mtl" />
       <div className="container">
         <div className="form">
           <div className="heading">
             <h2>MTL Login</h2>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>    
-         
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-12">
-              <div className="mb-3">
+                <div className="mb-3">
                   <label className="form-label">Email</label>
                   <input
                     type="text"
-                   className={classNames("form-control", {
+                    className={classNames("form-control", {
                       "is-invalid": errors.p_email,
                     })}
                     name="p_email"
                     ref={register}
                     placeholder="Enter Email"
+                    onChange={(e) => handleChange(e)}
                   />
                   {errors.p_email && (
-                <div className="invalid-feedback">{errors.p_email.message}</div>
-              )}
+                    <div className="invalid-feedback">
+                      {errors.p_email.message}
+                    </div>
+                  )}
                 </div>
-                
               </div>
               <div className="col-md-12">
                 <div className="mb-3">
                   <label className="form-label">Password</label>
                   <input
                     type="password"
-                   className={classNames("form-control", {
+                    className={classNames("form-control", {
                       "is-invalid": errors.password,
                     })}
                     name="password"
                     placeholder="Enter Password"
                     ref={register}
                   />
-                 {errors.password && (
-                <div className="invalid-feedback">{errors.password.message}</div>
-              )}
+                  {errors.password && (
+                    <div className="invalid-feedback">
+                      {errors.password.message}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Link
+                to={{
+                  pathname: "/teamleader/forget-password",
+                  email: `${email}`,
+                }}
+              >
+                Forgot Password
+              </Link>
+            </div>
           </form>
         </div>
       </div>

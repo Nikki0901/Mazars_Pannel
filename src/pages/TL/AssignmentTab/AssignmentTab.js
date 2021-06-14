@@ -149,7 +149,15 @@ function AssignmentTab() {
         console.log(row);
         return (
           <>
-            <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link>
+            {/* <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link> */}
+            <Link
+              to={{
+                pathname: `/teamleader/queries/${row.q_id}`,         
+                routes: "assignment",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -352,26 +360,18 @@ function AssignmentTab() {
                 </div>
               )}
             </div>
-          </>
-        );
-      },
-    },
-    {
-      dataField: "",
-      text: "Video Call",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div style={{ cursor: "pointer" }}>
-              <i
-                class="fa fa-video-camera"
-                style={{ color: "red", fontSize: "16px" }}
-                onClick={() => handleJoin(row.q_id)}
-              ></i>
-            </div>
+
+            {row.vstart < 11 &&
+            row.vend >= 0 &&
+            !(row.vstart == null && row.vend == null) ? (
+              <div style={{ cursor: "pointer" }} title="Video Chat">
+                <i
+                  class="fa fa-video-camera"
+                  style={{ color: "red", fontSize: "16px" }}
+                  onClick={() => handleJoin(row.id)}
+                ></i>
+              </div>
+            ) : null}
           </>
         );
       },
@@ -416,7 +416,9 @@ function AssignmentTab() {
           userid
         )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
           data.p_dateTo
-        }&assignment_status=${status}&stages_status=${data.p_status}&pcat_id=${selectedData}`
+        }&assignment_status=${status}&stages_status=${
+          data.p_status
+        }&pcat_id=${selectedData}`
       )
       .then((res) => {
         console.log(res);

@@ -52,7 +52,7 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
                 type="file"
                 name="p_final"
                 ref={register}
-                className="form-control-file"
+                className="form-control-file manage_file"
               />
             </div>
             <div class="modal-footer">

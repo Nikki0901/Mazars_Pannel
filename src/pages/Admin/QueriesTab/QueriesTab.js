@@ -20,6 +20,8 @@ import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
 function QueriesTab(props) {
   console.log("queries tab: ", props);
+
+  
   const userid = window.localStorage.getItem("adminkey");
   const count_PFA = window.localStorage.getItem("count_PFA");
 
@@ -91,6 +93,7 @@ function QueriesTab(props) {
   useLayoutEffect(() => {
     setTabIndex(props.location.index || 0);
   }, [props.location.index]);
+
 
   const myStyle1 = {
     backgroundColor: "grey",

@@ -74,7 +74,15 @@ function Proposal() {
         console.log(row);
         return (
           <>
-            <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link>
+            {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
+            <Link
+              to={{
+                pathname: `/teamleader/queries/${row.id}`,
+                routes: "proposal",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -111,34 +119,34 @@ function Proposal() {
         return { fontSize: "12px" };
       },
     },
-    {
-      text: "History",
-      // dataField: "revised_text",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            {row.revised_text && (
-              <div style={{ cursor: "pointer" }} title="View History">
-                {myFunction(row.revised_text)}
+    // {
+    //   text: "History",
+    //   dataField: "",
+    //   headerStyle: () => {
+    //     return { fontSize: "12px" };
+    //   },
+    //   formatter: function (cell, row) {
+    //     return (
+    //       <>
+    //         {row.revised_text && (
+    //           <div style={{ cursor: "pointer" }} title="View History">
+    //             {/* {myFunction(row.revised_text)} */}
 
-                <div>
-                  <button
-                    type="button"
-                    class="btn btn-info btn-sm"
-                    onClick={() => chatHandler(row)}
-                  >
-                    view
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
-        );
-      },
-    },
+    //             <div>
+    //               <button
+    //                 type="button"
+    //                 class="btn btn-info btn-sm"
+    //                 onClick={() => chatHandler(row)}
+    //               >
+    //                 view
+    //               </button>
+    //             </div>
+    //           </div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       text: "Action",
       dataField: "",
@@ -148,41 +156,49 @@ function Proposal() {
       formatter: function (cell, row) {
         return (
           <>
-            {row.status == "Cust Accepted" || row.status == "Pending" ? (
-              <Link to={`/teamleader/edit-proposal/${row.id}`}>
-                <i
-                  className="fa fa-edit"
-                  style={{
-                    fontSize: 18,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "green",
-                  }}
-                ></i>
-              </Link>
-            ) : row.status == "Progress" ? (
-              <Link to={`/teamleader/sendproposal/${row.id}`}>
-                <i
-                  class="fa fa-mail-forward"
-                  style={{
-                    fontSize: 14,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                  }}
-                ></i>
-              </Link>
-            ) : null}
+            <div style={{display:"flex",justifyContent:"space-around"}}>
+              <div>
+                {row.status == "Cust Accepted" || row.status == "Pending" ? (
+                  <Link to={`/teamleader/edit-proposal/${row.id}`}>
+                    <i
+                      className="fa fa-edit"
+                      style={{
+                        fontSize: "16px",
+                        cursor: "pointer",           
+                        color: "green",
+                      }}
+                    ></i>
+                  </Link>
+                ) : row.status == "Progress" ? (
+                  <Link to={`/teamleader/sendproposal/${row.id}`}>
+                    <i
+                      class="fa fa-mail-forward"
+                      style={{
+                        fontSize: "14px",
+                        cursor: "pointer",             
+                      }}
+                    ></i>
+                  </Link>
+                ) : null}
+              </div>
+
+              <div>
+                {row.revised_text && (
+                  <div style={{ cursor: "pointer" }} title="View History">
+                    <i
+                      class="fa fa-comments-o"
+                      style={{ color: "green", fontSize: "16px",color: "light-blue", }}
+                      onClick={() => chatHandler(row)}
+                    ></i>
+                  </div>
+                )}
+              </div>
+            </div>
           </>
         );
       },
     },
   ];
-
-  const myFunction = (str) => {
-    var str2 = "...";
-    var res = str.slice(0, 5).concat(str2);
-    return res;
-  };
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -224,3 +240,11 @@ function Proposal() {
 }
 
 export default Proposal;
+{
+  /* {myFunction(row.revised_text)} */
+}
+// const myFunction = (str) => {
+//   var str2 = "...";
+//   var res = str.slice(0, 5).concat(str2);
+//   return res;
+// };

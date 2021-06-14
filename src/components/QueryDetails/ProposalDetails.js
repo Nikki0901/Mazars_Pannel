@@ -21,34 +21,13 @@ function ProposalDetails({
 
   const { tlname, date_of_allocation } = diaplayHistory;
 
-  const userId = window.localStorage.getItem("userid");
+  // const userId = window.localStorage.getItem("userid");
 
-  console.log("p", p.query_status);
+  console.log("p", p.id);
 
   // CommonServices.removeTime(proposal_date);
 
-  // const url = `https://mazarsapi.multitvsolution.com/mazarapi/v1/customers/dounloadpdf?id=28`;
-
-  // const getDataFromURL = (url) =>
-  //   new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       fetch(url)
-  //         .then((response) => response.text())
-  //         .then((data) => {
-  //           console.log("res",data)
-  //           resolve(data);
-  //         });
-  //     });
-  //   }, 2000);
-
-  const getProposalData = () => {
-    axios
-      .get(`${baseUrl}/customers/dounloadpdf?id=28`)
-      .then((res) => {
-        console.log(res);
-      });
-  };
-
+  console.log("diaplayProposal", diaplayProposal);
   return (
     <>
       <div>
@@ -60,14 +39,19 @@ function ProposalDetails({
           }}
         >
           PROCESSING OF QUERY
+          <div>
+            {proposal_date && (
+              <a
+                class="btn btn-primary btn-sm"
+                href={`${baseUrl}/customers/dounloadpdf?id=${p.id}`}
+                role="button"
+              >
+                Download
+              </a>
+            )}
+          </div>
         </p>
-        <div>
-          <DownloadLink
-            label={"Download"}
-            filename={"filename.pdf"}
-            exportFile={getProposalData}
-          />
-        </div>
+
         <table class="table table-bordered">
           <thead>
             <tr>

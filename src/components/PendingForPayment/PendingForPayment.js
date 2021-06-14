@@ -114,7 +114,16 @@ function PendingForPayment({ CountPendingForPayment }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link
+              // to={`/admin/queries/${row.q_id}`}
+              to={{
+                pathname: `/admin/queries/${row.q_id}`,
+                index: 3,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -241,7 +250,7 @@ function PendingForPayment({ CountPendingForPayment }) {
         var a = row.accepted_amount;
         var p = row.paid_amount;
         return a - p;
-      }
+      },
     },
     {
       text: "Date of Payment",
@@ -286,8 +295,6 @@ function PendingForPayment({ CountPendingForPayment }) {
     },
   ];
 
-
-
   //reset date
   const resetData = () => {
     console.log("resetData ..");
@@ -329,7 +336,7 @@ function PendingForPayment({ CountPendingForPayment }) {
     <>
       <Card>
         <CardHeader>
-        <AdminFilter
+          <AdminFilter
             setData={setPendingData}
             getData={getPendingForPayment}
             pendingPayment="pendingPayment"

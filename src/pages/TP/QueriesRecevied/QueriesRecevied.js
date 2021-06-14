@@ -3,12 +3,13 @@ import Layout from "../../../components/Layout/Layout";
 import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams } from "react-router-dom";
+import { useParams, Link ,useHistory } from "react-router-dom";
 import QueryDetails from "../../../components/QueryDetails/QueryDetails";
-
 
 function QueriesRecevied() {
   const { id } = useParams();
+  const history = useHistory();
+
   const userid = window.localStorage.getItem("tpkey");
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
@@ -122,23 +123,39 @@ function QueriesRecevied() {
           </div>
         </div>
         <div class="col-xl-12 col-lg-12 col-md-12">
-          {submitData.map((p, index) => (
-            <QueryDetails
-              p={p}
-              key={index}
-              diaplaySpecific={diaplaySpecific}
-              diaplayProposal={diaplayProposal}
-              diaplayHistory={diaplayHistory}
-              diaplayAssignment={diaplayAssignment}
-              displayQuery={displayQuery}
-              getQuery={getQuery}
-              assingNo={assingNo}
-              queryDocs={queryDocs}
-              paymentDetails={paymentDetails}
-              purpose={purpose}
-              year={year}
-            />
-          ))}
+          <div class="card">
+            <div
+              class="card-header"
+              id="headingOne"
+              style={{ padding: ".5rem .1rem" }}
+            >
+              <h2 class="mb-0 query ml-3">
+                <button
+                  class="btn btn-success"
+                  onClick={() => history.goBack("4")}
+                >
+                  Go Back
+                </button>
+              </h2>
+            </div>
+            {submitData.map((p, index) => (
+              <QueryDetails
+                p={p}
+                key={index}
+                diaplaySpecific={diaplaySpecific}
+                diaplayProposal={diaplayProposal}
+                diaplayHistory={diaplayHistory}
+                diaplayAssignment={diaplayAssignment}
+                displayQuery={displayQuery}
+                getQuery={getQuery}
+                assingNo={assingNo}
+                queryDocs={queryDocs}
+                paymentDetails={paymentDetails}
+                purpose={purpose}
+                year={year}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Layout>

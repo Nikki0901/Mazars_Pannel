@@ -22,6 +22,7 @@ import { Select } from "antd";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import History from "./History";
+import Swal from "sweetalert2";
 
 function PendingAllocation({ CountPendingForAllocation }) {
   const { Option, OptGroup } = Select;
@@ -136,7 +137,15 @@ function PendingAllocation({ CountPendingForAllocation }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.id}`}>{row.assign_no}</Link>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.id}`,
+                index: 1,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -188,11 +197,29 @@ function PendingAllocation({ CountPendingForAllocation }) {
                 <p>{row.allocation_time}</p>
               </p>
             ) : (
-              <div title="Assign to">
-                <Link to={`/admin/queryassing/${row.id}`}>
-                  <i class="fa fa-share"></i>
-                </Link>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <div title="Assign to">
+                  <Link
+                    to={`/admin/queryassing/${row.id}`}
+                  >
+                    <i class="fa fa-share"></i>
+                  </Link>
+
+                </div>
+                <div>
+                  <Link
+                    to={`/admin/query_rejection/${row.id}`}
+                  >
+                    <i
+                      className="fa fa-trash"
+                    ></i>
+                  </Link>
+
+                </div>
               </div>
+
+
+
             )}
           </>
         );
@@ -220,6 +247,8 @@ function PendingAllocation({ CountPendingForAllocation }) {
     },
   ];
 
+
+
   return (
     <>
       <Card>
@@ -246,11 +275,27 @@ function PendingAllocation({ CountPendingForAllocation }) {
 }
 
 export default PendingAllocation;
+  // axios
+    //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
+    //   .then(function (response) {
+    //     console.log("delete-", response);
+    // if (response.data.code === 1) {
+    //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    //   getTeamLeader();
+    // } else {
+    //   Swal.fire("Oops...", "Errorr ", "error");
+    // }
+
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
+
 
 /* <td style={{ textAlign: "center" }}>
                       {p.is_assigned === "1" && (
                         <p style={{ color: "green" }}>
-                          <i class="fa fa-circle" 
+                          <i class="fa fa-circle"
                           style={{fontSize:"10px" ,marginRight:"4px"}}>
                             </i>
                             {p.allocation_time}

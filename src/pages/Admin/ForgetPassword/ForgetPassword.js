@@ -1,31 +1,29 @@
 import { useForm } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import "../../assets/css/style.css";
-import "../../assets/css/media.css";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import Header from "../../../components/Header/Header";
+import Footer from "../../../components/Footer/Footer";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 // import NewPassword from "../NewPassword/NewPassword";
 import classNames from "classnames";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
 });
 
-function ForgetPassword(props) {
-  // console.log("props", props.location.email);
 
+
+function ForgetPassword(props) {
   const alert = useAlert();
 
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -33,36 +31,37 @@ function ForgetPassword(props) {
     let formData = new FormData();
     formData.append("email", value.p_email);
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/forgototp`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          alert.success("otp send your email !");
-          props.history.push(`/customer/new-password/${value.p_email}`)
-        } else if (response.data.code === 0) {
-          console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/customers/forgototp`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
+    //     if (response.data.code === 1) {
+    //       alert.success("otp send your email !");
+    //       props.history.push("/admin/new-password");
+    //     } else if (response.data.code === 0) {
+    //       console.log(response.data.result);   
+    //       Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
   };
-
 
   return (
     <>
-      <Header cust_sign="cust_sign" />
+     <Header admin="admin" />
       <div className="container">
         <div className="form">
-          <div className="heading">
+        <div className="heading">
             <h2>Forgot Password</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
+            
+      
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
@@ -83,6 +82,7 @@ function ForgetPassword(props) {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+
           </form>
         </div>
       </div>
@@ -93,23 +93,3 @@ function ForgetPassword(props) {
 }
 
 export default ForgetPassword;
-
-{
-  /* <Link
-            to={{
-              pathname: `/customer/new-password`,
-              email:`${value.p_email}`
-            }}
-          ></Link>; */
-}
-
-  // const sendEmail = (email) => {
-  //   return (
-  //     <Link
-  //       to={{
-  //         pathname: `/customer/new-password`,
-  //         email: `${email}`,
-  //       }}
-  //     ></Link>
-  //   );
-  // };

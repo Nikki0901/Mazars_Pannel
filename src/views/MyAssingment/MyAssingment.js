@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import QueryDetails from "../../components/QueryDetails/QueryDetails";
 
 function MyAssingment() {
   const { id } = useParams();
+  const history = useHistory();
+
   const userId = window.localStorage.getItem("userid");
 
   const [submitData, setSubmitData] = useState([]);
@@ -17,7 +19,6 @@ function MyAssingment() {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
-
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -55,7 +56,7 @@ function MyAssingment() {
 
           var purposeItem = res.data.result[0].purpose_opinion;
           var assementItem = res.data.result[0].assessment_year;
-          
+
           console.log("purposeItem-", typeof purposeItem);
           try {
             var myPurpose = JSON.parse(purposeItem);
@@ -129,24 +130,42 @@ function MyAssingment() {
           </div>
         </div>
         <div class="col-xl-12 col-lg-12 col-md-12">
-          {submitData.map((p, index) => (
-            <QueryDetails
-              p={p}
-              key={index}
-              diaplaySpecific={diaplaySpecific}
-              diaplayProposal={diaplayProposal}
-              diaplayHistory={diaplayHistory}
-              diaplayAssignment={diaplayAssignment}
-              displayQuery={displayQuery}
-              getQuery={getQuery}
-              assingNo={assingNo}
-              customerQuery="customerQuery"
-              queryDocs={queryDocs}
-              purpose={purpose}
-              year={year}
-              paymentDetails={paymentDetails}
-            />
-          ))}
+          <div class="card">
+            <div
+              class="card-header"
+              id="headingOne"
+              style={{ padding: ".5rem .1rem" }}
+            >
+              <h2 class="mb-0 query">
+                <div>
+                  <button
+                    class="btn btn-success ml-3"
+                    onClick={() => history.goBack()}
+                  >
+                    Go Back
+                  </button>
+                </div>
+              </h2>
+            </div>
+            {submitData.map((p, index) => (
+              <QueryDetails
+                p={p}
+                key={index}
+                diaplaySpecific={diaplaySpecific}
+                diaplayProposal={diaplayProposal}
+                diaplayHistory={diaplayHistory}
+                diaplayAssignment={diaplayAssignment}
+                displayQuery={displayQuery}
+                getQuery={getQuery}
+                assingNo={assingNo}
+                customerQuery="customerQuery"
+                queryDocs={queryDocs}
+                purpose={purpose}
+                year={year}
+                paymentDetails={paymentDetails}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Layout>

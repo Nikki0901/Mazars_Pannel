@@ -48,7 +48,7 @@ function DraftReport({ draftModal, uploadDraftReport ,id ,getAssignmentList}) {
                     type="file"
                     name="p_draft"
                     ref={register}
-                    className="form-control-file"
+                    className="form-control-file manage_file"
                   />
                   </div>
                   <div class="modal-footer">

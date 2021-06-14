@@ -114,7 +114,15 @@ function PendingForAcceptence({ pendingProposal }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.q_id}`,
+                index: 1,
+                routes: "proposal",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -241,7 +249,7 @@ function PendingForAcceptence({ pendingProposal }) {
         var a = row.accepted_amount;
         var p = row.paid_amount;
         return a - p;
-      }
+      },
     },
     {
       text: "Date of Payment",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import axios from "axios";
+import { Link, useHistory } from "react-router-dom";
 import { baseUrl } from "../../../config/config";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
@@ -19,16 +20,23 @@ import {
   TodayButton,
   Toolbar,
 } from "@devexpress/dx-react-scheduler-material-ui";
+import { withStyles } from "@material-ui/core/styles";
+import * as Cookies from "js-cookie";
 
-import {owners}  from "./appoinments";
-
-
+// import {owners}  from "./appoinments";
 
 function Demo() {
   const userId = window.localStorage.getItem("tlkey");
+  const history = useHistory();
+
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
+  const [owner, setOwner] = useState([]);
 
+  const [baseMode, SetbaseMode] = useState("avc");
+  const [transcode, SetTranscode] = useState("interop");
+  const [attendeeMode, SetAttendeeMode] = useState("video");
+  const [videoProfile, SetVideoProfile] = useState("480p_4");
   var date = new Date();
 
   function convert(str) {
@@ -42,6 +50,7 @@ function Demo() {
   useEffect(() => {
     getData();
     getAssignmentNo();
+    getUsers();
   }, []);
 
   const getData = () => {
@@ -49,7 +58,6 @@ function Demo() {
       .get(`${baseUrl}/tl/videoScheduler?tl_id=${JSON.parse(userId)}`)
       .then((res) => {
         console.log("res -", res);
-        console.log("result -", res.data.result.items);
         var a = res.data.result.items;
         setData(a.map(mapAppointmentData));
       });
@@ -62,6 +70,8 @@ function Demo() {
     title: appointment.title,
     notes: appointment.summary,
     question_id: appointment.question_id,
+    vstart:appointment.vstart,
+    vend:appointment.vend,
   });
 
   const getAssignmentNo = () => {
@@ -85,6 +95,21 @@ function Demo() {
       });
   };
 
+  const getUsers = () => {
+    axios.get(`${baseUrl}/tl/allAttendees?uid=${JSON.parse(userId)}`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        var data = res.data.result;
+        const newOwners = data.map(({ name: text, ...rest }) => ({
+          text,
+          ...rest,
+        }));
+        console.log("dt--", newOwners);
+        setOwner(newOwners);
+      }
+    });
+  };
+
   const resources = [
     {
       fieldName: "question_id",
@@ -92,12 +117,75 @@ function Demo() {
       instances: assignmentdata,
     },
     {
-      fieldName: 'members',
-      title: 'Members',
-      instances: owners,
+      fieldName: "name",
+      title: "Users",
+      instances: owner,
       allowMultiple: true,
     },
   ];
+
+  const styles = (theme) => ({
+    button: {
+      color: theme.palette.background.default,
+      padding: 0,
+    },
+    text: {
+      paddingTop: theme.spacing(1),
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    },
+  });
+
+  const AppointmentBase = ({
+    children,
+    // data,
+    onClick,
+    classes,
+    onAppointmentMetaChange,
+    ...restProps
+  }) => (
+    <Appointments.Appointment {...restProps}>
+      <div style={{ display: "flex" }}>
+        {
+          console.log("children",children)
+        }
+        <div>{children}</div>
+        <div
+        onClick={() => handleJoin("2")}
+        ><i
+        class="fa fa-mail-forward"
+        style={{ fontSize: "12px", color: "#fff" }}
+      ></i>
+        </div>
+      </div>
+    </Appointments.Appointment>
+  );
+
+  const Appointment = withStyles(styles, { name: "Appointment" })(
+    AppointmentBase
+  );
+
+  const myAppointment = (props) => {
+    return (
+      <Appointment
+        {...props}
+        // onAppointmentMetaChange={onAppointmentMetaChange}
+      />
+    );
+  };
+
+  //handleJoin
+  const handleJoin = (id) => {
+    console.log("id", id);
+
+    Cookies.set("channel_2", id);
+    Cookies.set("baseMode_2", baseMode);
+    Cookies.set("transcode_2", transcode);
+    Cookies.set("attendeeMode_2", attendeeMode);
+    Cookies.set("videoProfile_2", videoProfile);
+    history.push("/teamleader/meeting");
+  };
 
   const changeFormat = (d) => {
     console.log(d);
@@ -115,6 +203,7 @@ function Demo() {
   const commitChanges = ({ added, changed, deleted }) => {
     if (added) {
       console.log("added - ", added);
+
       var startDate = added.startDate;
       var endDate = added.endDate;
 
@@ -125,15 +214,16 @@ function Demo() {
       formData.append("endtime", changeFormat(endDate));
       formData.append("title", added.title);
       formData.append("notes", added.notes);
+      formData.append("user", added.name);
+
       axios({
         method: "POST",
-        url: `${baseUrl}/customers/PostCallSchedule`,
+        url: `${baseUrl}/tl/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
           console.log("res post-", response);
           getData();
-
         })
         .catch((error) => {
           console.log("erroror - ", error);
@@ -172,7 +262,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/customers/PostCallSchedule`,
+        url: `${baseUrl}/tl/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -205,7 +295,7 @@ function Demo() {
 
         <DayView startDayHour={10} endDayHour={24} />
         <WeekView startDayHour={10} endDayHour={19} />
-        <Appointments />
+        <Appointments appointmentComponent={myAppointment} />
 
         <Toolbar />
         <DateNavigator />
@@ -215,14 +305,16 @@ function Demo() {
         <AppointmentTooltip showOpenButton />
         <AppointmentForm />
 
-        <Resources data={resources} mainResourceName="question_id" />
+        <Resources
+          data={resources}
+          // mainResourceName="question_id"
+        />
       </Scheduler>
     </Paper>
   );
 }
 
 export default Demo;
-
 
 // const styles = {
 //   toolbarRoot: {

@@ -17,6 +17,8 @@ import {
 import { useForm } from "react-hook-form";
 
 function AssignmentForm(props) {
+  console.log("props", props.location.clients);
+
   const alert = useAlert();
   const { handleSubmit, register, errors, reset, setValue } = useForm();
   const history = useHistory();
@@ -133,134 +135,236 @@ function AssignmentForm(props) {
           </Row>
         </CardHeader>
         <CardHeader>
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Titles</label>
-                    <textarea
-                      className="form-control"
-                      id="textarea"
-                      rows="2"
-                      name="p_notes"
-                      ref={register}
-                    ></textarea>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Date</label>
-                    <input
-                      type="date"
-                      name="p_date"
-                      className="form-control"
-                      ref={register}
-                    />
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Upload Documents</label>
-                    <input
-                      type="file"
-                      name="p_upload"
-                      ref={register}
-                      className="form-control-file"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Send/Received</label>
-                    <select
-                      class="form-control"
-                      ref={register}
-                      name="p_type"
-                      onChange={(e) => setItem(e.target.value)}
-                    >
-                      <option value="">--select--</option>
-                      <option value="send">Send</option>
-                      <option value="received">Received</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Notes Type</label>
-                    <select
-                      class="form-control"
-                      ref={register}
-                      name="p_type"
-                      onChange={(e) => setStore(e.target.value)}
-                    >
-                      <option value="">--select type--</option>
-                      <option value="email">Email</option>
-                      <option value="phone">Phone</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
-                {store == "email" && (
+          {props.location.clients == "completed" ? (
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
-                      <label>Email</label>
+                      <label>Titles</label>
+                      <textarea
+                        className="form-control"
+                        id="textarea"
+                        rows="2"
+                        name="p_notes"
+                        ref={register}
+                        disabled
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Date</label>
                       <input
-                        type="text"
-                        name="p_info"
+                        type="date"
+                        name="p_date"
+                        className="form-control"
+                        ref={register}
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Upload Documents</label>
+                      <input
+                        type="file"
+                        name="p_upload"
+                        ref={register}
+                        className="form-control-file"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Send/Received</label>
+                      <select
+                        class="form-control"
+                        ref={register}
+                        name="p_type"
+                        onChange={(e) => setItem(e.target.value)}
+                        disabled
+                      >
+                        <option value="">--select--</option>
+                        <option value="send">Send</option>
+                        <option value="received">Received</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Notes Type</label>
+                      <select
+                        class="form-control"
+                        ref={register}
+                        name="p_type"
+                        onChange={(e) => setStore(e.target.value)}
+                        disabled
+                      >
+                        <option value="">--select type--</option>
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                        disabled
+                      >
+                        submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Titles</label>
+                      <textarea
+                        className="form-control"
+                        id="textarea"
+                        rows="2"
+                        name="p_notes"
+                        ref={register}
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Date</label>
+                      <input
+                        type="date"
+                        name="p_date"
                         className="form-control"
                         ref={register}
                       />
                     </div>
                   </div>
-                )}
 
-                {store == "phone" && (
                   <div class="col-md-4">
                     <div class="form-group">
-                      <label>Phone</label>
+                      <label>Upload Documents</label>
                       <input
-                        type="text"
-                        name="p_info"
-                        className="form-control"
+                        type="file"
+                        name="p_upload"
                         ref={register}
+                        className="form-control-file"
                       />
                     </div>
-                  </div>
-                )}
-                {store == "other" && (
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label>Notes info</label>
-                      <input
-                        type="text"
-                        name="p_info"
-                        className="form-control"
-                        ref={register}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div class="row">
-                <div class="col-md-2">
-                  <div class="form-group">
-                    <button type="submit" className="btn btn-primary btn-block">
-                      submit
-                    </button>
                   </div>
                 </div>
-              </div>
-            </form>
-          </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Send/Received</label>
+                      <select
+                        class="form-control"
+                        ref={register}
+                        name="p_type"
+                        onChange={(e) => setItem(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="send">Send</option>
+                        <option value="received">Received</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Notes Type</label>
+                      <select
+                        class="form-control"
+                        ref={register}
+                        name="p_type"
+                        onChange={(e) => setStore(e.target.value)}
+                      >
+                        <option value="">--select type--</option>
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {store == "email" && (
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Email</label>
+                        <input
+                          type="text"
+                          name="p_info"
+                          className="form-control"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {store == "phone" && (
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Phone</label>
+                        <input
+                          type="text"
+                          name="p_info"
+                          className="form-control"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {store == "other" && (
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Notes info</label>
+                        <input
+                          type="text"
+                          name="p_info"
+                          className="form-control"
+                          ref={register}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                      >
+                        submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          )}
         </CardHeader>
 
         <CardBody>

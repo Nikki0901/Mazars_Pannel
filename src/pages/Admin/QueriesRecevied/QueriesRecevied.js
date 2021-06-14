@@ -15,8 +15,12 @@ import {
 } from "reactstrap";
 import QueryDetails from "../../../components/QueryDetails/QueryDetails";
 
-function QueriesRecevied() {
+function QueriesRecevied(props) {
+  console.log("props", props);
+
   const { id } = useParams();
+  const history = useHistory();
+
   const userid = window.localStorage.getItem("adminkey");
   const [submitData, setSubmitData] = useState([]);
   const [assingNo, setAssingmentNo] = useState();
@@ -63,7 +67,7 @@ function QueriesRecevied() {
 
           var purposeItem = res.data.result[0].purpose_opinion;
           var assementItem = res.data.result[0].assessment_year;
-          
+
           console.log("purposeItem-", typeof purposeItem);
           try {
             var myPurpose = JSON.parse(purposeItem);
@@ -131,23 +135,42 @@ function QueriesRecevied() {
           </div>
         </div>
         <div class="col-xl-12 col-lg-12 col-md-12">
-          {submitData.map((p, index) => (
-            <QueryDetails
-              p={p}
-              key={index}
-              diaplaySpecific={diaplaySpecific}
-              diaplayProposal={diaplayProposal}
-              diaplayHistory={diaplayHistory}
-              diaplayAssignment={diaplayAssignment}
-              displayQuery={displayQuery}
-              getQuery={getQuery}
-              assingNo={assingNo}
-              queryDocs={queryDocs}
-              paymentDetails={paymentDetails}
-              purpose={purpose}
-              year={year}
-            />
-          ))}
+          <div class="card">
+            <div
+              class="card-header"
+              id="headingOne"
+              style={{ padding: ".5rem .1rem" }}
+            >
+              <h2 class="mb-0 query ml-3">
+                <Link
+                  to={{
+                    pathname: `/admin/${props.location.routes}`,
+                    index: props.location.index,
+                  }}
+                >
+                  <button class="btn btn-success ml-3">Go Back</button>
+                </Link>
+              </h2>
+            </div>
+
+            {submitData.map((p, index) => (
+              <QueryDetails
+                p={p}
+                key={index}
+                diaplaySpecific={diaplaySpecific}
+                diaplayProposal={diaplayProposal}
+                diaplayHistory={diaplayHistory}
+                diaplayAssignment={diaplayAssignment}
+                displayQuery={displayQuery}
+                getQuery={getQuery}
+                assingNo={assingNo}
+                queryDocs={queryDocs}
+                paymentDetails={paymentDetails}
+                purpose={purpose}
+                year={year}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Layout>
@@ -332,3 +355,12 @@ export default QueriesRecevied;
 // }, [assingNo]);
 
 // console.log(assingNo);
+
+{
+  /* <button
+                  class="btn btn-success"
+                  onClick={() => history.goBack("4")}
+                >
+                  Go Back
+                </button> */
+}

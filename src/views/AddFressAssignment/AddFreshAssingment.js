@@ -19,6 +19,7 @@ import {
 import Select from "react-select";
 import { Spinner } from "reactstrap";
 
+
 function AddFreshAssingment(props) {
   const alert = useAlert();
   const history = useHistory();
@@ -403,7 +404,7 @@ const ImageUploads = ({ register, control }) => {
             type="file"
             name={`upload[${index}].pics`}
             ref={register()}
-            className="form-control-file"
+            className="form-control-file manage_file"
             defaultValue={item.pics}
           />
           <div className="btn btn-primary ml-2" onClick={() => remove(index)}>

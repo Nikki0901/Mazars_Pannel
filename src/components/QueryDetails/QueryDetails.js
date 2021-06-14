@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import BasicQuery from "./BasicQuery";
 import ProposalDetails from "./ProposalDetails";
 import AssignmentDetails from "./AssignmentDetails";
@@ -20,7 +20,7 @@ function QueryDetails({
   queryDocs,
   purpose,
   paymentDetails,
-  year
+  year,
 }) {
   console.log("p", p);
   const history = useHistory();
@@ -30,23 +30,45 @@ function QueryDetails({
 
   return (
     <>
-      <div class="card">
-        <div
-          class="card-header"
-          id="headingOne"
-          style={{ padding: ".5rem .1rem" }}
-        >
-          <h2 class="mb-0 query">
-            <div>
-              <button
-                class="btn btn-success ml-3"
-                onClick={() => history.goBack()}
-              >
-                Go Back
-              </button>
-            </div>
+      <div class="card-body">
+        <BasicQuery
+          p={p}
+          diaplaySpecific={diaplaySpecific}
+          purpose={purpose}
+          queryDocs={queryDocs}
+          year={year}
+        />
+        <ProposalDetails
+          diaplayProposal={diaplayProposal}
+          diaplayHistory={diaplayHistory}
+          paymentDetails={paymentDetails}
+          p={p}
+        />
+        <AssignmentDetails
+          diaplayAssignment={diaplayAssignment}
+          p={p}
+          diaplayProposal={diaplayProposal}
+        />
+      </div>
+    </>
+  );
+}
 
-            {/* <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+export default QueryDetails;
+
+{
+  /* <AddAdditionalQuery
+          addHandler={addHandler}
+          addModal={addModal}
+          assingNo={assingNo}
+          getQuery={getQuery}
+        /> */
+}
+{
+  /* <AdditionalQuery displayQuery={displayQuery} /> */
+}
+{
+  /* <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               <p class="m-0" style={{ fontSize: "15px" }}>
                 Submitted on
               </p>
@@ -66,40 +88,5 @@ function QueryDetails({
                   </button>
                 )}
               </div>
-            </div> */}
-          </h2>
-        </div>
-
-        <div class="card-body">
-          <BasicQuery
-            p={p}
-            diaplaySpecific={diaplaySpecific}
-            purpose={purpose}
-            queryDocs={queryDocs}
-            year={year}
-          />
-          <ProposalDetails
-            diaplayProposal={diaplayProposal}
-            diaplayHistory={diaplayHistory}
-            paymentDetails={paymentDetails}
-            p={p}
-          />
-          <AssignmentDetails diaplayAssignment={diaplayAssignment} 
-          p={p} 
-          diaplayProposal={diaplayProposal}
-          />
-          {/* <AdditionalQuery displayQuery={displayQuery} /> */}
-        </div>
-
-        {/* <AddAdditionalQuery
-          addHandler={addHandler}
-          addModal={addModal}
-          assingNo={assingNo}
-          getQuery={getQuery}
-        /> */}
-      </div>
-    </>
-  );
+            </div> */
 }
-
-export default QueryDetails;

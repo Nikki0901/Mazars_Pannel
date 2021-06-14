@@ -92,6 +92,10 @@ function QueriesTab(props) {
     getComplete();
   }, []);
 
+  const updateTab = (key) =>{
+    setTabIndex(key)
+  }
+  
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div>
@@ -117,7 +121,7 @@ function QueriesTab(props) {
           <TabPanel>
             <PendingForAcceptence
             // CountPendingForAcceptence={CountPendingForAcceptence}
-            // updateTab={updateTab}
+            updateTab={updateTab}
             />
           </TabPanel>
           <TabPanel>

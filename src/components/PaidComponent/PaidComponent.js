@@ -109,7 +109,14 @@ function PaidComponent() {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.assign_id}`}>{row.assign_no}</Link>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.assign_id}`,
+                routes: "paymentstatus",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },

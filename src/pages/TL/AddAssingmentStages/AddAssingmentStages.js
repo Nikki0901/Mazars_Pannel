@@ -20,6 +20,8 @@ function AddAssingmentStages() {
   const alert = useAlert();
   const { register, handleSubmit, errors, reset } = useForm();
   const [assignmentStages, setAssignmentstages] = useState([]);
+  const [clientDiscussion, setClientDiscussion] = useState(null);
+
   const userid = window.localStorage.getItem("tlkey");
   const { id } = useParams();
   const history = useHistory();
@@ -33,11 +35,12 @@ function AddAssingmentStages() {
       .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}`)
       .then((res) => {
         console.log(res);
-        console.log(res.data.result);
+        console.log("dt -",res.data.result[0].client_discussion);
 
         if (res.data.code === 1) {
           setAssignmentstages(res.data.result);
           reset(res.data.result[0]);
+          setClientDiscussion(res.data.result[0].client_discussion)
         }
       });
   };
@@ -83,7 +86,8 @@ function AddAssingmentStages() {
     );
   };
 
-  console.log("assignmentStages", assignmentStages);
+  console.log("clientDiscussion", clientDiscussion);
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
@@ -296,19 +300,27 @@ function AddAssingmentStages() {
                             </select>
                           </div>
                         </div>
-                        {p.client_discussion == "completed" ? null : (
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <div>
-                                <Link
+                        {/* {p.client_discussion == "completed" ? null : ( */}
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <div>
+                              <Link
+                                to={{
+                                  pathname: `/teamleader/assignment-form/${p.assign_id}`,
+                                  clients:`${clientDiscussion}`,
+                                }}
+                              >
+                                View Details
+                              </Link>
+                              {/* <Link
                                   to={`/teamleader/assignment-form/${p.assign_id}`}
                                 >
-                                  Add Details
-                                </Link>
-                              </div>
+                                  View Details
+                                </Link> */}
                             </div>
                           </div>
-                        )}
+                        </div>
+                        {/* )} */}
                       </div>
 
                       <div class="row">

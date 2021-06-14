@@ -17,13 +17,11 @@ import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 
-
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
 
- 
   useEffect(() => {
     getProposalData();
   }, []);
@@ -44,16 +42,17 @@ function AllProposalComponent({ allProposal }) {
 
   useEffect(() => {
     const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${selectedData}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
+      axios
+        .get(`${baseUrl}/customers/getCategory?pid=${selectedData}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setTax2(res.data.result);
+          }
+        });
     };
     getSubCategory();
   }, [selectedData]);
-
 
   const columns = [
     {
@@ -102,7 +101,15 @@ function AllProposalComponent({ allProposal }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.q_id}`,
+                index: 0,
+                routes: "proposal",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -229,7 +236,7 @@ function AllProposalComponent({ allProposal }) {
         var a = row.accepted_amount;
         var p = row.paid_amount;
         return a - p;
-      }
+      },
     },
     {
       text: "Date of Payment",
@@ -274,7 +281,6 @@ function AllProposalComponent({ allProposal }) {
     },
   ];
 
-
   //handleCategory
   const handleCategory = (value) => {
     console.log(`selected ${value}`);
@@ -305,7 +311,6 @@ function AllProposalComponent({ allProposal }) {
     setStore2([]);
     getProposalData();
   };
-
 
   const onSubmit = (data) => {
     console.log("data :", data);

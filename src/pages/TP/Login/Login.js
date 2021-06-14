@@ -9,6 +9,7 @@ import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -24,6 +25,7 @@ function Login(props) {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+  const [email, setEmail] = useState(null);
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -57,6 +59,10 @@ function Login(props) {
       });
   };
 
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setEmail(e.target.value);
+  };
   return (
     <>
       <Header mtp="mtp" />
@@ -78,6 +84,7 @@ function Login(props) {
                     name="p_email"
                     ref={register}
                     placeholder="Enter Email"
+                    onChange={(e) => handleChange(e)}
                   />
                   {errors.p_email && (
                     <div className="invalid-feedback">
@@ -109,6 +116,16 @@ function Login(props) {
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
+            <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Link
+                to={{
+                  pathname: "/taxprofessional/forget-password",
+                  email: `${email}`,
+                }}
+              >
+                Forgot Password
+              </Link>
+            </div>
           </form>
         </div>
       </div>

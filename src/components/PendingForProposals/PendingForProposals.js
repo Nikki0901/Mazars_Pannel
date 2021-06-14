@@ -114,7 +114,14 @@ function PendingForProposals({ CountPendingProposal }) {
         console.log(row);
         return (
           <>
-            <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link>
+            <Link 
+            // to={`/admin/queries/${row.id}`}
+            to={{
+              pathname: `/admin/queries/${row.id}`,
+              index: 2,
+              routes: "queriestab",
+            }}
+            >{row.assign_no}</Link>
           </>
         );
       },

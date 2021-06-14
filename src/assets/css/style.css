@@ -115,6 +115,9 @@ footer {
   padding: 0 !important;
 }
 
+.manage_file{
+  -webkit-user-modify: read-write
+}
 
 
 /* .react-tabs__tab-list {

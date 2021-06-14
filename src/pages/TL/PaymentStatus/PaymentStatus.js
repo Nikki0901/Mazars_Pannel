@@ -110,10 +110,18 @@ function PaymentStatus() {
         console.log(row);
         return (
           <>
-            <Link to={`/teamleader/queries/${row.assign_id}`}>
+            {/* <Link to={`/teamleader/queries/${row.assign_id}`}>
               {row.assign_no}
-            </Link>
-          </>
+            </Link> */}
+
+            <Link
+              to={{
+                pathname: `/teamleader/queries/${row.assign_id}`,         
+                routes: "paymentstatus",
+              }}
+            >
+              {row.assign_no}
+            </Link>          </>
         );
       },
     },

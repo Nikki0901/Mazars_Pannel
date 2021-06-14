@@ -109,7 +109,15 @@ function AllQueriesData({ CountAllQuery }) {
       formatter: function nameFormatter(cell, row) {
         return (
           <>
-            <Link to={`/admin/queries/${row.id}`}>{row.assign_no}</Link>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.id}`,
+                index: 0,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -173,8 +181,6 @@ function AllQueriesData({ CountAllQuery }) {
       });
   };
 
- 
-
   const Reset = () => {
     return (
       <>
@@ -193,7 +199,7 @@ function AllQueriesData({ CountAllQuery }) {
     <>
       <Card>
         <CardHeader>
-        <AdminFilter
+          <AdminFilter
             setData={setAllQueriesData}
             getData={getAllQueriesData}
             allQueries="allQueries"

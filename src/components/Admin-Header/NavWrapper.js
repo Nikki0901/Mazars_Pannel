@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 // import CustomerNotification from "./CustomerNotification";
 
 function NavWrapper(props) {
-  const { color, logout, name, cust, tl, tpdashboard } = props;
+  const { color, logout, name } = props;
 
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
@@ -105,7 +105,7 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
-              {cust && (
+              {name == "Customer" && (
                 <li class="dropdown dropdown-notification nav-item">
                   {countNotification ? (
                     <div>
@@ -131,13 +131,15 @@ function NavWrapper(props) {
                               class="dropdown-item"
                               style={{ padding: "0", fontSize: "12px" }}
                             >
-                              <p
-                                class="dropdown-item"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => readNotification(p.id)}
-                              >
-                                {p.message}
-                              </p>
+                              <Link to={`/customer/view-notification/${p.id}`}>
+                                <p
+                                  class="dropdown-item"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => readNotification(p.id)}
+                                >
+                                  {p.message}
+                                </p>
+                              </Link>
                             </div>
                           ))}
                         </div>
@@ -147,7 +149,7 @@ function NavWrapper(props) {
                 </li>
               )}
 
-              {tl && (
+              {name == "Team Leader" && (
                 <li class="dropdown dropdown-notification nav-item">
                   {countNotificationTl ? (
                     <div>
@@ -173,13 +175,17 @@ function NavWrapper(props) {
                               class="dropdown-item"
                               style={{ padding: "0", fontSize: "12px" }}
                             >
-                              <p
-                                class="dropdown-item"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => readNotification(p.id)}
+                              <Link
+                                to={`/teamleader/view-notification/${p.id}`}
                               >
-                                {p.message}
-                              </p>
+                                <p
+                                  class="dropdown-item"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => readNotification(p.id)}
+                                >
+                                  {p.message}
+                                </p>
+                              </Link>
                             </div>
                           ))}
                         </div>
@@ -217,14 +223,14 @@ function NavWrapper(props) {
                       </p>
                     )}
 
-                    {name == "Tax Professional" && (
+                    {/* {name == "Tax Professional" && (
                       <p class="dropdown-item" style={{ cursor: "pointer" }}>
                         <i class="fa fa-sign-out"></i>
                         <Link to="/taxprofessional/change-password">
                           Change Password
                         </Link>
                       </p>
-                    )}
+                    )} */}
 
                     <p
                       class="dropdown-item"
