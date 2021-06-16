@@ -11,7 +11,7 @@ import ChatHistory from "./ChatHistory";
 
 function Proposal() {
   const userid = window.localStorage.getItem("tlkey");
-
+  const [records, setRecords] = useState([]);
   const [proposal, setProposal] = useState([]);
   const [count, setCount] = useState("");
   const [id, setId] = useState(null);
@@ -35,6 +35,8 @@ function Proposal() {
         if (res.data.code === 1) {
           setProposal(res.data.result);
           setCount(res.data.result.length);
+          setRecords(res.data.result.length);
+
         }
       });
   };
@@ -156,7 +158,7 @@ function Proposal() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{display:"flex",justifyContent:"space-around"}}>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
               <div>
                 {row.status == "Cust Accepted" || row.status == "Pending" ? (
                   <Link to={`/teamleader/edit-proposal/${row.id}`}>
@@ -164,7 +166,7 @@ function Proposal() {
                       className="fa fa-edit"
                       style={{
                         fontSize: "16px",
-                        cursor: "pointer",           
+                        cursor: "pointer",
                         color: "green",
                       }}
                     ></i>
@@ -175,7 +177,7 @@ function Proposal() {
                       class="fa fa-mail-forward"
                       style={{
                         fontSize: "14px",
-                        cursor: "pointer",             
+                        cursor: "pointer",
                       }}
                     ></i>
                   </Link>
@@ -187,7 +189,7 @@ function Proposal() {
                   <div style={{ cursor: "pointer" }} title="View History">
                     <i
                       class="fa fa-comments-o"
-                      style={{ color: "green", fontSize: "16px",color: "light-blue", }}
+                      style={{ color: "green", fontSize: "16px", color: "light-blue", }}
                       onClick={() => chatHandler(row)}
                     ></i>
                   </div>
@@ -216,6 +218,8 @@ function Proposal() {
             setData={setProposal}
             getData={getProposalList}
             proposal="proposal"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>
@@ -231,7 +235,7 @@ function Proposal() {
             chatHandler={chatHandler}
             addPaymentModal={addPaymentModal}
             qno={id}
-            // getProposalData={getProposalList}
+          // getProposalData={getProposalList}
           />
         </CardBody>
       </Card>

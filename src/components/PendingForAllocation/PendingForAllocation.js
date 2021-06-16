@@ -30,6 +30,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [history, setHistory] = useState([]);
+  const [records, setRecords] = useState([]);
 
   const [modal, setModal] = useState(false);
 
@@ -61,10 +62,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
       if (res.data.code === 1) {
         // CountPendingForAllocation(res.data.result.length);
         setPendingData(res.data.result);
-        // localStorage.setItem(
-        //   "count_PFA",
-        //   JSON.stringify(res.data.result.length)
-        // );
+        setRecords(res.data.result.length);
       }
     });
   };
@@ -257,6 +255,8 @@ function PendingAllocation({ CountPendingForAllocation }) {
             setData={setPendingData}
             getData={getPendingForAllocation}
             pendingAlloation="pendingAlloation"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>

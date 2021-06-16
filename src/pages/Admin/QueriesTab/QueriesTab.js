@@ -135,9 +135,9 @@ function QueriesTab(props) {
               Pending for Proposal ({pendingProposalCount})
             </Tab>
 
-            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+            {/* <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
               Pending for Payment ({pendingForPayment})
-            </Tab>
+            </Tab> */}
           </TabList>
 
           <TabPanel>
@@ -152,9 +152,9 @@ function QueriesTab(props) {
             <PendingForProposals />
           </TabPanel>
 
-          <TabPanel>
+          {/* <TabPanel>
             <PendingForPayment />
-          </TabPanel>
+          </TabPanel> */}
         </Tabs>
       </div>
     </Layout>

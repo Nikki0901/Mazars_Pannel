@@ -11,18 +11,16 @@ import {
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import "antd/dist/antd.css";
-import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
 function InCompleteData({ CountIncomplete }) {
-  const [incompleteData, setInCompleteData] = useState([]);
   const userid = window.localStorage.getItem("tlkey");
-  const { handleSubmit, register, errors, reset } = useForm();
-  const { Option, OptGroup } = Select;
-  const [selectedData, setSelectedData] = useState([]);
+
+  const [incompleteData, setInCompleteData] = useState([]);
+  const [records, setRecords] = useState([]);
+
+
 
   useEffect(() => {
     getInCompleteAssingment();
@@ -36,6 +34,8 @@ function InCompleteData({ CountIncomplete }) {
         if (res.data.code === 1) {
           // CountIncomplete(res.data.result.length);
           setInCompleteData(res.data.result);
+          setRecords(res.data.result.length);
+
         }
       });
   };
@@ -82,7 +82,7 @@ function InCompleteData({ CountIncomplete }) {
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.id}`,
-                index:1,
+                index: 1,
                 routes: "queriestab",
               }}
             >
@@ -174,6 +174,8 @@ function InCompleteData({ CountIncomplete }) {
             setData={setInCompleteData}
             getData={getInCompleteAssingment}
             inCompleteQuery="inCompleteQuery"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>

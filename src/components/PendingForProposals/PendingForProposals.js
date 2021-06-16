@@ -28,9 +28,11 @@ function PendingForProposals({ CountPendingProposal }) {
 
   const [nonpendingData, setNonPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [records, setRecords] = useState([]);
 
   const [history, setHistory] = useState([]);
   const [modal, setModal] = useState(false);
+
   const toggle = (key) => {
     console.log("key", key);
     setModal(!modal);
@@ -52,6 +54,18 @@ function PendingForProposals({ CountPendingProposal }) {
   useEffect(() => {
     getPendingForProposals();
   }, []);
+
+  const getPendingForProposals = () => {
+    axios.get(`${baseUrl}/admin/pendingProposal`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setNonPendingData(res.data.result);
+        setRecords(res.data.result.length);
+        // CountPendingProposal(res.data.result.length);
+      }
+    });
+  };
+
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -114,13 +128,13 @@ function PendingForProposals({ CountPendingProposal }) {
         console.log(row);
         return (
           <>
-            <Link 
-            // to={`/admin/queries/${row.id}`}
-            to={{
-              pathname: `/admin/queries/${row.id}`,
-              index: 2,
-              routes: "queriestab",
-            }}
+            <Link
+              // to={`/admin/queries/${row.id}`}
+              to={{
+                pathname: `/admin/queries/${row.id}`,
+                index: 2,
+                routes: "queriestab",
+              }}
             >{row.assign_no}</Link>
           </>
         );
@@ -177,15 +191,6 @@ function PendingForProposals({ CountPendingProposal }) {
     },
   ];
 
-  const getPendingForProposals = () => {
-    axios.get(`${baseUrl}/admin/pendingProposal`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setNonPendingData(res.data.result);
-        // CountPendingProposal(res.data.result.length);
-      }
-    });
-  };
 
   //reset date
   const resetData = () => {
@@ -243,96 +248,10 @@ function PendingForProposals({ CountPendingProposal }) {
             setData={setNonPendingData}
             getData={getPendingForProposals}
             pendingForProposal="pendingForProposal"
+            setRecords={setRecords}
+            records={records}
           />
-          {/* <div className="row">
-            <div className="col-sm-12 d-flex">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-inline">
-                    <div class="form-group mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore(e.target.value)}
-                      >
-                        <option value="">--Select Category--</option>
-                        {tax.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
 
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_tax2"
-                        ref={register}
-                        style={{ height: "35px" }}
-                        onChange={(e) => setStore2(e.target.value)}
-                      >
-                        <option value="">--Select Sub-Category--</option>
-                        {tax2.map((p, index) => (
-                          <option key={index} value={p.id}>
-                            {p.details}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">Pending</option>
-                        <option value="2">Accepted</option>
-                        <option value="3">Declined</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                    Search
-                  </button>
-
-                  <Reset />
-                </form>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
         <CardBody>
           <BootstrapTable
@@ -342,46 +261,6 @@ function PendingForProposals({ CountPendingProposal }) {
             columns={columns}
             wrapperClasses="table-responsive"
           />
-
-          {/* <div>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Query No</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Sub Category</th>
-                  <th>Customer Name</th>
-                  <th scope="col">History</th>
-                </tr>
-              </thead>
-              {nonpendingData.map((p, i) => (
-                <tbody>
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <th scope="row">
-                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
-                    </th>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td>{p.name}</td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-info btn-sm"
-                        onClick={() => toggle(p.id)}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
-          </div> */}
-
           <Modal isOpen={modal} fade={false} toggle={toggle}>
             <ModalHeader toggle={toggle}>History</ModalHeader>
             <ModalBody>
@@ -398,16 +277,16 @@ function PendingForProposals({ CountPendingProposal }) {
 
                 {history.length > 0
                   ? history.map((p, i) => (
-                      <tbody>
-                        <tr>
-                          <td>{i + 1}</td>
-                          <td>{p.name}</td>
-                          <td>{p.assign_no}</td>
-                          <td>{p.status}</td>
-                          <td>{ChangeFormateDate(p.date_of_allocation)}</td>
-                        </tr>
-                      </tbody>
-                    ))
+                    <tbody>
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>{p.name}</td>
+                        <td>{p.assign_no}</td>
+                        <td>{p.status}</td>
+                        <td>{ChangeFormateDate(p.date_of_allocation)}</td>
+                      </tr>
+                    </tbody>
+                  ))
                   : null}
               </table>
             </ModalBody>

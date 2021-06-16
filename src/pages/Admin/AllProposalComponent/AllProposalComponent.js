@@ -21,6 +21,7 @@ function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     getProposalData();
@@ -31,6 +32,8 @@ function AllProposalComponent({ allProposal }) {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
+        setRecords(res.data.result.length);
+
         // allProposal(res.data.result.length);
       }
     });
@@ -323,6 +326,7 @@ function AllProposalComponent({ allProposal }) {
         if (res.data.code === 1) {
           if (res.data.result) {
             setProposalDisplay(res.data.result);
+            setRecords(res.data.result.length);
           }
         }
       });
@@ -437,6 +441,11 @@ function AllProposalComponent({ allProposal }) {
                         <option value="3">Declined</option>
                       </select>
                     </div>
+
+                    <div class="form-group mx-sm-1  mb-2">
+                      <label className="form-select form-control">Total Records : {records}</label>
+                    </div>
+
                     <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                       Search
                     </button>

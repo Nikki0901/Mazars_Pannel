@@ -25,6 +25,7 @@ import * as Cookies from "js-cookie";
 function AssignmentTab() {
   const history = useHistory();
   const userid = window.localStorage.getItem("tlkey");
+
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [count, setCount] = useState("");
@@ -32,6 +33,7 @@ function AssignmentTab() {
   const [id, setId] = useState("");
   const [finalId, setFinalId] = useState("");
 
+  const [records, setRecords] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [status, setStatus] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -54,6 +56,7 @@ function AssignmentTab() {
         if (res.data.code === 1) {
           setAssignment(res.data.result);
           setCount(res.data.result.length);
+          setRecords(res.data.result.length);
         }
       });
   };
@@ -152,7 +155,7 @@ function AssignmentTab() {
             {/* <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link> */}
             <Link
               to={{
-                pathname: `/teamleader/queries/${row.q_id}`,         
+                pathname: `/teamleader/queries/${row.q_id}`,
                 routes: "assignment",
               }}
             >
@@ -319,13 +322,13 @@ function AssignmentTab() {
               }}
             >
               {row.accepted_amount == row.paid_amount &&
-              !row.final_report &&
-              !(
-                row.client_discussion == "completed" &&
-                row.delivery_report == "completed" &&
-                row.draft_report == "completed" &&
-                row.final_discussion == "completed"
-              ) ? (
+                !row.final_report &&
+                !(
+                  row.client_discussion == "completed" &&
+                  row.delivery_report == "completed" &&
+                  row.draft_report == "completed" &&
+                  row.final_discussion == "completed"
+                ) ? (
                 <div title="upload Pdf">
                   <p
                     style={{ cursor: "pointer", color: "green" }}
@@ -344,10 +347,10 @@ function AssignmentTab() {
                     onClick={() => uploadFinalReport(row)}
                   >
                     {row.client_discussion == "completed" &&
-                    row.delivery_report == "completed" &&
-                    row.draft_report == "completed" &&
-                    row.final_discussion == "completed" &&
-                    row.amount == row.paid_amount ? (
+                      row.delivery_report == "completed" &&
+                      row.draft_report == "completed" &&
+                      row.final_discussion == "completed" &&
+                      row.amount == row.paid_amount ? (
                       <div>
                         <i
                           class="fa fa-upload"
@@ -362,8 +365,8 @@ function AssignmentTab() {
             </div>
 
             {row.vstart < 11 &&
-            row.vend >= 0 &&
-            !(row.vstart == null && row.vend == null) ? (
+              row.vend >= 0 &&
+              !(row.vstart == null && row.vend == null) ? (
               <div style={{ cursor: "pointer" }} title="Video Chat">
                 <i
                   class="fa fa-video-camera"
@@ -414,10 +417,8 @@ function AssignmentTab() {
       .get(
         `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
           userid
-        )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-          data.p_dateTo
-        }&assignment_status=${status}&stages_status=${
-          data.p_status
+        )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+        }&assignment_status=${status}&stages_status=${data.p_status
         }&pcat_id=${selectedData}`
       )
       .then((res) => {
@@ -425,6 +426,8 @@ function AssignmentTab() {
         if (res.data.code === 1) {
           if (res.data.result) {
             setAssignment(res.data.result);
+            setRecords(res.data.result.length);
+
           }
         }
       });
@@ -575,7 +578,9 @@ function AssignmentTab() {
                   <option value="2">Complete</option>
                 </select>
               </div>
-
+              <div class="form-group mx-sm-1  mb-2">
+                <label className="form-select form-control">Total Records : {records}</label>
+              </div>
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                 Search
               </button>

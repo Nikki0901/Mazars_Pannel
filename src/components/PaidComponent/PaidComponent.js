@@ -28,6 +28,7 @@ function PaidComponent() {
   const [selectedData, setSelectedData] = useState([]);
   const [paymentcount, setPaymentCount] = useState("");
   const [pay, setPay] = useState([]);
+  const [records, setRecords] = useState([]);
 
   useEffect(() => {
     getPaymentStatus();
@@ -39,6 +40,8 @@ function PaidComponent() {
       if (res.data.code === 1) {
         setPayment(res.data.result);
         setPaymentCount(res.data.result.length);
+        setRecords(res.data.result.length);
+
       }
     });
   };
@@ -339,6 +342,8 @@ function PaidComponent() {
             setData={setPayment}
             getData={getPaymentStatus}
             paymentStatus="paymentStatus"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>

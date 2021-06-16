@@ -8,8 +8,6 @@ import {
   CardHeader,
   CardBody,
 } from "reactstrap";
-import "antd/dist/antd.css";
-import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import RejectedModal from "./RejectedModal";
@@ -20,9 +18,10 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendingData, setPendingData] = useState([]);
+  const [records, setRecords] = useState([]);
 
   const [pay, setPay] = useState({
-    id: "", 
+    id: "",
     allocation_id: "",
   });
 
@@ -47,6 +46,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
         console.log(res);
         if (res.data.code === 1) {
           setPendingData(res.data.result);
+          setRecords(res.data.result.length);
           // CountPendingForAcceptence(res.data.result.length);
         }
       });
@@ -94,7 +94,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.id}`,
-                index:0,
+                index: 0,
                 routes: "queriestab",
               }}
             >
@@ -227,6 +227,8 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             setData={setPendingData}
             getData={getPendingforAcceptance}
             pendingForAcceptence="pendingForAcceptence"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>
@@ -237,7 +239,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
             columns={columns}
             rowIndex
           />
-           <RejectedModal
+          <RejectedModal
             rejectHandler={rejectHandler}
             addPaymentModal={addPaymentModal}
             pay={pay}

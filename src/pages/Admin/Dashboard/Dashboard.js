@@ -4,8 +4,10 @@ import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
-import { values } from "lodash";
-
+import {
+  Card, CardText, CardBody, CardLink,
+  CardTitle, CardSubtitle
+} from 'reactstrap';
 
 function Dashboard() {
   const userId = window.localStorage.getItem("adminkey");
@@ -22,12 +24,19 @@ function Dashboard() {
   const [proposal, setProposal] = useState({
     allproposal: '',
     pendingforacceptance: '',
+    pendingforPreperation: '',
     declineed: '',
+    InProgress: '',
   });
 
   const [assignment, setAssignment] = useState({
     inprogress: '',
     complete: '',
+  });
+
+  const [payment, setPayment] = useState({
+    paid: '',
+    unpaid: '',
   });
 
   const { total_query, total_inprogress,
@@ -36,18 +45,22 @@ function Dashboard() {
 
   const { allproposal,
     pendingforacceptance,
-    declineed, } = proposal;
+    declineed, pendingforPreperation, InProgress } = proposal;
 
   const {
     inprogress,
     complete } = assignment;
 
+  const {
+    paid,
+    unpaid } = payment;
 
   const [value, setValue] = useState(false);
-  const [allPendingForPayment, setPendingForPayment] = useState("");
+  const [valueProposal, setValueProposal] = useState(false);
+  const [valueProposal2, setValueProposal2] = useState(false);
+  const [valuePayment, setValuePayment] = useState(false);
+  const [valueAssignment, setValueAssignment] = useState(false);
 
-  const [allDeclinedProposal, setDeclinedProposal] = useState("");
-  const [pendingForAcceptence, setPendingForAcceptence] = useState("");
 
 
 
@@ -84,6 +97,8 @@ function Dashboard() {
             setProposal({
               allproposal: response.data.result.allproposal,
               pendingforacceptance: response.data.result.pendingforacceptance,
+              pendingforPreperation: response.data.result.pendingforPreperation,
+              InProgress: response.data.result.InProgress,
               declineed: response.data.result.declineed,
             })
           }
@@ -110,10 +125,27 @@ function Dashboard() {
         });
     };
 
+    const getPayment = () => {
+      axios
+        .get(`${baseUrl}/admin/getAssignmentsPaymentCount`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPayment({
+              paid: response.data.result.paid,
+              unpaid: response.data.result.unpaid,
+            })
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
 
     getAllQueries();
     getAllProposal();
-    getAssignment()
+    getPayment();
+    getAssignment();
   }, []);
 
 
@@ -121,39 +153,45 @@ function Dashboard() {
     setValue(!value)
   }
 
+  const toggleProposal = () => {
+    setValueProposal(!valueProposal)
+  }
+
+  const toggleProposal2 = () => {
+    setValueProposal2(!valueProposal2)
+  }
+
+  const togglePayment = () => {
+    setValuePayment(!valuePayment)
+  }
+
+  const toggleAssignment = () => {
+    setValueAssignment(!valueAssignment)
+  }
+
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
       <div class="row mt-3">
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body height-100">
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white info position-absolute p-1">
+                  <p class="text-white info">
                     All Queries
-                  </h5>
+                  </p>
                 </div>
-                <div>
-                  <Link
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p class="text-white">{total_query}</p>
+                  {/* <Link
                     to={{
                       pathname: `/admin/queriestab`,
                       index: 0,
                     }}
                   >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
+                    <i class="fa fa-tasks text-white"></i>
+                  </Link> */}
                 </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{total_query}</h4>
               </div>
             </div>
           </div>
@@ -161,34 +199,16 @@ function Dashboard() {
 
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body height-100">
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white info position-absolute p-1">
+                  <p class="text-white info">
                     Inprogress Queries
-                  </h5>
+                  </p>
                 </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 1,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p class="text-white">{total_inprogress + pendingfor_allocation}</p>
                 </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{total_inprogress}</h4>
               </div>
             </div>
           </div>
@@ -196,29 +216,16 @@ function Dashboard() {
 
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body height-100">
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white info position-absolute p-1">
+                  <p class="text-white info">
                     Completed Queries
-                  </h5>
+                  </p>
                 </div>
-                <div>
-                  <Link to={`/admin/queriestab`}>
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p class="text-white">{total_complete}</p>
                 </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{total_complete}</h4>
               </div>
             </div>
           </div>
@@ -227,72 +234,23 @@ function Dashboard() {
 
 
       <div class="row mt-3">
-        <div class="col-xl-6 col-lg-6 col-md-12">
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body height-100">
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white info position-absolute p-1">
-                    Pending For Allocation
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 1,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{pendingfor_allocation}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info position-absolute p-1">
+                  <p class="text-white info">
                     Decline
-                  </h5>
+                  </p>
                 </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 1,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px", }}>
-                <div>
-                  <button type="button" class="btn btn-warning btn-sm"
-                    onClick={toggle}
-                  >expand</button>
-                </div>
-                <div>
-                  <h4 class="text-white">{
-                    customer_decline + admin_decline
-                  }</h4>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p onClick={toggle} title="Expand"
+                    style={{ cursor: "pointer", color: "white" }}>
+                    {
+                      customer_decline + admin_decline
+                    }
+                  </p>
                 </div>
               </div>
             </div>
@@ -303,160 +261,335 @@ function Dashboard() {
       {
         value &&
         <div class="row mt-3">
-          <div class="col-xl-6 col-lg-6 col-md-12">
+
+          <div class="col-xl-4 col-lg-6 col-md-12">
             <div class="card pull-up ecom-card-1 bg-info">
-              <div class="card-body height-100">
+              <div class="card-body">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <div>
-                    <h5 class="text-white info position-absolute p-1">
+                    <p class="text-white info">
                       Customer Decline
-                    </h5>
+                    </p>
                   </div>
-                  <div>
-                    <Link
-                      to={{
-                        pathname: `/admin/queriestab`,
-                        index: 1,
-                      }}
-                    >
-                      <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                    </Link>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{customer_decline}</p>
                   </div>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    marginTop: "15px",
-                  }}
-                >
-                  <h4 class="text-white">{customer_decline}</h4>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-6 col-lg-6 col-md-12">
+          <div class="col-xl-4 col-lg-6 col-md-12">
             <div class="card pull-up ecom-card-1 bg-info">
-              <div class="card-body height-100">
+              <div class="card-body">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <div>
-                    <h5 class="text-white info position-absolute p-1">
+                    <p class="text-white info">
                       Admin Decline
-                    </h5>
+                    </p>
                   </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{admin_decline}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      }
+
+
+      <div class="row mt-3">
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-secondary">
+            <div class="card-body">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <p class="text-white info">
+                    All Proposal
+                  </p>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p onClick={toggleProposal} title="Expand"
+                    style={{ cursor: "pointer", color: "white" }}>
+                    {
+                      allproposal
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-secondary">
+            <div class="card-body">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <p class="text-white info">
+                    In Progress
+                  </p>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p onClick={toggleProposal2} title="Expand"
+                    style={{ cursor: "pointer", color: "white" }}>
+                    {
+                      InProgress
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      {
+        valueProposal &&
+        <div class="row mt-3">
+
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1 bg-secondary">
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <div>
-                    <Link
-                      to={{
-                        pathname: `/admin/queriestab`,
-                        index: 1,
-                      }}
-                    >
-                      <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                    </Link>
+                    <p class="text-white info">
+                      Pending for Acceptance
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{pendingforacceptance}</p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    marginTop: "15px",
-                  }}
-                >
-                  <h4 class="text-white">{admin_decline}</h4>
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1 bg-secondary">
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Declined
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{declineed}</p>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
+
+        </div>
+      }
+
+      {
+        valueProposal2 &&
+        <div class="row mt-3">
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1 bg-secondary">
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Pending for Acceptance
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{pendingforacceptance}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1 bg-secondary">
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Pending for Preperation
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{pendingforPreperation}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       }
 
+      <div class="row mt-3">
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
+            <div class="card-body">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <p class="text-white info">
+                    All payment
+                  </p>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p onClick={togglePayment} title="Expand"
+                    style={{ cursor: "pointer", color: "white" }}>
+                    {unpaid + paid}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        {
+          valuePayment &&
+
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Unpaid
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{unpaid}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        {
+          valuePayment &&
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Paid
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{paid}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        }
+
+
+      </div>
+
+
 
       <div class="row mt-3">
+
         <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-danger">
-            <div class="card-body height-100">
+          <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white  info position-absolute p-1">
-                    All Proposal
-                  </h5>
+                  <p class="text-white info">
+                    Total Assignment
+                  </p>
                 </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/proposal`,
-                      index: 0,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white  font-large-1 float-right p-1"></i>
-                  </Link>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <p onClick={toggleAssignment} title="Expand"
+                    style={{ cursor: "pointer", color: "white" }}>
+                    {complete + inprogress}
+                  </p>
                 </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{allproposal}</h4>
               </div>
             </div>
           </div>
         </div>
+        {
+          valueAssignment &&
 
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-danger">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white  info position-absolute p-1">
-                    Pending For Acceptence
-                  </h5>
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Inprogress
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{inprogress}</p>
+                  </div>
                 </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/proposal`,
-                      index: 1,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white  font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{pendingforacceptance}</h4>
               </div>
             </div>
           </div>
-        </div>
+
+        }
+
+        {
+          valueAssignment &&
+
+          <div class="col-xl-4 col-lg-6 col-md-12">
+            <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
+              <div class="card-body">
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div>
+                    <p class="text-white info">
+                      Complete
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <p class="text-white">{complete}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+    </Layout>
+  );
+}
+
+export default Dashboard;
 
 
 
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-danger">
+// {
+//   Object.keys(response.data.result[0]).map((key, i ,value) => (
+//     console.log(key,i,value)
+//   )
+//   )
+// }
+
+
+
+{/* <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-secondary">
             <div class="card-body height-100">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
                   <h5 class="text-white  info position-absolute p-1">
-                    Declined Proposal
+                    Pending for Preperation
                   </h5>
                 </div>
                 <div>
@@ -479,35 +612,28 @@ function Dashboard() {
                   marginTop: "15px",
                 }}
               >
-                <h4 class="text-white">{declineed}</h4>
+                <h4 class="text-white">{pendingforPreperation}</h4>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
-
-      </div>
-
-
-
-      <div class="row mt-3">
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-primary">
-            <div class="card-body height-100">
+{/* <div class="card bg-info">
+            <div class="card-body">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <h5 class="text-white info position-absolute p-1">
-                    Unpaid
+                  <h5 class="text-white info">
+                    All Queries
                   </h5>
                 </div>
                 <div>
                   <Link
                     to={{
                       pathname: `/admin/queriestab`,
-                      index: 3,
+                      index: 0,
                     }}
                   >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
+                    <i class="fa fa-tasks text-white"></i>
                   </Link>
                 </div>
               </div>
@@ -520,170 +646,7 @@ function Dashboard() {
                   marginTop: "15px",
                 }}
               >
-                <h4 class="text-white">{allPendingForPayment}</h4>
+                <h4 class="text-white">{total_query}</h4>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-primary">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info position-absolute p-1">
-                    Paid
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 3,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{allPendingForPayment}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="row mt-3">
-
-      <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-success">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info position-absolute p-1">
-                    Total Assignment 
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 3,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{complete + inprogress}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-success">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info position-absolute p-1">
-                    Inprogress
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 3,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{inprogress}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-success">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info position-absolute p-1">
-                   Complete
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 3,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{complete}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </Layout>
-  );
-}
-
-export default Dashboard;
-
-
-
-// {
-//   Object.keys(response.data.result[0]).map((key, i ,value) => (
-//     console.log(key,i,value)
-//   )
-//   )
-// }
+          </div> */}

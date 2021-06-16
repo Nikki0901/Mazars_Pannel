@@ -27,6 +27,7 @@ function AssignmentTab() {
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
   const [assignmentCount, setCountAssignment] = useState("");
+  const [records, setRecords] = useState([]);
 
   const [selectedData, setSelectedData] = useState([]);
   const [status, setStatus] = useState([]);
@@ -43,6 +44,7 @@ function AssignmentTab() {
       if (res.data.code === 1) {
         setAssignmentDisplay(res.data.result);
         setCountAssignment(res.data.result.length);
+        setRecords(res.data.result.length);
       }
     });
   };
@@ -294,6 +296,7 @@ function AssignmentTab() {
         if (res.data.code === 1) {
           if (res.data.result) {
             setAssignmentDisplay(res.data.result);
+            setRecords(res.data.result.length);
           }
         }
       });
@@ -444,7 +447,9 @@ function AssignmentTab() {
                   <option value="2">Complete</option>
                 </select>
               </div>
-
+              <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control">Total Records : {records}</label>
+                </div>
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                 Search
               </button>
@@ -504,16 +509,16 @@ export default AssignmentTab;
                     </div> */
 }
 
-/* <div className="mb-3">                     
+/* <div className="mb-3">
                       <select
                         className="form-select form-control"
-                        name="p_purpose"                     
-                      >                  
-                        <option >status</option>                                         
-                        <option >Client Discussion : {p.client_discussion}</option>                                         
-                        <option >Draft report : {p.draft_report}</option>                                         
-                        <option >Final Discussion : {p.final_discussion}</option>                                         
-                        <option >Delivery of report : {p.delivery_report}</option>                                         
+                        name="p_purpose"
+                      >
+                        <option >status</option>
+                        <option >Client Discussion : {p.client_discussion}</option>
+                        <option >Draft report : {p.draft_report}</option>
+                        <option >Final Discussion : {p.final_discussion}</option>
+                        <option >Delivery of report : {p.delivery_report}</option>
                       </select>
                     </div> */
 //  {/* <AdminFilter

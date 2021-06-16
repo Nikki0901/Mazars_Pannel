@@ -8,7 +8,8 @@ function CustomerFilter(props) {
   const { Option } = Select;
   const { handleSubmit, register, errors, reset } = useForm();
 
-  const { setData, getData, id, query, proposal, assignment } = props;
+  const { records,
+    setRecords, setData, getData, id, query, proposal, assignment } = props;
   const [selectedData, setSelectedData] = useState([]);
 
   const [tax2, setTax2] = useState([]);
@@ -68,8 +69,7 @@ function CustomerFilter(props) {
         .get(
           `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
             id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
@@ -77,6 +77,7 @@ function CustomerFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -87,8 +88,7 @@ function CustomerFilter(props) {
         .get(
           `${baseUrl}/customers/getProposals?uid=${JSON.parse(
             id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
@@ -96,6 +96,8 @@ function CustomerFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
+
             }
           }
         });
@@ -106,8 +108,7 @@ function CustomerFilter(props) {
         .get(
           `${baseUrl}/customers/completeAssignments?user=${JSON.parse(
             id
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
@@ -115,6 +116,7 @@ function CustomerFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -253,6 +255,11 @@ function CustomerFilter(props) {
                     </select>
                   )}
                 </div>
+
+                <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control">Total Records : {records}</label>
+                </div>
+
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>

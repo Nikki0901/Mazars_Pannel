@@ -26,6 +26,7 @@ function PaymentStatus() {
   const { id } = useParams();
   const userid = window.localStorage.getItem("tlkey");
   const cust_id = window.localStorage.getItem("userid");
+  const [records, setRecords] = useState([]);
 
   const [pay, setPay] = useState([]);
   const [count, setCount] = useState("");
@@ -42,6 +43,8 @@ function PaymentStatus() {
       if (res.data.code === 1) {
         setPayment(res.data.result);
         setCount(res.data.result.length);
+        setRecords(res.data.result.length);
+
       }
     });
   };
@@ -330,6 +333,8 @@ function PaymentStatus() {
               setData={setPayment}
               getData={getPaymentStatus}
               paymentStatus="paymentStatus"
+              setRecords={setRecords}
+              records={records}
             />
           </CardHeader>
 

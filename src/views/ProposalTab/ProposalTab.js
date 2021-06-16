@@ -25,16 +25,12 @@ function ProposalTab() {
   const userId = window.localStorage.getItem("userid");
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const [proposalCount, setCountProposal] = useState("");
+  const [records, setRecords] = useState([]);
 
   const [id, setId] = useState(null);
   const [reject, setRejected] = useState(true);
   
-  // accept modal
-  // const [acceptedModal, setAcceptedModal] = useState(false);
-  // const acceptedHandler = (id) => {
-  //   setAcceptedModal(!acceptedModal);
-  //   setId(id);
-  // };
+ 
 
   const [addPaymentModal, setPaymentModal] = useState(false);
   const chatHandler = (key) => {
@@ -55,6 +51,8 @@ function ProposalTab() {
         if (res.data.code === 1) {
           setProposalDisplay(res.data.result);
           setCountProposal(res.data.result.length);
+          setRecords(res.data.result.length);
+
         }
       });
   };
@@ -389,6 +387,8 @@ function ProposalTab() {
             getData={getProposalData}
             id={userId}
             proposal="proposal"
+            records={records}
+            setRecords={setRecords}
           />
         </CardHeader>
         <CardBody>

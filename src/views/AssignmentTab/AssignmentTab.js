@@ -23,6 +23,7 @@ function AssignmentTab() {
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
+  const [records, setRecords] = useState([]);
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -70,6 +71,7 @@ function AssignmentTab() {
         if (res.data.code === 1) {
           setAssignmentDisplay(res.data.result);
           setAssignmentQueries(res.data.result.length);
+          setRecords(res.data.result.length);
         }
       });
   };
@@ -185,7 +187,7 @@ function AssignmentTab() {
         // console.log(row.final_report);
         return (
           <>
-            <div style={{ textAlign:"center" }}>
+            <div style={{ textAlign: "center" }}>
               {!row.final_report == "" ? (
                 <div>
                   <a
@@ -291,8 +293,8 @@ function AssignmentTab() {
               </div>
 
               {row.vstart < 11 &&
-              row.vend >= 0 &&
-              !(row.vstart == null && row.vend == null) ? (
+                row.vend >= 0 &&
+                !(row.vstart == null && row.vend == null) ? (
                 <div style={{ cursor: "pointer" }} title="Video Chat">
                   <i
                     class="fa fa-video-camera"
@@ -413,6 +415,8 @@ function AssignmentTab() {
             getData={getAssignmentData}
             id={userId}
             assignment="assignment"
+            records={records}
+            setRecords={setRecords}
           />
         </CardHeader>
 

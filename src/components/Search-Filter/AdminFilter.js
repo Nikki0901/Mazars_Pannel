@@ -9,6 +9,8 @@ function AdminFilter(props) {
   const { handleSubmit, register, errors, reset } = useForm();
 
   const {
+    records,
+    setRecords,
     setData,
     getData,
     acceptedProposal,
@@ -86,6 +88,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -101,6 +104,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -116,6 +120,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -131,6 +136,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -146,6 +152,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -161,6 +168,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -176,6 +184,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -191,6 +200,7 @@ function AdminFilter(props) {
           if (res.data.code === 1) {
             if (res.data.result) {
               setData(res.data.result);
+              setRecords(res.data.result.length);
             }
           }
         });
@@ -342,6 +352,10 @@ function AdminFilter(props) {
                       <option value="2">Paid</option>
                     </select>
                   )}
+                </div>
+
+                <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control">Total Records : {records}</label>
                 </div>
 
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
