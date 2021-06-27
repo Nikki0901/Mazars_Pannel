@@ -17,9 +17,11 @@ import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
 import * as Cookies from "js-cookie";
 import RejectedModal from "./RejectModal";
+import { useAlert } from "react-alert";
 
 function AssignmentTab() {
   const history = useHistory();
+  const alert = useAlert();
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
@@ -224,10 +226,10 @@ function AssignmentTab() {
                   ></i>
                 </div>
 
-                <div style={{ cursor: "pointer" }} title="Rejected">
+                <div style={{ cursor: "pointer" }} title="Message">
                   <i
-                    class="fa fa-times"
-                    style={{ color: "red", fontSize: "16px" }}
+                    class="fa fa-comments-o"
+                    style={{ color: "green", fontSize: "16px" }}
                     onClick={() => rejectHandler(row)}
                   ></i>
                 </div>
@@ -336,6 +338,7 @@ function AssignmentTab() {
       });
   };
 
+
   //tl,phone,email
   function priceFormatter(cell, row) {
     console.log("row", row);
@@ -362,6 +365,7 @@ function AssignmentTab() {
     Cookies.set("videoProfile", videoProfile);
     history.push("/customer/meeting");
   };
+
 
   function schedultTime(cell, row) {
     // console.log("schedultTime", row);

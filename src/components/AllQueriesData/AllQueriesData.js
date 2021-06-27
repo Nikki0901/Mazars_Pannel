@@ -140,6 +140,16 @@ function AllQueriesData() {
 
         </CardHeader>
         <CardBody>
+          {/* <div class="row">
+            <div className="col-9">
+            </div>
+            <div className="col-3">
+              <div class="form-group">
+                <label className="form-select form-control"
+                >Total Records : 12</label>
+              </div>
+            </div>
+          </div> */}
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -155,4 +165,6 @@ function AllQueriesData() {
 }
 
 export default AllQueriesData;
+
+
 

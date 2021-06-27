@@ -160,7 +160,7 @@ function Proposal() {
           <>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <div>
-                {row.status == "Cust Accepted" || row.status == "Pending" ? (
+                {row.status == "Cust Accepted" || row.status == "Pending for approval" ? (
                   <Link to={`/teamleader/edit-proposal/${row.id}`}>
                     <i
                       className="fa fa-edit"
@@ -171,7 +171,7 @@ function Proposal() {
                       }}
                     ></i>
                   </Link>
-                ) : row.status == "Progress" ? (
+                ) : row.status == "Pending for Preparation" ? (
                   <Link to={`/teamleader/sendproposal/${row.id}`}>
                     <i
                       class="fa fa-mail-forward"

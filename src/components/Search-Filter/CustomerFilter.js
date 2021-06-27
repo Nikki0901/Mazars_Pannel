@@ -250,20 +250,23 @@ function CustomerFilter(props) {
                     >
                       <option value="">--select--</option>
                       <option value="1">Pending</option>
-                      {/* <option value="2">Accepted</option> */}
+                      <option value="2">Accepted</option>
                       <option value="3">Declined</option>
                     </select>
                   )}
-                </div>
-
-                <div class="form-group mx-sm-1  mb-2">
-                  <label className="form-select form-control">Total Records : {records}</label>
                 </div>
 
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>
                 <Reset />
+
+                <div class="form-group mx-sm-5 mb-2">
+                  <label className="form-select form-control"
+                  style={{marginLeft:"450px"}}
+                  >Total Records : {records}</label>
+                </div>
+
               </div>
             </form>
           </div>

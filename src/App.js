@@ -5,6 +5,8 @@ import { positions, Provider, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 // import 'bulma/css/bulma.css'
+import PageNotFound from './components/PageNotFound/PageNotFound'
+
 
 
 //user routes
@@ -24,7 +26,7 @@ import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
 import ProposalTab from './views/ProposalTab/ProposalTab'
 import AssignmentTab from './views/AssignmentTab/AssignmentTab'
-import ProposalReceived from './views/ProposalReceived/ProposalReceived'
+import ProposalReceived from './views/ProposalView/ProposalView'
 import ForgetPassword from './views/ForgetPassword/ForgetPassword'
 import NewPassword from './views/NewPassword/NewPassword'
 import ChangePassword from './views/ChangePassword/ChangePassword'
@@ -33,6 +35,12 @@ import VideoCall from './views/VideoCall/VideoCall'
 import MeetingComponent from './views/MeetingComponent/MeetingComponent'
 import schedule from './views/Schedule/schedule'
 import ViewNotification from './views/ViewNotification/ViewNotification'
+import Chatting from './views/Chatting/Chatting'
+import Message from './views/Message/Message'
+import ProposalView from './views/ProposalView/ProposalView'
+
+
+
 
 
 
@@ -89,6 +97,10 @@ import TlSchedule from './pages/TL/Schedule/Schedule'
 import TlForgetPassword from './pages/TL/ForgetPassword/ForgetPassword'
 import TlNewPassword from './pages/TL/NewPassword/NewPassword'
 import TlViewNotification from './pages/TL/ViewNotification/ViewNotification'
+import TlChatting from './pages/TL/Chatting/Chatting'
+import TlMessage from './pages/TL/Message/Message'
+
+
 
 
 
@@ -114,14 +126,11 @@ import TpNewPassword from './pages/TP/NewPassword/NewPassword'
 
 
 
-
 //private routes
-// import PrivateRouteUser from './Service/PrivateRouteUser'
+import PrivateRouteUser from './Service/PrivateRouteUser'
 import PrivateRouteAdmin from './Service/PrivateRouteAdmin'
 import PrivateRouteTL from './Service/PrivateRouteTL'
 import PrivateRouteTP from './Service/PrivateRouteTP'
-
-
 
 
 const options = {
@@ -164,7 +173,9 @@ function App() {
             <Route exact path="/customer/meeting" component={MeetingComponent} />
             <Route exact path="/customer/schedule" component={schedule} />
             <Route exact path="/customer/view-notification/:id" component={ViewNotification} />
-
+            <Route exact path="/customer/chatting" component={Chatting} />
+            <Route exact path="/customer/message" component={Message} />
+            <Route exact path="/customer/proposal_view/:id" component={ProposalView} />
 
 
 
@@ -189,8 +200,6 @@ function App() {
             <Route exact path="/admin/forget-password" component={AdminForgetPassword} />
             <Route exact path="/admin/new-password" component={AdminNewPassword} />
             <Route exact path="/admin/query_rejection/:id" component={AdminQueryRejection} />
-
-
 
 
 
@@ -219,7 +228,8 @@ function App() {
             <Route exact path="/teamleader/forget-password" component={TlForgetPassword} />
             <Route exact path="/teamleader/new-password/:id" component={TlNewPassword} />
             <Route exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
-
+            <Route exact path="/teamleader/chatting" component={TlChatting} />
+            <Route exact path="/teamleader/message" component={TlMessage} />
 
 
 
@@ -235,6 +245,8 @@ function App() {
             <Route exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
             <Route exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
 
+            <Route exact path="/*" component={PageNotFound} />
+
           </Switch>
         </Router>
       </Provider>
@@ -246,6 +258,9 @@ function App() {
 export default App;
 
 
+
+
+  
 
 
 

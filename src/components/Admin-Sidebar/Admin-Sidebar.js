@@ -88,6 +88,15 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
+      
+              <li class="nav-item">
+                <NavLink to={"/customer/message"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Message
+                  </span>
+                </NavLink>
+              </li>
 
               <li class="nav-item">
                 <NavLink to={"/customer/feedback"}>
@@ -236,6 +245,15 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   <i class="fa fa-rss-square"></i>
                   <span class="menu-title" data-i18n="">
                     schedule
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/teamleader/message"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Message
                   </span>
                 </NavLink>
               </li>

@@ -22,6 +22,7 @@ function AdminFilter(props) {
     allQueries,
     assignment,
     paymentStatus,
+    allProposal
   } = props;
 
   const [selectedData, setSelectedData] = useState([]);
@@ -206,6 +207,21 @@ function AdminFilter(props) {
         });
     }
 
+    if (allProposal == "allProposal") {
+      axios
+        .get(
+          `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
     // if (assignment == "assignment") {
     //   axios
     //     .get(
@@ -340,6 +356,20 @@ function AdminFilter(props) {
                     </select>
                   )}
 
+                  {allProposal == "allProposal" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Pending</option>
+                      <option value="2">Accepted</option>
+                      <option value="3">Declined</option>
+                    </select>
+                  )}
+
                   {paymentStatus == "paymentStatus" && (
                     <select
                       className="form-select form-control"
@@ -354,15 +384,15 @@ function AdminFilter(props) {
                   )}
                 </div>
 
-                <div class="form-group mx-sm-1  mb-2">
-                  <label className="form-select form-control">Total Records : {records}</label>
-                </div>
-
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>
-
                 <Reset />
+
+                <div class="form-group mb-2">
+                  <label className="form-select form-control"
+                  >Total Records : {records}</label>
+                </div>
               </div>
             </form>
           </div>

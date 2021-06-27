@@ -16,16 +16,19 @@ function ProposalDetails({
     payment_received,
     cust_accept_date,
     proposal_date,
-    misc2,
+    description,
+
+    amount_type,
+    amount_fixed,
+    amount_hourly,
+    payment_terms,
+    no_of_installment,
+    installment_amount,
+    due_date,
   } = diaplayProposal;
 
   const { tlname, date_of_allocation } = diaplayHistory;
 
-  // const userId = window.localStorage.getItem("userid");
-
-  console.log("p", p.id);
-
-  // CommonServices.removeTime(proposal_date);
 
   console.log("diaplayProposal", diaplayProposal);
   return (
@@ -39,23 +42,12 @@ function ProposalDetails({
           }}
         >
           PROCESSING OF QUERY
-          <div>
-            {proposal_date && (
-              <a
-                class="btn btn-primary btn-sm"
-                href={`${baseUrl}/customers/dounloadpdf?id=${p.id}`}
-                role="button"
-              >
-                Download
-              </a>
-            )}
-          </div>
         </p>
 
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">Titles</th>
+              <th scope="col" style={{ width: "400px" }}>Titles</th>
               <th scope="col">Data</th>
             </tr>
           </thead>
@@ -74,12 +66,92 @@ function ProposalDetails({
             </tr>
             <tr>
               <th scope="row">Date of Proposal</th>
-              <td>{CommonServices.removeTime(proposal_date)}</td>
+              <td>
+                <div style={{display:"flex",justifyContent:"space-between"}}>
+                {CommonServices.removeTime(proposal_date)}
+                  {proposal_date && (
+                    <a
+                      class="btn btn-primary btn-sm"
+                      href={`${baseUrl}/customers/dounloadpdf?id=${p.id}`}
+                      role="button"
+                    >
+                      Download
+                    </a>
+                  )}
+                </div>
+              </td>
             </tr>
             <tr>
-              <th scope="row">Proposal Description</th>
-              <td>{misc2}</td>
+              <th scope="row">Scope of Work</th>
+              <td>{description}</td>
             </tr>
+
+            <tr>
+              <th scope="row">Amount</th>
+              <td>
+                <tr>
+                  <th>Amount Type</th>
+                  <th>Price</th>
+                </tr>
+                <tr>
+                  <td>{amount_type}</td>
+                  <td>
+                    {
+                      amount_type == "fixed" ?
+                        amount_fixed
+                        :
+                        amount_type == "hourly" ?
+                          amount_hourly
+                          :
+                          amount_type == "mixed" ?
+                            <div>
+                              <p>Fixed : {amount_fixed}</p>
+                              <p>Hourly : {amount_hourly}</p>
+                            </div>
+                            :
+                            ""
+                    }
+                  </td>
+                </tr>
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Payment Terms</th>
+              {
+                payment_terms == "Lumpsum" ?
+                  <td>
+                    <tr>
+                      <th>Payment Type</th>
+                      <th>Due Dates</th>
+                    </tr>
+                    <tr>
+                      <td>{payment_terms}</td>
+                      <td>{due_date}</td>
+                    </tr>
+                  </td>
+                  :
+                  payment_terms == "installment" ?
+                    <td>
+                      <tr>
+                        <th>Payment Type</th>
+                        <th>No of Installments</th>
+                        <th>Installment Amount</th>
+                        <th>Due Dates</th>
+                      </tr>
+                      <tr>
+                        <td>{payment_terms}</td>
+                        <td>{no_of_installment}</td>
+                        <td>{installment_amount}</td>
+                        <td>{due_date}</td>
+                      </tr>
+                    </td>
+                    :
+                    ""
+              }
+
+            </tr>
+
             <tr>
               <th scope="row">Proposed Amount</th>
               <td>{amount}</td>
@@ -101,7 +173,7 @@ function ProposalDetails({
               <td>{CommonServices.removeTime(cust_accept_date)}</td>
             </tr>
             <tr>
-              <th scope="row">Payment Terms</th>
+              <th scope="row">Payment History</th>
               <td>
                 <tr>
                   <th>Date</th>

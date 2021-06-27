@@ -25,8 +25,8 @@ function QueryDetails({
   console.log("p", p);
   const history = useHistory();
 
-  const [addModal, setAddModal] = useState(false);
-  const addHandler = () => setAddModal(!addModal);
+  // const [addModal, setAddModal] = useState(false);
+  // const addHandler = () => setAddModal(!addModal);
 
   return (
     <>

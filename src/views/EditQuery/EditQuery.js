@@ -42,6 +42,7 @@ function EditQuery(props) {
     getQuery();
   }, []);
 
+
   const getQuery = () => {
     axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
       console.log(res);

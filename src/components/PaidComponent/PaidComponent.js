@@ -146,25 +146,25 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
     },
-    {
-      text: "Date of Proposal",
-      dataField: "created",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
-        var oldDate = row.created;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-      },
-    },
+    // {
+    //   text: "Date of Proposal",
+    //   dataField: "created",
+    //   sort: true,
+    //   style: {
+    //     fontSize: "11px",
+    //   },
+    //   headerStyle: () => {
+    //     return { fontSize: "11px" };
+    //   },
+    //   formatter: function dateFormat(cell, row) {
+    //     console.log("dt", row.created);
+    //     var oldDate = row.created;
+    //     if (oldDate == null) {
+    //       return null;
+    //     }
+    //     return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+    //   },
+    // },
     {
       text: "Date of acceptance of Proposal",
       dataField: "cust_accept_date",
@@ -195,17 +195,17 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
     },
-    {
-      dataField: "amount",
-      text: "Proposed Amount",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
+    // {
+    //   dataField: "amount",
+    //   text: "Proposed Amount",
+    //   sort: true,
+    //   style: {
+    //     fontSize: "11px",
+    //   },
+    //   headerStyle: () => {
+    //     return { fontSize: "11px" };
+    //   },
+    // },
     {
       dataField: "accepted_amount",
       text: "Accepted Amount ",

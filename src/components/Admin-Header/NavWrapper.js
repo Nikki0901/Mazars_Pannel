@@ -19,8 +19,7 @@ function NavWrapper(props) {
 
   useEffect(() => {
     getNotificationCust();
-    getNotificationTl();
-  }, []);
+  }, [userId]);
 
   const getNotificationCust = () => {
     axios
@@ -34,6 +33,10 @@ function NavWrapper(props) {
       });
   };
 
+  useEffect(() => {
+    getNotificationTl();
+  }, [tlkey]);
+  
   const getNotificationTl = () => {
     axios
       .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(tlkey)}`)

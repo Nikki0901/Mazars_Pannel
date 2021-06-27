@@ -20,8 +20,8 @@ import Swal from "sweetalert2";
 function QueriesTab() {
   const alert = useAlert();
   const userId = window.localStorage.getItem("userid");
-  const [queriesCount, setCountQueries] = useState(null);
   const [query, setQuery] = useState([]);
+  const [queriesCount, setCountQueries] = useState(null);
   const [records, setRecords] = useState([]);
 
 
@@ -107,10 +107,25 @@ function QueriesTab() {
     },
     {
       text: "Status",
-      dataField: "status",
+      dataField: "",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              <p>{row.status}</p>
+              {
+                row.status_message == "-1" ?
+                  <p style={{ color: "red" }}>{row.status_message}</p>
+                  :
+                  <p style={{ color: "green" }}>{row.status_message}</p>
+              }
+            </div>
+          </>
+        );
       },
     },
     {
@@ -152,8 +167,8 @@ function QueriesTab() {
                   ) : null}
                 </Link>
               </div>
-              {/* <div title="Delete Query">
-                {row.status_code < 5 ? (
+              <div title="Delete Query">
+                {row.status_code < 1 ? (
                   <i
                     className="fa fa-trash"
                     style={{
@@ -164,7 +179,7 @@ function QueriesTab() {
                     onClick={() => del(row.id)}
                   ></i>
                 ) : null}
-              </div> */}
+              </div>
             </div>
           </>
         );
@@ -173,47 +188,47 @@ function QueriesTab() {
   ];
 
   //check
-  // const del = (id) => {
-  //   console.log("del", id);
+  const del = (id) => {
+    console.log("del", id);
 
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "It will permanently deleted !",
-  //     type: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then((result) => {
-  //     if (result.value) {
-  //       deleteCliente(id);
-  //     }
-  //   });
-  // };
+    Swal.fire({
+      title: "Are you sure?",
+      text: "It will permanently deleted !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteCliente(id);
+      }
+    });
+  };
 
-  // const deleteCliente = (id) => {
-  //   let formData = new FormData();
-  //   formData.append("uid", JSON.parse(userId));
-  //   formData.append("id", id);
+  const deleteCliente = (id) => {
+    let formData = new FormData();
+    formData.append("uid", JSON.parse(userId));
+    formData.append("id", id);
 
-  //   axios({
-  //     method: "POST",
-  //     url: `${baseUrl}/customers/deleteQuery`,
-  //     data: formData,
-  //   })
-  //     .then(function (response) {
-  //       console.log("res-", response);
-  //       if (response.data.code === 1) {
-  //         Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //         getQueriesData();
-  //       } else {
-  //         Swal.fire("Oops...", "Errorr ", "error");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log("erroror - ", error);
-  //     });
-  // };
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/deleteQuery`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          getQueriesData();
+        } else {
+          Swal.fire("Oops...", "Errorr ", "error");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

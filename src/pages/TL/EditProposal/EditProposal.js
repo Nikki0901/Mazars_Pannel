@@ -1,285 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { baseUrl } from "../../../config/config";
-// import { useAlert } from "react-alert";
-// import { useHistory, useParams } from "react-router-dom";
-// import Layout from "../../../components/Layout/Layout";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Row,
-//   Col,
-// } from "reactstrap";
-// import Loader from "react-loader-spinner";
-
-// function ProposalComponent() {
-
-//   const alert = useAlert();
-//   const userid = window.localStorage.getItem("tlkey");
-
-//   const [loading, setLoading] = useState(true);
-
-//   const history = useHistory();
-//   const { id } = useParams();
-
-//   const [proposal, setProposal] = useState({
-//     query: "",
-//     name: "",
-//     amount: "",
-//     payable: "",
-//     misc1: "",
-//     misc2: "",
-//     payable_through: "",
-//   });
-//   const { query, name, amount, misc1, misc2, payable_through } = proposal;
-//   const [errormsg, setErrormsg] = useState({amounterr: "", misc1err: "", misc2err: ""});
-
-//   useEffect(() => {
-//     getQuery();
-//   }, []);
-
-//   const getQuery = () => {
-//     axios.get(`${baseUrl}/tl/getProposalDetail?id=${id}`).then((res) => {
-//       console.log(res);
-//       if (res.data.code === 1) {
-//         setProposal({
-//           name: res.data.result.name,
-//           query: res.data.result.assign_no,
-//           amount: res.data.result.amount,
-//           misc1: res.data.result.misc1,
-//           misc2: res.data.result.misc2,
-//           payable_through: res.data.result.payable_through,
-//         });
-//       }
-//       setLoading(false);
-//     });
-//   };
-
-
-//   const HandleSubmit = async(e) => {
-//     if(errormsg.amounterr || errormsg.misc1err || errormsg.misc2err){
-//         alert.show("Please fill form properly!", {
-//           type: "error"
-//         });
-//     }
-//     else{
-//       e.preventDefault();
-//       let formData = new FormData();
-
-//       formData.append("assign_no", query);
-//       formData.append("name", name);
-//       formData.append("assign_id", id);
-//       formData.append("amount", amount);
-//       formData.append("payable_through", payable_through);
-//       formData.append("misc1", misc1);
-//       formData.append("misc2", misc2);
-
-//       await axios({
-//         method: "POST",
-//         url: `${baseUrl}/tl/updateProposal`,
-//         data: formData,
-//       })
-//         .then(function (response) {
-//           console.log("res-", response);
-//           if (response.data.code === 1) {
-//             // reset();
-//             alert.success(<Msg />);
-//             history.push("/teamleader/proposal");
-//           }
-//         })
-//         .catch((error) => {
-//           console.log("erroror - ", error);
-//         });
-//     }
-//   };
-
-//   //alert msg
-//   const Msg = () => {
-//     return (
-//       <>
-//         <p style={{ fontSize: "10px" }}>proposal updated</p>
-//       </>
-//     );
-//   };
-
-//   const inputHandler = (e) => {
-//     let name = e.target.name;
-//     let val = e.target.value;
-//     let err = "";
-
-//     if(name === "amount"){
-//         if(!Number(val) || val === ""){
-//             err = <strong>Please enter a valid amount!</strong>
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 amounterr: err
-//             }))
-//         }
-//         else{
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 amounterr: ""
-//             }));
-//             setProposal(prevState => ({
-//               ...prevState,
-//               amount: val
-//             }));
-//         }
-//     }
-//     else if(name === "misc1"){
-//         if(val === ""){
-//             err = <strong>Please enter a valid input!</strong>
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 misc1err: err
-//             }))
-//         }
-//         else{
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 misc1err: ""
-//             }));
-//             setProposal(prevState => ({
-//               ...prevState,
-//               misc1: val
-//             }));
-//         }
-//     }
-//     else if(name === "misc2"){
-//         if(val === ""){
-//             err = <strong>Please enter a valid input!</strong>
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 misc2err: err
-//             }))
-//         }
-//         else{
-//             setErrormsg(prevState => ({
-//                 ...prevState,
-//                 misc2err: ""
-//             }))
-//             setProposal(prevState => ({
-//               ...prevState,
-//               misc2: val
-//             }));
-//         }
-//     }
-//   }
-
-//   return (
-//     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
-//       <Card>
-//         <CardHeader>
-//           <Row>
-//             <Col md="5">
-//               <button
-//                 class="btn btn-success ml-3"
-//                 onClick={() => history.goBack()}
-//               >
-//                 <i class="fas fa-arrow-left mr-2"></i>
-//                 Go Back
-//               </button>
-//             </Col>
-//             <Col md="7">
-//               <div class="btn ml-3">
-//                 <h4>Edit Proposal</h4>
-//               </div>
-//             </Col>
-//           </Row>
-//         </CardHeader>
-
-//         {loading ? (
-//           <div style={{display: 'flex', justifyContent: 'center'}}><Loader type="ThreeDots" color="#00BFFF" height={80} width={80} /></div>
-//         ) : (
-//           <CardBody>
-//           <form onSubmit={(e) => {HandleSubmit(e)}}>
-//             <div class="row">
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Query No.</label>
-//                   <input className="form-control"  type="text" placeholder="query no." value={query}/>
-//                 </div>
-//               </div>
-
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Customer Name</label>
-//                   <input className="form-control"  type="text" placeholder="query no." value={name}/>
-//                 </div>
-//               </div>
-//             </div>
-
-//             <div class="row">
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Amount</label>
-//                   <input className="form-control" type="text" name="amount" placeholder="enter amount" defaultValue={amount} onChange={inputHandler} /><br/>
-//                   {errormsg.amounterr}
-//                 </div>
-//               </div>
-
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Payment mode</label>
-//                   <select className="form-control" name="payment" id="payment">
-//                     <option value="none" selected disabled hidden>
-//                       {payable_through ? payable_through : "--select--"}</option>
-//                     <option value="neft" >NEFT</option>
-//                     <option value="debit">DEBIT CARD</option>
-//                     <option value="credit">CREDIT CARD</option>
-//                     <option value="upi">UPI</option>
-//                     <option value="wallet">Wallet</option>
-//                   </select>
-//                 </div>
-//               </div>
-//             </div>
-
-//             <div class="row">
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Misc 1</label>
-//                   <input className="form-control" name="misc1" type="text" defaultValue={misc1} onChange={inputHandler} /><br/>
-//                   {errormsg.misc1err}
-//                 </div>
-//               </div>
-//               <div class="col-md-6">
-//                 <div class="form-group">
-//                   <label>Proposal Description</label>
-//                   <textarea rows="3" className="form-control" type="text" name="misc2" defaultValue={misc2} onChange={inputHandler} /><br/>
-//                   {errormsg.misc2err}
-//                 </div>
-//               </div>
-//             </div>
-
-//             <br />
-//             <div class="form-group">
-//               <button type="submit" class="btn btn-primary">
-//                 Submit
-//               </button>
-//             </div>
-//           </form>
-//         </CardBody>
-//         )}
-//       </Card>
-//     </Layout>
-//   );
-// }
-
-// export default ProposalComponent;
-
-// const payable = [
-//   { pay: "NEFT" },
-//   { pay: "DEBIT CARD" },
-//   { pay: "CREDIT CARD" },
-//   { pay: "UPI" },
-//   { pay: "WALLET" },
-// ];
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -296,17 +14,22 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import Payment from "./Payment";
 
 function ProposalComponent() {
 
   const alert = useAlert();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: { email: "", firstname: "" },
+  });
   const userid = window.localStorage.getItem("tlkey");
 
   const [custId, setCustId] = useState("");
-  const [custname, setCustName] = useState();
-  const [assignId, setAssignID] = useState("");
-  const [assingNo, setAssingNo] = useState("");
+  const [store, setStore] = useState(null);
+  const [payment, setPayment] = useState(null);
+  const [installment, setInstallment] = useState(null);
+  const [amount, setAmount] = useState();
+  const [date, setDate] = useState();
 
   const history = useHistory();
   const { id } = useParams();
@@ -314,17 +37,22 @@ function ProposalComponent() {
   const [proposal, setProposal] = useState({
     query: "",
     name: "",
-    amount: "",
+    fixed_amount: "",
     payable: "",
-    misc1: "",
-    misc2: "",
-    payable_through: "",
+    description: "",
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
   });
-  const { query, name, amount, misc1, misc2, payable_through } = proposal;
+  const { query, name, description, fixed_amount,
+    no_of_installment, payment_terms,
+    due_date, installment_amount } = proposal;
 
   useEffect(() => {
     getQuery();
   }, []);
+
 
   const getQuery = () => {
     axios.get(`${baseUrl}/tl/getProposalDetail?id=${id}`).then((res) => {
@@ -333,45 +61,57 @@ function ProposalComponent() {
         setProposal({
           name: res.data.result.name,
           query: res.data.result.assign_no,
-          amount: res.data.result.amount,
-          misc1: res.data.result.misc1,
-          misc2: res.data.result.misc2,
-          payable_through: res.data.result.payable_through,
+          fixed_amount: res.data.result.amount,
+          description: res.data.result.description,
+          payment_terms: res.data.result.payment_terms,
+          installment_amount: res.data.result.installment_amount,
+          due_date: res.data.result.due_date,
         });
+
+        setInstallment(res.data.result.no_of_installment)
       }
     });
   };
 
+
+
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
-      console.log("res", res);
-      // setCustName(res.data.name);
       setCustId(res.data.id);
     };
     getUser();
   }, [id]);
 
-  console.log(assignId);
+
 
   const onSubmit = (value) => {
     console.log(value);
 
-    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-    var todaysDate = new Date();
+    var lumsum = value.p_inst_date
+    setDate(lumsum)
+
     let formData = new FormData();
 
     formData.append("assign_no", value.p_assingment);
     formData.append("name", value.p_name);
-    // formData.append("type", "tl");
+    formData.append("type", "tl");
+    formData.append("id", JSON.parse(userid));
+    formData.append("description", value.description);
+    formData.append("customer_id", custId);
     formData.append("assign_id", id);
-    formData.append("amount", value.p_amount);
-    formData.append("payable_through", value.p_payable);
-    formData.append("misc1", value.misc_1);
-    formData.append("misc2", value.misc_2);
-    // formData.append("payable_date", todaysDate);
-    // formData.append("customer_id", custId);
-    // formData.append("assign_id", assignId);
+
+    formData.append("amount_type", value.p_type);
+    formData.append("amount", value.p_fixed);
+    formData.append("amount_hourly", value.p_hourly);
+    formData.append("payment_terms", value.p_payment_terms);
+    formData.append("no_of_installment", value.p_no_installments);
+    formData.append("installment_amount", amount);
+
+    payment == "lumpsum" ?
+      formData.append("due_date", lumsum) :
+      formData.append("due_date", date)
+
 
     axios({
       method: "POST",
@@ -381,8 +121,7 @@ function ProposalComponent() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          // reset();
-          getQuery();
+          // getQuery();
           alert.success(<Msg />);
           history.push("/teamleader/proposal");
         }
@@ -399,6 +138,34 @@ function ProposalComponent() {
       </>
     );
   };
+
+
+  const paymentAmount = (data) => {
+    console.log("paymentAmount", data)
+
+    var array1 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array1.push(value)
+    });
+    console.log("array1", array1);
+
+    setAmount(array1);
+  };
+
+  const paymentDate = (data) => {
+    console.log("paymentDate", data)
+
+    var array2 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array2.push(value)
+    });
+    console.log("array2", array2);
+    setDate(array2);
+  };
+
+
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -424,8 +191,10 @@ function ProposalComponent() {
 
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="row">
+
+            <div style={{ display: "flex" }}>
               <div class="col-md-6">
+
                 <div class="form-group">
                   <label>Query No.</label>
                   <input
@@ -436,9 +205,51 @@ function ProposalComponent() {
                     ref={register}
                   />
                 </div>
+
+                <div class="form-group">
+                  <label>Fee</label>
+                  <select
+                    class="form-control"
+                    ref={register}
+                    name="p_type"
+                    onChange={(e) => setStore(e.target.value)}
+                  >
+                    {/* <option value="">--select type--</option> */}
+                    <option value="fixed">Fixed Price</option>
+                  </select>
+                </div>
+
+
+                <div class="form-group">
+                  <label>Fixed Price</label>
+                  <input
+                    type="text"
+                    name="p_fixed"
+                    className="form-control"
+                    ref={register}
+                    placeholder="Enter Fixed Price"
+                    defaultValue={fixed_amount}
+                  />
+                </div>
+
+
+                <div class="form-group">
+                  <label>Scope of Work</label>
+                  <textarea
+                    className="form-control"
+                    id="textarea"
+                    rows="3"
+                    name="description"
+                    defaultValue={description}
+                    ref={register}
+                  ></textarea>
+                </div>
+
               </div>
 
+
               <div class="col-md-6">
+
                 <div class="form-group">
                   <label>Customer Name</label>
                   <input
@@ -449,75 +260,78 @@ function ProposalComponent() {
                     ref={register}
                   />
                 </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Amount</label>
-                  <input
-                    type="text"
-                    name="p_amount"
-                    class="form-control"
-                    ref={register}
-                    defaultValue={amount}
-                  />
-                </div>
-              </div>
 
-              <div class="col-md-6">
+
                 <div class="form-group">
-                <label>Payment Mode</label>
+                  <label>Payment Terms</label>
                   <select
-                    class="form-control"
-                    name="p_payable"
+                    className="form-control"
+                    name="p_payment_terms"
                     aria-label="Default select example"
                     ref={register}
-                    defaultValue={payable_through}
+                    onChange={(e) => setPayment(e.target.value)}
+                    value="jjkhlj"
                   >
                     <option value="">--select--</option>
-                    {payable.map((p, index) => (
-                      <option key={index} value={p.pay}>
-                        {p.pay}
-                      </option>
-                    ))}
+                    <option value="lumpsum">Lumpsum</option>
+                    <option value="installment">Installment</option>
                   </select>
                 </div>
+
+
+                {payment_terms == "lumpsum" ? (
+                  <div class="form-group">
+                    <label>Due Dates</label>
+                    <input
+                      type="date"
+                      name="p_inst_date"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                      defaultValue={due_date}
+                    />
+                  </div>
+                ) :
+                  payment_terms == "installment" ? (
+                    <div class="form-group">
+                      <label>No of Installments</label>
+                      <select
+                        className="form-control"
+                        name="p_no_installments"
+                        aria-label="Default select example"
+                        ref={register}
+                        onChange={(e) => setInstallment(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  )
+                    : ""
+                }
+                {
+                  payment == "Lumpsum"
+                    ?
+                    ""
+                    :
+                    <Payment
+                      installment={installment}
+                      paymentAmount={paymentAmount}
+                      paymentDate={paymentDate}
+                      installment_amount={installment_amount}
+                      due_date={due_date}
+                    />
+                }
+
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Misc 1</label>
-                  <input
-                    type="text"
-                    name="misc_1"
-                    class="form-control"
-                    ref={register}
-                    defaultValue={misc1}
-                  />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Proposal Description</label>
-                  <textarea
-                    className="form-control"
-                    id="textarea"
-                    rows="3"
-                    name="misc_2"
-                    defaultValue={misc2}
-                    ref={register}
-                  ></textarea>
-                </div>
-              </div>
-            </div>
 
-
-            <br />
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <button type="submit" class="btn btn-primary">
                 Submit
               </button>
@@ -531,10 +345,40 @@ function ProposalComponent() {
 
 export default ProposalComponent;
 
-const payable = [
-  { pay: "NEFT" },
-  { pay: "DEBIT CARD" },
-  { pay: "CREDIT CARD" },
-  { pay: "UPI" },
-  { pay: "WALLET" },
-];
+
+
+{/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}

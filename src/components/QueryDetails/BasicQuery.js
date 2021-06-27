@@ -19,7 +19,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">Titles</th>
+              <th scope="col" style={{width:"400px"}}>Titles</th>
               <th scope="col">Data</th>
             </tr>
           </thead>

@@ -133,10 +133,9 @@ function TeamFilter(props) {
     if (proposal == "proposal") {
       axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
+          `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
             userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${
-            data.p_dateTo
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
@@ -268,9 +267,9 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Progress</option>
-                      <option value="2">Pending</option>
-                      {/* <option value="3">Cust Accepted</option> */}
+                      <option value="1">Pending Preparation</option>
+                      <option value="2">Pending Approval</option>
+                      <option value="3">Accepted</option>
                       <option value="4">Declined</option>
                     </select>
                   )}
@@ -288,13 +287,15 @@ function TeamFilter(props) {
                     </select>
                   )}
                 </div>
-                <div class="form-group mx-sm-1  mb-2">
-                  <label className="form-select form-control">Total Records : {records}</label>
-                </div>
+
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>
                 <Reset />
+                <div class="form-group mx-sm-1  mb-2">
+                  <label className="form-select form-control"
+                  >Total Records : {records}</label>
+                </div>
               </div>
             </form>
           </div>

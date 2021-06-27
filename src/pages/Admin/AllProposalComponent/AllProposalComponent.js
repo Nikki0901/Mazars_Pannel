@@ -10,17 +10,14 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import { useForm } from "react-hook-form";
-import "antd/dist/antd.css";
-import { Select } from "antd";
+
 import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 
+
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
-  const { handleSubmit, register, errors, reset } = useForm();
-  const { Option, OptGroup } = Select;
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
@@ -39,23 +36,7 @@ function AllProposalComponent({ allProposal }) {
     });
   };
 
-  const [selectedData, setSelectedData] = useState([]);
-  const [tax2, setTax2] = useState([]);
-  const [store2, setStore2] = useState([]);
 
-  useEffect(() => {
-    const getSubCategory = () => {
-      axios
-        .get(`${baseUrl}/customers/getCategory?pid=${selectedData}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setTax2(res.data.result);
-          }
-        });
-    };
-    getSubCategory();
-  }, [selectedData]);
 
   const columns = [
     {
@@ -284,72 +265,22 @@ function AllProposalComponent({ allProposal }) {
     },
   ];
 
-  //handleCategory
-  const handleCategory = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    setStore2([]);
-  };
 
-  //handleSubCategory
-  const handleSubCategory = (value) => {
-    console.log(`selected ${value}`);
-    setStore2(value);
-  };
-
-  //reset category
-  const resetCategory = () => {
-    console.log("resetCategory ..");
-    setSelectedData([]);
-    setStore2([]);
-    getProposalData();
-  };
-
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    // setStatus([]);
-    setSelectedData([]);
-    setStore2([]);
-    getProposalData();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    axios
-      .get(
-        `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setProposalDisplay(res.data.result);
-            setRecords(res.data.result.length);
-          }
-        }
-      });
-  };
-
-  const Reset = () => {
-    return (
-      <>
-        <button
-          type="submit"
-          class="btn btn-primary mx-sm-1 mb-2"
-          onClick={() => resetData()}
-        >
-          Reset
-        </button>
-      </>
-    );
-  };
   return (
     <>
       <Card>
         <CardHeader>
-          <div className="row">
+
+        <AdminFilter
+            setData={setProposalDisplay}
+            getData={getProposalData}
+            allProposal="allProposal"
+            setRecords={setRecords}
+            records={records}
+          />
+
+
+          {/* <div className="row">
             <div className="col-sm-12 d-flex">
               <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -455,7 +386,7 @@ function AllProposalComponent({ allProposal }) {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
         </CardHeader>
 
         <CardBody>

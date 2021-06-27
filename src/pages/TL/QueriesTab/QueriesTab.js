@@ -15,8 +15,9 @@ function QueriesTab(props) {
   const [incomplete, setIncomplete] = useState("");
   const [complete, setcomplete] = useState("");
 
+
   // const CountPendingForAcceptence = (data) => {
-  //   setPendingAcceptence(data);
+  //   setPendingForAcceptence(data);
   // };
 
   // const CountIncomplete = (data) => {
@@ -49,6 +50,8 @@ function QueriesTab(props) {
   useLayoutEffect(() => {
     setTabIndex(props.location.index || 0);
   }, [props.location.index]);
+
+
 
   useEffect(() => {
     const getPendindForAccepttence = () => {
@@ -92,10 +95,10 @@ function QueriesTab(props) {
     getComplete();
   }, []);
 
-  const updateTab = (key) =>{
+  const updateTab = (key) => {
     setTabIndex(key)
   }
-  
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <div>
@@ -120,13 +123,13 @@ function QueriesTab(props) {
 
           <TabPanel>
             <PendingForAcceptence
-            // CountPendingForAcceptence={CountPendingForAcceptence}
-            updateTab={updateTab}
+              // CountPendingForAcceptence={CountPendingForAcceptence}
+              updateTab={updateTab}
             />
           </TabPanel>
           <TabPanel>
             <InCompleteData
-            // CountIncomplete={CountIncomplete}
+              // CountIncomplete={CountIncomplete}
             />
           </TabPanel>
           <TabPanel>
@@ -225,14 +228,3 @@ export default QueriesTab;
 {
   /* <button onClick={() => setTabIndex(1)}>go to 1st tab</button> */
 }
-
-// 9837505200
-
-// prashant kaushik
-
-// pwd
-
-// noddle oofficer covid 19 rmg
-
-// 7302556474
-// 9411515029

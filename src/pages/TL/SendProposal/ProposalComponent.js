@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
@@ -16,30 +16,37 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Payment from "./Payment";
+
 
 const Schema = yup.object().shape({
-  p_amount: yup.string().required("required amount"),
   misc_1: yup.string().required("required misc_1"),
   misc_2: yup.string().required("required proposal description"),
   p_payable: yup.string().required("required payable"),
 });
+
 
 function ProposalComponent(props) {
   const { id } = props;
   console.log(id);
 
   const alert = useAlert();
-  const { handleSubmit, register, reset, errors } = useForm({
-    resolver: yupResolver(Schema),
-  });
-  const userid = window.localStorage.getItem("tlkey");
+  const history = useHistory();
+  const { handleSubmit, register, reset } = useForm();
 
+
+  const userid = window.localStorage.getItem("tlkey");
   const [custId, setCustId] = useState("");
   const [custname, setCustName] = useState();
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
+  const [store, setStore] = useState(null);
+  const [payment, setPayment] = useState(null);
+  const [installment, setInstallment] = useState(null);
 
-  const history = useHistory();
+  const [amount, setAmount] = useState();
+  const [date, setDate] = useState();
+
 
   useEffect(() => {
     const getQuery = () => {
@@ -62,6 +69,7 @@ function ProposalComponent(props) {
     getQuery();
   }, []);
 
+
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
@@ -73,11 +81,14 @@ function ProposalComponent(props) {
     getUser();
   }, [id]);
 
+
+  
   const onSubmit = (value) => {
     console.log(value);
 
-    // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-    var todaysDate = new Date();
+    var lumsum = value.p_inst_date
+    setDate(lumsum)
+    console.log("date --=", date)
 
     let formData = new FormData();
 
@@ -85,13 +96,20 @@ function ProposalComponent(props) {
     formData.append("name", value.p_name);
     formData.append("type", "tl");
     formData.append("id", JSON.parse(userid));
-    formData.append("amount", value.p_amount);
-    formData.append("payable", value.p_payable);
-    formData.append("misc1", value.misc_1);
-    formData.append("misc2", value.misc_2);
-    formData.append("payable_date", todaysDate);
-    formData.append("customer_id", custId);
     formData.append("assign_id", assignId);
+    formData.append("description", value.description);
+    formData.append("customer_id", custId);
+
+    formData.append("amount_type", "fixed");
+    formData.append("amount", value.p_fixed);
+    formData.append("amount_hourly", value.p_hourly);
+    formData.append("payment_terms", value.p_payment_terms);
+    formData.append("no_of_installment", value.p_no_installments);
+    formData.append("installment_amount", amount);
+
+    payment == "Lumpsum" ?
+      formData.append("due_date", lumsum) :
+      formData.append("due_date", date)
 
     axios({
       method: "POST",
@@ -111,6 +129,7 @@ function ProposalComponent(props) {
       });
   };
 
+
   //alert msg
   const Msg = () => {
     return (
@@ -119,6 +138,37 @@ function ProposalComponent(props) {
       </>
     );
   };
+
+
+  const paymentAmount = (data) => {
+    console.log("paymentAmount", data)
+
+    var array1 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array1.push(value)
+    });
+    console.log("array1", array1);
+
+    setAmount(array1);
+  };
+
+  const paymentDate = (data) => {
+    console.log("paymentDate", data)
+
+    var array2 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array2.push(value)
+    });
+    console.log("array2", array2);
+    setDate(array2);
+  };
+
+
+  // console.log("amount", amount)
+  // console.log("date", date)
+
 
   return (
     <>
@@ -135,7 +185,7 @@ function ProposalComponent(props) {
               </button>
             </Col>
             <Col md="7">
-              <div class="btn ml-3">
+              <div>
                 <h4>Prepare Proposal</h4>
               </div>
             </Col>
@@ -144,147 +194,152 @@ function ProposalComponent(props) {
 
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="row">
+
+            <div style={{ display: "flex" }}>
+
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Query No.</label>
                   <input
                     type="text"
                     name="p_assingment"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_assingment,
-                    })}
+                    className="form-control"
                     value={assingNo}
                     ref={register}
                   />
                 </div>
+
+                <div class="form-group">
+                  <label>Fee</label>
+                  <select
+                    class="form-control"
+                    ref={register}
+                    name="p_type"
+                    onChange={(e) => setStore(e.target.value)}
+                  >
+                    {/* <option value="">--select type--</option> */}
+                    <option value="fixed">Fixed Price</option>
+                    {/* <option value="hourly">Hourly basis</option>
+                    <option value="mixed">Mixed</option> */}
+                  </select>
+                </div>
+
+                {/* {store == "fixed" && ( */}
+
+                  <div class="form-group">
+                    <label>Fixed Price</label>
+                    <input
+                      type="text"
+                      name="p_fixed"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Fixed Price"
+                    />
+                  </div>
+
+                {/* )} */}
+
+
+                <div class="form-group">
+                  <label>Scope of Work</label>
+                  <textarea
+                    className="form-control"
+                    id="textarea"
+                    rows="3"
+                    name="description"
+                    ref={register}
+                    placeholder="Enter Proposal Description"
+                  ></textarea>
+                </div>
+
               </div>
 
               <div class="col-md-6">
+
                 <div class="form-group">
                   <label>Customer Name</label>
                   <input
                     type="text"
                     name="p_name"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_name,
-                    })}
+                    className="form-control"
                     value={custname}
                     ref={register}
                   />
                 </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Amount</label>
-                  <input
-                    type="text"
-                    name="p_amount"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_amount,
-                    })}
-                    ref={register}
-                  />
-                  {errors.p_amount && (
-                    <div className="invalid-feedback">
-                      {errors.p_amount.message}
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              <div class="col-md-6">
                 <div class="form-group">
-                  <label>Payment Mode</label>
+                  <label>Payment Terms</label>
                   <select
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_payable,
-                    })}
-                    name="p_payable"
+                    className="form-control"
+                    name="p_payment_terms"
                     aria-label="Default select example"
                     ref={register}
+                    onChange={(e) => setPayment(e.target.value)}
                   >
                     <option value="">--select--</option>
-                    {payable.map((p, index) => (
-                      <option key={index} value={p.pay}>
-                        {p.pay}
-                      </option>
-                    ))}
+                    <option value="Lumpsum">Lumpsum</option>
+                    <option value="Installment">Installment</option>
                   </select>
-                  {errors.p_payable && (
-                    <div className="invalid-feedback">
-                      {errors.p_payable.message}
-                    </div>
-                  )}
                 </div>
+
+                {payment == "Lumpsum" ? (
+                  <div class="form-group">
+                    <label>Due Dates</label>
+                    <input
+                      type="date"
+                      name="p_inst_date"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                ) :
+                  payment == "Installment" ? (
+                    <div class="form-group">
+                      <label>No of Installments</label>
+                      <select
+                        className="form-control"
+                        name="p_no_installments"
+                        aria-label="Default select example"
+                        ref={register}
+                        onChange={(e) => setInstallment(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  )
+                    : ""
+                }
+
+                {
+                  payment == "Lumpsum"
+                    ?
+                    ""
+                    :
+                    <Payment
+                      installment={installment}
+                      paymentAmount={paymentAmount}
+                      paymentDate={paymentDate}
+                    />
+                }
+
+
               </div>
+
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Misc 1</label>
-                  <input
-                    type="text"
-                    name="misc_1"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.misc_1,
-                    })}
-                    ref={register}
-                  />
-                  {errors.misc_1 && (
-                    <div className="invalid-feedback">
-                      {errors.misc_1.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Proposal Description</label>
-                  <textarea
-                    className={classNames("form-control", {
-                      "is-invalid": errors.misc_2,
-                    })}
-                    id="textarea"
-                    rows="3"
-                    name="misc_2"
-                    ref={register}
-                  ></textarea>
-                  {errors.misc_2 && (
-                    <div className="invalid-feedback">
-                      {errors.misc_2.message}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
 
-            {/* <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Payable by date</label>
-                  <input
-                    type="date"
-                    name="p_date"
-                    className={classNames("form-control", {
-                        "is-invalid": errors.p_email,
-                      })}
-                    ref={register}
-                  />
-                </div>
-              </div>
-            </div> */}
-
-            <br />
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <button type="submit" class="btn btn-primary">
                 Submit
               </button>
             </div>
+
           </form>
         </CardBody>
       </Card>
@@ -294,72 +349,14 @@ function ProposalComponent(props) {
 
 export default ProposalComponent;
 
-const payable = [
-  { pay: "NEFT" },
-  { pay: "DEBIT CARD" },
-  { pay: "CREDIT CARD" },
-  { pay: "UPI" },
-  { pay: "WALLET" },
-];
 
-{
-  /* <div class="col-md-8">
-        <div>
-          <h3>Send Proposal</h3>
-          <br />
 
-          
-        
-        </div>
-      </div> */
-}
 
-// const handleImage = (e) =>{
-//   let files = e.target.files
-//    console.log(files)
 
-//   let reader = new FileReader();
-//   reader.readAsDataURL(files[0])
 
-//  reader.onload = (e) => {
-//  console.log("img", e.target.result)
-// }
+// var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+// var todaysDate = new Date();
 
-/* <div class="col-md-6">
-              <div class="form-group">
-                <label>Proposal File</label>
-                <input type="file" name="p_image" ref={register} />
-              </div>
-            </div> */
-
-// const Schema = yup.object().shape({
-//     p_assingment: yup.string().required("required assingment"),
-//     p_name: yup.string().required("required name"),
-//     p_document: yup.string().required("required file"),
-//   });
-
-// {
-//   Object.entries(res.data.result).map(([key, value]) => {
-//     console.log("val", value.name);
-//     setCustName(value.name);
-//   });
-// }
-
-{
-  /* <select
-                    class="form-control"
-                    ref={register}
-                    name="p_assingment"
-                    onChange={(e) => getID(e.target.value)}
-                  >
-                    <option value="">--select--</option>
-                    {incompleteData.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.assign_no}
-                      </option>
-                    ))}
-                  </select> */
-}
 
 // const getID = (key) => {
 //     setId(key);
@@ -371,3 +368,83 @@ const payable = [
 //       }
 //     });
 //   };
+
+
+
+
+
+
+                {/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}
+                {/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}
+
+
+
+        

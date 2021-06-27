@@ -139,7 +139,7 @@ function Demo() {
 
   const AppointmentBase = ({
     children,
-    // data,
+    data,
     onClick,
     classes,
     onAppointmentMetaChange,
@@ -148,19 +148,22 @@ function Demo() {
     <Appointments.Appointment {...restProps}>
       <div style={{ display: "flex" }}>
         {
-          console.log("children",children)
+          // console.log("children",children)
+          console.log("data",data)
+
         }
         <div>{children}</div>
         <div
-        onClick={() => handleJoin("2")}
+        onClick={() => handleJoin(data.id)}
         ><i
-        class="fa fa-mail-forward"
+        class="fa fa-video-camera"
         style={{ fontSize: "12px", color: "#fff" }}
       ></i>
         </div>
       </div>
     </Appointments.Appointment>
   );
+
 
   const Appointment = withStyles(styles, { name: "Appointment" })(
     AppointmentBase
@@ -315,6 +318,8 @@ function Demo() {
 }
 
 export default Demo;
+
+
 
 // const styles = {
 //   toolbarRoot: {

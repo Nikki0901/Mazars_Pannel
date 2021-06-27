@@ -445,6 +445,7 @@ function AssignmentTab() {
                   <option value="">--select--</option>
                   <option value="1">Pending</option>
                   <option value="2">Complete</option>
+                  <option value="3">Payment Decline</option>
                 </select>
               </div>
               <div class="form-group mx-sm-1  mb-2">

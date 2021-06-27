@@ -219,7 +219,7 @@ function Demo() {
 
   const AppointmentBase = ({
     children,
-    // data,
+    data,
     onClick,
     classes,
     onAppointmentMetaChange,
@@ -227,10 +227,16 @@ function Demo() {
   }) => (
     <Appointments.Appointment {...restProps}>
       <div style={{ display: "flex" }}>
+        {
+          console.log("data", data)
+
+        }
         <div>{children}</div>
-        <div onClick={() => handleJoin("2")}>
+        <div
+          onClick={() => handleJoin(data.id)}
+        >
           <i
-            class="fa fa-mail-forward"
+            class="fa fa-video-camera"
             style={{ fontSize: "12px", color: "#fff" }}
           ></i>
         </div>
@@ -257,7 +263,7 @@ function Demo() {
     return (
       <Appointment
         {...props}
-        // onAppointmentMetaChange={onAppointmentMetaChange}
+      // onAppointmentMetaChange={onAppointmentMetaChange}
       />
     );
   };

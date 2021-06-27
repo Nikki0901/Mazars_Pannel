@@ -56,7 +56,7 @@ function RejectedModal({
   return (
     <div>
       <Modal isOpen={rejectModal} toggle={rejectHandler} size="sm">
-        <ModalHeader toggle={rejectHandler}>Rejected Reason</ModalHeader>
+        <ModalHeader toggle={rejectHandler}>Discussion Message</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
@@ -68,7 +68,7 @@ function RejectedModal({
                 rows="4"
                 name="p_chat"
                 ref={register}
-                placeholder="enter text"
+                placeholder="enter text here"
               ></textarea>
 
               {errors.p_chat && (

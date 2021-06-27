@@ -30,7 +30,7 @@ function ForgetPassword(props) {
 
     let formData = new FormData();
     formData.append("email", value.p_email);
-    formData.append("type","tp");
+    formData.append("type", "tp");
 
     axios({
       method: "POST",
@@ -43,7 +43,7 @@ function ForgetPassword(props) {
           alert.success("otp send your email !");
           props.history.push(`/taxprofessional/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
-          console.log(response.data.result);   
+          console.log(response.data.result);
           Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
         }
       })
@@ -52,17 +52,27 @@ function ForgetPassword(props) {
       });
   };
 
+  const valueHandler = () => {
+    var item = props.location.email
+    if (item == "null") {
+      console.log("item : ", item)
+      // return '';
+    } else {
+      return item
+    }
+  }
+
   return (
     <>
-     <Header mtp="mtp" />
+      <Header mtp="mtp" />
       <div className="container">
         <div className="form">
-        <div className="heading">
+          <div className="heading">
             <h2>Forgot Password</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            
-      
+
+
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
@@ -73,7 +83,7 @@ function ForgetPassword(props) {
                 name="p_email"
                 ref={register}
                 placeholder="Enter Email"
-                defaultValue={props.location.email}
+                defaultValue={valueHandler()}
               />
               {errors.p_email && (
                 <div className="invalid-feedback">{errors.p_email.message}</div>

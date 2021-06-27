@@ -9,29 +9,41 @@ import {
   CardTitle, CardSubtitle
 } from 'reactstrap';
 
+
 function Dashboard() {
   const userId = window.localStorage.getItem("adminkey");
 
   const [allQueries, setAllQueries] = useState({
-    total_query: '',
-    total_inprogress: '',
-    total_complete: '',
-    pendingfor_allocation: '',
-    customer_decline: '',
-    admin_decline: '',
+    total: '',
+    inprogress_queries: '',
+    inprogress_allocation: '',
+    inprogress_proposal: '',
+    inprogress_assignment: '',
+    complete_query: '',
+    declined_queries: '',
+    admin_declined_query: '',
+    customer_declined_Query: '',
+    customer_declined_proposal: '',
+    Customer_declined_payment: '',
+
+    allproposal: '',
+    accepted_proposals: '',
+    InProgress: '',
+    inprogress_preparation: '',
+    inprogress_acceptance: '',
+    declined: '',
   });
 
-  const [proposal, setProposal] = useState({
-    allproposal: '',
-    pendingforacceptance: '',
-    pendingforPreperation: '',
-    declineed: '',
-    InProgress: '',
-  });
 
   const [assignment, setAssignment] = useState({
     inprogress: '',
     complete: '',
+    client_discussion: '',
+    draft_report: '',
+    final_discussion: '',
+    final_report: '',
+    complete_inprocess: '',
+    customer_declined_payment: ''
   });
 
   const [payment, setPayment] = useState({
@@ -39,31 +51,27 @@ function Dashboard() {
     unpaid: '',
   });
 
-  const { total_query, total_inprogress,
-    total_complete, pendingfor_allocation,
-    customer_decline, admin_decline } = allQueries;
+  const { total, inprogress_queries,
+    inprogress_allocation, inprogress_proposal,
+    inprogress_assignment, complete_query,
+    declined_queries, admin_declined_query,
+    customer_declined_Query, customer_declined_proposal,
+    Customer_declined_payment,
+    allproposal,
+    inprogress_preparation,
+    declined, inprogress_acceptance,
+    accepted_proposals, InProgress } = allQueries;
 
-  const { allproposal,
-    pendingforacceptance,
-    declineed, pendingforPreperation, InProgress } = proposal;
 
   const {
     inprogress,
-    complete } = assignment;
+    complete, client_discussion, draft_report, final_discussion,
+    final_report, complete_inprocess,
+    customer_declined_payment } = assignment;
 
   const {
     paid,
     unpaid } = payment;
-
-  const [value, setValue] = useState(false);
-  const [valueProposal, setValueProposal] = useState(false);
-  const [valueProposal2, setValueProposal2] = useState(false);
-  const [valuePayment, setValuePayment] = useState(false);
-  const [valueAssignment, setValueAssignment] = useState(false);
-
-
-
-
 
 
   useEffect(() => {
@@ -74,32 +82,24 @@ function Dashboard() {
           console.log("code---", response);
           if (response.data.code === 1) {
             setAllQueries({
-              total_query: response.data.result.total_query,
-              total_inprogress: response.data.result.total_inprogress,
-              total_complete: response.data.result.total_complete,
-              pendingfor_allocation: response.data.result.pendingfor_allocation,
-              customer_decline: response.data.result.customer_decline,
-              admin_decline: response.data.result.admin_decline,
-            })
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    };
+              total: response.data.result.total,
+              inprogress_queries: response.data.result.inprogress_queries,
+              inprogress_allocation: response.data.result.inprogress_allocation,
+              inprogress_proposal: response.data.result.inprogress_proposal,
+              inprogress_assignment: response.data.result.inprogress_assignment,
+              complete_query: response.data.result.complete_query,
+              declined_queries: response.data.result.declined_queries,
+              admin_declined_query: response.data.result.admin_declined_query,
+              customer_declined_Query: response.data.result.customer_declined_Query,
+              customer_declined_proposal: response.data.result.customer_declined_proposal,
+              Customer_declined_payment: response.data.result.Customer_declined_payment,
 
-    const getAllProposal = () => {
-      axios
-        .get(`${baseUrl}/admin/getProposalsCount`)
-        .then((response) => {
-          console.log("code---", response);
-          if (response.data.code === 1) {
-            setProposal({
-              allproposal: response.data.result.allproposal,
-              pendingforacceptance: response.data.result.pendingforacceptance,
-              pendingforPreperation: response.data.result.pendingforPreperation,
-              InProgress: response.data.result.InProgress,
-              declineed: response.data.result.declineed,
+              allproposal: response.data.result.proposal.allproposal,
+              InProgress: response.data.result.proposal.InProgress,
+              inprogress_preparation: response.data.result.proposal.inprogress_preparation,
+              inprogress_acceptance: response.data.result.proposal.inprogress_acceptance,
+              accepted_proposals: response.data.result.proposal.accepted_proposals,
+              declined: response.data.result.proposal["customer_declined_proposals "],
             })
           }
         })
@@ -117,6 +117,12 @@ function Dashboard() {
             setAssignment({
               inprogress: response.data.result.inprogress,
               complete: response.data.result.complete,
+              client_discussion: response.data.result.client_discussion,
+              draft_report: response.data.result.draft_report,
+              final_discussion: response.data.result.final_discussion,
+              final_report: response.data.result.final_report,
+              complete_inprocess: response.data.result.complete_inprocess,
+              customer_declined_payment: response.data.result.customer_declined_payment,
             })
           }
         })
@@ -143,35 +149,268 @@ function Dashboard() {
     };
 
     getAllQueries();
-    getAllProposal();
     getPayment();
     getAssignment();
   }, []);
 
-
-  const toggle = () => {
-    setValue(!value)
-  }
-
-  const toggleProposal = () => {
-    setValueProposal(!valueProposal)
-  }
-
-  const toggleProposal2 = () => {
-    setValueProposal2(!valueProposal2)
-  }
-
-  const togglePayment = () => {
-    setValuePayment(!valuePayment)
-  }
-
-  const toggleAssignment = () => {
-    setValueAssignment(!valueAssignment)
-  }
+  console.log("declined", declined)
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
-      <div class="row mt-3">
+
+      <div class="card ecom-card-1" style={{ background: "#c74e07" }}>
+        <div class="card-header">
+          <p class="mb-0">
+            <button class="btn btn-link text-white"
+              style={{ textDecoration: "none", fontSize: "18px", fontWeight: "bold" }}
+            >
+              All Queries :  {total}
+            </button>
+          </p>
+        </div>
+
+        <div class="card-body" style={{ background: "#c36d56", fontFamily: "monospace" }}>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Inprogress Queries</th>
+                <th scope="col">{inprogress_queries}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Inprogress Allocation</td>
+                <td>{inprogress_allocation}</td>
+              </tr>
+              <tr>
+                <td>Inprogress Proposal</td>
+                <td>{inprogress_proposal}</td>
+              </tr>
+              <tr>
+                <td>Inprogress Assignment</td>
+                <td>{inprogress_assignment}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Completed Queries</th>
+                <th scope="col">{complete_query}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Declined Queries</th>
+                <th scope="col">{declined_queries}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Admin Declined Queries</td>
+                <td>{admin_declined_query}</td>
+              </tr>
+              <tr>
+                <td> Customer Declined Queries</td>
+                <td>{customer_declined_Query}</td>
+              </tr>
+              <tr>
+                <td>Customer Declined proposal</td>
+                <td>{customer_declined_proposal}</td>
+              </tr>
+              <tr>
+                <td>Customer Declined Payment</td>
+                <td>{Customer_declined_payment}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="card ecom-card-1 bg-info">
+        <div class="card-header">
+          <p class="mb-0">
+            <button class="btn btn-link text-white"
+              style={{ textDecoration: "none", fontSize: "18px", fontWeight: "bold" }}
+            >
+              Proposals :  {allproposal}
+            </button>
+          </p>
+        </div>
+
+        <div class="card-body" style={{ background: "#5dabb9", fontFamily: "monospace" }}>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Inprogress</th>
+                <th scope="col">{InProgress}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Inprogress : Prepartion</td>
+                <td>{inprogress_preparation}</td>
+              </tr>
+              <tr>
+                <td>Inprogress : Acceptance</td>
+                <td>{inprogress_acceptance}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Accepted Proposal </th>
+                <th scope="col">{accepted_proposals}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Customer Declined Proposal</th>
+                <th scope="col">{declined}</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+
+      <div class="card ecom-card-1" style={{ background: "#2ea226" }}>
+        <div class="card-header">
+          <p class="mb-0">
+            <button class="btn btn-link text-white"
+              style={{ textDecoration: "none", fontSize: "18px", fontWeight: "bold" }}
+            >
+              Assignments :  {inprogress + complete + +(customer_declined_payment)}
+            </button>
+          </p>
+        </div>
+
+        <div class="card-body" style={{ background: "#288836", fontFamily: "monospace" }}>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Inprogress</th>
+                <th scope="col">{inprogress}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Client Dicussion</td>
+                <td>{client_discussion}</td>
+              </tr>
+              <tr>
+                <td>Draft Report</td>
+                <td>{draft_report}</td>
+              </tr>
+              <tr>
+                <td>Final Dicussion</td>
+                <td>{final_discussion}</td>
+              </tr>
+              <tr>
+                <td>Final Delivery of Report</td>
+                <td>{final_report}</td>
+              </tr>
+              <tr>
+                <td>Complete</td>
+                <td>{complete_inprocess}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Completed</th>
+                <th scope="col">{complete}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Customer Declined Payment</th>
+                <th scope="col">{customer_declined_payment}</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+
+
+      <div class="card ecom-card-1" style={{ background: "#ffc107" }}>
+        <div class="card-header">
+          <p class="mb-0">
+            <button class="btn btn-link text-white"
+              style={{ textDecoration: "none", fontSize: "18px", fontWeight: "bold" }}
+            >
+              Payments :  {unpaid + paid}
+            </button>
+          </p>
+        </div>
+
+        <div class="card-body" style={{ background: "#a98a0aba", fontFamily: "monospace" }}>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Paid</th>
+                <th scope="col">{paid}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "400px" }}>Unpaid</th>
+                <th scope="col">{unpaid}</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+
+
+    </Layout>
+  );
+}
+
+export default Dashboard;
+
+
+
+// {
+//   Object.keys(response.data.result[0]).map((key, i ,value) => (
+//     console.log(key,i,value)
+//   )
+//   )
+// }
+{/* <div class="row mt-3">
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
             <div class="card-body">
@@ -183,14 +422,7 @@ function Dashboard() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <p class="text-white">{total_query}</p>
-                  {/* <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 0,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white"></i>
-                  </Link> */}
+
                 </div>
               </div>
             </div>
@@ -230,10 +462,10 @@ function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
 
-      <div class="row mt-3">
+{/* <div class="row mt-3">
 
         <div class="col-xl-4 col-lg-6 col-md-12">
           <div class="card pull-up ecom-card-1 bg-info">
@@ -297,9 +529,9 @@ function Dashboard() {
           </div>
 
         </div>
-      }
+      } */}
 
-
+{/* 
       <div class="row mt-3">
 
         <div class="col-xl-4 col-lg-6 col-md-12">
@@ -346,10 +578,10 @@ function Dashboard() {
           </div>
         </div>
 
-      </div>
+      </div> */}
 
 
-      {
+{/* {
         valueProposal &&
         <div class="row mt-3">
 
@@ -429,8 +661,8 @@ function Dashboard() {
             </div>
           </div>
         </div>
-      }
-
+      } */}
+{/* 
       <div class="row mt-3">
 
         <div class="col-xl-4 col-lg-6 col-md-12">
@@ -564,22 +796,7 @@ function Dashboard() {
             </div>
           </div>
         }
-      </div>
-
-    </Layout>
-  );
-}
-
-export default Dashboard;
-
-
-
-// {
-//   Object.keys(response.data.result[0]).map((key, i ,value) => (
-//     console.log(key,i,value)
-//   )
-//   )
-// }
+      </div> */}
 
 
 
@@ -650,3 +867,24 @@ export default Dashboard;
               </div>
             </div>
           </div> */}
+
+
+  // const toggle = () => {
+  //   setValue(!value)
+  // }
+
+  // const toggleProposal = () => {
+  //   setValueProposal(!valueProposal)
+  // }
+
+  // const toggleProposal2 = () => {
+  //   setValueProposal2(!valueProposal2)
+  // }
+
+  // const togglePayment = () => {
+  //   setValuePayment(!valuePayment)
+  // }
+
+  // const toggleAssignment = () => {
+  //   setValueAssignment(!valueAssignment)
+  // }

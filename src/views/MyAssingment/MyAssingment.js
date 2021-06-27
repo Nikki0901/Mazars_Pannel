@@ -26,7 +26,15 @@ function MyAssingment() {
     payment_received: "",
     cust_accept_date: "",
     proposal_date: "",
-    misc2: "",
+    description: "",
+    
+    amount_type: "",
+    amount_fixed: "",
+    amount_hourly: "",
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
   });
 
   const [diaplayAssignment, setDisplayAssignment] = useState([
@@ -67,10 +75,6 @@ function MyAssingment() {
             return false;
           }
 
-          // if (typeof purposeItem == "string") {
-
-          // }
-
           if (res.data.proposal_queries.length > 0) {
             setDisplayProposal({
               accepted_amount: res.data.proposal_queries[0].accepted_amount,
@@ -78,7 +82,16 @@ function MyAssingment() {
               amount: res.data.proposal_queries[0].amount,
               cust_accept_date: res.data.proposal_queries[0].cust_accept_date,
               proposal_date: res.data.proposal_queries[0].created,
-              misc2: res.data.proposal_queries[0].misc2,
+              description: res.data.proposal_queries[0].description,
+
+              amount_type: res.data.proposal_queries[0].amount_type,
+              amount_fixed: res.data.proposal_queries[0].amount,
+              amount_hourly: res.data.proposal_queries[0].amount_hourly,
+              payment_terms: res.data.proposal_queries[0].payment_terms,
+              no_of_installment: res.data.proposal_queries[0].no_of_installment,
+              installment_amount: res.data.proposal_queries[0].installment_amount,
+              due_date: res.data.proposal_queries[0].due_date,
+
             });
           }
 

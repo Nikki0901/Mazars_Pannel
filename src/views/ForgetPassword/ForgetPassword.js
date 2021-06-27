@@ -19,7 +19,7 @@ const Schema = yup.object().shape({
 });
 
 function ForgetPassword(props) {
-  // console.log("props", props.location.email);
+  console.log("props : ", props.location.email);
 
   const alert = useAlert();
 
@@ -53,6 +53,15 @@ function ForgetPassword(props) {
       });
   };
 
+  const valueHandler = () => {
+    var item = props.location.email
+    if (item == "null") {
+      console.log("item : ", item)
+      // return '';
+    } else {
+      return item
+    }
+  }
 
   return (
     <>
@@ -73,7 +82,7 @@ function ForgetPassword(props) {
                 name="p_email"
                 ref={register}
                 placeholder="Enter Email"
-                defaultValue={props.location.email}
+                defaultValue={valueHandler()}
               />
               {errors.p_email && (
                 <div className="invalid-feedback">{errors.p_email.message}</div>

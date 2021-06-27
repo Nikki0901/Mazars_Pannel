@@ -64,7 +64,7 @@ function ViewNotification() {
               </button>
             </Col>
             <Col md="8">
-              <h4>Notification Details</h4>
+              <h4>Message Details</h4>
             </Col>
           </Row>
         </CardHeader>

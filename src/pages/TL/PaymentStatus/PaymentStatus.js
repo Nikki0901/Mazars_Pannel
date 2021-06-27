@@ -66,6 +66,8 @@ function PaymentStatus() {
       })
       .catch((error) => console.log(error));
   };
+
+
   const columns = [
     {
       dataField: "",
@@ -119,12 +121,13 @@ function PaymentStatus() {
 
             <Link
               to={{
-                pathname: `/teamleader/queries/${row.assign_id}`,         
+                pathname: `/teamleader/queries/${row.assign_id}`,
                 routes: "paymentstatus",
               }}
             >
               {row.assign_no}
-            </Link>          </>
+            </Link>
+          </>
         );
       },
     },
@@ -151,25 +154,6 @@ function PaymentStatus() {
       },
     },
     {
-      text: "Date of Proposal",
-      dataField: "created",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
-        var oldDate = row.created;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-      },
-    },
-    {
       text: "Date of acceptance of Proposal",
       dataField: "cust_accept_date",
       sort: true,
@@ -191,17 +175,6 @@ function PaymentStatus() {
     {
       text: "Status",
       dataField: "status",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
-      dataField: "amount",
-      text: "Proposed Amount",
       sort: true,
       style: {
         fontSize: "11px",
@@ -298,23 +271,58 @@ function PaymentStatus() {
         fontSize: "11px",
       },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "11px"};
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ cursor: "pointer" }} title="Payment History">
-              <i
-                class="fa fa-credit-card"
-                style={{ color: "green", fontSize: "16px" }}
-                onClick={() => toggle(row.assign_id)}
-              ></i>
+
+            <div style={{ display: "flex", justifyContent: "space-between" ,width:"100px" }}>
+              <div title="Payment History">
+                <i
+                  class="fa fa-credit-card"
+                  style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                  onClick={() => toggle(row.assign_id)}
+                ></i>
+              </div>
+              <div title="schedule call">
+                <Link
+                  to={{
+                    pathname: `/teamleader/schedule`,
+                  }}
+                >
+                  <i
+                    class="fa fa-caret-square-o-right"
+                    style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                  ></i>
+                </Link>
+
+              </div>
+              <div>
+                <i
+                  class="fa fa-exchange"
+                  style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                  onClick={() => sendEmail(row.assign_id)}
+                ></i>
+              </div>
             </div>
           </>
         );
       },
     },
   ];
+
+
+  const sendEmail = (key) => {
+    console.log("key", key);
+
+    axios
+      .get(`${baseUrl}/customers/paymentemail?id=${key}`)
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
 
   return (
     <>
@@ -359,14 +367,14 @@ function PaymentStatus() {
                   </thead>
                   {pay.length > 0
                     ? pay.map((p, i) => (
-                        <tbody>
-                          <tr>
-                            <td>{i + 1}</td>
-                            <td>{CommonServices.removeTime(p.payment_date)}</td>
-                            <td>{p.paid_amount}</td>
-                          </tr>
-                        </tbody>
-                      ))
+                      <tbody>
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{CommonServices.removeTime(p.payment_date)}</td>
+                          <td>{p.paid_amount}</td>
+                        </tr>
+                      </tbody>
+                    ))
                     : null}
                 </table>
               </ModalBody>

@@ -51,17 +51,27 @@ function ForgetPassword(props) {
     //   });
   };
 
+  const valueHandler = () => {
+    var item = props.location.email
+    if (item == "null") {
+      console.log("item : ", item)
+      // return '';
+    } else {
+      return item
+    }
+  }
+  
   return (
     <>
-     <Header admin="admin" />
+      <Header admin="admin" />
       <div className="container">
         <div className="form">
-        <div className="heading">
+          <div className="heading">
             <h2>Forgot Password</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            
-      
+
+
             <div className="mb-3">
               <label className="form-label">Email</label>
               <input
@@ -72,7 +82,7 @@ function ForgetPassword(props) {
                 name="p_email"
                 ref={register}
                 placeholder="Enter Email"
-                defaultValue={props.location.email}
+                defaultValue={valueHandler()}
               />
               {errors.p_email && (
                 <div className="invalid-feedback">{errors.p_email.message}</div>

@@ -19,14 +19,16 @@ const Schema = yup.object().shape({
   p_password: yup.string().required("required password"),
 });
 
+
 function SignIn(props) {
   const alert = useAlert();
-  const { handleSubmit, register, reset, errors } = useForm({
+  const { handleSubmit, register,  errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
   const [load, setLoad] = useState(false);
   const [email, setEmail] = useState(null);
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -150,6 +152,8 @@ function SignIn(props) {
 }
 
 export default SignIn;
+
+
 
 // <Link
 //   to={{

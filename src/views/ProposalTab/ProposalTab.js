@@ -29,8 +29,6 @@ function ProposalTab() {
 
   const [id, setId] = useState(null);
   const [reject, setRejected] = useState(true);
-  
- 
 
   const [addPaymentModal, setPaymentModal] = useState(false);
   const chatHandler = (key) => {
@@ -57,32 +55,28 @@ function ProposalTab() {
       });
   };
 
-  const refreshList = () => {
-    getProposalData();
-  };
-
   // accepted proposal
-  const accepted = (key) => {
-    console.log("acc", key);
+  // const accepted = (key) => {
+  //   console.log("acc", key);
 
-    let formData = new FormData();
-    formData.append("id", key);
-    formData.append("status", 5);
+  //   let formData = new FormData();
+  //   formData.append("id", key);
+  //   formData.append("status", 5);
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/ProposalAccept`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        refreshList();
-        alert.success("proposal accepted !");
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
+  //   axios({
+  //     method: "POST",
+  //     url: `${baseUrl}/customers/ProposalAccept`,
+  //     data: formData,
+  //   })
+  //     .then(function (response) {
+  //       console.log("res-", response);
+  //       refreshList();
+  //       alert.success("proposal accepted !");
+  //     })
+  //     .catch((error) => {
+  //       console.log("erroror - ", error);
+  //     });
+  // };
 
   // rejected proposal
   const rejected = (key) => {
@@ -332,17 +326,19 @@ function ProposalTab() {
             {row.statuscode === "6" ? null : (
               <div>
                 {row.negotiated_amount === "0" &&
-                row.accepted_amount === "0" ? (
+                  row.accepted_amount === "0" ? (
                   <div>
-                    <div style={{ cursor: "pointer" }} title="Accepted">
-                      <i
-                        class="fa fa-check"
-                        style={{
-                          color: "green",
-                          fontSize: "16px",
-                        }}
-                        onClick={() => accepted(row.q_id)}
-                      ></i>
+                    <div style={{ cursor: "pointer" }} title="Proposal View">
+                      <Link to={`/customer/proposal_view/${row.id}`}>
+                        <i
+                          class="fa fa-check"
+                          style={{
+                            color: "blue",
+                            fontSize: "16px",
+                          }}
+                        // onClick={() => accepted(row.q_id)}
+                        ></i>
+                      </Link>
                     </div>
 
                     <div style={{ cursor: "pointer" }} title="Rejected">
@@ -399,7 +395,6 @@ function ProposalTab() {
             columns={columns}
             classes="table-responsive"
           />
-
           <ChatComponent
             chatHandler={chatHandler}
             addPaymentModal={addPaymentModal}
