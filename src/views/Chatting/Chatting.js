@@ -15,12 +15,38 @@ import { useAlert } from "react-alert";
 
 
 function Chatting(props) {
+
+  console.log("props", props)
+
   const alert = useAlert();
   const { handleSubmit, register, errors, reset } = useForm();
 
   const userId = window.localStorage.getItem("userid");
-
   const [assignment, setAssingment] = useState([]);
+
+  const [data, setData] = useState({})
+
+  const { message_type, query_id, query_No, routes } = data
+
+  // const dataItem = props.location.obj
+  // const { message_type, query_id, query_No, routes } = dataItem
+
+
+
+  useEffect(() => {
+    console.log("useEffect", props)
+    const dataItem = props.location.obj
+
+    if (dataItem) {
+      localStorage.setItem("myDataCust", JSON.stringify(dataItem));
+    }
+
+    var myData = localStorage.getItem("myDataCust");
+    var data2 = JSON.parse(myData)
+    setData(data2)
+
+  }, []);
+
 
 
   useEffect(() => {
@@ -39,14 +65,16 @@ function Chatting(props) {
   }, []);
 
 
+  // console.log("data", data)
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
-    formData.append("assign_id", value.p_assignment);
-    formData.append("message_type", value.p_sms_type);
+    formData.append("assign_id", query_id);
+    formData.append("message_type", message_type);
     formData.append("message", value.p_message);
 
     axios({
@@ -59,7 +87,7 @@ function Chatting(props) {
         if (response.data.code === 1) {
           reset();
           alert.success(" message successfully send!");
-          props.history.push("/customer/message");
+          props.history.push(routes);
         }
       })
       .catch((error) => {
@@ -85,34 +113,28 @@ function Chatting(props) {
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Query No.</label>
-                    <select
-                      class="form-control"
-                      name="p_assignment"
+                    <input
+                      type="text"
+                      name="p_query"
+                      className="form-control"
                       ref={register}
-                    >
-                      <option value="">--select--</option>
-                      {assignment.map((p, i) => (
-                        <option key={i} value={p.id}>
-                          {p.assign_no}
-                        </option>
-                      ))}
-                    </select>
+                      value={query_No}
+                      disabled
+                    />
                   </div>
                 </div>
 
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Message Type</label>
-                    <select
-                      class="form-control"
-                      name="p_sms_type"
+                    <input
+                      type="text"
+                      name="p_query"
+                      className="form-control"
                       ref={register}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Information</option>
-                      <option value="2">Proposal Discussion</option>
-                      <option value="3">Assignment Discussion</option>
-                    </select>
+                      value={message_type}
+                      disabled
+                    />
 
                   </div>
                 </div>
@@ -139,8 +161,21 @@ function Chatting(props) {
         </div>
         <div class="col-lg-2 col-xl-2 col-md-12"></div>
       </div>
-    </Layout>
+    </Layout >
   );
 }
 
 export default Chatting;
+
+
+{/* <select
+                    class="form-control"
+                    name="p_sms_type"
+                    ref={register}
+                    value={query_No}
+                  >
+                    <option value="">--select--</option>
+                    <option value="1">Information</option>
+                    <option value="2">Proposal Discussion</option>
+                    <option value="3">Assignment Discussion</option>
+                  </select> */}

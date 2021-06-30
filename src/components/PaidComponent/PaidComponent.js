@@ -195,17 +195,6 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
     },
-    // {
-    //   dataField: "amount",
-    //   text: "Proposed Amount",
-    //   sort: true,
-    //   style: {
-    //     fontSize: "11px",
-    //   },
-    //   headerStyle: () => {
-    //     return { fontSize: "11px" };
-    //   },
-    // },
     {
       dataField: "accepted_amount",
       text: "Accepted Amount ",

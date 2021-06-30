@@ -317,8 +317,8 @@ function AssignmentTab() {
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "space-between",
+                width:"60px"
               }}
             >
               {row.accepted_amount == row.paid_amount &&
@@ -362,23 +362,51 @@ function AssignmentTab() {
                   </p>
                 </div>
               )}
-            </div>
 
-            {row.vstart < 11 &&
-              row.vend >= 0 &&
-              !(row.vstart == null && row.vend == null) ? (
-              <div style={{ cursor: "pointer" }} title="Video Chat">
-                <i
-                  class="fa fa-video-camera"
-                  style={{ color: "red", fontSize: "16px" }}
-                  onClick={() => handleJoin(row.id)}
-                ></i>
+
+              {row.vstart < 11 &&
+                row.vend >= 0 &&
+                !(row.vstart == null && row.vend == null) ? (
+                <div style={{ cursor: "pointer" }} title="Video Chat">
+                  <i
+                    class="fa fa-video-camera"
+                    style={{ color: "red", fontSize: "16px" }}
+                    onClick={() => handleJoin(row.id)}
+                  ></i>
+                </div>
+              ) : null}
+
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/teamleader/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "Assignment Discussion",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/teamleader/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
               </div>
-            ) : null}
+
+            </div>
           </>
         );
       },
     },
+
   ];
 
   //handleJoin

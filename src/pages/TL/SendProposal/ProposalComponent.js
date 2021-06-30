@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Payment from "./Payment";
+import Select from "react-select";
 
 
 const Schema = yup.object().shape({
@@ -41,8 +42,9 @@ function ProposalComponent(props) {
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
   const [store, setStore] = useState(null);
-  const [payment, setPayment] = useState(null);
-  const [installment, setInstallment] = useState(null);
+
+  const [payment, setPayment] = useState([]);
+  const [installment, setInstallment] = useState([]);
 
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
@@ -82,13 +84,15 @@ function ProposalComponent(props) {
   }, [id]);
 
 
-  
   const onSubmit = (value) => {
     console.log(value);
 
     var lumsum = value.p_inst_date
     setDate(lumsum)
-    console.log("date --=", date)
+    // console.log("date --=", date)
+
+    // console.log("payment --=", payment.value)
+    // console.log("installment --=", installment.value)
 
     let formData = new FormData();
 
@@ -97,17 +101,18 @@ function ProposalComponent(props) {
     formData.append("type", "tl");
     formData.append("id", JSON.parse(userid));
     formData.append("assign_id", assignId);
-    formData.append("description", value.description);
     formData.append("customer_id", custId);
+    formData.append("description", value.description);
 
     formData.append("amount_type", "fixed");
     formData.append("amount", value.p_fixed);
-    formData.append("amount_hourly", value.p_hourly);
-    formData.append("payment_terms", value.p_payment_terms);
-    formData.append("no_of_installment", value.p_no_installments);
+    // formData.append("amount_hourly", value.p_hourly);
     formData.append("installment_amount", amount);
 
-    payment == "Lumpsum" ?
+    formData.append("payment_terms", payment.value);
+    formData.append("no_of_installment", installment.value);
+
+    payment.label == "lumpsum" ?
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
@@ -167,7 +172,7 @@ function ProposalComponent(props) {
 
 
   // console.log("amount", amount)
-  // console.log("date", date)
+  console.log("installment", installment)
 
 
   return (
@@ -226,16 +231,16 @@ function ProposalComponent(props) {
 
                 {/* {store == "fixed" && ( */}
 
-                  <div class="form-group">
-                    <label>Fixed Price</label>
-                    <input
-                      type="text"
-                      name="p_fixed"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Fixed Price"
-                    />
-                  </div>
+                <div class="form-group">
+                  <label>Fixed Price</label>
+                  <input
+                    type="text"
+                    name="p_fixed"
+                    className="form-control"
+                    ref={register}
+                    placeholder="Enter Fixed Price"
+                  />
+                </div>
 
                 {/* )} */}
 
@@ -270,20 +275,15 @@ function ProposalComponent(props) {
 
                 <div class="form-group">
                   <label>Payment Terms</label>
-                  <select
-                    className="form-control"
-                    name="p_payment_terms"
-                    aria-label="Default select example"
-                    ref={register}
-                    onChange={(e) => setPayment(e.target.value)}
-                  >
-                    <option value="">--select--</option>
-                    <option value="Lumpsum">Lumpsum</option>
-                    <option value="Installment">Installment</option>
-                  </select>
+                  <Select
+                    onChange={setPayment}
+                    options={payment_terms}
+                  />
+
+
                 </div>
 
-                {payment == "Lumpsum" ? (
+                {payment.label == "lumpsum" ? (
                   <div class="form-group">
                     <label>Due Dates</label>
                     <input
@@ -295,10 +295,14 @@ function ProposalComponent(props) {
                     />
                   </div>
                 ) :
-                  payment == "Installment" ? (
+                  payment.label == "installment" ? (
                     <div class="form-group">
                       <label>No of Installments</label>
-                      <select
+                      <Select
+                        onChange={setInstallment}
+                        options={no_installments}
+                      />
+                      {/* <select
                         className="form-control"
                         name="p_no_installments"
                         aria-label="Default select example"
@@ -310,19 +314,19 @@ function ProposalComponent(props) {
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
-                      </select>
+                      </select> */}
                     </div>
                   )
                     : ""
                 }
 
                 {
-                  payment == "Lumpsum"
+                  payment.label == "lumpsum"
                     ?
                     ""
                     :
                     <Payment
-                      installment={installment}
+                      installment={installment.label}
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                     />
@@ -350,13 +354,90 @@ function ProposalComponent(props) {
 export default ProposalComponent;
 
 
+const payment_terms = [
+  {
+    value: "lumpsum",
+    label: "lumpsum",
+  },
+  {
+    value: "installment",
+    label: "installment",
+  },
+];
 
+const no_installments = [
+  {
+    value: "2",
+    label: "2",
+  },
+  {
+    value: "3",
+    label: "3",
+  },
+  {
+    value: "4",
+    label: "4",
+  },
+];
+
+
+{/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}
 
 
 
 // var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
 // var todaysDate = new Date();
 
+
+{
+  /* <select
+                    class="form-control"
+                    ref={register}
+                    name="p_assingment"
+                    onChange={(e) => getID(e.target.value)}
+                  >
+                    <option value="">--select--</option>
+                    {incompleteData.map((p, index) => (
+                      <option key={index} value={p.id}>
+                        {p.assign_no}
+                      </option>
+                    ))}
+                  </select> */
+}
 
 // const getID = (key) => {
 //     setId(key);
@@ -368,83 +449,14 @@ export default ProposalComponent;
 //       }
 //     });
 //   };
-
-
-
-
-
-
-                {/* {store == "hourly" && (
-                  <div class="form-group">
-                    <label>Hourly basis</label>
-                    <input
-                      type="text"
-                      name="p_hourly"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Hourly basis"
-                    />
-                  </div>
-                )}
-                {store == "mixed" && (
-                  <div>
-                    <div class="form-group">
-                      <label>Mixed</label>
-                      <input
-                        type="text"
-                        name="p_fixed"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Fixed Price"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        type="text"
-                        name="p_hourly"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Hourly basis"
-                      />
-                    </div>
-                  </div>
-                )} */}
-                {/* {store == "hourly" && (
-                  <div class="form-group">
-                    <label>Hourly basis</label>
-                    <input
-                      type="text"
-                      name="p_hourly"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Hourly basis"
-                    />
-                  </div>
-                )}
-                {store == "mixed" && (
-                  <div>
-                    <div class="form-group">
-                      <label>Mixed</label>
-                      <input
-                        type="text"
-                        name="p_fixed"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Fixed Price"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        type="text"
-                        name="p_hourly"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Hourly basis"
-                      />
-                    </div>
-                  </div>
-                )} */}
-
-
-
-        
+{/* <select
+                    className="form-control"
+                    name="p_payment_terms"
+                    aria-label="Default select example"
+                    ref={register}
+                    onChange={(e) => setPayment(e.target.value)}
+                  >
+                    <option value="">--select--</option>
+                    <option value="Lumpsum">Lumpsum</option>
+                    <option value="Installment">Installment</option>
+                  </select> */}

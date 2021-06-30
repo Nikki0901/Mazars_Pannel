@@ -4,6 +4,8 @@ import { baseUrl } from "../../config/config";
 import { Link, useHistory } from "react-router-dom";
 // import CustomerNotification from "./CustomerNotification";
 
+import './index.css'
+
 function NavWrapper(props) {
   const { color, logout, name } = props;
 
@@ -21,9 +23,10 @@ function NavWrapper(props) {
     getNotificationCust();
   }, [userId]);
 
+
   const getNotificationCust = () => {
     axios
-      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}`)
+      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}&type_list=uread`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -36,7 +39,7 @@ function NavWrapper(props) {
   useEffect(() => {
     getNotificationTl();
   }, [tlkey]);
-  
+
   const getNotificationTl = () => {
     axios
       .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(tlkey)}`)
@@ -48,6 +51,7 @@ function NavWrapper(props) {
         }
       });
   };
+
 
   // readnotification
   const readNotification = (id) => {
@@ -64,6 +68,8 @@ function NavWrapper(props) {
         console.log("erroror - ", error);
       });
   };
+
+  
 
   return (
     <>
@@ -117,11 +123,16 @@ function NavWrapper(props) {
                         href="#"
                         data-toggle="dropdown"
                       >
-                        <span class="badge badge-light">
+                        {/* <span class="badge badge-light">
                           <i class="fa fa-bell" style={{ fontSize: "16px" }}>
                             {countNotification}
                           </i>
-                        </span>
+                        </span> */}
+
+                        <a href="#" class="notification">
+                          <span>Inbox</span>
+                          <span class="badge">{countNotification}</span>
+                        </a>
                       </a>
 
                       <div
@@ -160,12 +171,11 @@ function NavWrapper(props) {
                         class="nav-link nav-link-label"
                         href="#"
                         data-toggle="dropdown"
-                      >
-                        <span class="badge badge-light">
-                          <i class="fa fa-bell" style={{ fontSize: "16px" }}>
-                            {countNotificationTl}
-                          </i>
-                        </span>
+                      >       
+                        <a href="#" class="notification">
+                          <span>Inbox</span>
+                          <span class="badge">{countNotificationTl}</span>
+                        </a>
                       </a>
 
                       <div

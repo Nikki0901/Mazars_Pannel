@@ -38,8 +38,10 @@ function AddFreshAssingment(props) {
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
+
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
+
 
   const onSubmit = (value) => {
     console.log("value :", value);

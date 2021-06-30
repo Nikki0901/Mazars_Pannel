@@ -118,10 +118,36 @@ function AllQueriesData() {
     },
     {
       text: "Status",
-      dataField: "status",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              <p>
+                {row.status}
+              </p>
+              {
+                row.status == "Inprogress Queries" ?
+                  <p style={{ color: "brown" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  row.status == "Declined Queries" ?
+                    <p style={{ color: "red" }}>
+                      {row.statusdescription}
+                    </p> :
+                    row.status == "Completed Queries" ?
+                      <p style={{ color: "green" }}>
+                        {row.statusdescription}
+                      </p> :
+                      null
+              }
+            </div>
+          </>
+        );
       },
     },
   ];
@@ -140,16 +166,7 @@ function AllQueriesData() {
 
         </CardHeader>
         <CardBody>
-          {/* <div class="row">
-            <div className="col-9">
-            </div>
-            <div className="col-3">
-              <div class="form-group">
-                <label className="form-select form-control"
-                >Total Records : 12</label>
-              </div>
-            </div>
-          </div> */}
+
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -168,3 +185,13 @@ export default AllQueriesData;
 
 
 
+{/* <div class="row">
+            <div className="col-9">
+            </div>
+            <div className="col-3">
+              <div class="form-group">
+                <label className="form-select form-control"
+                >Total Records : 12</label>
+              </div>
+            </div>
+          </div> */}

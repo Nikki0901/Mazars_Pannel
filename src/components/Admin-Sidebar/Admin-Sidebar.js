@@ -88,7 +88,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-      
+
               <li class="nav-item">
                 <NavLink to={"/customer/message"}>
                   <i class="fa fa-envelope"></i>

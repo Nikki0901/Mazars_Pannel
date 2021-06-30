@@ -20,6 +20,8 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import PaymentModal from "./PaymentModal";
+
 
 function PaymentStatus() {
   const alert = useAlert();
@@ -32,6 +34,17 @@ function PaymentStatus() {
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
   const [modal, setModal] = useState(false);
+
+  const [assignNo, setAssignNo] = useState("");
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const paymentHandler = (key) => {
+    console.log("key", key.assign_no);
+    setPaymentModal(!addPaymentModal);
+    setAssignNo(key.assign_no)
+  };
+
+
 
   useEffect(() => {
     getPaymentStatus();
@@ -271,13 +284,13 @@ function PaymentStatus() {
         fontSize: "11px",
       },
       headerStyle: () => {
-        return { fontSize: "11px"};
+        return { fontSize: "11px" };
       },
       formatter: function (cell, row) {
         return (
           <>
 
-            <div style={{ display: "flex", justifyContent: "space-between" ,width:"100px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100px" }}>
               <div title="Payment History">
                 <i
                   class="fa fa-credit-card"
@@ -303,6 +316,14 @@ function PaymentStatus() {
                   class="fa fa-exchange"
                   style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
                   onClick={() => sendEmail(row.assign_id)}
+                ></i>
+              </div>
+
+              <div style={{ cursor: "pointer" }} title="Payment decline">
+                <i
+                  class="fa fa-comments-o"
+                  style={{ color: "green", fontSize: "16px" }}
+                  onClick={() => paymentHandler(row)}
                 ></i>
               </div>
             </div>
@@ -354,6 +375,14 @@ function PaymentStatus() {
               columns={columns}
               classes="table-responsive"
             />
+
+            <PaymentModal
+              paymentHandler={paymentHandler}
+              addPaymentModal={addPaymentModal}
+              assignNo={assignNo}
+            />
+
+
             <Modal isOpen={modal} fade={false} toggle={toggle}>
               <ModalHeader toggle={toggle}>History</ModalHeader>
               <ModalBody>
@@ -384,6 +413,8 @@ function PaymentStatus() {
                 </Button>
               </ModalFooter>
             </Modal>
+
+
           </CardBody>
         </Card>
       </Layout>

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../../components/Layout/Layout";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -15,102 +12,119 @@ import {
   Row,
   Col,
   Table,
-  Tooltip,
 } from "reactstrap";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+import Payment from "./Payment";
 import Select from "react-select";
-import Reset from "./Reset";
 
-function EditTL() {
-  const { id } = useParams();
-  const history = useHistory();
+
+const Schema = yup.object().shape({
+  misc_1: yup.string().required("required misc_1"),
+  misc_2: yup.string().required("required proposal description"),
+  p_payable: yup.string().required("required payable"),
+});
+
+
+function ProposalComponent(props) {
+  const { id } = props;
+  console.log(id);
 
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset, setValue } = useForm({
-    defaultValues: {
-      activitiesbefore: "mmmm",
-    },
-  });
-  const userid = window.localStorage.getItem("adminkey");
+  const history = useHistory();
+  const { handleSubmit, register, reset } = useForm();
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    category: "",
-    sub_category: "",
-  });
 
-  const { name, email, phone, category, sub_category } = user;
-  const [selectedOption, setSelectedOption] = useState([]);
-  const [tax, setTax] = useState([]);
-  const [tax2, setTax2] = useState([]);
+  const userid = window.localStorage.getItem("tlkey");
+  const [custId, setCustId] = useState("");
+  const [custname, setCustName] = useState();
+  const [assignId, setAssignID] = useState("");
+  const [assingNo, setAssingNo] = useState("");
+  const [store, setStore] = useState(null);
 
-  const [store, setStore] = useState("");
-  const [store2, setStore2] = useState(null);
-  useEffect(() => {
-    const getTeamLeader = () => {
-      axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
-        console.log(res);
-        console.log(res.data.result[0]);
-        if (res.data.code === 1) {
-          // reset(res.data.result[0]);
-          setValue("p_name", res.data.result[0].name);
-          setValue("p_email", res.data.result[0].email);
-          setValue("p_phone", res.data.result[0].phone);
-          setValue("p_tax", res.data.result[0].parent_id);
-          setValue("p_tax2", res.data.result[0].cat_name);
-        }
-      });
-    };
 
-    getTeamLeader();
-  }, [id]);
+  const [payment, setPayment] = useState([]);
+  const [installment, setInstallment] = useState([]);
+
+  const [amount, setAmount] = useState();
+  const [date, setDate] = useState();
+
 
   useEffect(() => {
-    const getCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax(res.data.result);
-        }
-      });
+    const getQuery = () => {
+      axios
+        .get(
+          `${baseUrl}/tl/pendingTlProposal?tl_id=${JSON.parse(
+            userid
+          )}&assign_id=${id}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result.length > 0) {
+              setAssingNo(res.data.result[0].assign_no);
+              setAssignID(res.data.result[0].id);
+            }
+          }
+        });
     };
-
-    getCategory();
+    getQuery();
   }, []);
 
+
   useEffect(() => {
-    const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
+    const getUser = async () => {
+      const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
+      console.log("res", res);
+      setCustName(res.data.name);
+      setCustId(res.data.id);
     };
-    getSubCategory();
-  }, [store]);
+
+    getUser();
+  }, [id]);
+
 
   const onSubmit = (value) => {
-    console.log("value :", value);
+    console.log(value);
+
+    var lumsum = value.p_inst_date
+    setDate(lumsum)
+    console.log("date --=", date)
+
     let formData = new FormData();
-    formData.append("email", value.p_email);
+
+    formData.append("assign_no", assingNo);
     formData.append("name", value.p_name);
-    formData.append("phone", value.p_phone);
-    formData.append("pcat_id", value.p_tax);
-    formData.append("cat_id", value.p_tax2);
-    formData.append("id", id);
+    formData.append("type", "tl");
+    formData.append("id", JSON.parse(userid));
+    formData.append("assign_id", assignId);
+    formData.append("customer_id", custId);
+    formData.append("description", value.description);
+
+    formData.append("amount_type", "fixed");
+    formData.append("amount", value.p_fixed);
+    // formData.append("amount_hourly", value.p_hourly);
+    formData.append("installment_amount", amount);
+
+    formData.append("payment_terms", JSON.stringify(payment));
+    formData.append("no_of_installment", JSON.stringify(installment));
+
+    payment.label == "Lumpsum" ?
+      formData.append("due_date", lumsum) :
+      formData.append("due_date", date)
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/updateTeamLeader`,
+      url: `${baseUrl}/tl/uploadProposal`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TL updated  !");
-          history.goBack();
+          reset();
+          alert.success(<Msg />);
+          history.push("/teamleader/proposal");
         }
       })
       .catch((error) => {
@@ -118,12 +132,53 @@ function EditTL() {
       });
   };
 
+
+  //alert msg
+  const Msg = () => {
+    return (
+      <>
+        <p style={{ fontSize: "10px" }}>proposal successfully sent</p>
+      </>
+    );
+  };
+
+
+  const paymentAmount = (data) => {
+    console.log("paymentAmount", data)
+
+    var array1 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array1.push(value)
+    });
+    console.log("array1", array1);
+
+    setAmount(array1);
+  };
+
+  const paymentDate = (data) => {
+    console.log("paymentDate", data)
+
+    var array2 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array2.push(value)
+    });
+    console.log("array2", array2);
+    setDate(array2);
+  };
+
+
+  // console.log("amount", amount)
+  console.log("installment", installment)
+
+
   return (
-    <Layout adminDashboard="adminDashboard" adminUserId={userid}>
+    <>
       <Card>
         <CardHeader>
-          <div class="col-md-12 d-flex">
-            <div>
+          <Row>
+            <Col md="5">
               <button
                 class="btn btn-success ml-3"
                 onClick={() => history.goBack()}
@@ -131,136 +186,274 @@ function EditTL() {
                 <i class="fas fa-arrow-left mr-2"></i>
                 Go Back
               </button>
-            </div>
-            <div class="text-center ml-5">
-              <h4>Edit Team Leader</h4>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardHeader>
-          <div class="row mt-3">
-            <div class="col-lg-2 col-xl-2 col-md-12"></div>
-            <div class="col-lg-8 col-xl-8 col-md-12">
+            </Col>
+            <Col md="7">
               <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Name</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_name"
-                          defaultValue={name}
-                          ref={register}
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Phone Number</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="p_phone"
-                          defaultValue={phone}
-                          ref={register}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Category</label>
-
-                        <select
-                          className="form-control"
-                          name="p_tax"
-                          ref={register}
-                          value={store}
-                          onChange={(e) => setStore(e.target.value)}
-                        >
-                          <option value="">--Select Category--</option>
-                          {tax.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Sub Category</label>
-                        <select
-                          className="form-select form-control"
-                          name="p_tax2"
-                          ref={register}
-                          onChange={(e) => setStore2(e.target.value)}
-                        >
-                          <option value="">--Select Sub-Category--</option>
-                          {tax2.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Email</label>
-                        <input
-                          type="email"
-                          class="form-control"
-                          name="p_email"
-                          defaultValue={email}
-                          ref={register}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Update
-                  </button>
-                </form>
+                <h4>Prepare Proposal</h4>
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </CardHeader>
+
+        <CardBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+
+            <div style={{ display: "flex" }}>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Query No.</label>
+                  <input
+                    type="text"
+                    name="p_assingment"
+                    className="form-control"
+                    value={assingNo}
+                    ref={register}
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Fee</label>
+                  <select
+                    class="form-control"
+                    ref={register}
+                    name="p_type"
+                    onChange={(e) => setStore(e.target.value)}
+                  >
+                    {/* <option value="">--select type--</option> */}
+                    <option value="fixed">Fixed Price</option>
+                    {/* <option value="hourly">Hourly basis</option>
+                    <option value="mixed">Mixed</option> */}
+                  </select>
+                </div>
+
+                {/* {store == "fixed" && ( */}
+
+                <div class="form-group">
+                  <label>Fixed Price</label>
+                  <input
+                    type="text"
+                    name="p_fixed"
+                    className="form-control"
+                    ref={register}
+                    placeholder="Enter Fixed Price"
+                  />
+                </div>
+
+                {/* )} */}
+
+
+                <div class="form-group">
+                  <label>Scope of Work</label>
+                  <textarea
+                    className="form-control"
+                    id="textarea"
+                    rows="3"
+                    name="description"
+                    ref={register}
+                    placeholder="Enter Proposal Description"
+                  ></textarea>
+                </div>
+
+              </div>
+
+              <div class="col-md-6">
+
+                <div class="form-group">
+                  <label>Customer Name</label>
+                  <input
+                    type="text"
+                    name="p_name"
+                    className="form-control"
+                    value={custname}
+                    ref={register}
+                  />
+                </div>
+
+
+                <div class="form-group">
+                  <label>Payment Terms</label>
+                  <Select
+                    onChange={setPayment}
+                    options={payment_terms}
+                  />
+
+                  {/* <select
+                    className="form-control"
+                    name="p_payment_terms"
+                    aria-label="Default select example"
+                    ref={register}
+                    onChange={(e) => setPayment(e.target.value)}
+                  >
+                    <option value="">--select--</option>
+                    <option value="Lumpsum">Lumpsum</option>
+                    <option value="Installment">Installment</option>
+                  </select> */}
+                </div>
+
+                {payment.label == "Lumpsum" ? (
+                  <div class="form-group">
+                    <label>Due Dates</label>
+                    <input
+                      type="date"
+                      name="p_inst_date"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                ) :
+                  payment.label == "Installment" ? (
+                    <div class="form-group">
+                      <label>No of Installments</label>
+                      <Select
+                        onChange={setInstallment}
+                        options={no_installments}
+                      />
+                      {/* <select
+                        className="form-control"
+                        name="p_no_installments"
+                        aria-label="Default select example"
+                        ref={register}
+                        onChange={(e) => setInstallment(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select> */}
+                    </div>
+                  )
+                    : ""
+                }
+
+                {
+                  payment.label == "Lumpsum"
+                    ?
+                    ""
+                    :
+                    <Payment
+                      installment={installment.label}
+                      paymentAmount={paymentAmount}
+                      paymentDate={paymentDate}
+                    />
+                }
+
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group col-md-6">
+              <button type="submit" class="btn btn-primary">
+                Submit
+              </button>
+            </div>
+
+          </form>
+        </CardBody>
       </Card>
-    </Layout>
+    </>
   );
 }
 
-export default EditTL;
+export default ProposalComponent;
 
-// setValue("p_name", res.data.result[0].name);
-// setValue("p_email", res.data.result[0].email);
-// setUser({
-//   name: res.data.result[0].name,
-//   email: res.data.result[0].email,
-//   phone: res.data.result[0].phone,
-//   category: res.data.result[0].parent_id,
-//   sub_category: res.data.result[0].cat_name,
-// });
+
+const payment_terms = [
+  {
+    value: "Lumpsum",
+    label: "Lumpsum",
+  },
+  {
+    value: "Installment",
+    label: "Installment",
+  },
+];
+
+const no_installments = [
+  {
+    value: "2",
+    label: "2",
+  },
+  {
+    value: "3",
+    label: "3",
+  },
+  {
+    value: "4",
+    label: "4",
+  },
+];
+
+
+{/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}
+
+
+
+// var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
+// var todaysDate = new Date();
+
+
 {
-  /* <Select
-                          closeMenuOnSelect={false}
-                          onChange={(e) => setStore(e.target.value)}
-                        >
-                          <option value="">--Select Category--</option>
-                          {tax.map((p, index) => (
-                            <option key={index} value={p.id}>
-                              {p.details}
-                            </option>
-                          ))}
-                        </Select> */
+  /* <select
+                    class="form-control"
+                    ref={register}
+                    name="p_assingment"
+                    onChange={(e) => getID(e.target.value)}
+                  >
+                    <option value="">--select--</option>
+                    {incompleteData.map((p, index) => (
+                      <option key={index} value={p.id}>
+                        {p.assign_no}
+                      </option>
+                    ))}
+                  </select> */
 }
+
+// const getID = (key) => {
+//     setId(key);
+//     incompleteData.filter((data) => {
+//       if (data.id == key) {
+//         console.log("assingNo", data.assign_no);
+//         setAssingNo(data.assign_no);
+//         setAssignID(data.id);
+//       }
+//     });
+//   };

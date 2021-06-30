@@ -43,9 +43,6 @@ import ProposalView from './views/ProposalView/ProposalView'
 
 
 
-
-
-
 //admin routes
 import AdminStart from './pages/Admin/Start/Start'
 import AdminLogin from './pages/Admin/Login/Login'
@@ -173,9 +170,9 @@ function App() {
             <Route exact path="/customer/meeting" component={MeetingComponent} />
             <Route exact path="/customer/schedule" component={schedule} />
             <Route exact path="/customer/view-notification/:id" component={ViewNotification} />
-            <Route exact path="/customer/chatting" component={Chatting} />
-            <Route exact path="/customer/message" component={Message} />
             <Route exact path="/customer/proposal_view/:id" component={ProposalView} />
+            <Route exact path="/customer/message" component={Message} />
+            <Route exact path="/customer/chatting/:id" component={Chatting} />
 
 
 
@@ -228,7 +225,7 @@ function App() {
             <Route exact path="/teamleader/forget-password" component={TlForgetPassword} />
             <Route exact path="/teamleader/new-password/:id" component={TlNewPassword} />
             <Route exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
-            <Route exact path="/teamleader/chatting" component={TlChatting} />
+            <Route exact path="/teamleader/chatting/:id" component={TlChatting} />
             <Route exact path="/teamleader/message" component={TlMessage} />
 
 
@@ -260,7 +257,7 @@ export default App;
 
 
 
-  
+
 
 
 

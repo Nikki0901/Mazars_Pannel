@@ -291,7 +291,7 @@ function Demo() {
       <Scheduler data={data} height={660}>
         <ViewState
           defaultCurrentDate={currentDate}
-          defaultCurrentViewName="Week"
+          defaultCurrentViewName="Day"
         />
         <EditingState onCommitChanges={commitChanges} />
         <EditRecurrenceMenu />

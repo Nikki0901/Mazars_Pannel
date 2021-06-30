@@ -21,6 +21,25 @@ function Chatting(props) {
   const userId = window.localStorage.getItem("tlkey");
   const [assignment, setAssingment] = useState([]);
 
+  const [data, setData] = useState({})
+  const { message_type, query_id, query_No, routes } = data
+
+
+  useEffect(() => {
+    console.log("useEffect", props)
+    const dataItem = props.location.obj
+
+    if (dataItem) {
+      localStorage.setItem("myDataTL", JSON.stringify(dataItem));
+    }
+
+    var myData = localStorage.getItem("myDataTL");
+    var data2 = JSON.parse(myData)
+    setData(data2)
+
+  }, []);
+
+
   useEffect(() => {
     const getQuery = () => {
       axios.get(`${baseUrl}/tl/getProposalQuery?uid=${JSON.parse(userId)}`)
@@ -41,8 +60,8 @@ function Chatting(props) {
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
-    formData.append("assign_id", value.p_assignment);
-    formData.append("message_type", value.p_sms_type);
+    formData.append("assign_id", query_id);
+    formData.append("message_type", message_type);
     formData.append("message", value.p_message);
 
     axios({
@@ -55,7 +74,7 @@ function Chatting(props) {
         if (response.data.code === 1) {
           reset();
           alert.success("message successfully send!");
-          props.history.push("/teamleader/message");
+          props.history.push(routes);
         }
       })
       .catch((error) => {
@@ -65,6 +84,7 @@ function Chatting(props) {
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userId}>
+
       <div class="row mt-3">
         <div class="col-md-12">
           <div class="text-center">
@@ -81,34 +101,28 @@ function Chatting(props) {
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Query No.</label>
-                    <select
-                      class="form-control"
-                      name="p_assignment"
+                    <input
+                      type="text"
+                      name="p_query"
+                      className="form-control"
                       ref={register}
-                    >
-                      <option value="">--select--</option>
-                      {assignment.map((p, i) => (
-                        <option key={i} value={p.id}>
-                          {p.assign_no}
-                        </option>
-                      ))}
-                    </select>
+                      value={query_No}
+                      disabled
+                    />
                   </div>
                 </div>
 
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Message Type</label>
-                    <select
-                      class="form-control"
-                      name="p_sms_type"
+                    <input
+                      type="text"
+                      name="p_query"
+                      className="form-control"
                       ref={register}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Information</option>
-                      <option value="2">Proposal Discussion</option>
-                      <option value="3">Assignment Discussion</option>
-                    </select>
+                      value={message_type}
+                      disabled
+                    />
 
                   </div>
                 </div>

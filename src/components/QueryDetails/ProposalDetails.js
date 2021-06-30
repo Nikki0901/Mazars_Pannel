@@ -30,7 +30,24 @@ function ProposalDetails({
   const { tlname, date_of_allocation } = diaplayHistory;
 
 
-  console.log("diaplayProposal", diaplayProposal);
+  console.log("installment_amount", installment_amount.split(','));
+
+
+  const installAmount = (data) => {
+    var item = data.split(',')
+    console.log("item", item);
+
+    const dataItem = item.map((p, i) =>
+    (
+      <>
+        <p>{p}</p>
+      </>
+    ))
+    return dataItem;
+  }
+
+
+  // console.log("payment_terms", JSON.parse(payment_terms))
   return (
     <>
       <div>
@@ -67,8 +84,8 @@ function ProposalDetails({
             <tr>
               <th scope="row">Date of Proposal</th>
               <td>
-                <div style={{display:"flex",justifyContent:"space-between"}}>
-                {CommonServices.removeTime(proposal_date)}
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  {CommonServices.removeTime(proposal_date)}
                   {proposal_date && (
                     <a
                       class="btn btn-primary btn-sm"
@@ -119,7 +136,7 @@ function ProposalDetails({
             <tr>
               <th scope="row">Payment Terms</th>
               {
-                payment_terms == "Lumpsum" ?
+                payment_terms == "lumpsum" ?
                   <td>
                     <tr>
                       <th>Payment Type</th>
@@ -142,8 +159,8 @@ function ProposalDetails({
                       <tr>
                         <td>{payment_terms}</td>
                         <td>{no_of_installment}</td>
-                        <td>{installment_amount}</td>
-                        <td>{due_date}</td>
+                        <td>{installAmount(installment_amount)}</td>
+                        <td>{installAmount(due_date)}</td>
                       </tr>
                     </td>
                     :

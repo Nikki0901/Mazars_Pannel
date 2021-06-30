@@ -15,9 +15,9 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import { Link, useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import AdminFilter from "../Search-Filter/AdminFilter";
 
-function PendingForPayment({ CountPendingForPayment }) {
+function DeclinedQueries({ CountPendingForPayment }) {
 
   const [pendingData, setPendingData] = useState([]);
   const [records, setRecords] = useState([]);
@@ -27,7 +27,7 @@ function PendingForPayment({ CountPendingForPayment }) {
   }, []);
 
   const getPendingForPayment = () => {
-    axios.get(`${baseUrl}/admin/pendingPaymentProposals`).then((res) => {
+    axios.get(`${baseUrl}/admin/getProposals?status1=3`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
@@ -297,4 +297,4 @@ function PendingForPayment({ CountPendingForPayment }) {
   );
 }
 
-export default PendingForPayment;
+export default DeclinedQueries;

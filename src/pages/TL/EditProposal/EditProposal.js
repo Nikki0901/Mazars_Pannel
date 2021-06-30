@@ -15,21 +15,23 @@ import {
   Table,
 } from "reactstrap";
 import Payment from "./Payment";
+import Select from "react-select";
 
-function ProposalComponent() {
+
+
+function EditComponent() {
 
   const alert = useAlert();
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues: { email: "", firstname: "" },
-  });
+  const { register, handleSubmit, reset } = useForm();
   const userid = window.localStorage.getItem("tlkey");
 
   const [custId, setCustId] = useState("");
   const [store, setStore] = useState(null);
-  const [payment, setPayment] = useState(null);
-  const [installment, setInstallment] = useState(null);
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
+
+  const [payment, setPayment] = useState([]);
+  const [installment, setInstallment] = useState([]);
 
   const history = useHistory();
   const { id } = useParams();
@@ -40,13 +42,12 @@ function ProposalComponent() {
     fixed_amount: "",
     payable: "",
     description: "",
-    payment_terms: "",
-    no_of_installment: "",
     installment_amount: "",
     due_date: "",
   });
+
+
   const { query, name, description, fixed_amount,
-    no_of_installment, payment_terms,
     due_date, installment_amount } = proposal;
 
   useEffect(() => {
@@ -63,12 +64,26 @@ function ProposalComponent() {
           query: res.data.result.assign_no,
           fixed_amount: res.data.result.amount,
           description: res.data.result.description,
-          payment_terms: res.data.result.payment_terms,
           installment_amount: res.data.result.installment_amount,
           due_date: res.data.result.due_date,
         });
 
-        setInstallment(res.data.result.no_of_installment)
+        var payment_terms = res.data.result.payment_terms
+        var no_of_installment = res.data.result.no_of_installment
+
+        const data1 = {
+          label: payment_terms,
+          value: payment_terms,
+        }
+
+        const data2 = {
+          label: no_of_installment,
+          value: no_of_installment,
+        }
+
+        // console.log("data1", data1)
+        setPayment(data1);
+        setInstallment(data2);
       }
     });
   };
@@ -88,6 +103,11 @@ function ProposalComponent() {
   const onSubmit = (value) => {
     console.log(value);
 
+    console.log("amount",amount);
+    console.log("date",date);
+
+
+
     var lumsum = value.p_inst_date
     setDate(lumsum)
 
@@ -101,14 +121,13 @@ function ProposalComponent() {
     formData.append("customer_id", custId);
     formData.append("assign_id", id);
 
-    formData.append("amount_type", value.p_type);
+    formData.append("amount_type", "fixed");
     formData.append("amount", value.p_fixed);
-    formData.append("amount_hourly", value.p_hourly);
-    formData.append("payment_terms", value.p_payment_terms);
-    formData.append("no_of_installment", value.p_no_installments);
     formData.append("installment_amount", amount);
+    formData.append("payment_terms", payment.value);
+    formData.append("no_of_installment", installment.value);
 
-    payment == "lumpsum" ?
+    payment.label == "lumpsum" ?
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
@@ -165,6 +184,8 @@ function ProposalComponent() {
     setDate(array2);
   };
 
+
+  console.log("installment : ", installment.label)
 
 
   return (
@@ -262,25 +283,18 @@ function ProposalComponent() {
                 </div>
 
 
-
                 <div class="form-group">
                   <label>Payment Terms</label>
-                  <select
-                    className="form-control"
-                    name="p_payment_terms"
-                    aria-label="Default select example"
-                    ref={register}
-                    onChange={(e) => setPayment(e.target.value)}
-                    value="jjkhlj"
-                  >
-                    <option value="">--select--</option>
-                    <option value="lumpsum">Lumpsum</option>
-                    <option value="installment">Installment</option>
-                  </select>
+                  <Select
+                    closeMenuOnSelect={true}
+                    onChange={setPayment}
+                    value={payment}
+                    options={paymentsTerms}
+                  />
+
                 </div>
 
-
-                {payment_terms == "lumpsum" ? (
+                {payment.label == "lumpsum" ? (
                   <div class="form-group">
                     <label>Due Dates</label>
                     <input
@@ -293,43 +307,36 @@ function ProposalComponent() {
                     />
                   </div>
                 ) :
-                  payment_terms == "installment" ? (
+                  payment.label == "installment" ? (
                     <div class="form-group">
                       <label>No of Installments</label>
-                      <select
-                        className="form-control"
-                        name="p_no_installments"
-                        aria-label="Default select example"
-                        ref={register}
-                        onChange={(e) => setInstallment(e.target.value)}
-                      >
-                        <option value="">--select--</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
+
+                      <Select
+                        closeMenuOnSelect={true}
+                        onChange={setInstallment}
+                        value={installment}
+                        options={noInstallments}
+                      />
+
                     </div>
                   )
                     : ""
                 }
                 {
-                  payment == "Lumpsum"
+                  payment.label == "lumpsum"
                     ?
                     ""
                     :
                     <Payment
-                      installment={installment}
+                      installment={installment.label}
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                       installment_amount={installment_amount}
                       due_date={due_date}
                     />
                 }
-
               </div>
             </div>
-
 
             <div class="form-group col-md-6">
               <button type="submit" class="btn btn-primary">
@@ -343,7 +350,34 @@ function ProposalComponent() {
   );
 }
 
-export default ProposalComponent;
+export default EditComponent;
+
+const paymentsTerms = [
+  {
+    value: "lumpsum",
+    label: "lumpsum",
+  },
+  {
+    value: "installment",
+    label: "installment",
+  },
+];
+
+const noInstallments = [
+  {
+    value: "2",
+    label: "2",
+  },
+  {
+    value: "3",
+    label: "3",
+  },
+  {
+    value: "4",
+    label: "4",
+  },
+];
+
 
 
 
@@ -382,3 +416,35 @@ export default ProposalComponent;
                     </div>
                   </div>
                 )} */}
+{/* <Select
+                    options={paymentsTerms}
+                    value={payment}
+                  // defaultValue={payment}
+                  /> */}
+
+{/* <select
+                    className="form-control"
+                    name="p_payment_terms"
+                    aria-label="Default select example"
+                    ref={register}
+                    onChange={(e) => setPayment(e.target.value)}
+
+                  >
+                    <option value="">--select--</option>
+                    <option value="Lumpsum">Lumpsum</option>
+                    <option value="Installment">Installment</option>
+                  </select> */}
+
+{/* <select
+                        className="form-control"
+                        name="p_no_installments"
+                        aria-label="Default select example"
+                        ref={register}
+                        onChange={(e) => setInstallment(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select> */}

@@ -121,34 +121,6 @@ function Proposal() {
         return { fontSize: "12px" };
       },
     },
-    // {
-    //   text: "History",
-    //   dataField: "",
-    //   headerStyle: () => {
-    //     return { fontSize: "12px" };
-    //   },
-    //   formatter: function (cell, row) {
-    //     return (
-    //       <>
-    //         {row.revised_text && (
-    //           <div style={{ cursor: "pointer" }} title="View History">
-    //             {/* {myFunction(row.revised_text)} */}
-
-    //             <div>
-    //               <button
-    //                 type="button"
-    //                 class="btn btn-info btn-sm"
-    //                 onClick={() => chatHandler(row)}
-    //               >
-    //                 view
-    //               </button>
-    //             </div>
-    //           </div>
-    //         )}
-    //       </>
-    //     );
-    //   },
-    // },
     {
       text: "Action",
       dataField: "",
@@ -158,9 +130,9 @@ function Proposal() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
-                {row.status == "Cust Accepted" || row.status == "Pending for approval" ? (
+                {row.status == "Pending for approval" || row.status == "Declined" ? (
                   <Link to={`/teamleader/edit-proposal/${row.id}`}>
                     <i
                       className="fa fa-edit"
@@ -194,6 +166,30 @@ function Proposal() {
                     ></i>
                   </div>
                 )}
+              </div>
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/teamleader/chatting/${row.id}`,
+                    obj: {
+                      message_type: "Proposal Discussion",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/teamleader/proposal`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
               </div>
             </div>
           </>

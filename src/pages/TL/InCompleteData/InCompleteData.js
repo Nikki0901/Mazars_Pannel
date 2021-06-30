@@ -152,11 +152,16 @@ function InCompleteData({ CountIncomplete }) {
                   <div title="Assigned">
                     <i class="fa fa-share" style={{ color: "green" }}></i>
                   </div>
-                ) : (
-                  <div title="Assign to">
-                    <i class="fa fa-share"></i>
-                  </div>
-                )}
+                ) :
+                  row.status_code < "4" ?
+                    (
+                      <div title="Assign to">
+                        <i class="fa fa-share"></i>
+                      </div>
+                    )
+                    :
+                    ""
+                }
               </Link>
             </div>
           </>

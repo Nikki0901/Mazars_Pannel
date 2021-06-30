@@ -19,6 +19,7 @@ export default class YourComponent extends React.Component {
             })
     }
 
+    
     handleChange2(i, e) {
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
@@ -69,9 +70,10 @@ export default class YourComponent extends React.Component {
             );
         }
 
-        console.log("installment_amount - ", this.props.installment_amount);
-        console.log("due_date - ", this.props.due_date);
+        // console.log("installment_amount - ", this.props.installment_amount);
+        // console.log("due_date - ", this.props.due_date);
 
+        console.log("values - ", this.state.values);
 
         return (
             <div className="inputs">
@@ -112,3 +114,38 @@ export default class YourComponent extends React.Component {
 //     values[i] = value
 //     setAmount({ values });
 //   };
+
+
+
+{/* <div>
+{
+  row.status == "Pending for Preparation" &&
+  <Link to={`/teamleader/sendproposal/${row.id}`}>
+    <i
+      class="fa fa-mail-forward"
+      style={{
+        fontSize: "14px",
+        cursor: "pointer",
+      }}
+    ></i>
+  </Link>
+}
+</div>
+
+<div>
+{
+  row.status_code < 9 ?
+    <Link to={`/teamleader/edit-proposal/${row.id}`}>
+      <i
+        className="fa fa-edit"
+        style={{
+          fontSize: "16px",
+          cursor: "pointer",
+          color: "green",
+        }}
+      ></i>
+    </Link>
+    :
+    null
+}
+</div> */}

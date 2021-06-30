@@ -338,8 +338,10 @@ function AdminFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Progress</option>
-                      <option value="2">Complete</option>
+                      <option value="1">Inprogress Queries</option>
+                      <option value="2">Completed Queries</option>
+                      <option value="3">Declined Queries</option>
+
                     </select>
                   )}
 
@@ -364,9 +366,9 @@ function AdminFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Pending</option>
-                      <option value="2">Accepted</option>
-                      <option value="3">Declined</option>
+                      <option value="1">Inprogress Proposal</option>
+                      <option value="2">Accepted Proposal</option>
+                      <option value="3">Customer Declined Proposal</option>
                     </select>
                   )}
 
@@ -378,7 +380,7 @@ function AdminFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">UnPaid</option>
+                      <option value="1">Unpaid</option>
                       <option value="2">Paid</option>
                     </select>
                   )}

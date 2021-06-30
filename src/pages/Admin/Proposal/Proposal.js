@@ -94,6 +94,7 @@ function Proposal(props) {
     color: "white",
     cursor: "pointer",
   };
+
   const myStyle2 = {
     padding: "12px",
     borderRadius: "50px",
@@ -119,13 +120,14 @@ function Proposal(props) {
               All Proposal ({allProposalCount})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Pending For Acceptence ({pendingProposalCount})
+              Inprogress ({pendingProposalCount})
             </Tab>
-            {/* <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Accepted ({acceptedProposalCount})
-            </Tab> */}
 
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Accepted ({acceptedProposalCount})
+            </Tab>
+
+            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
               Declined ({declinedProposalCount})
             </Tab>
           </TabList>
@@ -138,9 +140,9 @@ function Proposal(props) {
             <PendingForAcceptence />
           </TabPanel>
 
-          {/* <TabPanel>
+          <TabPanel>
             <AcceptedProposal />
-          </TabPanel> */}
+          </TabPanel>
 
           <TabPanel>
             <DeclinedPropoal />
@@ -152,6 +154,7 @@ function Proposal(props) {
 }
 
 export default Proposal;
+
 
 // const allProposal = (data) => {
 //   setAllProposalCount(data);

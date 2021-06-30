@@ -52,6 +52,7 @@ function MyAssingment() {
     },
   ]);
 
+
   useEffect(() => {
     const getSubmittedAssingment = () => {
       axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
@@ -120,6 +121,7 @@ function MyAssingment() {
     getQuery();
     getSubmittedAssingment();
   }, [assingNo]);
+
 
   const getQuery = () => {
     axios

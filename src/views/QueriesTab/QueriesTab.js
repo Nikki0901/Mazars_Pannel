@@ -17,6 +17,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
 
+
 function QueriesTab() {
   const alert = useAlert();
   const userId = window.localStorage.getItem("userid");
@@ -180,6 +181,47 @@ function QueriesTab() {
                   ></i>
                 ) : null}
               </div>
+
+              <div title="Send Message">
+                {/* <Link to={{
+                  pathname: `/customer/chatting/${row.id}`,
+                  state: [{ id: 1, name: 'Ford', color: 'red' }]
+                }}>
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i></Link> */}
+                
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "Information",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/queries`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+
+
+              </div>
+
             </div>
           </>
         );
@@ -229,6 +271,11 @@ function QueriesTab() {
         console.log("erroror - ", error);
       });
   };
+
+  const data = [
+    { id: 1, name: 'Ford', color: 'Red' },
+    { id: 2, name: 'Hyundai', color: 'Blue' }
+  ]
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

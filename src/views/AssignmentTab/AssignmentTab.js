@@ -247,26 +247,6 @@ function AssignmentTab() {
       },
       formatter: priceFormatter,
     },
-    // {
-    //   dataField: "",
-    //   text: "Video Call",
-    //   headerStyle: () => {
-    //     return { fontSize: "12px" };
-    //   },
-    //   formatter: function (cell, row) {
-    //     return (
-    //       <>
-    //         <div style={{ cursor: "pointer" }} title="Video Chat">
-    //           <i
-    //             class="fa fa-video-camera"
-    //             style={{ color: "red", fontSize: "16px" }}
-    //             onClick={() => handleJoin(row.id)}
-    //           ></i>
-    //         </div>
-    //       </>
-    //     );
-    //   },
-    // },
     {
       text: "Action",
       dataField: "",
@@ -280,11 +260,7 @@ function AssignmentTab() {
         return (
           <>
             <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
+              style={{ display: "flex" }}
             >
               <div style={{ cursor: "pointer" }} title="Pay Amount">
                 <i
@@ -305,6 +281,30 @@ function AssignmentTab() {
                   ></i>
                 </div>
               ) : null}
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "Assignment Discussion",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
             </div>
           </>
         );

@@ -323,11 +323,12 @@ function ProposalTab() {
       formatter: function (cell, row) {
         return (
           <>
+
             {row.statuscode === "6" ? null : (
               <div>
                 {row.negotiated_amount === "0" &&
                   row.accepted_amount === "0" ? (
-                  <div>
+                  <div style={{ display: "flex" ,width:"80px",justifyContent:"space-evenly" }}>
                     <div style={{ cursor: "pointer" }} title="Proposal View">
                       <Link to={`/customer/proposal_view/${row.id}`}>
                         <i
@@ -336,7 +337,6 @@ function ProposalTab() {
                             color: "blue",
                             fontSize: "16px",
                           }}
-                        // onClick={() => accepted(row.q_id)}
                         ></i>
                       </Link>
                     </div>
@@ -356,10 +356,36 @@ function ProposalTab() {
                         onClick={() => chatHandler(row)}
                       ></i>
                     </div>
+
+                    <div title="Send Message">
+                      <Link
+                        to={{
+                          pathname: `/customer/chatting/${row.id}`,
+                          obj: {
+                            message_type: "Proposal Discussion",
+                            query_No: row.assign_no,
+                            query_id: row.id,
+                            routes: `/customer/proposal`
+                          }
+                        }}
+                      >
+                        <i
+                          class="fa fa-comments-o"
+                          style={{
+                            fontSize: 16,
+                            cursor: "pointer",
+                            marginLeft: "8px",
+                            color: "blue"
+                          }}
+                        ></i>
+                      </Link>
+                    </div>
                   </div>
                 ) : null}
               </div>
             )}
+
+
           </>
         );
       },

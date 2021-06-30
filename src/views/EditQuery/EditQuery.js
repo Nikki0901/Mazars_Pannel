@@ -76,7 +76,6 @@ function EditQuery(props) {
           return false;
         }
 
-        console.log("purpose", purpose);
         console.log("purpose[0]", purpose[0]);
         setValue("fact_case", res.data.result[0].fact_case);
         setValue("case_name", res.data.result[0].case_name);

@@ -160,13 +160,40 @@ function AllProposalComponent({ allProposal }) {
     },
     {
       text: "Status",
-      dataField: "status",
+      // dataField: "status",
       sort: true,
       style: {
         fontSize: "11px",
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              <p>
+                {row.status}
+              </p>
+              {
+                row.status == "Inprogress" ?
+                  <p style={{ color: "green" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  row.status == "Customer Declined; Proposal" ?
+                    <p style={{ color: "red" }}>
+                      {row.statusdescription}
+                    </p> :
+                    row.status == "Accepted; Proposal" ?
+                      <p style={{ color: "blue" }}>
+                        {row.statusdescription}
+                      </p> :
+                      null
+              }
+            </div>
+          </>
+        );
       },
     },
     {
@@ -271,122 +298,13 @@ function AllProposalComponent({ allProposal }) {
       <Card>
         <CardHeader>
 
-        <AdminFilter
+          <AdminFilter
             setData={setProposalDisplay}
             getData={getProposalData}
             allProposal="allProposal"
             setRecords={setRecords}
             records={records}
           />
-
-
-          {/* <div className="row">
-            <div className="col-sm-12 d-flex">
-              <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div class="form-inline">
-                    <div class="form-group mb-2">
-                      <Select
-                        style={{ width: 130 }}
-                        placeholder="Select Category"
-                        defaultValue={[]}
-                        onChange={handleCategory}
-                        value={selectedData}
-                      >
-                        <Option value="1" label="Compilance">
-                          <div className="demo-option-label-item">
-                            Direct Tax
-                          </div>
-                        </Option>
-                        <Option value="2" label="Compilance">
-                          <div className="demo-option-label-item">
-                            Indirect Tax
-                          </div>
-                        </Option>
-                      </Select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <Select
-                        mode="multiple"
-                        style={{ width: 250 }}
-                        placeholder="Select Sub Category"
-                        defaultValue={[]}
-                        onChange={handleSubCategory}
-                        value={store2}
-                        allowClear
-                      >
-                        {tax2.map((p, index) => (
-                          <Option value={p.id} key={index}>
-                            {p.details}
-                          </Option>
-                        ))}
-                      </Select>
-                    </div>
-                    <div>
-                      <button
-                        type="submit"
-                        class="btn btn-primary mb-2 ml-3"
-                        onClick={resetCategory}
-                      >
-                        X
-                      </button>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">From</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateFrom"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">To</label>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <input
-                        type="date"
-                        name="p_dateTo"
-                        className="form-select form-control"
-                        ref={register}
-                      />
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <select
-                        className="form-select form-control"
-                        name="p_status"
-                        ref={register}
-                        style={{ height: "33px" }}
-                      >
-                        <option value="">--select--</option>
-                        <option value="1">Pending</option>
-                        <option value="2">Accepted</option>
-                        <option value="3">Declined</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group mx-sm-1  mb-2">
-                      <label className="form-select form-control">Total Records : {records}</label>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
-                      Search
-                    </button>
-
-                    <Reset />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div> */}
         </CardHeader>
 
         <CardBody>
