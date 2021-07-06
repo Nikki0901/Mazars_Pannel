@@ -16,7 +16,7 @@ function AdminFilter(props) {
     acceptedProposal,
     pendingAcceptedProposal,
     declinedProposal,
-    pendingPayment,
+    declinedQueries,
     pendingForProposal,
     pendingAlloation,
     allQueries,
@@ -28,6 +28,11 @@ function AdminFilter(props) {
   const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
+
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
 
   //get category
   useEffect(() => {
@@ -75,9 +80,37 @@ function AdminFilter(props) {
     getData();
   };
 
+
   const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("store2 :", store2);
+
+    console.log("data", data)
+    // console.log("End data :", data.p_dateTo);
+
+    // var dateto = data.p_dateTo
+
+    // var end_date;
+    // if (dateto == "") {
+
+    //   console.log("call")
+
+    // var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+    // console.log("current_date :", current_date);
+    //   end_date = current_date
+
+    //   // if (current_date) {
+    //   //   setItem(current_date)
+    //   // }
+
+    // } else {
+    //   end_date = dateto
+    //   // setItem(dateto)
+
+    // }
+
+    console.log("item", item)
+    console.log("data", data)
+
+
 
     if (acceptedProposal == "acceptedProposal") {
       axios
@@ -98,7 +131,7 @@ function AdminFilter(props) {
     if (pendingAcceptedProposal == "pendingAcceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=4&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/getProposals?status1=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -127,10 +160,10 @@ function AdminFilter(props) {
         });
     }
 
-    if (pendingPayment == "pendingPayment") {
+    if (declinedQueries == "declinedQueries") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/declinedQueries?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -146,7 +179,7 @@ function AdminFilter(props) {
     if (pendingForProposal == "pendingForProposal") {
       axios
         .get(
-          `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/pendingProposal?category=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -178,7 +211,7 @@ function AdminFilter(props) {
     if (pendingAlloation == "pendingAlloation") {
       axios
         .get(
-          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/pendingAllocation?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -210,7 +243,8 @@ function AdminFilter(props) {
     if (allProposal == "allProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}
+          &to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -222,21 +256,8 @@ function AdminFilter(props) {
           }
         });
     }
-    // if (assignment == "assignment") {
-    //   axios
-    //     .get(
-    //       `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}`
-    //     )
-    //     .then((res) => {
-    //       console.log(res);
-    //       if (res.data.code === 1) {
-    //         if (res.data.result) {
-    //           setData(res.data.result);
-    //         }
-    //       }
-    //     });
-    // }
   };
+
 
   const Reset = () => {
     return (
@@ -313,6 +334,7 @@ function AdminFilter(props) {
                     name="p_dateFrom"
                     className="form-select form-control"
                     ref={register}
+                    max={item}
                   />
                 </div>
 
@@ -326,6 +348,8 @@ function AdminFilter(props) {
                     name="p_dateTo"
                     className="form-select form-control"
                     ref={register}
+                    defaultValue={item}
+                    max={item}
                   />
                 </div>
 
@@ -345,7 +369,7 @@ function AdminFilter(props) {
                     </select>
                   )}
 
-                  {pendingAlloation == "pendingAlloation" && (
+                  {pendingAcceptedProposal == "pendingAcceptedProposal" && (
                     <select
                       className="form-select form-control"
                       name="p_status"
@@ -353,8 +377,21 @@ function AdminFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Progress</option>
-                      <option value="3"> Rejected</option>
+                      <option value="4">Inprogress; Preparation</option>
+                      <option value="5"> Inprogress; Acceptance</option>
+                    </select>
+                  )}
+
+                  {pendingForProposal == "pendingForProposal" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Inprogress; Preparation</option>
+                      <option value="2"> Inprogress; Acceptance</option>
                     </select>
                   )}
 
@@ -366,9 +403,24 @@ function AdminFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Inprogress Proposal</option>
-                      <option value="2">Accepted Proposal</option>
-                      <option value="3">Customer Declined Proposal</option>
+                      <option value="1">Inprogress Proposals</option>
+                      <option value="2">Accepted Proposals</option>
+                      <option value="3">Customer Declined Proposals</option>
+                    </select>
+                  )}
+
+                  {declinedQueries == "declinedQueries" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Admin Declined; Queries</option>
+                      <option value="2">Customer Declined; Queries</option>
+                      <option value="3">Customer Declined; Proposals</option>
+                      <option value="4">Customer Declined; Payment</option>
                     </select>
                   )}
 

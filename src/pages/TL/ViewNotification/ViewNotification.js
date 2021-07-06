@@ -14,6 +14,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import CommonServices from "../../../common/common";
 
 function ViewNotification() {
   const userid = window.localStorage.getItem("tlkey");
@@ -82,12 +83,14 @@ function ViewNotification() {
                 <td>{data.assign_no}</td>
               </tr>
               <tr>
-                <th scope="row">Send By</th>
+                <th scope="row"> System Generated</th>
                 <td>{data.name}</td>
               </tr>
               <tr>
                 <th scope="row">Date</th>
-                <td>{data.setdate}</td>
+                <td>
+                  {CommonServices.removeTime(data.setdate)}
+                </td>
               </tr>
               <tr>
                 <th scope="row">Message</th>
@@ -99,10 +102,10 @@ function ViewNotification() {
                   {data.type == "1"
                     ? "info"
                     : data.type == "2"
-                    ? "Proposal Discuss"
-                    : data.type == "3"
-                    ? "Draft Discuss"
-                    : null}
+                      ? "Proposal Discuss"
+                      : data.type == "3"
+                        ? "Draft Discuss"
+                        : null}
                 </td>
               </tr>
             </tbody>

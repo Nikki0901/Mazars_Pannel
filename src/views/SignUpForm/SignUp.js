@@ -42,8 +42,8 @@ function SignUp(props) {
   const [city, setCity] = useState([]);
   const [name, setName] = useState("");
   const [load, setLoad] = useState(false);
-
   const [store, setStore] = useState(0);
+
 
   useEffect(() => {
     const getStates = () => {
@@ -73,6 +73,7 @@ function SignUp(props) {
     getCity();
   }, [store]);
 
+
   const onSubmit = (value) => {
     console.log("value :", value);
   
@@ -83,7 +84,7 @@ function SignUp(props) {
     formData.append("email", value.p_email);
     formData.append("phone", value.p_phone);
     formData.append("occupation", value.p_profession);
-    formData.append("state", name);
+    formData.append("state", value.p_state);
     formData.append("city", value.p_city);
     formData.append("password", value.p_password);
 
@@ -125,14 +126,14 @@ function SignUp(props) {
       });
   };
 
+
   const getID = (key) => {
     setStore(key);
 
     states.filter((data) => {
-      if (data.Id == key) {
+      if (data.id == key) {
         console.log("Name", data.name);
         setName(data.name);
-        // document.getElementById('state').value=data.Name;
       }
     });
   };
@@ -245,11 +246,11 @@ function SignUp(props) {
                         "is-invalid": errors.p_state,
                       })}
                       ref={register}
-                      onChange={(e) => getID(e.target.value)}
+                      onChange={(e) => getID(e.target.value)} 
                     >
                       <option value="">--select--</option>
                       {states.map((p) => (
-                        <option key={p.Id} value={p.id}>
+                        <option key={p.id} value={p.id}>
                           {p.name}
                         </option>
                       ))}

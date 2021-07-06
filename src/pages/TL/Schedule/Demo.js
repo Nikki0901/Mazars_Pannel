@@ -72,6 +72,7 @@ function Demo() {
     question_id: appointment.question_id,
     vstart:appointment.vstart,
     vend:appointment.vend,
+    user: appointment.user.split(','),
   });
 
   const getAssignmentNo = () => {
@@ -113,11 +114,11 @@ function Demo() {
   const resources = [
     {
       fieldName: "question_id",
-      title: "Assignment No",
+      title: "Query No",
       instances: assignmentdata,
     },
     {
-      fieldName: "name",
+      fieldName: "user",
       title: "Users",
       instances: owner,
       allowMultiple: true,
@@ -217,7 +218,7 @@ function Demo() {
       formData.append("endtime", changeFormat(endDate));
       formData.append("title", added.title);
       formData.append("notes", added.notes);
-      formData.append("user", added.name);
+      formData.append("user", added.user);
 
       axios({
         method: "POST",

@@ -19,7 +19,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
 
     // var difference = Math.abs(date2 - date1);
     // var days = difference / (1000 * 3600 * 24);
-    var difference =  Math.round((date2-date1)/(1000*60*60*24));
+    var difference = Math.round((date2 - date1) / (1000 * 60 * 60 * 24));
     console.log(difference);
     // var difference = date2.getTime() - date1.getTime();
     // return difference;
@@ -41,7 +41,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col" style={{width:"400px"}}>Titles</th>
+              <th scope="col" style={{ width: "400px" }}>Titles</th>
               <th scope="col">Data</th>
             </tr>
           </thead>
@@ -75,7 +75,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
                   <td>{p.client_discussion}</td>
                 </tr>
                 <tr>
-                  <td>Draft report</td>
+                  <td>Draft Reports</td>
                   <td>{p.draft_report}</td>
                 </tr>
                 <tr>
@@ -83,11 +83,11 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
                   <td>{p.final_discussion}</td>
                 </tr>
                 <tr>
-                  <td> Delivery of report</td>
+                  <td>Delivery of Final Reports</td>
                   <td>{p.delivery_report}</td>
                 </tr>
                 <tr>
-                  <td>Complete</td>
+                  <td>Awaiting Completion</td>
                   <td>{p.other_stage}</td>
                 </tr>
               </td>
@@ -97,10 +97,10 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
               <th scope="row">Time taken to complete the assignment</th>
               <td>
                 {p.client_discussion == "completed" &&
-                p.delivery_report == "completed" &&
-                p.draft_report == "completed" &&
-                p.final_discussion == "completed" &&
-                p.other_stage == "completed"
+                  p.delivery_report == "completed" &&
+                  p.draft_report == "completed" &&
+                  p.final_discussion == "completed" &&
+                  p.other_stage == "completed"
                   ? CommonServices.removeTime(p.final_date)
                   : null}
               </td>
@@ -115,7 +115,6 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
 export default AssignmentDetails;
 
 // {timeTaken(p.final_date,cust_accept_date)}
-
 
 
 // function parseDate(str) {

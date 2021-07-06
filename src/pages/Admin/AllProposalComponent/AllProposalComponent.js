@@ -172,23 +172,30 @@ function AllProposalComponent({ allProposal }) {
         return (
           <>
             <div>
-              <p>
-                {row.status}
-              </p>
+
               {
                 row.status == "Inprogress" ?
-                  <p style={{ color: "green" }}>
-                    {row.statusdescription}
-                  </p>
+                  <div>
+                    {row.status}/
+                    <p style={{ color: "green" }}>
+                      {row.statusdescription}
+                    </p>
+                  </div>
                   :
                   row.status == "Customer Declined; Proposal" ?
-                    <p style={{ color: "red" }}>
-                      {row.statusdescription}
-                    </p> :
-                    row.status == "Accepted; Proposal" ?
-                      <p style={{ color: "blue" }}>
+                    <div>
+                      {row.status}
+                      <p style={{ color: "red" }}>
                         {row.statusdescription}
-                      </p> :
+                      </p>
+                    </div> :
+                    row.status == "Accepted; Proposal" ?
+                      <div>
+                        {row.status}
+                        <p style={{ color: "blue" }}>
+                          {row.statusdescription}
+                        </p>
+                      </div> :
                       null
               }
             </div>
@@ -288,6 +295,41 @@ function AllProposalComponent({ allProposal }) {
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+    },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "11px",width: "65px"  };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div title="Send Message">
+              <Link
+                to={{
+                  pathname: `/admin/chatting/${row.q_id}`,
+                  obj: {
+                    message_type: "2",
+                    query_No: row.assign_no,
+                    query_id: row.q_id,
+                    routes: `/admin/proposal`
+                  }
+                }}
+              >
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    color: "blue"
+                  }}
+                ></i>
+              </Link>
+            </div>
+          </>
+        );
       },
     },
   ];

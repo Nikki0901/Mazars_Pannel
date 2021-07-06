@@ -17,10 +17,9 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
-import Statusfilter from "./Statusfilter";
 
 
-function AssignmentTab() {
+function FinalReport() {
   const userid = window.localStorage.getItem("adminkey");
 
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
@@ -34,12 +33,16 @@ function AssignmentTab() {
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
   useEffect(() => {
     getAssignmentData();
   }, []);
 
   const getAssignmentData = () => {
-    axios.get(`${baseUrl}/tl/getAssignments`).then((res) => {
+    axios.get(`${baseUrl}/tl/getAssignments?assignment_status=Delivery_of_report&stages_status=1`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setAssignmentDisplay(res.data.result);
@@ -184,23 +187,23 @@ function AssignmentTab() {
             <div>
               <p>
                 <span style={{ fontWeight: "bold" }}>Client Discussion :</span>
-                {row.client_discussion}
+                {row.client_discussion == "pending" ? "processing" : row.client_discussion}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                {row.draft_report}
+                <span style={{ fontWeight: "bold" }}>Draft Report :</span>
+                {row.draft_report == "pending" ? "processing" : row.draft_report}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Final Discussion :</span>
-                {row.final_discussion}
+                {row.final_discussion == "pending" ? "processing" : row.final_discussion}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Delivery of Final report :</span>
-                {row.delivery_report}
+                <span style={{ fontWeight: "bold" }}>Delivery of Final Report :</span>
+                {row.delivery_report == "pending" ? "processing" : row.delivery_report}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Awaiting Completion :</span>
-                {row.other_stage}
+                {row.other_stage == "pending" ? "processing" : row.other_stage}
               </p>
             </div>
           </>
@@ -289,7 +292,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&assignment_status=${status}&stages_status=${data.p_status}&pcat_id=${selectedData}`
+        `${baseUrl}/tl/getAssignments?assignment_status=Delivery_of_report&stages_status=1&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}`
       )
       .then((res) => {
         console.log(res);
@@ -317,17 +320,8 @@ function AssignmentTab() {
   };
 
   return (
-    <Layout adminDashboard="adminDashboard" adminUserId={userid}>
+    <div>
       <Card>
-        <CardHeader>
-          <Row>
-            <Col md="7">
-              <CardTitle tag="h4">Assignment ({assignmentCount})</CardTitle>
-            </Col>
-            <Col md="5"></Col>
-          </Row>
-        </CardHeader>
-
         <CardHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="form-inline">
@@ -385,6 +379,7 @@ function AssignmentTab() {
                   name="p_dateFrom"
                   className="form-select form-control"
                   ref={register}
+                  max={item}
                 />
               </div>
 
@@ -398,10 +393,12 @@ function AssignmentTab() {
                   name="p_dateTo"
                   className="form-select form-control"
                   ref={register}
+                  defaultValue={item}
+                  max={item}
                 />
               </div>
 
-              <div class="form-group mx-sm-1  mb-2">
+              {/* <div class="form-group mx-sm-1  mb-2">
                 <select
                   className="form-select form-control"
                   name="p_status"
@@ -446,11 +443,9 @@ function AssignmentTab() {
                   <Option value="Completed" label="Compilance">
                     <div className="demo-option-label-item">Awaiting Completion</div>
                   </Option>
-                  {/* <Option value="decline" label="decline">
-                    <div className="demo-option-label-item">Customer Declined; Payment</div>
-                  </Option> */}
+                 
                 </Select>
-              </div>
+              </div> */}
 
               <div class="form-group mx-sm-1  mb-2">
                 <label className="form-select form-control">Total Records : {records}</label>
@@ -474,60 +469,9 @@ function AssignmentTab() {
           />
         </CardBody>
       </Card>
-    </Layout>
+    </div>
   );
 }
 
-export default AssignmentTab;
+export default FinalReport;
 
-{
-  /*            
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.final_discussion}</p>
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.other_stage}</p> */
-}
-{
-  /* <div>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Client Discussion :
-                        </span>
-                        {p.client_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                        {p.draft_report}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Final Discussion :
-                        </span>
-                        {p.final_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Delivery of report :
-                        </span> 
-                        {p.delivery_report}
-                      </p>
-                    </div> */
-}
-
-/* <div className="mb-3">
-                      <select
-                        className="form-select form-control"
-                        name="p_purpose"
-                      >
-                        <option >status</option>
-                        <option >Client Discussion : {p.client_discussion}</option>
-                        <option >Draft report : {p.draft_report}</option>
-                        <option >Final Discussion : {p.final_discussion}</option>
-                        <option >Delivery of report : {p.delivery_report}</option>
-                      </select>
-                    </div> */
-//  {/* <AdminFilter
-//             setData={setAssignmentDisplay}
-//             getData={getAssignmentData}
-//             assignment="assignment"
-//           />

@@ -39,6 +39,10 @@ function AssignmentTab() {
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
   const [attendeeMode, SetAttendeeMode] = useState("video");
@@ -318,7 +322,7 @@ function AssignmentTab() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width:"60px"
+                width: "60px"
               }}
             >
               {row.accepted_amount == row.paid_amount &&
@@ -544,6 +548,7 @@ function AssignmentTab() {
                   name="p_dateFrom"
                   className="form-select form-control"
                   ref={register}
+                  max={item}
                 />
               </div>
 
@@ -557,6 +562,8 @@ function AssignmentTab() {
                   name="p_dateTo"
                   className="form-select form-control"
                   ref={register}
+                  defaultValue={item}
+                  max={item}
                 />
               </div>
 

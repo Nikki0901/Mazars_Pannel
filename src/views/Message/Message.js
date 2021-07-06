@@ -15,6 +15,8 @@ import {
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
+import CommonServices from "../../common/common";
+
 
 function Message(props) {
     console.log("props", props.location.obj)
@@ -63,7 +65,22 @@ function Message(props) {
                 return rowIndex + 1;
             },
             headerStyle: () => {
-                return { fontSize: "12px", width: "10px" };
+                return { fontSize: "12px", width: "20px" };
+            },
+        },
+        {
+            text: "Date",         
+            sort: true,
+            headerStyle: () => {
+                return { fontSize: "12px", width: "40px" };
+            },
+            formatter: function nameFormatter(cell, row) {
+                console.log(row);
+                return (
+                    <>
+                        {CommonServices.removeTime(row.setdate)}
+                    </>
+                );
             },
         },
         {
@@ -77,9 +94,8 @@ function Message(props) {
                 console.log(row);
                 return (
                     <>
-                        {/* <Link to={`/customer/my-assingment/${row.id}`}> */}
                         {row.assign_no}
-                        {/* </Link> */}
+
                     </>
                 );
             },
@@ -143,22 +159,6 @@ function Message(props) {
                         <Col md="9">
                             <CardTitle tag="h4">Message</CardTitle>
                         </Col>
-                        {/* <Col md="3">
-                            <div style={{ display: "flex", justifyContent: "space-around" }}
-                                class="btn btn-primary"
-                            // onClick={() => paymentHandler()}
-                            >
-                                <Link
-                                    to={{
-                                        pathname: `/customer/chatting`,
-                                        obj: props.location.obj
-                                    }}
-
-                                >
-                                    Add Message
-                                </Link>
-                            </div>
-                        </Col> */}
                     </Row>
                 </CardHeader>
                 <CardBody>
@@ -183,3 +183,20 @@ function Message(props) {
 }
 
 export default Message;
+
+{/* <Col md="3">
+                            <div style={{ display: "flex", justifyContent: "space-around" }}
+                                class="btn btn-primary"
+                            // onClick={() => paymentHandler()}
+                            >
+                                <Link
+                                    to={{
+                                        pathname: `/customer/chatting`,
+                                        obj: props.location.obj
+                                    }}
+
+                                >
+                                    Add Message
+                                </Link>
+                            </div>
+                        </Col> */}

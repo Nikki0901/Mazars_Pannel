@@ -16,7 +16,8 @@ import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
-
+import FeedbackIcon from '@material-ui/icons/Feedback';
+// import DeleteIcon from '@material-ui/icons/Delete';
 
 function QueriesTab() {
   const alert = useAlert();
@@ -148,26 +149,33 @@ function QueriesTab() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px", textAlign: "center" };
+        return { fontSize: "12px", textAlign: "center", width: "200px" };
       },
       formatter: function (cell, row) {
         return (
           <>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <div title="Update Query">
-                <Link to={`/customer/edit-query/${row.id}`}>
-                  {row.status_code < 5 ? (
-                    <i
-                      className="fa fa-edit"
-                      style={{
-                        fontSize: 16,
-                        cursor: "pointer",
-                        marginLeft: "8px",
-                      }}
-                    ></i>
-                  ) : null}
-                </Link>
-              </div>
+
+              {
+                row.status_code < 2 ?
+                  <div title="Update Query">
+                    <Link to={`/customer/edit-query/${row.id}`}>
+                      {row.status_code < 5 ? (
+                        <i
+                          className="fa fa-edit"
+                          style={{
+                            fontSize: 16,
+                            cursor: "pointer",
+                            marginLeft: "8px",
+                          }}
+                        ></i>
+                      ) : null}
+                    </Link>
+                  </div>
+                  :
+                  null
+              }
+
               <div title="Delete Query">
                 {row.status_code < 1 ? (
                   <i
@@ -182,26 +190,13 @@ function QueriesTab() {
                 ) : null}
               </div>
 
+
               <div title="Send Message">
-                {/* <Link to={{
-                  pathname: `/customer/chatting/${row.id}`,
-                  state: [{ id: 1, name: 'Ford', color: 'red' }]
-                }}>
-                  <i
-                    class="fa fa-comments-o"
-                    style={{
-                      fontSize: 16,
-                      cursor: "pointer",
-                      marginLeft: "8px",
-                      color: "blue"
-                    }}
-                  ></i></Link> */}
-                
                 <Link
                   to={{
                     pathname: `/customer/chatting/${row.id}`,
                     obj: {
-                      message_type: "Information",
+                      message_type: "4",
                       query_No: row.assign_no,
                       query_id: row.id,
                       routes: `/customer/queries`
@@ -218,8 +213,13 @@ function QueriesTab() {
                     }}
                   ></i>
                 </Link>
+              </div>
 
 
+              <div title="Send Feedback" style={{ cursor: "pointer" }}>
+                <Link to={`/customer/feedback/${row.assign_no}`}>
+                  <FeedbackIcon />
+                </Link>
               </div>
 
             </div>
@@ -272,10 +272,6 @@ function QueriesTab() {
       });
   };
 
-  const data = [
-    { id: 1, name: 'Ford', color: 'Red' },
-    { id: 2, name: 'Hyundai', color: 'Blue' }
-  ]
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

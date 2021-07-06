@@ -27,7 +27,7 @@ function DeclinedQueries({ CountPendingForPayment }) {
   }, []);
 
   const getPendingForPayment = () => {
-    axios.get(`${baseUrl}/admin/getProposals?status1=3`).then((res) => {
+    axios.get(`${baseUrl}/admin/declinedQueries`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPendingData(res.data.result);
@@ -42,30 +42,24 @@ function DeclinedQueries({ CountPendingForPayment }) {
 
   const columns = [
     {
-      dataField: "",
       text: "S.No",
-      formatter: (cellContent, row, rowIndex) => {
-        return rowIndex + 1;
-      },
-      style: {
-        fontSize: "11px",
-      },
+      dataField: "",
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px", width: "50px" };
+      },
+      formatter: (cellContent, row, rowIndex, index) => {
+        console.log("rowIndex : ", index);
+        return <div>{rowIndex + 1}</div>;
       },
     },
     {
-      dataField: "created",
       text: "Date",
+      dataField: "created",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.created);
         var oldDate = row.created;
         if (oldDate == null) {
           return null;
@@ -74,24 +68,19 @@ function DeclinedQueries({ CountPendingForPayment }) {
       },
     },
     {
-      dataField: "assign_no",
       text: "Query No",
+      dataField: "assign_no",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px" };
       },
       formatter: function nameFormatter(cell, row) {
-        console.log(row);
         return (
           <>
             <Link
-              // to={`/admin/queries/${row.q_id}`}
               to={{
-                pathname: `/admin/queries/${row.q_id}`,
-                index: 3,
+                pathname: `/admin/queries/${row.id}`,
+                index: 0,
                 routes: "queriestab",
               }}
             >
@@ -102,168 +91,59 @@ function DeclinedQueries({ CountPendingForPayment }) {
       },
     },
     {
-      dataField: "parent_id",
       text: "Category",
+      dataField: "parent_id",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px" };
       },
     },
     {
-      dataField: "cat_name",
       text: "Sub Category",
+      dataField: "cat_name",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px" };
       },
     },
     {
-      text: "Date of Proposal",
-      dataField: "DateofProposal",
+      text: "Customer Name",
+      dataField: "name",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.DateofProposal);
-        var oldDate = row.DateofProposal;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.toString().split("-").reverse().join("-");
-      },
-    },
-    {
-      text: "Date of acceptance of Proposal",
-      dataField: "cust_accept_date",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.cust_accept_date);
-        var oldDate = row.cust_accept_date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
+        return { fontSize: "12px" };
       },
     },
     {
       text: "Status",
-      dataField: "status",
       sort: true,
-      style: {
-        fontSize: "11px",
-      },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "12px" };
       },
-    },
-    {
-      dataField: "ProposedAmount",
-      text: "Proposed Amount",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
-      dataField: "accepted_amount",
-      text: "Accepted Amount ",
-      sort: true,
-      style: {
-        fontSize: "11px",
-        color: "#21a3ce",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", color: "#21a3ce" };
-      },
-    },
-    {
-      text: "Amount Paid",
-      dataField: "paid_amount",
-      sort: true,
-      style: {
-        fontSize: "11px",
-        color: "#064606",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", color: "#064606" };
-      },
-    },
-
-    {
-      text: "Amount Outstanding",
-      dataField: "",
-      sort: true,
-      style: {
-        fontSize: "11px",
-        color: "darkred",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", color: "darkred" };
-      },
-      formatter: function amountOutstading(cell, row) {
-        var a = row.accepted_amount;
-        var p = row.paid_amount;
-        return a - p;
-      },
-    },
-    {
-      text: "Date of Payment",
-      dataField: "cust_paid_date",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.cust_paid_date);
-        var oldDate = row.cust_paid_date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-      },
-    },
-    {
-      text: "Date of Completion",
-      dataField: "",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
-      dataField: "tl_name",
-      text: "TL name",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              {row.status} /
+              {
+                row.status == "Inprogress Query" ?
+                  <p style={{ color: "brown" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  row.status == "Declined Query" ?
+                    <p style={{ color: "red" }}>
+                      {row.statusdescription}
+                    </p> :
+                    row.status == "Completed Query" ?
+                      <p style={{ color: "green" }}>
+                        {row.statusdescription}
+                      </p> :
+                      null
+              }
+            </div>
+          </>
+        );
       },
     },
   ];
@@ -276,21 +156,22 @@ function DeclinedQueries({ CountPendingForPayment }) {
           <AdminFilter
             setData={setPendingData}
             getData={getPendingForPayment}
-            pendingPayment="pendingPayment"
+            declinedQueries="declinedQueries"
             setRecords={setRecords}
             records={records}
           />
 
         </CardHeader>
         <CardBody>
+
           <BootstrapTable
             bootstrap4
             keyField="id"
             data={pendingData}
             columns={columns}
-            classes="table-responsive"
+            rowIndex
+            wrapperClasses="table-responsive"
           />
-
         </CardBody>
       </Card>
     </>

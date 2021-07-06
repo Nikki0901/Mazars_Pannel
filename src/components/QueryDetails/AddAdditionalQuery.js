@@ -14,7 +14,7 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
 
     let formData = new FormData();
     formData.append("assign_no", assingNo);
-    formData.append("query", value.p_addqueri);
+    // formData.append("query", value.p_addqueri);
     formData.append("upload", value.p_upload[0]);
 
     axios({
@@ -50,7 +50,7 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
         <ModalHeader toggle={addHandler}>Add. Query</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label className="form-label">Additional Queries</label>
               <textarea
                 className="form-control"
@@ -59,7 +59,7 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
                 name="p_addqueri"
                 ref={register}
               ></textarea>
-            </div>
+            </div> */}
 
             <div className="mb-3">
               <label className="form-label">Upload Your Document</label>

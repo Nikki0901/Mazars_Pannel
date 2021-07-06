@@ -27,6 +27,7 @@ function QueriesTab(props) {
     CountDeclined();
   }, []);
 
+
   const CountAllQuery = (data) => {
     axios.get(`${baseUrl}/admin/getAllQueries`).then((res) => {
       console.log(res);
@@ -35,7 +36,6 @@ function QueriesTab(props) {
       }
     });
   };
-
 
   const CountInprogressAllocation = () => {
     axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
@@ -56,7 +56,7 @@ function QueriesTab(props) {
   };
 
   const CountDeclined = () => {
-    axios.get(`${baseUrl}/admin/getProposals?status1=3`).then((res) => {
+    axios.get(`${baseUrl}/admin/declinedQueries`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setDeclined(res.data.result.length);
@@ -105,10 +105,10 @@ function QueriesTab(props) {
               All Queries ({allQueriesCount})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Inprogress for Allocation ({inprogressAllocation})
+              Inprogress; Allocation ({inprogressAllocation})
             </Tab>
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Inprogress for Proposal ({pendingProposalCount})
+              Inprogress; Proposals ({pendingProposalCount})
             </Tab>
 
             <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>

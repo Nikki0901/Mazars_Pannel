@@ -18,6 +18,7 @@ import PaymentModal from "./PaymentModal";
 import * as Cookies from "js-cookie";
 import RejectedModal from "./RejectModal";
 import { useAlert } from "react-alert";
+import FeedbackIcon from '@material-ui/icons/Feedback';
 
 function AssignmentTab() {
   const history = useHistory();
@@ -287,7 +288,7 @@ function AssignmentTab() {
                   to={{
                     pathname: `/customer/chatting/${row.id}`,
                     obj: {
-                      message_type: "Assignment Discussion",
+                      message_type: "3",
                       query_No: row.assign_no,
                       query_id: row.id,
                       routes: `/customer/assignment`
@@ -303,6 +304,12 @@ function AssignmentTab() {
                       color: "blue"
                     }}
                   ></i>
+                </Link>
+              </div>
+
+              <div title="Send Feedback" style={{ cursor: "pointer" }}>
+                <Link to={`/customer/feedback/${row.assign_no}`}>
+                  <FeedbackIcon />
                 </Link>
               </div>
             </div>

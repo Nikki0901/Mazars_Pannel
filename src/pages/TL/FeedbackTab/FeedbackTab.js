@@ -11,7 +11,7 @@ import {
   Col,
   Table,
 } from "reactstrap";
-
+import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 
 function FeedbackTab() {
@@ -45,11 +45,34 @@ function FeedbackTab() {
       },
     },
     {
+      text: "Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px", width: "110px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            {CommonServices.removeTime(row.created)}
+          </>
+        );
+      },
+    },
+    // {
+    //   text: "Date",
+    //   dataField: "created",
+    //   sort: true,
+    //   headerStyle: () => {
+    //     return { fontSize: "12px", width: "110px" };
+    //   },
+    // },
+    {
       text: "Query No",
       dataField: "assign_no",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "100px" };
       },
     },
 
@@ -58,11 +81,11 @@ function FeedbackTab() {
       dataField: "name",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "150px" };
       },
     },
     {
-      text: "Details of feedback",
+      text: "Feedback",
       dataField: "feedback",
       sort: true,
       headerStyle: () => {
@@ -78,7 +101,7 @@ function FeedbackTab() {
           <CardHeader>
             <Row>
               <Col md="7">
-                <CardTitle tag="h4">Feedback Recieved</CardTitle>
+                <CardTitle tag="h4">Feedback</CardTitle>
               </Col>
               <Col md="5"></Col>
             </Row>

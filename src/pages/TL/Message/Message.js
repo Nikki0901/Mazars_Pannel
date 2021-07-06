@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import PaymentModal from "./PaymentModal";
+import CommonServices from "../../../common/common";
 
 function Message(props) {
     console.log("props", props.location.obj)
@@ -57,6 +58,21 @@ function Message(props) {
             },
             headerStyle: () => {
                 return { fontSize: "12px", width: "10px" };
+            },
+        },
+        {
+            text: "Date",
+            sort: true,
+            headerStyle: () => {
+                return { fontSize: "12px", width: "40px" };
+            },
+            formatter: function nameFormatter(cell, row) {
+                console.log(row);
+                return (
+                    <>
+                        {CommonServices.removeTime(row.setdate)}
+                    </>
+                );
             },
         },
         {
@@ -131,20 +147,11 @@ function Message(props) {
         <Layout TLDashboard="TLDashboard" TLuserId={userId}>
             <Card>
                 <CardHeader>
-                    {/* <Row>
+                    <Row>
                         <Col md="9">
                             <CardTitle tag="h4">Message</CardTitle>
                         </Col>
-                        <Col md="3">
-                            <div style={{ display: "flex", justifyContent: "space-around" }}
-
-                                class="btn btn-primary"
-                                onClick={() => paymentHandler()}>
-                                Add Message
-
-                            </div>
-                        </Col>
-                    </Row> */}
+                    </Row>
                 </CardHeader>
                 <CardBody>
                     <BootstrapTable

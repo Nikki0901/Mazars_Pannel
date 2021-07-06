@@ -67,35 +67,8 @@ function PendingForProposals({ CountPendingProposal }) {
   };
 
 
-  const [tax, setTax] = useState([]);
-  const [tax2, setTax2] = useState([]);
-
-  const [store, setStore] = useState("");
-  const [store2, setStore2] = useState("");
-  useEffect(() => {
-    getCategory();
-  }, []);
-
-  const getCategory = () => {
-    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTax(res.data.result);
-      }
-    });
-  };
-
-  useEffect(() => {
-    const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
-    };
-    getSubCategory();
-  }, [store]);
+ 
+ 
 
   const columns = [
     {
@@ -160,10 +133,37 @@ function PendingForProposals({ CountPendingProposal }) {
     },
     {
       text: "Status",
-      dataField: "status",
       sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+             
+                {row.status}/
+              {
+                row.status == "Inprogress Query" ?
+                  <p style={{ color: "brown" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  row.status == "Declined Query" ?
+                    <p style={{ color: "red" }}>
+                      {row.statusdescription}
+                    </p> :
+                    row.status == "Completed Query" ?
+                      <p style={{ color: "green" }}>
+                        {row.statusdescription}
+                      </p> :
+                      null
+              }
+            </div>
+          </>
+        );
+      },
     },
-
     {
       dataField: "tname",
       text: "TL name",
@@ -192,31 +192,7 @@ function PendingForProposals({ CountPendingProposal }) {
   ];
 
 
-  //reset date
-  const resetData = () => {
-    console.log("resetData ..");
-    reset();
-    // setSelectedData([]);
-    getPendingForProposals();
-  };
-
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/admin/pendingProposal?category=${store2}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          if (res.data.result) {
-            setNonPendingData(res.data.result);
-          }
-        }
-      });
-  };
-
+ 
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);
@@ -225,20 +201,6 @@ function PendingForProposals({ CountPendingProposal }) {
     }
     return oldDate.toString().split("-").reverse().join("-");
   }
-
-  const Reset = () => {
-    return (
-      <>
-        <button
-          type="submit"
-          class="btn btn-primary mx-sm-1 mb-2"
-          onClick={() => resetData()}
-        >
-          Reset
-        </button>
-      </>
-    );
-  };
 
   return (
     <>

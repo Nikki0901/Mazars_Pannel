@@ -23,13 +23,17 @@ const Schema = yup.object().shape({
 
 function SignIn(props) {
   const alert = useAlert();
-  const { handleSubmit, register,  errors } = useForm({
+  const { handleSubmit, register, errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
   const [load, setLoad] = useState(false);
   const [email, setEmail] = useState(null);
 
+  const [isPasswordShow, setPasswordShow] = useState(false);
+  const togglePasssword = () => {
+    setPasswordShow(!isPasswordShow)
+  };
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -57,7 +61,7 @@ function SignIn(props) {
           setLoad(false);
           Swal.fire(
             "Oops...",
-            "Errorr : Incorrect Email and password",
+            "Errorr : Incorrect Email OR Password",
             "error"
           );
           // Swal.fire(`oops : ${response.data.result}`)
@@ -112,13 +116,17 @@ function SignIn(props) {
                   <div className="mb-3">
                     <label className="form-label">Password</label>
                     <input
-                      type="password"
+                      type={isPasswordShow ? "text" : "password"}
                       className={classNames("form-control", {
                         "is-invalid": errors.p_password,
                       })}
                       name="p_password"
                       placeholder="Enter Password"
                       ref={register}
+                    />
+                    <i
+                      className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                      onClick={togglePasssword}
                     />
                     {errors.p_password && (
                       <div className="invalid-feedback">

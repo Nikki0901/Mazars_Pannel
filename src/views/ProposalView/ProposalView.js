@@ -135,7 +135,7 @@ function ProposalView(props) {
               <tr>
                 <th scope="row">Proposal Status</th>
                 <td>
-                  {queryStatus == "4" && "pending"}
+                  {queryStatus == "4" && "Inprogress"}
                   {queryStatus == "6" && "Declined"}
                   {(queryStatus == "5" || queryStatus > 6) && "Accepted"}
                 </td>

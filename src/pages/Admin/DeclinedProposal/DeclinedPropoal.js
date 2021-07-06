@@ -277,8 +277,6 @@ function DeclinedProposal({ declinedProposal }) {
             declinedProposal="declinedProposal"
             setRecords={setRecords}
             records={records}
-            setRecords={setRecords}
-            records={records}
           />
   
         </CardHeader>

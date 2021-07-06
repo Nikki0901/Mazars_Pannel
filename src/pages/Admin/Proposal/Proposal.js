@@ -34,7 +34,7 @@ function Proposal(props) {
 
     const getAcceptedProposal = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals?&status=5,7,8`)
+        .get(`${baseUrl}/admin/getProposals?status1=2`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
@@ -62,7 +62,7 @@ function Proposal(props) {
 
     const getPendingForAcceptence = () => {
       axios
-        .get(`${baseUrl}/admin/getProposals?&status=4`)
+        .get(`${baseUrl}/admin/getProposals?status1=1`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
@@ -117,18 +117,18 @@ function Proposal(props) {
             }}
           >
             <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
-              All Proposal ({allProposalCount})
+              All Proposals ({allProposalCount})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Inprogress ({pendingProposalCount})
+              Inprogress; Proposals ({pendingProposalCount})
             </Tab>
 
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Accepted ({acceptedProposalCount})
+              Accepted; Proposals ({acceptedProposalCount})
             </Tab>
 
             <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
-              Declined ({declinedProposalCount})
+              Customer Declined; Proposals ({declinedProposalCount})
             </Tab>
           </TabList>
 

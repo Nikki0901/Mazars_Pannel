@@ -19,7 +19,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col" style={{width:"400px"}}>Titles</th>
+              <th scope="col" style={{ width: "400px" }}>Titles</th>
               <th scope="col">Data</th>
             </tr>
           </thead>
@@ -64,22 +64,33 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
               <th scope="row">Uploaded Documents</th>
               <td>
                 {queryDocs.map((p, i) => (
-                  <p>
+                  <p style={{ display: "flex" }}>
                     <a
                       href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
                       target="_blank"
                     >
                       <i class="fa fa-photo"></i>
+
                     </a>
+                    <p style={{ marginLeft: "15px" }}>{p.name}</p>
                   </p>
                 ))}
               </td>
             </tr>
             <tr>
               <th scope="row">specific questions</th>
-              <td colspan="1">
+              <td>
+                <tr>
+                  <th scope="col">S.No</th>
+                  <th scope="col">Questions</th>
+                </tr>
                 {diaplaySpecific.map((p, i) => (
-                  <p>{p.text}</p>
+
+                  <tr>
+                    <td>{i + 1}</td>
+                    <td>{p.text}</td>
+                  </tr>
+
                 ))}
               </td>
             </tr>
@@ -90,7 +101,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                   <p key={i}>{p.value}</p>
                 ))}
               </td>
-             
+
             </tr>
             <tr>
               <th scope="row">Format in which Opinion is required</th>

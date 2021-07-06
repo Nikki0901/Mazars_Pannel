@@ -27,7 +27,7 @@ function PendingForAcceptence({ pendingProposal }) {
   }, []);
 
   const getPendingAcceptedProposal = () => {
-    axios.get(`${baseUrl}/admin/getProposals?&status=4`).then((res) => {
+    axios.get(`${baseUrl}/admin/getProposals?status1=1`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
@@ -163,13 +163,29 @@ function PendingForAcceptence({ pendingProposal }) {
     },
     {
       text: "Status",
-      dataField: "status",
       sort: true,
       style: {
         fontSize: "11px",
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              {row.status}/
+              {
+                row.status == "Inprogress" ?
+                  <p style={{ color: "brown" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  null
+              }
+            </div>
+          </>
+        );
       },
     },
     {

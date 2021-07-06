@@ -26,6 +26,10 @@ function Login(props) {
     resolver: yupResolver(Schema),
   });
   const [email, setEmail] = useState(null);
+  const [isPasswordShow, setPasswordShow] = useState(false);
+  const togglePasssword = () => {
+    setPasswordShow(!isPasswordShow)
+  };
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -51,7 +55,11 @@ function Login(props) {
           props.history.push("/taxprofessional/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Swal.fire(
+            "Oops...",
+            "Errorr : Incorrect Email OR Password",
+            "error"
+          );
         }
       })
       .catch((error) => {
@@ -97,13 +105,17 @@ function Login(props) {
                 <div className="mb-3">
                   <label className="form-label">Password</label>
                   <input
-                    type="password"
+                    type={isPasswordShow ? "text" : "password"}
                     className={classNames("form-control", {
                       "is-invalid": errors.password,
                     })}
                     name="password"
                     placeholder="Enter Password"
                     ref={register}
+                  />
+                  <i
+                    className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                    onClick={togglePasssword}
                   />
                   {errors.password && (
                     <div className="invalid-feedback">

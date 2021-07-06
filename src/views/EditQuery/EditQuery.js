@@ -161,8 +161,8 @@ function EditQuery(props) {
             <Col md="4" style={{ display: "flex", justifyContent: "center" }}>
               <p style={{ fontSize: "20px" }}>Update Query</p>
             </Col>
-            <Col md="4" style={{ display: "flex",justifyContent:"flex-end" }}>
-             <DeleteQuery id={id}/>
+            <Col md="4" style={{ display: "flex", justifyContent: "flex-end" }}>
+              <DeleteQuery id={id} />
             </Col>
           </Row>
         </CardHeader>
@@ -305,7 +305,7 @@ function EditQuery(props) {
                           name="p_timelines"
                           ref={register}
                           value="Urgent, (4-5 Working Days)"
-                          // disabled
+                        // disabled
                         />
                         <label>Urgent, (4-5 Working Days)</label>
                       </div>
@@ -316,7 +316,7 @@ function EditQuery(props) {
                           name="p_timelines"
                           ref={register}
                           value="Regular (10-12 Working Days)"
-                          // disabled
+                        // disabled
                         />
                         <label>Regular (10-12 Working Days)</label>
                       </div>
@@ -334,6 +334,7 @@ function EditQuery(props) {
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">View</th>
+                              <th scope="col">Name</th>
                             </tr>
                             {queryDocs.map((p, i) => (
                               <tr>
@@ -348,7 +349,9 @@ function EditQuery(props) {
                                       style={{ width: "50", height: "20" }}
                                     ></i>
                                   </a>
+
                                 </td>
+                                <td>{p.name}</td>
                               </tr>
                             ))}
                           </table>
@@ -464,34 +467,6 @@ const assessment_year = [
   {
     value: "2020-21",
     label: "2020-21",
-  },
-  {
-    value: "2021-22",
-    label: "2021-22",
-  },
-  {
-    value: "2022-23",
-    label: "2022-23",
-  },
-  {
-    value: "2023-24",
-    label: "2023-24",
-  },
-  {
-    value: "2024-25",
-    label: "2024-25",
-  },
-  {
-    value: "2025-26",
-    label: "2025-26",
-  },
-  {
-    value: "2026-27",
-    label: "2026-27",
-  },
-  {
-    value: "2027-28",
-    label: "2027-28",
   },
 ];
 

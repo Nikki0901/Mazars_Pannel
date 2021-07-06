@@ -12,12 +12,19 @@ function NavWrapper(props) {
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
   const tlkey = window.localStorage.getItem("tlkey");
+  const adminkey = window.localStorage.getItem("adminkey");
+
 
   const [notification, setNotification] = useState([]);
   const [countNotification, setCountNotification] = useState("");
 
+  const [notificationAdmin, setNotificationAdmin] = useState([]);
+  const [countNotificationAdmin, setCountNotificationAdmin] = useState("");
+
   const [notificationTl, setNotificationTl] = useState([]);
   const [countNotificationTl, setCountNotificationTl] = useState("");
+
+
 
   useEffect(() => {
     getNotificationCust();
@@ -46,11 +53,29 @@ function NavWrapper(props) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          setNotificationTl(res.data.result);
+          setNotificationAdmin(res.data.result);
           setCountNotificationTl(res.data.result.length);
         }
       });
   };
+
+
+  useEffect(() => {
+    getNotificationAdmin();
+  }, [adminkey]);
+
+  const getNotificationAdmin = () => {
+    axios
+      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(adminkey)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setNotificationTl(res.data.result);
+          setCountNotificationAdmin(res.data.result.length);
+        }
+      });
+  };
+
 
 
   // readnotification
@@ -69,7 +94,7 @@ function NavWrapper(props) {
       });
   };
 
-  
+
 
   return (
     <>
@@ -171,7 +196,7 @@ function NavWrapper(props) {
                         class="nav-link nav-link-label"
                         href="#"
                         data-toggle="dropdown"
-                      >       
+                      >
                         <a href="#" class="notification">
                           <span>Inbox</span>
                           <span class="badge">{countNotificationTl}</span>
@@ -207,6 +232,51 @@ function NavWrapper(props) {
                   ) : null}
                 </li>
               )}
+
+              {name == "Admin" && (
+                <li class="dropdown dropdown-notification nav-item">
+                  {countNotificationAdmin ? (
+                    <div>
+                      <a
+                        class="nav-link nav-link-label"
+                        href="#"
+                        data-toggle="dropdown"
+                      >
+
+                        <a href="#" class="notification">
+                          <span>Inbox</span>
+                          <span class="badge">{countNotificationAdmin}</span>
+                        </a>
+                      </a>
+
+                      <div
+                        class="dropdown-menu dropdown-menu-right"
+                        style={{ height: "300px", overflowY: "scroll" }}
+                      >
+                        <div class="arrow_box_right">
+                          {notificationTl.map((p, i) => (
+                            <div
+                              class="dropdown-item"
+                              style={{ padding: "0", fontSize: "12px" }}
+                            >
+                              <Link to={`/admin/view-notification/${p.id}`}>
+                                <p
+                                  class="dropdown-item"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => readNotification(p.id)}
+                                >
+                                  {p.message}
+                                </p>
+                              </Link>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </li>
+              )}
+
 
               <li class="dropdown dropdown-user nav-item">
                 <a

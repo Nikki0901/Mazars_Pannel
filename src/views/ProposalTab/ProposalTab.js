@@ -17,6 +17,7 @@ import ChatComponent from "./ChatComponent";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import FeedbackIcon from '@material-ui/icons/Feedback';
 
 
 function ProposalTab() {
@@ -328,7 +329,7 @@ function ProposalTab() {
               <div>
                 {row.negotiated_amount === "0" &&
                   row.accepted_amount === "0" ? (
-                  <div style={{ display: "flex" ,width:"80px",justifyContent:"space-evenly" }}>
+                  <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
                     <div style={{ cursor: "pointer" }} title="Proposal View">
                       <Link to={`/customer/proposal_view/${row.id}`}>
                         <i
@@ -362,7 +363,7 @@ function ProposalTab() {
                         to={{
                           pathname: `/customer/chatting/${row.id}`,
                           obj: {
-                            message_type: "Proposal Discussion",
+                            message_type: "2",
                             query_No: row.assign_no,
                             query_id: row.id,
                             routes: `/customer/proposal`
@@ -380,6 +381,13 @@ function ProposalTab() {
                         ></i>
                       </Link>
                     </div>
+
+                    <div title="Send Feedback" style={{ cursor: "pointer" }}>
+                      <Link to={`/customer/feedback/${row.assign_no}`}>
+                        <FeedbackIcon />
+                      </Link>
+                    </div>
+
                   </div>
                 ) : null}
               </div>

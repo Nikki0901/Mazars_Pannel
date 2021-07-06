@@ -38,7 +38,6 @@ function AllQueriesData() {
   };
 
 
-
   const columns = [
     {
       text: "S.No",
@@ -46,9 +45,6 @@ function AllQueriesData() {
       headerStyle: () => {
         return { fontSize: "12px", width: "50px" };
       },
-      // dataFormat: function (cell, row, enumObject, index) {
-      //   return <div>{index + 1}</div>;
-      // },
       formatter: (cellContent, row, rowIndex, index) => {
         console.log("rowIndex : ", index);
         return <div>{rowIndex + 1}</div>;
@@ -126,25 +122,59 @@ function AllQueriesData() {
         return (
           <>
             <div>
-              <p>
-                {row.status}
-              </p>
+
+              {row.status} /
               {
-                row.status == "Inprogress Queries" ?
+                row.status == "Inprogress Query" ?
                   <p style={{ color: "brown" }}>
                     {row.statusdescription}
                   </p>
                   :
-                  row.status == "Declined Queries" ?
+                  row.status == "Declined Query" ?
                     <p style={{ color: "red" }}>
                       {row.statusdescription}
                     </p> :
-                    row.status == "Completed Queries" ?
+                    row.status == "Completed Query" ?
                       <p style={{ color: "green" }}>
                         {row.statusdescription}
                       </p> :
                       null
               }
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px",width: "65px"  };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div title="Send Message">
+              <Link
+                to={{
+                  pathname: `/admin/chatting/${row.id}`,
+                  obj: {
+                    message_type: "4",
+                    query_No: row.assign_no,
+                    query_id: row.id,
+                    routes: `/admin/queriestab`
+                  }
+                }}
+              >
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    color: "blue"
+                  }}
+                ></i>
+              </Link>
             </div>
           </>
         );

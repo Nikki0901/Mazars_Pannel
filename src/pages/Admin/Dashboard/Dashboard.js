@@ -173,11 +173,11 @@ function Dashboard() {
                 <td>{inprogress_allocation}</td>
               </tr>
               <tr>
-                <td>Inprogress; Proposal</td>
+                <td>Inprogress; Proposals</td>
                 <td>{inprogress_proposal}</td>
               </tr>
               <tr>
-                <td>Inprogress; Assignment</td>
+                <td>Inprogress; Assignments</td>
                 <td>{inprogress_assignment}</td>
               </tr>
             </tbody>
@@ -192,7 +192,7 @@ function Dashboard() {
             </thead>
             <tbody>
               <tr>
-                <td>Completed; Assignment</td>
+                <td>Completed; Assignments</td>
                 <td>{complete_query}</td>
               </tr>
             </tbody>
@@ -215,7 +215,7 @@ function Dashboard() {
                 <td>{customer_declined_Query}</td>
               </tr>
               <tr>
-                <td>Customer Declined; Proposal</td>
+                <td>Customer Declined; Proposals</td>
                 <td>{customer_declined_proposal}</td>
               </tr>
               <tr>
@@ -231,19 +231,19 @@ function Dashboard() {
 
       <div class="card">
         <div class="card-header">
-          Proposals :  {allproposal}
+        All Proposals :  {allproposal}
         </div>
         <div class="card-body">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "400px" }}>Inprogress</th>
+                <th scope="col" style={{ width: "400px" }}>Inprogress Proposals</th>
                 <th scope="col">{InProgress}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Inprogress; Prepartion</td>
+                <td>Inprogress; Preparation</td>
                 <td>{inprogress_preparation}</td>
               </tr>
               <tr>
@@ -256,7 +256,7 @@ function Dashboard() {
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "400px" }}>Accepted; Proposal </th>
+                <th scope="col" style={{ width: "400px" }}>Accepted; Proposals </th>
                 <th scope="col">{accepted_proposals}</th>
               </tr>
             </thead>
@@ -265,7 +265,7 @@ function Dashboard() {
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "400px" }}>Customer Declined; Proposal</th>
+                <th scope="col" style={{ width: "400px" }}>Customer Declined; Proposals</th>
                 <th scope="col">{declined}</th>
               </tr>
             </thead>
@@ -279,13 +279,13 @@ function Dashboard() {
 
       <div class="card">
         <div class="card-header">
-          Assignments :  {inprogress + complete + +(customer_declined_payment)}
+        All Assignments :  {inprogress + complete + +(customer_declined_payment)}
         </div>
         <div class="card-body">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "400px" }}>Inprogress</th>
+                <th scope="col" style={{ width: "400px" }}>Inprogress Assignments</th>
                 <th scope="col">{inprogress}</th>
               </tr>
             </thead>
@@ -295,7 +295,7 @@ function Dashboard() {
                 <td>{client_discussion}</td>
               </tr>
               <tr>
-                <td>Draft Report</td>
+                <td>Draft Reports</td>
                 <td>{draft_report}</td>
               </tr>
               <tr>
@@ -303,7 +303,7 @@ function Dashboard() {
                 <td>{final_discussion}</td>
               </tr>
               <tr>
-                <td>Delivery Final of Report</td>
+                <td>Delivery of Final Reports</td>
                 <td>{final_report}</td>
               </tr>
               <tr>
@@ -316,7 +316,7 @@ function Dashboard() {
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "400px" }}>Completed</th>
+                <th scope="col" style={{ width: "400px" }}>Completed; Assignments</th>
                 <th scope="col">{complete}</th>
               </tr>
             </thead>
@@ -339,7 +339,7 @@ function Dashboard() {
 
       <div class="card">
         <div class="card-header">
-          Payments :  {unpaid + paid}
+        All Payments :  {unpaid + paid}
         </div>
         <div class="card-body">
           <table class="table table-bordered">

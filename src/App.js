@@ -20,7 +20,6 @@ import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
 import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-import Feedback from './views/Feedback/Feedback'
 import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
@@ -38,6 +37,8 @@ import ViewNotification from './views/ViewNotification/ViewNotification'
 import Chatting from './views/Chatting/Chatting'
 import Message from './views/Message/Message'
 import ProposalView from './views/ProposalView/ProposalView'
+import Feedback from './views/Feedback/Feedback'
+import FeedbackData from './views/FeedbackData/FeedbackData'
 
 
 
@@ -55,7 +56,7 @@ import AdminQueryAssingment from './pages/Admin/QueryAssingment/QueryAssingment'
 import AdminEditTL from './pages/Admin/EditTL/EditTL'
 import AdminEditTP from './pages/Admin/EditTP/EditTP'
 import AdminQueriesTab from './pages/Admin/QueriesTab/QueriesTab'
-import AdminAssignmentTab from './pages/Admin/AssignmentTab/AssignmentTab'
+import AdminAssignmentTab from './pages/Admin/AssignmentTab/index'
 import AdminPaymentStatusTab from './pages/Admin/PaymentStatusTab/PaymentStatusTab'
 import AdminTeamLeaderTab from './pages/Admin/TeamLeaderTab/TeamLeaderTab'
 import AdminTaxProfessionalsTab from './pages/Admin/TaxProfessionalsTab/TaxProfessionalsTab'
@@ -64,6 +65,13 @@ import AdminPendingRecevived from './pages/Admin/PendingReceived/PendingRecevive
 import AdminForgetPassword from './pages/Admin/ForgetPassword/ForgetPassword'
 import AdminNewPassword from './pages/Admin/NewPassword/NewPassword'
 import AdminQueryRejection from './pages/Admin/QueryRejection/QueryRejection'
+import AdminSchedule from './pages/Admin/Schedule/Schedule'
+import AdminMeetingComponent from './pages/Admin/MeetingComponent/MeetingComponent'
+import AdminChatting from './pages/Admin/Chatting/Chatting'
+import AdminMessage from './pages/Admin/Message/Message'
+import AdminViewNotification from './pages/Admin/ViewNotification/ViewNotification'
+
+
 
 
 
@@ -88,14 +96,15 @@ import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
 import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
 import TlAssignmentForm from './pages/TL/AssignmentForm/AssignmentForm'
-import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
 import TlViewReport from './pages/TL/ViewReport/ViewReport'
-import TlSchedule from './pages/TL/Schedule/Schedule'
 import TlForgetPassword from './pages/TL/ForgetPassword/ForgetPassword'
 import TlNewPassword from './pages/TL/NewPassword/NewPassword'
 import TlViewNotification from './pages/TL/ViewNotification/ViewNotification'
 import TlChatting from './pages/TL/Chatting/Chatting'
 import TlMessage from './pages/TL/Message/Message'
+import TlSchedule from './pages/TL/Schedule/Schedule'
+import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
+
 
 
 
@@ -117,8 +126,6 @@ import TpChangePassword from './pages/TP/ChangePassword/ChangePassword'
 import TpDashboard from './pages/TP/Dashboard/Dashboard'
 import TpForgetPassword from './pages/TP/ForgetPassword/ForgetPassword'
 import TpNewPassword from './pages/TP/NewPassword/NewPassword'
-
-
 
 
 
@@ -152,7 +159,6 @@ function App() {
             <Route exact path="/customer/verify-otp" component={VerifyOtp} />
             <Route exact path="/customer/otp" component={VerifyOtpLogin} />
             <Route exact path="/customer/questionnaire-page" component={QuestionnairePage} />
-            <Route exact path="/customer/feedback" component={Feedback} />
             <Route exact path="/customer/dashboard" component={Dashboard} />
             <Route exact path="/customer/my-assingment/:id" component={MyAssingment} />
             <Route exact path="/customer/addfresh" component={AddFreshAssingment} />
@@ -173,6 +179,8 @@ function App() {
             <Route exact path="/customer/proposal_view/:id" component={ProposalView} />
             <Route exact path="/customer/message" component={Message} />
             <Route exact path="/customer/chatting/:id" component={Chatting} />
+            <Route exact path="/customer/feedback/:id" component={Feedback} />
+            <Route exact path="/customer/feedback-data" component={FeedbackData} />
 
 
 
@@ -197,6 +205,15 @@ function App() {
             <Route exact path="/admin/forget-password" component={AdminForgetPassword} />
             <Route exact path="/admin/new-password" component={AdminNewPassword} />
             <Route exact path="/admin/query_rejection/:id" component={AdminQueryRejection} />
+            <Route exact path="/admin/schedule" component={AdminSchedule} />
+            <Route exact path="/admin/meeting" component={AdminMeetingComponent} />
+            <Route exact path="/admin/chatting/:id" component={AdminChatting} />
+            <Route exact path="/admin/message" component={AdminMessage} />
+            <Route exact path="/admin/view-notification/:id" component={AdminViewNotification} />
+
+
+
+
 
 
 
@@ -227,6 +244,9 @@ function App() {
             <Route exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
             <Route exact path="/teamleader/chatting/:id" component={TlChatting} />
             <Route exact path="/teamleader/message" component={TlMessage} />
+
+
+
 
 
 

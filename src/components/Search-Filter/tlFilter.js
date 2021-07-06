@@ -26,6 +26,10 @@ function TeamFilter(props) {
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
   useEffect(() => {
     const getSubCategory = () => {
       axios
@@ -242,6 +246,7 @@ function TeamFilter(props) {
                     name="p_dateFrom"
                     className="form-select form-control"
                     ref={register}
+                    max={item}
                   />
                 </div>
 
@@ -255,6 +260,8 @@ function TeamFilter(props) {
                     name="p_dateTo"
                     className="form-select form-control"
                     ref={register}
+                    defaultValue={item}
+                    max={item}
                   />
                 </div>
 
@@ -282,7 +289,7 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">UnPaid</option>
+                      <option value="1">Unpaid</option>
                       <option value="2">Paid</option>
                     </select>
                   )}

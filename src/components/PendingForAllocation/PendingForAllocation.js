@@ -25,7 +25,6 @@ import History from "./History";
 import Swal from "sweetalert2";
 
 function PendingAllocation({ CountPendingForAllocation }) {
-  const { Option, OptGroup } = Select;
 
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
@@ -67,35 +66,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
     });
   };
 
-  const [tax, setTax] = useState([]);
-  const [tax2, setTax2] = useState([]);
 
-  const [store, setStore] = useState("");
-  const [store2, setStore2] = useState(null);
-  useEffect(() => {
-    getCategory();
-  }, []);
-
-  const getCategory = () => {
-    axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTax(res.data.result);
-      }
-    });
-  };
-
-  useEffect(() => {
-    const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
-    };
-    getSubCategory();
-  }, [store]);
 
   const columns = [
     {
@@ -179,6 +150,24 @@ function PendingAllocation({ CountPendingForAllocation }) {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+
+              {row.status} /
+              {
+                row.status == "Inprogress Query" ?
+                  <p style={{ color: "brown" }}>
+                    {row.statusdescription}
+                  </p>
+                  :
+                  null
+              }
+            </div>
+          </>
+        );
+      },
     },
     {
       text: "Query Allocation",
@@ -191,7 +180,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
           <>
             {row.is_assigned === "1" ? (
               <p style={{ color: "green", fontSize: "10px" }}>
-                Assign to {row.tname} on
+                Allocated to {row.tname} on
                 <p>{row.allocation_time}</p>
               </p>
             ) : (
@@ -212,7 +201,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
                       className="fa fa-trash"
                     ></i>
                   </Link>
-
                 </div>
               </div>
 

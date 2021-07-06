@@ -19,6 +19,7 @@ function MyAssingment() {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
+  const [feedback, setFeedback] = useState([]);
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -27,7 +28,7 @@ function MyAssingment() {
     cust_accept_date: "",
     proposal_date: "",
     description: "",
-    
+
     amount_type: "",
     amount_fixed: "",
     amount_hourly: "",
@@ -62,6 +63,8 @@ function MyAssingment() {
           setDisplaySpecific(res.data.additional_queries);
           setPaymentDetails(res.data.payment_detail);
           setAssingmentNo(res.data.result[0].assign_no);
+          setFeedback(res.data.feedback_detail);
+
 
           var purposeItem = res.data.result[0].purpose_opinion;
           var assementItem = res.data.result[0].assessment_year;
@@ -146,6 +149,7 @@ function MyAssingment() {
         </div>
         <div class="col-xl-12 col-lg-12 col-md-12">
           <div class="card">
+
             <div
               class="card-header"
               id="headingOne"
@@ -162,6 +166,7 @@ function MyAssingment() {
                 </div>
               </h2>
             </div>
+
             {submitData.map((p, index) => (
               <QueryDetails
                 p={p}
@@ -178,6 +183,7 @@ function MyAssingment() {
                 purpose={purpose}
                 year={year}
                 paymentDetails={paymentDetails}
+                feedback={feedback}
               />
             ))}
           </div>

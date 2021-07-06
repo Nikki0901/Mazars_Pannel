@@ -84,7 +84,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 <NavLink to={"/customer/schedule"}>
                   <i class="fa fa-rss-square"></i>
                   <span class="menu-title" data-i18n="">
-                    schedule
+                    Schedule
                   </span>
                 </NavLink>
               </li>
@@ -99,13 +99,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               </li>
 
               <li class="nav-item">
-                <NavLink to={"/customer/feedback"}>
+                <NavLink to={"/customer/feedback-data"}>
                   <i class="fa fa-rss-square"></i>
                   <span class="menu-title" data-i18n="">
                     Feedback
                   </span>
                 </NavLink>
               </li>
+
             </ul>
           )}
 
@@ -156,6 +157,24 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   <i class="fa fa-file"></i>
                   <span class="menu-title" data-i18n="">
                     Assignments
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/admin/schedule"}>
+                  <i class="fa fa-rss-square"></i>
+                  <span class="menu-title" data-i18n="">
+                    Schedule
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/admin/message"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Message
                   </span>
                 </NavLink>
               </li>

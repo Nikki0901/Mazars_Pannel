@@ -6,7 +6,15 @@ import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
-
+import { useHistory, useParams } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Row,
+  Col,
+} from "reactstrap";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // const Schema = yup.object().shape({
 //   p_feedback: yup.string().required("required feedback"),
@@ -16,40 +24,12 @@ import { useAlert } from "react-alert";
 
 function Feedback() {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm(); 
+  const { handleSubmit, register, errors, reset } = useForm();
+  const history = useHistory();
+  const { id } = useParams();
 
-
-  const [assignment, setAssingment] = useState([]);
-  const [teamLeader, setTeamLeader] = useState([]);
 
   const userId = window.localStorage.getItem("userid");
-
-  useEffect(() => {
-    const getAssingment = () => {
-      axios.get(`${baseUrl}/customers/getAssignedAssignments?user=${JSON.parse(userId)}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setAssingment(res.data.result);
-        }
-      });
-    };
-
-    getAssingment();
-  }, []);
-
-
-  useEffect(() => {
-    getTeamLeader();
-  }, []);
-
-  const getTeamLeader = () => {
-    axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setTeamLeader(res.data.result);
-      }
-    });
-  };
 
 
 
@@ -57,11 +37,10 @@ function Feedback() {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("assign_no", value.p_assignment);
+    formData.append("assign_no", id);
     formData.append("feedback", value.p_feedback);
     formData.append("user_id", JSON.parse(userId));
-    formData.append("tl_id", value.p_teamleader);
-
+    // formData.append("tl_id", value.p_teamleader);
 
     axios({
       method: "POST",
@@ -71,9 +50,9 @@ function Feedback() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          reset();   
-          alert.success(" feedback successfully added!");      
-          } 
+          reset();
+          alert.success(" feedback successfully send!");
+        }
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -82,25 +61,70 @@ function Feedback() {
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <div class="text-center">
-            <h3>Feedback!!!</h3>
-          </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-        <div class="col-lg-8 col-xl-8 col-md-12">
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Assignment No.</label>
-                    <select
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col md="4">
+              <button
+                class="btn btn-success ml-3"
+                onClick={() => history.goBack()}
+              >
+                <ArrowBackIcon />
+                Go Back
+              </button>
+            </Col>
+            <Col md="8">
+              <h4>Feedback</h4>
+            </Col>
+          </Row>
+        </CardHeader>
+
+        <CardBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div class="row" style={{ display: "flex", justifyContent: "center" }}>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Query No.</label>
+                  <input
+                    type="text"
+                    name="p_query"
+                    className="form-control"
+                    ref={register}
+                    value={id}
+                    disabled
+                  />
+                </div>
+
+
+                <div class="form-group">
+                  <label>Feedback</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="Feedback text here"
+                    rows="5"
+                    ref={register}
+                    name="p_feedback"
+                  ></textarea>
+
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  submit
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </CardBody>
+      </Card>
+
+    </Layout>
+  );
+}
+
+export default Feedback;
+
+
+{/* <select
                       class="form-control"
                       name="p_assignment"
                       ref={register}
@@ -112,55 +136,16 @@ function Feedback() {
                           {p.assign_no}
                         </option>
                       ))}
-                    </select>
-                   
-                  </div>
-                </div>
+                    </select> */}
+ // useEffect(() => {
+  //   const getAssingment = () => {
+  //     axios.get(`${baseUrl}/customers/getAssignedAssignments?user=${JSON.parse(userId)}`).then((res) => {
+  //       console.log(res);
+  //       if (res.data.code === 1) {
+  //         setAssingment(res.data.result);
+  //       }
+  //     });
+  //   };
 
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Select Team Leader</label>
-                    <select
-                      class="form-control"
-                      name="p_teamleader"
-                      ref={register}
-                    >
-                      <option value="">--select--</option>
-
-                      {teamLeader.map((p, i) => (
-                        <option key={i} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                   
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Feedback</label>
-                    <textarea
-                      class="form-control"
-                      placeholder="Feedback text here"
-                      rows="5"
-                      ref={register}
-                      name="p_feedback"
-                    ></textarea>
-                   
-                  </div>
-                </div>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-      </div>
-    </Layout>
-  );
-}
-
-export default Feedback;
+  //   getAssingment();
+  // }, []);

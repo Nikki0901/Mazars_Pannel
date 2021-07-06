@@ -17,9 +17,9 @@ function AdditionalQuery({ displayQuery }) {
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col" style={{ width: "33.3%" }}>
+              {/* <th scope="col" style={{ width: "33.3%" }}>
                 Additional Queries
-              </th>
+              </th> */}
               <th scope="col">Date Submission</th>
               <th scope="col">Documents</th>
             </tr>
@@ -27,7 +27,7 @@ function AdditionalQuery({ displayQuery }) {
           {displayQuery.map((p, i) => (
             <tbody>
               <tr key={i}>
-                <td>{p.additional_queries}</td>
+                {/* <td>{p.additional_queries}</td> */}
                 <td>{CommonServices.changeFormateDate(p.created)}</td>
                 <td>
                   {p.upload_doc == "" ? (

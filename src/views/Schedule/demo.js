@@ -104,7 +104,7 @@ function Demo() {
   const resources = [
     {
       fieldName: "question_id",
-      title: "Assignment No",
+      title: "Query No",
       instances: assignmentdata,
     },
   ];

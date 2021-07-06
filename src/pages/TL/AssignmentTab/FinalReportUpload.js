@@ -15,7 +15,15 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("final_report", value.p_final[0]);
+
+    var uploadImg = value.p_final;
+    if (uploadImg) {
+      for (var i = 0; i < uploadImg.length; i++) {
+        let a = value.p_final[0];
+        formData.append("final_report[]", a);
+      }
+    }
+   
     formData.append("id", id.id);
     formData.append("q_id", id.q_id);
 
@@ -53,6 +61,7 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
                 name="p_final"
                 ref={register}
                 className="form-control-file manage_file"
+                multiple
               />
             </div>
             <div class="modal-footer">
@@ -68,3 +77,5 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
 }
 
 export default DraftReport;
+
+ // formData.append("final_report", value.p_final[0]);

@@ -119,6 +119,15 @@ footer {
   -webkit-user-modify: read-write
 }
 
+.password-icon{
+  position: absolute;
+  right:35px;
+  top:38px;
+  cursor: pointer;
+}
+
+
+
 
 /* .react-tabs__tab-list {
   border-bottom: 0;

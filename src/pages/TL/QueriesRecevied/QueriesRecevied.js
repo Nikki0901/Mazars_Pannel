@@ -19,6 +19,8 @@ function QueriesRecevied(props) {
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
+  const [feedback, setFeedback] = useState([]);
+
 
   const [diaplayProposal, setDisplayProposal] = useState({
     amount: "",
@@ -61,6 +63,7 @@ function QueriesRecevied(props) {
           setDisplaySpecific(res.data.additional_queries);
           setPaymentDetails(res.data.payment_detail);
           setAssingmentNo(res.data.result[0].assign_no);
+          setFeedback(res.data.feedback_detail);
 
           var purposeItem = res.data.result[0].purpose_opinion;
           var assementItem = res.data.result[0].assessment_year;
@@ -172,6 +175,8 @@ function QueriesRecevied(props) {
                 paymentDetails={paymentDetails}
                 purpose={purpose}
                 year={year}
+                feedback={feedback}
+
               />
             ))}
           </div>
