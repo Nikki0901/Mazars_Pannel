@@ -78,7 +78,7 @@ function Chatting(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(" message successfully send!");
+          alert.success(" message successfully sent!");
           props.history.push(routes);
         }
       })
@@ -138,7 +138,7 @@ function Chatting(props) {
                       <option value="2">Proposal Discussion</option>
                       <option value="5">Payment Discussion</option>
                       <option value="3">Assignment Discussion</option>
-                      <option value="1">Other Information</option>
+                      <option value="1">Others</option>
                     </select>
                   }
                 </div>

@@ -40,7 +40,7 @@ function ProposalDetails({
     const dataItem = item.map((p, i) =>
     (
       <>
-        <p>{p}</p>
+        <p>{CommonServices.removeTime(p)}</p>
       </>
     ))
     return dataItem;
@@ -144,7 +144,9 @@ function ProposalDetails({
                     </tr>
                     <tr>
                       <td>{payment_terms}</td>
-                      <td>{due_date}</td>
+                      <td>
+                        {CommonServices.removeTime(due_date)}
+                      </td>
                     </tr>
                   </td>
                   :

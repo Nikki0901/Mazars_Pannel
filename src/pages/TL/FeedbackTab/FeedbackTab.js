@@ -59,14 +59,6 @@ function FeedbackTab() {
         );
       },
     },
-    // {
-    //   text: "Date",
-    //   dataField: "created",
-    //   sort: true,
-    //   headerStyle: () => {
-    //     return { fontSize: "12px", width: "110px" };
-    //   },
-    // },
     {
       text: "Query No",
       dataField: "assign_no",

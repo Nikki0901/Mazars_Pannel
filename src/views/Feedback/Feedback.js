@@ -51,7 +51,7 @@ function Feedback() {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(" feedback successfully send!");
+          alert.success(" feedback successfully sent!");
         }
       })
       .catch((error) => {

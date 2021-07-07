@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { Link, useHistory } from "react-router-dom";
-// import CustomerNotification from "./CustomerNotification";
+import CustomerNotification from "./CustomerNotification";
 
 import './index.css'
 
@@ -11,88 +11,8 @@ function NavWrapper(props) {
 
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
-  const tlkey = window.localStorage.getItem("tlkey");
   const adminkey = window.localStorage.getItem("adminkey");
-
-
-  const [notification, setNotification] = useState([]);
-  const [countNotification, setCountNotification] = useState("");
-
-  const [notificationAdmin, setNotificationAdmin] = useState([]);
-  const [countNotificationAdmin, setCountNotificationAdmin] = useState("");
-
-  const [notificationTl, setNotificationTl] = useState([]);
-  const [countNotificationTl, setCountNotificationTl] = useState("");
-
-
-
-  useEffect(() => {
-    getNotificationCust();
-  }, [userId]);
-
-
-  const getNotificationCust = () => {
-    axios
-      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}&type_list=uread`)
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setNotification(res.data.result);
-          setCountNotification(res.data.result.length);
-        }
-      });
-  };
-
-  useEffect(() => {
-    getNotificationTl();
-  }, [tlkey]);
-
-  const getNotificationTl = () => {
-    axios
-      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(tlkey)}`)
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setNotificationAdmin(res.data.result);
-          setCountNotificationTl(res.data.result.length);
-        }
-      });
-  };
-
-
-  useEffect(() => {
-    getNotificationAdmin();
-  }, [adminkey]);
-
-  const getNotificationAdmin = () => {
-    axios
-      .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(adminkey)}`)
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setNotificationTl(res.data.result);
-          setCountNotificationAdmin(res.data.result.length);
-        }
-      });
-  };
-
-
-
-  // readnotification
-  const readNotification = (id) => {
-    axios
-      .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
-      .then(function (response) {
-        console.log("delete-", response);
-        if (response.data.code === 1) {
-          console.log(response.data.result);
-          // history.push("/customer/proposal");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
+  const tlkey = window.localStorage.getItem("tlkey");
 
 
 
@@ -139,143 +59,19 @@ function NavWrapper(props) {
             </ul>
 
             <ul class="nav navbar-nav float-right">
-              {name == "Customer" && (
-                <li class="dropdown dropdown-notification nav-item">
-                  {countNotification ? (
-                    <div>
-                      <a
-                        class="nav-link nav-link-label"
-                        href="#"
-                        data-toggle="dropdown"
-                      >
-                        {/* <span class="badge badge-light">
-                          <i class="fa fa-bell" style={{ fontSize: "16px" }}>
-                            {countNotification}
-                          </i>
-                        </span> */}
 
-                        <a href="#" class="notification">
-                          <span>Inbox</span>
-                          <span class="badge">{countNotification}</span>
-                        </a>
-                      </a>
-
-                      <div
-                        class="dropdown-menu dropdown-menu-right"
-                        style={{ height: "300px", overflowY: "scroll" }}
-                      >
-                        <div class="arrow_box_right">
-                          {notification.map((p, i) => (
-                            <div
-                              class="dropdown-item"
-                              style={{ padding: "0", fontSize: "12px" }}
-                            >
-                              <Link to={`/customer/view-notification/${p.id}`}>
-                                <p
-                                  class="dropdown-item"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => readNotification(p.id)}
-                                >
-                                  {p.message}
-                                </p>
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                </li>
+              {name == "customer" && (
+                <CustomerNotification tokenKey={userId} name={name} />
               )}
 
-              {name == "Team Leader" && (
-                <li class="dropdown dropdown-notification nav-item">
-                  {countNotificationTl ? (
-                    <div>
-                      <a
-                        class="nav-link nav-link-label"
-                        href="#"
-                        data-toggle="dropdown"
-                      >
-                        <a href="#" class="notification">
-                          <span>Inbox</span>
-                          <span class="badge">{countNotificationTl}</span>
-                        </a>
-                      </a>
-
-                      <div
-                        class="dropdown-menu dropdown-menu-right"
-                        style={{ height: "300px", overflowY: "scroll" }}
-                      >
-                        <div class="arrow_box_right">
-                          {notificationTl.map((p, i) => (
-                            <div
-                              class="dropdown-item"
-                              style={{ padding: "0", fontSize: "12px" }}
-                            >
-                              <Link
-                                to={`/teamleader/view-notification/${p.id}`}
-                              >
-                                <p
-                                  class="dropdown-item"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => readNotification(p.id)}
-                                >
-                                  {p.message}
-                                </p>
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                </li>
+              {name == "admin" && (
+                <CustomerNotification tokenKey={adminkey} name={name} />
               )}
 
-              {name == "Admin" && (
-                <li class="dropdown dropdown-notification nav-item">
-                  {countNotificationAdmin ? (
-                    <div>
-                      <a
-                        class="nav-link nav-link-label"
-                        href="#"
-                        data-toggle="dropdown"
-                      >
-
-                        <a href="#" class="notification">
-                          <span>Inbox</span>
-                          <span class="badge">{countNotificationAdmin}</span>
-                        </a>
-                      </a>
-
-                      <div
-                        class="dropdown-menu dropdown-menu-right"
-                        style={{ height: "300px", overflowY: "scroll" }}
-                      >
-                        <div class="arrow_box_right">
-                          {notificationTl.map((p, i) => (
-                            <div
-                              class="dropdown-item"
-                              style={{ padding: "0", fontSize: "12px" }}
-                            >
-                              <Link to={`/admin/view-notification/${p.id}`}>
-                                <p
-                                  class="dropdown-item"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => readNotification(p.id)}
-                                >
-                                  {p.message}
-                                </p>
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                </li>
+              {name == "teamleader" && (
+                <CustomerNotification tokenKey={tlkey} name={name} />
               )}
+
 
 
               <li class="dropdown dropdown-user nav-item">
@@ -285,7 +81,6 @@ function NavWrapper(props) {
                   data-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  {/* <span class="pr-2">{name}</span> */}
                   <span class="avatar avatar-online">
                     <img
                       src="https://cdn1.vectorstock.com/i/1000x1000/40/30/user-glyph-icon-web-and-mobile-admin-sign-vector-18444030.jpg"
@@ -335,3 +130,126 @@ function NavWrapper(props) {
 }
 
 export default NavWrapper;
+
+
+
+       // <li class="dropdown dropdown-notification nav-item">
+                //   {countNotification ? (
+                //     <div>
+                //       <a
+                //         class="nav-link nav-link-label"
+                //         href="#"
+                //         data-toggle="dropdown"
+                //       >                   
+                //         <a href="#" class="notification">
+                //           <span>Inbox</span>
+                //           <span class="badge">{countNotification}</span>
+                //         </a>
+                //       </a>
+
+                //       <div
+                //         class="dropdown-menu dropdown-menu-right"
+                //         style={{ height: "300px", overflowY: "scroll" }}
+                //       >
+                //         <div class="arrow_box_right">
+                //           {notification.map((p, i) => (
+                //             <div
+                //               class="dropdown-item"
+                //               style={{ padding: "0", fontSize: "12px" }}
+                //             >
+                //               <Link to={`/customer/view-notification/${p.id}`}>
+                //                 <p
+                //                   class="dropdown-item"
+                //                   style={{ cursor: "pointer" }}
+                //                   onClick={() => readNotification(p.id)}
+                //                 >
+                //                   {p.message}
+                //                 </p>
+                //               </Link>
+                //             </div>
+                //           ))}
+                //         </div>
+                //       </div>
+                //     </div>
+                //   ) : null}
+                // </li>
+
+
+  // const [notification, setNotification] = useState([]);
+  // const [countNotification, setCountNotification] = useState("");
+
+  // const [notificationAdmin, setNotificationAdmin] = useState([]);
+  // const [countNotificationAdmin, setCountNotificationAdmin] = useState("");
+
+  // const [notificationTl, setNotificationTl] = useState([]);
+  // const [countNotificationTl, setCountNotificationTl] = useState("");
+
+
+
+  // useEffect(() => {
+  //   getNotificationCust();
+  // }, [userId]);
+
+
+  // const getNotificationCust = () => {
+  //   axios
+  //     .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}&type_list=uread`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.data.code === 1) {
+  //         setNotification(res.data.result);
+  //         setCountNotification(res.data.result.length);
+  //       }
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   getNotificationTl();
+  // }, [tlkey]);
+
+  // const getNotificationTl = () => {
+  //   axios
+  //     .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(tlkey)}&type_list=uread`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.data.code === 1) {
+  //         setNotificationAdmin(res.data.result);
+  //         setCountNotificationTl(res.data.result.length);
+  //       }
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   getNotificationAdmin();
+  // }, [adminkey]);
+
+  // const getNotificationAdmin = () => {
+  //   axios
+  //     .get(`${baseUrl}/customers/getNotification?id=${JSON.parse(adminkey)}&type_list=uread`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.data.code === 1) {
+  //         setNotificationTl(res.data.result);
+  //         setCountNotificationAdmin(res.data.result.length);
+  //       }
+  //     });
+  // };
+
+
+
+  // // readnotification
+  // const readNotification = (id) => {
+  //   axios
+  //     .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
+  //     .then(function (response) {
+  //       console.log("delete-", response);
+  //       if (response.data.code === 1) {
+  //         console.log(response.data.result);
+  //         // history.push("/customer/proposal");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("erroror - ", error);
+  //     });
+  // };
+

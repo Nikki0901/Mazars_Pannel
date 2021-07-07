@@ -35,6 +35,8 @@ function Demo() {
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [owner, setOwner] = useState([]);
+  const [read, setRead] = useState(false);
+
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -62,7 +64,9 @@ function Demo() {
       .then((res) => {
         console.log("res n -", res);
         var a = res.data.result.items;
-        setData(a.map(mapAppointmentData));
+        if (a) {
+          setData(a.map(mapAppointmentData));
+        }
       });
   };
 
@@ -76,6 +80,7 @@ function Demo() {
     vstart: appointment.vstart,
     vend: appointment.vend,
     user: appointment.user.split(','),
+    owner: appointment.owner,
   });
 
   const getAssignmentNo = () => {
@@ -137,6 +142,11 @@ function Demo() {
     },
   });
 
+  // const B = (key) => {
+  //   console.log("key", key)
+  //   return
+  // }
+
   const AppointmentBase = ({
     children,
     data,
@@ -146,12 +156,13 @@ function Demo() {
     ...restProps
   }) => (
     <Appointments.Appointment {...restProps}>
+
       <div style={{ display: "flex" }}>
         {
-          // console.log("children",children)
+          // () => setRead(data.owner)
           console.log("data", data)
-
         }
+
         <div>{children}</div>
         <div
           onClick={() => handleJoin(data.id)}
@@ -169,13 +180,28 @@ function Demo() {
     AppointmentBase
   );
 
+
   const myAppointment = (props) => {
+
+    console.log("props", props.data.owner)
+
+    var a = props.data.owner
+    // setRead(a)
+
+    // const B = () => {
+    //   console.log("B")
+    // }, []
+
     return (
-      <Appointment
-        {...props}
-      />
+      <div>
+        <Appointment
+          {...props}
+        />
+      </div>
+
     );
   };
+
 
   //handleJoin
   const handleJoin = (id) => {
@@ -204,6 +230,9 @@ function Demo() {
 
 
   const commitChanges = ({ added, changed, deleted }) => {
+
+    // console.log("data nks- ", data);
+
     if (added) {
       console.log("added - ", added);
 
@@ -222,7 +251,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tl/aminPostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -264,7 +293,10 @@ function Demo() {
       formData.append("endtime", dataIttem.endDate);
       formData.append("title", dataIttem.title);
       formData.append("notes", dataIttem.notes);
-      
+      formData.append("set_by", "admin");
+      formData.append("user", dataIttem.user);
+
+
       axios({
         method: "POST",
         url: `${baseUrl}/tl/aminPostCallSchedule`,
@@ -288,6 +320,8 @@ function Demo() {
     }
   };
 
+  console.log("tread", read)
+
   return (
     <Paper>
       <Scheduler data={data} height={660}>
@@ -308,7 +342,16 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm />
+
+        {
+          owner ? <AppointmentForm
+            readOnly
+          />
+            :
+            <AppointmentForm
+            />
+        }
+
 
         <Resources
           data={resources}

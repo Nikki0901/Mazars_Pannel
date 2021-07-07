@@ -46,22 +46,22 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
       >
         {custUserId && (
           <NavWrapper color="#5E96AE" logout={custLogout} 
-          name="Customer"
+          name="customer"
            />
         )}
 
         {adminUserId && (
           <NavWrapper color="#262d47" logout={adminLogout}
-           name="Admin"
+           name="admin"
             />
         )}
 
         {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout} 
-        name="Team Leader" 
+        name="teamleader" 
         />}
 
         {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} 
-        name="Tax Professional" 
+        name="taxprofessional" 
         />}
       </nav>
     </div>

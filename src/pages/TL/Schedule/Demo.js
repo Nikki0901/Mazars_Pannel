@@ -59,7 +59,9 @@ function Demo() {
       .then((res) => {
         console.log("res -", res);
         var a = res.data.result.items;
-        setData(a.map(mapAppointmentData));
+        if (a) {
+          setData(a.map(mapAppointmentData));
+        }
       });
   };
 
@@ -70,8 +72,8 @@ function Demo() {
     title: appointment.title,
     notes: appointment.summary,
     question_id: appointment.question_id,
-    vstart:appointment.vstart,
-    vend:appointment.vend,
+    vstart: appointment.vstart,
+    vend: appointment.vend,
     user: appointment.user.split(','),
   });
 
@@ -150,16 +152,16 @@ function Demo() {
       <div style={{ display: "flex" }}>
         {
           // console.log("children",children)
-          console.log("data",data)
+          console.log("data", data)
 
         }
         <div>{children}</div>
         <div
-        onClick={() => handleJoin(data.id)}
+          onClick={() => handleJoin(data.id)}
         ><i
-        class="fa fa-video-camera"
-        style={{ fontSize: "12px", color: "#fff" }}
-      ></i>
+          class="fa fa-video-camera"
+          style={{ fontSize: "12px", color: "#fff" }}
+        ></i>
         </div>
       </div>
     </Appointments.Appointment>
@@ -174,7 +176,7 @@ function Demo() {
     return (
       <Appointment
         {...props}
-        // onAppointmentMetaChange={onAppointmentMetaChange}
+      // onAppointmentMetaChange={onAppointmentMetaChange}
       />
     );
   };
@@ -263,6 +265,7 @@ function Demo() {
       formData.append("endtime", dataIttem.endDate);
       formData.append("title", dataIttem.title);
       formData.append("notes", dataIttem.notes);
+      formData.append("user", dataIttem.user);
 
       axios({
         method: "POST",
@@ -311,7 +314,7 @@ function Demo() {
 
         <Resources
           data={resources}
-          // mainResourceName="question_id"
+        // mainResourceName="question_id"
         />
       </Scheduler>
     </Paper>

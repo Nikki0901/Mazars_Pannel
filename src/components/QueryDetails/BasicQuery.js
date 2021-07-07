@@ -80,17 +80,8 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
             <tr>
               <th scope="row">specific questions</th>
               <td>
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col">Questions</th>
-                </tr>
                 {diaplaySpecific.map((p, i) => (
-
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{p.text}</td>
-                  </tr>
-
+                  <div>{i + 1}. {p.text}</div>
                 ))}
               </td>
             </tr>

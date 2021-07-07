@@ -99,26 +99,34 @@ function Message(props) {
                 return (
                     <>
                         <Link to={`/admin/view-notification/${row.id}`}>
+                            {
+                                row.is_read == "0" ?
+                                    <div
+                                        class="dropdown-item"
+                                        style={{
+                                            cursor: "pointer",
+                                            display: "flex", justifyContent: "space-between"
+                                        }}
+                                        onClick={() => readNotification(row.id)}
+                                        title="unread"
+                                    >
+                                        <p>{row.message}</p>
+                                        <i class="fa fa-bullseye" style={{ color: "green" }}></i>
+                                    </div>
 
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div>{row.message}</div>
-                                <div>{
-                                    row.is_read == "0" ?
-                                        <p style={{ color: 'blue' }} title="read"
-                                            onClick={() => readNotification(row.id)}
-                                        >
-                                            <i class="fa fa-bullseye"></i>
-                                        </p>
-                                        :
-                                        <p style={{ color: 'green' }} title="unread"
-                                        >
-                                            <i class="fa fa-circle"></i>
-                                        </p>
-                                }
-                                </div>
-                            </div>
+                                    :
+                                    <div
+                                        class="dropdown-item"
+                                        style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                                        title="read"
+                                    >
+                                        <p>{row.message}</p>
+                                        <i class="fa fa-bullseye" style={{ color: "red" }}></i>
+                                    </div>
 
+                            }
                         </Link>
+
                     </>
                 );
             },
@@ -126,9 +134,10 @@ function Message(props) {
     ];
 
 
-
     // readnotification
     const readNotification = (id) => {
+
+        console.log("call", id)
         axios
             .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
             .then(function (response) {

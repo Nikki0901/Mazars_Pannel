@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackService from "../../../config/services/QueryDetails";
+import CommonServices from "../../../common/common";
 
 function FeedbackTab() {
   const userid = window.localStorage.getItem("adminkey");
@@ -46,11 +47,26 @@ function FeedbackTab() {
       },
     },
     {
+      text: "Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px", width: "100px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            {CommonServices.removeTime(row.created)}
+          </>
+        );
+      },
+    },
+    {
       text: "Query No",
       dataField: "assign_no",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "100px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
@@ -58,7 +74,15 @@ function FeedbackTab() {
       },
     },
     {
-      text: "Details of feedback",
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px", width: "150px" };
+      },
+    },
+    {
+      text: "Feedback",
       dataField: "feedback",
       sort: true,
       headerStyle: () => {
@@ -95,6 +119,9 @@ function FeedbackTab() {
 }
 
 export default FeedbackTab;
+
+
+
 // const getFeedback = () => {
 //   axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
 //     console.log(res);

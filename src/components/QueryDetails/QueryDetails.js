@@ -31,10 +31,16 @@ function QueryDetails({
   feedback
 }) {
   console.log("p", p);
-  const history = useHistory();
+
+  // const history = useHistory();
 
   const [addModal, setAddModal] = useState(false);
-  const addHandler = () => setAddModal(!addModal);
+
+  const addHandler = () => {
+    console.log("addhandler")
+    setAddModal(!addModal);
+  }
+
 
   const [activeTab, setActiveTab] = useState('1');
 
@@ -162,14 +168,21 @@ function QueryDetails({
                           class="btn btn-info"
                           onClick={addHandler}
                         >
-                          Additional Query
+                          Additional Document
                         </button>
                       )}
                     </div>
                   </div>
 
-
-                  <AdditionalQuery displayQuery={displayQuery} />
+                  <AddAdditionalQuery
+                    addHandler={addHandler}
+                    addModal={addModal}
+                    assingNo={assingNo}
+                    getQuery={getQuery}
+                  />
+                  <AdditionalQuery
+                    displayQuery={displayQuery}
+                  />
                 </Card>
               </Col>
             </Row>
@@ -178,12 +191,13 @@ function QueryDetails({
         </TabContent>
       </div>
 
-
     </>
   );
 }
 
 export default QueryDetails;
+
+
 
 
 {
@@ -238,7 +252,6 @@ export default QueryDetails;
         />
 
         <DraftReports id={p.id} />
-
         <div class="d-flex">
           <div class="additional">
             {customerQuery == "customerQuery" && (
