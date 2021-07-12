@@ -300,7 +300,7 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm />
+        <AppointmentForm readOnly />
         <Resources data={resources} mainResourceName="question_id" />
       </Scheduler>
     </Paper>

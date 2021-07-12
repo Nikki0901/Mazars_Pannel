@@ -13,26 +13,28 @@ import {
 } from "reactstrap";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useAlert } from "react-alert";
 
 function FeedbackTab() {
-  const userid = window.localStorage.getItem("tlkey");
+  const alert = useAlert();
 
+  const userid = window.localStorage.getItem("tlkey");
   const [feedbackData, setFeedBackData] = useState([]);
 
   useEffect(() => {
-    const getFeedback = () => {
-      axios
-        .get(`${baseUrl}/customers/getFeedback?tl_id=${JSON.parse(userid)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setFeedBackData(res.data.result);
-          }
-        });
-    };
     getFeedback();
   }, []);
 
+  const getFeedback = () => {
+    axios
+      .get(`${baseUrl}/customers/getFeedback?tl_id=${JSON.parse(userid)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setFeedBackData(res.data.result);
+        }
+      });
+  };
   const columns = [
     {
       text: "S.No",
@@ -41,20 +43,23 @@ function FeedbackTab() {
         return rowIndex + 1;
       },
       headerStyle: () => {
-        return { fontSize: "12px", width: "50px" };
+        return { fontSize: "12px", width: "10px" };
       },
     },
     {
       text: "Date",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", width: "110px" };
+        return { fontSize: "12px", width: "60px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
         return (
           <>
-            {CommonServices.removeTime(row.created)}
+            <div style={{ display: "flex" }}>
+              <p>{CommonServices.removeTime(row.created)}</p>
+              <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.created)}</p>
+            </div>
           </>
         );
       },
@@ -64,27 +69,75 @@ function FeedbackTab() {
       dataField: "assign_no",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", width: "100px" };
-      },
-    },
-
-    {
-      text: "Customer Name",
-      dataField: "name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px", width: "150px" };
+        return { fontSize: "12px", width: "40px" };
       },
     },
     {
       text: "Feedback",
-      dataField: "feedback",
-      sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "150px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <div>
+              {
+                row.tl_read == "0" ?
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      display: "flex", justifyContent: "space-between"
+                    }}
+                    onClick={() => readNotification(row.id)}
+                    title="unread"
+                  >
+                    <p>{row.feedback}  - By {row.name}</p>
+                    <i class="fa fa-bullseye" style={{ color: "red" }}></i>
+                  </div>
+
+                  :
+                  <div
+                    style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                    title="read"
+                  >
+                    <p>{row.feedback}  - By {row.name}</p>
+                    <i class="fa fa-bullseye" style={{ color: "green" }}></i>
+                  </div>
+              }
+            </div>
+          </>
+        );
       },
     },
   ];
+
+
+  // readnotification
+  const readNotification = (id) => {
+
+    console.log("call", id)
+    let formData = new FormData();
+    formData.append("id", id);
+    formData.append("type", "tl");
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/markReadFeedback`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response)
+        if (response.data.code === 1) {
+          // alert.success("successfully read!");
+          getFeedback()
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
 
   return (
     <>
@@ -106,32 +159,6 @@ function FeedbackTab() {
               columns={columns}
               rowIndex
             />
-            {/* <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sr. No.</th>
-                  <th>Query No</th>
-                  <th>Customer Name</th>
-                  <th>Details of feedback</th>
-                </tr>
-              </thead>
-              <tbody>
-                {feedbackData.length > 0 ? (
-                  feedbackData.map((p, i) => (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{p.assign_no}</td>
-                      <td>{p.name}</td>
-                      <td>{p.feedback}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">No Records</td>
-                  </tr>
-                )}
-              </tbody>
-            </table> */}
           </CardBody>
         </Card>
       </Layout>

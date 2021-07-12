@@ -39,6 +39,7 @@ import Message from './views/Message/Message'
 import ProposalView from './views/ProposalView/ProposalView'
 import Feedback from './views/Feedback/Feedback'
 import FeedbackData from './views/FeedbackData/FeedbackData'
+import PaymentStatus from './views/PaymentStatus/PaymentStatus'
 
 
 
@@ -104,8 +105,6 @@ import TlChatting from './pages/TL/Chatting/Chatting'
 import TlMessage from './pages/TL/Message/Message'
 import TlSchedule from './pages/TL/Schedule/Schedule'
 import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
-
-
 
 
 
@@ -181,6 +180,7 @@ function App() {
             <Route exact path="/customer/chatting/:id" component={Chatting} />
             <Route exact path="/customer/feedback/:id" component={Feedback} />
             <Route exact path="/customer/feedback-data" component={FeedbackData} />
+            <Route exact path="/customer/paymentstatus" component={PaymentStatus} />
 
 
 
@@ -210,10 +210,6 @@ function App() {
             <Route exact path="/admin/chatting/:id" component={AdminChatting} />
             <Route exact path="/admin/message" component={AdminMessage} />
             <Route exact path="/admin/view-notification/:id" component={AdminViewNotification} />
-
-
-
-
 
 
 

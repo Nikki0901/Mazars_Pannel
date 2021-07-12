@@ -37,6 +37,7 @@ function ProposalComponent(props) {
 
 
   const userid = window.localStorage.getItem("tlkey");
+
   const [custId, setCustId] = useState("");
   const [custname, setCustName] = useState();
   const [assignId, setAssignID] = useState("");
@@ -48,6 +49,8 @@ function ProposalComponent(props) {
 
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
+
+  const [totalAmount, setTotalAmount] = useState(null);
 
 
   useEffect(() => {
@@ -89,10 +92,6 @@ function ProposalComponent(props) {
 
     var lumsum = value.p_inst_date
     setDate(lumsum)
-    // console.log("date --=", date)
-
-    // console.log("payment --=", payment.value)
-    // console.log("installment --=", installment.value)
 
     let formData = new FormData();
 
@@ -106,7 +105,6 @@ function ProposalComponent(props) {
 
     formData.append("amount_type", "fixed");
     formData.append("amount", value.p_fixed);
-    // formData.append("amount_hourly", value.p_hourly);
     formData.append("installment_amount", amount);
 
     formData.append("payment_terms", payment.value);
@@ -171,8 +169,13 @@ function ProposalComponent(props) {
   };
 
 
-  // console.log("amount", amount)
-  console.log("installment", installment)
+  console.log("totalAmount", totalAmount)
+
+
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setTotalAmount(e.target.value);
+  };
 
 
   return (
@@ -213,7 +216,6 @@ function ProposalComponent(props) {
                     ref={register}
                   />
                 </div>
-
                 <div class="form-group">
                   <label>Fee</label>
                   <select
@@ -222,14 +224,9 @@ function ProposalComponent(props) {
                     name="p_type"
                     onChange={(e) => setStore(e.target.value)}
                   >
-                    {/* <option value="">--select type--</option> */}
                     <option value="fixed">Fixed Price</option>
-                    {/* <option value="hourly">Hourly basis</option>
-                    <option value="mixed">Mixed</option> */}
                   </select>
                 </div>
-
-                {/* {store == "fixed" && ( */}
 
                 <div class="form-group">
                   <label>Fixed Price</label>
@@ -239,11 +236,10 @@ function ProposalComponent(props) {
                     className="form-control"
                     ref={register}
                     placeholder="Enter Fixed Price"
+                    onChange={(e) => handleChange(e)}
+
                   />
                 </div>
-
-                {/* )} */}
-
 
                 <div class="form-group">
                   <label>Scope of Work</label>
@@ -329,6 +325,7 @@ function ProposalComponent(props) {
                       installment={installment.label}
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
+                      totalAmount={totalAmount}
                     />
                 }
 

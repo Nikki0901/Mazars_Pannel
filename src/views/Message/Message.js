@@ -62,25 +62,28 @@ function Message(props) {
     const columns = [
         {
             text: "S.No",
-            dataField: "",
+            sort: true,
             formatter: (cellContent, row, rowIndex) => {
                 return rowIndex + 1;
             },
             headerStyle: () => {
-                return { fontSize: "12px", width: "20px" };
+                return { fontSize: "12px", width: "10px" };
             },
         },
         {
             text: "Date",
             sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "40px" };
+                return { fontSize: "12px", width: "50px" };
             },
             formatter: function nameFormatter(cell, row) {
                 console.log(row);
                 return (
                     <>
-                        {CommonServices.removeTime(row.setdate)}
+                        <div style={{ display: "flex" }}>
+                            <p>{CommonServices.removeTime(row.setdate)}</p>
+                            <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p>
+                        </div>
                     </>
                 );
             },
@@ -90,7 +93,7 @@ function Message(props) {
             dataField: "assign_no",
             sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "40px" };
+                return { fontSize: "12px", width: "30px" };
             },
             formatter: function nameFormatter(cell, row) {
                 console.log(row);
@@ -106,7 +109,7 @@ function Message(props) {
             text: "Message",
             sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "150px" };
+                return { fontSize: "12px", width: "180px" };
             },
             formatter: function nameFormatter(cell, row) {
                 console.log(row);
@@ -116,26 +119,29 @@ function Message(props) {
                             {
                                 row.is_read == "0" ?
                                     <div
-                                        class="dropdown-item"
                                         style={{
                                             cursor: "pointer",
-                                            display: "flex", justifyContent: "space-between"
+                                            display: "flex",
+                                            justifyContent: "space-between"
                                         }}
                                         onClick={() => readNotification(row.id)}
                                         title="unread"
                                     >
                                         <p>{row.message}</p>
-                                        <i class="fa fa-bullseye" style={{ color: "green" }}></i>
+                                        <i class="fa fa-bullseye" style={{ color: "red" }}></i>
                                     </div>
 
                                     :
                                     <div
-                                        class="dropdown-item"
-                                        style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                                        style={{
+                                            cursor: "pointer",
+                                            display: "flex",
+                                            justifyContent: "space-between"
+                                        }}
                                         title="read"
                                     >
                                         <p>{row.message}</p>
-                                        <i class="fa fa-bullseye" style={{ color: "red" }}></i>
+                                        <i class="fa fa-bullseye" style={{ color: "green" }}></i>
                                     </div>
 
                             }

@@ -3,7 +3,8 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { Link, useHistory } from "react-router-dom";
 import CustomerNotification from "./CustomerNotification";
-
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './index.css'
 
 function NavWrapper(props) {
@@ -73,7 +74,6 @@ function NavWrapper(props) {
               )}
 
 
-
               <li class="dropdown dropdown-user nav-item">
                 <a
                   class="dropdown-toggle nav-link dropdown-user-link"
@@ -92,32 +92,26 @@ function NavWrapper(props) {
 
                 <div class="dropdown-menu dropdown-menu-right">
                   <div class="arrow_box_right">
-                    {name == "Customer" && (
-                      <p class="dropdown-item" style={{ cursor: "pointer" }}>
-                        <i class="fa fa-sign-out"></i>
+
+                    {name == "customer" && (
+                      <div class="dropdown-item"
+                        style={{ cursor: "pointer" }}>
+                        <VpnKeyIcon />
                         <Link to="/customer/change-password">
-                          Change Password
+                          <span style={{ marginLeft: "3px" }}>Change Password</span>
                         </Link>
-                      </p>
+                      </div>
                     )}
 
-                    {/* {name == "Tax Professional" && (
-                      <p class="dropdown-item" style={{ cursor: "pointer" }}>
-                        <i class="fa fa-sign-out"></i>
-                        <Link to="/taxprofessional/change-password">
-                          Change Password
-                        </Link>
-                      </p>
-                    )} */}
-
-                    <p
+                    <div
                       class="dropdown-item"
                       onClick={logout}
                       style={{ cursor: "pointer" }}
                     >
-                      <i class="fa fa-sign-out"></i>
-                      Logout
-                    </p>
+                      <LockOpenIcon />
+                      <span style={{ marginLeft: "10px" }}>Logout</span>
+                    </div>
+
                   </div>
                 </div>
               </li>
@@ -131,8 +125,8 @@ function NavWrapper(props) {
 
 export default NavWrapper;
 
-
-
+{/* <i class="fa fa-sign-out"></i> */ }
+{/* <i class="fa fa-sign-out"></i> */ }
        // <li class="dropdown dropdown-notification nav-item">
                 //   {countNotification ? (
                 //     <div>

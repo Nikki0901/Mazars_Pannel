@@ -22,6 +22,7 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { withStyles } from "@material-ui/core/styles";
 import * as Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 // import {owners}  from "./appoinments";
 
@@ -283,10 +284,34 @@ function Demo() {
 
     if (deleted !== undefined) {
       console.log("deleted f", deleted);
-      axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
-        console.log("res -", res);
-        getData();
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "It will permanently deleted !",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.value) {
+          axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+            console.log("res -", res);
+
+            if (res.data.code === 1) {
+              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              getData();
+            } else {
+              Swal.fire("Oops...", "Errorr ", "error");
+            }
+          });
+        }
       });
+
+      // axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+      //   console.log("res -", res);
+      //   getData();
+      // });
     }
   };
 

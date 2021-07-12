@@ -390,29 +390,31 @@ function AssignmentForm(props) {
               </thead>
               {data.length > 0
                 ? data.map((p, i) => (
-                    <tbody>
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>
-                          {p.document && (
-                            <p>
-                              <a
-                                href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.document}`}
-                                target="_blank"
-                              >
-                                <i class="fa fa-photo"></i>
-                              </a>
-                            </p>
-                          )}
-                        </td>
-                        <td>{p.notes}</td>
-                        <td>{p.notes_type}</td>
-                        <td>{p.type_info}</td>
-                        <td>{p.receive_sent_date}</td>
-                        <td>{p.send_received}</td>
-                      </tr>
-                    </tbody>
-                  ))
+                  <tbody>
+                    <tr>
+                      <td>{i + 1}</td>
+                      <td>
+                        {p.document && (
+                          <p style={{ display: "flex" }}>
+
+                            <a
+                              href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.assign_no}/${p.document}`}
+                              target="_blank"
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                            <p style={{ marginLeft: "15px" }}>{p.document}</p>
+                          </p>
+                        )}
+                      </td>
+                      <td>{p.notes}</td>
+                      <td>{p.notes_type}</td>
+                      <td>{p.type_info}</td>
+                      <td>{p.receive_sent_date}</td>
+                      <td>{p.send_received}</td>
+                    </tr>
+                  </tbody>
+                ))
                 : null}
             </table>
           </div>

@@ -33,13 +33,14 @@ function AdditionalQuery({ displayQuery }) {
                   {p.upload_doc == "" ? (
                     ""
                   ) : (
-                    <p>
+                    <p style={{ display: "flex" }}>
                       <a
-                        href={`http://65.0.220.156/mazarapi/assets/image/${p.upload_doc}`}
+                        href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.upload_doc}`}
                         target="_blank"
                       >
                         <i class="fa fa-photo"></i>
                       </a>
+                      <p style={{ marginLeft: "15px" }}>{p.upload_doc}</p>
                     </p>
                   )}
                 </td>

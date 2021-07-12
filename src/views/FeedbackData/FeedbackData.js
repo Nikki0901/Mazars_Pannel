@@ -55,20 +55,24 @@ function FeedbackData(props) {
             },
         },
         {
-            text: "Date",         
+            text: "Date",
             sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "30px" };
+                return { fontSize: "12px", width: "60px" };
             },
             formatter: function nameFormatter(cell, row) {
                 console.log(row);
                 return (
                     <>
-                        {CommonServices.removeTime(row.created)}
+                        <div style={{ display: "flex" }}>
+                            <p>{CommonServices.removeTime(row.created)}</p>
+                            <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.created)}</p>
+                        </div>
                     </>
                 );
             },
         },
+
         {
             text: "Query No",
             dataField: "assign_no",
@@ -89,12 +93,14 @@ function FeedbackData(props) {
         {
             text: "Feedback",
             dataField: "feedback",
-            sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "160px" };
+                return { fontSize: "12px", width: "150px" };
             },
         },
     ];
+
+
+
 
     return (
         <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -102,7 +108,7 @@ function FeedbackData(props) {
                 <CardHeader>
                     <Row>
                         <Col md="9">
-                            <CardTitle tag="h4">List of Feedback</CardTitle>
+                            <CardTitle tag="h4">Feedback</CardTitle>
                         </Col>
                     </Row>
                 </CardHeader>
@@ -122,3 +128,18 @@ function FeedbackData(props) {
 }
 
 export default FeedbackData;
+        // {
+        //     text: "Time",
+        //     sort: true,
+        //     headerStyle: () => {
+        //         return { fontSize: "12px", width: "30px" };
+        //     },
+        //     formatter: function nameFormatter(cell, row) {
+        //         console.log(row);
+        //         return (
+        //             <>
+        //                 {CommonServices.removeDate(row.created)}
+        //             </>
+        //         );
+        //     },
+        // },

@@ -115,7 +115,7 @@ function AdminFilter(props) {
     if (acceptedProposal == "acceptedProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?&status=5,7,8&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/getProposals?status1=2&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -243,8 +243,7 @@ function AdminFilter(props) {
     if (allProposal == "allProposal") {
       axios
         .get(
-          `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}
-          &to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
+          `${baseUrl}/admin/getProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status1=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);

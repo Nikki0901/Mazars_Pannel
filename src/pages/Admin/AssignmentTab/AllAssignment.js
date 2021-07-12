@@ -188,28 +188,28 @@ function AssignmentComponent() {
             <div>
               {row.paid_status == "2" &&
                 <p>
-                  <span style={{ fontWeight: "bold", color: "red" }}>Payment Declined</span>
+                  <span style={{ color: "red" }}>Payment Declined</span>
                 </p>
               }
               <p>
                 <span style={{ fontWeight: "bold" }}>Client Discussion :</span>
-                {row.client_discussion == "pending" ? "processing" : row.client_discussion}
+                {row.client_discussion}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Draft Report :</span>
-                {row.draft_report == "pending" ? "processing" : row.draft_report}
+                {row.draft_report}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Final Discussion :</span>
-                {row.final_discussion == "pending" ? "processing" : row.final_discussion}
+                {row.final_discussion}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Delivery of Final Report :</span>
-                {row.delivery_report == "pending" ? "processing" : row.delivery_report}
+                {row.delivery_report}
               </p>
               <p>
                 <span style={{ fontWeight: "bold" }}>Awaiting Completion :</span>
-                {row.other_stage == "pending" ? "processing" : row.other_stage}
+                {row.other_stage}
               </p>
             </div>
           </>
@@ -261,7 +261,7 @@ function AssignmentComponent() {
             {!row.final_report == "" ? (
               <div>
                 <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
                   target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
@@ -271,7 +271,7 @@ function AssignmentComponent() {
             ) : row.assignement_draft_report ? (
               <div>
                 <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
                   target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}

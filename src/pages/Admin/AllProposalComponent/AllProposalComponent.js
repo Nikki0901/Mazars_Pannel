@@ -160,7 +160,6 @@ function AllProposalComponent({ allProposal }) {
     },
     {
       text: "Status",
-      // dataField: "status",
       sort: true,
       style: {
         fontSize: "11px",

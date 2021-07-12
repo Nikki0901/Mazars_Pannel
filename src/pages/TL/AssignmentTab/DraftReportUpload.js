@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
+import Alerts from "../../../common/Alerts";
 
 function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
   const alert = useAlert();
@@ -16,10 +17,12 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
     let formData = new FormData();
 
     var uploadImg = value.p_draft;
+    console.log("uploadImg", uploadImg);
+
     if (uploadImg) {
       for (var i = 0; i < uploadImg.length; i++) {
-        let a = value.p_draft[0];
-        formData.append("draft_report[]", a);
+        let file = uploadImg[i];
+        formData.append("draft_report[]",file);
       }
     }
 
@@ -30,21 +33,19 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
       }
     }).then(response => {
       console.log(response.data)
-      alert.success(<Msg />);
+
+      var msg = response.data.message
+      var variable = "Draft Report Uploaded"
+      Alerts.SuccessMsg(variable, msg)
+
+
       getAssignmentList();
       uploadDraftReport();
     });
 
   };
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>draft Report uploaded</p>
-      </>
-    )
-  }
+  
   return (
     <div>
       <Modal isOpen={draftModal} toggle={uploadDraftReport} size="md">
@@ -52,6 +53,7 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
+              <label>Upload Multiple Report</label>
               <input
                 type="file"
                 name="p_draft"

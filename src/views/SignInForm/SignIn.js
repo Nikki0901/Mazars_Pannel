@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
+import Alerts from "../../common/Alerts";
+
+
 
 
 const Schema = yup.object().shape({
@@ -52,19 +55,14 @@ function SignIn(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Login successfully !");
+          Alerts.SuccessLogin()
           localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           setLoad(false);
-          Swal.fire(
-            "Oops...",
-            "Errorr : Incorrect Email OR Password",
-            "error"
-          );
-          // Swal.fire(`oops : ${response.data.result}`)
+          Alerts.ErrorLogin()
         }
       })
       .catch((error) => {

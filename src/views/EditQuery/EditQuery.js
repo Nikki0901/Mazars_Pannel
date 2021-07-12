@@ -11,6 +11,7 @@ import { Card, CardHeader, Row, Col } from "reactstrap";
 import { Spinner } from "reactstrap";
 import Select from "react-select";
 import DeleteQuery from "./DeleteQuery";
+import Alerts from "../../common/Alerts";
 
 function EditQuery(props) {
   // const { Option } = Select;
@@ -136,7 +137,10 @@ function EditQuery(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("updated");
+          var msg = response.data.message
+          var variable = "Query Successfully Updated"
+          Alerts.SuccessMsg(variable, msg)
+          
           props.history.push("/customer/queries");
         } else {
           setLoad(false);
@@ -145,6 +149,14 @@ function EditQuery(props) {
       .catch((error) => {
         console.log("erroror - ", error);
       });
+  };
+
+  const Msg = ({ msg }) => {
+    return (
+      <>
+        <p style={{ fontSize: "12px" }}>Query successfully updated! {msg}</p>
+      </>
+    );
   };
 
   return (
@@ -341,7 +353,7 @@ function EditQuery(props) {
                                 <td>{i + 1}</td>
                                 <td>
                                   <a
-                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
+                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
                                     target="_blank"
                                   >
                                     <i
@@ -349,7 +361,6 @@ function EditQuery(props) {
                                       style={{ width: "50", height: "20" }}
                                     ></i>
                                   </a>
-
                                 </td>
                                 <td>{p.name}</td>
                               </tr>
@@ -468,6 +479,14 @@ const assessment_year = [
     value: "2020-21",
     label: "2020-21",
   },
+  {
+    value: "2021-22",
+    label: "2021-22",
+  },
+  {
+    value: "2022-23",
+    label: "2022-23",
+  }
 ];
 
 const purpose = [

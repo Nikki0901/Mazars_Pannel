@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { useAlert } from "react-alert";
+import Alerts from "../../common/Alerts";
 
 function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
   const alert = useAlert();
@@ -14,7 +15,6 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
 
     let formData = new FormData();
     formData.append("assign_no", assingNo);
-    // formData.append("query", value.p_addqueri);
     formData.append("upload", value.p_upload[0]);
 
     axios({
@@ -25,7 +25,10 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success(<Msg />);
+
+          var variable = "Document Uploaded Successfully"
+          Alerts.SuccessNormal(variable)
+
           reset();
           getQuery();
         }
@@ -36,30 +39,13 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
   };
 
 
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>Query successfully added!</p>
-      </>
-    );
-  };
 
   return (
     <>
       <Modal isOpen={addModal} toggle={addHandler} size="md">
-        <ModalHeader toggle={addHandler}>Add. Query</ModalHeader>
+        <ModalHeader toggle={addHandler}>UPLOAD DOCUMENTS</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* <div className="mb-3">
-              <label className="form-label">Additional Queries</label>
-              <textarea
-                className="form-control"
-                id="textarea"
-                rows="6"
-                name="p_addqueri"
-                ref={register}
-              ></textarea>
-            </div> */}
 
             <div className="mb-3">
               <label className="form-label">Upload Your Document</label>

@@ -173,7 +173,7 @@ function Proposal() {
                   to={{
                     pathname: `/teamleader/chatting/${row.id}`,
                     obj: {
-                      message_type: "Proposal Discussion",
+                      message_type: "2",
                       query_No: row.assign_no,
                       query_id: row.id,
                       routes: `/teamleader/proposal`

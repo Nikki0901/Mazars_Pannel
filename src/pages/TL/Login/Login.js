@@ -10,6 +10,7 @@ import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import Alerts from "../../../common/Alerts";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -48,7 +49,7 @@ function Login(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Login successfully !");
+          Alerts.SuccessLogin()
           localStorage.setItem(
             "tlkey",
             JSON.stringify(response.data["user id"])
@@ -56,11 +57,8 @@ function Login(props) {
           props.history.push("/teamleader/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
-          Swal.fire(
-            "Oops...",
-            "Errorr : Incorrect Email OR Password",
-            "error"
-          );
+          Alerts.ErrorLogin()
+
         }
       })
       .catch((error) => {
@@ -106,7 +104,7 @@ function Login(props) {
                 <div className="mb-3">
                   <label className="form-label">Password</label>
                   <input
-                   type={isPasswordShow ? "text" : "password"}
+                    type={isPasswordShow ? "text" : "password"}
                     className={classNames("form-control", {
                       "is-invalid": errors.password,
                     })}
@@ -115,9 +113,9 @@ function Login(props) {
                     ref={register}
                   />
                   <i
-                      className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
-                      onClick={togglePasssword}
-                    />
+                    className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                    onClick={togglePasssword}
+                  />
                   {errors.password && (
                     <div className="invalid-feedback">
                       {errors.password.message}

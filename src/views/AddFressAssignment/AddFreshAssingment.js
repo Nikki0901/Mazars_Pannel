@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { Spinner } from "reactstrap";
+import Alerts from "../../common/Alerts";
 
 
 function AddFreshAssingment(props) {
@@ -38,7 +39,6 @@ function AddFreshAssingment(props) {
 
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
-
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
 
@@ -83,9 +83,15 @@ function AddFreshAssingment(props) {
       })
       .then(function (response) {
         console.log("res-", response);
+        console.log("msg-", response.data.message[0]);
+
         if (response.data.code === 1) {
           reset();
-          alert.success(<Msg />);
+          var msg = response.data.message
+
+          var variable = "Query Successfully Added"
+          Alerts.SuccessMsg(variable, msg)
+
           props.history.push("/customer/queries");
         } else {
           setLoad(false);
@@ -96,10 +102,10 @@ function AddFreshAssingment(props) {
       });
   };
 
-  const Msg = () => {
+  const Msg = ({ msg }) => {
     return (
       <>
-        <p style={{ fontSize: "12px" }}>Query successfully added!</p>
+        <p style={{ fontSize: "12px" }}>Query successfully added! {msg}</p>
       </>
     );
   };
@@ -356,6 +362,14 @@ const assessment_year = [
   {
     value: "2020-21",
     label: "2020-21",
+  },
+  {
+    value: "2021-22",
+    label: "2021-22",
+  },
+  {
+    value: "2022-23",
+    label: "2022-23",
   }
 ];
 const ImageUploads = ({ register, control }) => {
@@ -389,6 +403,8 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
+
+
 
 // formData.append("purpose", value.p_purpose);
 // console.log("arr",arr);

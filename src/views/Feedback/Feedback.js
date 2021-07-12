@@ -15,6 +15,7 @@ import {
   Col,
 } from "reactstrap";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Alerts from "../../common/Alerts";
 
 // const Schema = yup.object().shape({
 //   p_feedback: yup.string().required("required feedback"),
@@ -51,7 +52,8 @@ function Feedback() {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(" feedback successfully sent!");
+          var variable = "Feedback Successfully Sent "
+          Alerts.SuccessNormal(variable)
         }
       })
       .catch((error) => {

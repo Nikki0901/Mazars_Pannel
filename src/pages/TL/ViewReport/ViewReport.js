@@ -77,24 +77,25 @@ function ViewReport() {
               </thead>
               {data.length > 0
                 ? data.map((p, i) => (
-                    <tbody>
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>
-                          {p.document && (
-                            <p>
-                              <a
-                                href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.document}`}
-                                target="_blank"
-                              >
-                                <i class="fa fa-photo"></i>
-                              </a>
-                            </p>
-                          )}
-                        </td>
-                      </tr>
-                    </tbody>
-                  ))
+                  <tbody>
+                    <tr>
+                      <td>{i + 1}</td>
+                      <td>
+                        {p.document && (
+                          <p style={{ display: "flex" }}>
+                            <a
+                              href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.assign_no}/${p.document}`}
+                              target="_blank"
+                            >
+                              <i class="fa fa-photo"></i>
+                            </a>
+                            <p style={{ marginLeft: "15px" }}>{p.document}</p>
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                ))
                 : null}
             </table>
           </div>

@@ -67,8 +67,7 @@ function PendingForProposals({ CountPendingProposal }) {
   };
 
 
- 
- 
+
 
   const columns = [
     {
@@ -141,23 +140,15 @@ function PendingForProposals({ CountPendingProposal }) {
         return (
           <>
             <div>
-             
-                {row.status}/
+
+              {row.status}/
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "brown" }}>
+                  <p style={{ color: "#1890ff" }}>
                     {row.statusdescription}
                   </p>
                   :
-                  row.status == "Declined Query" ?
-                    <p style={{ color: "red" }}>
-                      {row.statusdescription}
-                    </p> :
-                    row.status == "Completed Query" ?
-                      <p style={{ color: "green" }}>
-                        {row.statusdescription}
-                      </p> :
-                      null
+                  null
               }
             </div>
           </>
@@ -192,7 +183,7 @@ function PendingForProposals({ CountPendingProposal }) {
   ];
 
 
- 
+
   //change date format
   function ChangeFormateDate(oldDate) {
     console.log("date", oldDate);

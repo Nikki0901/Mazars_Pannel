@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
+import Alerts from "../../../common/Alerts";
 
 function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
   const alert = useAlert();
   const { handleSubmit, register, reset } = useForm();
 
 
-  console.log("id-",id)
+  console.log("id-", id)
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -19,14 +20,14 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
     var uploadImg = value.p_final;
     if (uploadImg) {
       for (var i = 0; i < uploadImg.length; i++) {
-        let a = value.p_final[0];
-        formData.append("final_report[]", a);
+        let file = uploadImg[i];
+        formData.append("final_report[]", file);
       }
     }
-   
+
+
     formData.append("id", id.id);
     formData.append("q_id", id.q_id);
-
     axios
       .post(`${baseUrl}/tl/UploadReport`, formData, {
         headers: {
@@ -35,20 +36,17 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
       })
       .then((response) => {
         console.log(response.data);
-        alert.success(<Msg />);
+
+        var msg = response.data.message
+        var variable = "Final Report Uploaded"
+        Alerts.SuccessMsg(variable, msg)
+
         getAssignmentList();
         uploadFinalReport();
       });
   };
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>final report uploaded</p>
-      </>
-    );
-  };
+
   return (
     <div>
       <Modal isOpen={fianlModal} toggle={uploadFinalReport} size="md">
@@ -56,6 +54,7 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
+              <label>Upload Multiple Report</label>
               <input
                 type="file"
                 name="p_final"

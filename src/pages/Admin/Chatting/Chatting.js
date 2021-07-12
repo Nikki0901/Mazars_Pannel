@@ -17,6 +17,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 // const Schema = yup.object().shape({
 //   p_feedback: yup.string().required("required feedback"),
@@ -39,8 +40,7 @@ function Chatting(props) {
   const [data, setData] = useState({})
   const { query_id, query_No, routes } = data
 
-  // const dataItem = props.location.obj
-  // const { message_type, query_id, query_No, routes } = dataItem
+
 
 
   useEffect(() => {
@@ -56,9 +56,6 @@ function Chatting(props) {
     setItem(data2.message_type)
   }, [item]);
 
-
-
-  // console.log("message_type", message_type)
 
 
   const onSubmit = (value) => {
@@ -80,7 +77,9 @@ function Chatting(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(" message successfully sent!");
+         
+          var variable = "Message Successfully Sent "
+          Alerts.SuccessNormal(variable)
           props.history.push(routes);
         }
       })
@@ -215,3 +214,5 @@ export default Chatting;
 
   //   getQuery();
   // }, []);
+    // const dataItem = props.location.obj
+  // const { message_type, query_id, query_No, routes } = dataItem

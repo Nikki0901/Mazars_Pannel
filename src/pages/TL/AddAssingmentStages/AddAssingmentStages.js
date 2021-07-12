@@ -292,7 +292,7 @@ function AddAssingmentStages() {
                               ref={register}
                               name="client_discussion"
                             >
-                              <option value="pending">Inprogress</option>
+                              <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
                               <option value="notApplicable">
                                 Not Applicable
@@ -344,7 +344,7 @@ function AddAssingmentStages() {
                               ref={register}
                               name="draft_report"
                             >
-                              <option value="pending">Inprogress</option>
+                              <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
                               <option value="notApplicable">
                                 Not Applicable
@@ -386,7 +386,7 @@ function AddAssingmentStages() {
                               ref={register}
                               name="final_discussion"
                             >
-                              <option value="pending">Inprogress</option>
+                              <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
                               <option value="notApplicable">
                                 Not Applicable
@@ -422,7 +422,7 @@ function AddAssingmentStages() {
                               ref={register}
                               name="delivery_report"
                             >
-                              <option value="pending">Inprogress</option>
+                              <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
                               <option value="notApplicable">
                                 Not Applicable
@@ -458,7 +458,7 @@ function AddAssingmentStages() {
                               ref={register}
                               name="other_stage"
                             >
-                              <option value="pending">Inprogress</option>
+                              <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
                             </select>
                           </div>

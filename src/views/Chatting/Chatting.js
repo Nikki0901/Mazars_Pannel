@@ -17,6 +17,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Alerts from "../../common/Alerts";
 
 
 // const Schema = yup.object().shape({
@@ -78,7 +79,11 @@ function Chatting(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(" message successfully sent!");
+
+          var variable = "Message Successfully Sent "
+          Alerts.SuccessNormal(variable)
+
+          // alert.success(" message successfully sent!");
           props.history.push(routes);
         }
       })

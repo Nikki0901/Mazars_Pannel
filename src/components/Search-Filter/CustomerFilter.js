@@ -9,9 +9,21 @@ function CustomerFilter(props) {
   const { handleSubmit, register, errors, reset } = useForm();
 
   const { records,
-    setRecords, setData, getData, id, query, proposal, assignment } = props;
-  const [selectedData, setSelectedData] = useState([]);
+    setRecords, setData, getData, id,
+    query,
+    InprogressAllocation,
+    InprogressQueryProposal,
+    DeclinedQuery,
 
+    proposal,
+    inprogressProposal,
+    acceptedProposal,
+    declinedProposal,
+    paymentStatus,
+    assignment } = props;
+
+
+  const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
 
@@ -88,6 +100,64 @@ function CustomerFilter(props) {
         });
     }
 
+
+    if (InprogressAllocation == "InprogressAllocation") {
+      axios
+        .get(
+          `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
+            id
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&status=4&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (InprogressQueryProposal == "InprogressQueryProposal") {
+      axios
+        .get(
+          `${baseUrl}/customers/getProposals?uid=${JSON.parse(id)}&status=1&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (DeclinedQuery == "DeclinedQuery") {
+      axios
+        .get(
+          `${baseUrl}/customers/declinedQueries?uid=${JSON.parse(
+            id
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&pcat_id=${selectedData}&status=${data.p_status}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+
+
     if (proposal == "proposal") {
       axios
         .get(
@@ -108,6 +178,64 @@ function CustomerFilter(props) {
         });
     }
 
+    if (inprogressProposal == "inprogressProposal") {
+      axios
+        .get(
+          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
+            id
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (acceptedProposal == "acceptedProposal") {
+      axios
+        .get(
+          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
+            id
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&status=2&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (declinedProposal == "declinedProposal") {
+      axios
+        .get(
+          `${baseUrl}/customers/getProposals?uid=${JSON.parse(
+            id
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&status=3pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+
     if (assignment == "assignment") {
       axios
         .get(
@@ -115,6 +243,22 @@ function CustomerFilter(props) {
             id
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (paymentStatus == "paymentStatus") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -232,8 +376,64 @@ function CustomerFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Inprogress</option>
-                      <option value="3">Complete</option>
+                      <option value="1">Inprogress Queries</option>
+                      <option value="2">Completed Queries</option>
+                      <option value="3">Declined Queries</option>
+                    </select>
+                  )}
+
+                  {DeclinedQuery == "DeclinedQuery" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Admin Declined; Queries</option>
+                      <option value="2">Declined; Queries</option>
+                      <option value="3">Declined; Proposals</option>
+                      <option value="4">Declined; Payment</option>
+                    </select>
+                  )}
+
+                  {proposal == "proposal" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Inprogress Proposals</option>
+                      <option value="2">Accepted Proposals</option>
+                      <option value="3">Declined Proposals</option>
+                    </select>
+                  )}
+
+                  {inprogressProposal == "inprogressProposal" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="4">Inprogress; Preparation</option>
+                      <option value="5"> Inprogress; Acceptance</option>
+                    </select>
+                  )}
+
+                  {paymentStatus == "paymentStatus" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Unpaid</option>
+                      <option value="2">Paid</option>
                     </select>
                   )}
 
@@ -246,22 +446,11 @@ function CustomerFilter(props) {
                     >
                       <option value="">--select--</option>
                       <option value="1">Inprogress</option>
-                      <option value="2">Complete</option>
+                      <option value="2">Completed</option>
+                      <option value="3">Payment Declined</option>
                     </select>
                   )}
-                  {proposal == "proposal" && (
-                    <select
-                      className="form-select form-control"
-                      name="p_status"
-                      ref={register}
-                      style={{ height: "33px" }}
-                    >
-                      <option value="">--select--</option>
-                      <option value="1">Inprogress</option>
-                      <option value="2">Accepted</option>
-                      <option value="3">Declined</option>
-                    </select>
-                  )}
+
                 </div>
 
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
@@ -269,9 +458,8 @@ function CustomerFilter(props) {
                 </button>
                 <Reset />
 
-                <div class="form-group mx-sm-5 mb-2">
+                <div class="form-group mx-sm-2 mb-2">
                   <label className="form-select form-control"
-                  style={{marginLeft:"450px"}}
                   >Total Records : {records}</label>
                 </div>
 
@@ -286,51 +474,4 @@ function CustomerFilter(props) {
 
 export default CustomerFilter;
 
-// http://13.232.121.233/mazarapi/v1/customers/incompleteAssignments?user=93&cat_id=&from=2021-03-20&to=2021-03-20
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore(e.target.value)}
-                  >
-                    <option value="">--Select Category--</option>
-                    {tax.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-{
-  /* <select
-                    className="form-select form-control"
-                    name="p_tax2"
-                    ref={register}
-                    style={{ height: "35px" }}
-                    onChange={(e) => setStore2(e.target.value)}
-                  >
-                    <option value="">--Select Sub-Category--</option>
-                    {tax2.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.details}
-                      </option>
-                    ))}
-                  </select> */
-}
-// useEffect(() => {
-// getCategory();
-// }, []);
 
-// const getCategory = () => {
-//   axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//     console.log(res);
-//     if (res.data.code === 1) {
-//       setTax(res.data.result);
-//     }
-//   });
-// };
-
-// const [store, setStore] = useState("");
-// const [tax, setTax] = useState([]);

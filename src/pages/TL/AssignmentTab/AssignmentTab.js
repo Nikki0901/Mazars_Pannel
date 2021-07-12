@@ -268,7 +268,7 @@ function AssignmentTab() {
             {!row.final_report == "" ? (
               <div>
                 <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
                   target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
@@ -278,7 +278,7 @@ function AssignmentTab() {
             ) : row.assignement_draft_report ? (
               <div>
                 <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignement_draft_report}`}
+                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
                   target="_blank"
                 >
                   <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
@@ -386,7 +386,7 @@ function AssignmentTab() {
                   to={{
                     pathname: `/teamleader/chatting/${row.q_id}`,
                     obj: {
-                      message_type: "Assignment Discussion",
+                      message_type: "3",
                       query_No: row.assign_no,
                       query_id: row.q_id,
                       routes: `/teamleader/assignment`

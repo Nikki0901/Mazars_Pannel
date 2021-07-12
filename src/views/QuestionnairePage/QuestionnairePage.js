@@ -10,6 +10,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAlert } from "react-alert";
 import Select from "react-select";
 import { Spinner } from "reactstrap";
+import Alerts from "../../common/Alerts";
 
 function Questionnaire(props) {
   const alert = useAlert();
@@ -28,14 +29,7 @@ function Questionnaire(props) {
   const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>Query successfully added!</p>
-      </>
-    );
-  };
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -79,8 +73,11 @@ function Questionnaire(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          var msg = response.data.message
           reset();
-          alert.success(<Msg />);
+          var variable = "Query Successfully Added"
+          Alerts.SuccessMsg(variable, msg)
+
           props.history.push("/customer/dashboard");
         } else {
           setLoad(false);
@@ -90,6 +87,17 @@ function Questionnaire(props) {
         console.log("erroror - ", error);
       });
   };
+
+
+  //alert msg
+  const Msg = ({ msg }) => {
+    return (
+      <>
+        <p style={{ fontSize: "12px" }}>Query successfully added! {msg}</p>
+      </>
+    );
+  };
+
 
   const SuccessMesg = () => {
     return (
@@ -217,7 +225,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_word"
                         ref={register}
-                        // value="1"
+                      // value="1"
                       />
                       <label className="form-check-label">
                         Softcopy - Word/ Pdf
@@ -229,7 +237,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_digital"
                         ref={register}
-                        // value="1"
+                      // value="1"
                       />
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
@@ -241,7 +249,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_physically"
                         ref={register}
-                        // value="1"
+                      // value="1"
                       />
                       <label className="form-check-label">
                         Printout- Physically Signed
@@ -363,6 +371,14 @@ const assessment_year = [
   {
     value: "2020-21",
     label: "2020-21",
+  },
+  {
+    value: "2021-22",
+    label: "2021-22",
+  },
+  {
+    value: "2022-23",
+    label: "2022-23",
   }
 ];
 
@@ -397,6 +413,8 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
+
+
 
 {
   /* <div className="col-md-6">

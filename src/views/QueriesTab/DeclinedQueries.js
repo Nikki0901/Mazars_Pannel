@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { Link } from "react-router-dom";
+import { useAlert } from "react-alert";
 import {
   Card,
   CardHeader,
@@ -11,28 +12,37 @@ import {
   Col,
   Table,
 } from "reactstrap";
-
-
+import { Link } from "react-router-dom";
+import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
-import AdminFilter from "../../components/Search-Filter/AdminFilter";
 
-function AllQueriesData() {
 
-  const [allQueriesData, setAllQueriesData] = useState([])
+
+function DeclinedQueries() {
+  const alert = useAlert();
+  const userId = window.localStorage.getItem("userid");
+  const [query, setQuery] = useState([]);
+  const [queriesCount, setCountQueries] = useState(null);
   const [records, setRecords] = useState([]);
 
+
   useEffect(() => {
-    getAllQueriesData();
+    getQueriesData();
   }, []);
 
-  const getAllQueriesData = () => {
-    axios.get(`${baseUrl}/admin/getAllQueries`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setAllQueriesData(res.data.result);
-        setRecords(res.data.result.length);
-      }
-    });
+  const getQueriesData = () => {
+    axios
+      .get(
+        `${baseUrl}/customers/declinedQueries?uid=${JSON.parse(userId)}`
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setQuery(res.data.result);
+          setCountQueries(res.data.result.length);
+          setRecords(res.data.result.length);
+        }
+      });
   };
 
 
@@ -40,12 +50,11 @@ function AllQueriesData() {
     {
       text: "S.No",
       dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
       headerStyle: () => {
         return { fontSize: "12px", width: "50px" };
-      },
-      formatter: (cellContent, row, rowIndex, index) => {
-        console.log("rowIndex : ", index);
-        return <div>{rowIndex + 1}</div>;
       },
     },
     {
@@ -56,6 +65,7 @@ function AllQueriesData() {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
         var oldDate = row.created;
         if (oldDate == null) {
           return null;
@@ -71,15 +81,10 @@ function AllQueriesData() {
         return { fontSize: "12px" };
       },
       formatter: function nameFormatter(cell, row) {
+        console.log(row);
         return (
           <>
-            <Link
-              to={{
-                pathname: `/admin/queries/${row.id}`,
-                index: 0,
-                routes: "queriestab",
-              }}
-            >
+            <Link to={`/customer/my-assingment/${row.id}`}>
               {row.assign_no}
             </Link>
           </>
@@ -103,15 +108,8 @@ function AllQueriesData() {
       },
     },
     {
-      text: "Customer Name",
-      dataField: "name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
       text: "Status",
+      dataField: "",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -145,82 +143,48 @@ function AllQueriesData() {
       },
     },
     {
-      text: "Action",
+      text: "Expected Delivery Date",
+      dataField: "exp_delivery_date",
+      sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", width: "65px" };
+        return { fontSize: "12px" };
       },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div title="Send Message">
-              <Link
-                to={{
-                  pathname: `/admin/chatting/${row.id}`,
-                  obj: {
-                    message_type: "4",
-                    query_No: row.assign_no,
-                    query_id: row.id,
-                    routes: `/admin/queriestab`
-                  }
-                }}
-              >
-                <i
-                  class="fa fa-comments-o"
-                  style={{
-                    fontSize: 16,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "blue"
-                  }}
-                ></i>
-              </Link>
-            </div>
-          </>
-        );
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.exp_delivery_date);
+        var oldDate = row.exp_delivery_date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
       },
     },
   ];
 
   return (
-    <>
+    <div>
       <Card>
         <CardHeader>
-          <AdminFilter
-            setData={setAllQueriesData}
-            getData={getAllQueriesData}
-            allQueries="allQueries"
-            setRecords={setRecords}
+          <CustomerFilter
+            setData={setQuery}
+            getData={getQueriesData}
+            id={userId}
+            DeclinedQuery="DeclinedQuery"
             records={records}
+            setRecords={setRecords}
           />
-
         </CardHeader>
         <CardBody>
-
           <BootstrapTable
             bootstrap4
             keyField="id"
-            data={allQueriesData}
+            data={query}
             columns={columns}
             rowIndex
-            wrapperClasses="table-responsive"
           />
         </CardBody>
       </Card>
-    </>
+    </div>
   );
 }
 
-export default AllQueriesData;
-
-
-
-{/* <div class="row">
-            <div className="col-9">
-            </div>
-            <div className="col-3">
-              <div class="form-group">
-                <label className="form-select form-control"
-                >Total Records : 12</label>
-              </div>
-            </div>
-          </div> */}
+export default DeclinedQueries;

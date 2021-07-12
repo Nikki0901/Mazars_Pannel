@@ -17,6 +17,7 @@ import {
   Tooltip,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import Alerts from "../../../common/Alerts";
 
 // const Schema = yup.object().shape({
 //   p_feedback: yup.string().required("required feedback"),
@@ -82,7 +83,9 @@ function Chatting(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success("message successfully sent!");
+
+          var variable = "Message Successfully Sent "
+          Alerts.SuccessNormal(variable)
           props.history.push(routes);
         }
       })

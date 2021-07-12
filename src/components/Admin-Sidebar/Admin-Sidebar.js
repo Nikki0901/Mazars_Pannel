@@ -72,6 +72,15 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
               </li>
 
               <li class="nav-item">
+                <NavLink to={"/customer/paymentstatus"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Payment Status
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
                 <NavLink to={"/customer/assignment"}>
                   <i class="fa fa-file"></i>
                   <span class="menu-title" data-i18n="">

@@ -14,11 +14,14 @@ import {
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import { Link, useHistory } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import PaymentModal from "./PaymentModal";
 import * as Cookies from "js-cookie";
-import RejectedModal from "./RejectModal";
 import { useAlert } from "react-alert";
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import PaymentModal from "./PaymentModal";
+import RejectedModal from "./RejectModal";
+import ViewAllReportModal from "./ViewAllReport";
+
 
 function AssignmentTab() {
   const history = useHistory();
@@ -34,6 +37,8 @@ function AssignmentTab() {
   const [videoProfile, SetVideoProfile] = useState("480p_4");
 
   const [rejectedItem, setRejectedItem] = useState({});
+  const [report, setReport] = useState();
+
   const [pay, setPay] = useState({
     pay: "",
     amount: "",
@@ -43,7 +48,6 @@ function AssignmentTab() {
 
   const [addPaymentModal, setPaymentModal] = useState(false);
   const paymentHandler = (key) => {
-    console.log("key", key);
     setPaymentModal(!addPaymentModal);
     setPay({
       amount: key.accepted_amount,
@@ -53,16 +57,31 @@ function AssignmentTab() {
     });
   };
 
+
+
   const [rejectModal, setRejectModal] = useState(false);
   const rejectHandler = (key) => {
-    console.log("key", key);
     setRejectModal(!rejectModal);
     setRejectedItem(key);
   };
 
+
+
+  const [reportModal, setReportModal] = useState(false);
+  const ViewReport = (key) => {
+    console.log("key - ", key);
+    setReportModal(!reportModal);
+    setReport(key);
+  };
+
+
+
+
+
   useEffect(() => {
     getAssignmentData();
   }, []);
+
 
   const getAssignmentData = () => {
     axios
@@ -194,20 +213,20 @@ function AssignmentTab() {
               {!row.final_report == "" ? (
                 <div>
                   <a
-                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.final_report}`}
+                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
                     target="_blank"
                   >
-                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
                     final
                   </a>
                 </div>
               ) : row.assignment_draft_report ? (
                 <div>
                   <a
-                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assignment_draft_report}`}
+                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignment_draft_report}`}
                     target="_blank"
                   >
-                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
                     draft
                   </a>
                 </div>
@@ -255,7 +274,7 @@ function AssignmentTab() {
         fontSize: "11px",
       },
       headerStyle: () => {
-        return { fontSize: "11px" };
+        return { fontSize: "11px", width: "100px" };
       },
       formatter: function (cell, row) {
         return (
@@ -312,6 +331,15 @@ function AssignmentTab() {
                   <FeedbackIcon />
                 </Link>
               </div>
+
+              <div title="View Report"
+                style={{ cursor: "pointer" }}
+                onClick={() => ViewReport(row.assign_no)}
+              >
+                <DraftsIcon />
+              </div>
+
+
             </div>
           </>
         );
@@ -451,6 +479,14 @@ function AssignmentTab() {
             rejectedItem={rejectedItem}
             getPendingforAcceptance={getAssignmentData}
           />
+
+          <ViewAllReportModal
+            ViewReport={ViewReport}
+            reportModal={reportModal}
+            report={report}
+            getPendingforAcceptance={getAssignmentData}
+          />
+
         </CardBody>
       </Card>
     </Layout>

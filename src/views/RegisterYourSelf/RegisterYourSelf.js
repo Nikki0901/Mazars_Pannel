@@ -12,27 +12,33 @@ function RegisterYourSelf() {
       <div style={{ display: "flex", justifyContent: "space-evenly", marginTop: "140px", }}>
 
         <div style={{
-          height: "200px", width: "300px", border: "2px solid blue",
-          padding: "78px 101px"
+          height: "200px", width: "300px", border: "2px solid blue", textAlign: "center",
+          paddingTop: "80px"
         }}>
-
           <Link to="/customer/signin">
-            <button type="button" class="btn btn-outline-primary btn-lg btn-block">
+            <button type="button" class="btn btn-outline-primary btn-lg">
               Signin
             </button>
           </Link>
-          <p style={{ marginLeft: "15px", marginTop: "12px", color: "forestgreen" }}>
-            Existing Customers</p>
+
+          <p style={{ marginLeft: "140px", marginTop: "50px" }}>
+            Existing Customers
+          </p>
         </div>
 
-        <div style={{ height: "200px", width: "300px", border: "2px solid blue", padding: "78px 101px" }}>
+
+        <div style={{
+          height: "200px", width: "300px", border: "2px solid blue", textAlign: "center",
+          paddingTop: "80px"
+        }}>
           <Link to="/customer/signup">
-            <button type="button" class="btn btn-outline-primary btn-lg btn-block">
+            <button type="button" class="btn btn-outline-primary btn-lg">
               SignUp
             </button>
           </Link>
-          <p style={{ marginLeft: "15px", marginTop: "12px", color: "forestgreen" }}>
-            For New Customers</p>
+          <p style={{ marginLeft: "140px", marginTop: "50px" }}>
+            For New Customers
+          </p>
         </div>
       </div>
 
@@ -43,8 +49,7 @@ function RegisterYourSelf() {
 }
 
 export default RegisterYourSelf;
-{/* <h1 style={{ color: "#2b345f",textDecoration:"none" }}>
-          <Link to="/customer/signup">
-            PLEASE REGISTER YOURSELF
-            </Link>
-        </h1> */}
+
+
+        // <p style={{ marginLeft: "15px", marginTop: "12px", }}>
+        // For New Customers</p>

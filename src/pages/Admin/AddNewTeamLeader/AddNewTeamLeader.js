@@ -54,6 +54,7 @@ function AddNew() {
     getCategory();
   }, []);
 
+
   useEffect(() => {
     const getSubCategory = () => {
       axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {

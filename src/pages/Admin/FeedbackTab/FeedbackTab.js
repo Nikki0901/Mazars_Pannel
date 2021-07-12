@@ -14,10 +14,13 @@ import {
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackService from "../../../config/services/QueryDetails";
 import CommonServices from "../../../common/common";
+import { useAlert } from "react-alert";
+
 
 function FeedbackTab() {
-  const userid = window.localStorage.getItem("adminkey");
+  const alert = useAlert();
 
+  const userid = window.localStorage.getItem("adminkey");
   const [feedbackData, setFeedBackData] = useState([]);
 
   useEffect(() => {
@@ -43,30 +46,34 @@ function FeedbackTab() {
         return rowIndex + 1;
       },
       headerStyle: () => {
-        return { fontSize: "12px", width: "50px" };
+        return { fontSize: "12px", width: "10px" };
       },
     },
     {
       text: "Date",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", width: "100px" };
+        return { fontSize: "12px", width: "60px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
         return (
           <>
-            {CommonServices.removeTime(row.created)}
+            <div style={{ display: "flex" }}>
+              <p>{CommonServices.removeTime(row.created)}</p>
+              <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.created)}</p>
+            </div>
           </>
         );
       },
     },
+
     {
       text: "Query No",
       dataField: "assign_no",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px", width: "100px" };
+        return { fontSize: "12px", width: "40px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
@@ -74,22 +81,70 @@ function FeedbackTab() {
       },
     },
     {
-      text: "Customer Name",
-      dataField: "name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px", width: "150px" };
-      },
-    },
-    {
       text: "Feedback",
       dataField: "feedback",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "150px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <div>
+              {
+                row.admin_read == "0" ?
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      display: "flex", justifyContent: "space-between"
+                    }}
+                    onClick={() => readNotification(row.id)}
+                    title="unread"
+                  >
+                    <p>{row.feedback}  - By {row.name}</p>
+                    <i class="fa fa-bullseye" style={{ color: "red" }}></i>
+                  </div>
+                  :
+                  <div
+                    style={{ cursor: "pointer", display: "flex", justifyContent: "space-between" }}
+                    title="read"
+                  >
+                    <p>{row.feedback}  - By {row.name}</p>
+                    <i class="fa fa-bullseye" style={{ color: "green" }}></i>
+                  </div>
+              }
+            </div>
+          </>
+        );
       },
     },
   ];
+
+
+  // readnotification
+  const readNotification = (id) => {
+
+    console.log("call", id)
+    let formData = new FormData();
+    formData.append("id", id);
+    formData.append("type", "admin");
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/markReadFeedback`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response)
+        if (response.data.code === 1) {
+          getFeedback()
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
 
   return (
     <>
@@ -98,7 +153,7 @@ function FeedbackTab() {
           <CardHeader>
             <Row>
               <Col md="7">
-                <CardTitle tag="h4">List of Feedback</CardTitle>
+                <CardTitle tag="h4">Feedback</CardTitle>
               </Col>
               <Col md="5"></Col>
             </Row>

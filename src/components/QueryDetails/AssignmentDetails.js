@@ -72,23 +72,23 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
                 </tr>
                 <tr>
                   <td>Client Discussion</td>
-                  <td>{p.client_discussion}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(p.client_discussion)}</td>
                 </tr>
                 <tr>
                   <td>Draft Reports</td>
-                  <td>{p.draft_report}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(p.draft_report)}</td>
                 </tr>
                 <tr>
                   <td>Final Discussion</td>
-                  <td>{p.final_discussion}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(p.final_discussion)}</td>
                 </tr>
                 <tr>
                   <td>Delivery of Final Reports</td>
-                  <td>{p.delivery_report}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(p.delivery_report)}</td>
                 </tr>
                 <tr>
                   <td>Awaiting Completion</td>
-                  <td>{p.other_stage}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(p.other_stage)}</td>
                 </tr>
               </td>
             </tr>

@@ -22,6 +22,7 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { withStyles } from "@material-ui/core/styles";
 import * as Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 
 
@@ -143,8 +144,8 @@ function Demo() {
   });
 
   // const B = (key) => {
-  //   console.log("key", key)
-  //   return
+  //   console.log("B call", key)
+  //   setRead(key)
   // }
 
   const AppointmentBase = ({
@@ -156,12 +157,9 @@ function Demo() {
     ...restProps
   }) => (
     <Appointments.Appointment {...restProps}>
-
       <div style={{ display: "flex" }}>
-        {
-          // () => setRead(data.owner)
-          console.log("data", data)
-        }
+
+        {/* {B(data.owner)} */}
 
         <div>{children}</div>
         <div
@@ -183,14 +181,7 @@ function Demo() {
 
   const myAppointment = (props) => {
 
-    console.log("props", props.data.owner)
-
-    var a = props.data.owner
-    // setRead(a)
-
-    // const B = () => {
-    //   console.log("B")
-    // }, []
+    // console.log("props", props.data.owner)
 
     return (
       <div>
@@ -198,7 +189,6 @@ function Demo() {
           {...props}
         />
       </div>
-
     );
   };
 
@@ -217,6 +207,7 @@ function Demo() {
 
   const changeFormat = (d) => {
     console.log(d);
+
     return (
       d.getFullYear() +
       "-" +
@@ -226,7 +217,10 @@ function Demo() {
       " " +
       d.toString().split(" ")[4]
     );
+
   };
+
+
 
 
   const commitChanges = ({ added, changed, deleted }) => {
@@ -285,17 +279,19 @@ function Demo() {
       }
       console.log("dataIttem", dataIttem);
 
+      console.log("startDate", dataIttem.startDate);
+      console.log("endDate", dataIttem.endDate);
+
       let formData = new FormData();
       formData.append("customer_id", JSON.parse(userId));
       formData.append("question_id", dataIttem.question_id);
       formData.append("id", dataIttem.id);
-      formData.append("time", dataIttem.startDate);
-      formData.append("endtime", dataIttem.endDate);
+      formData.append("time", changeFormat(dataIttem.startDate));
+      formData.append("endtime", changeFormat(dataIttem.endDate));
       formData.append("title", dataIttem.title);
       formData.append("notes", dataIttem.notes);
       formData.append("set_by", "admin");
       formData.append("user", dataIttem.user);
-
 
       axios({
         method: "POST",
@@ -313,9 +309,28 @@ function Demo() {
 
     if (deleted !== undefined) {
       console.log("deleted f", deleted);
-      axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
-        console.log("res -", res);
-        getData();
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "It will permanently deleted !",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.value) { 
+         axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+            console.log("res -", res);
+
+            if (res.data.code === 1) {
+              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              getData();
+            } else {
+              Swal.fire("Oops...", "Errorr ", "error");
+            }
+          });
+        }
       });
     }
   };
@@ -334,6 +349,7 @@ function Demo() {
 
         <DayView startDayHour={10} endDayHour={24} />
         <WeekView startDayHour={10} endDayHour={19} />
+
         <Appointments appointmentComponent={myAppointment} />
 
         <Toolbar />
@@ -342,16 +358,17 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-
-        {
-          owner ? <AppointmentForm
-            readOnly
-          />
+        <AppointmentForm
+        />
+        {/* {
+          read ?
+            <AppointmentForm
+              readOnly
+            />
             :
             <AppointmentForm
             />
-        }
-
+        } */}
 
         <Resources
           data={resources}

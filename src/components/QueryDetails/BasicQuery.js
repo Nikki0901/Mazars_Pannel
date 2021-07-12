@@ -66,11 +66,10 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                 {queryDocs.map((p, i) => (
                   <p style={{ display: "flex" }}>
                     <a
-                      href={`http://65.0.220.156/mazarapi/assets/image/${p.name}`}
+                      href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
                       target="_blank"
                     >
                       <i class="fa fa-photo"></i>
-
                     </a>
                     <p style={{ marginLeft: "15px" }}>{p.name}</p>
                   </p>

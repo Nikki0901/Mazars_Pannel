@@ -2,7 +2,7 @@
 import React from "react";
 
 
-export default class YourComponent extends React.Component {
+export default class Payment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,13 +13,17 @@ export default class YourComponent extends React.Component {
     }
 
     handleChange1(i, e) {
+        console.log("props", this.props.totalAmount)
+
+        var totalAmount = this.props.totalAmount
+
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },
             () => {
                 this.props.paymentAmount(this.state.values)
-
             })
+
 
         // this.props.paymentAmount(this.state.values)
     }
@@ -60,7 +64,6 @@ export default class YourComponent extends React.Component {
                         />
                     </div>
                 </div >
-
             );
         }
 
@@ -68,7 +71,6 @@ export default class YourComponent extends React.Component {
         console.log("dates state", this.state.dates);
 
         // console.log(" items", [...]);
-
 
 
         return (
@@ -105,7 +107,7 @@ export default class YourComponent extends React.Component {
 //     console.log("i-", i);
 
 //     const { name, value } = e.target
-  
+
 //     let values = [...amount];
 //     values[i] = value
 //     setAmount({ values });

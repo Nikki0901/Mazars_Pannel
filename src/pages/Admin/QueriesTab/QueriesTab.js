@@ -9,6 +9,7 @@ import DeclinedQueries from "../../../components/DeclinedQueries/DeclinedQueries
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
 import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
+
 function QueriesTab(props) {
   // console.log("queries tab: ", props);
 

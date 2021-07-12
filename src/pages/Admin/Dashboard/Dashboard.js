@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
-import "./index.css";
+import "./index1.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
@@ -155,7 +155,245 @@ function Dashboard() {
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
 
-      <div class="card">
+      <div className="row">
+        <div className="col-md-3 content_header">
+          <table className="table table-striped first main_table">
+            <thead className="query_thead">
+              <tr>
+                <th className="left_side"> All Queries</th>
+                <th>{total}</th>
+              </tr>
+            </thead>
+          </table>
+          <table className="table table-striped second main_table">
+            <thead className="query_thead">
+              <tr>
+                <th className="left_side">Inprogress; Queries</th>
+                <th>{inprogress_queries}</th>
+              </tr>
+            </thead>
+
+            <tbody className="table_body">
+              <tr>
+                <td className="left_side">Inprogress; Allocation</td>
+                <td>{inprogress_allocation}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Inprogress; Proposals</td>
+                <td>{inprogress_proposal}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Inprogress; Assignments</td>
+                <td>{inprogress_assignment}</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <table className="table table-striped third main_table">
+            <thead className="query_thead">
+              <tr>
+                <th className="left_side">Completed; Queries</th>
+                <th>{complete_query}</th>
+              </tr>
+            </thead>
+            <tbody className="table_body">
+              <tr>
+                <th className="left_side">Completed; Assignments</th>
+                <td>{complete_query}</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <table className="table table-striped forth main_table">
+            <thead className="query_thead">
+              <tr>
+                <th className="left_side">Declined; Queries</th>
+                <th>{declined_queries}</th>
+              </tr>
+            </thead>
+
+            <tbody className="table_body">
+              <tr>
+                <td className="left_side">Admin Declined; Queries</td>
+                <td>{admin_declined_query}</td>
+              </tr>
+              <tr>
+                <td className="left_side"> Customer Declined; Queries</td>
+                <td>{customer_declined_Query}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Customer Declined; Proposals</td>
+                <td>{customer_declined_proposal}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Customer Declined; Payment</td>
+                <td>{Customer_declined_payment}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="col-md-3 content_header">
+
+          <table className="table table-striped fifth main_table">
+            <thead className="proposal_thead">
+              <tr>
+                <th className="left_side">All Proposals</th>
+                <th>{allproposal}</th>
+
+              </tr>
+            </thead>
+          </table>
+
+          <table className="table table-striped sixth main_table">
+            <thead className="proposal_thead">
+              <tr>
+                <th className="left_side">Inprogress; Proposals</th>
+                <th>{InProgress}</th>
+              </tr>
+            </thead>
+            <tbody classNameName="table_body">
+              <tr>
+                <td className="left_side">Inprogress; Preparation</td>
+                <td>{inprogress_preparation}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Inprogress; Acceptance</td>
+                <td>{inprogress_acceptance}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table className="table table-striped seventh main_table">
+            <thead className="proposal_thead">
+              <tr>
+                <th className="left_side">Accepted; Proposals </th>
+                <th>{accepted_proposals}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table className="table table-striped eight main_table">
+            <thead className="proposal_thead">
+              <tr>
+                <th className="left_side">Customer Declined; Proposals</th>
+                <th>{declined}</th>
+              </tr>
+            </thead>
+          </table>
+
+
+        </div>
+
+        <div className="col-md-3 content_header">
+          <table className="table table-striped ninth main_table">
+            <thead className="assignment_thead">
+              <tr>
+                <th className="left_side">All Assignments</th>
+                <th>{inprogress + complete + +(customer_declined_payment)}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table className="table table-striped tenth main_table">
+            <thead className="assignment_thead">
+
+              <tr>
+                <th className="left_side">Inprogress; Assignments</th>
+                <th>{inprogress}</th>
+              </tr>
+            </thead>
+
+            <tbody classNameName="table_body">
+              <tr>
+                <td className="left_side">Client Discussion</td>
+                <td>{client_discussion}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Draft Reports</td>
+                <td>{draft_report}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Final Discussion</td>
+                <td>{final_discussion}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Delivery of Final Reports</td>
+                <td>{final_report}</td>
+              </tr>
+              <tr>
+                <td className="left_side">Awaiting Completion</td>
+                <td>{complete_inprocess}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table className="table table-striped tenth main_table">
+            <thead className="assignment_thead">
+
+              <tr>
+                <th className="left_side">Completed; Assignments</th>
+                <th>{complete}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table className="table table-striped tenth main_table">
+            <thead className="assignment_thead">
+
+              <tr>
+                <th className="left_side">Customer Declined; Payment</th>
+                <th>{customer_declined_payment}</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+
+        <div className="col-md-3 content_header">
+
+          <table className="table table-striped twelvth main_table">
+            <thead className="payment_thead">
+              <tr>
+                <th className="left_side">All Payments</th>
+                <th>{unpaid + paid}</th>
+              </tr>
+            </thead>
+          </table>
+          <table className="table table-striped thirteen main_table">
+            <thead className="payment_thead2">
+              <tr>
+                <th className="left_side">Paid</th>
+                <th>{paid}</th>
+              </tr>
+            </thead>
+          </table>
+
+          <table className="table table-striped thirteen main_table">
+            <thead className="payment_thead2">
+              <tr>
+                <th className="left_side">Unpaid</th>
+                <th>{unpaid}</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+
+    </Layout>
+  );
+}
+
+export default Dashboard;
+
+
+
+
+
+{/* 
+      <div className="card">
         <div class="card-header">
           All Queries :  {total}
         </div>
@@ -167,7 +405,7 @@ function Dashboard() {
                 <th scope="col">{inprogress_queries}</th>
               </tr>
             </thead>
-            <tbody>
+           <tbody className="table_body">
               <tr>
                 <td>Inprogress; Allocation</td>
                 <td>{inprogress_allocation}</td>
@@ -364,497 +602,4 @@ function Dashboard() {
           </table>
         </div>
       </div>
-
-
-    </Layout>
-  );
-}
-
-export default Dashboard;
-
-
-
-// {
-//   Object.keys(response.data.result[0]).map((key, i ,value) => (
-//     console.log(key,i,value)
-//   )
-//   )
-// }
-{/* <div class="row mt-3">
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    All Queries
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p class="text-white">{total_query}</p>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    Inprogress Queries
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p class="text-white">{total_inprogress + pendingfor_allocation}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    Completed Queries
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p class="text-white">{total_complete}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-
-{/* <div class="row mt-3">
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-info">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    Decline
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p onClick={toggle} title="Expand"
-                    style={{ cursor: "pointer", color: "white" }}>
-                    {
-                      customer_decline + admin_decline
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {
-        value &&
-        <div class="row mt-3">
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-info">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Customer Decline
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{customer_decline}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-info">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Admin Decline
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{admin_decline}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      } */}
-
-{/* 
-      <div class="row mt-3">
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-secondary">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    All Proposal
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p onClick={toggleProposal} title="Expand"
-                    style={{ cursor: "pointer", color: "white" }}>
-                    {
-                      allproposal
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-secondary">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    In Progress
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p onClick={toggleProposal2} title="Expand"
-                    style={{ cursor: "pointer", color: "white" }}>
-                    {
-                      InProgress
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div> */}
-
-
-{/* {
-        valueProposal &&
-        <div class="row mt-3">
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-secondary">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Pending for Acceptance
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{pendingforacceptance}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-secondary">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Declined
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{declineed}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-      }
-
-      {
-        valueProposal2 &&
-        <div class="row mt-3">
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-secondary">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Pending for Acceptance
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{pendingforacceptance}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1 bg-secondary">
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Pending for Preperation
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{pendingforPreperation}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      } */}
-{/* 
-      <div class="row mt-3">
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    All payment
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p onClick={togglePayment} title="Expand"
-                    style={{ cursor: "pointer", color: "white" }}>
-                    {unpaid + paid}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        {
-          valuePayment &&
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Unpaid
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{unpaid}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-
-        {
-          valuePayment &&
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1" style={{ background: "#a07a5f" }}>
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Paid
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{paid}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        }
-
-
-      </div>
-
-
-
-      <div class="row mt-3">
-
-        <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <p class="text-white info">
-                    Total Assignment
-                  </p>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <p onClick={toggleAssignment} title="Expand"
-                    style={{ cursor: "pointer", color: "white" }}>
-                    {complete + inprogress}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {
-          valueAssignment &&
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Inprogress
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{inprogress}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        }
-
-        {
-          valueAssignment &&
-
-          <div class="col-xl-4 col-lg-6 col-md-12">
-            <div class="card pull-up ecom-card-1" style={{ background: "#549263" }}>
-              <div class="card-body">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <div>
-                    <p class="text-white info">
-                      Complete
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <p class="text-white">{complete}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      </div> */}
-
-
-
-{/* <div class="col-xl-4 col-lg-6 col-md-12">
-          <div class="card pull-up ecom-card-1 bg-secondary">
-            <div class="card-body height-100">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white  info position-absolute p-1">
-                    Pending for Preperation
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/proposal`,
-                      index: 2,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white  font-large-1 float-right p-1"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{pendingforPreperation}</h4>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-{/* <div class="card bg-info">
-            <div class="card-body">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <h5 class="text-white info">
-                    All Queries
-                  </h5>
-                </div>
-                <div>
-                  <Link
-                    to={{
-                      pathname: `/admin/queriestab`,
-                      index: 0,
-                    }}
-                  >
-                    <i class="fa fa-tasks text-white"></i>
-                  </Link>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginTop: "15px",
-                }}
-              >
-                <h4 class="text-white">{total_query}</h4>
-              </div>
-            </div>
-          </div> */}
-
-
-  // const toggle = () => {
-  //   setValue(!value)
-  // }
-
-  // const toggleProposal = () => {
-  //   setValueProposal(!valueProposal)
-  // }
-
-  // const toggleProposal2 = () => {
-  //   setValueProposal2(!valueProposal2)
-  // }
-
-  // const togglePayment = () => {
-  //   setValuePayment(!valuePayment)
-  // }
-
-  // const toggleAssignment = () => {
-  //   setValueAssignment(!valueAssignment)
-  // }
+ */}

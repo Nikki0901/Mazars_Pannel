@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import Layout from "../../components/Layout/Layout";
 import {
   Card,
   CardHeader,
@@ -14,39 +15,54 @@ import {
   ModalFooter,
   Button,
 } from "reactstrap";
-import { useForm } from "react-hook-form";
-import "antd/dist/antd.css";
-import { Select } from "antd";
-import { Link } from "react-router-dom";
-import BootstrapTable from "react-bootstrap-table-next";
-import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import { useAlert } from "react-alert";
+import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../common/common";
-function PaidComponent() {
-  const [payment, setPayment] = useState([]);
-  const { handleSubmit, register, errors, reset } = useForm();
-  const { Option, OptGroup } = Select;
-  const [selectedData, setSelectedData] = useState([]);
-  const [paymentcount, setPaymentCount] = useState("");
-  const [pay, setPay] = useState([]);
+import BootstrapTable from "react-bootstrap-table-next";
+import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
+import PaymentModal from "./PaymentModal";
+
+
+function PaymentStatus() {
+  const alert = useAlert();
+  const { id } = useParams();
+  const userId = window.localStorage.getItem("userid");
+  // const cust_id = window.localStorage.getItem("userid");
   const [records, setRecords] = useState([]);
+
+  const [pay, setPay] = useState([]);
+  const [count, setCount] = useState("");
+  const [payment, setPayment] = useState([]);
+  const [modal, setModal] = useState(false);
+
+  const [assignNo, setAssignNo] = useState("");
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const paymentHandler = (key) => {
+    console.log("key", key.assign_no);
+    setPaymentModal(!addPaymentModal);
+    setAssignNo(key.assign_no)
+  };
+
+
 
   useEffect(() => {
     getPaymentStatus();
   }, []);
+  // /tl/getUploadedProposals?cid=customer_id
 
   const getPaymentStatus = () => {
-    axios.get(`${baseUrl}/tl/getUploadedProposals`).then((res) => {
+    axios.get(`${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(userId)}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setPayment(res.data.result);
-        setPaymentCount(res.data.result.length);
+        setCount(res.data.result.length);
         setRecords(res.data.result.length);
 
       }
     });
   };
 
-  const [modal, setModal] = useState(false);
   const toggle = (key) => {
     console.log("key", key);
     setModal(!modal);
@@ -64,6 +80,7 @@ function PaidComponent() {
       })
       .catch((error) => console.log(error));
   };
+
 
   const columns = [
     {
@@ -114,7 +131,7 @@ function PaidComponent() {
           <>
             <Link
               to={{
-                pathname: `/admin/queries/${row.assign_id}`,
+                pathname: `/customer/my-assingment/${row.assign_id}`,
                 routes: "paymentstatus",
               }}
             >
@@ -146,25 +163,6 @@ function PaidComponent() {
         return { fontSize: "11px" };
       },
     },
-    // {
-    //   text: "Date of Proposal",
-    //   dataField: "created",
-    //   sort: true,
-    //   style: {
-    //     fontSize: "11px",
-    //   },
-    //   headerStyle: () => {
-    //     return { fontSize: "11px" };
-    //   },
-    //   formatter: function dateFormat(cell, row) {
-    //     console.log("dt", row.created);
-    //     var oldDate = row.created;
-    //     if (oldDate == null) {
-    //       return null;
-    //     }
-    //     return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-    //   },
-    // },
     {
       text: "Date of acceptance of Proposal",
       dataField: "cust_accept_date",
@@ -277,135 +275,150 @@ function PaidComponent() {
         return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
-    {
-      dataField: "tl_name",
-      text: "TL name",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
-      text: "Action",
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div style={{ display: "flex" }}>
+    // {
+    //   text: "Action",
+    //   style: {
+    //     fontSize: "11px",
+    //   },
+    //   headerStyle: () => {
+    //     return { fontSize: "11px" };
+    //   },
+    //   formatter: function (cell, row) {
+    //     return (
+    //       <>
 
+    //         <div style={{ display: "flex", justifyContent: "space-between", width: "100px" }}>
+    //           <div title="Payment History">
+    //             <i
+    //               class="fa fa-credit-card"
+    //               style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+    //               onClick={() => toggle(row.assign_id)}
+    //             ></i>
+    //           </div>
+    //           <div title="schedule call">
+    //             <Link
+    //               to={{
+    //                 pathname: `/teamleader/schedule`,
+    //               }}
+    //             >
+    //               <i
+    //                 class="fa fa-caret-square-o-right"
+    //                 style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+    //               ></i>
+    //             </Link>
 
-              <div style={{ cursor: "pointer" }} title="Payment History">
-                <i
-                  class="fa fa-credit-card"
-                  style={{ color: "green", fontSize: "16px" }}
-                  onClick={() => toggle(row.assign_id)}
-                ></i>
-              </div>
+    //           </div>
+    //           <div>
+    //             <i
+    //               class="fa fa-exchange"
+    //               style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+    //               onClick={() => sendEmail(row.assign_id)}
+    //             ></i>
+    //           </div>
 
-              <div title="Send Message">
-                <Link
-                  to={{
-                    pathname: `/admin/chatting/${row.id}`,
-                    obj: {
-                      message_type: "5",
-                      query_No: row.assign_no,
-                      query_id: row.id,
-                      routes: `/admin/paymentstatus`
-                    }
-                  }}
-                >
-                  <i
-                    class="fa fa-comments-o"
-                    style={{
-                      fontSize: 16,
-                      cursor: "pointer",
-                      marginLeft: "8px",
-                      color: "blue"
-                    }}
-                  ></i>
-                </Link>
-              </div>
-            </div>
-          </>
-        );
-      },
-    },
+    //           <div style={{ cursor: "pointer" }} title="Payment decline">
+    //             <i
+    //               class="fa fa-comments-o"
+    //               style={{ color: "green", fontSize: "16px" }}
+    //               onClick={() => paymentHandler(row)}
+    //             ></i>
+    //           </div>
+    //         </div>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
-  console.log("pay", pay);
+
+  const sendEmail = (key) => {
+    console.log("key", key);
+
+    axios
+      .get(`${baseUrl}/customers/paymentemail?id=${key}`)
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
 
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <Row>
-            <Col md="7">
-              <CardTitle tag="h4">Payment status ({paymentcount})</CardTitle>
-            </Col>
-            <Col md="5"></Col>
-          </Row>
-        </CardHeader>
+    <>
+      <Layout custDashboard="custDashboard" custUserId={userId}>
+        <Card>
+          <CardHeader>
+            <Row>
+              <Col md="7">
+                <CardTitle tag="h4">Payment Status ({count})</CardTitle>
+              </Col>
+              <Col md="5"></Col>
+            </Row>
+          </CardHeader>
 
-        <CardHeader>
-          <AdminFilter
-            setData={setPayment}
-            getData={getPaymentStatus}
-            paymentStatus="paymentStatus"
-            setRecords={setRecords}
-            records={records}
-          />
-        </CardHeader>
-        <CardBody>
-          <BootstrapTable
-            bootstrap4
-            keyField="id"
-            data={payment}
-            columns={columns}
-            classes="table-responsive"
-          />
+          <CardHeader>
+            <CustomerFilter
+              setData={setPayment}
+              getData={getPaymentStatus}
+              paymentStatus="paymentStatus"
+              setRecords={setRecords}
+              records={records}
+              id={userId}
+            />
+          </CardHeader>
 
-          <Modal isOpen={modal} fade={false} toggle={toggle}>
-            <ModalHeader toggle={toggle}>History</ModalHeader>
-            <ModalBody>
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th scope="row">S.No</th>
-                    <th scope="row">Date</th>
-                    <th scope="row">Amount</th>
-                  </tr>
-                </thead>
-                {pay.length > 0
-                  ? pay.map((p, i) => (
-                    <tbody>
-                      <tr>
-                        <td>{i + 1}</td>
-                        <td>{CommonServices.removeTime(p.payment_date)}</td>
-                        <td>{p.paid_amount}</td>
-                      </tr>
-                    </tbody>
-                  ))
-                  : null}
-              </table>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={toggle}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </Modal>
-        </CardBody>
-      </Card>
-    </div>
+          <CardBody>
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={payment}
+              columns={columns}
+              classes="table-responsive"
+            />
+
+            <PaymentModal
+              paymentHandler={paymentHandler}
+              addPaymentModal={addPaymentModal}
+              assignNo={assignNo}
+            />
+
+
+            <Modal isOpen={modal} fade={false} toggle={toggle}>
+              <ModalHeader toggle={toggle}>History</ModalHeader>
+              <ModalBody>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="row">S.No</th>
+                      <th scope="row">Date</th>
+                      <th scope="row">Amount</th>
+                    </tr>
+                  </thead>
+                  {pay.length > 0
+                    ? pay.map((p, i) => (
+                      <tbody>
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{CommonServices.removeTime(p.payment_date)}</td>
+                          <td>{p.paid_amount}</td>
+                        </tr>
+                      </tbody>
+                    ))
+                    : null}
+                </table>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+
+
+          </CardBody>
+        </Card>
+      </Layout>
+    </>
   );
 }
 
-export default PaidComponent;
+export default PaymentStatus;
