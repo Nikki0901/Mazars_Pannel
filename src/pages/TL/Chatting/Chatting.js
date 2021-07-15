@@ -18,21 +18,25 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../../common/Alerts";
+import classNames from "classnames";
 
-// const Schema = yup.object().shape({
-//   p_feedback: yup.string().required("required feedback"),
-//   p_assignment: yup.string().required("required assignment"),
-// });
+const Schema = yup.object().shape({
+  msg_type: yup.string().required("required message type"),
+  p_message: yup.string().required("required message"),
+});
+
 
 
 function Chatting(props) {
   const alert = useAlert();
   const history = useHistory();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const userId = window.localStorage.getItem("tlkey");
-  const [assignment, setAssingment] = useState([]);
 
+  const [item, setItem] = useState("");
   const [data, setData] = useState({})
   const { message_type, query_id, query_No, routes } = data
 
@@ -44,25 +48,14 @@ function Chatting(props) {
     if (dataItem) {
       localStorage.setItem("myDataTL", JSON.stringify(dataItem));
     }
-
     var myData = localStorage.getItem("myDataTL");
+
     var data2 = JSON.parse(myData)
     setData(data2)
+    setItem(data2.message_type)
   }, []);
 
 
-  useEffect(() => {
-    const getQuery = () => {
-      axios.get(`${baseUrl}/tl/getProposalQuery?uid=${JSON.parse(userId)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setAssingment(res.data.result);
-          }
-        });
-    };
-    getQuery();
-  }, []);
 
 
   const onSubmit = (value) => {
@@ -131,30 +124,48 @@ function Chatting(props) {
 
                 <div class="form-group">
                   <label>Message Type</label>
-                  <select
-                    className="form-select form-control"
-                    name="msg_type"
-                    ref={register}
-                    style={{ height: "33px" }}
-                  >
-                    <option value="">--select--</option>
-                    <option value="4">Query Discussion</option>
-                    <option value="2">Proposal Discussion</option>
-                    <option value="5">Payment Discussion</option>
-                    <option value="3">Assignment Discussion</option>
-                    <option value="1">Others</option>
-                  </select>
+                  {
+                    item &&
+                    <select
+                      className={classNames("form-control", {
+                        "is-invalid": errors.msg_type,
+                      })}
+                      name="msg_type"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="4">Query Discussion</option>
+                      <option value="2">Proposal Discussion</option>
+                      <option value="5">Payment Discussion</option>
+                      <option value="3">Assignment Discussion</option>
+                      <option value="1">Others</option>
+                    </select>
+                  }
+                  {errors.msg_type && (
+                    <div className="invalid-feedback">
+                      {errors.msg_type.message}
+                    </div>
+                  )}
+
                 </div>
 
                 <div class="form-group">
                   <label>Message</label>
                   <textarea
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_message,
+                    })}
                     placeholder="Message text here"
                     rows="5"
                     ref={register}
                     name="p_message"
                   ></textarea>
+                  {errors.p_message && (
+                    <div className="invalid-feedback">
+                      {errors.p_message.message}
+                    </div>
+                  )}
                 </div>
 
                 <button type="submit" className="btn btn-primary">

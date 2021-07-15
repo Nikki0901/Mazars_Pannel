@@ -29,6 +29,7 @@ function QueriesRecevied(props) {
   const [queryDocs, setQueryDocs] = useState([]);
   const [paymentDetails, setPaymentDetails] = useState([]);
   const [feedback, setFeedback] = useState([]);
+  const [reports, setReports] = useState([]);
 
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
@@ -67,14 +68,35 @@ function QueriesRecevied(props) {
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
-        console.log(res);
+      axios.get(`${baseUrl}/tl/getQueryDetails?id=${id}`).then((res) => {
+        console.log("admin QD", res);
         if (res.data.code === 1) {
-          setSubmitData(res.data.result);
-          setDisplaySpecific(res.data.additional_queries);
-          setPaymentDetails(res.data.payment_detail);
-          setAssingmentNo(res.data.result[0].assign_no);
-          setFeedback(res.data.feedback_detail);
+
+          if (res.data.result) {
+            if (res.data.result[0].name == null) {
+              console.log("null")
+            }
+            else {
+              setSubmitData(res.data.result);
+            }
+          }
+          
+          if (res.data.additional_queries) {
+            setDisplaySpecific(res.data.additional_queries);
+          }
+          if (res.data.payment_detail) {
+            setPaymentDetails(res.data.payment_detail);
+          }
+          if (res.data.feedback_detail) {
+            setFeedback(res.data.feedback_detail);
+          }
+          if (res.data.result[0].assign_no) {
+            setAssingmentNo(res.data.result[0].assign_no);
+          }
+
+          if (res.data.reports) {
+            setReports(res.data.reports);
+          }
 
 
           var purposeItem = res.data.result[0].purpose_opinion;
@@ -128,6 +150,8 @@ function QueriesRecevied(props) {
               setQueryDocs(res.data.queries_document);
             }
           }
+
+
         }
       });
     };
@@ -189,6 +213,8 @@ function QueriesRecevied(props) {
                 purpose={purpose}
                 year={year}
                 feedback={feedback}
+                reports={reports}
+
               />
             ))}
           </div>

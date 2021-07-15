@@ -11,7 +11,6 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
 import Alerts from "../../common/Alerts";
 

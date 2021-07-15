@@ -13,6 +13,8 @@ import * as yup from "yup";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import Alerts from "../../common/Alerts";
+
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -41,7 +43,10 @@ function ForgetPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("otp send your email !");
+
+          var variable = "Otp Sent Your Email "
+          Alerts.SuccessNormal(variable)
+
           props.history.push(`/customer/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
           console.log(response.data.result);

@@ -5,6 +5,10 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
+import Alerts from "../../common/Alerts";
+import CommonServices from "../../common/common";
+
+
 
 function PaymentModal({
   addPaymentModal,
@@ -15,7 +19,13 @@ function PaymentModal({
   const { handleSubmit, register } = useForm();
   const alert = useAlert();
   const history = useHistory();
-  const { id, amount, accepted_amount, paid_amount } = pay;
+
+  const { id, amount, accepted_amount, paid_amount,
+    payment_terms, no_of_installment, installment_amount,
+    due_date, amount_type, amount_fixed, amount_hourly
+  } = pay;
+
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -33,7 +43,10 @@ function PaymentModal({
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Payment Done!");
+
+          var variable = "Payment Done Successfully "
+          Alerts.SuccessNormal(variable)
+
           getProposalData();
           paymentHandler();
         }
@@ -43,9 +56,23 @@ function PaymentModal({
       });
   };
 
+  const installAmount = (data) => {
+    var item = data.split(',')
+    console.log("item", item);
+
+    const dataItem = item.map((p, i) =>
+    (
+      <>
+        <p>{CommonServices.removeTime(p)}</p>
+      </>
+    ))
+    return dataItem;
+  }
+
+
   return (
     <div>
-      <Modal isOpen={addPaymentModal} toggle={paymentHandler} size="sm">
+      <Modal isOpen={addPaymentModal} toggle={paymentHandler} size="md">
         <ModalHeader toggle={paymentHandler}>Payment</ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
@@ -57,6 +84,65 @@ function PaymentModal({
               <th>Paid Amount</th>
               <td>{paid_amount}</td>
             </tr>
+
+            <tr>
+              <th>{amount_type}</th>
+              <td>
+                {
+                  amount_type == "fixed" ?
+                    amount
+                    :
+                    amount_type == "hourly" ?
+                      amount_hourly
+                      :
+                      amount_type == "mixed" ?
+                        <div>
+                          <p>Fixed : {amount}</p>
+                          <p>Hourly : {amount_hourly}</p>
+                        </div>
+                        :
+                        ""
+                }
+              </td>
+            </tr>
+
+            <tr>
+              <th scope="row">Payment Terms</th>
+              {
+                payment_terms == "lumpsum" ?
+                  <td>
+                    <tr>
+                      <th>Payment Type</th>
+                      <th>Due Dates</th>
+                    </tr>
+                    <tr>
+                      <td>{CommonServices.capitalizeFirstLetter(payment_terms)}</td>
+                      <td>
+                        {CommonServices.removeTime(due_date)}
+                      </td>
+                    </tr>
+                  </td>
+                  :
+                  payment_terms == "installment" ?
+                    <td>
+                      <tr>
+                        <th>Payment Type</th>
+                        <th>No of Installments</th>
+                        <th>Installment Amount</th>
+                        <th>Due Dates</th>
+                      </tr>
+                      <tr>
+                        <td>{payment_terms}</td>
+                        <td>{no_of_installment}</td>
+                        <td>{installAmount(installment_amount)}</td>
+                        <td>{installAmount(due_date)}</td>
+                      </tr>
+                    </td>
+                    :
+                    ""
+              }
+            </tr>
+
           </table>
           <form onSubmit={handleSubmit(onSubmit)}>
             {+accepted_amount == +paid_amount ? null : (

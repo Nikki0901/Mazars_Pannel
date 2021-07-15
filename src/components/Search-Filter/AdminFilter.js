@@ -442,10 +442,10 @@ function AdminFilter(props) {
                 </button>
                 <Reset />
 
-                <div class="form-group mb-2">
+                {/* <div class="form-group mb-2">
                   <label className="form-select form-control"
                   >Total Records : {records}</label>
-                </div>
+                </div> */}
               </div>
             </form>
           </div>

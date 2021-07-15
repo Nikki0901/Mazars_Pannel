@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Alerts from "../../common/Alerts";
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
@@ -38,7 +39,10 @@ function ChatComponent({ addPaymentModal, chatHandler, id, getProposalData }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Success !");
+
+          var variable = "Successfully Sent "
+          Alerts.SuccessNormal(variable)
+          
           getProposalData();
           chatHandler();
         }

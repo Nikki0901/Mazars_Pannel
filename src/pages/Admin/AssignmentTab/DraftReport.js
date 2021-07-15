@@ -17,6 +17,7 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Records from "../../../components/Records/Records";
 
 
 function DraftReport() {
@@ -398,58 +399,9 @@ function DraftReport() {
                 />
               </div>
 
-              {/* <div class="form-group mx-sm-1  mb-2">
-                <select
-                  className="form-select form-control"
-                  name="p_status"
-                  ref={register}
-                  style={{ height: "33px" }}
-                >
-                  <option value="">--select--</option>
-                  <option value="1">Inprogress</option>
-                  <option value="2">Completed</option>
-                  <option value="3">Payment Declined</option>
-                </select>
-              </div> */}
 
-              {/* <div class="form-group mx-sm-1  mb-2">
-                <Select
-                  mode="multiple"
-                  style={{ width: 210 }}
-                  placeholder="Select stages"
-                  defaultValue={[]}
-                  onChange={assingmentStatus}
-                  value={status}
-                  allowClear
-                >
-                  <Option value="Client_Discussion" label="Compilance">
-                    <div className="demo-option-label-item">
-                      Client Discussion
-                    </div>
-                  </Option>
-                  <Option value="Draft_Report" label="Compilance">
-                    <div className="demo-option-label-item">Draft report</div>
-                  </Option>
-                  <Option value="Final_Discussion" label="Compilance">
-                    <div className="demo-option-label-item">
-                      Final Discussion
-                    </div>
-                  </Option>
-                  <Option value="Delivery_of_report" label="Compilance">
-                    <div className="demo-option-label-item">
-                      Delivery of Final Report
-                    </div>
-                  </Option>
-                  <Option value="Completed" label="Compilance">
-                    <div className="demo-option-label-item">Awaiting Completion</div>
-                  </Option>
-                  
-                </Select>
-              </div> */}
 
-              <div class="form-group mx-sm-1  mb-2">
-                <label className="form-select form-control">Total Records : {records}</label>
-              </div>
+
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                 Search
               </button>
@@ -460,6 +412,7 @@ function DraftReport() {
         </CardHeader>
 
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

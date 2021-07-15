@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl ,ImageUrl} from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
 import {

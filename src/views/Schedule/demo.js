@@ -233,7 +233,7 @@ function Demo() {
         }
         <div>{children}</div>
         <div
-          onClick={() => handleJoin(data.id)}
+          onClick={() => handleJoin(data.question_id)}
         >
           <i
             class="fa fa-video-camera"

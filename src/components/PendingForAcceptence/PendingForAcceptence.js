@@ -16,6 +16,8 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Records from "../../components/Records/Records";
+
 
 function PendingForAcceptence({ pendingProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -177,7 +179,7 @@ function PendingForAcceptence({ pendingProposal }) {
               {row.status}/
               {
                 row.status == "Inprogress" ?
-                  <p style={{ color: "brown" }}>
+                  <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
@@ -300,6 +302,7 @@ function PendingForAcceptence({ pendingProposal }) {
 
         </CardHeader>
         <CardBody>
+        <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

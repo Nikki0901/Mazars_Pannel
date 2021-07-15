@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
+import Alerts from "../../../common/Alerts";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -107,7 +108,10 @@ function AddNew() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TP created  !");
+
+          var variable = "Tax Professional Created Successfully"
+          Alerts.SuccessNormal(variable)
+
           history.goBack();
         }
       })

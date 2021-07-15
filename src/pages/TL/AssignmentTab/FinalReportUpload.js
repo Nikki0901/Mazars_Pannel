@@ -36,10 +36,9 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
       })
       .then((response) => {
         console.log(response.data);
-
-        var msg = response.data.message
+        var msg = response.data.msg
         var variable = "Final Report Uploaded"
-        Alerts.SuccessMsg(variable, msg)
+        Alerts.SuccessReport(variable, msg)
 
         getAssignmentList();
         uploadFinalReport();

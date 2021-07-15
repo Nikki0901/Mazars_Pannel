@@ -1,7 +1,14 @@
+.main_table{
+	padding: 0;
+}
 
+.content_header{
+	padding: 3px;
+}
 
 .content_header table{
   	color: white;
+	  
 }
 
 
@@ -17,6 +24,7 @@
 
 .left_side{
 	width: 180px;
+	padding-left: 0px
 }
 
 

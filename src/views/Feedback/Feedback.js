@@ -15,20 +15,25 @@ import {
   Col,
 } from "reactstrap";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 
-// const Schema = yup.object().shape({
-//   p_feedback: yup.string().required("required feedback"),
-//   p_assignment: yup.string().required("required assignment"),
-// });
+const Schema = yup.object().shape({
+  p_feedback: yup.string().required("required feedback"),
+});
 
 
-function Feedback() {
-  const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+function Feedback({ props }) {
+
+  console.log("pp", props);
+
+
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
+
   const history = useHistory();
   const { id } = useParams();
-
 
   const userId = window.localStorage.getItem("userid");
 
@@ -54,6 +59,8 @@ function Feedback() {
           reset();
           var variable = "Feedback Successfully Sent "
           Alerts.SuccessNormal(variable)
+
+          // props.history.push(routes);
         }
       })
       .catch((error) => {
@@ -101,13 +108,19 @@ function Feedback() {
                 <div class="form-group">
                   <label>Feedback</label>
                   <textarea
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_feedback,
+                    })}
                     placeholder="Feedback text here"
                     rows="5"
                     ref={register}
                     name="p_feedback"
                   ></textarea>
-
+                  {errors.p_feedback && (
+                    <div className="invalid-feedback">
+                      {errors.p_feedback.message}
+                    </div>
+                  )}
                 </div>
                 <button type="submit" className="btn btn-primary">
                   submit

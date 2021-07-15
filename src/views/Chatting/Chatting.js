@@ -5,7 +5,6 @@ import * as yup from "yup";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 import {
   Card,
@@ -18,21 +17,23 @@ import {
   Tooltip,
 } from "reactstrap";
 import Alerts from "../../common/Alerts";
+import classNames from "classnames";
 
 
-// const Schema = yup.object().shape({
-//   p_feedback: yup.string().required("required feedback"),
-//   p_assignment: yup.string().required("required assignment"),
-// });
+const Schema = yup.object().shape({
+  message_type: yup.string().required("required message type"),
+  p_message: yup.string().required("required message"),
+});
 
 
 function Chatting(props) {
 
   console.log("props", props)
 
-  const alert = useAlert();
   const history = useHistory();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const userId = window.localStorage.getItem("userid");
 
@@ -40,10 +41,6 @@ function Chatting(props) {
   const [data, setData] = useState({})
 
   const { message_type, query_id, query_No, routes } = data
-
-  // const dataItem = props.location.obj
-  // const { message_type, query_id, query_No, routes } = dataItem
-
 
 
   useEffect(() => {
@@ -132,7 +129,9 @@ function Chatting(props) {
                   {
                     item &&
                     <select
-                      className="form-select form-control"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.message_type,
+                      })}
                       name="message_type"
                       ref={register}
                       style={{ height: "33px" }}
@@ -146,18 +145,30 @@ function Chatting(props) {
                       <option value="1">Others</option>
                     </select>
                   }
+
+                  {errors.message_type && (
+                    <div className="invalid-feedback">
+                      {errors.message_type.message}
+                    </div>
+                  )}
                 </div>
 
                 <div class="form-group">
                   <label>Message</label>
                   <textarea
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_message,
+                    })}
                     placeholder="Message text here"
                     rows="5"
                     ref={register}
                     name="p_message"
                   ></textarea>
-
+                  {errors.p_message && (
+                    <div className="invalid-feedback">
+                      {errors.p_message.message}
+                    </div>
+                  )}
                 </div>
 
                 <button type="submit" className="btn btn-primary">

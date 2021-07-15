@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Records from "../../components/Records/Records";
 
 
 
@@ -34,7 +35,7 @@ function InprogressAllocation() {
   const getQueriesData = () => {
     axios
       .get(
-        `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=4`
+        `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=1`
       )
       .then((res) => {
         console.log(res);
@@ -121,22 +122,29 @@ function InprogressAllocation() {
             <div>
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "#1890ff" }}>
+                  <div>
                     {row.status}/
-                    {row.status_message}
-                  </p>
-                  :
-                  row.status == "Declined Query" ?
-                    <p style={{ color: "red" }}>
-                      {row.status}/
+                    <p className="inprogress">
                       {row.status_message}
-                    </p> :
-                    row.status == "Completed Query" ?
-                      <p style={{ color: "green" }}>
-                        {row.status}/
-                        {row.status_message}
-                      </p> :
-                      null
+                    </p>
+                  </div>
+                  :
+                  row.status == "Inprogress; Allocation" ?
+                    <p>
+                      {row.status}
+                    </p>
+                    :
+                    row.status == "Inprogress; Proposals" ?
+                      <p>
+                        {row.status}
+                      </p>
+                      :
+                      row.status == "Inprogress; Assignments" ?
+                        <p>
+                          {row.status}
+                        </p>
+                        :
+                        null
               }
             </div>
           </>
@@ -175,6 +183,8 @@ function InprogressAllocation() {
           />
         </CardHeader>
         <CardBody>
+          <Records records={records} />
+
           <BootstrapTable
             bootstrap4
             keyField="id"

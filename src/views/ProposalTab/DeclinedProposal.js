@@ -18,6 +18,7 @@ import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import Records from "../../components/Records/Records";
 
 
 function DeclinedProposal() {
@@ -106,7 +107,7 @@ function DeclinedProposal() {
                 console.log(row);
                 return (
                     <>
-                        <Link to={`/customer/my-assingment/${row.id}`}>
+                        <Link to={`/customer/my-assingment/${row.q_id}`}>
                             {row.assign_no}
                         </Link>
                     </>
@@ -155,7 +156,7 @@ function DeclinedProposal() {
             },
         },
         {
-            text: "Date of acceptance of Proposal",
+            text: "Date of Declined of Proposal",
             dataField: "cust_accept_date",
             sort: true,
             style: {
@@ -190,7 +191,7 @@ function DeclinedProposal() {
                                 row.status == "Inprogress" ?
                                     <div>
                                         {row.status}/
-                                        <p style={{ color: "green" }}>
+                                        <p className="inprogress">
                                             {row.statusdescription}
                                         </p>
                                     </div>
@@ -198,14 +199,14 @@ function DeclinedProposal() {
                                     row.status == "Customer Declined; Proposal" ?
                                         <div>
                                             {row.status}
-                                            <p style={{ color: "red" }}>
+                                            <p className="declined">
                                                 {row.statusdescription}
                                             </p>
                                         </div> :
                                         row.status == "Accepted; Proposal" ?
                                             <div>
                                                 {row.status}
-                                                <p style={{ color: "blue" }}>
+                                                <p className="completed">
                                                     {row.statusdescription}
                                                 </p>
                                             </div> :
@@ -314,6 +315,8 @@ function DeclinedProposal() {
                     />
                 </CardHeader>
                 <CardBody>
+                <Records records={records} />
+
                     <BootstrapTable
                         bootstrap4
                         keyField="id"

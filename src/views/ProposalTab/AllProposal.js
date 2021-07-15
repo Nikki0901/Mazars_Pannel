@@ -18,6 +18,7 @@ import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import Records from "../../components/Records/Records";
 
 
 function ProposalTab() {
@@ -128,7 +129,7 @@ function ProposalTab() {
                 console.log(row);
                 return (
                     <>
-                        <Link to={`/customer/my-assingment/${row.id}`}>
+                        <Link to={`/customer/my-assingment/${row.q_id}`}>
                             {row.assign_no}
                         </Link>
                     </>
@@ -212,7 +213,7 @@ function ProposalTab() {
                                 row.status == "Inprogress" ?
                                     <div>
                                         {row.status}/
-                                        <p style={{ color: "green" }}>
+                                        <p className="inprogress">
                                             {row.statusdescription}
                                         </p>
                                     </div>
@@ -220,14 +221,14 @@ function ProposalTab() {
                                     row.status == "Customer Declined; Proposal" ?
                                         <div>
                                             {row.status}
-                                            <p style={{ color: "red" }}>
+                                            <p className="declined">
                                                 {row.statusdescription}
                                             </p>
                                         </div> :
                                         row.status == "Accepted; Proposal" ?
                                             <div>
                                                 {row.status}
-                                                <p style={{ color: "blue" }}>
+                                                <p className=".completed{">
                                                     {row.statusdescription}
                                                 </p>
                                             </div> :
@@ -338,7 +339,7 @@ function ProposalTab() {
                                 {row.negotiated_amount === "0" &&
                                     row.accepted_amount === "0" ? (
                                     <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
-                                        <div style={{ cursor: "pointer" }} title="Proposal View">
+                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
                                             <Link to={`/customer/proposal_view/${row.q_id}`}>
                                                 <i
                                                     class="fa fa-check"
@@ -356,44 +357,6 @@ function ProposalTab() {
                                                 style={{ color: "red", fontSize: "16px" }}
                                                 onClick={() => rejected(row.q_id)}
                                             ></i>
-                                        </div>
-
-                                        <div style={{ cursor: "pointer" }} title="Discussion">
-                                            <i
-                                                class="fa fa-comments-o"
-                                                style={{ color: "green", fontSize: "16px" }}
-                                                onClick={() => chatHandler(row)}
-                                            ></i>
-                                        </div>
-
-                                        <div title="Send Message">
-                                            <Link
-                                                to={{
-                                                    pathname: `/customer/chatting/${row.id}`,
-                                                    obj: {
-                                                        message_type: "2",
-                                                        query_No: row.assign_no,
-                                                        query_id: row.id,
-                                                        routes: `/customer/proposal`
-                                                    }
-                                                }}
-                                            >
-                                                <i
-                                                    class="fa fa-comments-o"
-                                                    style={{
-                                                        fontSize: 16,
-                                                        cursor: "pointer",
-                                                        marginLeft: "8px",
-                                                        color: "blue"
-                                                    }}
-                                                ></i>
-                                            </Link>
-                                        </div>
-
-                                        <div title="Send Feedback" style={{ cursor: "pointer" }}>
-                                            <Link to={`/customer/feedback/${row.assign_no}`}>
-                                                <FeedbackIcon />
-                                            </Link>
                                         </div>
 
                                     </div>
@@ -422,6 +385,7 @@ function ProposalTab() {
                     />
                 </CardHeader>
                 <CardBody>
+                    <Records records={records} />
                     <BootstrapTable
                         bootstrap4
                         keyField="id"
@@ -442,3 +406,43 @@ function ProposalTab() {
 }
 
 export default ProposalTab;
+
+
+// <div title="Send Message">
+// <Link
+//     to={{
+//         pathname: `/customer/chatting/${row.q_id}`,
+//         obj: {
+//             message_type: "2",
+//             query_No: row.assign_no,
+//             query_id: row.q_id,
+//             routes: `/customer/proposal`
+//         }
+//     }}
+// >
+//     <i
+//         class="fa fa-comments-o"
+//         style={{
+//             fontSize: 16,
+//             cursor: "pointer",
+//             marginLeft: "8px",
+//             color: "blue"
+//         }}
+//     ></i>
+// </Link>
+// </div>
+
+// <div title="Send Feedback" style={{ cursor: "pointer" }}>
+// <Link to={`/customer/feedback/${row.assign_no}`}>
+//     <FeedbackIcon />
+// </Link>
+// </div>
+
+
+{/* <div style={{ cursor: "pointer" }} title="Discussion">
+                                            <i
+                                                class="fa fa-comments-o"
+                                                style={{ color: "green", fontSize: "16px" }}
+                                                onClick={() => chatHandler(row)}
+                                            ></i>
+                                        </div> */}

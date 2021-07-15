@@ -94,12 +94,19 @@ function ViewNotification() {
                 <th scope="row">Type</th>
                 <td>
                   {data.type == "1"
-                    ? "info"
+                    ? "Others"
                     : data.type == "2"
-                      ? "Proposal Discuss"
+                      ? "Proposal Discussion"
                       : data.type == "3"
-                        ? "Draft Discuss"
-                        : null}
+                        ? "Assignment Discussion"
+                        : data.type == "4"
+                          ? "Query Discussion"
+                          :
+                          data.type == "5"
+                            ? "Payment Discussion"
+                            :
+                            null
+                  }
                 </td>
               </tr>
             </tbody>

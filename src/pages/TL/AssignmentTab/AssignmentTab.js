@@ -344,6 +344,7 @@ function AssignmentTab() {
                 </div>
               ) : null}
 
+
               {row.final_report ? null : (
                 <div title="upload Pdf">
                   <p

@@ -23,6 +23,8 @@ import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import History from "./History";
 import Swal from "sweetalert2";
+import Records from "../../components/Records/Records";
+
 
 function PendingAllocation({ CountPendingForAllocation }) {
 
@@ -51,6 +53,9 @@ function PendingAllocation({ CountPendingForAllocation }) {
       .catch((error) => console.log(error));
   };
 
+
+
+  
   useEffect(() => {
     getPendingForAllocation();
   }, []);
@@ -158,7 +163,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
               {row.status} /
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "brown" }}>
+                <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
@@ -248,6 +253,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
           />
         </CardHeader>
         <CardBody>
+        <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

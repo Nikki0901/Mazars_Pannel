@@ -14,6 +14,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Records from "../../../components/Records/Records";
 
 
 function AllProposalComponent({ allProposal }) {
@@ -299,7 +300,7 @@ function AllProposalComponent({ allProposal }) {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "11px",width: "65px"  };
+        return { fontSize: "11px", width: "65px" };
       },
       formatter: function (cell, row) {
         return (
@@ -349,6 +350,7 @@ function AllProposalComponent({ allProposal }) {
         </CardHeader>
 
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

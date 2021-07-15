@@ -7,6 +7,7 @@ import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Alerts from "../../common/Alerts";
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
@@ -43,7 +44,10 @@ function RejectedModal({
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          alert.success("Submitted!");
+          
+          var variable = "Submitted Successfully "
+          Alerts.SuccessNormal(variable)
+
           getPendingforAcceptance();
           rejectHandler();
         }

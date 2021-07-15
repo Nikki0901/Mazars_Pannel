@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { baseUrl, ReportUrl } from "../../config/config";
+import { baseUrl, ReportUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
-import CommonServices from "../../common/common";
+import CommonServices from "../../../common/common";
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),

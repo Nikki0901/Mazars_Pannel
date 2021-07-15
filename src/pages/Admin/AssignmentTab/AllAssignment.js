@@ -17,6 +17,9 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Records from "../../../components/Records/Records";
+import ViewAllReportModal from "./ViewAllReport";
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 
 
 function AssignmentComponent() {
@@ -33,10 +36,20 @@ function AssignmentComponent() {
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
   const [hide, setHide] = useState();
+  const [report, setReport] = useState();
 
   var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
   console.log("current_date :", current_date);
   const [item] = useState(current_date);
+
+
+  const [reportModal, setReportModal] = useState(false);
+  const ViewReport = (key) => {
+    console.log("key - ", key);
+    setReportModal(!reportModal);
+    setReport(key);
+  };
+
 
   useEffect(() => {
     getAssignmentData();
@@ -294,33 +307,44 @@ function AssignmentComponent() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px", width: "65px" };
+        return { fontSize: "12px", width: "75px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div title="Send Message">
-              <Link
-                to={{
-                  pathname: `/admin/chatting/${row.q_id}`,
-                  obj: {
-                    message_type: "3",
-                    query_No: row.assign_no,
-                    query_id: row.q_id,
-                    routes: `/admin/assignment`
-                  }
-                }}
-              >
-                <i
-                  class="fa fa-comments-o"
-                  style={{
-                    fontSize: 16,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "blue"
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "3",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/admin/assignment`
+                    }
                   }}
-                ></i>
-              </Link>
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Report"
+                style={{ cursor: "pointer" }}
+                onClick={() => ViewReport(row.assign_no)}
+              >
+                <DescriptionOutlinedIcon color="secondary" />
+              </div>
+
             </div>
           </>
         );
@@ -502,9 +526,6 @@ function AssignmentComponent() {
               }
 
 
-              <div class="form-group mx-sm-1  mb-2">
-                <label className="form-select form-control">Total Records : {records}</label>
-              </div>
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                 Search
               </button>
@@ -515,6 +536,7 @@ function AssignmentComponent() {
         </CardHeader>
 
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"
@@ -522,6 +544,14 @@ function AssignmentComponent() {
             columns={columns}
             rowIndex
           />
+
+          <ViewAllReportModal
+            ViewReport={ViewReport}
+            reportModal={reportModal}
+            report={report}
+            getPendingforAcceptance={getAssignmentData}
+          />
+
         </CardBody>
       </Card>
     </div>

@@ -12,6 +12,7 @@ import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
+import Alerts from "../../common/Alerts";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -76,7 +77,7 @@ function SignUp(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-  
+
     // setLoad(true);
 
     let formData = new FormData();
@@ -97,7 +98,10 @@ function SignUp(props) {
         console.log("res-", response);
 
         if (response.data.code === 1) {
-          alert.success("signup successfully !");
+
+          var variable = "Signup successfully."
+          Alerts.SuccessNormal(variable)
+
           localStorage.setItem("userid", JSON.stringify(response.data.id));
           localStorage.setItem(
             "userNameId",
@@ -246,7 +250,7 @@ function SignUp(props) {
                         "is-invalid": errors.p_state,
                       })}
                       ref={register}
-                      onChange={(e) => getID(e.target.value)} 
+                      onChange={(e) => getID(e.target.value)}
                     >
                       <option value="">--select--</option>
                       {states.map((p) => (

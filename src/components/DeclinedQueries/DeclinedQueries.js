@@ -16,6 +16,7 @@ import { Select } from "antd";
 import { Link, useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../Search-Filter/AdminFilter";
+import Records from "../../components/Records/Records";
 
 function DeclinedQueries({ CountPendingForPayment }) {
 
@@ -127,16 +128,16 @@ function DeclinedQueries({ CountPendingForPayment }) {
               {row.status} /
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "brown" }}>
+                <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
                   row.status == "Declined Query" ?
-                    <p style={{ color: "red" }}>
+                  <p className="declined">
                       {row.statusdescription}
                     </p> :
                     row.status == "Completed Query" ?
-                      <p style={{ color: "green" }}>
+                    <p className="completed">
                         {row.statusdescription}
                       </p> :
                       null
@@ -163,7 +164,7 @@ function DeclinedQueries({ CountPendingForPayment }) {
 
         </CardHeader>
         <CardBody>
-
+        <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

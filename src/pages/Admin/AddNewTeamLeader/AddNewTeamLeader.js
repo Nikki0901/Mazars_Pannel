@@ -9,6 +9,7 @@ import { useAlert } from "react-alert";
 import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
+import Alerts from "../../../common/Alerts";
 
 
 const Schema = yup.object().shape({
@@ -88,7 +89,10 @@ function AddNew() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TL created  !");
+
+          var variable = "Team Leader Created Successfully"
+          Alerts.SuccessNormal(variable)
+
           history.goBack();
         }
       })

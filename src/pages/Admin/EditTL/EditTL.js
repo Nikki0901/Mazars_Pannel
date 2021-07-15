@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import Reset from "./Reset";
 import { Select, Form, Input, Button } from "antd";
+import Alerts from "../../../common/Alerts";
 
 function EditTL() {
   const { Option } = Select;
@@ -106,7 +107,9 @@ function EditTL() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TL updated  !");
+          
+          var variable = "Team Leader Updated Successfully"
+          Alerts.SuccessNormal(variable)
           history.goBack();
         }
       })

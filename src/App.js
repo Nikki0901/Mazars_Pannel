@@ -43,8 +43,6 @@ import PaymentStatus from './views/PaymentStatus/PaymentStatus'
 
 
 
-
-
 //admin routes
 import AdminStart from './pages/Admin/Start/Start'
 import AdminLogin from './pages/Admin/Login/Login'
@@ -71,8 +69,6 @@ import AdminMeetingComponent from './pages/Admin/MeetingComponent/MeetingCompone
 import AdminChatting from './pages/Admin/Chatting/Chatting'
 import AdminMessage from './pages/Admin/Message/Message'
 import AdminViewNotification from './pages/Admin/ViewNotification/ViewNotification'
-
-
 
 
 

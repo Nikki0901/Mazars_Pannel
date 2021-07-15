@@ -1,7 +1,9 @@
 import React from "react";
 import CommonServices from "../../common/common";
+import { ReportUrl } from "../../config/config";
 
-function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
+function AssignmentDetails({ p, diaplayAssignment, diaplayProposal, reports, assingNo }) {
+
   const {
     assignment_number,
     assignment_date,
@@ -25,7 +27,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
     // return difference;
   };
 
-
+  console.log("reports", reports)
   return (
     <>
       <div>
@@ -36,7 +38,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
             fontSize: "18px",
           }}
         >
-          PROCESSING OF ASSIGNMENT
+          Assignment Details
         </p>
         <table class="table table-bordered">
           <thead>
@@ -88,7 +90,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
                 </tr>
                 <tr>
                   <td>Awaiting Completion</td>
-                  <td>{CommonServices.capitalizeFirstLetter(p.other_stage)}</td>
+                  {/* <td>{CommonServices.capitalizeFirstLetter(p.other_stage)}</td> */}
                 </tr>
               </td>
             </tr>
@@ -105,6 +107,33 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
                   : null}
               </td>
             </tr>
+
+            <tr>
+              <th scope="row">Reports</th>
+              <td>
+                {
+                  reports.map((p, i) => (
+                    <div>
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>
+                          <a
+                            href={`${ReportUrl}/${assingNo}/${p.document}`}
+                            target="_blank"
+                          >
+                            <i class="fa fa-photo"></i> {p.document}
+                          </a>
+                        </td>
+                        <td style={{ marginLeft: "15px", color: "green" }}>
+                          {p.stages_type == 2 && "Draft Report" || p.stages_type == 3 && "Final Report"}
+                        </td>
+                      </tr>
+                    </div>
+                  ))
+                }
+              </td>
+            </tr>
+
           </tbody>
         </table>
       </div>
@@ -113,6 +142,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal }) {
 }
 
 export default AssignmentDetails;
+
 
 // {timeTaken(p.final_date,cust_accept_date)}
 
@@ -129,3 +159,16 @@ export default AssignmentDetails;
 // }
 
 // alert(datediff(parseDate(first.value), parseDate(second.value)));
+
+{/* <p>
+                        <a
+                          href={`${ReportUrl}/${assingNo}/${p.document}`}
+                          target="_blank"
+                        >
+                          <i class="fa fa-photo"></i> {p.document}
+                        </a>
+
+                      </p>
+                      <p style={{ marginLeft: "15px", color: "green" }}>
+                        {p.stages_type == 2 && "Draft report" || p.stages_type == 3 && "Final Report"} 
+                        </p> */}

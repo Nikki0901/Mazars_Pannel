@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl, ImageUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
 import { Card, CardHeader, Row, Col } from "reactstrap";
@@ -140,7 +140,7 @@ function EditQuery(props) {
           var msg = response.data.message
           var variable = "Query Successfully Updated"
           Alerts.SuccessMsg(variable, msg)
-          
+
           props.history.push("/customer/queries");
         } else {
           setLoad(false);
@@ -151,13 +151,7 @@ function EditQuery(props) {
       });
   };
 
-  const Msg = ({ msg }) => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>Query successfully updated! {msg}</p>
-      </>
-    );
-  };
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -342,30 +336,23 @@ function EditQuery(props) {
 
                       <>
                         <div>
-                          <table class="table table-bordered">
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">View</th>
-                              <th scope="col">Name</th>
-                            </tr>
-                            {queryDocs.map((p, i) => (
-                              <tr>
-                                <td>{i + 1}</td>
-                                <td>
-                                  <a
-                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
-                                    target="_blank"
-                                  >
-                                    <i
-                                      class="fa fa-photo"
-                                      style={{ width: "50", height: "20" }}
-                                    ></i>
-                                  </a>
-                                </td>
-                                <td>{p.name}</td>
-                              </tr>
-                            ))}
-                          </table>
+                          {queryDocs.map((p, i) => (
+                            <ul>
+                              <li>
+                                <a
+                                  href={`${ImageUrl}/${p.assign_no}/${p.name}`}
+                                  target="_blank"
+                                >
+                                  <i
+                                    class="fa fa-photo"
+                                    style={{ width: "50", height: "20" }}
+                                  ></i>
+                                  <span style={{marginLeft:"10px"}}>{p.name}</span>
+                                </a>
+                              </li>
+                            </ul>
+                          ))}
+
                         </div>
                       </>
                     </div>
@@ -523,3 +510,30 @@ const purpose = [
                         updateValue={updateValue}
                       /> */
 }
+
+
+
+{/* <table class="table table-bordered">
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">View</th>
+                              <th scope="col">Name</th>
+                            </tr>
+                            {queryDocs.map((p, i) => (
+                              <tr>
+                                <td>{i + 1}</td>
+                                <td>
+                                  <a
+                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
+                                    target="_blank"
+                                  >
+                                    <i
+                                      class="fa fa-photo"
+                                      style={{ width: "50", height: "20" }}
+                                    ></i>
+                                  </a>
+                                </td>
+                                <td>{p.name}</td>
+                              </tr>
+                            ))}
+                          </table> */}

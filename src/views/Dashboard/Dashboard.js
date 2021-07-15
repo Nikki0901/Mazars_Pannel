@@ -30,10 +30,10 @@ function Dashboard() {
     inprogress_acceptance: '',
     declined: '',
 
-    allassignment:'',
-    inprogress:'',
-    complete:'',
-    customer_declined_Pay:'',
+    allassignment: '',
+    inprogress: '',
+    complete: '',
+    customer_declined_Pay: '',
 
 
     paid: '',
@@ -43,7 +43,7 @@ function Dashboard() {
 
 
 
- 
+
 
   const { total, inprogress_queries,
     inprogress_allocation, inprogress_proposal,
@@ -55,7 +55,7 @@ function Dashboard() {
     inprogress_preparation,
     declined, inprogress_acceptance,
     accepted_proposals, InProgress,
-    allassignment,inprogress,complete,
+    allassignment, inprogress, complete,
     customer_declined_Pay,
     paid, unpaid, totalpayment,
   } = allQueries;
@@ -165,7 +165,7 @@ function Dashboard() {
             </thead>
             <tbody className="table_body">
               <tr>
-                <th className="left_side">Completed; Assignments</th>
+                <td className="left_side">Completed; Assignments</td>
                 <td>{complete_query}</td>
               </tr>
             </tbody>
@@ -186,15 +186,15 @@ function Dashboard() {
                 <td>{admin_declined_query}</td>
               </tr>
               <tr>
-                <td className="left_side">Declined; Queries</td>
+                <td className="left_side">Customer Declined; Queries</td>
                 <td>{customer_declined_Query}</td>
               </tr>
               <tr>
-                <td className="left_side">Declined; Proposals</td>
+                <td className="left_side">Customer Declined; Proposals</td>
                 <td>{customer_declined_proposal}</td>
               </tr>
               <tr>
-                <td className="left_side">Declined; Payment</td>
+                <td className="left_side">Customer Declined; Payment</td>
                 <td>{Customer_declined_payment}</td>
               </tr>
             </tbody>
@@ -244,7 +244,7 @@ function Dashboard() {
           <table className="table table-striped eight main_table">
             <thead className="proposal_thead">
               <tr>
-                <th className="left_side">Declined; Proposals</th>
+                <th className="left_side">Customer Declined; Proposals</th>
                 <th>{declined}</th>
               </tr>
             </thead>
@@ -287,7 +287,7 @@ function Dashboard() {
             <thead className="assignment_thead">
 
               <tr>
-                <th className="left_side">Declined; Payment</th>
+                <th className="left_side">Customer Declined; Payment</th>
                 <th>{customer_declined_Pay}</th>
               </tr>
             </thead>

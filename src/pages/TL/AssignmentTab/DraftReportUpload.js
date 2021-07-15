@@ -32,11 +32,11 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
         'content-type': 'multipart/form-data'
       }
     }).then(response => {
-      console.log(response.data)
+      console.log(response)
 
-      var msg = response.data.message
+      var msg = response.data.msg
       var variable = "Draft Report Uploaded"
-      Alerts.SuccessMsg(variable, msg)
+      Alerts.SuccessReport(variable, msg)
 
 
       getAssignmentList();

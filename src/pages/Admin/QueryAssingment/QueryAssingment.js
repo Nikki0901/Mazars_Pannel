@@ -15,6 +15,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 function QueryAssingment(props) {
   const alert = useAlert();
@@ -132,7 +133,10 @@ function QueryAssingment(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("assigned!");
+
+          var variable = "Query Assigned Successfully"
+          Alerts.SuccessNormal(variable)
+
           getQuery();
           props.history.push({
             pathname: `/admin/queriestab`,
@@ -167,8 +171,8 @@ function QueryAssingment(props) {
     }
   };
 
-  console.log("expectedDate",expectedDate)
-  
+  console.log("expectedDate", expectedDate)
+
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userId}>
       <Card>

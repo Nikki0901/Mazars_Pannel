@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams, Link,useHistory} from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import QueryDetails from "../../../components/QueryDetails/QueryDetails";
 
 function QueriesRecevied(props) {
@@ -20,6 +20,7 @@ function QueriesRecevied(props) {
   const [purpose, setPurpose] = useState([]);
   const [year, setYear] = useState([]);
   const [feedback, setFeedback] = useState([]);
+  const [reports, setReports] = useState([]);
 
 
   const [diaplayProposal, setDisplayProposal] = useState({
@@ -56,14 +57,35 @@ function QueriesRecevied(props) {
 
   useEffect(() => {
     const getSubmittedAssingment = () => {
-      axios.get(`${baseUrl}/customers/getQueryDetails?id=${id}`).then((res) => {
+      axios.get(`${baseUrl}/tl/getQueryDetails?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          setSubmitData(res.data.result);
-          setDisplaySpecific(res.data.additional_queries);
-          setPaymentDetails(res.data.payment_detail);
-          setAssingmentNo(res.data.result[0].assign_no);
-          setFeedback(res.data.feedback_detail);
+
+          if (res.data.result) {
+            if (res.data.result[0].name == null) {
+              console.log("null")
+            }
+            else {
+              setSubmitData(res.data.result);
+            }
+          }
+
+          if (res.data.additional_queries) {
+            setDisplaySpecific(res.data.additional_queries);
+          }
+          if (res.data.payment_detail) {
+            setPaymentDetails(res.data.payment_detail);
+          }
+          if (res.data.feedback_detail) {
+            setFeedback(res.data.feedback_detail);
+          }
+          if (res.data.result[0].assign_no) {
+            setAssingmentNo(res.data.result[0].assign_no);
+          }
+
+          if (res.data.reports) {
+            setReports(res.data.reports);
+          }
 
           var purposeItem = res.data.result[0].purpose_opinion;
           var assementItem = res.data.result[0].assessment_year;
@@ -86,7 +108,7 @@ function QueriesRecevied(props) {
               cust_accept_date: res.data.proposal_queries[0].cust_accept_date,
               proposal_date: res.data.proposal_queries[0].created,
               description: res.data.proposal_queries[0].description,
-              
+
               amount_type: res.data.proposal_queries[0].amount_type,
               amount_fixed: res.data.proposal_queries[0].amount,
               amount_hourly: res.data.proposal_queries[0].amount_hourly,
@@ -176,6 +198,7 @@ function QueriesRecevied(props) {
                 purpose={purpose}
                 year={year}
                 feedback={feedback}
+                reports={reports}
 
               />
             ))}

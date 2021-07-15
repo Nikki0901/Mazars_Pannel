@@ -18,11 +18,15 @@ import {
   Tooltip,
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
+import classNames from "classnames";
 
-// const Schema = yup.object().shape({
-//   p_feedback: yup.string().required("required feedback"),
-//   p_assignment: yup.string().required("required assignment"),
-// });
+
+const Schema = yup.object().shape({
+  message_type: yup.string().required("required message type"),
+  p_message: yup.string().required("required message"),
+  p_to: yup.string().required("required to"),
+});
+
 
 
 function Chatting(props) {
@@ -31,7 +35,9 @@ function Chatting(props) {
 
   const alert = useAlert();
   const history = useHistory();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const userId = window.localStorage.getItem("adminkey");
 
@@ -77,7 +83,7 @@ function Chatting(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-         
+
           var variable = "Message Successfully Sent "
           Alerts.SuccessNormal(variable)
           props.history.push(routes);
@@ -128,7 +134,9 @@ function Chatting(props) {
                   {
                     item &&
                     <select
-                      className="form-select form-control"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.message_type,
+                      })}
                       name="message_type"
                       ref={register}
                       style={{ height: "33px" }}
@@ -142,13 +150,19 @@ function Chatting(props) {
                       <option value="1">Others</option>
                     </select>
                   }
-
+                  {errors.message_type && (
+                    <div className="invalid-feedback">
+                      {errors.message_type.message}
+                    </div>
+                  )}
                 </div>
 
                 <div class="form-group">
                   <label>To</label>
                   <select
-                    className="form-select form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_to,
+                    })}
                     name="p_to"
                     ref={register}
                     style={{ height: "33px" }}
@@ -158,18 +172,29 @@ function Chatting(props) {
                     <option value="tl">Team Leader</option>
                     <option value="both">Both</option>
                   </select>
+                  {errors.p_to && (
+                    <div className="invalid-feedback">
+                      {errors.p_to.message}
+                    </div>
+                  )}
                 </div>
 
                 <div class="form-group">
                   <label>Message</label>
                   <textarea
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_message,
+                    })}
                     placeholder="Message text here"
                     rows="5"
                     ref={register}
                     name="p_message"
                   ></textarea>
-
+                  {errors.p_message && (
+                    <div className="invalid-feedback">
+                      {errors.p_message.message}
+                    </div>
+                  )}
                 </div>
                 <button type="submit" className="btn btn-primary">
                   Send

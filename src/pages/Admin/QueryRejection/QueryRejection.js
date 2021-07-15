@@ -15,6 +15,7 @@ import {
     Table,
     Tooltip,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 
 function QueryRejection(props) {
@@ -38,11 +39,13 @@ function QueryRejection(props) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    alert.success("success !");
+                    var variable = "Query declined successfully. "
+                    Alerts.SuccessNormal(variable)
+
                     props.history.push({
                         pathname: `/admin/queriestab`,
                         index: 1,
-                      });
+                    });
                 }
             })
             .catch((error) => {
@@ -70,7 +73,7 @@ function QueryRejection(props) {
                         </Col>
                         <Col md="4">
                             <div style={{ textAlign: "center" }}>
-                                <h2>Query Rejection</h2>
+                                <h2>Decline Query</h2>
                             </div>
                         </Col>
                     </Row>

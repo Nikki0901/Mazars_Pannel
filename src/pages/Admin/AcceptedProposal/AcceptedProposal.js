@@ -16,6 +16,7 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Records from "../../../components/Records/Records";
 
 
 function AcceptedProposal({ acceptedProposal }) {
@@ -272,6 +273,7 @@ function AcceptedProposal({ acceptedProposal }) {
 
         </CardHeader>
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

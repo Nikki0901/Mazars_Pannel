@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { useHistory, useParams } from "react-router-dom";
+import Records from "../../components/Records/Records";
 
 function PaymentModal({
   addPaymentModal,

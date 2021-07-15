@@ -5,6 +5,8 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { useHistory, useParams } from "react-router-dom";
+import Alerts from "../../../common/Alerts";
+
 
 function PaymentModal({
   addPaymentModal,
@@ -36,7 +38,10 @@ function PaymentModal({
         console.log("res-", response);
         if (response.data.code === 1) {
           paymentHandler()
-          alert.success(" message successfully send!");
+
+          var variable = "Message Successfully Sent "
+          Alerts.SuccessNormal(variable)
+
         }
       })
       .catch((error) => {

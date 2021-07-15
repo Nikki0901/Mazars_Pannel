@@ -21,6 +21,8 @@ import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Records from "../../components/Records/Records";
+
 
 function PendingForProposals({ CountPendingProposal }) {
   const { handleSubmit, register, errors, reset } = useForm();
@@ -140,11 +142,10 @@ function PendingForProposals({ CountPendingProposal }) {
         return (
           <>
             <div>
-
               {row.status}/
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "#1890ff" }}>
+                  <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
@@ -207,6 +208,7 @@ function PendingForProposals({ CountPendingProposal }) {
 
         </CardHeader>
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

@@ -160,7 +160,7 @@ function Dashboard() {
           <table className="table table-striped first main_table">
             <thead className="query_thead">
               <tr>
-                <th className="left_side"> All Queries</th>
+                <th className="left_side">All Queries</th>
                 <th>{total}</th>
               </tr>
             </thead>
@@ -199,7 +199,7 @@ function Dashboard() {
             </thead>
             <tbody className="table_body">
               <tr>
-                <th className="left_side">Completed; Assignments</th>
+                <td className="left_side">Completed; Assignments</td>
                 <td>{complete_query}</td>
               </tr>
             </tbody>

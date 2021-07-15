@@ -23,6 +23,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import * as Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import Alerts from "../../../common/Alerts";
 
 // import {owners}  from "./appoinments";
 
@@ -76,23 +77,21 @@ function Demo() {
     vstart: appointment.vstart,
     vend: appointment.vend,
     user: appointment.user.split(','),
+    owner: appointment.owner,
   });
 
   const getAssignmentNo = () => {
     axios
-      .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userId)}`)
+      .get(`${baseUrl}/admin/getAllQuery?uid=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           var data = res.data.result;
-          const newArrayOfObj = data.map(
-            ({ assign_no: text, q_id: id, id: d_id, ...rest }) => ({
-              text,
-              id,
-              d_id,
-              ...rest,
-            })
-          );
+
+          const newArrayOfObj = data.map(({ assign_no: text, ...rest }) => ({
+            text,
+            ...rest,
+          }));
           console.log("dt--", newArrayOfObj);
           setAssignmentData(newArrayOfObj);
         }
@@ -158,7 +157,7 @@ function Demo() {
         }
         <div>{children}</div>
         <div
-          onClick={() => handleJoin(data.id)}
+          onClick={() => handleJoin(data.question_id)}
         ><i
           class="fa fa-video-camera"
           style={{ fontSize: "12px", color: "#fff" }}
@@ -195,16 +194,23 @@ function Demo() {
   };
 
   const changeFormat = (d) => {
-    console.log(d);
-    return (
-      d.getFullYear() +
-      "-" +
-      (d.getMonth() + 1) +
-      "-" +
-      d.getDate() +
-      " " +
-      d.toString().split(" ")[4]
-    );
+    console.log("d ---", d);
+
+    if (typeof d === 'object') {
+      console.log("GMT");
+      return (
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        " " +
+        d.toString().split(" ")[4]
+      );
+    } else {
+      console.log("d");
+      return d;
+    }
   };
 
   const commitChanges = ({ added, changed, deleted }) => {
@@ -256,14 +262,24 @@ function Demo() {
           dataIttem = data2[i];
         }
       }
-      console.log("dataIttem", dataIttem);
+      console.log("owner", dataIttem.owner);
 
+      var a = dataIttem.startDate
+      var b = dataIttem.endDate
+
+
+      if (!dataIttem.owner) {
+        // alert("hjgh")
+        var variable = "Error"
+        Alerts.ErrorEdit(variable)
+        return false;
+      }
       let formData = new FormData();
       formData.append("customer_id", JSON.parse(userId));
       formData.append("question_id", dataIttem.question_id);
       formData.append("id", dataIttem.id);
-      formData.append("time", dataIttem.startDate);
-      formData.append("endtime", dataIttem.endDate);
+      formData.append("time", changeFormat(a));
+      formData.append("endtime", changeFormat(b));
       formData.append("title", dataIttem.title);
       formData.append("notes", dataIttem.notes);
       formData.append("user", dataIttem.user);
@@ -285,9 +301,24 @@ function Demo() {
     if (deleted !== undefined) {
       console.log("deleted f", deleted);
 
+      var value;
+      data.filter((data) => {
+        if (data.id == deleted) {
+          console.log("owner", data.owner);
+          value = data.owner
+        }
+      });
+
+      // console.log("value", value);
+      if (!value) {
+        var variable = "Error"
+        Alerts.ErrorDelete(variable)
+        return false;
+      }
+
       Swal.fire({
         title: "Are you sure?",
-        text: "It will permanently deleted !",
+        text: "It will be permanently deleted !",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -295,11 +326,10 @@ function Demo() {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.value) {
-          axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+          axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
-
             if (res.data.code === 1) {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              Swal.fire("Deleted!", "Your Schedule has been deleted.", "success");
               getData();
             } else {
               Swal.fire("Oops...", "Errorr ", "error");
@@ -307,11 +337,6 @@ function Demo() {
           });
         }
       });
-
-      // axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
-      //   console.log("res -", res);
-      //   getData();
-      // });
     }
   };
 
@@ -370,3 +395,13 @@ export default Demo;
 //     </div>
 //   )
 // );
+
+// const newArrayOfObj = data.map(
+//   ({ assign_no: text, q_id: id, id: d_id, ...rest }) => ({
+//     text,
+//     id,
+//     d_id,
+//     ...rest,
+//   })
+// );
+// console.log("dt--", newArrayOfObj);

@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Records from "../../components/Records/Records";
 
 
 
@@ -34,7 +35,7 @@ function InprogressProposal() {
   const getQueriesData = () => {
     axios
       .get(
-        `${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}&status=1`
+        `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=2`
       )
       .then((res) => {
         console.log(res);
@@ -85,7 +86,7 @@ function InprogressProposal() {
         console.log(row);
         return (
           <>
-            <Link to={`/customer/my-assingment/${row.id}`}>
+            <Link to={`/customer/my-assingment/${row.q_id}`}>
               {row.assign_no}
             </Link>
           </>
@@ -119,10 +120,10 @@ function InprogressProposal() {
         return (
           <>
             <div>
+              {row.status}/
               {
                 row.status == "Inprogress" ?
-                  <p style={{ color: "#1890ff" }}>
-                    {row.status}/
+                  <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
@@ -135,14 +136,14 @@ function InprogressProposal() {
     },
     {
       text: "Expected Delivery Date",
-      dataField: "exp_delivery_date",
+      dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.exp_delivery_date);
-        var oldDate = row.exp_delivery_date;
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
         if (oldDate == null) {
           return null;
         }
@@ -165,6 +166,7 @@ function InprogressProposal() {
           />
         </CardHeader>
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

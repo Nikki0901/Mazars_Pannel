@@ -49,7 +49,7 @@ function QueriesTab(props) {
   };
 
   const CountInprogressAllocation = () => {
-    axios.get(`${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=4`).then((res) => {
+    axios.get(`${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=1`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setInprogressAllocation(res.data.result.length);
@@ -58,7 +58,7 @@ function QueriesTab(props) {
   };
 
   const CountInprogressProposal = () => {
-    axios.get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}&status=1`).then((res) => {
+    axios.get(`${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(userId)}&status=2`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setInprogressProposal(res.data.result.length);
@@ -109,10 +109,10 @@ function QueriesTab(props) {
               All Queries ({allQueriesCount})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Inprogress; Allocation ({inprogressAllocation})
+              Inprogress; Queries({inprogressAllocation})
             </Tab>
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Inprogress; Proposals ({inprogressProposal})
+              Completed; Queries ({inprogressProposal})
             </Tab>
 
             <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>

@@ -5,5 +5,14 @@
 // export const baseUrl = "http://65.0.220.156/mazarapi/v1";
 
 
+//api base url
 export const baseUrl = "https://mazarsapi.multitvsolution.com/mazarapi/v1";
+
+
+//image url
+export const ImageUrl = "http://65.0.220.156/mazarapi/assets/image";
+
+
+//report url
+export const ReportUrl = "http://65.0.220.156/mazarapi/assets/upload/report";
 

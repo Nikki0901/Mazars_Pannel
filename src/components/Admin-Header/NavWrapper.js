@@ -6,6 +6,7 @@ import CustomerNotification from "./CustomerNotification";
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './index.css'
+import CommonServices from "../../common/common";
 
 function NavWrapper(props) {
   const { color, logout, name } = props;
@@ -55,7 +56,7 @@ function NavWrapper(props) {
               </li>
 
               <li>
-                <h4 class="brand-text text-white">{name}</h4>
+                <h4 class="brand-text text-white">{CommonServices.capitalizeFirstLetter(name)}</h4>
               </li>
             </ul>
 

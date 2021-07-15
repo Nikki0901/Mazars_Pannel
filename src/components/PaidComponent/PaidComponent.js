@@ -21,6 +21,12 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import CommonServices from "../../common/common";
+import Records from "../../components/Records/Records";
+
+
+
+
+
 function PaidComponent() {
   const [payment, setPayment] = useState([]);
   const { handleSubmit, register, errors, reset } = useForm();
@@ -364,6 +370,7 @@ function PaidComponent() {
           />
         </CardHeader>
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

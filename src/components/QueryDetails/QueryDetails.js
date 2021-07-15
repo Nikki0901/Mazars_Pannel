@@ -14,6 +14,7 @@ import {
 import classnames from 'classnames';
 import Feedback from './Feedback'
 
+
 function QueryDetails({
   p,
   diaplaySpecific,
@@ -28,18 +29,18 @@ function QueryDetails({
   purpose,
   paymentDetails,
   year,
-  feedback
+  feedback,
+  reports
 }) {
   console.log("p", p);
 
   // const history = useHistory();
 
-  const [addModal, setAddModal] = useState(false);
-
-  const addHandler = () => {
-    console.log("addhandler")
-    setAddModal(!addModal);
-  }
+  // const [addModal, setAddModal] = useState(false);
+  // const addHandler = () => {
+  //   console.log("addhandler")
+  //   setAddModal(!addModal);
+  // }
 
 
   const [activeTab, setActiveTab] = useState('1');
@@ -57,7 +58,7 @@ function QueryDetails({
               className={classnames({ active: activeTab === '1' })}
               onClick={() => { toggle('1'); }}
             >
-              BASIC QUERY
+              Basic Query Information
             </NavLink>
           </NavItem>
           <NavItem>
@@ -65,7 +66,7 @@ function QueryDetails({
               className={classnames({ active: activeTab === '2' })}
               onClick={() => { toggle('2'); }}
             >
-              PROCESSING OF QUERY
+              Proposal
             </NavLink>
           </NavItem>
 
@@ -74,7 +75,7 @@ function QueryDetails({
               className={classnames({ active: activeTab === '3' })}
               onClick={() => { toggle('3'); }}
             >
-              PROCESSING OF ASSIGNMENT
+              Assignment
             </NavLink>
           </NavItem>
           <NavItem>
@@ -82,18 +83,18 @@ function QueryDetails({
               className={classnames({ active: activeTab === '4' })}
               onClick={() => { toggle('4'); }}
             >
-              FEEDBACK
+              Feedback
             </NavLink>
           </NavItem>
 
-          <NavItem>
+          {/* <NavItem>
             <NavLink
               className={classnames({ active: activeTab === '5' })}
               onClick={() => { toggle('5'); }}
             >
               UPLOAD ADDITIONAL DOCUMENTS
             </NavLink>
-          </NavItem>
+          </NavItem> */}
 
         </Nav>
 
@@ -137,6 +138,8 @@ function QueryDetails({
                     diaplayAssignment={diaplayAssignment}
                     p={p}
                     diaplayProposal={diaplayProposal}
+                    reports={reports}
+                    assingNo={assingNo}
                   />
                 </Card>
               </Col>
@@ -156,7 +159,7 @@ function QueryDetails({
             </Row>
           </TabPane>
 
-          <TabPane tabId="5">
+          {/* <TabPane tabId="5">
             <Row>
               <Col sm="12">
                 <Card body>
@@ -186,7 +189,7 @@ function QueryDetails({
                 </Card>
               </Col>
             </Row>
-          </TabPane>
+          </TabPane> */}
 
         </TabContent>
       </div>

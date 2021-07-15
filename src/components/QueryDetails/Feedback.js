@@ -14,15 +14,14 @@ function Feedback({ feedback }) {
                     fontSize: "18px",
                 }}
             >
-                FEEDBACK
+                Feedback
             </p>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th scope="col">S.No</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Query No</th>
-                        <th scope="col">Feedback</th>
+                        <th style={{ width: "80px" }}>S.No</th>
+                        <th style={{ width: "200px" }}>Date</th>
+                        <th>Feedback</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,10 +29,10 @@ function Feedback({ feedback }) {
                         feedback.map((p, i) => (
                             <tr>
                                 <td>{i + 1}</td>
-                                <td>
-                                    {CommonServices.removeTime(p.created)}
+                                <td style={{ display: "flex" }}>
+                                    <p>{CommonServices.removeTime(p.created)}</p>
+                                    <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(p.created)}</p>
                                 </td>
-                                <td>{p.assign_no}</td>
                                 <td>{p.feedback}</td>
                             </tr>
                         ))

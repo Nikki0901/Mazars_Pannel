@@ -4,12 +4,16 @@ import DownloadLink from "react-download-link";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 
+
+
 function ProposalDetails({
   diaplayProposal,
   diaplayHistory,
   paymentDetails,
   p,
 }) {
+
+
   const {
     amount,
     accepted_amount,
@@ -21,6 +25,7 @@ function ProposalDetails({
     amount_type,
     amount_fixed,
     amount_hourly,
+
     payment_terms,
     no_of_installment,
     installment_amount,
@@ -58,7 +63,7 @@ function ProposalDetails({
             fontSize: "18px",
           }}
         >
-          PROCESSING OF QUERY
+          Proposal and Payment Details
         </p>
 
         <table class="table table-bordered">
@@ -111,7 +116,7 @@ function ProposalDetails({
                   <th>Price</th>
                 </tr>
                 <tr>
-                  <td>{amount_type}</td>
+                  <td>{CommonServices.capitalizeFirstLetter(amount_type)}</td>
                   <td>
                     {
                       amount_type == "fixed" ?
@@ -143,7 +148,7 @@ function ProposalDetails({
                       <th>Due Dates</th>
                     </tr>
                     <tr>
-                      <td>{payment_terms}</td>
+                      <td>{CommonServices.capitalizeFirstLetter(payment_terms)}</td>
                       <td>
                         {CommonServices.removeTime(due_date)}
                       </td>
@@ -170,7 +175,6 @@ function ProposalDetails({
               }
 
             </tr>
-
             <tr>
               <th scope="row">Proposed Amount</th>
               <td>{amount}</td>
@@ -178,7 +182,7 @@ function ProposalDetails({
             <tr>
               <th scope="row">Proposal Status</th>
               <td>
-                {p.query_status == "4" && "pending"}
+                {p.query_status == "4" && "Inprogress"}
                 {p.query_status == "6" && "Declined"}
                 {(p.query_status == "5" || p.query_status > 6) && "Accepted"}
               </td>

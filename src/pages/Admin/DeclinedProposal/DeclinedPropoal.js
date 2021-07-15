@@ -16,6 +16,7 @@ import { Select } from "antd";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
+import Records from "../../../components/Records/Records";
 
 function DeclinedProposal({ declinedProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -140,7 +141,7 @@ function DeclinedProposal({ declinedProposal }) {
       },
     },
     {
-      text: "Date of acceptance of Proposal",
+      text: "Date of Declined of Proposal",
       dataField: "cust_accept_date",
       sort: true,
       style: {
@@ -281,6 +282,7 @@ function DeclinedProposal({ declinedProposal }) {
   
         </CardHeader>
         <CardBody>
+        <Records records={records} />
         <BootstrapTable
             bootstrap4
             keyField="id"

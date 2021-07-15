@@ -18,6 +18,7 @@ import * as yup from "yup";
 import classNames from "classnames";
 import Payment from "./Payment";
 import Select from "react-select";
+import Alerts from "../../../common/Alerts";
 
 
 const Schema = yup.object().shape({
@@ -49,6 +50,9 @@ function ProposalComponent(props) {
 
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
+
+  const [error, setError] = useState('');
+
 
   const [totalAmount, setTotalAmount] = useState(null);
 
@@ -114,33 +118,50 @@ function ProposalComponent(props) {
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/uploadProposal`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          reset();
-          alert.success(<Msg />);
-          history.push("/teamleader/proposal");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+
+    console.log("amount -", amount)
+    // console.log("date -", date)
+    console.log("payment -", payment.value)
+
+
+    if (payment.value == "installment") {
+      let sum = amount.reduce(myFunction)
+      function myFunction(total, value) {
+        return Number(total) + Number(value);
+      }
+      console.log("sum -", sum)
+      if (value.p_fixed != sum) {
+        console.log(`installment amount should be eqaul to ${value.p_fixed}`)
+        setError(`installment amount should be eqaul to ${value.p_fixed}`)
+      }
+      else {
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/uploadProposal`,
+          data: formData,
+        })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              reset();
+
+              var variable = "Proposal Successfully Sent "
+              Alerts.SuccessNormal(variable)
+
+              history.push("/teamleader/proposal");
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+      }
+    }
+
+
   };
 
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "10px" }}>proposal successfully sent</p>
-      </>
-    );
-  };
+
 
 
   const paymentAmount = (data) => {
@@ -202,9 +223,8 @@ function ProposalComponent(props) {
 
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-
+            <p style={{ color: "red" }}>{error}</p>
             <div style={{ display: "flex" }}>
-
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Query No.</label>
@@ -256,7 +276,6 @@ function ProposalComponent(props) {
               </div>
 
               <div class="col-md-6">
-
                 <div class="form-group">
                   <label>Customer Name</label>
                   <input
@@ -268,15 +287,12 @@ function ProposalComponent(props) {
                   />
                 </div>
 
-
                 <div class="form-group">
                   <label>Payment Terms</label>
                   <Select
                     onChange={setPayment}
                     options={payment_terms}
                   />
-
-
                 </div>
 
                 {payment.label == "lumpsum" ? (
@@ -329,9 +345,7 @@ function ProposalComponent(props) {
                     />
                 }
 
-
               </div>
-
             </div>
 
 

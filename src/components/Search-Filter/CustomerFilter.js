@@ -100,14 +100,13 @@ function CustomerFilter(props) {
         });
     }
 
-
     if (InprogressAllocation == "InprogressAllocation") {
       axios
         .get(
           `${baseUrl}/customers/incompleteAssignments?user=${JSON.parse(
             id
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
-          }&status=4&pcat_id=${selectedData}`
+          }&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -123,7 +122,7 @@ function CustomerFilter(props) {
     if (InprogressQueryProposal == "InprogressQueryProposal") {
       axios
         .get(
-          `${baseUrl}/customers/getProposals?uid=${JSON.parse(id)}&status=1&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          `${baseUrl}/customers/incompleteAssignments?uid=${JSON.parse(id)}&status=2&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&pcat_id=${selectedData}`
         )
         .then((res) => {
@@ -136,6 +135,7 @@ function CustomerFilter(props) {
           }
         });
     }
+
 
     if (DeclinedQuery == "DeclinedQuery") {
       axios
@@ -155,7 +155,6 @@ function CustomerFilter(props) {
           }
         });
     }
-
 
 
     if (proposal == "proposal") {
@@ -382,6 +381,21 @@ function CustomerFilter(props) {
                     </select>
                   )}
 
+                  {InprogressAllocation == "InprogressAllocation" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="4">Inprogress; Allocation</option>
+                      <option value="5">Inprogress; Proposals</option>
+                      <option value="6">Inprogress; Assignments</option>
+                    </select>
+                  )}
+
+
                   {DeclinedQuery == "DeclinedQuery" && (
                     <select
                       className="form-select form-control"
@@ -391,9 +405,9 @@ function CustomerFilter(props) {
                     >
                       <option value="">--select--</option>
                       <option value="1">Admin Declined; Queries</option>
-                      <option value="2">Declined; Queries</option>
-                      <option value="3">Declined; Proposals</option>
-                      <option value="4">Declined; Payment</option>
+                      <option value="2">Customer Declined; Queries</option>
+                      <option value="3">Customer Declined; Proposals</option>
+                      <option value="4">Customer Declined; Payment</option>
                     </select>
                   )}
 
@@ -458,10 +472,10 @@ function CustomerFilter(props) {
                 </button>
                 <Reset />
 
-                <div class="form-group mx-sm-2 mb-2">
+                {/* <div class="form-group mx-sm-2 mb-2">
                   <label className="form-select form-control"
                   >Total Records : {records}</label>
-                </div>
+                </div> */}
 
               </div>
             </form>

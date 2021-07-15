@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
+import Records from "../../components/Records/Records";
 
 
 
@@ -118,21 +119,21 @@ function DeclinedQueries() {
         return (
           <>
             <div>
+              {row.status}/
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "#1890ff" }}>
-                    {row.status}/
+                  <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
                   row.status == "Declined Query" ?
-                    <p style={{ color: "red" }}>
-                      {row.status}/
+                    <p className="declined">
+
                       {row.statusdescription}
                     </p> :
                     row.status == "Completed Query" ?
-                      <p style={{ color: "green" }}>
-                        {row.status}/
+                      <p className="completed">
+
                         {row.statusdescription}
                       </p> :
                       null
@@ -144,14 +145,14 @@ function DeclinedQueries() {
     },
     {
       text: "Expected Delivery Date",
-      dataField: "exp_delivery_date",
+      dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.exp_delivery_date);
-        var oldDate = row.exp_delivery_date;
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
         if (oldDate == null) {
           return null;
         }
@@ -174,6 +175,7 @@ function DeclinedQueries() {
           />
         </CardHeader>
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

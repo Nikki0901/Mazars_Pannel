@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CommonServices from "../../common/common";
 
 function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
-  console.log("purpose", purpose);
+  // console.log("p", p);
 
   return (
     <>
@@ -14,7 +14,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
             fontSize: "18px",
           }}
         >
-          BASIC INFORMATION
+          Basic Query Information
         </p>
         <table class="table table-bordered">
           <thead>
@@ -49,7 +49,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
               <td>{p.case_name}</td>
             </tr>
             <tr>
-              <th scope="row">Assessment Year</th>
+              <th scope="row">Assessment Year(s)</th>
               <td>
                 {year.map((p, i) => (
                   <p key={i}>{p.value}</p>
@@ -77,7 +77,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
               </td>
             </tr>
             <tr>
-              <th scope="row">specific questions</th>
+              <th scope="row">Specific questions</th>
               <td>
                 {diaplaySpecific.map((p, i) => (
                   <div>{i + 1}. {p.text}</div>
@@ -112,6 +112,19 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
               <th scope="row">Timelines within which Opinion is Required</th>
               <td colspan="1">{p.Timelines}</td>
             </tr>
+            {
+              p.query_status == "-1" ?
+                <tr>
+                  <th scope="row">Admin Declined Query</th>
+                  <td colspan="1">
+                    {
+                      p.notes
+                    }
+                  </td>
+                </tr>
+                : null
+            }
+
           </tbody>
         </table>
       </div>

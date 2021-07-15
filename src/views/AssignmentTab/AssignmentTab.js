@@ -17,10 +17,14 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as Cookies from "js-cookie";
 import { useAlert } from "react-alert";
 import FeedbackIcon from '@material-ui/icons/Feedback';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import PaymentModal from "./PaymentModal";
 import RejectedModal from "./RejectModal";
 import ViewAllReportModal from "./ViewAllReport";
+import Records from "../../components/Records/Records";
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import Alerts from "../../common/Alerts";
+import PaymentIcon from '@material-ui/icons/Payment';
+
 
 
 function AssignmentTab() {
@@ -44,6 +48,15 @@ function AssignmentTab() {
     amount: "",
     accepted_amount: "",
     paid_amount: "",
+
+    amount_type: "",
+    amount_fixed: "",
+    amount_hourly: "",
+
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
   });
 
   const [addPaymentModal, setPaymentModal] = useState(false);
@@ -54,6 +67,17 @@ function AssignmentTab() {
       id: key.id,
       accepted_amount: key.accepted_amount,
       paid_amount: key.paid_amount,
+
+      amount_type: key.amount_type,
+      amount_fixed: key.amount_fixed,
+      amount_hourly: key.amount_hourly,
+
+
+      payment_terms: key.payment_terms,
+      no_of_installment: key.no_of_installment,
+      installment_amount: key.installment_amount,
+      due_date: key.due_date,
+
     });
   };
 
@@ -73,9 +97,6 @@ function AssignmentTab() {
     setReportModal(!reportModal);
     setReport(key);
   };
-
-
-
 
 
   useEffect(() => {
@@ -234,26 +255,46 @@ function AssignmentTab() {
             </div>
 
             {row.assignment_draft_report && !row.final_report ? (
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <div style={{ cursor: "pointer" }} title="Accepted">
-                  <i
-                    class="fa fa-check"
-                    style={{
-                      color: "green",
-                      fontSize: "16px",
-                    }}
-                    onClick={() => acceptHandler(row)}
-                  ></i>
+              row.draft_report == "completed" ?
+                null :
+                <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                  <div style={{ cursor: "pointer" }} title="Accepted">
+                    <i
+                      class="fa fa-check"
+                      style={{
+                        color: "green",
+                        fontSize: "16px",
+                      }}
+                      onClick={() => acceptHandler(row)}
+                    ></i>
+                  </div>
+
+                  <div title="Send Message">
+                    <Link
+                      to={{
+                        pathname: `/customer/chatting/${row.id}`,
+                        obj: {
+                          message_type: "3",
+                          query_No: row.assign_no,
+                          query_id: row.id,
+                          routes: `/customer/assignment`
+                        }
+                      }}
+                    >
+                      <i
+                        class="fa fa-comments-o"
+                        style={{
+                          fontSize: 16,
+                          cursor: "pointer",
+                          marginLeft: "8px",
+                          color: "green"
+                        }}
+                      ></i>
+                    </Link>
+                  </div>
                 </div>
 
-                <div style={{ cursor: "pointer" }} title="Message">
-                  <i
-                    class="fa fa-comments-o"
-                    style={{ color: "green", fontSize: "16px" }}
-                    onClick={() => rejectHandler(row)}
-                  ></i>
-                </div>
-              </div>
             ) : null}
           </>
         );
@@ -274,23 +315,22 @@ function AssignmentTab() {
         fontSize: "11px",
       },
       headerStyle: () => {
-        return { fontSize: "11px", width: "100px" };
+        return { fontSize: "11px", width: "70px" };
       },
       formatter: function (cell, row) {
         return (
           <>
             <div
-              style={{ display: "flex" }}
+              style={{ display: "flex", justifyContent: "space-between" }}
             >
-              <div style={{ cursor: "pointer" }} title="Pay Amount">
-                <i
-                  class="fa fa-credit-card"
-                  style={{ color: "green", fontSize: "16px" }}
-                  onClick={() => paymentHandler(row)}
-                ></i>
+              <div
+                style={{ cursor: "pointer" }}
+                title="Pay Amount"
+                onClick={() => paymentHandler(row)}>
+                <PaymentIcon color="primary"/>
               </div>
 
-              {row.vstart < 11 &&
+              {/* {row.vstart < 11 &&
                 row.vend >= 0 &&
                 !(row.vstart == null && row.vend == null) ? (
                 <div style={{ cursor: "pointer" }} title="Video Chat">
@@ -300,9 +340,9 @@ function AssignmentTab() {
                     onClick={() => handleJoin(row.id)}
                   ></i>
                 </div>
-              ) : null}
+              ) : null} */}
 
-              <div title="Send Message">
+              {/* <div title="Send Message">
                 <Link
                   to={{
                     pathname: `/customer/chatting/${row.id}`,
@@ -330,13 +370,13 @@ function AssignmentTab() {
                 <Link to={`/customer/feedback/${row.assign_no}`}>
                   <FeedbackIcon />
                 </Link>
-              </div>
+              </div> */}
 
               <div title="View Report"
                 style={{ cursor: "pointer" }}
                 onClick={() => ViewReport(row.assign_no)}
               >
-                <DraftsIcon />
+                <DescriptionOutlinedIcon color="secondary" />
               </div>
 
 
@@ -365,7 +405,9 @@ function AssignmentTab() {
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          alert.success("draft accepted !");
+
+          var variable = "Draft accepted successfully "
+          Alerts.SuccessNormal(variable)
         }
       })
       .catch((error) => {
@@ -460,6 +502,7 @@ function AssignmentTab() {
         </CardHeader>
 
         <CardBody>
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

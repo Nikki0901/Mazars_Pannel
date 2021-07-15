@@ -3,7 +3,7 @@ import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useParams, useHistory,Link } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import {
   Card,
@@ -15,6 +15,7 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 function QueryAssingment() {
   const alert = useAlert();
@@ -99,10 +100,10 @@ function QueryAssingment() {
       });
   };
 
-  const handleChange= (e) =>{
-    console.log("val-",e.target.value);
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
     setTaxID(e.target.value)
-    var value = taxProfessionDisplay.filter(function(item) {
+    var value = taxProfessionDisplay.filter(function (item) {
       return item.id == e.target.value
     })
     console.log(value[0]);
@@ -138,7 +139,8 @@ function QueryAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("assigned  !");
+          var variable = "Query Assigned Successfully"
+          Alerts.SuccessNormal(variable)
           getQuery();
           reset();
         }
@@ -154,7 +156,7 @@ function QueryAssingment() {
         <CardHeader>
           <Row>
             <Col md="4">
-            <Link
+              <Link
                 to={{
                   pathname: `/teamleader/queriestab`,
                   index: 1,
@@ -199,7 +201,7 @@ function QueryAssingment() {
                               class="form-control"
                               name="p_taxprof"
                               ref={register}
-                              onChange={(e)=> handleChange(e)}
+                              onChange={(e) => handleChange(e)}
                             >
                               <option value="">--select--</option>
                               {taxProfessionDisplay.map((p, index) => (

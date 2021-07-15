@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 import Payment from "./Payment";
 import Select from "react-select";
+import Alerts from "../../../common/Alerts";
 
 
 
@@ -103,8 +104,8 @@ function EditComponent() {
   const onSubmit = (value) => {
     console.log(value);
 
-    console.log("amount",amount);
-    console.log("date",date);
+    console.log("amount", amount);
+    console.log("date", date);
 
 
 
@@ -141,7 +142,9 @@ function EditComponent() {
         console.log("res-", response);
         if (response.data.code === 1) {
           // getQuery();
-          alert.success(<Msg />);
+
+          var variable = "Proposal Updated Successfully "
+          Alerts.SuccessNormal(variable)
           history.push("/teamleader/proposal");
         }
       })
@@ -150,13 +153,7 @@ function EditComponent() {
       });
   };
 
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "10px" }}>proposal updated</p>
-      </>
-    );
-  };
+
 
 
   const paymentAmount = (data) => {
@@ -265,7 +262,6 @@ function EditComponent() {
                     ref={register}
                   ></textarea>
                 </div>
-
               </div>
 
 

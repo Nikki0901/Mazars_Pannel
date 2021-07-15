@@ -23,6 +23,8 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import * as Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import Alerts from "../../../common/Alerts";
+import { values } from "lodash";
 
 
 
@@ -143,10 +145,6 @@ function Demo() {
     },
   });
 
-  // const B = (key) => {
-  //   console.log("B call", key)
-  //   setRead(key)
-  // }
 
   const AppointmentBase = ({
     children,
@@ -163,7 +161,7 @@ function Demo() {
 
         <div>{children}</div>
         <div
-          onClick={() => handleJoin(data.id)}
+          onClick={() => handleJoin(data.question_id)}
         ><i
           class="fa fa-video-camera"
           style={{ fontSize: "12px", color: "#fff" }}
@@ -205,27 +203,36 @@ function Demo() {
     history.push("/admin/meeting");
   };
 
+
   const changeFormat = (d) => {
-    console.log(d);
+    console.log("d ---", d);
 
-    return (
-      d.getFullYear() +
-      "-" +
-      (d.getMonth() + 1) +
-      "-" +
-      d.getDate() +
-      " " +
-      d.toString().split(" ")[4]
-    );
-
+    if (typeof d === 'object') {
+      console.log("GMT");
+      return (
+        d.getFullYear() +
+        "-" +
+        (d.getMonth() + 1) +
+        "-" +
+        d.getDate() +
+        " " +
+        d.toString().split(" ")[4]
+      );
+    } else {
+      console.log("d");
+      return d;
+    }
   };
-
 
 
 
   const commitChanges = ({ added, changed, deleted }) => {
 
-    // console.log("data nks- ", data);
+    // var dt = document.getElementsByClassName("jss149")
+
+
+
+    // return false;
 
     if (added) {
       console.log("added - ", added);
@@ -258,14 +265,14 @@ function Demo() {
     }
 
     if (changed) {
-      console.log("changed", changed);
 
+      // console.log("changed", changed)
       const data2 = data.map((appointment) =>
         changed[appointment.id]
           ? { ...appointment, ...changed[appointment.id] }
           : appointment
       );
-      console.log("data2 - ", data2);
+      // console.log("data2 - ", data2);
 
       let valuesArray = Object.entries(changed);
       let id = valuesArray[0][0];
@@ -277,17 +284,24 @@ function Demo() {
           dataIttem = data2[i];
         }
       }
-      console.log("dataIttem", dataIttem);
 
-      console.log("startDate", dataIttem.startDate);
-      console.log("endDate", dataIttem.endDate);
+      var a = dataIttem.startDate
+      var b = dataIttem.endDate
+
+      // console.log("dataIttem", dataIttem);
+
+      if (!dataIttem.owner) {
+        var variable = "Error"
+        Alerts.ErrorEdit(variable)
+        return false;
+      }
 
       let formData = new FormData();
       formData.append("customer_id", JSON.parse(userId));
       formData.append("question_id", dataIttem.question_id);
       formData.append("id", dataIttem.id);
-      formData.append("time", changeFormat(dataIttem.startDate));
-      formData.append("endtime", changeFormat(dataIttem.endDate));
+      formData.append("time", changeFormat(a));
+      formData.append("endtime", changeFormat(b));
       formData.append("title", dataIttem.title);
       formData.append("notes", dataIttem.notes);
       formData.append("set_by", "admin");
@@ -308,23 +322,36 @@ function Demo() {
     }
 
     if (deleted !== undefined) {
-      console.log("deleted f", deleted);
+
+      var value;
+      data.filter((data) => {
+        if (data.id == deleted) {
+          console.log("owner", data.owner);
+          value = data.owner
+        }
+      });
+
+      console.log("value", value);
+      if (!value) {
+        var variable = "Error"
+        Alerts.ErrorDelete(variable)
+        return false;
+      }
 
       Swal.fire({
         title: "Are you sure?",
-        text: "It will permanently deleted !",
+        text: "It will be permanently deleted !",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
-        if (result.value) { 
-         axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+        if (result.value) {
+          axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
-
             if (res.data.code === 1) {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              Swal.fire("Deleted!", "Your Schedule has been deleted.", "success");
               getData();
             } else {
               Swal.fire("Oops...", "Errorr ", "error");
@@ -335,7 +362,7 @@ function Demo() {
     }
   };
 
-  console.log("tread", read)
+  // console.log("tread", read)
 
   return (
     <Paper>
@@ -360,16 +387,7 @@ function Demo() {
         <AppointmentTooltip showOpenButton />
         <AppointmentForm
         />
-        {/* {
-          read ?
-            <AppointmentForm
-              readOnly
-            />
-            :
-            <AppointmentForm
-            />
-        } */}
-
+       
         <Resources
           data={resources}
         />

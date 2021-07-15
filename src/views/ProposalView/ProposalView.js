@@ -15,6 +15,8 @@ import {
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import TermsConditions from "./TermsConditions";
+import CommonServices from "../../common/common";
+import Alerts from "../../common/Alerts";
 
 
 
@@ -32,10 +34,26 @@ function ProposalView(props) {
     proposal_date: "",
     name: "",
     description: "",
+
+    amount_type: "",
+    amount_fixed: "",
+    amount_hourly: "",
+
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
   });
 
   const { amount, proposal_date,
-     name, description } = diaplayProposal
+    name, description,
+    amount_type, amount_fixed, amount_hourly,
+    payment_terms,
+    no_of_installment,
+    installment_amount,
+    due_date,
+  } = diaplayProposal
+
 
   useEffect(() => {
     const getProposalDetails = () => {
@@ -53,8 +71,18 @@ function ProposalView(props) {
               payment_received: res.data.proposal_queries[0].paid_amount,
               amount: res.data.proposal_queries[0].amount,
               proposal_date: res.data.proposal_queries[0].created,
-              name: res.data.proposal_queries[0].name,
+              name: res.data.proposal_queries[0].tlname,
               description: res.data.proposal_queries[0].description,
+              amount_type: res.data.proposal_queries[0].amount_type,
+              amount_fixed: res.data.proposal_queries[0].amount_fixed,
+              amount_hourly: res.data.proposal_queries[0].amount_hourly,
+
+              payment_terms: res.data.proposal_queries[0].payment_terms,
+              no_of_installment: res.data.proposal_queries[0].no_of_installment,
+              installment_amount: res.data.proposal_queries[0].installment_amount,
+              due_date: res.data.proposal_queries[0].due_date,
+
+
             });
           }
         });
@@ -83,13 +111,30 @@ function ProposalView(props) {
     })
       .then(function (response) {
         console.log("res-", response);
-        alert.success("proposal accepted !");
+
+        var variable = "Proposal accepted successfully."
+        Alerts.SuccessNormal(variable)
         props.history.push('/customer/proposal')
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
+
+
+  const installAmount = (data) => {
+    var item = data.split(',')
+    console.log("item", item);
+
+    const dataItem = item.map((p, i) =>
+    (
+      <>
+        <p>{CommonServices.removeTime(p)}</p>
+      </>
+    ))
+    return dataItem;
+  }
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -113,24 +158,90 @@ function ProposalView(props) {
         </CardHeader>
         <CardBody>
           <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">Titles</th>
-                <th scope="col">Data</th>
-              </tr>
-            </thead>
             <tbody>
               <tr>
-                <th scope="row">Name</th>
+                <th scope="row">Name of Team Leader</th>
                 <td>{name}</td>
               </tr>
               <tr>
                 <th scope="row">Date of Allocation</th>
-                <td>{proposal_date}</td>
+                <td>{CommonServices.removeTime(proposal_date)}</td>
               </tr>
               <tr>
                 <th scope="row">Proposed Amount</th>
                 <td>{amount}</td>
+              </tr>
+              <tr>
+                <th scope="row">Scope of Work</th>
+                <td>{description}</td>
+              </tr>
+              <tr>
+                <th scope="row">Amount</th>
+                <td>
+                  <tr>
+                    <th>Amount Type</th>
+                    <th>Price</th>
+                  </tr>
+                  <tr>
+                    <td>{CommonServices.capitalizeFirstLetter(amount_type)}</td>
+                    <td>
+                      {
+                        amount_type == "fixed" ?
+                          amount
+                          :
+                          amount_type == "hourly" ?
+                            amount_hourly
+                            :
+                            amount_type == "mixed" ?
+                              <div>
+                                <p>Fixed : {amount}</p>
+                                <p>Hourly : {amount_hourly}</p>
+                              </div>
+                              :
+                              ""
+                      }
+                    </td>
+                  </tr>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row">Payment Terms</th>
+                {
+                  payment_terms == "lumpsum" ?
+                    <td>
+                      <tr>
+                        <th>Payment Type</th>
+                        <th>Due Dates</th>
+                      </tr>
+                      <tr>
+                        <td>{CommonServices.capitalizeFirstLetter(payment_terms)}</td>
+                        <td>
+                          {CommonServices.removeTime(due_date)}
+                        </td>
+                      </tr>
+                    </td>
+                    :
+                    payment_terms == "installment" ?
+                      <td>
+                        <tr>
+                          <th>Payment Type</th>
+                          <th>No of Installments</th>
+                          <th>Installment Amount</th>
+                          <th>Due Dates</th>
+                        </tr>
+                        <tr>
+                          <td>{payment_terms}</td>
+                          <td>{no_of_installment}</td>
+                          <td>{installAmount(installment_amount)}</td>
+                          <td>{installAmount(due_date)}</td>
+                        </tr>
+                      </td>
+                      :
+                      ""
+                }
+
+
               </tr>
               <tr>
                 <th scope="row">Proposal Status</th>
@@ -139,10 +250,6 @@ function ProposalView(props) {
                   {queryStatus == "6" && "Declined"}
                   {(queryStatus == "5" || queryStatus > 6) && "Accepted"}
                 </td>
-              </tr>
-              <tr>
-                <th scope="row">Proposal Description</th>
-                <td>{description}</td>
               </tr>
             </tbody>
 

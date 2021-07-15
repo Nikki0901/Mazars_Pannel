@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import { Select, Form, Input, Button } from "antd";
 import TaxProffesionalService from "../../../config/services/TaxProffesional";
+import Alerts from "../../../common/Alerts";
 
 
 function EditTP() {
@@ -126,7 +127,8 @@ function EditTP() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("TP updated  !");
+          var variable = "Tax Professional Updated Successfully"
+          Alerts.SuccessNormal(variable)
           history.goBack();
         }
       })

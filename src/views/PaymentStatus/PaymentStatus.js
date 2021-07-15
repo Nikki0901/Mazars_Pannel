@@ -21,6 +21,7 @@ import CommonServices from "../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import PaymentModal from "./PaymentModal";
+import Records from "../../components/Records/Records";
 
 
 function PaymentStatus() {
@@ -367,6 +368,7 @@ function PaymentStatus() {
           </CardHeader>
 
           <CardBody>
+            <Records records={records} />
             <BootstrapTable
               bootstrap4
               keyField="id"

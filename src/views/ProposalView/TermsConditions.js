@@ -13,7 +13,8 @@ function PaymentModal({
         <ModalHeader toggle={readTerms}>GENERAL TERMS AND CONDITIONS</ModalHeader>
         <ModalBody>
           <p>
-            These General Terms and Conditions form an integral part of the engagement letter dated July 3, 2020 issued to Lakshmi Float Glass Group (the “Company” or the “Client”) by S.N Dhawan & Co. LLP (“we” or the “Firm”)
+            These General Terms and Conditions form an integral part of the engagement letter issued to Name of the Customer (the “Client”) by Mazars
+            Advisory LLP (“we” or the “Firm”)
           </p>
 
           <h5>1. Applicability</h5>

@@ -15,6 +15,8 @@ import {
 
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import Records from "../../components/Records/Records";
+
 
 function AllQueriesData() {
 
@@ -120,21 +122,22 @@ function AllQueriesData() {
         return (
           <>
             <div>
+              {row.status}/
               {
                 row.status == "Inprogress Query" ?
-                  <p style={{ color: "#1890ff" }}>
-                    {row.status}/
+                  <p className="inprogress">
+
                     {row.statusdescription}
                   </p>
                   :
                   row.status == "Declined Query" ?
-                    <p style={{ color: "red" }}>
-                      {row.status}/
+                    <p className="declined">
+
                       {row.statusdescription}
                     </p> :
                     row.status == "Completed Query" ?
-                      <p style={{ color: "green" }}>
-                        {row.status}/
+                      <p className="completed">
+
                         {row.statusdescription}
                       </p> :
                       null
@@ -195,7 +198,7 @@ function AllQueriesData() {
 
         </CardHeader>
         <CardBody>
-
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

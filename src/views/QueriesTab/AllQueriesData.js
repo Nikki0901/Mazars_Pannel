@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
@@ -17,6 +16,9 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import Records from "../../components/Records/Records";
+import PublishIcon from '@material-ui/icons/Publish';
+import AdditionalQueryModal from "./AdditionalQueryModal";
 
 
 
@@ -26,6 +28,16 @@ function AllQueriesData() {
     const [query, setQuery] = useState([]);
     const [queriesCount, setCountQueries] = useState(null);
     const [records, setRecords] = useState([]);
+    const [assignNo, setAssignNo] = useState('');
+
+
+
+    const [additionalQuery, setAdditionalQuery] = useState(false);
+    const additionalHandler = (key) => {
+        setAdditionalQuery(!additionalQuery);
+        setAssignNo(key)
+    };
+
 
     useEffect(() => {
         getQueriesData();
@@ -118,21 +130,21 @@ function AllQueriesData() {
                 return (
                     <>
                         <div>
+                            {row.status}/
                             {
                                 row.status == "Inprogress Query" ?
-                                    <p style={{ color: "#1890ff" }}>
-                                        {row.status}/
+                                    <p className="inprogress">
                                         {row.status_message}
                                     </p>
                                     :
                                     row.status == "Declined Query" ?
-                                        <p style={{ color: "red" }}>
-                                            {row.status}/
+                                        <p className="declined">
+
                                             {row.status_message}
                                         </p> :
                                         row.status == "Completed Query" ?
-                                            <p style={{ color: "green" }}>
-                                                {row.status}/
+                                            <p className="completed">
+
                                                 {row.status_message}
                                             </p> :
                                             null
@@ -166,73 +178,64 @@ function AllQueriesData() {
             formatter: function (cell, row) {
                 return (
                     <>
-                        <div style={{ display: "flex", justifyContent: "space-around" }}>
+                        {
+                            row.status == "Declined Query" ?
+                                null
+                                :
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "space-around"
+                                }}>
 
-                            <div title="Update Query">
-                                {
-                                    row.status_code < 2 ?
-                                        <Link to={`/customer/edit-query/${row.id}`}>
-                                            {row.status_code < 5 ? (
-                                                <i
-                                                    className="fa fa-edit"
-                                                    style={{
-                                                        fontSize: 16,
-                                                        cursor: "pointer",
-                                                        marginLeft: "8px",
-                                                    }}
-                                                ></i>
-                                            ) : null}
-                                        </Link>
-                                        :
-                                        null
-                                }
-                            </div>
+                                    <div>
+                                        {
+                                            row.status_code < 2 ?
+                                                <div style={{ display: "flex" }}>
+                                                    <div title="Update Query">
+                                                        <Link to={`/customer/edit-query/${row.id}`}>
+                                                            <i
+                                                                className="fa fa-edit"
+                                                                style={{
+                                                                    fontSize: 16,
+                                                                    cursor: "pointer",
+                                                                    marginLeft: "8px",
+                                                                }}
+                                                            ></i>
+                                                        </Link>
+                                                    </div>
 
-                            <div title="Delete Query">
-                                {row.status_code < 1 ? (
-                                    <i
-                                        className="fa fa-trash"
-                                        style={{
-                                            fontSize: 16,
-                                            cursor: "pointer",
-                                            marginLeft: "8px",
-                                        }}
-                                        onClick={() => del(row.id)}
-                                    ></i>
-                                ) : null}
-                            </div>
+                                                    <div title="Delete Query">
+                                                        {
+                                                            row.status_code < 1 ?
+                                                                <i
+                                                                    className="fa fa-trash"
+                                                                    style={{
+                                                                        fontSize: 16,
+                                                                        cursor: "pointer",
+                                                                        marginLeft: "8px",
+                                                                    }}
+                                                                    onClick={() => del(row.id)}
+                                                                ></i>
+                                                                : null
+                                                        }
 
-                            <div title="Send Message">
-                                <Link
-                                    to={{
-                                        pathname: `/customer/chatting/${row.id}`,
-                                        obj: {
-                                            message_type: "4",
-                                            query_No: row.assign_no,
-                                            query_id: row.id,
-                                            routes: `/customer/queries`
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div style={{ display: "flex" }}>
+
+                                                
+                                                    <div title="Upload Additional Documents"
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => additionalHandler(row.assign_no)}
+                                                    >
+                                                        <PublishIcon color="secondary" />
+                                                    </div>
+                                                </div>
                                         }
-                                    }}
-                                >
-                                    <i
-                                        class="fa fa-comments-o"
-                                        style={{
-                                            fontSize: 16,
-                                            cursor: "pointer",
-                                            marginLeft: "8px",
-                                            color: "blue"
-                                        }}
-                                    ></i>
-                                </Link>
-                            </div>
-
-                            <div title="Send Feedback" style={{ cursor: "pointer" }}>
-                                <Link to={`/customer/feedback/${row.assign_no}`}>
-                                    <FeedbackIcon />
-                                </Link>
-                            </div>
-
-                        </div>
+                                    </div>
+                                </div>
+                        }
                     </>
                 );
             },
@@ -245,12 +248,12 @@ function AllQueriesData() {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "It will permanently deleted !",
+            text: "Do you want to decline query ?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "Yes, decline it!",
         }).then((result) => {
             if (result.value) {
                 deleteCliente(id);
@@ -271,7 +274,7 @@ function AllQueriesData() {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                    Swal.fire("", "Query declined successfully.", "success");
                     getQueriesData();
                 } else {
                     Swal.fire("Oops...", "Errorr ", "error");
@@ -310,6 +313,8 @@ function AllQueriesData() {
                     />
                 </CardHeader>
                 <CardBody>
+                    <Records records={records} />
+
                     <BootstrapTable
                         bootstrap4
                         keyField="id"
@@ -317,6 +322,16 @@ function AllQueriesData() {
                         columns={columns}
                         rowIndex
                     />
+
+
+
+                    <AdditionalQueryModal
+                        additionalHandler={additionalHandler}
+                        additionalQuery={additionalQuery}
+                        assignNo={assignNo}
+                        getQueriesData={getQueriesData}
+                    />
+
                 </CardBody>
             </Card>
         </div>
@@ -324,3 +339,46 @@ function AllQueriesData() {
 }
 
 export default AllQueriesData;
+
+
+
+{/* <div title="Send Message">
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/customer/chatting/${row.id}`,
+                                                                obj: {
+                                                                    message_type: "4",
+                                                                    query_No: row.assign_no,
+                                                                    query_id: row.id,
+                                                                    routes: `/customer/queries`
+                                                                }
+                                                            }}
+                                                        >
+                                                            <i
+                                                                class="fa fa-comments-o"
+                                                                style={{
+                                                                    fontSize: 16,
+                                                                    cursor: "pointer",
+
+                                                                    color: "blue"
+                                                                }}
+                                                            ></i>
+                                                        </Link>
+                                                    </div>
+
+                                                    <div title="Send Feedback"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            marginLeft: "5px",
+                                                        }}>
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/customer/feedback/${row.assign_no}`,
+                                                                obj: {
+                                                                    routes: `/customer/queries`
+                                                                }
+                                                            }}
+                                                        >
+                                                            <FeedbackIcon />
+                                                        </Link>
+                                                    </div> */}
