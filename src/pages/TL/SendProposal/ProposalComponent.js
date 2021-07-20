@@ -45,7 +45,7 @@ function ProposalComponent(props) {
   const [assignId, setAssignID] = useState("");
   const [assingNo, setAssingNo] = useState("");
   const [store, setStore] = useState(null);
-
+  const [diserror, setdiserror] = useState("")
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
 
@@ -223,7 +223,10 @@ console.log(lumsum)
   const handleChange = (e) => {
     console.log("val-", e.target.value);
     if (isNaN(e.target.value)) {
-      Alerts.ErrorNormal("Please enter only digit")
+      setdiserror("Please enter digit only");
+    }
+    else{
+      setdiserror("");
     }
     setTotalAmount(e.target.value);
   };
@@ -290,7 +293,7 @@ console.log(lumsum)
 
                   />
                 </div>
-
+                <p style={{"color" : "red"}}>{diserror}</p>
                 <div class="form-group">
                   <label>Scope of Work</label>
                   <textarea

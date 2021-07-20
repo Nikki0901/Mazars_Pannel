@@ -115,7 +115,7 @@ function QueriesTab(props) {
                             Accepted; Proposals
                         </Tab>
                         <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
-                            Customer Declined; Proposals
+                            Declined; Proposals
                         </Tab>
                     </TabList>
 

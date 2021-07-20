@@ -7,13 +7,16 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
-            error : []
+           error : ""
         };
     }
 
     handleChange1(i, e) {
         if(isNaN(e.target.value)) {
-          this.setState.error("Please enter only digit")
+          this.setState({error : "Please insert only digit"})
+        }
+        else{
+            this.setState({error : ""})
         }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
@@ -58,8 +61,10 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
+                         <p style={{"display" : "block", "color" : "red"}}>{this.state.error}</p>
                     </div>
-                    <p style={{"color" : "red"}}>{this.state.error[0]}</p>
+                   
+                   
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input
