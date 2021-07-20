@@ -7,12 +7,13 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
+            error : []
         };
     }
 
     handleChange1(i, e) {
         if(isNaN(e.target.value)) {
-            Alerts.ErrorNormal("Please enter only digit")
+          this.setState.error("Please enter only digit")
         }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
@@ -58,6 +59,7 @@ export default class YourComponent extends React.Component {
                             defaultValue={installment_amount[i]}
                         />
                     </div>
+                    <p style={{"color" : "red"}}>{this.state.error[0]}</p>
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input

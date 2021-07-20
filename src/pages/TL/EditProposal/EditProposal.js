@@ -30,10 +30,11 @@ function EditComponent() {
   const [store, setStore] = useState(null);
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
-
+ 
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
+  const [diserror, setdiserror] = useState("")
   const history = useHistory();
   const { id } = useParams();
 
@@ -189,7 +190,10 @@ function EditComponent() {
   const handleChange = (e) => {
     console.log("val-", e.target.value);
     if (isNaN(e.target.value)) {
-      Alerts.ErrorNormal("Please enter only digit")
+      setdiserror("Please enter digit only");
+    }
+    else{
+      setdiserror("");
     }
     
   };
@@ -288,7 +292,7 @@ function EditComponent() {
                     onChange = {handleChange}
                   />
                 </div>
-
+                  <p style={{"color" : "red"}}>{diserror}</p>
 
                 <div class="form-group">
                   <label>Scope of Work</label>
