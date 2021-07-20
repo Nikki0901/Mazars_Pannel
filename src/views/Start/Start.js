@@ -10,7 +10,6 @@ function Start() {
   return (
     <>
       <Header noSign="noSign" />
-
       <CategorySelect startbtn="startbtn"/>
       <Footer />
     </>

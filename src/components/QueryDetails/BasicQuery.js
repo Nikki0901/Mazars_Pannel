@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CommonServices from "../../common/common";
 
+
+
 function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
   // console.log("p", p);
-
   return (
     <>
       <div>
@@ -91,7 +92,6 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                   <p key={i}>{p.value}</p>
                 ))}
               </td>
-
             </tr>
             <tr>
               <th scope="row">Format in which Opinion is required</th>
@@ -115,7 +115,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
             {
               p.query_status == "-1" ?
                 <tr>
-                  <th scope="row">Reason of Admin Declined Query</th>
+                  <th scope="row">Reasons for Admin Decline Query</th>
                   <td colspan="1">
                     {
                       p.notes
@@ -124,7 +124,6 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                 </tr>
                 : null
             }
-
           </tbody>
         </table>
       </div>

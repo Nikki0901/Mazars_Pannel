@@ -158,7 +158,7 @@ function AllProposal() {
                                 ) : null}
                             </div>
 
-                            <div>
+                            {/* <div>
                                 {row.revised_text && (
                                     <div style={{ cursor: "pointer" }} title="View History">
                                         <i
@@ -168,7 +168,7 @@ function AllProposal() {
                                         ></i>
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
 
                             <div title="Send Message">
                                 <Link

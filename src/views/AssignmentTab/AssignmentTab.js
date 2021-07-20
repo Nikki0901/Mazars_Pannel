@@ -230,72 +230,68 @@ function AssignmentTab() {
         // console.log(row.final_report);
         return (
           <>
-            <div style={{ textAlign: "center" }}>
-              {!row.final_report == "" ? (
+
+            {
+              row.status == "Payment decliend" ? null :
                 <div>
-                  <a
-                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-                    target="_blank"
-                  >
-                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
-                    final
-                  </a>
-                </div>
-              ) : row.assignment_draft_report ? (
-                <div>
-                  <a
-                    href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignment_draft_report}`}
-                    target="_blank"
-                  >
-                    <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
-                    draft
-                  </a>
-                </div>
-              ) : null}
-            </div>
-
-            {row.assignment_draft_report && !row.final_report ? (
-              row.draft_report == "completed" ?
-                null :
-                <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                  <div style={{ cursor: "pointer" }} title="Accepted">
-                    <i
-                      class="fa fa-check"
-                      style={{
-                        color: "green",
-                        fontSize: "16px",
-                      }}
-                      onClick={() => acceptHandler(row)}
-                    ></i>
-                  </div>
-
-                  <div title="Send Message">
-                    <Link
-                      to={{
-                        pathname: `/customer/chatting/${row.id}`,
-                        obj: {
-                          message_type: "3",
-                          query_No: row.assign_no,
-                          query_id: row.id,
-                          routes: `/customer/assignment`
-                        }
-                      }}
+                  {row.assignment_draft_report || row.final_report ?
+                    <div title="View All Report"
+                      style={{ cursor: "pointer", textAlign: "center" }}
+                      onClick={() => ViewReport(row.assign_no)}
                     >
-                      <i
-                        class="fa fa-comments-o"
-                        style={{
-                          fontSize: 16,
-                          cursor: "pointer",
-                          marginLeft: "8px",
-                          color: "green"
-                        }}
-                      ></i>
-                    </Link>
-                  </div>
-                </div>
+                      <DescriptionOutlinedIcon color="secondary" />
+                    </div>
+                    :
+                    null
+                  }
 
-            ) : null}
+                  {row.assignment_draft_report && !row.final_report ? (
+                    row.draft_report == "completed" ?
+                      null :
+                      <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                        <div style={{ cursor: "pointer" }} title="Accepted">
+                          <i
+                            class="fa fa-check"
+                            style={{
+                              color: "green",
+                              fontSize: "16px",
+                            }}
+                            onClick={() => acceptHandler(row)}
+                          ></i>
+                        </div>
+
+                        <div title="Send Message">
+                          <Link
+                            to={{
+                              pathname: `/customer/chatting/${row.id}`,
+                              obj: {
+                                message_type: "3",
+                                query_No: row.assign_no,
+                                query_id: row.id,
+                                routes: `/customer/assignment`
+                              }
+                            }}
+                          >
+                            <i
+                              class="fa fa-comments-o"
+                              style={{
+                                fontSize: 16,
+                                cursor: "pointer",
+                                marginLeft: "8px",
+                                color: "green"
+                              }}
+                            ></i>
+                          </Link>
+                        </div>
+                      </div>
+
+                  ) : null}
+
+                </div>
+            }
+
+
           </>
         );
       },
@@ -320,67 +316,17 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <div
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <div
-                style={{ cursor: "pointer" }}
-                title="Pay Amount"
-                onClick={() => paymentHandler(row)}>
-                <PaymentIcon color="primary"/>
-              </div>
 
-              {/* {row.vstart < 11 &&
-                row.vend >= 0 &&
-                !(row.vstart == null && row.vend == null) ? (
-                <div style={{ cursor: "pointer" }} title="Video Chat">
-                  <i
-                    class="fa fa-video-camera"
-                    style={{ color: "red", fontSize: "16px" }}
-                    onClick={() => handleJoin(row.id)}
-                  ></i>
+            {
+              row.status == "Payment Decliend" ? null :
+                <div
+                  style={{ cursor: "pointer" }}
+                  title="Pay Amount"
+                  onClick={() => paymentHandler(row)}>
+                  <PaymentIcon color="primary" />
                 </div>
-              ) : null} */}
+            }
 
-              {/* <div title="Send Message">
-                <Link
-                  to={{
-                    pathname: `/customer/chatting/${row.id}`,
-                    obj: {
-                      message_type: "3",
-                      query_No: row.assign_no,
-                      query_id: row.id,
-                      routes: `/customer/assignment`
-                    }
-                  }}
-                >
-                  <i
-                    class="fa fa-comments-o"
-                    style={{
-                      fontSize: 16,
-                      cursor: "pointer",
-                      marginLeft: "8px",
-                      color: "blue"
-                    }}
-                  ></i>
-                </Link>
-              </div>
-
-              <div title="Send Feedback" style={{ cursor: "pointer" }}>
-                <Link to={`/customer/feedback/${row.assign_no}`}>
-                  <FeedbackIcon />
-                </Link>
-              </div> */}
-
-              <div title="View Report"
-                style={{ cursor: "pointer" }}
-                onClick={() => ViewReport(row.assign_no)}
-              >
-                <DescriptionOutlinedIcon color="secondary" />
-              </div>
-
-
-            </div>
           </>
         );
       },
@@ -538,16 +484,66 @@ function AssignmentTab() {
 
 export default AssignmentTab;
 
-// var endTime = 15;
-// var startTime = converToMinutes(b);
-// var converted = parseTime(startTime - endTime);
-// console.log("time", converted);
 
-// function converToMinutes(s) {
-//   var c = s.split(".");
-//   return parseInt(c[0]) * 60 + parseInt(c[1]);
-// }
+{/* {!row.final_report == "" ? (
+                  <div title="Final Report">
+                    <a
+                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
+                      target="_blank"
+                    >
+                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
+                    </a>
+                  </div>
+                ) : row.assignment_draft_report ? (
+                  <div title="Draft Report">
+                    <a
+                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignment_draft_report}`}
+                      target="_blank"
+                    >
+                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>
+                    </a>
+                  </div>
+                ) : null} */}
 
-// function parseTime(s) {
-//   return Math.floor(parseInt(s) / 60) + "." + (parseInt(s) % 60);
-// }
+
+{/* {row.vstart < 11 &&
+                row.vend >= 0 &&
+                !(row.vstart == null && row.vend == null) ? (
+                <div style={{ cursor: "pointer" }} title="Video Chat">
+                  <i
+                    class="fa fa-video-camera"
+                    style={{ color: "red", fontSize: "16px" }}
+                    onClick={() => handleJoin(row.id)}
+                  ></i>
+                </div>
+              ) : null} */}
+
+{/* <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "3",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="Send Feedback" style={{ cursor: "pointer" }}>
+                <Link to={`/customer/feedback/${row.assign_no}`}>
+                  <FeedbackIcon />
+                </Link>
+              </div> */}

@@ -226,7 +226,7 @@ function ProposalDetails({
               p.paid_status == "2" &&
               <tr>
                 <th scope="row">Payment Decline Date</th>
-                <td>{p.declined_date}</td>
+                <td>{CommonServices.removeTime(p.declined_date)}</td>
               </tr>
             }
           </tbody>

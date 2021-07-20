@@ -52,7 +52,7 @@ function Demo() {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
-  
+
   const [currentDate, setCurrentDate] = useState(convert(date));
 
   useEffect(() => {
@@ -260,6 +260,9 @@ function Demo() {
           if (response.data.code === 1) {
             var msg = "Successfully added"
             Alerts.SuccessNormal(msg)
+          } else if (response.data.code === 0) {
+            var msg = response.data.result
+            Alerts.ErrorNormal(msg)
           }
           getData();
         })
@@ -323,7 +326,6 @@ function Demo() {
             Alerts.SuccessNormal(msg)
           }
           else if (response.data.code === 0) {
-            console.log("call 0 code")
             var msg = response.data.result
             Alerts.ErrorNormal(msg)
           }

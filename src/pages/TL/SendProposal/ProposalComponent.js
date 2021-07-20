@@ -34,7 +34,10 @@ function ProposalComponent(props) {
 
   const alert = useAlert();
   const history = useHistory();
-  const { handleSubmit, register, reset } = useForm();
+
+  const { handleSubmit, register, errors,reset} = useForm({
+    resolver: yupResolver(Schema),
+  });
 
 
   const userid = window.localStorage.getItem("tlkey");
@@ -52,8 +55,6 @@ function ProposalComponent(props) {
   const [date, setDate] = useState();
 
   const [error, setError] = useState('');
-
-
   const [totalAmount, setTotalAmount] = useState(null);
 
 
@@ -97,7 +98,7 @@ function ProposalComponent(props) {
 
 
   const onSubmit = (value) => {
-    console.log(value);
+    console.log("data --",value);
 
     var lumsum = value.p_inst_date
     setDate(lumsum)
@@ -125,7 +126,6 @@ function ProposalComponent(props) {
 
 
     console.log("amount -", amount)
-    // console.log("date -", date)
     console.log("payment -", payment.value)
 
 
@@ -134,11 +134,13 @@ function ProposalComponent(props) {
       function myFunction(total, value) {
         return Number(total) + Number(value);
       }
+
       console.log("sum -", sum)
       if (value.p_fixed != sum) {
         console.log(`installment amount should be eqaul to ${value.p_fixed}`)
         setError(`installment amount should be eqaul to ${value.p_fixed}`)
       }
+      
       else {
         axios({
           method: "POST",
@@ -161,11 +163,7 @@ function ProposalComponent(props) {
           });
       }
     }
-
-
   };
-
-
 
 
 
@@ -229,6 +227,7 @@ function ProposalComponent(props) {
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <p style={{ color: "red" }}>{error}</p>
+
             <div style={{ display: "flex" }}>
               <div class="col-md-6">
                 <div class="form-group">
@@ -256,13 +255,12 @@ function ProposalComponent(props) {
                 <div class="form-group">
                   <label>Fixed Price</label>
                   <input
-                    type="text"
+                    type="number"
                     name="p_fixed"
                     className="form-control"
                     ref={register}
                     placeholder="Enter Fixed Price"
                     onChange={(e) => handleChange(e)}
-
                   />
                 </div>
 
@@ -277,7 +275,6 @@ function ProposalComponent(props) {
                     placeholder="Enter Proposal Description"
                   ></textarea>
                 </div>
-
               </div>
 
               <div class="col-md-6">

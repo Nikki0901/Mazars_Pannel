@@ -290,23 +290,31 @@ function PaymentStatus() {
         return (
           <>
 
-            <div style={{ display: "flex", justifyContent: "space-between", width: "100px" }}>
-              <div title="Payment History">
-                <i
-                  class="fa fa-credit-card"
-                  style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
-                  onClick={() => toggle(row.assign_id)}
-                ></i>
-              </div>
-           
+            <div style={{ display: "flex", justifyContent: "space-between", width: "60px" }}>
+              {
+                row.paid_status == "0" ? null :
+                  <div title="Payment History">
+                    <i
+                      class="fa fa-credit-card"
+                      style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                      onClick={() => toggle(row.assign_id)}
+                    ></i>
+                  </div>
 
-              <div style={{ cursor: "pointer" }} title="Payment decline">
-                <i
-                  class="fa fa-comments-o"
-                  style={{ color: "green", fontSize: "16px" }}
-                  onClick={() => paymentHandler(row)}
-                ></i>
-              </div>
+              }
+
+              {
+                (row.paid_status == "0" || row.paid_status == "1") ?
+                  <div style={{ cursor: "pointer" }} title="Payment decline">
+                    <i
+                      class="fa fa-comments-o"
+                      style={{ color: "green", fontSize: "16px" }}
+                      onClick={() => paymentHandler(row)}
+                    ></i>
+                  </div>
+                  :
+                  null
+              }
             </div>
           </>
         );
