@@ -1,6 +1,6 @@
 import React from "react";
 
-
+import Alerts from "../../../common/Alerts";
 export default class YourComponent extends React.Component {
     constructor(props) {
         super(props);
