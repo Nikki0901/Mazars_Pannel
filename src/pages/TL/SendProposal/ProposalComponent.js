@@ -12,6 +12,7 @@ import {
   Row,
   Col,
   Table,
+  Alert,
 } from "reactstrap";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -101,7 +102,7 @@ function ProposalComponent(props) {
 
     var lumsum = value.p_inst_date
     setDate(lumsum)
-
+console.log(lumsum)
     let formData = new FormData();
 
     formData.append("assign_no", assingNo);
@@ -130,14 +131,14 @@ function ProposalComponent(props) {
 
 
     if (payment.value == "installment") {
+
       let sum = amount.reduce(myFunction)
       function myFunction(total, value) {
         return Number(total) + Number(value);
       }
       console.log("sum -", sum)
       if (value.p_fixed != sum) {
-        console.log(`installment amount should be eqaul to ${value.p_fixed}`)
-        setError(`installment amount should be eqaul to ${value.p_fixed}`)
+        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
       }
       else {
         axios({
@@ -160,6 +161,27 @@ function ProposalComponent(props) {
             console.log("erroror - ", error);
           });
       }
+    }
+    else {
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/uploadProposal`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            reset();
+
+            var variable = "Proposal Successfully Sent "
+            Alerts.SuccessNormal(variable)
+
+            history.push("/teamleader/proposal");
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
     }
 
 
@@ -200,6 +222,9 @@ function ProposalComponent(props) {
 
   const handleChange = (e) => {
     console.log("val-", e.target.value);
+    if (isNaN(e.target.value)) {
+      Alerts.ErrorNormal("Please enter only digit")
+    }
     setTotalAmount(e.target.value);
   };
 
@@ -348,7 +373,7 @@ function ProposalComponent(props) {
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                       totalAmount={totalAmount}
-                      min={item}
+                    
                       min={item}
                       item={item}
                     />

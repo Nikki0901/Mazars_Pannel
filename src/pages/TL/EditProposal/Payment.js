@@ -11,6 +11,9 @@ export default class YourComponent extends React.Component {
     }
 
     handleChange1(i, e) {
+        if(isNaN(e.target.value)) {
+            Alerts.ErrorNormal("Please enter only digit")
+        }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },

@@ -1,6 +1,7 @@
 
 import React from "react";
-
+import { useAlert } from "react-alert";
+import Alerts from "../../../common/Alerts";
 
 export default class Payment extends React.Component {
     constructor(props) {
@@ -14,7 +15,10 @@ export default class Payment extends React.Component {
 
     handleChange1(i, e) {
         console.log("props", this.props.totalAmount)
-
+        
+        if(isNaN(e.target.value)) {
+            Alerts.ErrorNormal("Please enter only digit")
+        }
         var totalAmount = this.props.totalAmount
 
         this.setState({
@@ -26,6 +30,7 @@ export default class Payment extends React.Component {
 
 
         // this.props.paymentAmount(this.state.values)
+        
     }
 
     handleChange2(i, e) {

@@ -33,7 +33,7 @@ function EditComponent() {
 
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
-
+  const [error, setError] = useState('');
   const history = useHistory();
   const { id } = useParams();
 
@@ -132,7 +132,38 @@ function EditComponent() {
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
+      if (payment.value == "installment") {
+        let sum = amount.reduce(myFunction)
+        function myFunction(total, value) {
+          return Number(total) + Number(value);
+        }
+        if (value.p_fixed != sum) {
+          console.log(`installment amount should be eqaul to ${value.p_fixed}`)
+          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+        }
+        else{
+          axios({
+            method: "POST",
+            url: `${baseUrl}/tl/uploadProposal`,
+            data: formData,
+          })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              reset();
 
+              var variable = "Proposal Successfully Sent "
+              Alerts.SuccessNormal(variable)
+
+              history.push("/teamleader/proposal");
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+        }
+      }
+   else{
     axios({
       method: "POST",
       url: `${baseUrl}/tl/updateProposal`,
@@ -151,10 +182,17 @@ function EditComponent() {
       .catch((error) => {
         console.log("erroror - ", error);
       });
+   }
   };
 
 
-
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    if (isNaN(e.target.value)) {
+      Alerts.ErrorNormal("Please enter only digit")
+    }
+    
+  };
 
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
@@ -247,6 +285,7 @@ function EditComponent() {
                     ref={register}
                     placeholder="Enter Fixed Price"
                     defaultValue={fixed_amount}
+                    onChange = {handleChange}
                   />
                 </div>
 
