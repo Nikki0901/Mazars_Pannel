@@ -20,7 +20,7 @@ import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
 import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-import Layout from './components/Layout/Layout'
+// import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
 import ProposalTab from './views/ProposalTab/ProposalTab'
@@ -125,6 +125,11 @@ import PrivateRouteUser from './Service/PrivateRouteUser'
 import PrivateRouteAdmin from './Service/PrivateRouteAdmin'
 import PrivateRouteTL from './Service/PrivateRouteTL'
 import PrivateRouteTP from './Service/PrivateRouteTP'
+import PublicRouteUser from './Service/PublicRouteUser'
+import PublicRouteAdmin from './Service/PublicRouteAdmin'
+import PublicRouteTL from './Service/PublicRouteTL'
+import PublicRouteTP from './Service/PublicRouteTP'
+
 
 
 
@@ -143,109 +148,107 @@ function App() {
         <Router>
           <Switch>
 
-            <Route exact path="/" component={Start} />
-            <Route exact path="/customer/signin" component={Signin} />
-            <Route exact path="/customer/signup" component={SignUp} />
-            <Route exact path="/customer/register-yourself" component={RegisterYourSelf} />
-            <Route exact path="/customer/verify-otp" component={VerifyOtp} />
-            <Route exact path="/customer/otp" component={VerifyOtpLogin} />
-            <Route exact path="/customer/questionnaire-page" component={QuestionnairePage} />
-            <Route exact path="/customer/dashboard" component={Dashboard} />
-            <Route exact path="/customer/my-assingment/:id" component={MyAssingment} />
-            <Route exact path="/customer/addfresh" component={AddFreshAssingment} />
-            <Route exact path="/customer/select-category" component={SelectCategoryPage} />
-            <Route exact path="/customer/dashboard" component={Layout} />
-            <Route exact path="/customer/queries" component={QueriesTab} />
-            <Route exact path="/customer/proposal" component={ProposalTab} />
-            <Route exact path="/customer/assignment" component={AssignmentTab} />
-            <Route exact path="/customer/proposal-received/:id" component={ProposalReceived} />
-            <Route exact path="/customer/forget-password" component={ForgetPassword} />
-            <Route exact path="/customer/new-password/:id" component={NewPassword} />
-            <Route exact path="/customer/change-password" component={ChangePassword} />
-            <Route exact path="/customer/edit-query/:id" component={EditQuery} />
-            <Route exact path="/customer/video-call" component={VideoCall} />
-            <Route exact path="/customer/meeting" component={MeetingComponent} />
-            <Route exact path="/customer/schedule" component={schedule} />
-            <Route exact path="/customer/view-notification/:id" component={ViewNotification} />
-            <Route exact path="/customer/proposal_view/:id" component={ProposalView} />
-            <Route exact path="/customer/message" component={Message} />
-            <Route exact path="/customer/chatting/:id" component={Chatting} />
-            <Route exact path="/customer/feedback/:id" component={Feedback} />
-            <Route exact path="/customer/feedback-data" component={FeedbackData} />
-            <Route exact path="/customer/paymentstatus" component={PaymentStatus} />
+            <PublicRouteUser exact path="/" component={Start} />
+            <PublicRouteUser exact path="/customer/signin" component={Signin} />
+            <PublicRouteUser exact path="/customer/signup" component={SignUp} />
+            <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} />
+            <PublicRouteUser exact path="/customer/verify-otp" component={VerifyOtp} />
+            <PublicRouteUser exact path="/customer/otp" component={VerifyOtpLogin} />
+            <PublicRouteUser exact path="/customer/forget-password" component={ForgetPassword} />
+            <PublicRouteUser exact path="/customer/new-password/:id" component={NewPassword} />
+           
+            <PrivateRouteUser exact path="/customer/questionnaire-page" component={QuestionnairePage} />
+            <PrivateRouteUser exact path="/customer/select-category" component={SelectCategoryPage} />
+            <PrivateRouteUser exact path="/customer/dashboard" component={Dashboard} />
+            <PrivateRouteUser exact path="/customer/my-assingment/:id" component={MyAssingment} />
+            <PrivateRouteUser exact path="/customer/addfresh" component={AddFreshAssingment} />
+            <PrivateRouteUser exact path="/customer/queries" component={QueriesTab} />
+            <PrivateRouteUser exact path="/customer/proposal" component={ProposalTab} />
+            <PrivateRouteUser exact path="/customer/assignment" component={AssignmentTab} />
+            <PrivateRouteUser exact path="/customer/proposal-received/:id" component={ProposalReceived} />
+            <PrivateRouteUser exact path="/customer/change-password" component={ChangePassword} />
+            <PrivateRouteUser exact path="/customer/edit-query/:id" component={EditQuery} />
+            <PrivateRouteUser exact path="/customer/video-call" component={VideoCall} />
+            <PrivateRouteUser exact path="/customer/meeting" component={MeetingComponent} />
+            <PrivateRouteUser exact path="/customer/schedule" component={schedule} />
+            <PrivateRouteUser exact path="/customer/view-notification/:id" component={ViewNotification} />
+            <PrivateRouteUser exact path="/customer/proposal_view/:id" component={ProposalView} />
+            <PrivateRouteUser exact path="/customer/message" component={Message} />
+            <PrivateRouteUser exact path="/customer/chatting/:id" component={Chatting} />
+            <PrivateRouteUser exact path="/customer/feedback/:id" component={Feedback} />
+            <PrivateRouteUser exact path="/customer/feedback-data" component={FeedbackData} />
+            <PrivateRouteUser exact path="/customer/paymentstatus" component={PaymentStatus} />
 
 
 
-
-            <Route exact path="/admin/start" component={AdminStart} />
-            <Route exact path="/admin/login" component={AdminLogin} />
-            <Route exact path="/admin/dashboard" component={AdminDashboard} />
-            <Route exact path="/admin/addnewtl" component={AdminNewTeamLeader} />
-            <Route exact path="/admin/addnewtp" component={AdminNewTaxProf} />
-            <Route exact path="/admin/teamleaders" component={AdminTeamLeaderTab} />
-            <Route exact path="/admin/taxprofessionals" component={AdminTaxProfessionalsTab} />
-            <Route exact path="/admin/proposal" component={AdminProposal} />
-            <Route exact path="/admin/queries/:id" component={AdminQueriesRecevied} />
-            <Route exact path="/admin/queryassing/:id" component={AdminQueryAssingment} />
-            <Route exact path="/admin/queriestab" component={AdminQueriesTab} />
-            <Route exact path="/admin/feedback" component={AdminFeedbackTab} />
-            <Route exact path="/admin/paymentstatus" component={AdminPaymentStatusTab} />
-            <Route exact path="/admin/assignment" component={AdminAssignmentTab} />
-            <Route exact path="/admin/edittl/:id" component={AdminEditTL} />
-            <Route exact path="/admin/edittp/:id" component={AdminEditTP} />
-            <Route exact path="/admin/pending/:id" component={AdminPendingRecevived} />
-            <Route exact path="/admin/forget-password" component={AdminForgetPassword} />
-            <Route exact path="/admin/new-password" component={AdminNewPassword} />
-            <Route exact path="/admin/query_rejection/:id" component={AdminQueryRejection} />
-            <Route exact path="/admin/schedule" component={AdminSchedule} />
-            <Route exact path="/admin/meeting" component={AdminMeetingComponent} />
-            <Route exact path="/admin/chatting/:id" component={AdminChatting} />
-            <Route exact path="/admin/message" component={AdminMessage} />
-            <Route exact path="/admin/view-notification/:id" component={AdminViewNotification} />
-
-
-
-            <Route exact path="/teamleader/start" component={TlStart} />
-            <Route exact path="/teamleader/login" component={TlLogin} />
-            <Route exact path="/teamleader/dashboard" component={TlDashboard} />
-            <Route exact path="/teamleader/addnew" component={TlAddNew} />
-            <Route exact path="/teamleader/addteamprof" component={TlAddTeamProf} />
-            <Route exact path="/teamleader/proposal" component={TlProposalTab} />
-            <Route exact path="/teamleader/addassingment/:id" component={TlAddAssingmentStages} />
-            <Route exact path="/teamleader/queries/:id" component={TlQueriesRecevied} />
-            <Route exact path="/teamleader/queryassing/:id" component={TlQueryAssingment} />
-            <Route exact path="/teamleader/edittp/:id" component={TlEditTP} />
-            <Route exact path="/teamleader/feedback" component={TlFeedbackTab} />
-            <Route exact path="/teamleader/paymentstatus" component={TlPaymentStatus} />
-            <Route exact path="/teamleader/assignment" component={TlAssignmentTab} />
-            <Route exact path="/teamleader/sendproposal/:id" component={TlSendProposal} />
-            <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
-            <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
-            <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
-            <Route exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
-            <Route exact path="/teamleader/meeting" component={TlMeetingComponent} />
-            <Route exact path="/teamleader/view-report/:id" component={TlViewReport} />
-            <Route exact path="/teamleader/schedule" component={TlSchedule} />
-            <Route exact path="/teamleader/forget-password" component={TlForgetPassword} />
-            <Route exact path="/teamleader/new-password/:id" component={TlNewPassword} />
-            <Route exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
-            <Route exact path="/teamleader/chatting/:id" component={TlChatting} />
-            <Route exact path="/teamleader/message" component={TlMessage} />
+            <PublicRouteAdmin exact path="/admin/start" component={AdminStart} />
+            <PublicRouteAdmin exact path="/admin/login" component={AdminLogin} />
+            <PrivateRouteAdmin exact path="/admin/dashboard" component={AdminDashboard} />
+            <PrivateRouteAdmin exact path="/admin/addnewtl" component={AdminNewTeamLeader} />
+            <PrivateRouteAdmin exact path="/admin/addnewtp" component={AdminNewTaxProf} />
+            <PrivateRouteAdmin exact path="/admin/teamleaders" component={AdminTeamLeaderTab} />
+            <PrivateRouteAdmin exact path="/admin/taxprofessionals" component={AdminTaxProfessionalsTab} />
+            <PrivateRouteAdmin exact path="/admin/proposal" component={AdminProposal} />
+            <PrivateRouteAdmin exact path="/admin/queries/:id" component={AdminQueriesRecevied} />
+            <PrivateRouteAdmin exact path="/admin/queryassing/:id" component={AdminQueryAssingment} />
+            <PrivateRouteAdmin exact path="/admin/queriestab" component={AdminQueriesTab} />
+            <PrivateRouteAdmin exact path="/admin/feedback" component={AdminFeedbackTab} />
+            <PrivateRouteAdmin exact path="/admin/paymentstatus" component={AdminPaymentStatusTab} />
+            <PrivateRouteAdmin exact path="/admin/assignment" component={AdminAssignmentTab} />
+            <PrivateRouteAdmin exact path="/admin/edittl/:id" component={AdminEditTL} />
+            <PrivateRouteAdmin exact path="/admin/edittp/:id" component={AdminEditTP} />
+            <PrivateRouteAdmin exact path="/admin/pending/:id" component={AdminPendingRecevived} />
+            <PrivateRouteAdmin exact path="/admin/forget-password" component={AdminForgetPassword} />
+            <PrivateRouteAdmin exact path="/admin/new-password" component={AdminNewPassword} />
+            <PrivateRouteAdmin exact path="/admin/query_rejection/:id" component={AdminQueryRejection} />
+            <PrivateRouteAdmin exact path="/admin/schedule" component={AdminSchedule} />
+            <PrivateRouteAdmin exact path="/admin/meeting" component={AdminMeetingComponent} />
+            <PrivateRouteAdmin exact path="/admin/chatting/:id" component={AdminChatting} />
+            <PrivateRouteAdmin exact path="/admin/message" component={AdminMessage} />
+            <PrivateRouteAdmin exact path="/admin/view-notification/:id" component={AdminViewNotification} />
 
 
 
+            <PublicRouteTL exact path="/teamleader/start" component={TlStart} />
+            <PublicRouteTL exact path="/teamleader/login" component={TlLogin} />
+            <PublicRouteTL exact path="/teamleader/forget-password" component={TlForgetPassword} />
+            <PublicRouteTL exact path="/teamleader/new-password/:id" component={TlNewPassword} />
+            <PrivateRouteTL exact path="/teamleader/dashboard" component={TlDashboard} />
+            <PrivateRouteTL exact path="/teamleader/addnew" component={TlAddNew} />
+            <PrivateRouteTL exact path="/teamleader/addteamprof" component={TlAddTeamProf} />
+            <PrivateRouteTL exact path="/teamleader/proposal" component={TlProposalTab} />
+            <PrivateRouteTL exact path="/teamleader/addassingment/:id" component={TlAddAssingmentStages} />
+            <PrivateRouteTL exact path="/teamleader/queries/:id" component={TlQueriesRecevied} />
+            <PrivateRouteTL exact path="/teamleader/queryassing/:id" component={TlQueryAssingment} />
+            <PrivateRouteTL exact path="/teamleader/edittp/:id" component={TlEditTP} />
+            <PrivateRouteTL exact path="/teamleader/feedback" component={TlFeedbackTab} />
+            <PrivateRouteTL exact path="/teamleader/paymentstatus" component={TlPaymentStatus} />
+            <PrivateRouteTL exact path="/teamleader/assignment" component={TlAssignmentTab} />
+            <PrivateRouteTL exact path="/teamleader/sendproposal/:id" component={TlSendProposal} />
+            <PrivateRouteTL exact path="/teamleader/queriestab" component={TlQueriesTab} />
+            <PrivateRouteTL exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
+            <PrivateRouteTL exact path="/teamleader/pending/:id" component={TlPendingReceived} />
+            <PrivateRouteTL exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
+            <PrivateRouteTL exact path="/teamleader/meeting" component={TlMeetingComponent} />
+            <PrivateRouteTL exact path="/teamleader/view-report/:id" component={TlViewReport} />
+            <PrivateRouteTL exact path="/teamleader/schedule" component={TlSchedule} />
+            <PrivateRouteTL exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
+            <PrivateRouteTL exact path="/teamleader/chatting/:id" component={TlChatting} />
+            <PrivateRouteTL exact path="/teamleader/message" component={TlMessage} />
 
-            <Route exact path="/taxprofessional/start" component={TpStart} />
-            <Route exact path="/taxprofessional/login" component={TpLogin} />
-            <Route exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
-            <Route exact path="/taxprofessional/queriestab" component={TpQueriesTab} />
-            <Route exact path="/taxprofessional/proposal" component={TpProposal} />
-            <Route exact path="/taxprofessional/sendproposal/:id" component={TpSendProposal} />
-            <Route exact path="/taxprofessional/edit-proposal/:id" component={TpEditProposal} />
-            <Route exact path="/taxprofessional/change-password" component={TpChangePassword} />
-            <Route exact path="/taxprofessional/dashboard" component={TpDashboard} />
-            <Route exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
-            <Route exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
+
+
+            <PublicRouteTP exact path="/taxprofessional/start" component={TpStart} />
+            <PublicRouteTP exact path="/taxprofessional/login" component={TpLogin} />
+            <PrivateRouteTP exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
+            <PrivateRouteTP exact path="/taxprofessional/queriestab" component={TpQueriesTab} />
+            <PrivateRouteTP exact path="/taxprofessional/proposal" component={TpProposal} />
+            <PrivateRouteTP exact path="/taxprofessional/sendproposal/:id" component={TpSendProposal} />
+            <PrivateRouteTP exact path="/taxprofessional/edit-proposal/:id" component={TpEditProposal} />
+            <PrivateRouteTP exact path="/taxprofessional/change-password" component={TpChangePassword} />
+            <PrivateRouteTP exact path="/taxprofessional/dashboard" component={TpDashboard} />
+            <PrivateRouteTP exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
+            <PrivateRouteTP exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
 
             <Route exact path="/*" component={PageNotFound} />
 

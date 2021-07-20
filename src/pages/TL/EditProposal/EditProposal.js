@@ -30,10 +30,11 @@ function EditComponent() {
   const [store, setStore] = useState(null);
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
-
+ 
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
-
+  const [error, setError] = useState('');
+  const [diserror, setdiserror] = useState("")
   const history = useHistory();
   const { id } = useParams();
 
@@ -108,7 +109,6 @@ function EditComponent() {
     console.log("date", date);
 
 
-
     var lumsum = value.p_inst_date
     setDate(lumsum)
 
@@ -132,7 +132,38 @@ function EditComponent() {
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
+      if (payment.value == "installment") {
+        let sum = amount.reduce(myFunction)
+        function myFunction(total, value) {
+          return Number(total) + Number(value);
+        }
+        if (value.p_fixed != sum) {
+          console.log(`installment amount should be eqaul to ${value.p_fixed}`)
+          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+        }
+        else{
+          axios({
+            method: "POST",
+            url: `${baseUrl}/tl/uploadProposal`,
+            data: formData,
+          })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              reset();
 
+              var variable = "Proposal Successfully Sent "
+              Alerts.SuccessNormal(variable)
+
+              history.push("/teamleader/proposal");
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+        }
+      }
+   else{
     axios({
       method: "POST",
       url: `${baseUrl}/tl/updateProposal`,
@@ -151,10 +182,20 @@ function EditComponent() {
       .catch((error) => {
         console.log("erroror - ", error);
       });
+   }
   };
 
 
-
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    if (isNaN(e.target.value)) {
+      setdiserror("Please enter digit only");
+    }
+    else{
+      setdiserror("");
+    }
+    
+  };
 
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
@@ -247,9 +288,10 @@ function EditComponent() {
                     ref={register}
                     placeholder="Enter Fixed Price"
                     defaultValue={fixed_amount}
+                    onChange = {handleChange}
                   />
                 </div>
-
+                  <p style={{"color" : "red"}}>{diserror}</p>
 
                 <div class="form-group">
                   <label>Scope of Work</label>
@@ -374,73 +416,3 @@ const noInstallments = [
   },
 ];
 
-
-
-
-{/* {store == "hourly" && (
-                  <div class="form-group">
-                    <label>Hourly basis</label>
-                    <input
-                      type="text"
-                      name="p_hourly"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Hourly basis"
-                    />
-                  </div>
-                )}
-                {store == "mixed" && (
-                  <div>
-                    <div class="form-group">
-                      <label>Mixed</label>
-                      <input
-                        type="text"
-                        name="p_fixed"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Fixed Price"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        type="text"
-                        name="p_hourly"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Hourly basis"
-                      />
-                    </div>
-                  </div>
-                )} */}
-{/* <Select
-                    options={paymentsTerms}
-                    value={payment}
-                  // defaultValue={payment}
-                  /> */}
-
-{/* <select
-                    className="form-control"
-                    name="p_payment_terms"
-                    aria-label="Default select example"
-                    ref={register}
-                    onChange={(e) => setPayment(e.target.value)}
-
-                  >
-                    <option value="">--select--</option>
-                    <option value="Lumpsum">Lumpsum</option>
-                    <option value="Installment">Installment</option>
-                  </select> */}
-
-{/* <select
-                        className="form-control"
-                        name="p_no_installments"
-                        aria-label="Default select example"
-                        ref={register}
-                        onChange={(e) => setInstallment(e.target.value)}
-                      >
-                        <option value="">--select--</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select> */}
