@@ -84,39 +84,16 @@ function PaymentModal({
               <th>Paid Amount</th>
               <td>{paid_amount}</td>
             </tr>
-
-            <tr>
-              <th>{amount_type}</th>
-              <td>
-                {
-                  amount_type == "fixed" ?
-                    amount
-                    :
-                    amount_type == "hourly" ?
-                      amount_hourly
-                      :
-                      amount_type == "mixed" ?
-                        <div>
-                          <p>Fixed : {amount}</p>
-                          <p>Hourly : {amount_hourly}</p>
-                        </div>
-                        :
-                        ""
-                }
-              </td>
-            </tr>
-
             <tr>
               <th scope="row">Payment Terms</th>
               {
                 payment_terms == "lumpsum" ?
                   <td>
                     <tr>
-                      <th>Payment Type</th>
+
                       <th>Due Dates</th>
                     </tr>
                     <tr>
-                      <td>{CommonServices.capitalizeFirstLetter(payment_terms)}</td>
                       <td>
                         {CommonServices.removeTime(due_date)}
                       </td>
@@ -126,14 +103,10 @@ function PaymentModal({
                   payment_terms == "installment" ?
                     <td>
                       <tr>
-                        <th>Payment Type</th>
-                        <th>No of Installments</th>
                         <th>Installment Amount</th>
                         <th>Due Dates</th>
                       </tr>
                       <tr>
-                        <td>{payment_terms}</td>
-                        <td>{no_of_installment}</td>
                         <td>{installAmount(installment_amount)}</td>
                         <td>{installAmount(due_date)}</td>
                       </tr>
@@ -172,3 +145,24 @@ function PaymentModal({
 }
 
 export default PaymentModal;
+
+{/* <tr>
+              <th>{amount_type}</th>
+              <td>
+                {
+                  amount_type == "fixed" ?
+                    amount
+                    :
+                    amount_type == "hourly" ?
+                      amount_hourly
+                      :
+                      amount_type == "mixed" ?
+                        <div>
+                          <p>Fixed : {amount}</p>
+                          <p>Hourly : {amount_hourly}</p>
+                        </div>
+                        :
+                        ""
+                }
+              </td>
+            </tr> */}

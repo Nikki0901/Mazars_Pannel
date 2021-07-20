@@ -7,7 +7,7 @@ import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../common/Alerts";
 import CommonServices from "../../common/common";
-
+import Swal from "sweetalert2";
 
 
 function AdditionalQueryModal({
@@ -18,10 +18,8 @@ function AdditionalQueryModal({
 }) {
   const { handleSubmit, register } = useForm();
 
-
   const onSubmit = (value) => {
     console.log("value :", value);
-
 
     let formData = new FormData();
     var uploadImg = value.p_upload;
@@ -44,8 +42,36 @@ function AdditionalQueryModal({
         console.log("res-", response);
         if (response.data.code === 1) {
 
-          var variable = "Document Uploaded Successfully"
-          Alerts.SuccessNormal(variable)
+          // var variable = "Document Uploaded Successfully"
+          // Alerts.SuccessNormal(variable)
+
+          var message = response.data.message
+          if (message.invalid) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.invalid}</p>`,
+            })
+          } else if (message.faill && message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              icon: 'success',
+            })
+          } else if (message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p>${message.success}</p>`,
+              icon: 'success',
+            })
+          }
+          else if (message.faill) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.faill}</p>`,
+              icon: 'error',
+            })
+          }
+
           additionalHandler();
           getQueriesData();
         }

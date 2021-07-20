@@ -115,7 +115,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
             {
               p.query_status == "-1" ?
                 <tr>
-                  <th scope="row">Admin Declined Query</th>
+                  <th scope="row">Reason of Admin Declined Query</th>
                   <td colspan="1">
                     {
                       p.notes

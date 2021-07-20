@@ -13,12 +13,16 @@ function TeamFilter(props) {
     setRecords,
     setData,
     getData,
+    AllQuery,
     pendingForAcceptence,
-    inCompleteQuery,
+    InprogressQuery,
+    DeclinedQuery,
+
     completeAssignment,
     proposal,
     paymentStatus,
     assignment,
+
   } = props;
   const userid = window.localStorage.getItem("tlkey");
 
@@ -79,6 +83,24 @@ function TeamFilter(props) {
     console.log("data :", data);
     console.log("store2 :", store2);
 
+    if (AllQuery == "AllQuery") {
+      axios
+        .get(
+          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+
+            }
+          }
+        });
+    }
+
+
     if (pendingForAcceptence == "pendingForAcceptence") {
       axios
         .get(
@@ -97,12 +119,11 @@ function TeamFilter(props) {
           }
         });
     }
-    if (inCompleteQuery == "inCompleteQuery") {
+
+    if (InprogressQuery == "InprogressQuery") {
       axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(
-            userid
-          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -110,11 +131,27 @@ function TeamFilter(props) {
             if (res.data.result) {
               setData(res.data.result);
               setRecords(res.data.result.length);
-
             }
           }
         });
     }
+
+    if (DeclinedQuery == "DeclinedQuery") {
+      axios
+        .get(
+          `${baseUrl}/tl/declinedQueries?id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
     if (completeAssignment == "completeAssignment") {
       axios
         .get(
@@ -266,6 +303,51 @@ function TeamFilter(props) {
                 </div>
 
                 <div class="form-group mx-sm-1  mb-2">
+
+                  {AllQuery == "AllQuery" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Inprogress; Queries</option>
+                      <option value="2">Completed; Queries</option>
+                      <option value="3">Declined; Queries</option>
+                    </select>
+                  )}
+
+                  {InprogressQuery == "InprogressQuery" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Inprogress; Proposals</option>
+                      <option value="2">Accepted; Proposals</option>
+                      <option value="3">Customer Declined; Proposals</option>
+                    </select>
+                  )}
+
+
+                  {DeclinedQuery == "DeclinedQuery" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="1">Customer Declined; Proposals</option>
+                      <option value="2">Customer Declined; Payment</option>
+                    </select>
+                  )}
+
+
+
                   {proposal == "proposal" && (
                     <select
                       className="form-select form-control"

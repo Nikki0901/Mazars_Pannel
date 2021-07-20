@@ -236,6 +236,10 @@ function Demo() {
       })
         .then(function (response) {
           console.log("res post-", response);
+          if (response.data.code === 1) {
+            var msg = "Successfully added"
+            Alerts.SuccessNormal(msg)
+          }
           getData();
         })
         .catch((error) => {
@@ -291,6 +295,16 @@ function Demo() {
       })
         .then(function (response) {
           console.log("res post-", response);
+          
+          if (response.data.code === 1) {
+            var msg = "Successfully updated"
+            Alerts.SuccessNormal(msg)
+          }
+          else if (response.data.code === 0) {
+            console.log("call 0 code")
+            var msg = response.data.result
+            Alerts.ErrorNormal(msg)
+          }
           getData();
         })
         .catch((error) => {

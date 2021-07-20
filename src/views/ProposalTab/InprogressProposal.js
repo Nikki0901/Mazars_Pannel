@@ -19,6 +19,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
+import Alerts from "../../common/Alerts";
 
 
 function InprogressProposal() {
@@ -52,13 +53,37 @@ function InprogressProposal() {
                     setProposalDisplay(res.data.result);
                     setCountProposal(res.data.result.length);
                     setRecords(res.data.result.length);
-
                 }
             });
     };
 
 
+    // rejected proposal
+    const rejected = (key) => {
+        console.log("rej", key);
 
+        let formData = new FormData();
+        formData.append("id", key);
+        formData.append("status", 6);
+
+        axios({
+            method: "POST",
+            url: `${baseUrl}/customers/ProposalAccept`,
+            data: formData,
+        })
+            .then(function (response) {
+                console.log("res-", response);
+                if (response.data.code === 1) {
+                    setRejected(false);
+                    getProposalData();
+                    var variable = "Proposal rejected successfully."
+                    Alerts.SuccessNormal(variable)
+                }
+            })
+            .catch((error) => {
+                console.log("erroror - ", error);
+            });
+    };
 
     const columns = [
         {
@@ -298,7 +323,55 @@ function InprogressProposal() {
             headerStyle: () => {
                 return { fontSize: "11px" };
             },
-        }
+        },
+        {
+            text: "Action",
+            dataField: "",
+            style: {
+                fontSize: "11px",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
+            formatter: function (cell, row) {
+                return (
+                    <>
+
+                        {row.statuscode === "6" ? null : (
+                            <div>
+                                {row.negotiated_amount === "0" &&
+                                    row.accepted_amount === "0" ? (
+                                    <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
+                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
+                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                <i
+                                                    class="fa fa-check"
+                                                    style={{
+                                                        color: "blue",
+                                                        fontSize: "16px",
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+
+                                        <div style={{ cursor: "pointer" }} title="Rejected">
+                                            <i
+                                                class="fa fa-times"
+                                                style={{ color: "red", fontSize: "16px" }}
+                                                onClick={() => rejected(row.q_id)}
+                                            ></i>
+                                        </div>
+
+                                    </div>
+                                ) : null}
+                            </div>
+                        )}
+
+
+                    </>
+                );
+            },
+        },
     ];
 
     return (

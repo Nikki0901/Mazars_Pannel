@@ -48,6 +48,11 @@ function QueryAssingment() {
 
   const { queryNo, timelines, custId, expect_dd } = queryData;
 
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
+
   useEffect(() => {
     getTaxProfession();
     getQueryData();
@@ -228,6 +233,7 @@ function QueryAssingment() {
                               name="p_expdeldate"
                               class="form-control"
                               value={expect_dd}
+                              min={item}
                             />
                           </td>
 

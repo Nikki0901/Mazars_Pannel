@@ -38,7 +38,6 @@ function AllProposalComponent({ allProposal }) {
   };
 
 
-
   const columns = [
     {
       dataField: "",
@@ -141,7 +140,7 @@ function AllProposalComponent({ allProposal }) {
       },
     },
     {
-      text: "Date of acceptance of Proposal",
+      text: "Date of acceptance / decline of Proposal",
       dataField: "cust_accept_date",
       sort: true,
       style: {

@@ -14,9 +14,7 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
-
-
-function CompletedQuery() {
+function DeclinedQuery({ CountIncomplete }) {
   const userid = window.localStorage.getItem("tlkey");
 
   const [incompleteData, setInCompleteData] = useState([]);
@@ -30,13 +28,12 @@ function CompletedQuery() {
 
   const getInCompleteAssingment = () => {
     axios
-      .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=2`)
+      .get(`${baseUrl}/tl/declinedQueries?id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setInCompleteData(res.data.result);
           setRecords(res.data.result.length);
-
         }
       });
   };
@@ -71,6 +68,7 @@ function CompletedQuery() {
         console.log(row);
         return (
           <>
+            {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.id}`,
@@ -133,7 +131,7 @@ function CompletedQuery() {
           <TeamFilter
             setData={setInCompleteData}
             getData={getInCompleteAssingment}
-            inCompleteQuery="inCompleteQuery"
+            DeclinedQuery="DeclinedQuery"
             setRecords={setRecords}
             records={records}
           />
@@ -152,4 +150,4 @@ function CompletedQuery() {
   );
 }
 
-export default CompletedQuery;
+export default DeclinedQuery;

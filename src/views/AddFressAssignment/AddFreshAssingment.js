@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { baseUrl ,ImageUrl} from "../../config/config";
+import { baseUrl, ImageUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
 import {
@@ -19,6 +19,7 @@ import {
 import Select from "react-select";
 import { Spinner } from "reactstrap";
 import Alerts from "../../common/Alerts";
+import Swal from "sweetalert2";
 
 
 function AddFreshAssingment(props) {
@@ -84,13 +85,45 @@ function AddFreshAssingment(props) {
       .then(function (response) {
         console.log("res-", response);
         console.log("msg-", response.data.message[0]);
-
         if (response.data.code === 1) {
           reset();
-          var msg = response.data.message
 
-          var variable = "Query Successfully Added"
-          Alerts.SuccessMsg(variable, msg)
+          // var msg = response.data.message
+          // var variable = "Query Successfully Added"
+          // Alerts.SuccessMsg(variable, msg)
+
+          var message = response.data.message
+          if (message == "") {
+            Swal.fire(
+              "Success",
+              `Query successfully added.`,
+              "success"
+            )
+          } else if (message.invalid) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.invalid}</p>`,
+            })
+          } else if (message.faill && message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              icon: 'success',
+            })
+          } else if (message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p>${message.success}</p>`,
+              icon: 'success',
+            })
+          }
+          else if (message.faill) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.faill}</p>`,
+              icon: 'error',
+            })
+          }
 
           props.history.push("/customer/queries");
         } else {
@@ -102,13 +135,6 @@ function AddFreshAssingment(props) {
       });
   };
 
-  const Msg = ({ msg }) => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>Query successfully added! {msg}</p>
-      </>
-    );
-  };
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

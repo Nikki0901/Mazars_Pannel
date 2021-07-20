@@ -90,7 +90,6 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
         console.log(row);
         return (
           <>
-            {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.id}`,

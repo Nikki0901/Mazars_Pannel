@@ -20,31 +20,26 @@ function ViewReport({
   report,
   getPendingforAcceptance,
 }) {
-  const userId = window.localStorage.getItem("userid");
+  const userId = window.localStorage.getItem("adminkey");
   const [data, setData] = useState([]);
 
-
-  console.log("ass-", report)
 
   useEffect(() => {
 
     let formData = new FormData();
     formData.append("assign_no", report);
     formData.append("uid", JSON.parse(userId));
-
+    formData.append("stages_type", 2);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/getstagesinfo`,
+      url: `${baseUrl}/tl/getstagesinfo`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setData(response.data.result)
-          // alert.success("Payment Done!");
-          // getProposalData();
-          // paymentHandler();
         }
       })
       .catch((error) => {

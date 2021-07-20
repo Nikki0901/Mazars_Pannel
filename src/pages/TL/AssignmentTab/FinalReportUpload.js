@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import Alerts from "../../../common/Alerts";
+import Swal from "sweetalert2";
+
 
 function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
   const alert = useAlert();
@@ -36,9 +37,35 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
       })
       .then((response) => {
         console.log(response.data);
-        var msg = response.data.msg
-        var variable = "Final Report Uploaded"
-        Alerts.SuccessReport(variable, msg)
+
+
+        var message = response.data.message
+        if (message.invalid) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.invalid}</p>`,
+            })
+          } else if (message.faill && message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              icon: 'success',
+            })
+          } else if (message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p>${message.success}</p>`,
+              icon: 'success',
+            })
+          }
+          else if (message.faill) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.faill}</p>`,
+              icon: 'error',
+            })
+          }
+
 
         getAssignmentList();
         uploadFinalReport();

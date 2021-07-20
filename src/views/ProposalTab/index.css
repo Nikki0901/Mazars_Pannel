@@ -8,6 +8,12 @@
   padding: 2px;
 }
 
+.table-responsive{
+  display: block;
+  height: 65vh;
+}
+
+
 /* 
 
 .tableFixHead          { overflow-y: auto; height: 100px; }

@@ -15,8 +15,8 @@ import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
-import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
+import FeedbackIcon from '@material-ui/icons/Feedback';
 import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 
@@ -28,16 +28,13 @@ function AllQueriesData() {
     const [query, setQuery] = useState([]);
     const [queriesCount, setCountQueries] = useState(null);
     const [records, setRecords] = useState([]);
+
     const [assignNo, setAssignNo] = useState('');
-
-
-
     const [additionalQuery, setAdditionalQuery] = useState(false);
     const additionalHandler = (key) => {
         setAdditionalQuery(!additionalQuery);
         setAssignNo(key)
     };
-
 
     useEffect(() => {
         getQueriesData();
@@ -96,7 +93,13 @@ function AllQueriesData() {
                 console.log(row);
                 return (
                     <>
-                        <Link to={`/customer/my-assingment/${row.id}`}>
+                        <Link
+                            to={{
+                                pathname: `/customer/my-assingment/${row.id}`,
+                                index: 0,
+                                routes: "queries",
+                            }}
+                        >
                             {row.assign_no}
                         </Link>
                     </>
@@ -224,7 +227,46 @@ function AllQueriesData() {
                                                 :
                                                 <div style={{ display: "flex" }}>
 
-                                                
+                                                    <div title="Send Message">
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/customer/chatting/${row.id}`,
+                                                                obj: {
+                                                                    message_type: "4",
+                                                                    query_No: row.assign_no,
+                                                                    query_id: row.id,
+                                                                    routes: `/customer/queries`
+                                                                }
+                                                            }}
+                                                        >
+                                                            <i
+                                                                class="fa fa-comments-o"
+                                                                style={{
+                                                                    fontSize: 16,
+                                                                    cursor: "pointer",
+
+                                                                    color: "blue"
+                                                                }}
+                                                            ></i>
+                                                        </Link>
+                                                    </div>
+
+                                                    <div title="Send Feedback"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            marginLeft: "5px",
+                                                        }}>
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/customer/feedback/${row.assign_no}`,
+                                                                obj: {
+                                                                    routes: `/customer/queries`
+                                                                }
+                                                            }}
+                                                        >
+                                                            <FeedbackIcon />
+                                                        </Link>
+                                                    </div>
                                                     <div title="Upload Additional Documents"
                                                         style={{ cursor: "pointer" }}
                                                         onClick={() => additionalHandler(row.assign_no)}
@@ -342,43 +384,3 @@ export default AllQueriesData;
 
 
 
-{/* <div title="Send Message">
-                                                        <Link
-                                                            to={{
-                                                                pathname: `/customer/chatting/${row.id}`,
-                                                                obj: {
-                                                                    message_type: "4",
-                                                                    query_No: row.assign_no,
-                                                                    query_id: row.id,
-                                                                    routes: `/customer/queries`
-                                                                }
-                                                            }}
-                                                        >
-                                                            <i
-                                                                class="fa fa-comments-o"
-                                                                style={{
-                                                                    fontSize: 16,
-                                                                    cursor: "pointer",
-
-                                                                    color: "blue"
-                                                                }}
-                                                            ></i>
-                                                        </Link>
-                                                    </div>
-
-                                                    <div title="Send Feedback"
-                                                        style={{
-                                                            cursor: "pointer",
-                                                            marginLeft: "5px",
-                                                        }}>
-                                                        <Link
-                                                            to={{
-                                                                pathname: `/customer/feedback/${row.assign_no}`,
-                                                                obj: {
-                                                                    routes: `/customer/queries`
-                                                                }
-                                                            }}
-                                                        >
-                                                            <FeedbackIcon />
-                                                        </Link>
-                                                    </div> */}

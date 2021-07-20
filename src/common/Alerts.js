@@ -24,12 +24,16 @@ const ErrorLogin = () => {
 }
 
 
+
+
 // Success
 const SuccessMsg = (variable, key) => {
     return (
         Swal.fire(
             'Success',
-            ` ${variable} </br> </br> ${key.faill} </br></br>  ${key.success}`,
+            ` ${variable ? variable : ""} </br> </br>
+             ${key.faill ? key.faill : ""} </br></br> 
+              ${key.success ? key.success : ""}`,
             'success'
         )
     )
@@ -37,14 +41,34 @@ const SuccessMsg = (variable, key) => {
 
 
 // Success
-const SuccessReport = (variable, key) => {
-    return (
+const SuccessReport = (message) => {
+    if (message.invalid) {
+        Swal.fire(
+            "Error",
+            `${message.invalid}`,
+            "error"
+        )
+    } else if (message.faill && message.success) {
         Swal.fire(
             'Success',
-            ` ${variable} </br> </br> ${key}`,
+            ` ${message.faill} <br/><br/> 
+            ${message.success}`,
             'success'
         )
-    )
+    } else if (message.success) {
+        Swal.fire(
+            'Success',
+            ` ${message.success}`,
+            'success'
+        )
+    }
+    else if (message.faill) {
+        Swal.fire(
+            'Error',
+            ` ${message.faill} <br/>`,
+            'error'
+        )
+    }
 }
 
 
@@ -65,7 +89,7 @@ const ErrorDelete = () => {
     return (
         Swal.fire(
             "Error",
-            "You have not permission to delete scheduled call.",
+            "Permission denied.",
             "error"
         )
     )
@@ -76,8 +100,20 @@ const ErrorEdit = () => {
     return (
         Swal.fire(
             "Error",
-            "You have not permission to edit scheduled call.",
+            "Permission denied.",
             "error"
+        )
+    )
+}
+
+
+// SuccessNormal
+const ErrorNormal = (variable) => {
+    return (
+        Swal.fire(
+            'Error',
+            ` ${variable} </br> `,
+            'error'
         )
     )
 }
@@ -92,6 +128,7 @@ export default {
     SuccessReport,
     ErrorDelete,
     ErrorEdit,
+    ErrorNormal
 };
 
 

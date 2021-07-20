@@ -31,10 +31,7 @@ function Demo() {
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [appointmentMeta, setAppointmentMeta] = useState({
-  //   target: null,
-  //   data: {},
-  // });
+ 
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -49,11 +46,10 @@ function Demo() {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
-  const [currentDate, setCurrentDate] = useState(convert(date));
+  const [currentDate] = useState(convert(date));
 
   useEffect(() => {
     getData();
-    getAssignmentNo();
   }, []);
 
   const getData = () => {
@@ -72,6 +68,7 @@ function Demo() {
       });
   };
 
+
   const mapAppointmentData = (appointment) => ({
     id: appointment.id,
     startDate: appointment.start,
@@ -79,129 +76,99 @@ function Demo() {
     title: appointment.title,
     notes: appointment.summary,
     question_id: appointment.question_id,
+    assign_no: appointment.assign_no,
   });
 
-  const getAssignmentNo = () => {
-    axios
-      .get(
-        `${baseUrl}/customers/completeAssignments?user=${JSON.parse(userId)}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          var data = res.data.result;
-          const newArrayOfObj = data.map(({ assign_no: text, ...rest }) => ({
-            text,
-            ...rest,
-          }));
-          console.log("dt--", newArrayOfObj);
-          setAssignmentData(newArrayOfObj);
-          setLoading(false);
-        }
-      });
-  };
 
-  const resources = [
-    {
-      fieldName: "question_id",
-      title: "Query No",
-      instances: assignmentdata,
-    },
-  ];
+  // const resources = [
+  //   {
+  //     fieldName: "question_id",
+  //     title: "Query No",
+  //     instances: assignmentdata,
+  //   },
+  // ];
 
-  const changeFormat = (d) => {
-    console.log(d);
-    return (
-      d.getFullYear() +
-      "-" +
-      (d.getMonth() + 1) +
-      "-" +
-      d.getDate() +
-      " " +
-      d.toString().split(" ")[4]
-    );
-  };
 
   const commitChanges = ({ added, changed, deleted }) => {
-    if (added) {
-      console.log("added - ", added);
-      var startDate = added.startDate;
-      var endDate = added.endDate;
+    // if (added) {
+    //   console.log("added - ", added);
+    //   var startDate = added.startDate;
+    //   var endDate = added.endDate;
 
-      let formData = new FormData();
-      formData.append("customer_id", JSON.parse(userId));
-      formData.append("question_id", added.question_id);
-      formData.append("time", changeFormat(startDate));
-      formData.append("endtime", changeFormat(endDate));
-      formData.append("title", added.title);
-      formData.append("notes", added.notes);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/PostCallSchedule`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res post-", response);
-          getData();
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-    if (changed) {
-      console.log("changed", changed);
+    //   let formData = new FormData();
+    //   formData.append("customer_id", JSON.parse(userId));
+    //   formData.append("question_id", added.question_id);
+    //   formData.append("time", changeFormat(startDate));
+    //   formData.append("endtime", changeFormat(endDate));
+    //   formData.append("title", added.title);
+    //   formData.append("notes", added.notes);
+    //   axios({
+    //     method: "POST",
+    //     url: `${baseUrl}/customers/PostCallSchedule`,
+    //     data: formData,
+    //   })
+    //     .then(function (response) {
+    //       console.log("res post-", response);
+    //       getData();
+    //       setLoading(false);
+    //     })
+    //     .catch((error) => {
+    //       console.log("erroror - ", error);
+    //     });
+    // }
+    // if (changed) {
+    //   console.log("changed", changed);
 
-      const data2 = data.map((appointment) =>
-        changed[appointment.id]
-          ? { ...appointment, ...changed[appointment.id] }
-          : appointment
-      );
-      console.log("data2 - ", data2);
+    //   const data2 = data.map((appointment) =>
+    //     changed[appointment.id]
+    //       ? { ...appointment, ...changed[appointment.id] }
+    //       : appointment
+    //   );
+    //   console.log("data2 - ", data2);
 
-      let valuesArray = Object.entries(changed);
-      let id = valuesArray[0][0];
-      console.log("id -", id);
-      let dataIttem;
+    //   let valuesArray = Object.entries(changed);
+    //   let id = valuesArray[0][0];
+    //   console.log("id -", id);
+    //   let dataIttem;
 
-      for (var i = 0; i < data2.length; i++) {
-        if (data2[i].id === id) {
-          dataIttem = data2[i];
-        }
-      }
-      console.log("dataIttem", dataIttem);
+    //   for (var i = 0; i < data2.length; i++) {
+    //     if (data2[i].id === id) {
+    //       dataIttem = data2[i];
+    //     }
+    //   }
+    //   console.log("dataIttem", dataIttem);
 
-      let formData = new FormData();
-      formData.append("customer_id", JSON.parse(userId));
-      formData.append("question_id", dataIttem.question_id);
-      formData.append("id", dataIttem.id);
-      formData.append("time", dataIttem.startDate);
-      formData.append("endtime", dataIttem.endDate);
-      formData.append("title", dataIttem.title);
-      formData.append("notes", dataIttem.notes);
+    //   let formData = new FormData();
+    //   formData.append("customer_id", JSON.parse(userId));
+    //   formData.append("question_id", dataIttem.question_id);
+    //   formData.append("id", dataIttem.id);
+    //   formData.append("time", dataIttem.startDate);
+    //   formData.append("endtime", dataIttem.endDate);
+    //   formData.append("title", dataIttem.title);
+    //   formData.append("notes", dataIttem.notes);
 
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/PostCallSchedule`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res post-", response);
-          getData();
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
+    //   axios({
+    //     method: "POST",
+    //     url: `${baseUrl}/customers/PostCallSchedule`,
+    //     data: formData,
+    //   })
+    //     .then(function (response) {
+    //       console.log("res post-", response);
+    //       getData();
+    //     })
+    //     .catch((error) => {
+    //       console.log("erroror - ", error);
+    //     });
+    // }
 
-    if (deleted !== undefined) {
-      console.log("deleted f", deleted);
-      axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
-        console.log("res -", res);
-        getData();
-        setLoading(false);
-      });
-    }
+    // if (deleted !== undefined) {
+    //   console.log("deleted f", deleted);
+    //   axios.get(`${baseUrl}/customers/freeslot?id=${deleted}`).then((res) => {
+    //     console.log("res -", res);
+    //     getData();
+    //     setLoading(false);
+    //   });
+    // }
   };
 
   const styles = (theme) => ({
@@ -229,7 +196,6 @@ function Demo() {
       <div style={{ display: "flex" }}>
         {
           console.log("data", data)
-
         }
         <div>{children}</div>
         <div
@@ -244,26 +210,17 @@ function Demo() {
     </Appointments.Appointment>
   );
 
+
   const Appointment = withStyles(styles, { name: "Appointment" })(
     AppointmentBase
   );
 
-  // const onAppointmentMetaChange = () => {
-  //   setAppointmentMeta({
-  //     appointmentMeta: { data, target },
-  //   });
-  //   return(
-  //     <div>
-  //       kjghkhl
-  //     </div>
-  //   )
-  // };
+
 
   const myAppointment = (props) => {
     return (
       <Appointment
         {...props}
-      // onAppointmentMetaChange={onAppointmentMetaChange}
       />
     );
   };
@@ -277,6 +234,13 @@ function Demo() {
     Cookies.set("attendeeMode", attendeeMode);
     Cookies.set("videoProfile", videoProfile);
     history.push("/customer/meeting");
+  };
+
+  const Label = (props) => {
+    if (props.text === "Details") {
+      return null;
+    }
+    return <AppointmentForm.Label {...props} />;
   };
 
   return (
@@ -300,14 +264,25 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm readOnly />
-        <Resources data={resources} mainResourceName="question_id" />
+        <AppointmentForm
+          readOnly
+        />
+
+        {/* <AppointmentForm.Label text="Customer Phone" type="title" /> */}
+
+        {/* <Resources 
+        data={resources}
+         mainResourceName="question_id" /> */}
+
       </Scheduler>
     </Paper>
   );
 }
 
 export default Demo;
+
+
+
 
 // function TitleComponent({ title }) {
 //   return (
@@ -316,8 +291,8 @@ export default Demo;
 //     </div>
 //   );
 // }
-{
+
   /* <Link to={`/customer/meeting`}>
             <p style={{ fontSize: "12px",color:"#fff" }}>link</p>
           </Link> */
-}
+

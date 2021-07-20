@@ -61,6 +61,7 @@ export default class Payment extends React.Component {
                             className="form-control"
                             name={this.state.dates[i]}
                             onChange={this.handleChange2.bind(this, i)}
+                            min={this.props.item}
                         />
                     </div>
                 </div >

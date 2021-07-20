@@ -298,26 +298,7 @@ function PaymentStatus() {
                   onClick={() => toggle(row.assign_id)}
                 ></i>
               </div>
-              <div title="schedule call">
-                <Link
-                  to={{
-                    pathname: `/teamleader/schedule`,
-                  }}
-                >
-                  <i
-                    class="fa fa-caret-square-o-right"
-                    style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
-                  ></i>
-                </Link>
-
-              </div>
-              <div>
-                <i
-                  class="fa fa-exchange"
-                  style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
-                  onClick={() => sendEmail(row.assign_id)}
-                ></i>
-              </div>
+           
 
               <div style={{ cursor: "pointer" }} title="Payment decline">
                 <i

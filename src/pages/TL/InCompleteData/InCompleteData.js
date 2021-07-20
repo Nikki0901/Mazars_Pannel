@@ -28,13 +28,13 @@ function InCompleteData({ CountIncomplete }) {
 
   const getInCompleteAssingment = () => {
     axios
-      .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=1`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           setInCompleteData(res.data.result);
           setRecords(res.data.result.length);
-          // CountIncomplete(res.data.result.length);
+
         }
       });
   };
@@ -52,18 +52,10 @@ function InCompleteData({ CountIncomplete }) {
     },
     {
       text: "Date",
-      dataField: "query_date",
+      dataField: "created",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.query_date);
-        var oldDate = row.query_date.split(" ")[0];
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
     {
@@ -77,7 +69,6 @@ function InCompleteData({ CountIncomplete }) {
         console.log(row);
         return (
           <>
-            {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.id}`,
@@ -131,43 +122,6 @@ function InCompleteData({ CountIncomplete }) {
         return oldDate.toString().split("-").reverse().join("-");
       },
     },
-    {
-      text: "Query Allocation",
-      dataField: "",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                color: "green",
-              }}
-            >
-              <Link to={`/teamleader/queryassing/${row.id}`}>
-                {row.tp_status == "1" ? (
-                  <div title="Assigned">
-                    <i class="fa fa-share" style={{ color: "green" }}></i>
-                  </div>
-                ) :
-                  row.status_code < "4" ?
-                    (
-                      <div title="Assign to">
-                        <i class="fa fa-share"></i>
-                      </div>
-                    )
-                    :
-                    ""
-                }
-              </Link>
-            </div>
-          </>
-        );
-      },
-    },
   ];
 
   return (
@@ -177,7 +131,7 @@ function InCompleteData({ CountIncomplete }) {
           <TeamFilter
             setData={setInCompleteData}
             getData={getInCompleteAssingment}
-            inCompleteQuery="inCompleteQuery"
+            InprogressQuery="InprogressQuery"
             setRecords={setRecords}
             records={records}
           />

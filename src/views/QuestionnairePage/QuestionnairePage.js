@@ -11,6 +11,8 @@ import { useAlert } from "react-alert";
 import Select from "react-select";
 import { Spinner } from "reactstrap";
 import Alerts from "../../common/Alerts";
+import Swal from "sweetalert2";
+
 
 function Questionnaire(props) {
   const alert = useAlert();
@@ -73,10 +75,44 @@ function Questionnaire(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          var msg = response.data.message
           reset();
-          var variable = "Query Successfully Added"
-          Alerts.SuccessMsg(variable, msg)
+
+          // var msg = response.data.message
+          // var variable = "Query Successfully Added"
+          // Alerts.SuccessMsg(variable, msg)
+
+          var message = response.data.message
+          if (message == "") {
+            Swal.fire(
+              "Success",
+              `Query successfully added.`,
+              "success"
+            )
+          } else if (message.invalid) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.invalid}</p>`,
+            })
+          } else if (message.faill && message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              icon: 'success',
+            })
+          } else if (message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p>${message.success}</p>`,
+              icon: 'success',
+            })
+          }
+          else if (message.faill) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.faill}</p>`,
+              icon: 'error',
+            })
+          }
 
           props.history.push("/customer/dashboard");
         } else {
@@ -89,14 +125,7 @@ function Questionnaire(props) {
   };
 
 
-  //alert msg
-  const Msg = ({ msg }) => {
-    return (
-      <>
-        <p style={{ fontSize: "12px" }}>Query successfully added! {msg}</p>
-      </>
-    );
-  };
+
 
 
   const SuccessMesg = () => {

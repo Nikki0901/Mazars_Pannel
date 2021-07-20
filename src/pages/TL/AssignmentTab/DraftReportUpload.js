@@ -4,7 +4,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
-import Alerts from "../../../common/Alerts";
+// import Alerts from "../../../common/Alerts";
+import Swal from "sweetalert2";
+
+
 
 function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
   const alert = useAlert();
@@ -22,7 +25,7 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
     if (uploadImg) {
       for (var i = 0; i < uploadImg.length; i++) {
         let file = uploadImg[i];
-        formData.append("draft_report[]",file);
+        formData.append("draft_report[]", file);
       }
     }
 
@@ -34,18 +37,39 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
     }).then(response => {
       console.log(response)
 
-      var msg = response.data.msg
-      var variable = "Draft Report Uploaded"
-      Alerts.SuccessReport(variable, msg)
-
+      var message = response.data.message
+      if (message.invalid) {
+        Swal.fire({
+          title: 'Error !',
+          html: `<p class="text-danger">${message.invalid}</p>`,
+        })
+      } else if (message.faill && message.success) {
+        Swal.fire({
+          title: 'Success',
+          html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+          icon: 'success',
+        })
+      } else if (message.success) {
+        Swal.fire({
+          title: 'Success',
+          html: `<p>${message.success}</p>`,
+          icon: 'success',
+        })
+      }
+      else if (message.faill) {
+        Swal.fire({
+          title: 'Error !',
+          html: `<p class="text-danger">${message.faill}</p>`,
+          icon: 'error',
+        })
+      }
 
       getAssignmentList();
       uploadDraftReport();
     });
-
   };
 
-  
+
   return (
     <div>
       <Modal isOpen={draftModal} toggle={uploadDraftReport} size="md">

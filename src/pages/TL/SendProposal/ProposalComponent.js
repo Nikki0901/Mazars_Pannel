@@ -57,6 +57,11 @@ function ProposalComponent(props) {
   const [totalAmount, setTotalAmount] = useState(null);
 
 
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
+
   useEffect(() => {
     const getQuery = () => {
       axios
@@ -304,6 +309,7 @@ function ProposalComponent(props) {
                       className="form-control"
                       ref={register}
                       placeholder="Enter Hourly basis"
+                      min={item}
                     />
                   </div>
                 ) :
@@ -342,6 +348,9 @@ function ProposalComponent(props) {
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                       totalAmount={totalAmount}
+                      min={item}
+                      min={item}
+                      item={item}
                     />
                 }
 

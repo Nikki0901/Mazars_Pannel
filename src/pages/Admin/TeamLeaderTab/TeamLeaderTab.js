@@ -42,20 +42,59 @@ function TeamLeaderTab() {
       },
     },
     {
-      dataField: "parent_id",
+      // dataField: "parent_id",
       text: "Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter : function nameFormatter(cell, row) {
+        var digit2 = [];
+        digit2 = row.allpcat_id.split(",")
+       
+        return(
+          <>
+          
+         {
+            digit2.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
+          </>
+        )
+      }
     },
     {
-      dataField: "cat_name",
+      
+     
       text: "Sub Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter : function nameFormatter(cell, row) {
+        var digit = [];
+        digit = row.allcat_id.split(",")
+       
+        return(
+          <>
+          
+         {
+            digit.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
+          </>
+        )
+      }
     },
     {
       dataField: "email",
@@ -118,12 +157,14 @@ function TeamLeaderTab() {
 
   useEffect(() => {
     getTeamLeader();
+   
   }, []);
 
   const getTeamLeader = () => {
     axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
+        console.log(data)
         setData(res.data.result);
         setTlCount(res.data.result.length);
       }
@@ -201,110 +242,3 @@ function TeamLeaderTab() {
 }
 
 export default TeamLeaderTab;
-
-{
-  /* <Table responsive="sm" bordered>
-            <thead>
-              <tr>
-                <th scope="col">S.No.</th>
-                <th scope="col">Name</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone No.</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((p, i) => (
-                <tr>
-                  <th scope="row">{i + 1}</th>
-                  <td>{p.name}</td>
-                  <td>{p.parent_id}</td>
-                  <td>{p.cat_name}</td>
-                  <td>{p.email}</td>
-                  <td>{p.phone}</td>
-                  <td>
-                    <Link to={`/admin/edittl/${p.id}`}>
-                      <i
-                        className="fa fa-edit"
-                        style={{
-                          fontSize: 18,
-                          cursor: "pointer",
-                          marginLeft: "8px",
-                        }}
-                      ></i>
-                    </Link>
-                  </td>
-                  <td onClick={() => del(p.id)}>
-                    <i
-                      className="fa fa-trash"
-                      style={{
-                        fontSize: 22,
-                        cursor: "pointer",
-                        marginLeft: "8px",
-                      }}
-                    ></i>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table> */
-}
-
-// <div class="row mt-3">
-//         <div class="col-md-12">
-//           <div class="schedule">
-//             <h3>Team Leaders</h3>
-// <Link to={"/admin/addnew"} class="btn btn-primary">
-//   Add New
-// </Link>
-//           </div>
-//         </div>
-//         <br />
-//         <br />
-//         <br />
-//         <br />
-//         <div class="col-md-12">
-//           <table class="table">
-// <thead>
-//   <tr>
-//     <th scope="col">No.</th>
-//     <th scope="col">Name</th>
-//     <th scope="col">Email</th>
-//     <th scope="col">Phone No.</th>
-//     <th scope="col">Edit</th>
-//     <th scope="col">Delete</th>
-//   </tr>
-// </thead>
-// {data.map((p, i) => (
-//   <tr>
-//     <th scope="row">{i + 1}</th>
-//     <td>{p.name}</td>
-//     <td>{p.email}</td>
-//     <td>{p.Phone}</td>
-//     <td>
-//       <Link to={`/admin/edit/${p.id}`}>
-//         <i
-//           className="fa fa-edit"
-//           style={{ fontSize: 18, cursor: "pointer", marginLeft:"8px" }}
-//         ></i>
-//       </Link>
-//     </td>
-//     <td
-//     onClick={() => del(p.id)}>
-// <i className="fa fa-trash" style={{ fontSize: 22, cursor: "pointer" ,marginLeft:"8px" }}>
-// </i>
-//     </td>
-//   </tr>
-// ))}
-//           </table>
-//         </div>
-//       </div>
-
-// cellRenderer:  (params)=> {
-//   return <Link to={`/?info=${params.data.Id}`}>"+{params.value}+"</Link>,
-
-// const [gridApi, setGridApi] = useState(null);
-// const [gridColumnApi, setGridColumnApi] = useState(null);

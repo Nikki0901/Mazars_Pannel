@@ -12,6 +12,9 @@ import { Spinner } from "reactstrap";
 import Select from "react-select";
 import DeleteQuery from "./DeleteQuery";
 import Alerts from "../../common/Alerts";
+import Swal from "sweetalert2";
+
+
 
 function EditQuery(props) {
   // const { Option } = Select;
@@ -137,9 +140,43 @@ function EditQuery(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          var msg = response.data.message
-          var variable = "Query Successfully Updated"
-          Alerts.SuccessMsg(variable, msg)
+
+          var message = response.data.message
+          if (message == "") {
+            Swal.fire(
+              "Success",
+              `Query successfully updated.`,
+              "success"
+            )
+          } else if (message.invalid) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.invalid}</p>`,
+            })
+          } else if (message.faill && message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              icon: 'success',
+            })
+          } else if (message.success) {
+            Swal.fire({
+              title: 'Success',
+              html: `<p>${message.success}</p>`,
+              icon: 'success',
+            })
+          }
+          else if (message.faill) {
+            Swal.fire({
+              title: 'Error !',
+              html: `<p class="text-danger">${message.faill}</p>`,
+              icon: 'error',
+            })
+          }
+
+          // var msg = response.data.message
+          // var variable = "Query Successfully Updated"
+          // Alerts.SuccessMsg(variable, msg)
 
           props.history.push("/customer/queries");
         } else {
@@ -347,7 +384,7 @@ function EditQuery(props) {
                                     class="fa fa-photo"
                                     style={{ width: "50", height: "20" }}
                                   ></i>
-                                  <span style={{marginLeft:"10px"}}>{p.name}</span>
+                                  <span style={{ marginLeft: "10px" }}>{p.name}</span>
                                 </a>
                               </li>
                             </ul>

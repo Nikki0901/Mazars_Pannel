@@ -192,7 +192,7 @@ function ProposalDetails({
               <td>{accepted_amount}</td>
             </tr>
             <tr>
-              <th scope="row">Date of Acceptance</th>
+              <th scope="row">Date of Acceptance / Decline</th>
               <td>{CommonServices.removeTime(cust_accept_date)}</td>
             </tr>
             <tr>
@@ -222,6 +222,13 @@ function ProposalDetails({
               <th scope="row">Payment Outstanding</th>
               <td>{accepted_amount - payment_received}</td>
             </tr>
+            {
+              p.paid_status == "2" &&
+              <tr>
+                <th scope="row">Payment Decline Date</th>
+                <td>{p.declined_date}</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>

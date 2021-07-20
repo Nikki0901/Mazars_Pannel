@@ -7,9 +7,21 @@ import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+
+
+const Schema = yup.object().shape({
+  p_tax: yup.string().required("required"),
+});
+
 
 function CategorySelect({ addfreshbtn, startbtn }) {
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
+
   const [modal, setModal] = useState(false);
 
   const toggle = () => {
@@ -57,7 +69,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
     getSubCategory();
   }, [store]);
 
-  
+
   const onSubmit = (value) => {
     console.log("value :", value);
   };
@@ -84,6 +96,11 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   </option>
                 ))}
               </select>
+              {errors.p_tax && (
+                <div className="invalid-feedback">
+                  {errors.p_tax.message}
+                </div>
+              )}
             </div>
 
             <div class="form-group">
@@ -101,6 +118,11 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   </option>
                 ))}
               </select>
+              {errors.p_tax2 && (
+                <div className="invalid-feedback">
+                  {errors.p_tax2.message}
+                </div>
+              )}
             </div>
 
             <div class="form-group">

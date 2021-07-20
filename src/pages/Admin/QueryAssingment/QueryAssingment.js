@@ -47,6 +47,11 @@ function QueryAssingment(props) {
 
   const { queryNo, timelines, custId } = queryData;
 
+
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  console.log("current_date :", current_date);
+  const [item] = useState(current_date);
+
   useEffect(() => {
     getTaxLeader();
     getQueryData();
@@ -246,8 +251,8 @@ function QueryAssingment(props) {
                             type="date"
                             ref={register}
                             name="p_expdeldate"
-                            // defaultValue={expectedDate}
                             class="form-control"
+                            min={item}
                           />
                         </td>
 

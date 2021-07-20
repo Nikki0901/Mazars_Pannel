@@ -80,7 +80,7 @@ import TlDashboard from './pages/TL/Dashboard/Dashboard'
 import TlAddAssingmentStages from './pages/TL/AddAssingmentStages/AddAssingmentStages'
 import TlAddNew from './pages/TL/AddNew/AddNew'
 import TlAddTeamProf from './pages/TL/AddTeamProf/AddTeamProf'
-import TlProposal from './pages/TL/Proposal/Proposal'
+import TlProposalTab from './pages/TL/Proposal/ProposalTab'
 import TlQueriesRecevied from './pages/TL/QueriesRecevied/QueriesRecevied'
 import TlQueryAssingment from './pages/TL/QueryAssingment/QueryAssingment'
 import TlEditTP from './pages/TL/EditTP/EditTP'
@@ -91,7 +91,6 @@ import TlSendProposal from './pages/TL/SendProposal/SendProposal'
 import TlQueriesTab from './pages/TL/QueriesTab/QueriesTab'
 import TlEditProposal from './pages/TL/EditProposal/EditProposal'
 import TlPendingReceived from './pages/TL//PendingReceived/PendingReceived'
-import TlQueryTab2 from './pages/TL/QueryTab2/QueryTab2'
 import TlAssignmentForm from './pages/TL/AssignmentForm/AssignmentForm'
 import TlViewReport from './pages/TL/ViewReport/ViewReport'
 import TlForgetPassword from './pages/TL/ForgetPassword/ForgetPassword'
@@ -101,10 +100,6 @@ import TlChatting from './pages/TL/Chatting/Chatting'
 import TlMessage from './pages/TL/Message/Message'
 import TlSchedule from './pages/TL/Schedule/Schedule'
 import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
-
-
-
-
 
 
 
@@ -130,6 +125,7 @@ import PrivateRouteUser from './Service/PrivateRouteUser'
 import PrivateRouteAdmin from './Service/PrivateRouteAdmin'
 import PrivateRouteTL from './Service/PrivateRouteTL'
 import PrivateRouteTP from './Service/PrivateRouteTP'
+
 
 
 const options = {
@@ -214,7 +210,7 @@ function App() {
             <Route exact path="/teamleader/dashboard" component={TlDashboard} />
             <Route exact path="/teamleader/addnew" component={TlAddNew} />
             <Route exact path="/teamleader/addteamprof" component={TlAddTeamProf} />
-            <Route exact path="/teamleader/proposal" component={TlProposal} />
+            <Route exact path="/teamleader/proposal" component={TlProposalTab} />
             <Route exact path="/teamleader/addassingment/:id" component={TlAddAssingmentStages} />
             <Route exact path="/teamleader/queries/:id" component={TlQueriesRecevied} />
             <Route exact path="/teamleader/queryassing/:id" component={TlQueryAssingment} />
@@ -226,7 +222,6 @@ function App() {
             <Route exact path="/teamleader/queriestab" component={TlQueriesTab} />
             <Route exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
             <Route exact path="/teamleader/pending/:id" component={TlPendingReceived} />
-            <Route exact path="/teamleader/queriestab2" component={TlQueryTab2} />
             <Route exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
             <Route exact path="/teamleader/meeting" component={TlMeetingComponent} />
             <Route exact path="/teamleader/view-report/:id" component={TlViewReport} />
@@ -236,8 +231,6 @@ function App() {
             <Route exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
             <Route exact path="/teamleader/chatting/:id" component={TlChatting} />
             <Route exact path="/teamleader/message" component={TlMessage} />
-
-
 
 
 

@@ -10,60 +10,63 @@ import {
   Row,
   Col,
   Table,
+  Tooltip,
 } from "reactstrap";
+import DraftReportModal from "./DraftReportUpload";
+import FinalReportUpload from "./FinalReportUpload";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
-import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import AdminFilter from "../../../components/Search-Filter/AdminFilter";
-import Records from "../../../components/Records/Records";
-import ViewAllReportModal from "./ViewAllReport";
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import * as Cookies from "js-cookie";
 
 
-function AssignmentComponent() {
-  const userid = window.localStorage.getItem("adminkey");
 
-  const [assignmentDisplay, setAssignmentDisplay] = useState([]);
+function AssignmentTab() {
+
+  const history = useHistory();
+  const userid = window.localStorage.getItem("tlkey");
+
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;
-  const [assignmentCount, setCountAssignment] = useState("");
-  const [records, setRecords] = useState([]);
+  const [count, setCount] = useState("");
+  const [assignment, setAssignment] = useState([]);
+  const [id, setId] = useState("");
+  const [finalId, setFinalId] = useState("");
 
+  const [records, setRecords] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
   const [status, setStatus] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
   const [hide, setHide] = useState();
-  const [report, setReport] = useState();
 
   var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
   console.log("current_date :", current_date);
   const [item] = useState(current_date);
 
-
-  const [reportModal, setReportModal] = useState(false);
-  const ViewReport = (key) => {
-    console.log("key - ", key);
-    setReportModal(!reportModal);
-    setReport(key);
-  };
-
+  const [baseMode, SetbaseMode] = useState("avc");
+  const [transcode, SetTranscode] = useState("interop");
+  const [attendeeMode, SetAttendeeMode] = useState("video");
+  const [videoProfile, SetVideoProfile] = useState("480p_4");
 
   useEffect(() => {
-    getAssignmentData();
+    getAssignmentList();
   }, []);
 
-  const getAssignmentData = () => {
-    axios.get(`${baseUrl}/tl/getAssignments`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setAssignmentDisplay(res.data.result);
-        setCountAssignment(res.data.result.length);
-        setRecords(res.data.result.length);
-      }
-    });
+  const getAssignmentList = () => {
+    axios
+      .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setAssignment(res.data.result);
+          setCount(res.data.result.length);
+          setRecords(res.data.result.length);
+        }
+      });
   };
 
   //get category
@@ -99,7 +102,7 @@ function AssignmentComponent() {
     console.log("resetCategory ..");
     setSelectedData([]);
     setStore2([]);
-    getAssignmentData();
+    getAssignmentList();
   };
 
   //reset date
@@ -109,7 +112,7 @@ function AssignmentComponent() {
     setStatus([]);
     setSelectedData([]);
     setStore2([]);
-    getAssignmentData();
+    getAssignmentList();
   };
 
   //assingmentStatus
@@ -118,6 +121,8 @@ function AssignmentComponent() {
     setStatus(value);
   };
 
+
+  //columns
   const columns = [
     {
       text: "S.No",
@@ -156,10 +161,10 @@ function AssignmentComponent() {
         console.log(row);
         return (
           <>
-            {/* <Link to={`/admin/queries/${row.q_id}`}>{row.assign_no}</Link> */}
+            {/* <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link> */}
             <Link
               to={{
-                pathname: `/admin/queries/${row.q_id}`,
+                pathname: `/teamleader/queries/${row.q_id}`,
                 routes: "assignment",
               }}
             >
@@ -199,17 +204,12 @@ function AssignmentComponent() {
         return (
           <>
             <div>
-              {row.paid_status == "2" &&
-                <p>
-                  <span style={{ color: "red" }}>Payment Declined</span>
-                </p>
-              }
               <p>
                 <span style={{ fontWeight: "bold" }}>Client Discussion :</span>
                 {row.client_discussion}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Draft Report :</span>
+                <span style={{ fontWeight: "bold" }}>Draft report :</span>
                 {row.draft_report}
               </p>
               <p>
@@ -217,11 +217,11 @@ function AssignmentComponent() {
                 {row.final_discussion}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Delivery of Final Report :</span>
+                <span style={{ fontWeight: "bold" }}>Delivery of report :</span>
                 {row.delivery_report}
               </p>
               <p>
-                <span style={{ fontWeight: "bold" }}>Awaiting Completion :</span>
+                <span style={{ fontWeight: "bold" }}>Complete :</span>
                 {row.other_stage}
               </p>
             </div>
@@ -230,8 +230,8 @@ function AssignmentComponent() {
       },
     },
     {
-      dataField: "Exp_Delivery_Date",
       text: "Expected date of delivery",
+      dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -246,8 +246,8 @@ function AssignmentComponent() {
       },
     },
     {
-      dataField: "final_date",
       text: "Actual date of delivery",
+      dataField: "final_date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -264,7 +264,6 @@ function AssignmentComponent() {
     {
       text: "Deliverable",
       dataField: "",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -297,32 +296,105 @@ function AssignmentComponent() {
       },
     },
     {
-      text: "TL name",
-      dataField: "tl_name",
-      sort: true,
+      text: "Assignment Stage",
       headerStyle: () => {
         return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              title="Add Assignment stages"
+              style={{ cursor: "pointer", textAlign: "center" }}
+            >
+              <Link to={`/teamleader/addassingment/${row.q_id}`}>
+                <i class="fa fa-tasks"></i>
+              </Link>
+            </div>
+          </>
+        );
       },
     },
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px", width: "75px" };
+        return { fontSize: "12px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "60px"
+              }}
+            >
+              {row.accepted_amount == row.paid_amount &&
+                !row.final_report && row.client_discussion == "completed" &&
+                !(
+                  row.delivery_report == "completed" &&
+                  row.draft_report == "completed" &&
+                  row.final_discussion == "completed"
+                ) ? (
+                <div title="upload Pdf">
+                  <p
+                    style={{ cursor: "pointer", color: "green" }}
+                    onClick={() => uploadDraftReport(row.id)}
+                  >
+                    <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                    draft
+                  </p>
+                </div>
+              ) : null}
+
+
+              {/* {row.final_report ? null : ( */}
+                <div title="upload Pdf">
+                  <p
+                    style={{ cursor: "pointer", color: "red" }}
+                    onClick={() => uploadFinalReport(row)}
+                  >
+                    {row.client_discussion == "completed" &&
+                      row.delivery_report == "completed" &&
+                      row.draft_report == "completed" &&
+                      row.final_discussion == "completed" &&
+                      row.amount == row.paid_amount ? (
+                      <div>
+                        <i
+                          class="fa fa-upload"
+                          style={{ fontSize: "16px" }}
+                        ></i>
+                        final
+                      </div>
+                    ) : null}
+                  </p>
+                </div>
+              {/* )} */}
+
+
+              {row.vstart < 11 &&
+                row.vend >= 0 &&
+                !(row.vstart == null && row.vend == null) ? (
+                <div style={{ cursor: "pointer" }} title="Video Chat">
+                  <i
+                    class="fa fa-video-camera"
+                    style={{ color: "red", fontSize: "16px" }}
+                    onClick={() => handleJoin(row.id)}
+                  ></i>
+                </div>
+              ) : null}
+
 
               <div title="Send Message">
                 <Link
                   to={{
-                    pathname: `/admin/chatting/${row.q_id}`,
+                    pathname: `/teamleader/chatting/${row.q_id}`,
                     obj: {
                       message_type: "3",
                       query_No: row.assign_no,
                       query_id: row.q_id,
-                      routes: `/admin/assignment`
+                      routes: `/teamleader/assignment`
                     }
                   }}
                 >
@@ -338,39 +410,70 @@ function AssignmentComponent() {
                 </Link>
               </div>
 
-              <div title="View Report"
-                style={{ cursor: "pointer" }}
-                onClick={() => ViewReport(row.assign_no)}
-              >
-                <DescriptionOutlinedIcon color="secondary" />
-              </div>
-
             </div>
           </>
         );
       },
     },
+
   ];
+
+
+  //handleJoin
+  const handleJoin = (id) => {
+    console.log("id", id);
+
+    Cookies.set("channel_2", id);
+    Cookies.set("baseMode_2", baseMode);
+    Cookies.set("transcode_2", transcode);
+    Cookies.set("attendeeMode_2", attendeeMode);
+    Cookies.set("videoProfile_2", videoProfile);
+    history.push("/teamleader/meeting");
+  };
+
+
+  // draft modal
+  const [draftModal, setDraftModal] = useState(false);
+  const uploadDraftReport = (id) => {
+    console.log(id);
+    setDraftModal(!draftModal);
+    setId(id);
+  };
+
+
+  // final modal
+  const [fianlModal, setFianlModal] = useState(false);
+  const uploadFinalReport = (id) => {
+    console.log(id);
+    setFianlModal(!fianlModal);
+    setFinalId(id);
+  };
+
 
   const onSubmit = (data) => {
     console.log("data :", data);
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&assignment_status=${status}&stages_status=${data.p_status}&pcat_id=${selectedData}`
+        `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
+          userid
+        )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+        }&assignment_status=${status}&stages_status=${data.p_status
+        }&pcat_id=${selectedData}`
       )
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
           if (res.data.result) {
-            setAssignmentDisplay(res.data.result);
+            setAssignment(res.data.result);
             setRecords(res.data.result.length);
+
           }
         }
       });
   };
 
-  
+
   const Reset = () => {
     return (
       <>
@@ -385,13 +488,14 @@ function AssignmentComponent() {
     );
   };
 
+
   const disabledHandler = (e) => {
     setHide(e.target.value);
   };
 
 
   return (
-    <div>
+    <>
       <Card>
         <CardHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -478,9 +582,9 @@ function AssignmentComponent() {
                   onChange={(e) => disabledHandler(e)}
                 >
                   <option value="">--select--</option>
-                  <option value="1">Inprogress</option>
-                  <option value="2">Completed</option>
-                  <option value="3">Payment Declined</option>
+                  <option value="1">Pending</option>
+                  <option value="2">Complete</option>
+                  <option value="3">Payment Decline</option>
                 </select>
               </div>
 
@@ -504,9 +608,7 @@ function AssignmentComponent() {
                         </div>
                       </Option>
                       <Option value="Draft_Report" label="Compilance">
-                        <div className="demo-option-label-item">
-                          Draft reports
-                        </div>
+                        <div className="demo-option-label-item">Draft report</div>
                       </Option>
                       <Option value="Final_Discussion" label="Compilance">
                         <div className="demo-option-label-item">
@@ -515,17 +617,20 @@ function AssignmentComponent() {
                       </Option>
                       <Option value="Delivery_of_report" label="Compilance">
                         <div className="demo-option-label-item">
-                          Delivery of Final Reports
+                          Delivery of report
                         </div>
                       </Option>
                       <Option value="Completed" label="Compilance">
-                        <div className="demo-option-label-item">Awaiting Completion</div>
+                        <div className="demo-option-label-item">Completed</div>
                       </Option>
                     </Select>
                   </div>
-
               }
 
+
+              <div class="form-group mx-sm-1  mb-2">
+                <label className="form-select form-control">Total Records : {records}</label>
+              </div>
               <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                 Search
               </button>
@@ -536,78 +641,31 @@ function AssignmentComponent() {
         </CardHeader>
 
         <CardBody>
-          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"
-            data={assignmentDisplay}
+            data={assignment}
             columns={columns}
             rowIndex
           />
 
-          <ViewAllReportModal
-            ViewReport={ViewReport}
-            reportModal={reportModal}
-            report={report}
-            getPendingforAcceptance={getAssignmentData}
+          <DraftReportModal
+            draftModal={draftModal}
+            uploadDraftReport={uploadDraftReport}
+            getAssignmentList={getAssignmentList}
+            id={id}
           />
 
+          <FinalReportUpload
+            fianlModal={fianlModal}
+            uploadFinalReport={uploadFinalReport}
+            getAssignmentList={getAssignmentList}
+            id={finalId}
+          />
         </CardBody>
       </Card>
-    </div>
+    </>
   );
 }
 
-export default AssignmentComponent;
-
-{
-  /*            
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.final_discussion}</p>
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.other_stage}</p> */
-}
-{
-  /* <div>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Client Discussion :
-                        </span>
-                        {p.client_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                        {p.draft_report}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Final Discussion :
-                        </span>
-                        {p.final_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Delivery of report :
-                        </span> 
-                        {p.delivery_report}
-                      </p>
-                    </div> */
-}
-
-/* <div className="mb-3">
-                      <select
-                        className="form-select form-control"
-                        name="p_purpose"
-                      >
-                        <option >status</option>
-                        <option >Client Discussion : {p.client_discussion}</option>
-                        <option >Draft report : {p.draft_report}</option>
-                        <option >Final Discussion : {p.final_discussion}</option>
-                        <option >Delivery of report : {p.delivery_report}</option>
-                      </select>
-                    </div> */
-//  {/* <AdminFilter
-//             setData={setAssignmentDisplay}
-//             getData={getAssignmentData}
-//             assignment="assignment"
-//           />
+export default AssignmentTab;
