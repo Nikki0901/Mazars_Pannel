@@ -117,7 +117,6 @@ function PaymentStatus() {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -188,7 +187,6 @@ function PaymentStatus() {
     {
       text: "Status",
       dataField: "status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -300,11 +298,10 @@ function PaymentStatus() {
                       onClick={() => toggle(row.assign_id)}
                     ></i>
                   </div>
-
               }
 
               {
-                (row.paid_status == "0" || row.paid_status == "1") ?
+                (row.paid_status == "0") ?
                   <div style={{ cursor: "pointer" }} title="Payment decline">
                     <i
                       class="fa fa-comments-o"

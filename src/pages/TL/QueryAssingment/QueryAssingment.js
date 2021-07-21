@@ -16,10 +16,22 @@ import {
   Tooltip,
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+
+
+const Schema = yup.object().shape({
+  p_taxprof: yup.string().required("required team leader"),
+  p_expdeldate: yup.string().required("required  Exp. delivery date "),
+});
+
 
 function QueryAssingment() {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
 
   const { id } = useParams();
   const history = useHistory();
@@ -156,7 +168,7 @@ function QueryAssingment() {
   };
 
   return (
-    <Layout TLDashboard="TLDashboard">
+    <Layout TLDashboard="TLDashboard" TLuserId={userId}>
       <Card>
         <CardHeader>
           <Row>
@@ -164,7 +176,7 @@ function QueryAssingment() {
               <Link
                 to={{
                   pathname: `/teamleader/queriestab`,
-                  index: 1,
+                  index: 0,
                 }}
               >
                 <button
@@ -203,7 +215,9 @@ function QueryAssingment() {
                           <th scope="row">{queryNo}</th>
                           <td>
                             <select
-                              class="form-control"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.p_taxprof,
+                              })}
                               name="p_taxprof"
                               ref={register}
                               onChange={(e) => handleChange(e)}
@@ -215,6 +229,11 @@ function QueryAssingment() {
                                 </option>
                               ))}
                             </select>
+                            {errors.p_taxprof && (
+                              <div className="invalid-feedback">
+                                {errors.p_taxprof.message}
+                              </div>
+                            )}
                           </td>
 
                           <td>
@@ -231,10 +250,17 @@ function QueryAssingment() {
                               type="text"
                               ref={register}
                               name="p_expdeldate"
-                              class="form-control"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.p_expdeldate,
+                              })}
                               value={expect_dd}
                               min={item}
                             />
+                            {errors.p_expdeldate && (
+                              <div className="invalid-feedback">
+                                {errors.p_expdeldate.message}
+                              </div>
+                            )}
                           </td>
 
                           <td>

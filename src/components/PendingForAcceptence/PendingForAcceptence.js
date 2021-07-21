@@ -79,7 +79,6 @@ function PendingForAcceptence({ pendingProposal }) {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -165,7 +164,6 @@ function PendingForAcceptence({ pendingProposal }) {
     },
     {
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },

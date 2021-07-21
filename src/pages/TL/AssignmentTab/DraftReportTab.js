@@ -45,7 +45,7 @@ function AssignmentTab() {
 
     const getAssignmentList = () => {
         axios
-            .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}&assignment_status=Draft_Report&stages_status=1`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -140,7 +140,6 @@ function AssignmentTab() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -179,7 +178,6 @@ function AssignmentTab() {
         {
             dataField: "status",
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -258,8 +256,8 @@ function AssignmentTab() {
                 `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
                     userid
                 )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
-                }&assignment_status=${status}&stages_status=${data.p_status
-                }&pcat_id=${selectedData}`
+                }&assignment_status="Draft_Report"&stages_status=1
+               &pcat_id=${selectedData}`
             )
             .then((res) => {
                 console.log(res);

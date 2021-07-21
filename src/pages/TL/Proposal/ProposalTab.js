@@ -16,9 +16,13 @@ function QueriesTab(props) {
     const userid = window.localStorage.getItem("tlkey");
     const [tabIndex, setTabIndex] = useState(0);
 
-    const [pendindForAccepttence, setPendingForAcceptence] = useState("");
-    const [incomplete, setIncomplete] = useState("");
-    const [complete, setcomplete] = useState("");
+
+    const [allProposal, setAllProposal] = useState("");
+    const [inprogressProposal, setInprogressProposal] = useState("");
+    const [acceptedProposal, setAcceptedProposal] = useState("");
+    const [declinedProposal, setDeclinedProposal] = useState("");
+
+
 
 
     const myStyle1 = {
@@ -48,51 +52,58 @@ function QueriesTab(props) {
 
 
     useEffect(() => {
-        const getPendindForAccepttence = () => {
+
+        const AllProposal = () => {
             axios
-                .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
+                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}`)
                 .then((response) => {
                     console.log("code---", response);
                     if (response.data.code === 1) {
-                        setPendingForAcceptence(response.data.result.length);
+                        setAllProposal(response.data.result.length);
                     }
                 })
-                .catch((error) => {
-                    console.log("error", error);
-                });
         };
 
-        const getIncomplete = () => {
+        const InprogressProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
-                .then((res) => {
-                    console.log(res);
-                    if (res.data.code === 1) {
-                        setIncomplete(res.data.result.length);
+                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=1`)
+                .then((response) => {
+                    console.log("code---", response);
+                    if (response.data.code === 1) {
+                        setInprogressProposal(response.data.result.length);
                     }
-                });
+                })
         };
 
-        const getComplete = () => {
+        const AcceptedProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getCompleteQues?id=${JSON.parse(userid)}`)
-                .then((res) => {
-                    console.log(res);
-                    if (res.data.code === 1) {
-                        setcomplete(res.data.result.length);
+                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=2`)
+                .then((response) => {
+                    console.log("code---", response);
+                    if (response.data.code === 1) {
+                        setAcceptedProposal(response.data.result.length);
                     }
-                });
+                })
         };
 
-        getPendindForAccepttence();
-        getIncomplete();
-        getComplete();
+        const DeclinedProposal = () => {
+            axios
+                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=3`)
+                .then((response) => {
+                    console.log("code---", response);
+                    if (response.data.code === 1) {
+                        setDeclinedProposal(response.data.result.length);
+                    }
+                })
+        };
+
+        AllProposal();
+        InprogressProposal();
+        AcceptedProposal();
+        DeclinedProposal();
     }, []);
 
 
-    // const updateTab = (key) => {
-    //     setTabIndex(key)
-    // }
 
     return (
         <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -106,16 +117,16 @@ function QueriesTab(props) {
                         }}
                     >
                         <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
-                            All Proposals
+                            All Proposals ({allProposal})
                         </Tab>
                         <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-                            Inprogress; Proposals
+                            Inprogress; Proposals ({inprogressProposal})
                         </Tab>
                         <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-                            Accepted; Proposals
+                            Accepted; Proposals ({acceptedProposal})
                         </Tab>
                         <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
-                            Customer Declined; Proposals
+                            Customer Declined; Proposals ({declinedProposal})
                         </Tab>
                     </TabList>
 

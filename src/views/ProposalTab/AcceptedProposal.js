@@ -96,7 +96,6 @@ function AcceptedProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -176,7 +175,6 @@ function AcceptedProposal() {
         },
         {
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },

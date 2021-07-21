@@ -19,16 +19,18 @@ function TeamFilter(props) {
     DeclinedQuery,
 
     completeAssignment,
-    proposal,
+    AllProposal,
+    InprogressProposal,
     paymentStatus,
     assignment,
-
   } = props;
   const userid = window.localStorage.getItem("tlkey");
 
   const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
+  const [status1, setStatus1] = useState(1);
+
 
   var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
   console.log("current_date :", current_date);
@@ -76,6 +78,7 @@ function TeamFilter(props) {
     reset();
     setSelectedData([]);
     setStore2([]);
+    setStatus1(1)
     getData();
   };
 
@@ -121,9 +124,11 @@ function TeamFilter(props) {
     }
 
     if (InprogressQuery == "InprogressQuery") {
+
+      console.log("status1", status1)
       axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=${status1}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -171,7 +176,7 @@ function TeamFilter(props) {
         });
     }
 
-    if (proposal == "proposal") {
+    if (AllProposal == "AllProposal") {
       axios
         .get(
           `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
@@ -190,6 +195,26 @@ function TeamFilter(props) {
         });
     }
 
+    if (InprogressProposal == "InprogressProposal") {
+      axios
+        .get(
+          `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
+          }&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+
     if (paymentStatus == "paymentStatus") {
       axios
         .get(
@@ -207,6 +232,7 @@ function TeamFilter(props) {
     }
   };
 
+
   const Reset = () => {
     return (
       <>
@@ -220,6 +246,9 @@ function TeamFilter(props) {
       </>
     );
   };
+
+
+
 
   return (
     <>
@@ -324,11 +353,12 @@ function TeamFilter(props) {
                       name="p_status"
                       ref={register}
                       style={{ height: "33px" }}
+                      onChange={(e) => setStatus1(e.target.value)}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Inprogress; Proposals</option>
-                      <option value="2">Accepted; Proposals</option>
-                      <option value="3">Customer Declined; Proposals</option>
+                      <option value="4">Inprogress; Allocation</option>
+                      <option value="5">Inprogress; Proposals</option>
+                      <option value="6">Inprogress; Assignments</option>
                     </select>
                   )}
 
@@ -341,14 +371,12 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Customer Declined; Proposals</option>
-                      <option value="2">Customer Declined; Payment</option>
+                      <option value="3">Customer Declined; Proposals</option>
+                      <option value="4">Customer Declined; Payment</option>
                     </select>
                   )}
 
-
-
-                  {proposal == "proposal" && (
+                  {AllProposal == "AllProposal" && (
                     <select
                       className="form-select form-control"
                       name="p_status"
@@ -356,10 +384,22 @@ function TeamFilter(props) {
                       style={{ height: "33px" }}
                     >
                       <option value="">--select--</option>
-                      <option value="1">Pending Preparation</option>
-                      <option value="2">Pending Approval</option>
-                      <option value="3">Accepted</option>
-                      <option value="4">Declined</option>
+                      <option value="1">Inprogress; Proposals</option>
+                      <option value="2">Accepted; Proposals</option>
+                      <option value="3">Customer Declined; Proposals</option>
+                    </select>
+                  )}
+
+                  {InprogressProposal == "InprogressProposal" && (
+                    <select
+                      className="form-select form-control"
+                      name="p_status"
+                      ref={register}
+                      style={{ height: "33px" }}
+                    >
+                      <option value="">--select--</option>
+                      <option value="4">Inprogress; Preparation</option>
+                      <option value="5">Inprogress; Acceptance</option>
                     </select>
                   )}
 

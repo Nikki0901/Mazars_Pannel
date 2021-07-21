@@ -157,7 +157,7 @@ function App() {
             <PublicRouteUser exact path="/customer/forget-password" component={ForgetPassword} />
             <PublicRouteUser exact path="/customer/new-password/:id" component={NewPassword} />
            
-            <PrivateRouteUser exact path="/customer/questionnaire-page" component={QuestionnairePage} />
+            <PrivateRouteUser exact path="/customer/questionnaire-page" component={QuestionnairePage} />            
             <PrivateRouteUser exact path="/customer/select-category" component={SelectCategoryPage} />
             <PrivateRouteUser exact path="/customer/dashboard" component={Dashboard} />
             <PrivateRouteUser exact path="/customer/my-assingment/:id" component={MyAssingment} />

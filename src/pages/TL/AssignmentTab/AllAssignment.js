@@ -153,15 +153,13 @@ function AssignmentTab() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function nameFormatter(cell, row) {
         console.log(row);
         return (
-          <>
-            {/* <Link to={`/teamleader/queries/${row.q_id}`}>{row.assign_no}</Link> */}
+          <>       
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.q_id}`,
@@ -193,7 +191,6 @@ function AssignmentTab() {
     {
       dataField: "status",
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },

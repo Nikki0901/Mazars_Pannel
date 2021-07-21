@@ -15,9 +15,10 @@ function QueriesTab(props) {
   const userid = window.localStorage.getItem("tlkey");
   const [tabIndex, setTabIndex] = useState(0);
 
-  const [pendindForAccepttence, setPendingForAcceptence] = useState("");
-  const [incomplete, setIncomplete] = useState("");
-  const [complete, setcomplete] = useState("");
+
+  const [allAssignmentCount, setAllAssignmentCount] = useState("");
+  const [draft, setDraft] = useState("");
+  const [final, setFinal] = useState();
 
 
   const myStyle1 = {
@@ -46,46 +47,45 @@ function QueriesTab(props) {
 
 
 
+
   useEffect(() => {
-    const getPendindForAccepttence = () => {
-      axios
-        .get(`${baseUrl}/tl/pendingQues?id=${JSON.parse(userid)}`)
-        .then((response) => {
-          console.log("code---", response);
-          if (response.data.code === 1) {
-            setPendingForAcceptence(response.data.result.length);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    };
 
-    const getIncomplete = () => {
+    const AllAssignment = () => {
       axios
-        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setIncomplete(res.data.result.length);
+            setAllAssignmentCount(res.data.result.length);
           }
         });
     };
 
-    const getComplete = () => {
+    const getDraftReports = () => {
       axios
-        .get(`${baseUrl}/tl/getCompleteQues?id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}&assignment_status=Draft_Report&stages_status=1`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setcomplete(res.data.result.length);
+            setDraft(res.data.result.length);
           }
         });
     };
 
-    getPendindForAccepttence();
-    getIncomplete();
-    getComplete();
+    const getFinalReports = () => {
+      axios
+        .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}&assignment_status=Delivery_of_report&stages_status=1`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            setFinal(res.data.result.length);
+          }
+        });
+    };
+
+    AllAssignment();
+    getDraftReports();
+    getFinalReports();
   }, []);
 
 
@@ -102,13 +102,13 @@ function QueriesTab(props) {
             }}
           >
             <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
-              All Assignments
+              All Assignments ({allAssignmentCount})
             </Tab>
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Inprogress; Draft Reports
+              Inprogress; Draft Reports ({draft})
             </Tab>
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Inprogress; Delivery of Final
+              Inprogress; Delivery of Final ({final})
             </Tab>
           </TabList>
 

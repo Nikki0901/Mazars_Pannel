@@ -125,7 +125,6 @@ function InprogressProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -205,7 +204,6 @@ function InprogressProposal() {
         },
         {
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },

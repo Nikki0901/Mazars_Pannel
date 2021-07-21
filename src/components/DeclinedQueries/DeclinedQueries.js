@@ -71,7 +71,6 @@ function DeclinedQueries({ CountPendingForPayment }) {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -117,7 +116,6 @@ function DeclinedQueries({ CountPendingForPayment }) {
     },
     {
       text: "Status",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },

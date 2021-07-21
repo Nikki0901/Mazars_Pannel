@@ -77,10 +77,6 @@ function Questionnaire(props) {
         if (response.data.code === 1) {
           reset();
 
-          // var msg = response.data.message
-          // var variable = "Query Successfully Added"
-          // Alerts.SuccessMsg(variable, msg)
-
           var message = response.data.message
           if (message == "") {
             Swal.fire(
@@ -126,32 +122,31 @@ function Questionnaire(props) {
 
 
 
+  // const SuccessMesg = () => {
+  //   return (
+  //     <>
+  //       <Modal isOpen={modal} toggle={toggle} size="sm">
+  //         <ModalHeader toggle={toggle}></ModalHeader>
 
+  //         <ModalBody>
+  //           <br />
+  //           <div class="modal-body">
+  //             <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
+  //               {JSON.parse(userNameId)} , You have Successfully Registered
+  //             </h1>
+  //           </div>
+  //         </ModalBody>
+  //       </Modal>
+  //     </>
+  //   );
+  // };
 
-  const SuccessMesg = () => {
-    return (
-      <>
-        <Modal isOpen={modal} toggle={toggle} size="sm">
-          <ModalHeader toggle={toggle}></ModalHeader>
-
-          <ModalBody>
-            <br />
-            <div class="modal-body">
-              <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                {JSON.parse(userNameId)} , You have Successfully Registered
-              </h1>
-            </div>
-          </ModalBody>
-        </Modal>
-      </>
-    );
-  };
 
   return (
     <>
       <Header id={JSON.parse(userNameId)} />
       <div className="container">
-        {SuccessMesg()}
+        {/* {SuccessMesg()} */}
         <div className="form">
           <div className="heading">
             <h2>Basic Questionnaire</h2>
@@ -254,7 +249,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_word"
                         ref={register}
-                      // value="1"
+                        defaultChecked
                       />
                       <label className="form-check-label">
                         Softcopy - Word/ Pdf
@@ -266,7 +261,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_digital"
                         ref={register}
-                      // value="1"
+
                       />
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
@@ -278,7 +273,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_physically"
                         ref={register}
-                      // value="1"
+
                       />
                       <label className="form-check-label">
                         Printout- Physically Signed
@@ -299,7 +294,7 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Urgent, (4-5 Working Days)"
-                        defaultChecked
+
                       />
                       <label>Urgent, (4-5 Working Days)</label>
                     </div>
@@ -310,6 +305,7 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Regular (10-12 Working Days)"
+                        defaultChecked
                       />
                       <label>Regular (10-12 Working Days)</label>
                     </div>
@@ -344,6 +340,7 @@ function Questionnaire(props) {
 }
 
 export default Questionnaire;
+
 
 const purpose = [
   { value: "Assessment", label: "Assessment" },

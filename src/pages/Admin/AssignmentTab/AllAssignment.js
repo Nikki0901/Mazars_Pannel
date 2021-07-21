@@ -148,7 +148,6 @@ function AssignmentComponent() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -188,7 +187,6 @@ function AssignmentComponent() {
     {
       dataField: "status",
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
