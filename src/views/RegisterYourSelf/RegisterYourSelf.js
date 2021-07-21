@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../assets/css/style.css";
 import "../../assets/css/media.css";
+import { useRef , useState} from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
 import {Button , Typography } from "@material-ui/core";
@@ -9,7 +10,22 @@ import {Button , Typography } from "@material-ui/core";
 
 import './style.css';
 function RegisterYourSelf() {
+  var otime = 180;
+const [otpTime, setotpTime] = useState(otime);
+ const register = useRef(null)
  
+ const getotpFun = () => {
+setotpTime(otpTime - 1)
+ }
+
+ const getOtp = () => {
+ return(
+   register.current.disabled = false,
+  setInterval(getotpFun(), 1000)
+  
+  
+ )
+ }
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -19,7 +35,7 @@ function RegisterYourSelf() {
           <div className="signBtn">
             <div className="boxOverlay">
             <p style={{"color" : "white", "fontSize" : "22px"}}>
-             New  User
+            For new Customers
               
             
                </p>
@@ -32,7 +48,7 @@ function RegisterYourSelf() {
           <div className="signUp">
           
          <Typography variant="h4">
-         MTL Login
+         Existing Customers
          </Typography>
            <form>
 
@@ -44,15 +60,23 @@ function RegisterYourSelf() {
                <label htmlFor="userPass">Password</label>
                <input type="password" className="form-control" name="userPass" id="userpass"/>
              </div>
-             <div className="form-group">
-               <a href="#" style={{"display" : "block"}}>Terms & Conditions</a>
-            <div className="form-group">
-            <input type="checkbox" name="terms"/>
-              <label htmlFor="terms" style={{"margin" : "5px 10px"}}>I Agree</label>
-            </div>
+             <div className="form-group" style={{"display" : "flex"}}>
+              
+            <input 
+            type="text"
+            ref = {register}
+            name="getOtp"
+            disabled style={{"margin" : "0 10px 0 0"}}
+            
+            />
+            
+              <Button variant="contained"  size="small"  onClick={getOtp}> Get Otp</Button>
+          
              </div>
+             <p>{otpTime}</p>
+             <Button variant="contained" color="primary"> Log In</Button>
              <div>
-               <Button variant="contained"> Log In</Button>
+             
               
               
              </div>

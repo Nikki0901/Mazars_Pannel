@@ -169,13 +169,12 @@ function AddFreshAssingment(props) {
                         rows="6"
                         name="p_fact"
                         ref={register({
-                          required: true
+                          required: "This field is required",
                           
                            
                             
                         })}
                       ></textarea>
-                    
                     </div>
                   </div>
 
@@ -219,12 +218,10 @@ function AddFreshAssingment(props) {
                         type="text"
                         name="p_case_name"
                         ref={register({
-                          required : true
+                          required : "This feild is required"
                         })}
-                        id="caseName"
                         className="form-control"
                       />
-                      <p>{errors.caseName && "This feild is required"}</p>
                     </div>
                   </div>
                   <div className="col-md-6">

@@ -26,17 +26,26 @@ function Questionnaire(props) {
   const userNameId = window.localStorage.getItem("name");
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
-
+const [custError, setcustError] = useState([])
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
 
 
-
+const valiFun = (e) =>{
+  setcustError("")
+}
   const onSubmit = (value) => {
     console.log("value :", value);
-    setLoad(true);
-
+   
+    const a = value.p_fact;
+    if (a == ''){
+    setcustError("This feild is required");
+    }
+   
+    else {
+      setcustError(" ");
+      setLoad(true);
     let formData = new FormData();
 
     var uploadImg = value.upload;
@@ -47,7 +56,7 @@ function Questionnaire(props) {
         formData.append("upload_1[]", a);
       }
     }
-
+   
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.specific));
     formData.append("timelines", value.p_timelines);
@@ -66,7 +75,9 @@ function Questionnaire(props) {
     formData.append("case_name", value.p_case_name);
     formData.append("assessment_year", JSON.stringify(selectedOption));
     formData.append("purpose", JSON.stringify(purposeOption));
-    axios
+   
+   
+      axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
         headers: {
           "content-type": "multipart/form-data",
@@ -122,6 +133,9 @@ function Questionnaire(props) {
       .catch((error) => {
         console.log("erroror - ", error);
       });
+    }
+    
+     
   };
 
 
@@ -169,8 +183,10 @@ function Questionnaire(props) {
                       id="textarea"
                       rows="6"
                       name="p_fact"
+                      onChange={valiFun}
                       ref={register}
                     ></textarea>
+                    <p style={{"color" :"red"}}>{custError}</p>
                   </div>
                 </div>
 
@@ -239,6 +255,7 @@ function Questionnaire(props) {
                       isMulti
                       options={assessment_year}
                     />
+                      
                   </div>
                 </div>
 
