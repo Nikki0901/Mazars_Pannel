@@ -168,8 +168,14 @@ function AddFreshAssingment(props) {
                         id="textarea"
                         rows="6"
                         name="p_fact"
-                        ref={register}
+                        ref={register({
+                          required: true
+                          
+                           
+                            
+                        })}
                       ></textarea>
+                    
                     </div>
                   </div>
 
@@ -212,9 +218,13 @@ function AddFreshAssingment(props) {
                       <input
                         type="text"
                         name="p_case_name"
-                        ref={register}
+                        ref={register({
+                          required : true
+                        })}
+                        id="caseName"
                         className="form-control"
                       />
+                      <p>{errors.caseName && "This feild is required"}</p>
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -225,6 +235,7 @@ function AddFreshAssingment(props) {
                         onChange={setSelectedOption}
                         isMulti
                         options={assessment_year}
+                       
                       />
                     </div>
                   </div>

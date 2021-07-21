@@ -118,6 +118,10 @@ function ChangePassword(props) {
                     className={classNames("form-control", {
                       "is-invalid": errors.p_password,
                     })}
+                    onPaste={((e) => {
+                      e.preventDefault();
+                      return false;
+                    })}
                     placeholder="Enter Your Password"
                     name="p_password"
                     ref={register({
@@ -146,6 +150,10 @@ function ChangePassword(props) {
                 <div className="mb-3">
                   <label className="form-label">Confirm Password</label>
                   <input
+                 onPaste={((e) => {
+                  e.preventDefault();
+                  return false;
+                })}
                     type={isPasswordShow2 ? "text" : "password"}
                     id="password"
                     className={classNames("form-control", {
