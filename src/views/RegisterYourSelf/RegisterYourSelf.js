@@ -14,17 +14,15 @@ function RegisterYourSelf() {
 const [otpTime, setotpTime] = useState(otime);
  const register = useRef(null)
  
- const getotpFun = () => {
-setotpTime(otpTime - 1)
- }
 
+
+const myFun = () => {
+  setInterval(
+    setotpTime(otpTime - 1), 1000
+   )
+}
  const getOtp = () => {
- return(
-   register.current.disabled = false,
-  setInterval(getotpFun(), 1000)
-  
-  
- )
+myFun();
  }
   return (
     <>
