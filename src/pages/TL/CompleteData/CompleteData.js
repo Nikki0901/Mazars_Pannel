@@ -10,58 +10,146 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
+import { Link } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
-function CompleteData() {
-  const [completeData, setCompleteData] = useState([]);
+
+
+function CompletedQuery() {
   const userid = window.localStorage.getItem("tlkey");
 
-  useEffect(() => {
-    const getCompleteAssingment = () => {
-      axios
-        .get(`${baseUrl}/get/tp/tl/complete/id/${JSON.parse(userid)}/type/tl`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setCompleteData(res.data.result);
-          }
-        });
-    };
+  const [incompleteData, setInCompleteData] = useState([]);
+  const [records, setRecords] = useState([]);
 
-    getCompleteAssingment();
+
+
+  useEffect(() => {
+    getInCompleteAssingment();
   }, []);
+
+  const getInCompleteAssingment = () => {
+    axios
+      .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=2`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setInCompleteData(res.data.result);
+          setRecords(res.data.result.length);
+
+        }
+      });
+  };
+
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link
+              to={{
+                pathname: `/teamleader/queries/${row.id}`,
+                index: 1,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "	Exp. Delivery Date",
+      dataField: "Exp_Delivery_Date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+  ];
 
   return (
     <>
       <Card>
-        <CardHeader></CardHeader>
+        <CardHeader>
+          <TeamFilter
+            setData={setInCompleteData}
+            getData={getInCompleteAssingment}
+            inCompleteQuery="inCompleteQuery"
+            setRecords={setRecords}
+            records={records}
+          />
+        </CardHeader>
         <CardBody>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">Query No .</th>
-                <th scope="col">Customer Name</th>
-                <th scope="col">Delivery Date</th>
-                <th scope="col">Assignment Stage</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {completeData.map((p, i) => (
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              ))} */}
-            </tbody>
-          </table>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={incompleteData}
+            columns={columns}
+            rowIndex
+          />
         </CardBody>
       </Card>
     </>
   );
 }
 
-export default CompleteData;
+export default CompletedQuery;

@@ -1,276 +1,103 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../../components/Layout/Layout";
-import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+// import "../../../../node_modules/react-tabs/style/react-tabs.css";
+
+import Layout from "../../../components/Layout/Layout";
 
 function Dashboard() {
-  const [newQueries, setNewQueries] = useState([]);
-  const [incompleteData, setInCompleteData] = useState([]);
-  const [completeData, setCompleteData] = useState([]);
-
   const userid = window.localStorage.getItem("tpkey");
+  const [incomplete, setIncomplete] = useState("");
+  const [complete, setcomplete] = useState("");
 
   useEffect(() => {
-    const getNewQueries = () => {
-      axios
-        .get(`${baseUrl}/tp/getassignedques?id=${JSON.parse(userid)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setNewQueries(res.data.result);
-          }
-        });
-    };
-
-    const getInCompleteAssingment = () => {
+    const getIncomplete = () => {
       axios
         .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setInCompleteData(res.data.result);
+            setIncomplete(res.data.result.length);
           }
         });
     };
 
-    const getCompleteAssingment = () => {
+    const getComplete = () => {
       axios
         .get(`${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
-            setCompleteData(res.data.result);
+            setcomplete(res.data.result.length);
           }
         });
     };
 
-    getNewQueries();
-    getInCompleteAssingment();
-    getCompleteAssingment();
+    getIncomplete();
+    getComplete();
   }, []);
-
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
 
   return (
     <Layout TPDashboard="TPDashboard" TPuserId={userid}>
       <div class="row mt-3">
-        <div class="col-md-12">
-          <ul
-            class="nav nav-pills mb-3"
-            style={{ justifyContent: "space-around" }}
-            id="pills-tab"
-            role="tablist"
-          >
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white active"
-                id="pills-profile-tab"
-                data-toggle="pill"
-                href="#payment"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-              >
-                New Queries
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white"
-                id="pills-contact-tab"
-                data-toggle="pill"
-                href="#incomplete"
-                role="tab"
-                aria-controls="pills-contact"
-                aria-selected="false"
-              >
-                Incomplete
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link text-white"
-                id="pills-contact-tab"
-                data-toggle="pill"
-                href="#complete"
-                role="tab"
-                aria-controls="pills-contact"
-                aria-selected="false"
-              >
-                Complete
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="payment"
-              role="tabpanel"
-              aria-labelledby="pills-profile-tab"
-            >
-              {newQueries.map((p, i) => (
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th scope="col">Query No .</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Facts of the Case</th>
-                        <th scope="col">Exp. Delivery Date</th>
-                        <th scope="col">Assignment Stage</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">
-                          <Link to={`/taxprofessional/queries/${p.id}`}>
-                            {p.assign_no}
-                          </Link>
-                        </th>
-                        <td>{p.name}</td>
-                        <td>{p.fact_case}</td>
-                        <td>{ChangeFormateDate(p.Exp_Delivery_Date)}</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Inprogress
+                  </h5>
                 </div>
-              ))}
+                <div>
+                  <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4>{incomplete}</h4>
+              </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="incomplete"
-              role="tabpanel"
-              aria-labelledby="pills-contact-tab"
-            >
-              {incompleteData.map((p, i) => (
+          </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-6 col-md-12">
+          <div class="card pull-up ecom-card-1 bg-white">
+            <div class="card-body height-150">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th scope="col">Query No .</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Facts of the Case</th>
-                        <th scope="col">Exp. Delivery Date</th>
-                        <th scope="col">Assignment Stage</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">{p.assign_no}</th>
-                        <td>{p.name}</td>
-                        <td>{p.fact_case}</td>
-                        <td>{p.Exp_Delivery_Date}</td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <h5 class="text-muted info position-absolute p-1">
+                    Complete
+                  </h5>
                 </div>
-              ))}
-            </div>
-            <div
-              class="tab-pane fade"
-              id="complete"
-              role="tabpanel"
-              aria-labelledby="pills-contact-tab"
-            >
-              {/* {completeData.map((p, i) => (
                 <div>
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th scope="col">Query No .</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Delivery Date</th>
-                        <th scope="col">Assignment Stage</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">{p.AssignNo}</th>
-                        <td>{p.name}</td>
-                        <td>{p.Expect}</td>
-                        <td>Client discussion</td>
-                        <td class="bg-success text-white">Complete</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td>Draft report</td>
-                        <td class="bg-success text-white">Complete</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td>Final Discussion</td>
-                        <td class="bg-success text-white">Complete</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td>Delivery of report</td>
-                        <td class="bg-success text-white">Complete</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <Link to={`/teamleader/queriestab`}>
+                    <i class="fa fa-tasks info font-large-1 float-right p-1"></i>
+                  </Link>
                 </div>
-              ))} */}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: "50px",
+                }}
+              >
+                <h4>{complete}</h4>
+              </div>
             </div>
           </div>
         </div>
@@ -280,3 +107,54 @@ function Dashboard() {
 }
 
 export default Dashboard;
+{
+  /* <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              Pending for Acceptance
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>Inprogress</Tab>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>Complete</Tab>
+          </TabList>
+
+          <TabPanel>
+            <p> Pending for Acceptance</p>
+            <button onClick={() => setTabIndex(1)}>go to 1st tab</button>
+          </TabPanel>
+          <TabPanel>
+            <p>Inprogress tab</p>
+          </TabPanel>
+          <TabPanel>
+            <p>Complete tab</p>
+          </TabPanel>
+        </Tabs>
+      </div> */
+}
+
+// const myStyle1 = {
+//   backgroundColor: "grey",
+//  padding: "12px",
+//   borderRadius: "50px",
+//   width: "200px",
+//   textAlign: "center",
+//   color: "white",
+//   cursor: "pointer",
+// };
+// const myStyle2 = {
+//  padding: "12px",
+//   borderRadius: "50px",
+//   width: "200px",
+//   textAlign: "center",
+//   backgroundColor: "blue",
+//   color: "white",
+//   cursor: "pointer",
+// };
+
+// const [tabIndex, setTabIndex] = useState(0);

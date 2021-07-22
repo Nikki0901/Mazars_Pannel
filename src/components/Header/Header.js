@@ -71,7 +71,7 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
             <ul class="menu">
               <li style={{ color: "#fff" }}>{id}</li>
               <li onClick={custLogout}  style={{ color: "#fff" }}>
-              <i class="fa fa-sign-out"></i>
+              <i class="fa fa-sign-out">logout</i>
               </li>        
             </ul>
           )}

@@ -1,151 +1,173 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
+import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
 import AllProposalComponent from "../AllProposalComponent/AllProposalComponent";
-import PendingPropoal from "../PendingProposal/PendingPropoal";
+import PendingForAcceptence from "../../../components/PendingForAcceptence/PendingForAcceptence";
 import AcceptedProposal from "../AcceptedProposal/AcceptedProposal";
 import DeclinedPropoal from "../DeclinedProposal/DeclinedPropoal";
 
-function Proposal() {
-  const [proposalDisplay, setProposalDisplay] = useState([]);
-
+function Proposal(props) {
   const userid = window.localStorage.getItem("adminkey");
+
+  const [allProposalCount, setAllProposalCount] = useState("");
+  const [pendingProposalCount, setPendingProposalCount] = useState("");
+  const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
+  const [declinedProposalCount, setDeclinedProposalCount] = useState("");
+
   useEffect(() => {
-    const getProposalData = () => {
-      axios.get(`${baseUrl}/get/admin/showproposal`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setProposalDisplay(res.data.result);
-        }
-      });
+    const getAllProposal = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setAllProposalCount(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
     };
-    getProposalData();
+
+    const getAcceptedProposal = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?status1=2`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setAcceptedProposalCount(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    const getDeclinedProposal = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?&status=6`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setDeclinedProposalCount(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    const getPendingForAcceptence = () => {
+      axios
+        .get(`${baseUrl}/admin/getProposals?status1=1`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPendingProposalCount(response.data.result.length);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    getAllProposal();
+    getAcceptedProposal();
+    getDeclinedProposal();
+    getPendingForAcceptence();
   }, []);
 
-  // change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
+  const [tabIndex, setTabIndex] = useState(0);
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
+
+  const myStyle1 = {
+    backgroundColor: "grey",
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    color: "white",
+    cursor: "pointer",
+  };
+
+  const myStyle2 = {
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    backgroundColor: "blue",
+    color: "white",
+    cursor: "pointer",
+  };
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <div class="row mt-3">
-        <div class="col-md-12" style={{ top: "-12px" }}>
-          <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="query"
-              role="tabpanel"
-              aria-labelledby="pills-query-tab"
-            >
-              <ul
-                class="nav nav-pills mb-3 col-sm-12"
-                style={{ justifyContent: "space-around" }}
-                id="pills-tab"
-                role="tablist"
-              >
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white active"
-                    id="pills-d-tab"
-                    data-toggle="pill"
-                    href="#d"
-                    role="tab"
-                    aria-controls="pills-d"
-                    aria-selected="true"
-                  >
-                    All Proposal
-                  </a>
-                </li>
+      <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              All Proposals ({allProposalCount})
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+              Inprogress; Proposals ({pendingProposalCount})
+            </Tab>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-a-tab"
-                    data-toggle="pill"
-                    href="#a"
-                    role="tab"
-                    aria-controls="pills-a"
-                    aria-selected="false"
-                  >
-                    Pending Proposal
-                  </a>
-                </li>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Accepted; Proposals ({acceptedProposalCount})
+            </Tab>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-b-tab"
-                    data-toggle="pill"
-                    href="#b"
-                    role="tab"
-                    aria-controls="pills-b"
-                    aria-selected="false"
-                  >
-                    Accepted Proposal
-                  </a>
-                </li>
+            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+              Customer Declined; Proposals ({declinedProposalCount})
+            </Tab>
+          </TabList>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-c-tab"
-                    data-toggle="pill"
-                    href="#c"
-                    role="tab"
-                    aria-controls="pills-c"
-                    aria-selected="false"
-                  >
-                    Declined Proposal
-                  </a>
-                </li>
-              </ul>
+          <TabPanel>
+            <AllProposalComponent />
+          </TabPanel>
 
-              <div class="tab-content" id="pills-tabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="d"
-                  role="tabpanel"
-                  aria-labelledby="pills-d-tab"
-                >
-                  <AllProposalComponent />
-                </div>
+          <TabPanel>
+            <PendingForAcceptence />
+          </TabPanel>
 
-                <div
-                  class="tab-pane fade"
-                  id="a"
-                  role="tabpanel"
-                  aria-labelledby="pills-a-tab"
-                >
-                  <PendingPropoal />
-                </div>
+          <TabPanel>
+            <AcceptedProposal />
+          </TabPanel>
 
-                <div
-                  class="tab-pane fade"
-                  id="b"
-                  role="tabpanel"
-                  aria-labelledby="pills-b-tab"
-                >
-                  <AcceptedProposal />
-                </div>
-
-                <div
-                  class="tab-pane fade"
-                  id="c"
-                  role="tabpanel"
-                  aria-labelledby="pills-c-tab"
-                >
-                  <DeclinedPropoal />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <TabPanel>
+            <DeclinedPropoal />
+          </TabPanel>
+        </Tabs>
       </div>
     </Layout>
   );
 }
 
 export default Proposal;
+
+
+// const allProposal = (data) => {
+//   setAllProposalCount(data);
+// };
+
+// const pendingProposal = (data) => {
+//   setPendingProposalCount(data);
+// };
+
+// const acceptedProposal = (data) => {
+//   setAcceptedProposalCount(data);
+// };
+
+// const declinedProposal = (data) => {
+//   setDeclinedProposalCount(data);
+// };

@@ -9,224 +9,259 @@ import {
   Row,
   Col,
   Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
+import AdminFilter from "../../components/Search-Filter/AdminFilter";
+import BootstrapTable from "react-bootstrap-table-next";
+import History from "./History";
+import Swal from "sweetalert2";
+import Records from "../../components/Records/Records";
 
 
-
-function PendingAllocation({CountPendingAllocation}) {
-  const { handleSubmit, register, errors, reset } = useForm();
-  const { Option, OptGroup } = Select;
+function PendingAllocation({ CountPendingForAllocation }) {
 
   const [pendingData, setPendingData] = useState([]);
   const [selectedData, setSelectedData] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [records, setRecords] = useState([]);
+
+  const [modal, setModal] = useState(false);
+
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(`${baseUrl}/customers/getQueryHistory?q_id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setHistory(response.result);
+      })
+      .catch((error) => console.log(error));
+  };
 
 
+
+  
   useEffect(() => {
     getPendingForAllocation();
   }, []);
-
 
   const getPendingForAllocation = () => {
     axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
+        // CountPendingForAllocation(res.data.result.length);
         setPendingData(res.data.result);
-        CountPendingAllocation(res.data.result.length)
+        setRecords(res.data.result.length);
       }
     });
   };
 
 
-  //search filter
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-    setSelectedData(value);
-    getPendingForAllocation();
-  }
 
-
-  // `${baseUrl}/get/filter/admin/date1/${data.p_dateFrom}/date2/${data.p_dateTo}/category/${selectedData}`
-  // admin/pendingAllocation?category=4&date1=&date2
-  const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("selectedData :", selectedData);
-    axios
-      .get(
-        `${baseUrl}/admin/pendingAllocation?category=${selectedData}&date1=${data.p_dateFrom}&date2=${data.p_dateTo}`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setPendingData(res.data.result);
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Date",
+      dataField: "created",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.created);
+        var oldDate = row.created;
+        if (oldDate == null) {
+          return null;
         }
-      });
-  };
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Query No",
+      dataField: "assign_no",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        console.log(row);
+        return (
+          <>
+            <Link
+              to={{
+                pathname: `/admin/queries/${row.id}`,
+                index: 1,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      text: "Category",
+      dataField: "parent_id",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Sub Category",
+      dataField: "cat_name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Customer Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Status",
+      dataField: "status",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
 
-  
-  //change date format
-  function ChangeFormateDate(oldDate) {
-    return oldDate.toString().split("-").reverse().join("-");
-  }
+              {row.status} /
+              {
+                row.status == "Inprogress Query" ?
+                <p className="inprogress">
+                    {row.statusdescription}
+                  </p>
+                  :
+                  null
+              }
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      text: "Query Allocation",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            {row.is_assigned === "1" ? (
+              <p style={{ color: "green", fontSize: "10px" }}>
+                Allocated to {row.tname} on
+                <p>{row.allocation_time}</p>
+              </p>
+            ) : (
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <div title="Assign to">
+                  <Link
+                    to={`/admin/queryassing/${row.id}`}
+                  >
+                    <i class="fa fa-share"></i>
+                  </Link>
+
+                </div>
+                <div>
+                  <Link
+                    to={`/admin/query_rejection/${row.id}`}
+                  >
+                    <i
+                      className="fa fa-trash"
+                    ></i>
+                  </Link>
+                </div>
+              </div>
+
+
+
+            )}
+          </>
+        );
+      },
+    },
+    {
+      text: "History",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <button
+              type="button"
+              class="btn btn-info btn-sm"
+              onClick={() => toggle(row.id)}
+            >
+              History
+            </button>
+          </>
+        );
+      },
+    },
+  ];
+
+
 
   return (
     <>
       <Card>
         <CardHeader>
-          <div className="row">
-            <div class="col-sm-4">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                placeholder="Select Category"
-                defaultValue={[]}
-                onChange={handleChange}
-                optionLabelProp="label"
-              >
-                <OptGroup label="Direct Tax">
-                  <Option value="3" label="Compilance">
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="4" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="5" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="6" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="7" label="Transfer Pricing">
-                    <div className="demo-option-label-item">
-                      Transfer Pricing
-                    </div>
-                  </Option>
-                  <Option value="8" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-
-                <OptGroup label="Indirect Tax">
-                  <Option value="9" label="Compilance">
-
-
-
-                    <div className="demo-option-label-item">Compliance</div>
-                  </Option>
-                  <Option value="10" label="Assessment">
-                    <div className="demo-option-label-item">Assessment</div>
-                  </Option>
-                  <Option value="11" label="Appeals">
-                    <div className="demo-option-label-item">Appeals</div>
-                  </Option>
-                  <Option value="12" label="Advisory/opinion">
-                    <div className="demo-option-label-item">
-                      Advisory/opinion
-                    </div>
-                  </Option>
-                  <Option value="13" label="Others">
-                    <div className="demo-option-label-item">Others</div>
-                  </Option>
-                </OptGroup>
-              </Select>
-            </div>
-
-            <div className="col-sm-8">
-              <form class="form-inline" onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">From</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateFrom"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
-
-                <div class="form-group mx-sm-3 mb-2">
-                  <label className="form-select form-control">To</label>
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                  <input
-                    type="date"
-                    name="p_dateTo"
-                    className="form-select form-control"
-                    ref={register}
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary mb-2">
-                  Search
-                </button>
-              </form>
-            </div>
-          </div>
+          <AdminFilter
+            setData={setPendingData}
+            getData={getPendingForAllocation}
+            pendingAlloation="pendingAlloation"
+            setRecords={setRecords}
+            records={records}
+          />
         </CardHeader>
         <CardBody>
-          <div>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Sr. No.</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Sub Category</th>
-                  <th scope="col">Query No .</th>
-                  <th scope="col">Query Allocation</th>
-                </tr>
-              </thead>
-              {pendingData.map((p, i) => (            
-                <tbody key={i}>
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{ChangeFormateDate(p.created)}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <th scope="row">
-                      <Link to={`/admin/queries/${p.id}`}>{p.assign_no}</Link>
-                    </th>
-                    <td class="text-center">
-
-                      {p.is_assigned === "1" ? (
-                        <i class="fa fa-share" style={{color:"green"}}></i>
-                      ) : (
-                        <Link to={`/admin/queryassing/${p.id}`}>
-                          <i class="fa fa-share"></i>
-                        </Link>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{ textAlign: "center" }}>
-                      {
-                        p.is_assigned === "1" && 
-                         <p style={{ color: "green" }}>
-                         Assigned to {p.tname}
-                      </p>
-                      }
-
-                      {p.reject === "3" && (
-                        <p style={{ color: "red" }}>
-                          Query Rejected By {p.tname}
-                        </p>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
-          </div>
+        <Records records={records} />
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={pendingData}
+            columns={columns}
+            rowIndex
+          />
+          <History history={history} toggle={toggle} modal={modal} />
         </CardBody>
       </Card>
     </>
@@ -234,112 +269,74 @@ function PendingAllocation({CountPendingAllocation}) {
 }
 
 export default PendingAllocation;
+  // axios
+    //   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
+    //   .then(function (response) {
+    //     console.log("delete-", response);
+    // if (response.data.code === 1) {
+    //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    //   getTeamLeader();
+    // } else {
+    //   Swal.fire("Oops...", "Errorr ", "error");
+    // }
+
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
 
 
-{/* <i class="fa fa-share" style={{color:"green"}}></i> */}
+/* <td style={{ textAlign: "center" }}>
+                      {p.is_assigned === "1" && (
+                        <p style={{ color: "green" }}>
+                          <i class="fa fa-circle"
+                          style={{fontSize:"10px" ,marginRight:"4px"}}>
+                            </i>
+                            {p.allocation_time}
+                          </p>
+                      )}
 
+                      {p.reject === "3" && (
+                        <p style={{ color: "red" }}>
+                          Query Rejected By {p.tname}
+                        </p>
+                      )}
+                    </td> */
 
+//   <Modal isOpen={addModal} toggle={addHandler} size="md">
+//   <ModalHeader toggle={addHandler}>Show history</ModalHeader>
+//   <ModalBody>
+// <table class="table table-bordered">
+//   <thead>
+//     <tr>
+//       <th scope="col">Titles</th>
+//       <th scope="col">Data</th>
+//     </tr>
+//   </thead>
 
-{
-  /* <div class="form-group mb-2 ml-2">
-          <select
-            className="form-select form-control"
-            name="p_tax2"
-            ref={register}
-            onChange={(e) => setStore2(e.target.value)}
-          >
-            <option value="">--Select Sub-Category--</option>
-            {tax2.map((p, index) => (
-              <option key={index} value={p.id}>
-                {p.details}
-              </option>
-            ))}
-          </select>
-        </div> */
-}
+//   {history.length > 0
+//     ? history.map((p, i) => (
+//         <tbody>
+//           <tr>
+//             <th scope="row">Name</th>
+//             <td>{p.name}</td>
+//           </tr>
 
-//   <div class="form-group mb-2">
-//   <select
-//     className="form-select form-control"
-//     name="p_tax"
-//     ref={register}
-//     onChange={(e) => setStore(e.target.value)}
-//   >
-//     <option value="">--Select Category--</option>
-//     {tax.map((p, index) => (
-//       <option key={index} value={p.id}>
-//         {p.details}
-//       </option>
-//     ))}
-//   </select>
-// </div>
-
-{
-  /* <select
-            className="form-select form-control"
-            name="p_tax"
-            ref={register}
-            onChange={(e) => setStore(e.target.value)}
-          >     
-           <option value="">--Select Category--</option>              
-          </select> */
-}
-
-{
-  /* <div class="dropdown">
-            <button class="btn btn-primary
-             dropdown-toggle" type="button"
-              id="dropdownMenuButton" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-              Select Category
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Direct Tax</a>
-              <div className="d-flex">
-              <input
-                    class="dropdown-item"
-                    type="checkbox"
-                    name="p_check1"
-                    ref={register}
-                    value="1"
-                  />
-              <label className="form-check-label">Compilance</label>
-              </div>
-              <div className="d-flex">
-              <input
-                    class="dropdown-item"
-                    type="checkbox"
-                    name="p_check2"
-                    ref={register}
-                    value="2"
-                  />
-              <label className="form-check-label">Assessment</label>
-              </div>
-              
-              
-            </div>
-          </div> */
-}
-
-// const options = [
-//   {name:"Compilance" , id:1, cat: "direct"},
-//   {name:"Assessment" , id:2, cat: "direct"},
-//   {name:"Compilance" , id:4 ,cat: "indirect"},
-//   {name:"Assessment" , id:5 ,cat: "indirect"},
-//   {name:"others" , id:6 ,cat: "indirect"},
-// ]
-
-//   const [data, setData] = useState(options);
-// const  onSelect = (data) => {
-//     console.log(data)
-// }
-
-{
-  /* <Multiselect
-              options={data}
-              displayValue="name"
-              groupBy="cat"
-              showCheckbox={true}
-              onSelect={onSelect}
-            /> */
-}
+//           <tr>
+//             <th scope="row">Date of Allocation</th>
+//             <td>{ChangeFormateDate(p.date_of_allocation)}</td>
+//           </tr>
+//           <tr>
+//             <th scope="row">Query No</th>
+//             <td>{p.assign_no}</td>
+//           </tr>
+//           <tr>
+//             <th scope="row">Status</th>
+//             <td>{p.status}</td>
+//           </tr>
+//         </tbody>
+//       ))
+//     : null}
+// </table>
+//   </ModalBody>
+// </Modal>

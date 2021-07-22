@@ -1,159 +1,161 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-} from "reactstrap";
-import { Link } from "react-router-dom";
+
 import PendingForAllocation from "../../../components/PendingForAllocation/PendingForAllocation";
 import PendingForProposals from "../../../components/PendingForProposals/PendingForProposals";
-import PendingForNonPayment from "../../../components/PendingForNonPayment/PendingForNonPayment";
+import DeclinedQueries from "../../../components/DeclinedQueries/DeclinedQueries";
 import AllQueriesData from "../../../components/AllQueriesData/AllQueriesData";
+import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
-function QueriesTab() {
+
+function QueriesTab(props) {
+  // console.log("queries tab: ", props);
+
   const userid = window.localStorage.getItem("adminkey");
 
-  const [allQueriesCount, setAllQueriesCount] = useState('');
-  const [pendingAllocationCount, setPendingAllocationCount] = useState('');
-  const [pendingProposalCount, setPendingProposalCount] = useState('');
+  const [allQueriesCount, setAllQueriesCount] = useState("");
+  const [pendingProposalCount, setPendingProposalCount] = useState("");
+  const [declined, setDeclined] = useState("");
+  const [inprogressAllocation, setInprogressAllocation] = useState();
+
+
+  useEffect(() => {
+    CountAllQuery();
+    CountInprogressAllocation();
+    CountInprogressProposal();
+    CountDeclined();
+  }, []);
 
 
   const CountAllQuery = (data) => {
-    setAllQueriesCount(data)
-  }
+    axios.get(`${baseUrl}/admin/getAllQueries`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setAllQueriesCount(res.data.result.length);
+      }
+    });
+  };
 
-  const CountPendingAllocation = (data) => {
-    setPendingAllocationCount(data)
-  }
+  const CountInprogressAllocation = () => {
+    axios.get(`${baseUrl}/admin/pendingAllocation`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setInprogressAllocation(res.data.result.length);
+      }
+    });
+  };
 
-  const CountPendingProposal = (data) => {
-    setPendingProposalCount(data)
-  }
+  const CountInprogressProposal = () => {
+    axios.get(`${baseUrl}/admin/pendingProposal`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setPendingProposalCount(res.data.result.length);
+      }
+    });
+  };
+
+  const CountDeclined = () => {
+    axios.get(`${baseUrl}/admin/declinedQueries`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setDeclined(res.data.result.length);
+      }
+    });
+  };
+
+
+  const [tabIndex, setTabIndex] = useState(0);
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
+
+
+  const myStyle1 = {
+    backgroundColor: "grey",
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    color: "white",
+    cursor: "pointer",
+  };
+  const myStyle2 = {
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    backgroundColor: "blue",
+    color: "white",
+    cursor: "pointer",
+  };
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <div class="row mt-3">
-        <div class="col-md-12" style={{ top: "-12px" }}>
-          <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="query"
-              role="tabpanel"
-              aria-labelledby="pills-query-tab"
-            >
-              <ul
-                class="nav nav-pills mb-3 col-sm-12"
-                style={{ justifyContent: "space-around" }}
-                id="pills-tab"
-                role="tablist"
-              >
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white active"
-                    id="pills-d-tab"
-                    data-toggle="pill"
-                    href="#d"
-                    role="tab"
-                    aria-controls="pills-d"
-                    aria-selected="true"
-                  >
-                    All Queries ({allQueriesCount})
-                  </a>
-                </li>
+      <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              All Queries ({allQueriesCount})
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+              Inprogress; Allocation ({inprogressAllocation})
+            </Tab>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Inprogress; Proposals ({pendingProposalCount})
+            </Tab>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-a-tab"
-                    data-toggle="pill"
-                    href="#a"
-                    role="tab"
-                    aria-controls="pills-a"
-                    aria-selected="false"
-                  >
-                    Pending for Allocation ({pendingAllocationCount})
-                  </a>
-                </li>
+            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+              Declined Queries ({declined})
+            </Tab>
+          </TabList>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-b-tab"
-                    data-toggle="pill"
-                    href="#b"
-                    role="tab"
-                    aria-controls="pills-b"
-                    aria-selected="false"
-                  >
-                    Pending for Proposal ({pendingProposalCount})
-                  </a>
-                </li>
+          <TabPanel>
+            <AllQueriesData />
+          </TabPanel>
 
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link text-white"
-                    id="pills-c-tab"
-                    data-toggle="pill"
-                    href="#c"
-                    role="tab"
-                    aria-controls="pills-c"
-                    aria-selected="false"
-                  >
-                    Pending for Non-Payment
-                  </a>
-                </li>
-              </ul>
+          <TabPanel>
+            <PendingForAllocation />
+          </TabPanel>
 
-              <div class="tab-content" id="pills-tabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="d"
-                  role="tabpanel"
-                  aria-labelledby="pills-d-tab"
-                >
-                  <AllQueriesData CountAllQuery={CountAllQuery}/>
-                </div>
+          <TabPanel>
+            <PendingForProposals />
+          </TabPanel>
 
-                <div
-                  class="tab-pane fade"
-                  id="a"
-                  role="tabpanel"
-                  aria-labelledby="pills-a-tab"
-                >
-                  <PendingForAllocation CountPendingAllocation={CountPendingAllocation} />
-                </div>
-
-                <div
-                  class="tab-pane fade"
-                  id="b"
-                  role="tabpanel"
-                  aria-labelledby="pills-b-tab"
-                >
-                  <PendingForProposals CountPendingProposal={CountPendingProposal}/>
-                </div>
-
-                <div
-                  class="tab-pane fade"
-                  id="c"
-                  role="tabpanel"
-                  aria-labelledby="pills-c-tab"
-                >
-                  <PendingForNonPayment />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <TabPanel>
+            <DeclinedQueries />
+          </TabPanel>
+        </Tabs>
       </div>
     </Layout>
   );
 }
 
 export default QueriesTab;
+
+
+
+  // const count_PFA = window.localStorage.getItem("count_PFA");
+
+  // const CountAllQuery = (data) => {
+  //   setAllQueriesCount(data);
+  // };
+
+  // const CountPendingProposal = (data) => {
+  //   setPendingProposalCount(data);
+  // };
+
+  // const CountPendingForPayment = (data) => {
+  //   setPendingforPayment(data);
+  // };
+
+  // const CountPendingForAllocation = (data) => {
+  //   setPendingforAllocation(data);
+  // };

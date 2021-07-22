@@ -1,105 +1,159 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-} from "reactstrap";
+import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
 
-function ProposalTab() {
+import AllProposal from "./AllProposal";
+import InprogressProposal from "./InprogressProposal";
+import AcceptedProposal from "./AcceptedProposal";
+import DeclinedProposal from "./DeclinedProposal";
+
+
+
+
+function Proposal(props) {
   const userId = window.localStorage.getItem("userid");
-  const [proposalDisplay, setProposalDisplay] = useState([]);
+
+  const [tabIndex, setTabIndex] = useState(0);
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
+
+
+  const [allProposalCount, setAllProposalCount] = useState("");
+  const [inprogressProposalCount, setInprogressProposalCount] = useState("");
+  const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
+  const [declinedProposalCount, setDeclinedProposalCount] = useState("");
+
 
   useEffect(() => {
-    const getProposalData = () => {
-      axios
-        .get(`${baseUrl}/admin/getProposals?uid=${JSON.parse(userId)}`)
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          if (res.data.code === 1) {
-            setProposalDisplay(res.data.result);
-          }
-        });
-    };
-    getProposalData();
+    getAllProposal();
+    getInprogressProposal();
+    getAcceptedProposal();
+    getDeclinedProposal();
   }, []);
+
+
+  const getAllProposal = () => {
+    axios
+      .get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        setAllProposalCount(res.data.result.length);
+      });
+  };
+
+  const getInprogressProposal = () => {
+    axios
+      .get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}&status=1`)
+      .then((response) => {
+        console.log("code---", response);
+        if (response.data.code === 1) {
+          setInprogressProposalCount(response.data.result.length);
+        }
+      })
+  };
+
+  const getAcceptedProposal = () => {
+    axios
+      .get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}&status=2`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setAcceptedProposalCount(res.data.result.length);
+        }
+      });
+  };
+
+  const getDeclinedProposal = () => {
+    axios
+      .get(`${baseUrl}/customers/getProposals?uid=${JSON.parse(userId)}&status=3`)
+      .then((response) => {
+        console.log("code---", response);
+        if (response.data.code === 1) {
+          setDeclinedProposalCount(response.data.result.length);
+        }
+      })
+  };
+
+
+
+  const myStyle1 = {
+    backgroundColor: "grey",
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    color: "white",
+    cursor: "pointer",
+  };
+
+  const myStyle2 = {
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    backgroundColor: "blue",
+    color: "white",
+    cursor: "pointer",
+  };
+
+
+  console.log("allProposalCount", allProposalCount)
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-      <Card>
-        <CardHeader>
-          <Row>
-            <Col md="7">
-              <CardTitle tag="h4">Proposal</CardTitle>
-            </Col>
-            <Col md="5"></Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <Table responsive="sm" bordered>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Query No</th>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>Status of Proposal</th>
-                <th>Date of Proposal</th>
-                <th>Proposed Amount</th>
-                <th>Amount Accepted</th>
-                <th>Amount Paid</th>
-                <th>Date of Payment</th>
-                <th>Amount Outstanding</th>
-                <th>Date of acceptance of Proposal</th>
-                <th>Date of Completion</th>
-              </tr>
-            </thead>
+      <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              All Proposals ({allProposalCount})
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+              Inprogress; Proposals ({inprogressProposalCount})
+            </Tab>
 
-            {proposalDisplay.length > 0 ? (
-              proposalDisplay.map((p, i) => (
-                <tbody>
-                  <tr key={i}>
-                    <td>{p.Created}</td>
-                    <td>{p.assign_no}</td>
-                    <td>{p.parent_id}</td>
-                    <td>{p.cat_name}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Accepted; Proposals ({acceptedProposalCount})
+            </Tab>
 
-                  <tr>
-                    <td colSpan="3">Accept</td>
-                    <td colSpan="3">Reject</td>
-                    <td colSpan="7"></td>
-                  </tr>
-                </tbody>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="13">No Records</td>
-              </tr>
-            )}
-          </Table>
-        </CardBody>
-      </Card>
+            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+              Declined; Proposals ({declinedProposalCount})
+            </Tab>
+          </TabList>
+
+          <TabPanel>
+            <AllProposal />
+          </TabPanel>
+
+          <TabPanel>
+            <InprogressProposal />
+          </TabPanel>
+
+          <TabPanel>
+            <AcceptedProposal />
+          </TabPanel>
+
+          <TabPanel>
+            <DeclinedProposal />
+          </TabPanel>
+        </Tabs>
+      </div>
     </Layout>
   );
 }
 
-export default ProposalTab;
+export default Proposal;
+
+
+
+

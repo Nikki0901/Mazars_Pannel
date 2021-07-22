@@ -329,12 +329,12 @@ input:focus ~ .bg-black
 body.vertical-layout[data-color=bg-chartbg] .navbar-container,
 body.vertical-layout[data-color=bg-chartbg] .content-wrapper-before
 {
-    background-color: #262d47 !important;
+    background-color: #262d47 ;
 }
 
 body.horizontal-layout[data-color=bg-chartbg] .navbar-horizontal
 {
-    background-color: #21273d;
+    background-color: #262d47 !important;
 }
 
 body.horizontal-layout[data-color=bg-chartbg] .content-wrapper-before

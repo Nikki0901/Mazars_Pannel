@@ -14,11 +14,12 @@ import {
   Table,
 } from "reactstrap";
 import { useAlert } from "react-alert";
+import BootstrapTable from "react-bootstrap-table-next";
 
 function AddTeamProf() {
   const alert = useAlert();
   const [data, setData] = useState([]);
-
+  const [count, setCount] = useState("");
   const userid = window.localStorage.getItem("tlkey");
 
   useEffect(() => {
@@ -26,14 +27,53 @@ function AddTeamProf() {
   }, []);
 
   const getTaxProf = () => {
-    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        setData(res.data.result);
-      }
-    });
+    axios
+      .get(`${baseUrl}/tp/getTaxProfessional?tl_id=${JSON.parse(userid)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setData(res.data.result);
+          setCount(res.data.result.length);
+        }
+      });
   };
 
+  const columns = [
+    {
+      text: "S.No",
+      dataField: "",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1;
+      },
+      headerStyle: () => {
+        return { fontSize: "12px", width: "50px" };
+      },
+    },
+    {
+      text: "Name",
+      dataField: "name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Email",
+      dataField: "email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      text: "Phone",
+      dataField: "phone",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+  ];
   // delete data
   const del = (id) => {
     console.log("del", id);
@@ -49,31 +89,34 @@ function AddTeamProf() {
         console.log("erroror - ", error);
       });
   };
+
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
         <CardHeader>
           <Row>
             <Col md="10">
-              <CardTitle tag="h4">Tax Professionals</CardTitle>
+              <CardTitle tag="h4">Tax Professionals ({count})</CardTitle>
             </Col>
-            <Col md="2">
-              <Link to={"/teamleader/addnew"} class="btn btn-primary">
-                Add New
-              </Link>
-            </Col>
+            <Col md="2"></Col>
           </Row>
         </CardHeader>
         <CardBody>
-          <Table responsive="sm" bordered>
+          <BootstrapTable
+            bootstrap4
+            keyField="id"
+            data={data}
+            columns={columns}
+            rowIndex
+          />
+
+          {/* <Table responsive="sm" bordered>
             <thead>
               <tr>
-                <th scope="col">No.</th>
+                <th scope="col">S.No</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone No.</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -83,32 +126,10 @@ function AddTeamProf() {
                   <td>{p.name}</td>
                   <td>{p.email}</td>
                   <td>{p.phone}</td>
-                  <td>
-                    <Link to={`/teamleader/edittp/${p.id}`}>
-                      <i
-                        className="fa fa-edit"
-                        style={{
-                          fontSize: 18,
-                          cursor: "pointer",
-                          marginLeft: "8px",
-                        }}
-                      ></i>
-                    </Link>
-                  </td>
-                  <td onClick={() => del(p.id)}>
-                    <i
-                      className="fa fa-trash"
-                      style={{
-                        fontSize: 22,
-                        cursor: "pointer",
-                        marginLeft: "8px",
-                      }}
-                    ></i>
-                  </td>
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </Table> */}
         </CardBody>
       </Card>
     </Layout>

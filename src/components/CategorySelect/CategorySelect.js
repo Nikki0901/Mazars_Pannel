@@ -7,17 +7,36 @@ import "./index.css";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+
+
+
+const Schema = yup.object().shape({
+  p_tax: yup.string().required("required"),
+  p_tax2: yup.string().required("required"),
+});
+
 
 function CategorySelect({ addfreshbtn, startbtn }) {
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
+
   const [modal, setModal] = useState(false);
 
   const toggle = () => {
-    if (store2) {
+    if (store2 && store) {
       localStorage.setItem("category", JSON.stringify(store2));
+      setModal(!modal);
+    } else {
+      // alert("please select category and subcategory")
     }
-    setModal(!modal);
   };
+  const validation = () => {
+    toggle()
+  }
 
   const toggle2 = () => {
     if (store2) {
@@ -57,7 +76,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
     getSubCategory();
   }, [store]);
 
-  
+
   const onSubmit = (value) => {
     console.log("value :", value);
   };
@@ -72,8 +91,12 @@ function CategorySelect({ addfreshbtn, startbtn }) {
             <div class="form-group">
               <label>Category</label>
               <select
-                className="form-select form-control"
+                className="form-control"
                 name="p_tax"
+                //
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_tax,
+                })}
                 ref={register}
                 onChange={(e) => setStore(e.target.value)}
               >
@@ -84,6 +107,11 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   </option>
                 ))}
               </select>
+              {errors.p_tax && (
+                <div className="invalid-feedback">
+                  {errors.p_tax.message}
+                </div>
+              )}
             </div>
 
             <div class="form-group">
@@ -91,6 +119,10 @@ function CategorySelect({ addfreshbtn, startbtn }) {
               <select
                 className="form-select form-control"
                 name="p_tax2"
+                //
+                className={classNames("form-control", {
+                  "is-invalid": errors.p_tax2,
+                })}
                 ref={register}
                 onChange={(e) => setStore2(e.target.value)}
               >
@@ -101,6 +133,11 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   </option>
                 ))}
               </select>
+              {errors.p_tax2 && (
+                <div className="invalid-feedback">
+                  {errors.p_tax2.message}
+                </div>
+              )}
             </div>
 
             <div class="form-group">
@@ -108,7 +145,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                 <button
                   type="submit"
                   class="btn btn-primary  btn-block"
-                  onClick={toggle}
+                  onClick={e => validation()} //
                 >
                   Submit
                 </button>
@@ -121,7 +158,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
                   class="btn btn-primary  btn-block"
                   onClick={toggle2}
                 >
-                  Submit
+                  yuigt7g67tf6f
                 </Link>
               )}
             </div>
