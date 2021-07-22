@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/style.css";
 import "../../assets/css/media.css";
 import axios from "axios";
+import {Link} from 'react-router-dom';
+import {Button } from '@material-ui/core';
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import Layout from "../../components/Layout/Layout";
@@ -118,6 +120,10 @@ function ChangePassword(props) {
                     className={classNames("form-control", {
                       "is-invalid": errors.p_password,
                     })}
+                    onPaste={((e) => {
+                      e.preventDefault();
+                      return false;
+                    })}
                     placeholder="Enter Your Password"
                     name="p_password"
                     ref={register({
@@ -146,6 +152,10 @@ function ChangePassword(props) {
                 <div className="mb-3">
                   <label className="form-label">Confirm Password</label>
                   <input
+                 onPaste={((e) => {
+                  e.preventDefault();
+                  return false;
+                })}
                     type={isPasswordShow2 ? "text" : "password"}
                     id="password"
                     className={classNames("form-control", {
@@ -175,10 +185,16 @@ function ChangePassword(props) {
             </div>
 
 
-            <button type="submit" className="btn btn-primary">
+            <Button type="submit" variant="contained" color="primary">
               Submit
-            </button>
-
+            </Button>
+             <Link to="/customer/dashboard" style={{"margin" :"10px"}}>
+             <Button type="submit" variant="contained" color="secondary">
+             Cancle
+            </Button>
+             </Link>
+             
+             
           </form>
         </div>
       </div>

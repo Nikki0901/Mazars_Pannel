@@ -26,17 +26,40 @@ function Questionnaire(props) {
   const userNameId = window.localStorage.getItem("name");
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
-
+  const [custError, setcustError] = useState([])
+  const [custError2, setcustError2] = useState([])
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
+  const [selectError, setSelectError] = useState()
 
 
-
+const valiFun = (e) =>{
+  setcustError("")
+}
+const valiFun2 = (e) => {
+  setcustError2("")
+}
   const onSubmit = (value) => {
     console.log("value :", value);
-    setLoad(true);
-
+   if(selectedOption == ''){
+     setSelectError("Please select atleast one value")
+   }
+   else {
+     setSelectError("")
+   }
+    const a = value.p_fact;
+    const b = value.p_case_name;
+    if (a == ''){
+    setcustError("This feild is required");
+    }
+    if (b == ''){
+      setcustError2("This feild is required");
+      }
+   
+    else {
+      setcustError(" ");
+      setLoad(true);
     let formData = new FormData();
 
     var uploadImg = value.upload;
@@ -47,7 +70,7 @@ function Questionnaire(props) {
         formData.append("upload_1[]", a);
       }
     }
-
+   
     formData.append("fact", value.p_fact);
     formData.append("specific", JSON.stringify(value.specific));
     formData.append("timelines", value.p_timelines);
@@ -66,7 +89,9 @@ function Questionnaire(props) {
     formData.append("case_name", value.p_case_name);
     formData.append("assessment_year", JSON.stringify(selectedOption));
     formData.append("purpose", JSON.stringify(purposeOption));
-    axios
+   
+   
+      axios
       .post(`${baseUrl}/customers/PostQuestion`, formData, {
         headers: {
           "content-type": "multipart/form-data",
@@ -76,6 +101,10 @@ function Questionnaire(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
+
+          // var msg = response.data.message
+          // var variable = "Query Successfully Added"
+          // Alerts.SuccessMsg(variable, msg)
 
           var message = response.data.message
           if (message == "") {
@@ -118,35 +147,39 @@ function Questionnaire(props) {
       .catch((error) => {
         console.log("erroror - ", error);
       });
+    }
+    
+     
   };
 
 
 
-  // const SuccessMesg = () => {
-  //   return (
-  //     <>
-  //       <Modal isOpen={modal} toggle={toggle} size="sm">
-  //         <ModalHeader toggle={toggle}></ModalHeader>
 
-  //         <ModalBody>
-  //           <br />
-  //           <div class="modal-body">
-  //             <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-  //               {JSON.parse(userNameId)} , You have Successfully Registered
-  //             </h1>
-  //           </div>
-  //         </ModalBody>
-  //       </Modal>
-  //     </>
-  //   );
-  // };
 
+  const SuccessMesg = () => {
+    return (
+      <>
+        <Modal isOpen={modal} toggle={toggle} size="sm">
+          <ModalHeader toggle={toggle}></ModalHeader>
+
+          <ModalBody>
+            <br />
+            <div class="modal-body">
+              <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
+                {JSON.parse(userNameId)} , You have Successfully Registered
+              </h1>
+            </div>
+          </ModalBody>
+        </Modal>
+      </>
+    );
+  };
 
   return (
     <>
       <Header id={JSON.parse(userNameId)} />
       <div className="container">
-        {/* {SuccessMesg()} */}
+        {SuccessMesg()}
         <div className="form">
           <div className="heading">
             <h2>Basic Questionnaire</h2>
@@ -164,8 +197,10 @@ function Questionnaire(props) {
                       id="textarea"
                       rows="6"
                       name="p_fact"
+                      onChange={valiFun}
                       ref={register}
                     ></textarea>
+                    <p style={{"color" :"red"}}>{custError}</p>
                   </div>
                 </div>
 
@@ -220,8 +255,10 @@ function Questionnaire(props) {
                       type="text"
                       name="p_case_name"
                       ref={register}
+                      onChange = {valiFun2}
                       className="form-control"
                     />
+                     <p style={{"color" :"red"}}>{custError2}</p>
                   </div>
                 </div>
 
@@ -234,6 +271,7 @@ function Questionnaire(props) {
                       isMulti
                       options={assessment_year}
                     />
+                   
                   </div>
                 </div>
 
@@ -249,7 +287,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_word"
                         ref={register}
-                        defaultChecked
+                      // value="1"
                       />
                       <label className="form-check-label">
                         Softcopy - Word/ Pdf
@@ -261,7 +299,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_digital"
                         ref={register}
-
+                      // value="1"
                       />
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
@@ -273,7 +311,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_physically"
                         ref={register}
-
+                      // value="1"
                       />
                       <label className="form-check-label">
                         Printout- Physically Signed
@@ -294,7 +332,7 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Urgent, (4-5 Working Days)"
-
+                        defaultChecked
                       />
                       <label>Urgent, (4-5 Working Days)</label>
                     </div>
@@ -305,7 +343,6 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Regular (10-12 Working Days)"
-                        defaultChecked
                       />
                       <label>Regular (10-12 Working Days)</label>
                     </div>
@@ -323,6 +360,7 @@ function Questionnaire(props) {
                       isMulti
                       options={purpose}
                     />
+                       <p style={{"color" : "red"}}>{selectError}</p>
                   </div>
                 </div>
               </div>
@@ -340,7 +378,6 @@ function Questionnaire(props) {
 }
 
 export default Questionnaire;
-
 
 const purpose = [
   { value: "Assessment", label: "Assessment" },
