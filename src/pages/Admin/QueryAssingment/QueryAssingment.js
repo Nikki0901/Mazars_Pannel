@@ -16,10 +16,23 @@ import {
   Tooltip,
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+
+
+
+const Schema = yup.object().shape({
+  p_taxprof: yup.string().required("required team leader"),
+  p_expdeldate: yup.string().required("required  Exp. delivery date "),
+});
+
 
 function QueryAssingment(props) {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset } = useForm();
+  const { handleSubmit, register, errors, reset } = useForm({
+    resolver: yupResolver(Schema),
+  });
   const { id } = useParams();
 
   const [taxLeaderDisplay, setTaxLeaderDisplay] = useState([]);
@@ -223,7 +236,9 @@ function QueryAssingment(props) {
                         <th scope="row">{queryNo}</th>
                         <td>
                           <select
-                            class="form-control"
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_taxprof,
+                            })}
                             name="p_taxprof"
                             ref={register}
                             onChange={(e) => handleChange(e)}
@@ -235,6 +250,11 @@ function QueryAssingment(props) {
                               </option>
                             ))}
                           </select>
+                          {errors.p_taxprof && (
+                            <div className="invalid-feedback">
+                              {errors.p_taxprof.message}
+                            </div>
+                          )}
                         </td>
 
                         <td>
@@ -251,9 +271,16 @@ function QueryAssingment(props) {
                             type="date"
                             ref={register}
                             name="p_expdeldate"
-                            class="form-control"
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_expdeldate,
+                            })}
                             min={item}
                           />
+                          {errors.p_expdeldate && (
+                            <div className="invalid-feedback">
+                              {errors.p_expdeldate.message}
+                            </div>
+                          )}
                         </td>
 
                         <td>

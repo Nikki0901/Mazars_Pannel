@@ -61,7 +61,6 @@ function AllQuery() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -124,7 +123,41 @@ function AllQuery() {
             },
         },
         {
-            text: "Query Allocation",
+            text: "Status",
+            headerStyle: () => {
+                return { fontSize: "12px" };
+            },
+            formatter: function nameFormatter(cell, row) {
+                return (
+                    <>
+                        <div>
+                            {row.status}/
+                            {
+                                row.status == "Inprogress Query" ?
+                                    <p className="inprogress">
+
+                                        {row.statusdescription}
+                                    </p>
+                                    :
+                                    row.status == "Declined Query" ?
+                                        <p className="declined">
+
+                                            {row.statusdescription}
+                                        </p> :
+                                        row.status == "Completed Query" ?
+                                            <p className="completed">
+
+                                                {row.statusdescription}
+                                            </p> :
+                                            null
+                            }
+                        </div>
+                    </>
+                );
+            },
+        },
+        {
+            text: "Action",
             dataField: "",
             headerStyle: () => {
                 return { fontSize: "12px" };

@@ -171,7 +171,7 @@ function AddFreshAssingment(props) {
                         ref={register}
                       ></textarea>
                     </div>
-                  </div>
+                  </div>a
 
                   <div className="col-md-6">
                     <div className="question_query mb-2">
@@ -245,6 +245,7 @@ function AddFreshAssingment(props) {
                           type="checkbox"
                           name="p_format_word"
                           ref={register}
+                          defaultChecked
                         />
                         <label className="form-check-label">
                           Softcopy - Word/ Pdf
@@ -287,7 +288,6 @@ function AddFreshAssingment(props) {
                           name="p_timelines"
                           ref={register}
                           value="Urgent, (4-5 Working Days)"
-                          defaultChecked
                         />
                         <label>Urgent, (4-5 Working Days)</label>
                       </div>
@@ -298,6 +298,7 @@ function AddFreshAssingment(props) {
                           name="p_timelines"
                           ref={register}
                           value="Regular (10-12 Working Days)"
+                          defaultChecked
                         />
                         <label>Regular (10-12 Working Days)</label>
                       </div>
@@ -332,6 +333,8 @@ function AddFreshAssingment(props) {
 }
 
 export default AddFreshAssingment;
+
+
 
 const purpose = [
   { value: "Assessment", label: "Assessment" },
@@ -398,6 +401,9 @@ const assessment_year = [
     label: "2022-23",
   }
 ];
+
+
+
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -429,6 +435,9 @@ const ImageUploads = ({ register, control }) => {
     </>
   );
 };
+
+
+
 
 
 

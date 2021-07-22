@@ -135,7 +135,6 @@ function FinalReport() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -175,7 +174,6 @@ function FinalReport() {
     {
       dataField: "status",
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -243,41 +241,41 @@ function FinalReport() {
         return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
-    {
-      text: "Deliverable",
-      dataField: "",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
-            {!row.final_report == "" ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  final
-                </a>
-              </div>
-            ) : row.assignement_draft_report ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  draft
-                </a>
-              </div>
-            ) : null}
-          </>
-        );
-      },
-    },
+    // {
+    //   text: "Deliverable",
+    //   dataField: "",
+    //   sort: true,
+    //   headerStyle: () => {
+    //     return { fontSize: "12px" };
+    //   },
+    //   formatter: function (cell, row) {
+    //     return (
+    //       <>
+    //         {!row.final_report == "" ? (
+    //           <div>
+    //             <a
+    //               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
+    //               target="_blank"
+    //             >
+    //               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+    //               final
+    //             </a>
+    //           </div>
+    //         ) : row.assignement_draft_report ? (
+    //           <div>
+    //             <a
+    //               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
+    //               target="_blank"
+    //             >
+    //               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+    //               draft
+    //             </a>
+    //           </div>
+    //         ) : null}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       text: "TL name",
       dataField: "tl_name",

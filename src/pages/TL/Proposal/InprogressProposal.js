@@ -31,7 +31,7 @@ function InprogressProposal() {
 
     const getProposalList = () => {
         axios
-            .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=1`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -70,7 +70,6 @@ function InprogressProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -119,7 +118,6 @@ function InprogressProposal() {
         {
             text: "Status",
             dataField: "status",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -128,14 +126,14 @@ function InprogressProposal() {
             text: "Action",
             dataField: "",
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "12px",width: "80px" };
             },
             formatter: function (cell, row) {
                 return (
                     <>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                {row.status == "Pending for approval" || row.status == "Declined" ? (
+                                {row.status_code == "4" ? (
                                     <Link to={`/teamleader/edit-proposal/${row.id}`}>
                                         <i
                                             className="fa fa-edit"
@@ -146,7 +144,7 @@ function InprogressProposal() {
                                             }}
                                         ></i>
                                     </Link>
-                                ) : row.status == "Pending for Preparation" ? (
+                                ) : row.status_code == "2" ? (
                                     <Link to={`/teamleader/sendproposal/${row.id}`}>
                                         <i
                                             class="fa fa-mail-forward"
@@ -158,42 +156,34 @@ function InprogressProposal() {
                                     </Link>
                                 ) : null}
                             </div>
-
-                            <div>
-                                {row.revised_text && (
-                                    <div style={{ cursor: "pointer" }} title="View History">
-                                        <i
-                                            class="fa fa-comments-o"
-                                            style={{ color: "green", fontSize: "16px", color: "light-blue", }}
-                                            onClick={() => chatHandler(row)}
-                                        ></i>
+                            {
+                                row.status == "Customer Declined; Proposal" ?
+                                    null
+                                    :
+                                    <div title="Send Message">
+                                        <Link
+                                            to={{
+                                                pathname: `/teamleader/chatting/${row.id}`,
+                                                obj: {
+                                                    message_type: "2",
+                                                    query_No: row.assign_no,
+                                                    query_id: row.id,
+                                                    routes: `/teamleader/proposal`
+                                                }
+                                            }}
+                                        >
+                                            <i
+                                                class="fa fa-comments-o"
+                                                style={{
+                                                    fontSize: 16,
+                                                    cursor: "pointer",
+                                                    marginLeft: "8px",
+                                                    color: "blue"
+                                                }}
+                                            ></i>
+                                        </Link>
                                     </div>
-                                )}
-                            </div>
-
-                            <div title="Send Message">
-                                <Link
-                                    to={{
-                                        pathname: `/teamleader/chatting/${row.id}`,
-                                        obj: {
-                                            message_type: "2",
-                                            query_No: row.assign_no,
-                                            query_id: row.id,
-                                            routes: `/teamleader/proposal`
-                                        }
-                                    }}
-                                >
-                                    <i
-                                        class="fa fa-comments-o"
-                                        style={{
-                                            fontSize: 16,
-                                            cursor: "pointer",
-                                            marginLeft: "8px",
-                                            color: "blue"
-                                        }}
-                                    ></i>
-                                </Link>
-                            </div>
+                            }
                         </div>
                     </>
                 );
@@ -208,7 +198,7 @@ function InprogressProposal() {
                     <TeamFilter
                         setData={setProposal}
                         getData={getProposalList}
-                        proposal="proposal"
+                        InprogressProposal="InprogressProposal"
                         setRecords={setRecords}
                         records={records}
                     />

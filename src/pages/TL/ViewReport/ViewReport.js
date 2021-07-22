@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { baseUrl } from "../../../config/config";
+import { baseUrl, ReportUrl } from "../../../config/config";
 import Layout from "../../../components/Layout/Layout";
 import { useHistory, useParams } from "react-router-dom";
 import { useAlert } from "react-alert";
@@ -84,7 +84,7 @@ function ViewReport() {
                         {p.document && (
                           <p style={{ display: "flex" }}>
                             <a
-                              href={`http://65.0.220.156/mazarapi/assets/upload/report/${p.assign_no}/${p.document}`}
+                              href={`${ReportUrl}/${p.assign_no}/${p.document}`}
                               target="_blank"
                             >
                               <i class="fa fa-photo"></i>

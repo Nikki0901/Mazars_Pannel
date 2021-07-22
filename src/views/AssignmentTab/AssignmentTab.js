@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl,ReportUrl } from "../../config/config";
 import {
   Card,
   CardHeader,
@@ -149,7 +149,6 @@ function AssignmentTab() {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -183,7 +182,6 @@ function AssignmentTab() {
     {
       dataField: "status",
       text: "Status",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },

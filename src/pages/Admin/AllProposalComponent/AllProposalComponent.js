@@ -74,7 +74,6 @@ function AllProposalComponent({ allProposal }) {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -160,7 +159,6 @@ function AllProposalComponent({ allProposal }) {
     },
     {
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -171,32 +169,26 @@ function AllProposalComponent({ allProposal }) {
         return (
           <>
             <div>
-
+              {row.status}/
               {
                 row.status == "Inprogress" ?
-                  <div>
-                    {row.status}/
-                    <p style={{ color: "green" }}>
-                      {row.statusdescription}
-                    </p>
-                  </div>
+                  <p className="inprogress">
+
+                    {row.statusdescription}
+                  </p>
                   :
                   row.status == "Customer Declined; Proposal" ?
-                    <div>
-                      {row.status}
-                      <p style={{ color: "red" }}>
-                        {row.statusdescription}
-                      </p>
-                    </div> :
+                    <p className="declined">
+
+                      {row.statusdescription}
+                    </p> :
                     row.status == "Accepted; Proposal" ?
-                      <div>
-                        {row.status}
-                        <p style={{ color: "blue" }}>
-                          {row.statusdescription}
-                        </p>
-                      </div> :
+                      <p className="completed">
+                        {row.statusdescription}
+                      </p> :
                       null
               }
+
             </div>
           </>
         );

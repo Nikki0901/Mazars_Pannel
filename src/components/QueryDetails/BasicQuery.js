@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CommonServices from "../../common/common";
+import { ImageUrl } from "../../config/config";
 
 
 
@@ -67,7 +68,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                 {queryDocs.map((p, i) => (
                   <p style={{ display: "flex" }}>
                     <a
-                      href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
+                      href={`${ImageUrl}/${p.assign_no}/${p.name}`}
                       target="_blank"
                     >
                       <i class="fa fa-photo"></i>

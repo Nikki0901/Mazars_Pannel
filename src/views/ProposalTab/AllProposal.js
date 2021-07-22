@@ -99,7 +99,6 @@ function ProposalTab() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -179,7 +178,6 @@ function ProposalTab() {
         },
         {
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },

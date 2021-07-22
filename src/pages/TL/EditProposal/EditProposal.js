@@ -100,13 +100,37 @@ function EditComponent() {
     getUser();
   }, [id]);
 
+  const paymentAmount = (data) => {
+    console.log("paymentAmount", data)
 
+    var array1 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array1.push(value)
+    });
+    console.log("array1", array1);
+
+    setAmount(array1);
+  };
+
+  const paymentDate = (data) => {
+    console.log("paymentDate", data)
+
+    var array2 = []
+    Object.entries(data).map(([key, value]) => {
+      console.log("val", value);
+      array2.push(value)
+    });
+    console.log("array2", array2);
+    setDate(array2);
+  };
 
   const onSubmit = (value) => {
     console.log(value);
 
     console.log("amount", amount);
     console.log("date", date);
+
 
 
     var lumsum = value.p_inst_date
@@ -137,8 +161,9 @@ function EditComponent() {
         function myFunction(total, value) {
           return Number(total) + Number(value);
         }
-        if (value.p_fixed != sum) {
+        if (value.p_fixed != sum) {zzzzzzzzzzzzzza
           console.log(`installment amount should be eqaul to ${value.p_fixed}`)
+          console.log(value.due_date)
           Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
         }
         else{
@@ -197,30 +222,7 @@ function EditComponent() {
     
   };
 
-  const paymentAmount = (data) => {
-    console.log("paymentAmount", data)
-
-    var array1 = []
-    Object.entries(data).map(([key, value]) => {
-      console.log("val", value);
-      array1.push(value)
-    });
-    console.log("array1", array1);
-
-    setAmount(array1);
-  };
-
-  const paymentDate = (data) => {
-    console.log("paymentDate", data)
-
-    var array2 = []
-    Object.entries(data).map(([key, value]) => {
-      console.log("val", value);
-      array2.push(value)
-    });
-    console.log("array2", array2);
-    setDate(array2);
-  };
+  
 
 
   console.log("installment : ", installment.label)
@@ -416,3 +418,73 @@ const noInstallments = [
   },
 ];
 
+
+
+
+{/* {store == "hourly" && (
+                  <div class="form-group">
+                    <label>Hourly basis</label>
+                    <input
+                      type="text"
+                      name="p_hourly"
+                      className="form-control"
+                      ref={register}
+                      placeholder="Enter Hourly basis"
+                    />
+                  </div>
+                )}
+                {store == "mixed" && (
+                  <div>
+                    <div class="form-group">
+                      <label>Mixed</label>
+                      <input
+                        type="text"
+                        name="p_fixed"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Fixed Price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="p_hourly"
+                        className="form-control"
+                        ref={register}
+                        placeholder="Enter Hourly basis"
+                      />
+                    </div>
+                  </div>
+                )} */}
+{/* <Select
+                    options={paymentsTerms}
+                    value={payment}
+                  // defaultValue={payment}
+                  /> */}
+
+{/* <select
+                    className="form-control"
+                    name="p_payment_terms"
+                    aria-label="Default select example"
+                    ref={register}
+                    onChange={(e) => setPayment(e.target.value)}
+
+                  >
+                    <option value="">--select--</option>
+                    <option value="Lumpsum">Lumpsum</option>
+                    <option value="Installment">Installment</option>
+                  </select> */}
+
+{/* <select
+                        className="form-control"
+                        name="p_no_installments"
+                        aria-label="Default select example"
+                        ref={register}
+                        onChange={(e) => setInstallment(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select> */}

@@ -96,8 +96,6 @@ function PendingForProposals({ CountPendingProposal }) {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
-
       formatter: function nameFormatter(cell, row) {
         console.log(row);
         return (
@@ -134,7 +132,6 @@ function PendingForProposals({ CountPendingProposal }) {
     },
     {
       text: "Status",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },

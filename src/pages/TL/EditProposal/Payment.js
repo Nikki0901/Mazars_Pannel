@@ -13,24 +13,32 @@ export default class YourComponent extends React.Component {
 
     handleChange1(i, e) {
         if(isNaN(e.target.value)) {
-            Alerts.ErrorNormal("Please enter only digit")
+           this.setState({error : "Please enter digit only"})
         }
+       else{
+           this.setState({
+               error : ""
+           })
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },
             () => {
                 this.props.paymentAmount(this.state.values)
             })
+       }
     }
 
     
     handleChange2(i, e) {
+        e.preventDefault();
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
         },
             () => {
                 this.props.paymentDate(this.state.dates)
+                
             })
+        
     }
 
 
@@ -58,8 +66,10 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
+                        <p style={{"display" :"block", "color" : "red"}}>{this.state.error}</p>
                     </div>
-                    <p style={{"color" : "red"}}>{this.state.error[0]}</p>
+                    
+                  
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input
@@ -67,7 +77,8 @@ export default class YourComponent extends React.Component {
                             className="form-control"
                             name={this.state.dates[i]}
                             onChange={this.handleChange2.bind(this, i)}
-                            defaultValue={due_date[i]}
+                           
+                             
                         />
                     </div>
                 </div >
@@ -77,7 +88,7 @@ export default class YourComponent extends React.Component {
 
        
         console.log("values - ", this.state.values);
-
+        console.log("dates - " , this.state.dates )
         return (
             <div className="inputs">
                 {fieldsArray}
