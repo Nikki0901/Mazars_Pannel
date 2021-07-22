@@ -20,7 +20,11 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
-import PaymentModal from "./PaymentModal";
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+import PaymentIcon from '@material-ui/icons/Payment';
+import RejectedModal from "./RejectedModal";
+
+
 
 
 function PaymentStatus() {
@@ -37,13 +41,13 @@ function PaymentStatus() {
 
   const [assignNo, setAssignNo] = useState("");
 
+
   const [addPaymentModal, setPaymentModal] = useState(false);
-  const paymentHandler = (key) => {
-    console.log("key", key.assign_no);
+  const rejectHandler = (key) => {
+    console.log("key", key);
     setPaymentModal(!addPaymentModal);
     setAssignNo(key.assign_no)
   };
-
 
 
   useEffect(() => {
@@ -61,6 +65,7 @@ function PaymentStatus() {
       }
     });
   };
+
 
   const toggle = (key) => {
     console.log("key", key);
@@ -291,44 +296,55 @@ function PaymentStatus() {
             <div style={{ display: "flex", justifyContent: "space-between", width: "60px" }}>
               {
                 row.paid_status == "0" ? null :
-                  <div title="Payment History">
-                    <i
-                      class="fa fa-credit-card"
-                      style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
-                      onClick={() => toggle(row.assign_id)}
-                    ></i>
+                  <div title="Payment History"
+                    onClick={() => toggle(row.assign_id)}
+                    style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                  >
+                    <ChangeHistoryIcon />
                   </div>
               }
 
               {
                 (row.paid_status == "0") ?
-                  <div style={{ cursor: "pointer" }} title="Payment decline">
-                    <i
-                      class="fa fa-comments-o"
-                      style={{ color: "green", fontSize: "16px" }}
-                      onClick={() => paymentHandler(row)}
-                    ></i>
+                  <div title="Payment decline"
+                    onClick={() => rejectHandler(row)}
+                    style={{ color: "red", fontSize: "16px", cursor: "pointer" }}
+                  >
+                    <PaymentIcon />
                   </div>
                   :
                   null
               }
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/teamleader/chatting/${row.assign_id}`,
+                    obj: {
+                      message_type: "2",
+                      query_No: row.assign_no,
+                      query_id: row.assign_id,
+                      routes: `/teamleader/proposal`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
             </div>
           </>
         );
       },
     },
   ];
-
-
-  const sendEmail = (key) => {
-    console.log("key", key);
-
-    axios
-      .get(`${baseUrl}/customers/paymentemail?id=${key}`)
-      .then((res) => {
-        console.log(res);
-      });
-  };
 
 
   return (
@@ -362,10 +378,12 @@ function PaymentStatus() {
               classes="table-responsive"
             />
 
-            <PaymentModal
-              paymentHandler={paymentHandler}
+
+            <RejectedModal
+              rejectHandler={rejectHandler}
               addPaymentModal={addPaymentModal}
               assignNo={assignNo}
+              getPaymentStatus={getPaymentStatus}
             />
 
 

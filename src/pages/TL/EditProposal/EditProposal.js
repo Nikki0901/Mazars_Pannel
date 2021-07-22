@@ -109,6 +109,7 @@ function EditComponent() {
     console.log("date", date);
 
 
+
     var lumsum = value.p_inst_date
     setDate(lumsum)
 
@@ -144,7 +145,7 @@ function EditComponent() {
         else{
           axios({
             method: "POST",
-            url: `${baseUrl}/tl/uploadProposal`,
+            url: `${baseUrl}/tl/updateProposal`,
             data: formData,
           })
           .then(function (response) {
@@ -415,4 +416,3 @@ const noInstallments = [
     label: "4",
   },
 ];
-

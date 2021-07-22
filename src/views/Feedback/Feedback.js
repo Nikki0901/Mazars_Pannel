@@ -23,9 +23,9 @@ const Schema = yup.object().shape({
 });
 
 
-function Feedback({ props }) {
 
-  console.log("pp", props);
+function Feedback() {
+
 
 
   const { handleSubmit, register, errors, reset } = useForm({
@@ -34,19 +34,17 @@ function Feedback({ props }) {
 
   const history = useHistory();
   const { id } = useParams();
-
   const userId = window.localStorage.getItem("userid");
 
 
 
   const onSubmit = (value) => {
-    console.log("value :", value);
+    console.log("value :", value)
 
     let formData = new FormData();
     formData.append("assign_no", id);
     formData.append("feedback", value.p_feedback);
     formData.append("user_id", JSON.parse(userId));
-    // formData.append("tl_id", value.p_teamleader);
 
     axios({
       method: "POST",
@@ -56,17 +54,22 @@ function Feedback({ props }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+
           reset();
           var variable = "Feedback Successfully Sent "
           Alerts.SuccessNormal(variable)
 
-          // props.history.push(routes);
+          history.push({
+            pathname: `/customer/queries`,
+            index: 0,
+          });
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
   };
+
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>

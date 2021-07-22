@@ -7,13 +7,16 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
-            error : []
+            error: ""
         };
     }
 
     handleChange1(i, e) {
-        if(isNaN(e.target.value)) {
-            Alerts.ErrorNormal("Please enter only digit")
+        if (isNaN(e.target.value)) {
+            this.setState({ error: "Please insert only digit" })
+        }
+        else {
+            this.setState({ error: "" })
         }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
@@ -23,7 +26,7 @@ export default class YourComponent extends React.Component {
             })
     }
 
-    
+
     handleChange2(i, e) {
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
@@ -58,8 +61,10 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
+                        <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
                     </div>
-                    <p style={{"color" : "red"}}>{this.state.error[0]}</p>
+
+
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input
@@ -75,7 +80,7 @@ export default class YourComponent extends React.Component {
             );
         }
 
-       
+
         console.log("values - ", this.state.values);
 
         return (
@@ -110,7 +115,7 @@ export default class YourComponent extends React.Component {
 //             })
 //     }
 
-    
+
 //     handleChange2(i, e) {
 //         this.setState({
 //             dates: { ...this.state.dates, [i]: e.target.value }

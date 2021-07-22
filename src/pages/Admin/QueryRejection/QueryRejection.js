@@ -16,12 +16,22 @@ import {
     Tooltip,
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import classNames from "classnames";
+
+const Schema = yup.object().shape({
+    p_notes: yup.string().required("required"),
+});
 
 
 function QueryRejection(props) {
     const { id } = useParams();
 
-    const { handleSubmit, register, reset, errors } = useForm();
+    const { handleSubmit, register, errors, reset } = useForm({
+        resolver: yupResolver(Schema),
+    });
+
     const userId = window.localStorage.getItem("adminkey");
 
 
@@ -88,12 +98,19 @@ function QueryRejection(props) {
                                         <div class="form-group">
                                             <label>Notes</label>
                                             <textarea
-                                                className="form-control"
+                                                className={classNames("form-control", {
+                                                    "is-invalid": errors.p_notes,
+                                                })}
                                                 id="textarea"
                                                 rows="6"
                                                 name="p_notes"
                                                 ref={register}
                                             ></textarea>
+                                            {errors.p_notes && (
+                                                <div className="invalid-feedback">
+                                                    {errors.p_notes.message}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
