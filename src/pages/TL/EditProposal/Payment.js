@@ -28,6 +28,7 @@ export default class YourComponent extends React.Component {
 
     
     handleChange2(i, e) {
+        e.preventDefault()
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
         },
