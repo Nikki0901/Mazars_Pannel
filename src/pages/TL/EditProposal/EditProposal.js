@@ -145,7 +145,11 @@ function EditComponent() {
         else{
           axios({
             method: "POST",
+<<<<<<< HEAD
             url: `${baseUrl}/tl/updateProposal`,
+=======
+            url: `${baseUrl}/tl/uploadProposal`,
+>>>>>>> origin/prateek
             data: formData,
           })
           .then(function (response) {

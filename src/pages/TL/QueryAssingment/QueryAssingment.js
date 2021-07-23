@@ -135,36 +135,41 @@ function QueryAssingment() {
       /(\d\d)\/(\d\d)\/(\d{4})/,
       "$3-$1-$2"
     );
+    if(expdeliverydate === '' || expdeliverydate === "undefined"){
+      Alerts.ErrorNormal("Please select a date")
+    }
+else{
+  let formData = new FormData();
+  formData.append("who", taxID);
+  formData.append("id", id);
+  formData.append("user", JSON.parse(userId));
+  formData.append("type", "tl");
+  formData.append("types", "tp");
+  formData.append("name", teamName);
+  formData.append("timeline", value.p_timelines);
+  formData.append("expdeliverydate", expdeliverydate);
+  formData.append("assignNo", queryNo);
+  formData.append("customer_id", custId);
 
-    let formData = new FormData();
-    formData.append("who", taxID);
-    formData.append("id", id);
-    formData.append("user", JSON.parse(userId));
-    formData.append("type", "tl");
-    formData.append("types", "tp");
-    formData.append("name", teamName);
-    formData.append("timeline", value.p_timelines);
-    formData.append("expdeliverydate", expdeliverydate);
-    formData.append("assignNo", queryNo);
-    formData.append("customer_id", custId);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/AddQueryAssignment`,
-      data: formData,
+  axios({
+    method: "POST",
+    url: `${baseUrl}/tl/AddQueryAssignment`,
+    data: formData,
+  })
+    .then(function (response) {
+      console.log("res-", response);
+      if (response.data.code === 1) {
+        var variable = "Query Assigned Successfully"
+        Alerts.SuccessNormal(variable)
+        getQuery();
+        reset();
+      }
     })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          var variable = "Query Assigned Successfully"
-          Alerts.SuccessNormal(variable)
-          getQuery();
-          reset();
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+    .catch((error) => {
+      console.log("erroror - ", error);
+    });
+}
+   
   };
 
   return (

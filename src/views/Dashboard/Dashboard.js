@@ -122,6 +122,7 @@ function Dashboard() {
     <Layout custDashboard="custDashboard" custUserId={userId}>
 
       <div className="row">
+        
         <div className="col-md-3 content_header">
           <table className="table table-striped first main_table">
             <thead className="query_thead">
@@ -200,7 +201,7 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
-
+{allQueries.allproposal? <>
         <div className="col-md-3 content_header">
 
           <table className="table table-striped fifth main_table">
@@ -252,7 +253,7 @@ function Dashboard() {
 
 
         </div>
-
+{allQueries.allassignment? <>
         <div className="col-md-3 content_header">
           <table className="table table-striped ninth main_table">
             <thead className="assignment_thead">
@@ -294,7 +295,7 @@ function Dashboard() {
           </table>
         </div>
 
-
+{allQueries.totalpayment? <>
         <div className="col-md-3 content_header">
 
           <table className="table table-striped twelvth main_table">
@@ -323,7 +324,7 @@ function Dashboard() {
             </thead>
           </table>
         </div>
-      </div>
+</> : "" } </> : "" } </> : "" }  </div> : ""}
 
     </Layout>
   );
