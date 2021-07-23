@@ -19,6 +19,7 @@ import Records from "../../components/Records/Records";
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
+import CommonServices from "../../common/common";
 
 
 
@@ -84,7 +85,7 @@ function AllQueriesData() {
         },
         {
             text: "Query No",
-            dataField: "assign_no",           
+            dataField: "assign_no",
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -164,11 +165,22 @@ function AllQueriesData() {
             },
             formatter: function dateFormat(cell, row) {
                 console.log("dt", row.exp_delivery_date);
-                var oldDate = row.exp_delivery_date;
-                if (oldDate == null) {
-                    return null;
-                }
-                return oldDate.toString().split("-").reverse().join("-");
+
+                return (
+                    <>
+                        {
+                            row.status_code >= "1" ?
+                                CommonServices.removeTime(row.exp_delivery_date)
+                                :
+                                null
+                        }
+                    </>
+                )
+                // var oldDate = row.exp_delivery_date;    
+                // if (oldDate == null) {
+                //     return null;
+                // }
+                // return oldDate.toString().split("-").reverse().join("-");
             },
         },
         {

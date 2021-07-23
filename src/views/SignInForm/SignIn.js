@@ -37,7 +37,7 @@ function SignIn(props) {
     setPasswordShow(!isPasswordShow)
   };
 
-  
+
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -54,11 +54,18 @@ function SignIn(props) {
     })
       .then(function (response) {
         console.log("res-", response);
+        console.log("otp-", response.data["otp "]);
+
         if (response.data.code === 1) {
-          Alerts.SuccessLogin()
-          localStorage.setItem("userid", JSON.stringify(response.data.user_id));
-          localStorage.setItem("name", JSON.stringify(response.data.name));
-          props.history.push("/customer/dashboard");
+
+          localStorage.setItem("email", JSON.stringify(value.p_email))
+          localStorage.setItem("uid", JSON.stringify(response.data.user_id))
+         
+          // Alerts.SuccessLogin()
+          // localStorage.setItem("userid", JSON.stringify(response.data.user_id));
+          // localStorage.setItem("name", JSON.stringify(response.data.name));
+
+          props.history.push("/customer/otp");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           setLoad(false);

@@ -9,13 +9,14 @@ import './index.css'
 import CommonServices from "../../common/common";
 
 function NavWrapper(props) {
-  const { color, logout, name } = props;
+  const { color, logout, name ,email } = props;
 
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
   const adminkey = window.localStorage.getItem("adminkey");
   const tlkey = window.localStorage.getItem("tlkey");
 
+  // const CustEmail = window.localStorage.getItem("email");
 
 
   return (
@@ -56,7 +57,7 @@ function NavWrapper(props) {
               </li>
 
               <li>
-                <h4 class="brand-text text-white">{CommonServices.capitalizeFirstLetter(name)}</h4>
+                <h4 class="brand-text text-white">{CommonServices.capitalizeFirstLetter(name)}: {JSON.parse(email)} </h4>
               </li>
             </ul>
 

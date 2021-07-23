@@ -2,15 +2,15 @@ import { Link, useHistory } from "react-router-dom";
 import "../../assets/css/style.css";
 import mazars from "../../assets/images/mazars-logo.png";
 
-function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
+function Header({ id, cust_sign, admin, mtl, mtp, noSign, loginOTP }) {
   let history = useHistory();
 
-  const custLogout = () => {  
+  const custLogout = () => {
     localStorage.removeItem("userid");
     localStorage.removeItem("name");
     localStorage.removeItem("uid");
     localStorage.removeItem("category");
-     history.push("/customer/signin");
+    history.push("/customer/signin");
   }
 
   console.log("hid:", id);
@@ -18,7 +18,7 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
   return (
     <>
       <div class="header">
-       {id && (
+        {id && (
           <div>
             <Link to="/customer/questionnaire-page">
               <img src={mazars} class="logo" alt="mazar" />
@@ -37,8 +37,15 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
         {noSign && (
           <div>
             <Link to="/">
-              <img src={mazars} class="logo" alt="mazar" style={{marginBottom:"12px"}}/>
+              <img src={mazars} class="logo" alt="mazar" style={{ marginBottom: "12px" }} />
             </Link>
+          </div>
+        )}
+
+
+        {loginOTP && (
+          <div>
+            <img src={mazars} class="logo" alt="mazar" style={{ marginBottom: "12px" }} />
           </div>
         )}
 
@@ -70,9 +77,9 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
           {id && (
             <ul class="menu">
               <li style={{ color: "#fff" }}>{id}</li>
-              <li onClick={custLogout}  style={{ color: "#fff" }}>
-              <i class="fa fa-sign-out">logout</i>
-              </li>        
+              <li onClick={custLogout} style={{ color: "#fff" }}>
+                <i class="fa fa-sign-out">logout</i>
+              </li>
             </ul>
           )}
 
@@ -88,7 +95,7 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
               </ul>
             </div>
           )}
-{/* 
+          {/* 
          {noSign && (
             <div>
               <ul class="menu">
@@ -96,7 +103,7 @@ function Header({ id, cust_sign, admin, mtl, mtp , noSign }) {
               </ul>
             </div>
           )} */}
-        
+
 
           {admin && (
             <ul class="menu">

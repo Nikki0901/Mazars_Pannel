@@ -28,8 +28,6 @@ import { values } from "lodash";
 
 
 
-
-
 function Demo() {
   const userId = window.localStorage.getItem("adminkey");
 
@@ -146,6 +144,10 @@ function Demo() {
     },
   });
 
+  const B = (key) => {
+    console.log("call B", key)
+    setRead(key)
+  }
 
   const AppointmentBase = ({
     children,
@@ -156,9 +158,11 @@ function Demo() {
     ...restProps
   }) => (
     <Appointments.Appointment {...restProps}>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex" }} onDoubleClick={() => B(data.owner)}>
 
-        {/* {B(data.owner)} */}
+        {
+          console.log("data", data)
+        }
 
         <div>{children}</div>
         <div
@@ -173,15 +177,12 @@ function Demo() {
   );
 
 
-  const Appointment = withStyles(styles, { name: "Appointment" })(
-    AppointmentBase
-  );
+  const Appointment = withStyles
+    (styles, { name: "Appointment" })
+    (AppointmentBase);
 
 
   const myAppointment = (props) => {
-
-    // console.log("props", props.data.owner)
-
     return (
       <div>
         <Appointment
@@ -226,9 +227,9 @@ function Demo() {
   };
 
 
-
   const commitChanges = ({ added, changed, deleted }) => {
 
+    // console.log("deleted ----", deleted)
     // var dt = document.getElementsByClassName("jss149")
 
     // return false;
@@ -377,7 +378,7 @@ function Demo() {
     }
   };
 
-  // console.log("tread", read)
+  console.log("tread", read)
 
   return (
     <Paper>
@@ -399,8 +400,13 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm
-        />
+
+        {/* {
+          !read ?
+            <AppointmentForm readOnly /> : */}
+        <AppointmentForm />
+
+
         <Resources
           data={resources}
         />

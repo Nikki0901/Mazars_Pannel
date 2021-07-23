@@ -31,7 +31,7 @@ function Demo() {
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [loading, setLoading] = useState(false);
- 
+
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -90,6 +90,8 @@ function Demo() {
 
 
   const commitChanges = ({ added, changed, deleted }) => {
+    console.log("added", added)
+
     // if (added) {
     //   console.log("added - ", added);
     //   var startDate = added.startDate;
@@ -292,7 +294,7 @@ export default Demo;
 //   );
 // }
 
-  /* <Link to={`/customer/meeting`}>
-            <p style={{ fontSize: "12px",color:"#fff" }}>link</p>
-          </Link> */
+/* <Link to={`/customer/meeting`}>
+          <p style={{ fontSize: "12px",color:"#fff" }}>link</p>
+        </Link> */
 

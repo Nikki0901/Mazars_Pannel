@@ -38,6 +38,12 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
   // var a = res[1].toUpperCase()
   // console.log(nm)
 
+
+
+  const CustEmail = window.localStorage.getItem("email");
+  const adminEmail = window.localStorage.getItem("adminss");
+ 
+  
   return (
     <div>
       <nav
@@ -45,23 +51,23 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         sty
       >
         {custUserId && (
-          <NavWrapper color="#5E96AE" logout={custLogout} 
-          name="customer"
-           />
+          <NavWrapper color="#5E96AE" logout={custLogout}
+            name="customer" email={CustEmail}
+          />
         )}
 
         {adminUserId && (
           <NavWrapper color="#262d47" logout={adminLogout}
-           name="admin"
-            />
+            name="admin" email={adminEmail}
+          />
         )}
 
-        {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout} 
-        name="teamleader" 
+        {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout}
+          name="teamleader" email={adminEmail}
         />}
 
-        {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout} 
-        name="taxprofessional" 
+        {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout}
+          name="taxprofessional" email={adminEmail}
         />}
       </nav>
     </div>
