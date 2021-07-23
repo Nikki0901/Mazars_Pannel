@@ -1,6 +1,11 @@
 import React from "react";
 import { useAlert } from "react-alert";
 import Alerts from "../../../common/Alerts";
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> origin/prateek
 
 export default class Payment extends React.Component {
     constructor(props) {

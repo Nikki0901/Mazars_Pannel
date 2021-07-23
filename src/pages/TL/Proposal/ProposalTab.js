@@ -126,7 +126,11 @@ function QueriesTab(props) {
                             Accepted; Proposals ({acceptedProposal})
                         </Tab>
                         <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+<<<<<<< HEAD
                             Customer Declined; Proposals ({declinedProposal})
+=======
+                            Declined; Proposals
+>>>>>>> origin/prateek
                         </Tab>
                     </TabList>
 
