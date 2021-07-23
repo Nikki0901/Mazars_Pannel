@@ -60,7 +60,6 @@ function DeclinedQuery({ CountIncomplete }) {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -120,6 +119,29 @@ function DeclinedQuery({ CountIncomplete }) {
           return null;
         }
         return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Status",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              {row.status} /
+              {
+                row.status == "Declined Query" ?
+                  <p className="declined">
+                    {row.statusdescription}
+                  </p>
+                  :
+                  null
+              }
+            </div>
+          </>
+        );
       },
     },
   ];

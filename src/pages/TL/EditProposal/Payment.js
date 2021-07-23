@@ -7,34 +7,54 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
+<<<<<<< HEAD
            error : ""
+=======
+            error : []
+>>>>>>> dashboard
         };
     }
 
     handleChange1(i, e) {
         if(isNaN(e.target.value)) {
+<<<<<<< HEAD
           this.setState({error : "Please insert only digit"})
         }
         else{
             this.setState({error : ""})
         }
+=======
+           this.setState({error : "Please enter digit only"})
+        }
+       else{
+           this.setState({
+               error : ""
+           })
+>>>>>>> dashboard
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },
             () => {
                 this.props.paymentAmount(this.state.values)
             })
+       }
     }
 
     
     handleChange2(i, e) {
+<<<<<<< HEAD
         e.preventDefault()
+=======
+        e.preventDefault();
+>>>>>>> dashboard
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
         },
             () => {
                 this.props.paymentDate(this.state.dates)
+                
             })
+        
     }
 
 
@@ -62,10 +82,17 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
+<<<<<<< HEAD
                          <p style={{"display" : "block", "color" : "red"}}>{this.state.error}</p>
                     </div>
                    
                    
+=======
+                        <p style={{"display" :"block", "color" : "red"}}>{this.state.error}</p>
+                    </div>
+                    
+                  
+>>>>>>> dashboard
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input
@@ -73,7 +100,8 @@ export default class YourComponent extends React.Component {
                             className="form-control"
                             name={this.state.dates[i]}
                             onChange={this.handleChange2.bind(this, i)}
-                            defaultValue={due_date[i]}
+                           
+                             
                         />
                     </div>
                 </div >
@@ -81,11 +109,9 @@ export default class YourComponent extends React.Component {
             );
         }
 
-        // console.log("installment_amount - ", this.props.installment_amount);
-        // console.log("due_date - ", this.props.due_date);
-
+       
         console.log("values - ", this.state.values);
-
+        console.log("dates - " , this.state.dates )
         return (
             <div className="inputs">
                 {fieldsArray}
@@ -97,66 +123,85 @@ export default class YourComponent extends React.Component {
 
 
 
- // var fieldsArray = [];
-  // for (var i = 0; i < installment; i++) {
-  //   fieldsArray.push(
-  //     <div className="row">
-  //       <div class="col-md-6">
-  //         <label>Amount</label>
-  //         <input
-  //           type='text'
-  //           className="form-control"
-  //           name={amount[i]}
-  //           onChange={(e) => handleChange1(e, i)}
-  //         />
-  //       </div>
-  //     </div>
-  //   );
-  // }
+// import React from "react";
 
 
-//   const handleChange1 = (e, i) => {
-//     console.log("val-", e.target.value);
-//     console.log("i-", i);
+// export default class YourComponent extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             values: [],
+//             dates: [],
+//         };
+//     }
 
-//     const { name, value } = e.target
+//     handleChange1(i, e) {
+//         this.setState({
+//             values: { ...this.state.values, [i]: e.target.value }
+//         },
+//             () => {
+//                 this.props.paymentAmount(this.state.values)
+//             })
+//     }
 
-//     let values = [...amount];
-//     values[i] = value
-//     setAmount({ values });
-//   };
+    
+//     handleChange2(i, e) {
+//         this.setState({
+//             dates: { ...this.state.dates, [i]: e.target.value }
+//         },
+//             () => {
+//                 this.props.paymentDate(this.state.dates)
+//             })
+//     }
 
 
+//     render() {
 
-{/* <div>
-{
-  row.status == "Pending for Preparation" &&
-  <Link to={`/teamleader/sendproposal/${row.id}`}>
-    <i
-      class="fa fa-mail-forward"
-      style={{
-        fontSize: "14px",
-        cursor: "pointer",
-      }}
-    ></i>
-  </Link>
-}
-</div>
+//         var amount = this.props.installment_amount
+//         var date = this.props.due_date
 
-<div>
-{
-  row.status_code < 9 ?
-    <Link to={`/teamleader/edit-proposal/${row.id}`}>
-      <i
-        className="fa fa-edit"
-        style={{
-          fontSize: "16px",
-          cursor: "pointer",
-          color: "green",
-        }}
-      ></i>
-    </Link>
-    :
-    null
-}
-</div> */}
+//         const installment_amount = amount.split(',');
+//         const due_date = date.split(',');
+
+//         // console.log(due_date)
+
+//         var fieldsArray = [];
+
+//         for (var i = 0; i < this.props.installment; i++) {
+//             fieldsArray.push(
+//                 <div className="row">
+//                     <div class="col-md-6">
+//                         <label>Amount</label>
+//                         <input
+//                             type="text"
+//                             className="form-control"
+//                             name={this.state.values[i]}
+//                             onChange={this.handleChange1.bind(this, i)}
+//                             defaultValue={installment_amount[i]}
+//                         />
+//                     </div>
+//                     <div class="col-md-6">
+//                         <label>Due Dates</label>
+//                         <input
+//                             type="date"
+//                             className="form-control"
+//                             name={this.state.dates[i]}
+//                             onChange={this.handleChange2.bind(this, i)}
+//                             defaultValue={due_date[i]}
+//                         />
+//                     </div>
+//                 </div >
+
+//             );
+//         }
+
+//         console.log("values - ", this.state.values);
+
+//         return (
+//             <div className="inputs">
+//                 {fieldsArray}
+//             </div>
+//         );
+//     }
+// }
+

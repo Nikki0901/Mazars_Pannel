@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 
 
 
+
 function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
   const alert = useAlert();
   const { handleSubmit, register, reset } = useForm();
@@ -16,9 +17,7 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
-
     let formData = new FormData();
-
     var uploadImg = value.p_draft;
     console.log("uploadImg", uploadImg);
 
@@ -63,7 +62,6 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
           icon: 'error',
         })
       }
-
       getAssignmentList();
       uploadDraftReport();
     });
@@ -102,6 +100,9 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
 }
 
 export default DraftReport;
+
+
+
 
  // let formData = new FormData();
       // formData.append("draft_report", value.p_draft[0]);

@@ -79,7 +79,6 @@ function PendingForAcceptence({ pendingProposal }) {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -165,7 +164,6 @@ function PendingForAcceptence({ pendingProposal }) {
     },
     {
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -284,6 +282,41 @@ function PendingForAcceptence({ pendingProposal }) {
         return { fontSize: "11px" };
       },
     },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "11px", width: "65px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div title="Send Message">
+              <Link
+                to={{
+                  pathname: `/admin/chatting/${row.q_id}`,
+                  obj: {
+                    message_type: "2",
+                    query_No: row.assign_no,
+                    query_id: row.q_id,
+                    routes: `/admin/proposal`
+                  }
+                }}
+              >
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    marginLeft: "8px",
+                    color: "blue"
+                  }}
+                ></i>
+              </Link>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
 
@@ -302,7 +335,7 @@ function PendingForAcceptence({ pendingProposal }) {
 
         </CardHeader>
         <CardBody>
-        <Records records={records} />
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

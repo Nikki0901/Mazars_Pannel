@@ -99,7 +99,6 @@ function ProposalTab() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -179,7 +178,6 @@ function ProposalTab() {
         },
         {
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },
@@ -340,6 +338,31 @@ function ProposalTab() {
                                             ></i>
                                         </div>
 
+
+                                        <div title="Send Message">
+                                            <Link
+                                                to={{
+                                                    pathname: `/customer/chatting/${row.q_id}`,
+                                                    obj: {
+                                                        message_type: "2",
+                                                        query_No: row.assign_no,
+                                                        query_id: row.q_id,
+                                                        routes: `/customer/proposal`
+                                                    }
+                                                }}
+                                            >
+                                                <i
+                                                    class="fa fa-comments-o"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        cursor: "pointer",
+                                                        marginLeft: "8px",
+                                                        color: "blue"
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+
                                     </div>
                                 ) : null}
                             </div>
@@ -468,29 +491,7 @@ export default ProposalTab;
 
 
 
-// <div title="Send Message">
-// <Link
-//     to={{
-//         pathname: `/customer/chatting/${row.q_id}`,
-//         obj: {
-//             message_type: "2",
-//             query_No: row.assign_no,
-//             query_id: row.q_id,
-//             routes: `/customer/proposal`
-//         }
-//     }}
-// >
-//     <i
-//         class="fa fa-comments-o"
-//         style={{
-//             fontSize: 16,
-//             cursor: "pointer",
-//             marginLeft: "8px",
-//             color: "blue"
-//         }}
-//     ></i>
-// </Link>
-// </div>
+
 
 // <div title="Send Feedback" style={{ cursor: "pointer" }}>
 // <Link to={`/customer/feedback/${row.assign_no}`}>

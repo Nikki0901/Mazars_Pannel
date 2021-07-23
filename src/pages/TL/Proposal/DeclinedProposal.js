@@ -31,7 +31,7 @@ function DeclinedProposal() {
 
     const getProposalList = () => {
         axios
-            .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=3`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -70,7 +70,6 @@ function DeclinedProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -118,8 +117,7 @@ function DeclinedProposal() {
         },
         {
             text: "Status",
-            dataField: "status",
-            sort: true,
+            dataField:"status",
             headerStyle: () => {
                 return { fontSize: "12px" };
             },

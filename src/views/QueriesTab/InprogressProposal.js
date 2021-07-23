@@ -78,7 +78,6 @@ function InprogressProposal() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -112,7 +111,6 @@ function InprogressProposal() {
     {
       text: "Status",
       dataField: "",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },

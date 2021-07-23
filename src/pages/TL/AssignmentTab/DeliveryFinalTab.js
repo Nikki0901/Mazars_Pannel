@@ -43,7 +43,7 @@ function AssignmentTab() {
 
     const getAssignmentList = () => {
         axios
-            .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}&assignment_status=Delivery_of_report&stages_status=1`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -138,7 +138,6 @@ function AssignmentTab() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -177,7 +176,6 @@ function AssignmentTab() {
         {
             dataField: "status",
             text: "Status",
-            sort: true,
             style: {
                 fontSize: "11px",
             },

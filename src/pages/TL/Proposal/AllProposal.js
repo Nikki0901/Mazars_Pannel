@@ -8,6 +8,8 @@ import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import ChatHistory from "./ChatHistory";
+// import PostAddIcon from '@material-ui/icons/PostAdd';
+
 
 
 
@@ -38,10 +40,10 @@ function AllProposal() {
                     setProposal(res.data.result);
                     setCount(res.data.result.length);
                     setRecords(res.data.result.length);
-
                 }
             });
     };
+
 
     const columns = [
         {
@@ -70,7 +72,6 @@ function AllProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -78,7 +79,7 @@ function AllProposal() {
                 console.log(row);
                 return (
                     <>
-                        {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
+
                         <Link
                             to={{
                                 pathname: `/teamleader/queries/${row.id}`,
@@ -117,24 +118,51 @@ function AllProposal() {
         },
         {
             text: "Status",
-            dataField: "status",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
+            },
+            formatter: function nameFormatter(cell, row) {
+                return (
+                    <>
+                        <div>
+                            {row.status}/
+                            {
+                                row.status == "Inprogress" ?
+                                    <p className="inprogress">
+
+                                        {row.statusdescription}
+                                    </p>
+                                    :
+                                    row.status == "Customer Declined; Proposal" ?
+                                        <p className="declined">
+
+                                            {row.statusdescription}
+                                        </p> :
+                                        row.status == "Accepted; Proposal" ?
+                                            <p className="completed">
+                                                {row.statusdescription}
+                                            </p> :
+                                            null
+                            }
+
+
+                        </div>
+                    </>
+                );
             },
         },
         {
             text: "Action",
             dataField: "",
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "12px", width: "80px" };
             },
             formatter: function (cell, row) {
                 return (
                     <>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
-                                {row.status == "Pending for approval" || row.status == "Declined" ? (
+                                {row.status_code == "4" ? (
                                     <Link to={`/teamleader/edit-proposal/${row.id}`}>
                                         <i
                                             className="fa fa-edit"
@@ -145,7 +173,7 @@ function AllProposal() {
                                             }}
                                         ></i>
                                     </Link>
-                                ) : row.status == "Pending for Preparation" ? (
+                                ) : row.status_code == "2" ? (
                                     <Link to={`/teamleader/sendproposal/${row.id}`}>
                                         <i
                                             class="fa fa-mail-forward"
@@ -157,42 +185,34 @@ function AllProposal() {
                                     </Link>
                                 ) : null}
                             </div>
-
-                            <div>
-                                {row.revised_text && (
-                                    <div style={{ cursor: "pointer" }} title="View History">
-                                        <i
-                                            class="fa fa-comments-o"
-                                            style={{ color: "green", fontSize: "16px", color: "light-blue", }}
-                                            onClick={() => chatHandler(row)}
-                                        ></i>
+                            {
+                                row.status == "Customer Declined; Proposal" ?
+                                    null
+                                    :
+                                    <div title="Send Message">
+                                        <Link
+                                            to={{
+                                                pathname: `/teamleader/chatting/${row.id}`,
+                                                obj: {
+                                                    message_type: "2",
+                                                    query_No: row.assign_no,
+                                                    query_id: row.id,
+                                                    routes: `/teamleader/proposal`
+                                                }
+                                            }}
+                                        >
+                                            <i
+                                                class="fa fa-comments-o"
+                                                style={{
+                                                    fontSize: 16,
+                                                    cursor: "pointer",
+                                                    marginLeft: "8px",
+                                                    color: "blue"
+                                                }}
+                                            ></i>
+                                        </Link>
                                     </div>
-                                )}
-                            </div>
-
-                            <div title="Send Message">
-                                <Link
-                                    to={{
-                                        pathname: `/teamleader/chatting/${row.id}`,
-                                        obj: {
-                                            message_type: "2",
-                                            query_No: row.assign_no,
-                                            query_id: row.id,
-                                            routes: `/teamleader/proposal`
-                                        }
-                                    }}
-                                >
-                                    <i
-                                        class="fa fa-comments-o"
-                                        style={{
-                                            fontSize: 16,
-                                            cursor: "pointer",
-                                            marginLeft: "8px",
-                                            color: "blue"
-                                        }}
-                                    ></i>
-                                </Link>
-                            </div>
+                            }
                         </div>
                     </>
                 );
@@ -207,7 +227,7 @@ function AllProposal() {
                     <TeamFilter
                         setData={setProposal}
                         getData={getProposalList}
-                        proposal="proposal"
+                        AllProposal="AllProposal"
                         setRecords={setRecords}
                         records={records}
                     />
@@ -235,3 +255,17 @@ function AllProposal() {
 
 export default AllProposal;
 
+
+
+
+{/* <div>
+                                {row.revised_text && (
+                                    <div style={{ cursor: "pointer" }} title="View History">
+                                        <i
+                                            class="fa fa-comments-o"
+                                            style={{ color: "green", fontSize: "16px", color: "light-blue", }}
+                                            onClick={() => chatHandler(row)}
+                                        ></i>
+                                    </div>
+                                )}
+                            </div> */}

@@ -27,7 +27,11 @@ function Questionnaire(props) {
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
   const [custError, setcustError] = useState([])
+<<<<<<< HEAD
  
+=======
+  const [custError2, setcustError2] = useState([])
+>>>>>>> dashboard
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
@@ -37,6 +41,7 @@ function Questionnaire(props) {
 const valiFun = (e) =>{
   setcustError("")
 }
+<<<<<<< HEAD
 const purPoseQuery = (e) => {
   setSelectError("")
   setPurposeOption(e)
@@ -53,6 +58,28 @@ const purPoseQuery = (e) => {
    else if(purposeOption === "undefined" || purposeOption === '' || purposeOption.length ===0 || purposeOption === "null"){
      setSelectError("Please select atlease one value")
    }
+=======
+const valiFun2 = (e) => {
+  setcustError2("")
+}
+  const onSubmit = (value) => {
+    console.log("value :", value);
+   if(selectedOption == ''){
+     setSelectError("Please select atleast one value")
+   }
+   else {
+     setSelectError("")
+   }
+    const a = value.p_fact;
+    const b = value.p_case_name;
+    if (a == ''){
+    setcustError("This feild is required");
+    }
+    if (b == ''){
+      setcustError2("This feild is required");
+      }
+   
+>>>>>>> dashboard
     else {
       setcustError(" ");
       setLoad(true);
@@ -251,10 +278,17 @@ const purPoseQuery = (e) => {
                       type="text"
                       name="p_case_name"
                       ref={register}
+<<<<<<< HEAD
                       
                       className="form-control"
                     />
                   
+=======
+                      onChange = {valiFun2}
+                      className="form-control"
+                    />
+                     <p style={{"color" :"red"}}>{custError2}</p>
+>>>>>>> dashboard
                   </div>
                 </div>
 

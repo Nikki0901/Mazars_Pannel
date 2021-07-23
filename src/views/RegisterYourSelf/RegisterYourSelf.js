@@ -1,12 +1,51 @@
 import { Link } from "react-router-dom";
 import "../../assets/css/style.css";
 import "../../assets/css/media.css";
+<<<<<<< HEAD
 import { useRef , useState} from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
 import {Button , Typography } from "@material-ui/core";
+=======
+import { useEffect, useRef , useState} from "react";
+import Header from "../../components/Header/Header";
+import Footer from '../../components/Footer/Footer';
+import {Button , Typography } from "@material-ui/core";
+import './style.css';
+function RegisterYourSelf() {
+  const  [showResult, setShowResult] = useState(false)
+>>>>>>> dashboard
 
+ const register = useRef(null);
+ const inc = useRef(null);
+ const intervalRef = useRef(null);
+ const [timer, setTimer] = useState("00:00")
+ function getTimeRemaining(endtime) {
+  const total = Date.parse(endtime) - Date.parse(new Date());
+  const seconds = Math.floor((total/1000) % 60);
+  const minutes = Math.floor((total/1000/60) % 60);
+  const hours = Math.floor((total/1000*60*60) % 24);
+  const days = Math.floor(total/ (1000*60*60*24));
+  return{
+    total, days, hours, minutes, seconds
+  };
+}
+var b = null;
+function startTimer(deadline) {
+  let {total, days, hours, minutes, seconds} = getTimeRemaining(deadline);
+  if(total>= 0){
+    setTimer(
+      (hours > 9 ? hours : "0"+ hours) + ":" +
+      (minutes > 9 ? minutes : "0" + minutes) + ":" +
+      (seconds > 9 ? seconds : "0" + seconds)
+    )
+  }
+  else{
+    clearInterval(intervalRef.current);
+  }
+}
 
+<<<<<<< HEAD
 
 import './style.css';
 function RegisterYourSelf() {
@@ -24,6 +63,34 @@ const myFun = () => {
  const getOtp = () => {
 myFun();
  }
+=======
+function clearTimer(endtime) {
+  setTimer("03:60")
+
+if(intervalRef.current) clearInterval(intervalRef.current);
+const id = setInterval(() => {
+  startTimer(endtime)
+}, 1000)
+intervalRef.current = id;
+}
+function getDeadlineTime () {
+  let deadline = new Date();
+  deadline.setSeconds(deadline.getSeconds()+180);
+  return deadline
+}
+useEffect(() => {
+  clearTimer(getDeadlineTime())
+  return () => {
+    if(intervalRef.current) clearInterval(intervalRef.current)
+  }
+}, [])
+const  onClickResetButton =  () => {
+setShowResult(true)
+  clearTimer(getDeadlineTime())
+ 
+
+}
+>>>>>>> dashboard
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -68,10 +135,18 @@ myFun();
             
             />
             
+<<<<<<< HEAD
               <Button variant="contained"  size="small"  onClick={getOtp}> Get Otp</Button>
           
              </div>
              <p>{otpTime}</p>
+=======
+              <Button variant="contained"  size="small"  onClick={onClickResetButton}> Get Otp</Button>
+          
+             </div>
+           
+             <h2 style={{"textAlign" :"center"}}>{showResult ? timer: ""}</h2>
+>>>>>>> dashboard
              <Button variant="contained" color="primary"> Log In</Button>
              <div>
              
@@ -90,8 +165,11 @@ myFun();
 }
 
 export default RegisterYourSelf;
+<<<<<<< HEAD
 {/* <h1 style={{ color: "#2b345f",textDecoration:"none" }}>
           <Link to="/customer/signup">
             PLEASE REGISTER YOURSELF
             </Link>
         </h1> */}
+=======
+>>>>>>> dashboard

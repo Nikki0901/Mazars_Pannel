@@ -148,7 +148,6 @@ function AssignmentComponent() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -188,7 +187,6 @@ function AssignmentComponent() {
     {
       dataField: "status",
       text: "Status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -271,27 +269,21 @@ function AssignmentComponent() {
       formatter: function (cell, row) {
         return (
           <>
-            {!row.final_report == "" ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  final
-                </a>
-              </div>
-            ) : row.assignement_draft_report ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  draft
-                </a>
-              </div>
-            ) : null}
+            {
+              row.paid_status == "2" ? null :
+                <div>
+                  {row.assignement_draft_report || row.final_report ?
+                    <div title="View All Report"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => ViewReport(row.assign_no)}
+                    >
+                      <DescriptionOutlinedIcon color="secondary" />
+                    </div>
+                    :
+                    null
+                  }
+                </div>
+            }
           </>
         );
       },
@@ -312,40 +304,34 @@ function AssignmentComponent() {
       formatter: function (cell, row) {
         return (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
 
-              <div title="Send Message">
-                <Link
-                  to={{
-                    pathname: `/admin/chatting/${row.q_id}`,
-                    obj: {
-                      message_type: "3",
-                      query_No: row.assign_no,
-                      query_id: row.q_id,
-                      routes: `/admin/assignment`
-                    }
-                  }}
-                >
-                  <i
-                    class="fa fa-comments-o"
-                    style={{
-                      fontSize: 16,
-                      cursor: "pointer",
-                      marginLeft: "8px",
-                      color: "blue"
+            {
+              row.paid_status == "2" ? null :
+                <div title="Send Message">
+                  <Link
+                    to={{
+                      pathname: `/admin/chatting/${row.q_id}`,
+                      obj: {
+                        message_type: "3",
+                        query_No: row.assign_no,
+                        query_id: row.q_id,
+                        routes: `/admin/assignment`
+                      }
                     }}
-                  ></i>
-                </Link>
-              </div>
+                  >
+                    <i
+                      class="fa fa-comments-o"
+                      style={{
+                        fontSize: 16,
+                        cursor: "pointer",
+                        marginLeft: "8px",
+                        color: "blue"
+                      }}
+                    ></i>
+                  </Link>
+                </div>
+            }
 
-              <div title="View Report"
-                style={{ cursor: "pointer" }}
-                onClick={() => ViewReport(row.assign_no)}
-              >
-                <DescriptionOutlinedIcon color="secondary" />
-              </div>
-
-            </div>
           </>
         );
       },
@@ -370,7 +356,7 @@ function AssignmentComponent() {
       });
   };
 
-  
+
   const Reset = () => {
     return (
       <>
@@ -611,3 +597,24 @@ export default AssignmentComponent;
 //             getData={getAssignmentData}
 //             assignment="assignment"
 //           />
+{/* <div>
+                {!row.final_report == "" ? (
+                  <div title="Final Report">
+                    <a
+                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
+                      target="_blank"
+                    >
+                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    </a>
+                  </div>
+                ) : row.assignement_draft_report ? (
+                  <div title="Draft Report">
+                    <a
+                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
+                      target="_blank"
+                    >
+                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+                    </a>
+                  </div>
+                ) : null}
+              </div> */}

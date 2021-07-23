@@ -107,7 +107,6 @@ function PaidComponent() {
     {
       dataField: "assign_no",
       text: "Query No",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -193,7 +192,6 @@ function PaidComponent() {
     {
       text: "Status",
       dataField: "status",
-      sort: true,
       style: {
         fontSize: "11px",
       },
@@ -316,7 +314,7 @@ function PaidComponent() {
                 ></i>
               </div>
 
-              <div title="Send Message">
+              {/* <div title="Send Message">
                 <Link
                   to={{
                     pathname: `/admin/chatting/${row.id}`,
@@ -338,7 +336,8 @@ function PaidComponent() {
                     }}
                   ></i>
                 </Link>
-              </div>
+              </div> */}
+
             </div>
           </>
         );

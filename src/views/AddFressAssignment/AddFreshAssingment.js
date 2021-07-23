@@ -172,6 +172,7 @@ const purPoseQuery = (e) => {
   };
 
   return (
+<<<<<<< HEAD
     <>
       <Header id={JSON.parse(userNameId)} />
       <div className="container">
@@ -199,6 +200,43 @@ const purPoseQuery = (e) => {
                     <p style={{"color" :"red"}}>{custError}</p>
                   </div>
                 </div>
+=======
+    <Layout custDashboard="custDashboard" custUserId={userId}>
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col md="4">
+              <button class="btn btn-success" onClick={() => history.goBack()}>
+                <i class="fas fa-arrow-left mr-2"></i>
+                Go Back
+              </button>
+            </Col>
+            <Col md="4" style={{ display: "flex", justifyContent: "center" }}>
+              <p style={{ fontSize: "20px" }}>Add Fresh Query</p>
+            </Col>
+          </Row>
+        </CardHeader>
+
+        <CardHeader>
+          <div class="col-xl-8 col-lg-8 col-md-12 py-4">
+            {load ? (
+              <Spinner size="sm" color="primary" />
+            ) : (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Facts of the case</label>
+                      <textarea
+                        className="form-control"
+                        id="textarea"
+                        rows="6"
+                        name="p_fact"
+                        ref={register}
+                      ></textarea>
+                    </div>
+                  </div>a
+>>>>>>> dashboard
 
                 <div className="col-md-6">
                   <div className="question_query mb-2">
@@ -300,6 +338,44 @@ const purPoseQuery = (e) => {
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
                       </label>
+<<<<<<< HEAD
+=======
+                      <br />
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_format_word"
+                          ref={register}
+                          defaultChecked
+                        />
+                        <label className="form-check-label">
+                          Softcopy - Word/ Pdf
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_format_digital"
+                          ref={register}
+                        />
+                        <label className="form-check-label">
+                          SoftCopy- Digitally Signed
+                        </label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="p_format_physically"
+                          ref={register}
+                        />
+                        <label className="form-check-label">
+                          Printout- Physically Signed
+                        </label>
+                      </div>
+>>>>>>> dashboard
                     </div>
                     <div className="form-check">
                       <input
@@ -312,6 +388,31 @@ const purPoseQuery = (e) => {
                       <label className="form-check-label">
                         Printout- Physically Signed
                       </label>
+<<<<<<< HEAD
+=======
+                      <br />
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="p_timelines"
+                          ref={register}
+                          value="Urgent, (4-5 Working Days)"
+                        />
+                        <label>Urgent, (4-5 Working Days)</label>
+                      </div>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="p_timelines"
+                          ref={register}
+                          value="Regular (10-12 Working Days)"
+                          defaultChecked
+                        />
+                        <label>Regular (10-12 Working Days)</label>
+                      </div>
+>>>>>>> dashboard
                     </div>
                   </div>
                 </div>
@@ -374,6 +475,8 @@ const purPoseQuery = (e) => {
 }
 
 export default Questionnaire;
+
+
 
 const purpose = [
   { value: "Assessment", label: "Assessment" },
@@ -441,6 +544,11 @@ const assessment_year = [
   }
 ];
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> dashboard
 const ImageUploads = ({ register, control }) => {
   const { append, fields, remove } = useFieldArray({
     control,
@@ -475,6 +583,19 @@ const ImageUploads = ({ register, control }) => {
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+// formData.append("purpose", value.p_purpose);
+// console.log("arr",arr);
+
+// for (let i = 0; i < multipleFiles.length; i++) {
+//   formData.append('upload_1', multipleFiles[i]);
+// }
+
+>>>>>>> dashboard
 {
   /* <div className="col-md-6">
                 <div className="mb-3">

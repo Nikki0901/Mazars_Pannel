@@ -55,7 +55,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
 
 
 
-  
+
   useEffect(() => {
     getPendingForAllocation();
   }, []);
@@ -103,7 +103,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -151,7 +150,6 @@ function PendingAllocation({ CountPendingForAllocation }) {
     {
       text: "Status",
       dataField: "status",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -163,7 +161,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
               {row.status} /
               {
                 row.status == "Inprogress Query" ?
-                <p className="inprogress">
+                  <p className="inprogress">
                     {row.statusdescription}
                   </p>
                   :
@@ -175,7 +173,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
       },
     },
     {
-      text: "Query Allocation",
+      text: "Action",
       dataField: "",
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -198,7 +196,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
                   </Link>
 
                 </div>
-                <div>
+                <div title="Decline Query">
                   <Link
                     to={`/admin/query_rejection/${row.id}`}
                   >
@@ -207,6 +205,31 @@ function PendingAllocation({ CountPendingForAllocation }) {
                     ></i>
                   </Link>
                 </div>
+
+                <div title="Send Message">
+                  <Link
+                    to={{
+                      pathname: `/admin/chatting/${row.id}`,
+                      obj: {
+                        message_type: "4",
+                        query_No: row.assign_no,
+                        query_id: row.id,
+                        routes: `/admin/queriestab`
+                      }
+                    }}
+                  >
+                    <i
+                      class="fa fa-comments-o"
+                      style={{
+                        fontSize: 16,
+                        cursor: "pointer",
+                        marginLeft: "8px",
+                        color: "blue"
+                      }}
+                    ></i>
+                  </Link>
+                </div>
+
               </div>
 
 
@@ -253,7 +276,7 @@ function PendingAllocation({ CountPendingForAllocation }) {
           />
         </CardHeader>
         <CardBody>
-        <Records records={records} />
+          <Records records={records} />
           <BootstrapTable
             bootstrap4
             keyField="id"

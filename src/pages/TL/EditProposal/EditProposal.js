@@ -109,7 +109,6 @@ function EditComponent() {
     console.log("date", date);
 
 
-
     var lumsum = value.p_inst_date
     setDate(lumsum)
 
@@ -138,6 +137,7 @@ function EditComponent() {
         function myFunction(total, value) {
           return Number(total) + Number(value);
         }
+<<<<<<< HEAD
         if (value.p_fixed != sum) {
           console.log(`installment amount should be eqaul to ${value.p_fixed}`)
           Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
@@ -146,6 +146,21 @@ function EditComponent() {
           axios({
             method: "POST",
             url: `${baseUrl}/tl/uploadProposal`,
+=======
+        console.log(due_date)
+        if (value.p_fixed != sum) {
+          console.log(due_date)
+         
+          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+          return false
+        }
+        else{
+          console.log(due_date)
+          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+          axios({
+            method: "POST",
+            url: `${baseUrl}/tl/updateProposal`,
+>>>>>>> dashboard
             data: formData,
           })
           .then(function (response) {
@@ -417,73 +432,3 @@ const noInstallments = [
   },
 ];
 
-
-
-
-{/* {store == "hourly" && (
-                  <div class="form-group">
-                    <label>Hourly basis</label>
-                    <input
-                      type="text"
-                      name="p_hourly"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Hourly basis"
-                    />
-                  </div>
-                )}
-                {store == "mixed" && (
-                  <div>
-                    <div class="form-group">
-                      <label>Mixed</label>
-                      <input
-                        type="text"
-                        name="p_fixed"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Fixed Price"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        type="text"
-                        name="p_hourly"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Hourly basis"
-                      />
-                    </div>
-                  </div>
-                )} */}
-{/* <Select
-                    options={paymentsTerms}
-                    value={payment}
-                  // defaultValue={payment}
-                  /> */}
-
-{/* <select
-                    className="form-control"
-                    name="p_payment_terms"
-                    aria-label="Default select example"
-                    ref={register}
-                    onChange={(e) => setPayment(e.target.value)}
-
-                  >
-                    <option value="">--select--</option>
-                    <option value="Lumpsum">Lumpsum</option>
-                    <option value="Installment">Installment</option>
-                  </select> */}
-
-{/* <select
-                        className="form-control"
-                        name="p_no_installments"
-                        aria-label="Default select example"
-                        ref={register}
-                        onChange={(e) => setInstallment(e.target.value)}
-                      >
-                        <option value="">--select--</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select> */}

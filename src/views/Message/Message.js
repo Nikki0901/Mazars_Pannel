@@ -90,8 +90,7 @@ function Message(props) {
         },
         {
             text: "Query No",
-            dataField: "assign_no",
-            sort: true,
+            dataField: "assign_no",      
             headerStyle: () => {
                 return { fontSize: "12px", width: "30px" };
             },
@@ -107,7 +106,6 @@ function Message(props) {
         },
         {
             text: "Message",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px", width: "180px" };
             },

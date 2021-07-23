@@ -84,8 +84,7 @@ function AllQueriesData() {
         },
         {
             text: "Query No",
-            dataField: "assign_no",
-            sort: true,
+            dataField: "assign_no",           
             headerStyle: () => {
                 return { fontSize: "12px" };
             },
@@ -125,7 +124,6 @@ function AllQueriesData() {
         {
             text: "Status",
             dataField: "",
-            sort: true,
             headerStyle: () => {
                 return { fontSize: "12px" };
             },

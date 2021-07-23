@@ -88,7 +88,6 @@ function InprogressAllocation() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -131,7 +130,6 @@ function InprogressAllocation() {
     {
       text: "Status",
       dataField: "",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
