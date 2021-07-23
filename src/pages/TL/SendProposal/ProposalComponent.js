@@ -223,14 +223,7 @@ console.log(lumsum)
   const handleChange = (e) => {
     console.log("val-", e.target.value);
     if (isNaN(e.target.value)) {
-<<<<<<< HEAD
-      setdiserror("Please enter digit only");
-    }
-    else{
-      setdiserror("");
-=======
       Alerts.ErrorNormal("Please enter only digit")
->>>>>>> dashboard
     }
     setTotalAmount(e.target.value);
   };

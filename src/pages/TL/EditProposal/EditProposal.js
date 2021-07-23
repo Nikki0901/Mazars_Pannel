@@ -137,16 +137,6 @@ function EditComponent() {
         function myFunction(total, value) {
           return Number(total) + Number(value);
         }
-<<<<<<< HEAD
-        if (value.p_fixed != sum) {
-          console.log(`installment amount should be eqaul to ${value.p_fixed}`)
-          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
-        }
-        else{
-          axios({
-            method: "POST",
-            url: `${baseUrl}/tl/uploadProposal`,
-=======
         console.log(due_date)
         if (value.p_fixed != sum) {
           console.log(due_date)
@@ -160,7 +150,6 @@ function EditComponent() {
           axios({
             method: "POST",
             url: `${baseUrl}/tl/updateProposal`,
->>>>>>> dashboard
             data: formData,
           })
           .then(function (response) {

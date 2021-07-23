@@ -17,14 +17,7 @@ export default class Payment extends React.Component {
         console.log("props", this.props.totalAmount)
         
         if(isNaN(e.target.value)) {
-<<<<<<< HEAD
-            this.setState({error : "Pleae enter number only"})
-        }
-        else{
-            this.setState({error : ""})
-=======
             Alerts.ErrorNormal("Please enter only digit")
->>>>>>> dashboard
         }
         var totalAmount = this.props.totalAmount
 
