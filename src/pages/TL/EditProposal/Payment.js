@@ -7,28 +7,16 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
-<<<<<<< HEAD
-            error: ""
-=======
            error : ""
->>>>>>> origin/prateek
         };
     }
 
     handleChange1(i, e) {
-<<<<<<< HEAD
-        if (isNaN(e.target.value)) {
-            this.setState({ error: "Please insert only digit" })
-        }
-        else {
-            this.setState({ error: "" })
-=======
         if(isNaN(e.target.value)) {
           this.setState({error : "Please insert only digit"})
         }
         else{
             this.setState({error : ""})
->>>>>>> origin/prateek
         }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
@@ -74,17 +62,9 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
-<<<<<<< HEAD
-                        <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
-                    </div>
-
-
-=======
                          <p style={{"display" : "block", "color" : "red"}}>{this.state.error}</p>
                     </div>
-                   
-                   
->>>>>>> origin/prateek
+                              
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input

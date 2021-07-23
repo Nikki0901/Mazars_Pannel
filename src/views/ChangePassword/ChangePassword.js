@@ -3,13 +3,8 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/style.css";
 import "../../assets/css/media.css";
 import axios from "axios";
-<<<<<<< HEAD
-import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
-=======
 import {Link} from 'react-router-dom';
 import {Button } from '@material-ui/core';
->>>>>>> origin/prateek
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import Layout from "../../components/Layout/Layout";
@@ -157,17 +152,10 @@ function ChangePassword(props) {
                 <div className="mb-3">
                   <label className="form-label">Confirm Password</label>
                   <input
-<<<<<<< HEAD
-                    onPaste={((e) => {
-                      e.preventDefault();
-                      return false;
-                    })}
-=======
                  onPaste={((e) => {
                   e.preventDefault();
                   return false;
                 })}
->>>>>>> origin/prateek
                     type={isPasswordShow2 ? "text" : "password"}
                     id="password"
                     className={classNames("form-control", {
@@ -199,14 +187,6 @@ function ChangePassword(props) {
             <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
-<<<<<<< HEAD
-            <Link to="/customer/dashboard" style={{ "margin": "10px" }}>
-              <Button type="submit" variant="contained" color="secondary">
-                Cancle
-              </Button>
-            </Link>
-
-=======
              <Link to="/customer/dashboard" style={{"margin" :"10px"}}>
              <Button type="submit" variant="contained" color="secondary">
              Cancle
@@ -214,7 +194,6 @@ function ChangePassword(props) {
              </Link>
              
              
->>>>>>> origin/prateek
           </form>
         </div>
       </div>
