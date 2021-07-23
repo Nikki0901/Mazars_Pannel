@@ -90,7 +90,7 @@ function Dashboard() {
               accepted_proposals: response.data.result.proposal.accepted_proposals,
               declined: response.data.result.proposal["customer_declined_proposals "],
 
-
+             
               allassignment: response.data.result.assignment.allassignment,
               inprogress: response.data.result.assignment.inprogress,
               complete: response.data.result.assignment.complete,
@@ -258,7 +258,7 @@ function Dashboard() {
             <thead className="assignment_thead">
               <tr>
                 <th className="left_side">All Assignments</th>
-                <th>{allassignment}</th>
+                <th>{allproposal ? allassignment : ""}</th>
               </tr>
             </thead>
           </table>
@@ -301,7 +301,7 @@ function Dashboard() {
             <thead className="payment_thead">
               <tr>
                 <th className="left_side">All Payments</th>
-                <th>{totalpayment}</th>
+                <th>{allassignment? totalpayment: ""}</th>
               </tr>
             </thead>
           </table>

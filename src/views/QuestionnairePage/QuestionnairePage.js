@@ -26,22 +26,39 @@ function Questionnaire(props) {
   const userNameId = window.localStorage.getItem("name");
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
-const [custError, setcustError] = useState([])
+  const [custError, setcustError] = useState([])
+ 
   const [modal, setModal] = useState(true);
   const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
+  const [selectError, setSelectError] = useState()
 
 
 const valiFun = (e) =>{
   setcustError("")
 }
+const purPoseQuery = (e) => {
+  setSelectError("")
+  setPurposeOption(e)
+ 
+}
   const onSubmit = (value) => {
     console.log("value :", value);
-   
+    if(setPurposeOption ==''){
+      setSelectError("Please select atleast one value")
+    }
+   if(selectedOption == ''){
+     setSelectError("Please select atleast one value")
+   }
+   else {
+     setSelectError("")
+   }
     const a = value.p_fact;
+    const b = value.p_case_name;
     if (a == ''){
     setcustError("This feild is required");
     }
+    
    
     else {
       setcustError(" ");
@@ -241,8 +258,10 @@ const valiFun = (e) =>{
                       type="text"
                       name="p_case_name"
                       ref={register}
+                      
                       className="form-control"
                     />
+                  
                   </div>
                 </div>
 
@@ -255,7 +274,7 @@ const valiFun = (e) =>{
                       isMulti
                       options={assessment_year}
                     />
-                      
+                   
                   </div>
                 </div>
 
@@ -340,10 +359,11 @@ const valiFun = (e) =>{
                     </label>
                     <Select
                       closeMenuOnSelect={false}
-                      onChange={setPurposeOption}
+                      onChange={purPoseQuery}
                       isMulti
                       options={purpose}
                     />
+                       <p style={{"color" : "red"}}>{selectError}</p>
                   </div>
                 </div>
               </div>
