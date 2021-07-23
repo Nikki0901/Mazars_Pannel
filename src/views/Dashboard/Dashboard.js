@@ -90,7 +90,7 @@ function Dashboard() {
               accepted_proposals: response.data.result.proposal.accepted_proposals,
               declined: response.data.result.proposal["customer_declined_proposals "],
 
-             
+
               allassignment: response.data.result.assignment.allassignment,
               inprogress: response.data.result.assignment.inprogress,
               complete: response.data.result.assignment.complete,
@@ -120,8 +120,9 @@ function Dashboard() {
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
-
+ {allQueries.total?
       <div className="row">
+        
         <div className="col-md-3 content_header">
           <table className="table table-striped first main_table">
             <thead className="query_thead">
@@ -200,8 +201,7 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
-{allQueries.total?
-<>
+{allQueries.allproposal? <>
         <div className="col-md-3 content_header">
 
           <table className="table table-striped fifth main_table">
@@ -253,15 +253,13 @@ function Dashboard() {
 
 
         </div>
-</> : ""}
-{allQueries.allassignment?
-<>
+{allQueries.allassignment? <>
         <div className="col-md-3 content_header">
           <table className="table table-striped ninth main_table">
             <thead className="assignment_thead">
               <tr>
                 <th className="left_side">All Assignments</th>
-                <th>{allproposal ? allassignment : ""}</th>
+                <th>{allassignment}</th>
               </tr>
             </thead>
           </table>
@@ -296,12 +294,11 @@ function Dashboard() {
             </thead>
           </table>
         </div>
-</>
-: ""}
 
+{allQueries.totalpayment? <>
         <div className="col-md-3 content_header">
-{allQueries.allassignment ? <div>
-  <table className="table table-striped twelvth main_table">
+
+          <table className="table table-striped twelvth main_table">
             <thead className="payment_thead">
               <tr>
                 <th className="left_side">All Payments</th>
@@ -326,10 +323,8 @@ function Dashboard() {
               </tr>
             </thead>
           </table>
-  </div>: ""}
-          
         </div>
-      </div>
+</> : "" } </> : "" } </> : "" }  </div> : ""}
 
     </Layout>
   );
