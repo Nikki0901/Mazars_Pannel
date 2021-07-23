@@ -200,7 +200,8 @@ function Dashboard() {
             </tbody>
           </table>
         </div>
-
+{allQueries.total?
+<div>
         <div className="col-md-3 content_header">
 
           <table className="table table-striped fifth main_table">
@@ -252,7 +253,9 @@ function Dashboard() {
 
 
         </div>
-
+</div> : ""}
+{allQueries.allassignment?
+<div>
         <div className="col-md-3 content_header">
           <table className="table table-striped ninth main_table">
             <thead className="assignment_thead">
@@ -293,15 +296,16 @@ function Dashboard() {
             </thead>
           </table>
         </div>
-
+</div>
+: ""}
 
         <div className="col-md-3 content_header">
-
-          <table className="table table-striped twelvth main_table">
+{allQueries.allassignment ? <div>
+  <table className="table table-striped twelvth main_table">
             <thead className="payment_thead">
               <tr>
                 <th className="left_side">All Payments</th>
-                <th>{allassignment? totalpayment: ""}</th>
+                <th>{totalpayment}</th>
               </tr>
             </thead>
           </table>
@@ -322,6 +326,8 @@ function Dashboard() {
               </tr>
             </thead>
           </table>
+  </div>: ""}
+          
         </div>
       </div>
 
