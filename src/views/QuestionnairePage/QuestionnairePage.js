@@ -40,26 +40,19 @@ const valiFun = (e) =>{
 const purPoseQuery = (e) => {
   setSelectError("")
   setPurposeOption(e)
- 
 }
   const onSubmit = (value) => {
-    console.log("value :", value);
-    if(setPurposeOption ==''){
-      setSelectError("Please select atleast one value")
-    }
-   if(selectedOption == ''){
-     setSelectError("Please select atleast one value")
-   }
-   else {
-     setSelectError("")
-   }
     const a = value.p_fact;
-    const b = value.p_case_name;
+    
     if (a == ''){
+     
     setcustError("This feild is required");
+    console.log("secondValidation")
     }
     
-   
+   else if(purposeOption === "undefined" || purposeOption === '' || purposeOption.length ===0 || purposeOption === "null"){
+     setSelectError("Please select atlease one value")
+   }
     else {
       setcustError(" ");
       setLoad(true);
