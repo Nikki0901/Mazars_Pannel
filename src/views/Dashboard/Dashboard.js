@@ -120,7 +120,7 @@ function Dashboard() {
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
- {allQueries.total?
+
       <div className="row">
         
         <div className="col-md-3 content_header">
