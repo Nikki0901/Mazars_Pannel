@@ -112,6 +112,7 @@ function ChangePassword(props) {
               <div className="col-md-12">
                 <div className="mb-3">
                   <label className="form-label">New Password</label>
+                  
                   <input
                     type={isPasswordShow ? "text" : "password"}
                     id="password"

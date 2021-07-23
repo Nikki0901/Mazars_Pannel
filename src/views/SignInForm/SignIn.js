@@ -57,11 +57,6 @@ function SignIn(props) {
           Alerts.SuccessLogin()
           localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
-
-          //
-          localStorage.setItem("token", JSON.stringify("test"));
-
-          
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
@@ -126,12 +121,10 @@ function SignIn(props) {
                       placeholder="Enter Password"
                       ref={register}
                     />
-                    
                     <i
                       className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
                       onClick={togglePasssword}
                     />
-
                     {errors.p_password && (
                       <div className="invalid-feedback">
                         {errors.p_password.message}

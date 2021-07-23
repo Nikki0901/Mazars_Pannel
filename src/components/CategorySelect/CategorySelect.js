@@ -16,10 +16,11 @@ import classNames from "classnames";
 const Schema = yup.object().shape({
   p_tax: yup.string().required("required"),
   p_tax2: yup.string().required("required"),
+
 });
 
 
-function CategorySelect({ addfreshbtn, startbtn }) {
+function CategorySelect({ addfreshbtn, startbtn }, props) {
   const { handleSubmit, register, errors } = useForm({
     resolver: yupResolver(Schema),
   });
@@ -37,15 +38,20 @@ function CategorySelect({ addfreshbtn, startbtn }) {
   const validation = () => {
     toggle()
   }
+  const validation2 = () => {
+    toggle2()
+  }
 
   const toggle2 = () => {
-    if (store2) {
+    if (store2 && store) {
       localStorage.setItem("category", JSON.stringify(store2));
+      window.location.replace("questionnaire.html#/customer/addFresh")
     }
   };
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
+
 
   const [store, setStore] = useState("");
   const [store2, setStore2] = useState(null);
@@ -141,6 +147,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
             </div>
 
             <div class="form-group">
+
               {startbtn && (
                 <button
                   type="submit"
@@ -152,16 +159,39 @@ function CategorySelect({ addfreshbtn, startbtn }) {
               )}
 
               {addfreshbtn && (
-                <Link
+                <button
+                  type="submit"
+                  class="btn btn-primary  btn-block"
+                  onClick={e => validation2()} //
+                >
+                  Submit
+                </button>
+              )}
+              {/* <Link
+                  className="form-control"
+                  name="p_tax3"
+                  //
+                  className={classNames("form-control", {
+                    "is-invalid": errors.p_tax3,
+                  })}
+
                   to="/customer/addfresh"
                   type="submit"
                   class="btn btn-primary  btn-block"
-                  onClick={toggle2}
-                >
-                  yuigt7g67tf6f
-                </Link>
+                  onClick={e => validation()}
+                > 
+
+              {errors.p_tax3 && (
+                <div className="invalid-feedback">
+                  {errors.p_tax3.message}
+                </div>
               )}
+              Submitt
+                </Link> */}
+
             </div>
+
+
           </form>
 
           <Modal isOpen={modal} toggle={toggle}>
@@ -188,6 +218,7 @@ function CategorySelect({ addfreshbtn, startbtn }) {
               </Link>
             </div>
           </Modal>
+
         </div>
       </div>
     </>

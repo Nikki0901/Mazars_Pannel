@@ -7,6 +7,8 @@ import axios from "axios";
 import { baseUrl, ImageUrl } from "../../config/config";
 import * as yup from "yup";
 import { useAlert } from "react-alert";
+import classNames from "classnames";
+
 import {
   Card,
   CardHeader,
@@ -20,7 +22,9 @@ import Select from "react-select";
 import { Spinner } from "reactstrap";
 import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
-
+const Schema = yup.object().shape({
+  p_name: yup.string().required("required"),
+});
 
 function AddFreshAssingment(props) {
   const alert = useAlert();
@@ -28,11 +32,8 @@ function AddFreshAssingment(props) {
   const [load, setLoad] = useState(false);
 
   const { handleSubmit, register, errors, reset, control } = useForm({
-    defaultValues: {
-      users: [{ query: "" }],
-    },
+    resolver: yupResolver(Schema),
   });
-
   const { append, remove, fields } = useFieldArray({
     control,
     name: "users",
@@ -46,7 +47,7 @@ function AddFreshAssingment(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    setLoad(true);
+    // setLoad(true);
 
     let formData = new FormData();
 
@@ -169,7 +170,16 @@ function AddFreshAssingment(props) {
                         rows="6"
                         name="p_fact"
                         ref={register}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_name,
+                        })}
+
                       ></textarea>
+                      {errors.p_name && (
+                        <div className="invalid-feedback">
+                          {errors.p_name.message}{" "}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -195,6 +205,7 @@ function AddFreshAssingment(props) {
                           name={`users[${index}].query`}
                           placeholder="Specify your query"
                           defaultValue={`${item.query}`}
+
                         />
                         <div
                           className="btn btn-primary ml-2"
@@ -215,6 +226,7 @@ function AddFreshAssingment(props) {
                         ref={register}
                         className="form-control"
                       />
+
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -225,7 +237,16 @@ function AddFreshAssingment(props) {
                         onChange={setSelectedOption}
                         isMulti
                         options={assessment_year}
+                        register={register}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_name,
+                        })}
                       />
+                      {errors.p_name && (
+                        <div className="invalid-feedback">
+                          {errors.p_name.message}{" "}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -314,7 +335,15 @@ function AddFreshAssingment(props) {
                         onChange={setPurposeOption}
                         isMulti
                         options={purpose}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_name,
+                        })}
                       />
+                      {errors.p_name && (
+                        <div className="invalid-feedback">
+                          {errors.p_name.message}{" "}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

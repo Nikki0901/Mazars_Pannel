@@ -29,8 +29,8 @@ const Schema = yup.object().shape({
   p_password: yup
     .string()
     .required("required password")
-    .min(5, "at least 5 digits")
-    .max(20, "max 20 digits"),
+    .matches(/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars"),
+
   cp_password: yup.string().when("p_password", {
     is: val => (val && val.length > 0 ? true : false),
     then: yup.string().oneOf(
@@ -67,7 +67,7 @@ function SignUp(props) {
   };
 
 
- 
+
 
 
   useEffect(() => {
@@ -284,7 +284,7 @@ function SignUp(props) {
                       ref={register}
                       placeholder="Enter Password"
                     />
-                      <i
+                    <i
                       className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
                       onClick={togglePasssword}
                     />
