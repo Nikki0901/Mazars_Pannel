@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-// import "../../assets/css/style.css";
-// import "../../assets/css/media.css";
 import { useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
@@ -34,54 +32,17 @@ function RegisterYourSelf(props) {
       setotpTime(x)
     }
   }
-  // const getTimeRemaining = (endtime) => {
-  //   const total = Date.parse(endtime) - Date.parse(new Date());
-  //   const seconds = Math.floor((total / 1000) % 60);
-  //   const minutes = Math.floor((total / 1000 / 60) % 60);
-  //   const hours = Math.floor((total / 1000 * 60 * 60) % 24);
-  //   const days = Math.floor(total / (1000 * 60 * 60 * 24));
-  //   return {
-  //     total, days, hours, minutes, seconds
-  //   };
-  // }
-  var b = null;
-  // const startTimer = (deadline) => {
-  //   let { total, days, hours, minutes, seconds } = getTimeRemaining(deadline);
-  //   if (total >= 0) {
-  //     setTimer(
-  //       (hours > 9 ? hours : "0" + hours) + ":" +
-  //       (minutes > 9 ? minutes : "0" + minutes) + ":" +
-  //       (seconds > 9 ? seconds : "0" + seconds)
-  //     )
-  //   }
-  //   else {
-  //     clearInterval(intervalRef.current);
-  //   }
-  // }
 
+  var b = null;
   const getOtp = () => {
     setInterval(function () {
       myFun();
     }, 1000);
   }
-
   async function logindata(name, e) {
     let newdata = { ...loginfild, [name]: e }
     setloginfild(newdata)
-
-    // let result = await fetch("https://mazarsapi.multitvsolution.com/mazarapi/v1/customers/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Accept": "application/json"
-    //   },
-    //   body: JSON.stringify(inputdata)
-    // })
-    //   .then(res => res.json.stringify())
-    //   .then(result => {
-    //     console.log(result)
-    //   })
-    console.log(loginfild)
+     console.log(loginfild)
   }
 
   const verifyotp = () => {
@@ -115,8 +76,6 @@ function RegisterYourSelf(props) {
   }
 
   const regenrateotp = () => {
-    // otime = 180
-    // getOtp()
     if (otp == "") {
       alert("fill otp")
     } else {
@@ -173,7 +132,6 @@ function RegisterYourSelf(props) {
     }
   }
 
-  //Testing for error
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -220,8 +178,6 @@ function RegisterYourSelf(props) {
                 </>
                 : " "
               }
-
-              {/* <Button variant="contained" color="primary"> Log In</Button> */}
               {otowrong ? <Button variant="contained" size="small" onClick={e => regenrateotp()} style={{ fontSize: "14px" }}>Re Send Otp</Button> : ""}
               {userid ? "" : <Button variant="contained" color="primary" onClick={e => login()} style={{ fontSize: "14px" }}> Log In</Button>}
               <div>
