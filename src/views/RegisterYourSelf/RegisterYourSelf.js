@@ -39,6 +39,7 @@ function RegisterYourSelf(props) {
       myFun();
     }, 1000);
   }
+
   async function logindata(name, e) {
     let newdata = { ...loginfild, [name]: e }
     setloginfild(newdata)
@@ -250,3 +251,5 @@ export default RegisterYourSelf;
 // export default RegisterYourSelf;
 
 
+
+// /nksxjjfldkfhk
