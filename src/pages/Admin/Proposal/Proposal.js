@@ -17,6 +17,8 @@ function Proposal(props) {
   const [acceptedProposalCount, setAcceptedProposalCount] = useState("");
   const [declinedProposalCount, setDeclinedProposalCount] = useState("");
 
+
+
   useEffect(() => {
     const getAllProposal = () => {
       axios

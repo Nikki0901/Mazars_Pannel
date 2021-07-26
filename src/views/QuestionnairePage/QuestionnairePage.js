@@ -14,22 +14,28 @@ import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
 
 
+
+
 function Questionnaire(props) {
   const alert = useAlert();
-  const { handleSubmit, register, errors, reset, control } = useForm();
+  const { handleSubmit, register, errors, reset, control } = useForm({
+    defaultValues: {
+      users: [{ query: "" }],
+    },
+  });
+
   const { append, remove, fields } = useFieldArray({
     control,
-    name: "specific",
+    name: "users",
   });
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
   const userNameId = window.localStorage.getItem("name");
+
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
   const [custError, setcustError] = useState([])
 
-  const [modal, setModal] = useState(true);
-  const toggle = () => setModal(!modal);
   const [load, setLoad] = useState(false);
   const [selectError, setSelectError] = useState()
 
@@ -42,6 +48,8 @@ function Questionnaire(props) {
     setPurposeOption(e)
 
   }
+
+
   const onSubmit = (value) => {
     console.log("value :", value);
     if (setPurposeOption == '') {
@@ -59,7 +67,6 @@ function Questionnaire(props) {
       setcustError("This feild is required");
     }
 
-
     else {
       setcustError(" ");
       setLoad(true);
@@ -71,11 +78,11 @@ function Questionnaire(props) {
           console.log("pics", value.upload[i].pics[0]);
           let a = value.upload[i].pics[0];
           formData.append("upload_1[]", a);
-        }
+        }   
       }
 
       formData.append("fact", value.p_fact);
-      formData.append("specific", JSON.stringify(value.specific));
+      formData.append("specific", JSON.stringify(value.users));
       formData.append("timelines", value.p_timelines);
       formData.append("user", JSON.parse(userId));
       formData.append("cid", JSON.parse(category));
@@ -88,7 +95,6 @@ function Questionnaire(props) {
         "printout_physically_assigned",
         Number(value.p_format_physically)
       );
-
       formData.append("case_name", value.p_case_name);
       formData.append("assessment_year", JSON.stringify(selectedOption));
       formData.append("purpose", JSON.stringify(purposeOption));
@@ -105,9 +111,6 @@ function Questionnaire(props) {
           if (response.data.code === 1) {
             reset();
 
-            // var msg = response.data.message
-            // var variable = "Query Successfully Added"
-            // Alerts.SuccessMsg(variable, msg)
 
             var message = response.data.message
             if (message == "") {
@@ -151,38 +154,15 @@ function Questionnaire(props) {
           console.log("erroror - ", error);
         });
     }
-
-
   };
 
 
 
-
-
-  const SuccessMesg = () => {
-    return (
-      <>
-        <Modal isOpen={modal} toggle={toggle} size="sm">
-          <ModalHeader toggle={toggle}></ModalHeader>
-
-          <ModalBody>
-            <br />
-            <div class="modal-body">
-              <h1 style={{ textAlign: "center", fontSize: "1.5rem" }}>
-                {JSON.parse(userNameId)} , You have Successfully Registered
-              </h1>
-            </div>
-          </ModalBody>
-        </Modal>
-      </>
-    );
-  };
 
   return (
     <>
       <Header id={JSON.parse(userNameId)} />
       <div className="container">
-        {SuccessMesg()}
         <div className="form">
           <div className="heading">
             <h2>Basic Questionnaire</h2>
@@ -232,8 +212,9 @@ function Questionnaire(props) {
                               type="text"
                               className="form-control"
                               ref={register}
-                              name={`specific[${index}].query`}
+                              name={`users[${index}].query`}
                               placeholder="Specify your query"
+                              defaultValue={`${item.query}`}
                             />
                             <div
                               className="btn btn-primary ml-2"
@@ -290,7 +271,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_word"
                         ref={register}
-                      // value="1"
+                        defaultChecked
                       />
                       <label className="form-check-label">
                         Softcopy - Word/ Pdf
@@ -302,7 +283,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_digital"
                         ref={register}
-                      // value="1"
+
                       />
                       <label className="form-check-label">
                         SoftCopy- Digitally Signed
@@ -314,7 +295,7 @@ function Questionnaire(props) {
                         type="checkbox"
                         name="p_format_physically"
                         ref={register}
-                      // value="1"
+
                       />
                       <label className="form-check-label">
                         Printout- Physically Signed
@@ -335,7 +316,7 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Urgent, (4-5 Working Days)"
-                        defaultChecked
+
                       />
                       <label>Urgent, (4-5 Working Days)</label>
                     </div>
@@ -346,6 +327,7 @@ function Questionnaire(props) {
                         name="p_timelines"
                         ref={register}
                         value="Regular (10-12 Working Days)"
+                        defaultChecked
                       />
                       <label>Regular (10-12 Working Days)</label>
                     </div>

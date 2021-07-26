@@ -30,7 +30,7 @@ function EditComponent() {
   const [store, setStore] = useState(null);
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
- 
+
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
@@ -91,7 +91,6 @@ function EditComponent() {
   };
 
 
-
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`${baseUrl}/customers/allname?id=${id}`);
@@ -122,7 +121,6 @@ function EditComponent() {
     formData.append("description", value.description);
     formData.append("customer_id", custId);
     formData.append("assign_id", id);
-
     formData.append("amount_type", "fixed");
     formData.append("amount", value.p_fixed);
     formData.append("installment_amount", amount);
@@ -133,21 +131,21 @@ function EditComponent() {
       formData.append("due_date", lumsum) :
       formData.append("due_date", date)
 
-      if (payment.value == "installment") {
-        let sum = amount.reduce(myFunction)
-        function myFunction(total, value) {
-          return Number(total) + Number(value);
-        }
-        if (value.p_fixed != sum) {
-          console.log(`installment amount should be eqaul to ${value.p_fixed}`)
-          Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
-        }
-        else{
-          axios({
-            method: "POST",
-            url: `${baseUrl}/tl/updateProposal`,
-            data: formData,
-          })
+    if (payment.value == "installment") {
+      let sum = amount.reduce(myFunction)
+      function myFunction(total, value) {
+        return Number(total) + Number(value);
+      }
+      if (value.p_fixed != sum) {
+        console.log(`installment amount should be eqaul to ${value.p_fixed}`)
+        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+      }
+      else {
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/updateProposal`,
+          data: formData,
+        })
           .then(function (response) {
             console.log("res-", response);
             if (response.data.code === 1) {
@@ -162,28 +160,28 @@ function EditComponent() {
           .catch((error) => {
             console.log("erroror - ", error);
           });
-        }
       }
-   else{
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/updateProposal`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          // getQuery();
-
-          var variable = "Proposal Updated Successfully "
-          Alerts.SuccessNormal(variable)
-          history.push("/teamleader/proposal");
-        }
+    }
+    else {
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/updateProposal`,
+        data: formData,
       })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-   }
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            // getQuery();
+
+            var variable = "Proposal Updated Successfully "
+            Alerts.SuccessNormal(variable)
+            history.push("/teamleader/proposal");
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
   };
 
 
@@ -192,10 +190,10 @@ function EditComponent() {
     if (isNaN(e.target.value)) {
       setdiserror("Please enter digit only");
     }
-    else{
+    else {
       setdiserror("");
     }
-    
+
   };
 
   const paymentAmount = (data) => {
@@ -289,10 +287,10 @@ function EditComponent() {
                     ref={register}
                     placeholder="Enter Fixed Price"
                     defaultValue={fixed_amount}
-                    onChange = {handleChange}
+                    onChange={handleChange}
                   />
                 </div>
-                  <p style={{"color" : "red"}}>{diserror}</p>
+                <p style={{ "color": "red" }}>{diserror}</p>
 
                 <div class="form-group">
                   <label>Scope of Work</label>

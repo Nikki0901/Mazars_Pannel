@@ -13,7 +13,6 @@ import {
     Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import ChatComponent from "./ChatComponent";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -21,7 +20,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
 import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
-
+import ViewComponent from "./ViewComponent";
 
 
 
@@ -33,15 +32,16 @@ function ProposalTab() {
     const [proposalCount, setCountProposal] = useState("");
     const [records, setRecords] = useState([]);
 
-    const [id, setId] = useState(null);
     const [reject, setRejected] = useState(true);
 
-    const [addPaymentModal, setPaymentModal] = useState(false);
-    const chatHandler = (key) => {
+    const [viewData, setViewData] = useState({});
+    const [viewModal, setViewModal] = useState(false);
+    const ViewHandler = (key) => {
         console.log(key);
-        setPaymentModal(!addPaymentModal);
-        setId(key.q_id);
+        setViewModal(!viewModal);
+        setViewData(key);
     };
+
 
     useEffect(() => {
         getProposalData();
@@ -242,65 +242,6 @@ function ProposalTab() {
             },
         },
         {
-            text: "Amount Paid",
-            dataField: "paid_amount",
-            sort: true,
-            style: {
-                fontSize: "11px",
-                color: "#064606",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px", color: "#064606" };
-            },
-        },
-        {
-            text: "Amount Outstanding",
-            dataField: "",
-            sort: true,
-            style: {
-                fontSize: "11px",
-                color: "darkred",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px", color: "darkred" };
-            },
-            formatter: function amountOutstading(cell, row) {
-                var a = row.accepted_amount;
-                var p = row.paid_amount;
-                return a - p;
-            },
-        },
-        {
-            text: "Date of Payment",
-            dataField: "cust_paid_date",
-            sort: true,
-            style: {
-                fontSize: "11px",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px" };
-            },
-            formatter: function dateFormat(cell, row) {
-                console.log("dt", row.cust_paid_date);
-                var oldDate = row.cust_paid_date;
-                if (oldDate == null) {
-                    return null;
-                }
-                return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-            },
-        },
-        {
-            text: "Date of Completion",
-            dataField: "",
-            sort: true,
-            style: {
-                fontSize: "11px",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px" };
-            },
-        },
-        {
             text: "Action",
             dataField: "",
             style: {
@@ -312,59 +253,63 @@ function ProposalTab() {
             formatter: function (cell, row) {
                 return (
                     <>
-
                         {row.statuscode === "6" ? null : (
-                            <div>
-                                {row.negotiated_amount === "0" &&
-                                    row.accepted_amount === "0" ? (
-                                    <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
-                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
-                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>
+                                    {row.negotiated_amount === "0" &&
+                                        row.accepted_amount === "0" ? (
+                                        <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
+                                            <div style={{ cursor: "pointer" }} title="Proposal Accepted">
+                                                <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                    <i
+                                                        class="fa fa-check"
+                                                        style={{
+                                                            color: "blue",
+                                                            fontSize: "16px",
+                                                        }}
+                                                    ></i>
+                                                </Link>
+                                            </div>
+                                            <div style={{ cursor: "pointer" }} title="Rejected">
                                                 <i
-                                                    class="fa fa-check"
-                                                    style={{
-                                                        color: "blue",
-                                                        fontSize: "16px",
-                                                    }}
+                                                    class="fa fa-times"
+                                                    style={{ color: "red", fontSize: "16px" }}
+                                                    onClick={() => rejected(row.q_id)}
                                                 ></i>
-                                            </Link>
-                                        </div>
-
-                                        <div style={{ cursor: "pointer" }} title="Rejected">
-                                            <i
-                                                class="fa fa-times"
-                                                style={{ color: "red", fontSize: "16px" }}
-                                                onClick={() => rejected(row.q_id)}
-                                            ></i>
-                                        </div>
-
-
-                                        <div title="Send Message">
-                                            <Link
-                                                to={{
-                                                    pathname: `/customer/chatting/${row.q_id}`,
-                                                    obj: {
-                                                        message_type: "2",
-                                                        query_No: row.assign_no,
-                                                        query_id: row.q_id,
-                                                        routes: `/customer/proposal`
-                                                    }
-                                                }}
-                                            >
-                                                <i
-                                                    class="fa fa-comments-o"
-                                                    style={{
-                                                        fontSize: 16,
-                                                        cursor: "pointer",
-                                                        marginLeft: "8px",
-                                                        color: "blue"
+                                            </div>
+                                            <div title="Send Message">
+                                                <Link
+                                                    to={{
+                                                        pathname: `/customer/chatting/${row.q_id}`,
+                                                        obj: {
+                                                            message_type: "2",
+                                                            query_No: row.assign_no,
+                                                            query_id: row.q_id,
+                                                            routes: `/customer/proposal`
+                                                        }
                                                     }}
-                                                ></i>
-                                            </Link>
+                                                >
+                                                    <i
+                                                        class="fa fa-comments-o"
+                                                        style={{
+                                                            fontSize: 16,
+                                                            cursor: "pointer",
+                                                            marginLeft: "8px",
+                                                            color: "blue"
+                                                        }}
+                                                    ></i>
+                                                </Link>
+                                            </div>
                                         </div>
-
-                                    </div>
-                                ) : null}
+                                    ) : null}
+                                </div>
+                                <div style={{ cursor: "pointer" }} title="View Proposal">
+                                    <i
+                                        class="fa fa-eye"
+                                        style={{ color: "green", fontSize: "16px" }}
+                                        onClick={() => ViewHandler(row)}
+                                    ></i>
+                                </div>
                             </div>
                         )}
 
@@ -457,12 +402,14 @@ function ProposalTab() {
                         columns={columns}
                         classes="table-responsive"
                     />
-                    <ChatComponent
-                        chatHandler={chatHandler}
-                        addPaymentModal={addPaymentModal}
-                        id={id}
+
+                    <ViewComponent
+                        ViewHandler={ViewHandler}
+                        viewModal={viewModal}
+                        viewData={viewData}
                         getProposalData={getProposalData}
                     />
+
                 </CardBody>
             </Card>
         </div>

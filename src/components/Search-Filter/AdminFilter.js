@@ -21,8 +21,10 @@ function AdminFilter(props) {
     pendingAlloation,
     allQueries,
     assignment,
-    paymentStatus,
-    allProposal
+    allProposal,
+    AllPayment,
+    paid,
+    unpaid,
   } = props;
 
   const [selectedData, setSelectedData] = useState([]);
@@ -84,28 +86,7 @@ function AdminFilter(props) {
   const onSubmit = (data) => {
 
     console.log("data", data)
-    // console.log("End data :", data.p_dateTo);
 
-    // var dateto = data.p_dateTo
-
-    // var end_date;
-    // if (dateto == "") {
-
-    //   console.log("call")
-
-    // var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
-    // console.log("current_date :", current_date);
-    //   end_date = current_date
-
-    //   // if (current_date) {
-    //   //   setItem(current_date)
-    //   // }
-
-    // } else {
-    //   end_date = dateto
-    //   // setItem(dateto)
-
-    // }
 
     console.log("item", item)
     console.log("data", data)
@@ -224,10 +205,42 @@ function AdminFilter(props) {
         });
     }
 
-    if (paymentStatus == "paymentStatus") {
+    if (AllPayment == "AllPayment") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (paid == "paid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (unpaid == "unpaid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -423,7 +436,7 @@ function AdminFilter(props) {
                     </select>
                   )}
 
-                  {paymentStatus == "paymentStatus" && (
+                  {AllPayment == "AllPayment" && (
                     <select
                       className="form-select form-control"
                       name="p_status"
@@ -456,3 +469,27 @@ function AdminFilter(props) {
 }
 
 export default AdminFilter;
+
+
+   // console.log("End data :", data.p_dateTo);
+
+    // var dateto = data.p_dateTo
+
+    // var end_date;
+    // if (dateto == "") {
+
+    //   console.log("call")
+
+    // var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+    // console.log("current_date :", current_date);
+    //   end_date = current_date
+
+    //   // if (current_date) {
+    //   //   setItem(current_date)
+    //   // }
+
+    // } else {
+    //   end_date = dateto
+    //   // setItem(dateto)
+
+    // }

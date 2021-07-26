@@ -8,8 +8,7 @@ import AddAdditionalQuery from "./AddAdditionalQuery";
 import DraftReports from "./DraftReports";
 import CommonServices from "../../common/common";
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink, Card, Button,
-  CardTitle, CardText, Row, Col
+  TabContent, TabPane, Nav, NavItem, NavLink, Card, Row, Col
 } from 'reactstrap';
 import classnames from 'classnames';
 import Feedback from './Feedback'

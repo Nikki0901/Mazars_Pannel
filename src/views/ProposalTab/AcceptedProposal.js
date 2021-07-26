@@ -13,7 +13,6 @@ import {
     Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import ChatComponent from "./ChatComponent";
 import "./index.css";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -32,12 +31,7 @@ function AcceptedProposal() {
     const [id, setId] = useState(null);
     const [reject, setRejected] = useState(true);
 
-    const [addPaymentModal, setPaymentModal] = useState(false);
-    const chatHandler = (key) => {
-        console.log(key);
-        setPaymentModal(!addPaymentModal);
-        setId(key.q_id);
-    };
+
 
     useEffect(() => {
         getProposalData();
@@ -238,65 +232,6 @@ function AcceptedProposal() {
                 return { fontSize: "11px", color: "#21a3ce" };
             },
         },
-        {
-            text: "Amount Paid",
-            dataField: "paid_amount",
-            sort: true,
-            style: {
-                fontSize: "11px",
-                color: "#064606",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px", color: "#064606" };
-            },
-        },
-        {
-            text: "Amount Outstanding",
-            dataField: "",
-            sort: true,
-            style: {
-                fontSize: "11px",
-                color: "darkred",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px", color: "darkred" };
-            },
-            formatter: function amountOutstading(cell, row) {
-                var a = row.accepted_amount;
-                var p = row.paid_amount;
-                return a - p;
-            },
-        },
-        {
-            text: "Date of Payment",
-            dataField: "cust_paid_date",
-            sort: true,
-            style: {
-                fontSize: "11px",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px" };
-            },
-            formatter: function dateFormat(cell, row) {
-                console.log("dt", row.cust_paid_date);
-                var oldDate = row.cust_paid_date;
-                if (oldDate == null) {
-                    return null;
-                }
-                return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-            },
-        },
-        {
-            text: "Date of Completion",
-            dataField: "",
-            sort: true,
-            style: {
-                fontSize: "11px",
-            },
-            headerStyle: () => {
-                return { fontSize: "11px" };
-            },
-        }
     ];
 
     return (
@@ -322,12 +257,7 @@ function AcceptedProposal() {
                         columns={columns}
                         classes="table-responsive"
                     />
-                    <ChatComponent
-                        chatHandler={chatHandler}
-                        addPaymentModal={addPaymentModal}
-                        id={id}
-                        getProposalData={getProposalData}
-                    />
+                    
                 </CardBody>
             </Card>
         </div>

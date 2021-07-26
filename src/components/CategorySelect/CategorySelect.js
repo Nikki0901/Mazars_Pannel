@@ -98,7 +98,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
               <label>Category</label>
               <select
                 className="form-control"
-                name="p_tax"  
+                name="p_tax"
                 className={classNames("form-control", {
                   "is-invalid": errors.p_tax,
                 })}
@@ -122,9 +122,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
             <div class="form-group">
               <label>Sub Category</label>
               <select
-                className="form-select form-control"
                 name="p_tax2"
-                //
                 className={classNames("form-control", {
                   "is-invalid": errors.p_tax2,
                 })}

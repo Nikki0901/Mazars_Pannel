@@ -263,25 +263,6 @@ function PaymentStatus() {
       },
     },
     {
-      text: "Date of Completion",
-      dataField: "final_date",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.final_date);
-        var oldDate = row.final_date;
-        if (oldDate == null || oldDate == "0000-00-00 00:00:00") {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-      },
-    },
-    {
       text: "Action",
       style: {
         fontSize: "11px",

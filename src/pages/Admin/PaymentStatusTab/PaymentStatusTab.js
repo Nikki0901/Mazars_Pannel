@@ -1,73 +1,121 @@
-import React from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
-import PaidComponent from "../../../components/PaidComponent/PaidComponent";
+import axios from "axios";
+import { baseUrl } from "../../../config/config";
+import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
-function PaymentStatusTab() {
-  const userid = window.localStorage.getItem("adminkey");
+
+import AllPayment from "./AllPayment";
+import Paid from "./Paid";
+import Unpaid from "./Unpaid";
+
+
+
+
+function PaymentStatus(props) {
+  const userId = window.localStorage.getItem("adminkey");
+
+  const [allPayment, setAllPayment] = useState("");
+  const [paid, setPaid] = useState("");
+  const [unpaid, setUnpaid] = useState("");
+
+
+  useEffect(() => {
+    getAllPaid();
+    getPaid();
+    getUnpaid();
+  }, []);
+
+
+  const getAllPaid = () => {
+    axios
+      .get(`${baseUrl}/tl/getUploadedProposals`)
+      .then((res) => {
+        console.log(res);
+        setAllPayment(res.data.result.length);
+      });
+  };
+
+  const getPaid = () => {
+    axios
+      .get(`${baseUrl}/tl/getUploadedProposals?status=1`)
+      .then((res) => {
+        console.log(res);
+        setPaid(res.data.result.length);
+      });
+  };
+
+  const getUnpaid = () => {
+    axios
+      .get(`${baseUrl}/tl/getUploadedProposals?status=2`)
+      .then((res) => {
+        console.log(res);
+        setUnpaid(res.data.result.length);
+      });
+  };
+
+
+  const [tabIndex, setTabIndex] = useState(0);
+  useLayoutEffect(() => {
+    setTabIndex(props.location.index || 0);
+  }, [props.location.index]);
+
+  const myStyle1 = {
+    backgroundColor: "grey",
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    color: "white",
+    cursor: "pointer",
+  };
+
+  const myStyle2 = {
+    padding: "12px",
+    borderRadius: "50px",
+    width: "200px",
+    textAlign: "center",
+    backgroundColor: "blue",
+    color: "white",
+    cursor: "pointer",
+  };
+
   return (
-    <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-      <PaidComponent />
+    <Layout adminDashboard="adminDashboard" adminUserId={userId}>
+      <div>
+        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          <TabList
+            style={{
+              listStyleType: "none",
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
+              All Payment ({allPayment})
+            </Tab>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+              Unpaid ({paid})
+            </Tab>
+            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
+              Paid ({unpaid})
+            </Tab>
+          </TabList>
+          <TabPanel>
+            <AllPayment />
+          </TabPanel>
+
+          <TabPanel>
+            <Paid />
+          </TabPanel>
+
+          <TabPanel>
+            <Unpaid />
+          </TabPanel>
+        </Tabs>
+      </div>
     </Layout>
   );
 }
 
-export default PaymentStatusTab;
-
-// <div class="row mt-3">
-// <div class="col-md-12" style={{ top: "-12px" }}>
-//   <ul
-//     class="nav nav-pills mb-3 col-sm-12"
-//     style={{ justifyContent: "space-around" }}
-//     id="pills-tab"
-//     role="tablist"
-//   >
-//     <li class="nav-item" role="presentation">
-//       <a
-//         class="nav-link text-white active"
-//         id="pills-a-tab"
-//         data-toggle="pill"
-//         href="#a"
-//         role="tab"
-//         aria-controls="pills-a"
-//         aria-selected="true"
-//       >
-//        Partial Received
-//       </a>
-//     </li>
-
-//     <li class="nav-item" role="presentation">
-//       <a
-//         class="nav-link text-white"
-//         id="pills-b-tab"
-//         data-toggle="pill"
-//         href="#b"
-//         role="tab"
-//         aria-controls="pills-b"
-//         aria-selected="false"
-//       >
-//        Full Received
-//       </a>
-//     </li>
-//   </ul>
-
-//   <div class="tab-content" id="pills-tabContent">
-//     <div
-//       class="tab-pane fade show active"
-//       id="a"
-//       role="tabpanel"
-//       aria-labelledby="pills-a-tab"
-//     >
-//          <UnPaidComponent />
-//     </div>
-
-//     <div
-//       class="tab-pane fade"
-//       id="b"
-//       role="tabpanel"
-//       aria-labelledby="pills-b-tab"
-//     >
-//       <PaidComponent />
-//     </div>
-//   </div>
-// </div>
-// </div>
+export default PaymentStatus;

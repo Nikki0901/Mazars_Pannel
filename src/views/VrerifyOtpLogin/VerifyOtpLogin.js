@@ -6,21 +6,23 @@ import { baseUrl } from "../../config/config";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import classNames from "classnames";
 
-// const Schema = yup.object().shape({
-//   p_otp: yup.string().required("required otp"),
-// });
+const Schema = yup.object().shape({
+  p_otp: yup.string().required("required otp"),
+});
+
 
 
 function VerifyOtp(props) {
-
-  const { handleSubmit, register, errors } = useForm();
-
+  const { handleSubmit, register, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
   const [time, setTime] = useState('')
+  const [disabled, setDisabled] = useState(false)
   // const [uid, setUid] = useState('')
   // const [otp, setOtp] = useState('')
 
-  const [disabled, setDisabled] = useState(false)
 
 
   useEffect(() => {
@@ -69,7 +71,7 @@ function VerifyOtp(props) {
 
         if (response.data.code == 1) {
 
-  
+
           localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
           props.history.push("/customer/dashboard");

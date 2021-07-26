@@ -15,11 +15,19 @@ import { Link, NavLink } from "react-router-dom";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Records from "../../../components/Records/Records";
-
+import ViewComponent from "../ViewProposal/ViewComponent";
 
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const [records, setRecords] = useState([]);
+
+  const [viewData, setViewData] = useState({});
+  const [viewModal, setViewModal] = useState(false);
+  const ViewHandler = (key) => {
+    console.log(key);
+    setViewModal(!viewModal);
+    setViewData(key);
+  };
 
   useEffect(() => {
     getProposalData();
@@ -218,66 +226,6 @@ function AllProposalComponent({ allProposal }) {
       },
     },
     {
-      text: "Amount Paid",
-      dataField: "paid_amount",
-      sort: true,
-      style: {
-        fontSize: "11px",
-        color: "#064606",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", color: "#064606" };
-      },
-    },
-
-    {
-      text: "Amount Outstanding",
-      dataField: "",
-      sort: true,
-      style: {
-        fontSize: "11px",
-        color: "darkred",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", color: "darkred" };
-      },
-      formatter: function amountOutstading(cell, row) {
-        var a = row.accepted_amount;
-        var p = row.paid_amount;
-        return a - p;
-      },
-    },
-    {
-      text: "Date of Payment",
-      dataField: "cust_paid_date",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.cust_paid_date);
-        var oldDate = row.cust_paid_date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
-      },
-    },
-    {
-      text: "Date of Completion",
-      dataField: "",
-      sort: true,
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px" };
-      },
-    },
-    {
       dataField: "tl_name",
       text: "TL name",
       sort: true,
@@ -296,28 +244,39 @@ function AllProposalComponent({ allProposal }) {
       formatter: function (cell, row) {
         return (
           <>
-            <div title="Send Message">
-              <Link
-                to={{
-                  pathname: `/admin/chatting/${row.q_id}`,
-                  obj: {
-                    message_type: "2",
-                    query_No: row.assign_no,
-                    query_id: row.q_id,
-                    routes: `/admin/proposal`
-                  }
-                }}
-              >
-                <i
-                  class="fa fa-comments-o"
-                  style={{
-                    fontSize: 16,
-                    cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "blue"
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "2",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/admin/proposal`
+                    }
                   }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div style={{ cursor: "pointer" }} title="View Proposal">
+                <i
+                  class="fa fa-eye"
+                  style={{ color: "green", fontSize: "16px" }}
+                  onClick={() => ViewHandler(row)}
                 ></i>
-              </Link>
+              </div>
+
             </div>
           </>
         );
@@ -349,6 +308,14 @@ function AllProposalComponent({ allProposal }) {
             columns={columns}
             classes="table-responsive"
           />
+
+          <ViewComponent
+            ViewHandler={ViewHandler}
+            viewModal={viewModal}
+            viewData={viewData}
+            getProposalData={getProposalData}
+          />
+
         </CardBody>
       </Card>
     </>

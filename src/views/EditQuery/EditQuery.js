@@ -219,7 +219,7 @@ function EditQuery(props) {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="mb-3">
-                      <label className="form-label">Facts of the case</label>
+                      <label className="form-label">Facts of the case *</label>
                       <textarea
                         className="form-control"
                         id="textarea"
@@ -233,8 +233,8 @@ function EditQuery(props) {
                   <div className="col-md-6">
                     <div className="question_query mb-2">
                       <label className="form-label">
-                        Specific Questions for advisory
-                      </label>
+                        Specific Questions for advisory *
+                      </label> 
                       <div
                         className="btn btn-primary"
                         onClick={() => append({ query: "" })}
@@ -398,7 +398,7 @@ function EditQuery(props) {
                   <div className="col-md-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        Purpose for which Opinion is sought
+                        Purpose for which Opinion is sought *
                       </label>
                       <Select
                         closeMenuOnSelect={false}
@@ -523,54 +523,3 @@ const purpose = [
   },
   { value: "Others", label: "Others" },
 ];
-
-// console.log("value :", value);
-
-// console.log("arr", arr);
-// const [user, setUser] = useState({
-//   fact: "",
-//   case_assement: "",
-//   p_Softcopy_word: "",
-//   p_Softcopy_digital: "",
-//   p_Softcopy_physical: "",
-// });
-// const {
-//   fact,
-//   case_assement,
-//   p_Softcopy_word,
-//   p_Softcopy_digital,
-//   p_Softcopy_physical,
-// } = user;
-{
-  /* <SelectComponent
-                        assessmentYear={assessmentYear}
-                        updateValue={updateValue}
-                      /> */
-}
-
-
-
-{/* <table class="table table-bordered">
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">View</th>
-                              <th scope="col">Name</th>
-                            </tr>
-                            {queryDocs.map((p, i) => (
-                              <tr>
-                                <td>{i + 1}</td>
-                                <td>
-                                  <a
-                                    href={`http://65.0.220.156/mazarapi/assets/image/${p.assign_no}/${p.name}`}
-                                    target="_blank"
-                                  >
-                                    <i
-                                      class="fa fa-photo"
-                                      style={{ width: "50", height: "20" }}
-                                    ></i>
-                                  </a>
-                                </td>
-                                <td>{p.name}</td>
-                              </tr>
-                            ))}
-                          </table> */}

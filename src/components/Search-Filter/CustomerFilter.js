@@ -19,7 +19,9 @@ function CustomerFilter(props) {
     inprogressProposal,
     acceptedProposal,
     declinedProposal,
-    paymentStatus,
+    allPayment,
+    paid,
+    unpaid,
     assignment } = props;
 
 
@@ -254,10 +256,40 @@ function CustomerFilter(props) {
         });
     }
 
-    if (paymentStatus == "paymentStatus") {
+    if (allPayment == "allPayment") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+    if (paid == "paid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+    if (unpaid == "unpaid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -438,7 +470,7 @@ function CustomerFilter(props) {
                     </select>
                   )}
 
-                  {paymentStatus == "paymentStatus" && (
+                  {allPayment == "allPayment" && (
                     <select
                       className="form-select form-control"
                       name="p_status"

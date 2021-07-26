@@ -176,11 +176,6 @@ function AllQueriesData() {
                         }
                     </>
                 )
-                // var oldDate = row.exp_delivery_date;    
-                // if (oldDate == null) {
-                //     return null;
-                // }
-                // return oldDate.toString().split("-").reverse().join("-");
             },
         },
         {
@@ -200,10 +195,10 @@ function AllQueriesData() {
                                     justifyContent: "space-around"
                                 }}>
 
-                                    <div>
+                                    <div style={{ display: "flex" }}>
                                         {
                                             row.status_code < 2 ?
-                                                <div style={{ display: "flex" }}>
+                                                <div style={{ display: "flex", justifyContent: "space-around" }}>
                                                     <div title="Update Query">
                                                         <Link to={`/customer/edit-query/${row.id}`}>
                                                             <i
@@ -216,51 +211,54 @@ function AllQueriesData() {
                                                             ></i>
                                                         </Link>
                                                     </div>
-
                                                     <div title="Delete Query">
-                                                        {
-                                                            row.status_code < 1 ?
-                                                                <i
-                                                                    className="fa fa-trash"
-                                                                    style={{
-                                                                        fontSize: 16,
-                                                                        cursor: "pointer",
-                                                                        marginLeft: "8px",
-                                                                    }}
-                                                                    onClick={() => del(row.id)}
-                                                                ></i>
-                                                                : null
-                                                        }
-
+                                                        <i
+                                                            className="fa fa-trash"
+                                                            style={{
+                                                                fontSize: 16,
+                                                                cursor: "pointer",
+                                                                marginLeft: "8px",
+                                                            }}
+                                                            onClick={() => del(row.id)}
+                                                        ></i>
                                                     </div>
                                                 </div>
                                                 :
-                                                <div style={{ display: "flex" }}>
+                                                null
+                                        }
 
-                                                    <div title="Send Message">
-                                                        <Link
-                                                            to={{
-                                                                pathname: `/customer/chatting/${row.id}`,
-                                                                obj: {
-                                                                    message_type: "4",
-                                                                    query_No: row.assign_no,
-                                                                    query_id: row.id,
-                                                                    routes: `/customer/queries`
-                                                                }
+                                        {
+                                            row.status_code > 2 ?
+                                                <div title="Send Message">
+                                                    <Link
+                                                        to={{
+                                                            pathname: `/customer/chatting/${row.id}`,
+                                                            obj: {
+                                                                message_type: "4",
+                                                                query_No: row.assign_no,
+                                                                query_id: row.id,
+                                                                routes: `/customer/queries`
+                                                            }
+                                                        }}
+                                                    >
+                                                        <i
+                                                            class="fa fa-comments-o"
+                                                            style={{
+                                                                fontSize: 16,
+                                                                cursor: "pointer",
+
+                                                                color: "blue"
                                                             }}
-                                                        >
-                                                            <i
-                                                                class="fa fa-comments-o"
-                                                                style={{
-                                                                    fontSize: 16,
-                                                                    cursor: "pointer",
+                                                        ></i>
+                                                    </Link>
+                                                </div>
+                                                :
+                                                null
+                                        }
 
-                                                                    color: "blue"
-                                                                }}
-                                                            ></i>
-                                                        </Link>
-                                                    </div>
-
+                                        {
+                                            row.status_code > 4 ?
+                                                <div style={{ display: "flex" }}>
                                                     <div title="Send Feedback"
                                                         style={{
                                                             cursor: "pointer",
@@ -284,8 +282,12 @@ function AllQueriesData() {
                                                         <PublishIcon color="secondary" />
                                                     </div>
                                                 </div>
+                                                :
+                                                null
                                         }
                                     </div>
+
+
                                 </div>
                         }
                     </>

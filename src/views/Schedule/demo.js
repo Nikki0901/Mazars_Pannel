@@ -31,6 +31,7 @@ function Demo() {
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [owner, setOwner] = useState([]);
 
 
   const [baseMode, SetbaseMode] = useState("avc");
@@ -50,7 +51,10 @@ function Demo() {
 
   useEffect(() => {
     getData();
+    getAssignmentNo();
+    getUsers();
   }, []);
+
 
   const getData = () => {
     axios
@@ -77,16 +81,59 @@ function Demo() {
     notes: appointment.summary,
     question_id: appointment.question_id,
     assign_no: appointment.assign_no,
+    owner: appointment.owner,
+    username: appointment.username,
   });
 
 
-  // const resources = [
-  //   {
-  //     fieldName: "question_id",
-  //     title: "Query No",
-  //     instances: assignmentdata,
-  //   },
-  // ];
+  const getAssignmentNo = () => {
+    axios
+      .get(`${baseUrl}/customers/getAllQuery?uid=${JSON.parse(userId)}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          var data = res.data.result;
+          const newArrayOfObj = data.map(({ assign_no: text, ...rest }) => ({
+            text,
+            ...rest,
+          }));
+          console.log("dt--", newArrayOfObj);
+          setAssignmentData(newArrayOfObj);
+        }
+      });
+  };
+
+
+  const getUsers = () => {
+    axios.get(`${baseUrl}/tl/allAttendees?uid=${JSON.parse(userId)}`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        var data = res.data.result;
+        const newOwners = data.map(({ name: text, ...rest }) => ({
+          text,
+          ...rest,
+        }));
+        console.log("dt--", newOwners);
+        setOwner(newOwners);
+      }
+    });
+  };
+
+
+  const resources = [
+    {
+      fieldName: "question_id",
+      title: "Query No",
+      instances: assignmentdata,
+    },
+    {
+      fieldName: "username",
+      title: "Users",
+      instances: owner,
+      allowMultiple: true,
+    },
+  ];
+
 
 
   const commitChanges = ({ added, changed, deleted }) => {
@@ -172,6 +219,11 @@ function Demo() {
     //   });
     // }
   };
+
+
+
+
+
 
   const styles = (theme) => ({
     button: {
@@ -270,11 +322,10 @@ function Demo() {
           readOnly
         />
 
-        {/* <AppointmentForm.Label text="Customer Phone" type="title" /> */}
-
-        {/* <Resources 
-        data={resources}
-         mainResourceName="question_id" /> */}
+        <Resources
+          data={resources}
+          mainResourceName="username"
+        />
 
       </Scheduler>
     </Paper>
@@ -285,7 +336,7 @@ export default Demo;
 
 
 
-
+{/* <AppointmentForm.Label text="Customer Phone" type="title" /> */ }
 // function TitleComponent({ title }) {
 //   return (
 //     <div>
@@ -298,3 +349,6 @@ export default Demo;
           <p style={{ fontSize: "12px",color:"#fff" }}>link</p>
         </Link> */
 
+
+
+//03-nov-1972

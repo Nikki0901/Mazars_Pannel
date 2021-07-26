@@ -59,6 +59,7 @@ function Demo() {
     getUsers();
   }, []);
 
+
   const getData = () => {
     axios
       .get(`${baseUrl}/tl/videoScheduler?tl_id=1`)
@@ -70,6 +71,8 @@ function Demo() {
         }
       });
   };
+
+
 
   const mapAppointmentData = (appointment) => ({
     id: appointment.id,
@@ -148,6 +151,7 @@ function Demo() {
     console.log("call B", key)
     setRead(key)
   }
+
 
   const AppointmentBase = ({
     children,
