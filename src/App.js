@@ -147,11 +147,11 @@ function App() {
       <Provider template={AlertTemplate} {...options}>
         <Router>
           <Switch>
-
-            <PublicRouteUser exact path="/" component={Start} />
+          <PublicRouteUser exact path="/" component={RegisterYourSelf} />
+            {/* <PublicRouteUser exact path="/" component={RegisterYourself} /> */}
             <PublicRouteUser exact path="/customer/signin" component={Signin} />
             <PublicRouteUser exact path="/customer/signup" component={SignUp} />
-            <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} />
+           
             <PublicRouteUser exact path="/customer/verify-otp" component={VerifyOtp} />
             <PublicRouteUser exact path="/customer/otp" component={VerifyOtpLogin} />
             <PublicRouteUser exact path="/customer/forget-password" component={ForgetPassword} />

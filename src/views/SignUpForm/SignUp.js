@@ -12,8 +12,10 @@ import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
+import { professionName, country, states, cities} from './Data.jsx';
 import Alerts from "../../common/Alerts";
-
+import Button from '@material-ui/core'
+import { array } from "yup/lib/locale";
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
   p_email: yup.string().email("invalid email").required("required email"),
@@ -39,55 +41,137 @@ function SignUp(props) {
     resolver: yupResolver(Schema),
   });
 
-  const [states, setStates] = useState([]);
+  var array2 = []
+  var array3 = []
+  const [otpMsg, setOtpMsg] = useState();
+  const [email, setEmail] = useState([]);
+  const [phone, setPhone] = useState([]);
+  const [valiEmail, setValiemail] =useState()
   const [city, setCity] = useState([]);
-  const [name, setName] = useState("");
+  const [countryState, setCountryState] = useState([]);
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);
+  const [disabled, setDisbutton] = useState(true);
+  const [disabled2, setDisbutton2] = useState(false);
+ const [showInput , setshowInput] = useState(false)
+  const [password, setPassword] = useState(false);
+  const [passError, setpassError] = useState()
+  const [repassword, setRepassword] = useState(false);
+  const [passData, setPassData] = useState([])
+  const [countryCode, setCountryCode] = useState([])
+  const [valiPhone, setValiphone] = useState([]);
+  
+  const togglePasssword = () => {
+    setPassword(!password)
+  };
 
+  const handleChange2 = (e) => {
+    console.log("heoo")
+   
+    setPhone(e.target.value);
+   if(phone.length > 8){
+    let formData = new FormData();
+     
+    formData.append("phone", phone);
+    formData.append("type" , 2);
+  axios({
+    method: "POST",
+    url: `${baseUrl}/customers/validateregistration`,
+   
+    data: formData,
+  })
+  .then(function (response) {
+    console.log("res-", response); 
+  setValiphone(response.data.result)
+                console.log(response.data.result)
+  })
+  .catch((error) => {
+    console.log("erroror - ", error);
+ });
+   }
+   else{
+     setValiphone("")
+   }
+  };
+  
+  const togglePasssword2 = () => {
+    setRepassword(!repassword)
+  };
 
-  useEffect(() => {
-    const getStates = () => {
-      // console.log(`${baseUrl}/customers/getState`)
-      axios.get(`${baseUrl}/customers/getState`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setStates(res.data.result);
-        }
-      });
+const country2 =[]
+  const funValidation = (e) => {
+    setPassData(e.target.value)
+   
+  
+  if(passData.length > 0){
+    if (passData.length < 8) {
+      setpassError("Your password must be at least 8 characters"); 
+    }
+    
+  if (passData.search(/[!#$%&@? "]/) < 0) {
+    setpassError("Your password must contain at least one special Character."); 
+  }
+  if (passData.search(/[a-z]/i) < 0) {
+    setpassError("Your password must contain at least one lower case letter.");
+}
+
+  if (passData.search(/[A-Z]/i) < 0) {
+    setpassError("Your password must contain at least Uppercase letter.");
+}
+
+if (passData.search(/[0-9]/) < 0) {
+  setpassError("Your password must contain at least one digit."); 
+}
+
+  
+  }
+    }
+
+    const handleChange = (e) => {
+    
+     if(e.value){
+      setEmail(e.target.value);
+      let formData = new FormData();
+       
+        formData.append("email", email);
+        formData.append("type" , 1);
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+       
+        data: formData,
+      })
+      .then(function (response) {
+        console.log("res-", response); 
+      setValiemail(response.data.result)
+                    console.log(response.data.result)
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+     });
+     }
     };
-    getStates();
-  }, []);
+ 
 
-  useEffect(() => {
-    const getCity = () => {
-      axios
-        .get(`${baseUrl}/customers/getCity?state_id=${store}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setCity(res.data.result);
-          }
-        });
-    };
-
-    getCity();
-  }, [store]);
+  
+ 
+ 
 
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
-    // setLoad(true);
-
+    
     let formData = new FormData();
     formData.append("name", value.p_name);
     formData.append("email", value.p_email);
     formData.append("phone", value.p_phone);
     formData.append("occupation", value.p_profession);
     formData.append("state", value.p_state);
-    formData.append("city", value.p_city);
+    formData.append("city", value.p_city)
+    formData.append("zipCode", value.p_zipCode);
     formData.append("password", value.p_password);
+    // formData.append("confirmpassword", value.conformpass);
 
     axios({
       method: "POST",
@@ -116,9 +200,7 @@ function SignUp(props) {
             "Oops",
             `error :        
           ${response.data.message[0] ? response.data.message[0] : ""} 
-
           ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
-
             ${response.data.message[1] ? response.data.message[1] : ""} 
             `,
             "error"
@@ -129,18 +211,59 @@ function SignUp(props) {
         console.log("erroror - ", error);
       });
   };
-
-
-  const getID = (key) => {
-    setStore(key);
-
-    states.filter((data) => {
-      if (data.id == key) {
-        console.log("Name", data.name);
-        setName(data.name);
+ 
+  const getOtp = () =>{
+    setDisbutton(false)
+    setDisbutton2(true)
+    setshowInput(true)
+    let formData = new FormData();
+       
+    formData.append("email", email);
+  
+  axios({
+    method: "POST",
+    url: `${baseUrl}/customers/signupotp`,
+   
+    data: formData,
+  })
+  .then(function (response) {
+  setOtpMsg("Opt sent");
+ 
+                console.log(response.data.result)
+  })
+  .catch((error) => {
+    console.log("erroror - ", error);
+ });
+  }
+  const getCity = (key) => {
+      console.log("heool" + key)
+    
+    cities.filter((data) => {
+        console.log(data);
+      if (data.state_id == key) {
+       
+      array3.push(data)
       }
     });
+    setCity(array3)
+  }
+  const getcountryID = (key) => {
+ 
+    states.filter((data) => {
+        
+      if (data.country_id == key) {
+       
+      array2.push(data)
+      }
+    });
+   setCountryState(array2)
+   country.filter((data) => {
+   if(key == data.id){
+     setCountryCode(data.phoneCode)
+   }
+   })
   };
+ 
 
   return (
     <>
@@ -153,11 +276,12 @@ function SignUp(props) {
           {load ? (
             <Spinner size="sm" color="primary" />
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
               <div className="row">
                 <div className="col-md-6">
+
                   <div className="mb-3">
-                    <label className="form-label">Name</label>
+                  <label className="form-label">Name<sup style={{"color" :"red"}}>*</sup></label>
                     <input
                       type="text"
                       className={classNames("form-control", {
@@ -169,53 +293,41 @@ function SignUp(props) {
                     />
                     {errors.p_name && (
                       <div className="invalid-feedback">
-                        {errors.p_name.message}{" "}
+                        
                       </div>
                     )}
                   </div>
+
                 </div>
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Email</label>
+                  <label className="form-label">Email<sup style={{"color" :"red"}}>*</sup></label>
                     <input
                       type="text"
                       className={classNames("form-control", {
                         "is-invalid": errors.p_email,
                       })}
+                     
+                      onChange={(e) => handleChange(e)}
                       name="p_email"
                       ref={register}
+                     
                       placeholder="Enter Email"
                     />
                     {errors.p_email && (
                       <div className="invalid-feedback">
-                        {errors.p_email.message}{" "}
+                       
+                       
                       </div>
                     )}
+                    {valiEmail}
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Phone number</label>
-                    <input
-                      type="text"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_phone,
-                      })}
-                      name="p_phone"
-                      ref={register}
-                      placeholder="Phone number"
-                    />
-                    {errors.p_phone && (
-                      <div className="invalid-feedback">
-                        {errors.p_phone.message}{" "}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Occupation/ Profession</label>
+                  <label className="form-label">Occupation/ Profession<sup style={{"color" :"red"}}>*</sup></label>
                     <br />
                     <select
                       className={classNames("form-control", {
@@ -234,26 +346,29 @@ function SignUp(props) {
                     </select>
                     {errors.p_profession && (
                       <div className="invalid-feedback">
-                        {errors.p_profession.message}{" "}
+                     
                       </div>
                     )}
                   </div>
                 </div>
 
+               
+
+               
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">State</label>
+                  <label className="form-label">Country<sup style={{"color" :"red"}}>*</sup></label>
                     <select
                       id="state"
-                      name="p_state"
+                      name="p_country"
                       className={classNames("form-control", {
                         "is-invalid": errors.p_state,
                       })}
                       ref={register}
-                      onChange={(e) => getID(e.target.value)}
+                      onChange={(e) => getcountryID(e.target.value)}
                     >
                       <option value="">--select--</option>
-                      {states.map((p) => (
+                      {country.map((p) => (
                         <option key={p.id} value={p.id}>
                           {p.name}
                         </option>
@@ -261,15 +376,44 @@ function SignUp(props) {
                     </select>
                     {errors.p_state && (
                       <div className="invalid-feedback">
-                        {errors.p_state.message}
+                     
                       </div>
                     )}
                   </div>
                 </div>
+
+
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">City</label>
+                  <label className="form-label">State<sup style={{"color" :"red"}}>*</sup></label>
+                    <select
+                      id="state"
+                      name="p_state"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_state,
+                      })}
+                      ref={register}
+                      onChange={(e) => getCity(e.target.value)}
+                    >
+                      <option value="">--select--</option>
+                      {countryState.map((p) => (
+                        <option key={p.id} value={p.country_id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.p_state && (
+                      <div className="invalid-feedback">
+                     
+                      </div>
+                    )}
+                  </div>
+                </div>
 
+
+                <div className="col-md-6">
+                  <div className="mb-3">
+                  <label className="form-label">City<sup style={{"color" :"red"}}>*</sup></label>
                     <select
                       className={classNames("form-control", {
                         "is-invalid": errors.p_city,
@@ -280,41 +424,168 @@ function SignUp(props) {
                       <option value="">--select--</option>
                       {city.map((p, index) => (
                         <option key={index} value={p.city}>
-                          {p.city}
+                          {p.name}
                         </option>
                       ))}
                     </select>
                     {errors.p_city && (
                       <div className="invalid-feedback">
-                        {errors.p_city.message}
+                      
                       </div>
                     )}
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-3">
+                   
+                  <label className="form-label">Mobile number<sup style={{"color" :"red"}}>*</sup></label>
+                  <div  className="mobNumber" style={{"display" :"flex"}}>
+                 <select
+                 name="p_code"
+                 disabled={true}
+               
+                 ref={register}>
+                 
+                        <option>
+                        {countryCode}
+                        </option>
+                  
+                   </select>
+                    <input
+                      type="text"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_phone,
+                      })}
+                      name="p_phone"
+                      ref={register}
+                      placeholder="Phone number"
+                      onChange={(e) => handleChange2(e)}
+                    />
+                    </div>
+                    {errors.p_phone && (
+                      <div className="invalid-feedback">
+                     
+                      </div>
+                    )}
+                    {valiPhone}
+                  </div>
+                </div>
+
+                <div className="col-md-6">
+
+<div className="mb-3">
+<label className="form-label">Zipcode<sup style={{"color" :"red"}}>*</sup></label>
+  <input
+    type="text"
+    className={classNames("form-control", {
+      "is-invalid": errors.p_name,
+    })}
+    name="p_zipCode"
+    ref={register}
+    placeholder="Enter Name"
+  />
+  {errors.p_name && (
+    <div className="invalid-feedback">
+      
+    </div>
+  )}
+</div>
+
+</div>
+                <div class="col-md-6">
+                  <div className="mb-3">
+                  <label className="form-label">Password<sup style={{"color" :"red"}}>*</sup></label>
+
+
+                  <input
+                      type={password? "text" : "password"}
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_password,
+                      })}
+                      onCopy ={(e) => {
+                        e.preventDefault();
+                        return false
+                      }}
+                      onPaste = {(e) => {
+                        e.preventDefault();
+                        return false
+                      }}
+                       onChange={funValidation}
+                      name="p_password"
+                      ref={register}
+                      placeholder="Enter Password"
+                    />
+                    <i
+                      className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                      onClick={togglePasssword}
+                    />
+                     <p style={{"color" :"red"}}>{passError}</p>
+
+
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input
-                      type="password"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_password,
-                      })}
-                      name="p_password"
-                      ref={register}
-                      placeholder="Enter Password"
+                  <label className="form-label">Re-Type Password</label>
+
+<input
+  type={repassword ? "text" : "password"}
+  className={classNames("form-control", {
+    "is-invalid": errors.cp_password,
+  })}
+  onCopy ={(e) => {
+    e.preventDefault();
+    return false
+  }}
+  onPaste = {(e) => {
+    e.preventDefault();
+    return false
+  }}
+  ref={register}
+  name="cp_password"
+  placeholder="Enter Password"
+/>
+                    <i
+                      className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                      onClick={togglePasssword2}
                     />
-                    {errors.p_password && (
+
+
+                    {errors.cp_password && (
                       <div className="invalid-feedback">
-                        {errors.p_password.message}
+                      
                       </div>
                     )}
+
+
                   </div>
                 </div>
-              </div>
-              <button type="submit" className="btn btn-primary">
+                
+                <div class="col-md-6">
+                  <div className="mb-3">
+                  <button type="submit" className="btn btn-primary" style={{"margin" : "0 20px 0 0"}} disabled = {disabled2} onClick = {getOtp}>
+              Get Otp
+              </button>
+         
+              {showInput== true?   <input 
+              type="text"
+              disabled = {disabled} 
+              style={{"margin" : "0 15px"}}/> : ""}
+                <p style={{"color" : "green"}}>{otpMsg}</p>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div className="mb-3">
+                      <button type="submit" className="btn btn-primary">
                 Submit
               </button>
+                      </div>
+                    </div>
+              </div>
+             <p style={{"textAlign" : "right", "color" :"red"}}>Mandatory<sup>*</sup></p>
+            
+             
             </form>
           )}
         </div>
@@ -326,22 +597,3 @@ function SignUp(props) {
 
 export default SignUp;
 
-const professionName = [
-  { city: "CA" },
-  { city: "NON-CA" },
-  { city: "CFO" },
-  { city: "CEO" },
-  { city: "FINANCE HEAD" },
-  { city: "ACCOUNTS MANAGER" },
-  { city: "ACCOUNTANT" },
-  { city: "TAX PROFESSIONAL" },
-  { city: "OTHERS" },
-];
-
-// Swal.fire(
-//   'Oops...',
-//   "Errorr : <br/>"
-//  +response.data.message[0]+
-//   "<br/>"
-//   +response.data.message[1] ,
-//   'error')

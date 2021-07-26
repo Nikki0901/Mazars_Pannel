@@ -27,7 +27,11 @@ myFun();
   return (
     <>
       <Header cust_sign="cust_sign" />
+      <h1 style={{"textAlign" : "center", "margin" : "20px 0"}}>
+  Would you like to post a query
+</h1>
       <div className="StartPage">
+
         <div className="mainContent">
           <div className="signIn">
           <div className="signBtn">
