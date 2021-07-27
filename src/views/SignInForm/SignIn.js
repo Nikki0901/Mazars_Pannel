@@ -13,13 +13,15 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { Spinner } from "reactstrap";
 import Alerts from "../../common/Alerts";
+import VerifyOtpLogin from "../VrerifyOtpLogin/VerifyOtpLogin";
+
 
 
 
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("required email"),
-  p_password: yup.string().required("required password"),
+  p_email: yup.string().email("invalid email").required("mandatory"),
+  p_password: yup.string().required("mandatory"),
 });
 
 
@@ -31,6 +33,8 @@ function SignIn(props) {
 
   const [load, setLoad] = useState(false);
   const [email, setEmail] = useState(null);
+  const [show, setShow] = useState(false);
+
 
   const [isPasswordShow, setPasswordShow] = useState(false);
   const togglePasssword = () => {
@@ -60,12 +64,13 @@ function SignIn(props) {
 
           localStorage.setItem("email", JSON.stringify(value.p_email))
           localStorage.setItem("uid", JSON.stringify(response.data.user_id))
-         
+
+          setShow(true)
           // Alerts.SuccessLogin()
           // localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           // localStorage.setItem("name", JSON.stringify(response.data.name));
 
-          props.history.push("/customer/otp");
+          // props.history.push("/customer/otp");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           setLoad(false);
@@ -82,82 +87,94 @@ function SignIn(props) {
     setEmail(e.target.value);
   };
 
-  console.log("email", email);
+
+
+  // console.log("email", email);
   return (
     <>
       <Header cust_sign="cust_sign" />
       <div className="container">
-        <div className="form">
-          <div className="heading">
-            <h2>Customer Login</h2>
+
+
+        {
+          show ? <div>
+            <VerifyOtpLogin />
           </div>
-
-          {load ? (
-            <Spinner size="sm" color="primary" />
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="text"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_email,
-                      })}
-                      name="p_email"
-                      ref={register}
-                      placeholder="Enter Email"
-                      onChange={(e) => handleChange(e)}
-                    />
-                    {errors.p_email && (
-                      <div className="invalid-feedback">
-                        {errors.p_email.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input
-                      type={isPasswordShow ? "text" : "password"}
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_password,
-                      })}
-                      name="p_password"
-                      placeholder="Enter Password"
-                      ref={register}
-                    />
-                    <i
-                      className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
-                      onClick={togglePasssword}
-                    />
-                    {errors.p_password && (
-                      <div className="invalid-feedback">
-                        {errors.p_password.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
+            :
+            <div className="form">
+              <div className="heading">
+                <h2>Customer Login</h2>
               </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+              {load ? (
+                <Spinner size="sm" color="primary" />
+              ) : (
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Email *</label>
+                        <input
+                          type="text"
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_email,
+                          })}
+                          name="p_email"
+                          ref={register}
+                          placeholder="Enter Email"
+                          onChange={(e) => handleChange(e)}
+                        />
+                        {errors.p_email && (
+                          <div className="invalid-feedback">
+                            {errors.p_email.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-md-12">
+                      <div className="mb-3">
+                        <label className="form-label">Password *</label>
+                        <input
+                          type={isPasswordShow ? "text" : "password"}
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_password,
+                          })}
+                          name="p_password"
+                          placeholder="Enter Password"
+                          ref={register}
+                        />
+                        <i
+                          className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                          onClick={togglePasssword}
+                        />
+                        {errors.p_password && (
+                          <div className="invalid-feedback">
+                            {errors.p_password.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
 
-              <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-                <Link
-                  to={{
-                    pathname: "/customer/forget-password",
-                    email: `${email}`,
-                  }}
-                >
-                  Forgot Password
-                </Link>
-              </div>
-            </form>
-          )}
-        </div>
+                  <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                    <Link
+                      to={{
+                        pathname: "/customer/forget-password",
+                        email: `${email}`,
+                      }}
+                    >
+                      Forgot Password
+                    </Link>
+                  </div>
+                </form>
+              )}
+            </div>
+
+        }
+
+
       </div>
 
       <Footer />

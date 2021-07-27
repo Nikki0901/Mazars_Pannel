@@ -20,7 +20,6 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-import PaymentModal from "./PaymentModal";
 import Records from "../../components/Records/Records";
 
 
@@ -37,13 +36,6 @@ function Unpaid() {
     const [modal, setModal] = useState(false);
 
     const [assignNo, setAssignNo] = useState("");
-
-    const [addPaymentModal, setPaymentModal] = useState(false);
-    const paymentHandler = (key) => {
-        console.log("key", key.assign_no);
-        setPaymentModal(!addPaymentModal);
-        setAssignNo(key.assign_no)
-    };
 
 
 
@@ -283,11 +275,7 @@ function Unpaid() {
                             classes="table-responsive"
                         />
 
-                        <PaymentModal
-                            paymentHandler={paymentHandler}
-                            addPaymentModal={addPaymentModal}
-                            assignNo={assignNo}
-                        />
+                     
 
 
                         <Modal isOpen={modal} fade={false} toggle={toggle}>

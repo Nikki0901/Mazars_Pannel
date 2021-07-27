@@ -24,6 +24,16 @@ const ErrorLogin = () => {
 }
 
 
+// ErrorLogin
+const ErrorOTP = () => {
+    return (
+        Swal.fire(
+            "Oops...",
+            "Error : Incorrect otp",
+            "error"
+        )
+    )
+}
 
 
 // Success
@@ -128,7 +138,8 @@ export default {
     SuccessReport,
     ErrorDelete,
     ErrorEdit,
-    ErrorNormal
+    ErrorNormal,
+    ErrorOTP,
 };
 
 

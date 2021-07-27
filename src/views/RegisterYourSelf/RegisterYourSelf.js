@@ -43,7 +43,7 @@ function RegisterYourSelf(props) {
   async function logindata(name, e) {
     let newdata = { ...loginfild, [name]: e }
     setloginfild(newdata)
-     console.log(loginfild)
+    console.log(loginfild)
   }
 
   const verifyotp = () => {
@@ -136,6 +136,7 @@ function RegisterYourSelf(props) {
   return (
     <>
       <Header cust_sign="cust_sign" />
+      <h2 style={{ margingTop: "18px", marginLeft: "15px" }}>Would you like to post a Query ?</h2>
       <div className="StartPage">
         <div className="mainContent">
           <div className="signIn">
@@ -146,11 +147,9 @@ function RegisterYourSelf(props) {
                 </p>
                 <Button color="primary" variant="contained">Sign Up</Button>
               </div>
-
             </div>
           </div>
           <div className="signUp">
-
             <Typography variant="h4">
               Existing Customers
             </Typography>

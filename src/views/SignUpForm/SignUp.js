@@ -458,7 +458,7 @@ function SignUp(props) {
                         })}
                         name="p_phone"
                         ref={register}
-                        placeholder="Phone number"
+                        placeholder="Mobile number"
                         onChange={(e) => handleChange2(e)}
                       />
                     </div>

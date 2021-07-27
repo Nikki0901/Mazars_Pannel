@@ -303,13 +303,13 @@ function ProposalTab() {
                                         </div>
                                     ) : null}
                                 </div>
-                                <div style={{ cursor: "pointer" }} title="View Proposal">
+                                {/* <div style={{ cursor: "pointer" }} title="View Proposal">
                                     <i
                                         class="fa fa-eye"
                                         style={{ color: "green", fontSize: "16px" }}
                                         onClick={() => ViewHandler(row)}
                                     ></i>
-                                </div>
+                                </div> */}
                             </div>
                         )}
 

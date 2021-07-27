@@ -302,33 +302,33 @@ function AllAssignment() {
       },
       formatter: priceFormatter,
     },
-    {
-      text: "Action",
-      dataField: "",
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", width: "70px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
+    // {
+    //   text: "Action",
+    //   dataField: "",
+    //   style: {
+    //     fontSize: "11px",
+    //   },
+    //   headerStyle: () => {
+    //     return { fontSize: "11px", width: "70px" };
+    //   },
+    //   formatter: function (cell, row) {
+    //     return (
+    //       <>
 
-            {
-              row.status == "Payment Decliend" ? null :
-                <div
-                  style={{ cursor: "pointer" }}
-                  title="Pay Amount"
-                  onClick={() => paymentHandler(row)}>
-                  <PaymentIcon color="primary" />
-                </div>
-            }
+    //         {
+    //           row.status == "Payment Decliend" ? null :
+    //             <div
+    //               style={{ cursor: "pointer" }}
+    //               title="Pay Amount"
+    //               onClick={() => paymentHandler(row)}>
+    //               <PaymentIcon color="primary" />
+    //             </div>
+    //         }
 
-          </>
-        );
-      },
-    },
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   //accept handler

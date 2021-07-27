@@ -126,12 +126,12 @@ function Demo() {
       title: "Query No",
       instances: assignmentdata,
     },
-    {
-      fieldName: "username",
-      title: "Users",
-      instances: owner,
-      allowMultiple: true,
-    },
+    // {
+    //   fieldName: "username",
+    //   title: "Users",
+    //   instances: owner,
+    //   allowMultiple: true,
+    // },
   ];
 
 

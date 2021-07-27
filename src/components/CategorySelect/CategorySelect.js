@@ -10,13 +10,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
-
+import { useHistory } from "react-router-dom";
 
 
 const Schema = yup.object().shape({
   p_tax: yup.string().required("required"),
   p_tax2: yup.string().required("required"),
-
 });
 
 
@@ -24,7 +23,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
   const { handleSubmit, register, errors } = useForm({
     resolver: yupResolver(Schema),
   });
-
+  const history = useHistory();
   const [modal, setModal] = useState(false);
 
   const toggle = () => {
@@ -45,7 +44,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
   const toggle2 = () => {
     if (store2 && store) {
       localStorage.setItem("category", JSON.stringify(store2));
-      window.location.replace("questionnaire.html#/customer/addFresh")
+      history.push("/customer/addFresh");
     }
   };
 
@@ -95,7 +94,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
         <div class="col-sm-3" style={{ marginTop: "38px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="form-group">
-              <label>Category</label>
+              <label>Category *</label>
               <select
                 className="form-control"
                 name="p_tax"
@@ -120,7 +119,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
             </div>
 
             <div class="form-group">
-              <label>Sub Category</label>
+              <label>Sub Category *</label>
               <select
                 name="p_tax2"
                 className={classNames("form-control", {

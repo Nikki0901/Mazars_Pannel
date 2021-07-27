@@ -29,7 +29,6 @@ function PaymentStatus(props) {
     getAllPaid();
     getPaid();
     getUnpaid();
-
   }, []);
 
 

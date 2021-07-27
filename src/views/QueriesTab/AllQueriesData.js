@@ -377,8 +377,6 @@ function AllQueriesData() {
                         rowIndex
                     />
 
-
-
                     <AdditionalQueryModal
                         additionalHandler={additionalHandler}
                         additionalQuery={additionalQuery}

@@ -20,29 +20,56 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
-import PaymentModal from "./PaymentModal";
 import Records from "../../components/Records/Records";
+import PaymentIcon from '@material-ui/icons/Payment';
+import PaymentComponent from './PaymentComponent';
+
 
 
 function Paid() {
-  const alert = useAlert();
   const { id } = useParams();
   const userId = window.localStorage.getItem("userid");
-  // const cust_id = window.localStorage.getItem("userid");
-  const [records, setRecords] = useState([]);
 
-  const [pay, setPay] = useState([]);
+  const [records, setRecords] = useState([]);
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
-  const [modal, setModal] = useState(false);
 
-  const [assignNo, setAssignNo] = useState("");
+  const [pay, setPay] = useState({
+    pay: "",
+    amount: "",
+    accepted_amount: "",
+    paid_amount: "",
+
+    amount_type: "",
+    amount_fixed: "",
+    amount_hourly: "",
+
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
+  });
 
   const [addPaymentModal, setPaymentModal] = useState(false);
   const paymentHandler = (key) => {
-    console.log("key", key.assign_no);
     setPaymentModal(!addPaymentModal);
-    setAssignNo(key.assign_no)
+    setPay({
+      amount: key.accepted_amount,
+      id: key.id,
+      accepted_amount: key.accepted_amount,
+      paid_amount: key.paid_amount,
+
+      amount_type: key.amount_type,
+      amount_fixed: key.amount_fixed,
+      amount_hourly: key.amount_hourly,
+
+
+      payment_terms: key.payment_terms,
+      no_of_installment: key.no_of_installment,
+      installment_amount: key.installment_amount,
+      due_date: key.due_date,
+
+    });
   };
 
 
@@ -50,7 +77,6 @@ function Paid() {
   useEffect(() => {
     getPaymentStatus();
   }, []);
-  // /tl/getUploadedProposals?cid=customer_id
 
   const getPaymentStatus = () => {
     axios.get(`${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(userId)}`).then((res) => {
@@ -64,23 +90,7 @@ function Paid() {
     });
   };
 
-  const toggle = (key) => {
-    console.log("key", key);
-    setModal(!modal);
 
-    fetch(`${baseUrl}//admin/getPaymentDetail?id=${key}`, {
-      method: "GET",
-      headers: new Headers({
-        Accept: "application/vnd.github.cloak-preview",
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        console.log(response);
-        setPay(response.payment_detail);
-      })
-      .catch((error) => console.log(error));
-  };
 
 
   const columns = [
@@ -255,6 +265,33 @@ function Paid() {
         return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
       },
     },
+    {
+      text: "Action",
+      dataField: "",
+      style: {
+        fontSize: "11px",
+      },
+      headerStyle: () => {
+        return { fontSize: "11px", width: "70px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+
+            {
+              row.status == "Payment Decliend" ? null :
+                <div
+                  style={{ cursor: "pointer" }}
+                  title="Pay Amount"
+                  onClick={() => paymentHandler(row)}>
+                  <PaymentIcon color="primary" />
+                </div>
+            }
+
+          </>
+        );
+      },
+    },
   ];
 
 
@@ -264,7 +301,7 @@ function Paid() {
     <>
       <>
         <Card>
-    
+
           <CardHeader>
             <CustomerFilter
               setData={setPayment}
@@ -286,44 +323,12 @@ function Paid() {
               classes="table-responsive"
             />
 
-            <PaymentModal
+            <PaymentComponent
               paymentHandler={paymentHandler}
               addPaymentModal={addPaymentModal}
-              assignNo={assignNo}
+              pay={pay}
+              getPaymentStatus={getPaymentStatus}
             />
-
-
-            <Modal isOpen={modal} fade={false} toggle={toggle}>
-              <ModalHeader toggle={toggle}>History</ModalHeader>
-              <ModalBody>
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="row">S.No</th>
-                      <th scope="row">Date</th>
-                      <th scope="row">Amount</th>
-                    </tr>
-                  </thead>
-                  {pay.length > 0
-                    ? pay.map((p, i) => (
-                      <tbody>
-                        <tr>
-                          <td>{i + 1}</td>
-                          <td>{CommonServices.removeTime(p.payment_date)}</td>
-                          <td>{p.paid_amount}</td>
-                        </tr>
-                      </tbody>
-                    ))
-                    : null}
-                </table>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="secondary" onClick={toggle}>
-                  Cancel
-                </Button>
-              </ModalFooter>
-            </Modal>
-
 
           </CardBody>
         </Card>

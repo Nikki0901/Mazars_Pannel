@@ -7,17 +7,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
+import { useHistory } from "react-router-dom";
+import Alerts from "../../common/Alerts";
+
 
 const Schema = yup.object().shape({
-  p_otp: yup.string().required("required otp"),
+  p_otp: yup.string().required("mandatory"),
 });
 
 
-
-function VerifyOtp(props) {
-  const { handleSubmit, register, errors } = useForm({
+function VerifyOtp() {
+  const { handleSubmit, register, errors, reset } = useForm({
     resolver: yupResolver(Schema),
   });
+  const history = useHistory();
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
   // const [uid, setUid] = useState('')
@@ -53,7 +56,6 @@ function VerifyOtp(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-
     var myemail = localStorage.getItem("email");
 
     let formData = new FormData();
@@ -70,11 +72,13 @@ function VerifyOtp(props) {
         console.log("res-", response.data["otp "]);
 
         if (response.data.code == 1) {
-
-
+          Alerts.SuccessLogin()
           localStorage.setItem("userid", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
-          props.history.push("/customer/dashboard");
+          history.push("/customer/dashboard");
+        } else {
+          Alerts.ErrorOTP()
+          reset();
         }
       })
       .catch((error) => {
@@ -84,15 +88,13 @@ function VerifyOtp(props) {
 
 
   const resendOtp = () => {
-    props.history.push("/customer/signin");
+    // props.history.push("/customer/signin");
 
     var email = localStorage.getItem("email");
     var uid = localStorage.getItem("uid");
-
-
     let formData = new FormData();
-    formData.append("email", email);
-    formData.append("uid", uid);
+    formData.append("email", JSON.parse(email));
+    formData.append("uid", JSON.parse(uid));
 
     axios({
       method: "POST",
@@ -101,26 +103,23 @@ function VerifyOtp(props) {
     })
       .then(function (response) {
         console.log("res-", response);
-        if (response.data.code == 1) {
-          setDisabled(true)
+        if (response.data.code === 1) {
+          setDisabled(false)
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
-
   }
 
 
-  // console.log("otp-", otp);
-
   return (
     <>
-      <Header loginOTP="loginOTP" />
+      {/* <Header loginOTP="loginOTP" /> */}
       <div class="container">
         <div class="otp">
           <div class="heading text-center">
-            <h2>Verify Your OTP</h2>
+            <h2>Verify Your OTP *</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             {
@@ -130,13 +129,19 @@ function VerifyOtp(props) {
                 <div class="form-group">
                   <input
                     type="text"
-                    class="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_otp,
+                    })}
                     id="otp"
                     placeholder="Enter Your OTP Here"
                     ref={register}
                     name="p_otp"
                   />
-
+                  {errors.p_otp && (
+                    <div className="invalid-feedback">
+                      {errors.p_otp.message}
+                    </div>
+                  )}
                   <small class="text-center">
                     Note: OTP is valid for {time} seconds.
                   </small>
@@ -144,7 +149,6 @@ function VerifyOtp(props) {
             }
 
             <div class="text-center">
-
               {
                 disabled ?
                   <button type="submit" class="btn btn-success" onClick={resendOtp}>RESEND OTP</button>
@@ -155,7 +159,7 @@ function VerifyOtp(props) {
           </form>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

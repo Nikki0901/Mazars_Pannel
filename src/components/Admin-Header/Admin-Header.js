@@ -12,7 +12,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
     localStorage.removeItem("name");
     localStorage.removeItem("uid");
     localStorage.removeItem("category");
-    history.push("/customer/signin");
+    history.push("/");
   };
 
   const adminLogout = () => {

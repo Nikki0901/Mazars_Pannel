@@ -87,7 +87,7 @@ function Header({ id, cust_sign, admin, mtl, mtp, noSign, loginOTP }) {
             <div>
               <ul class="menu">
                 <li>
-                  <Link to="/customer/signin">Signin</Link>
+                  <Link to="/">Signin</Link>
                 </li>
                 <li>
                   <Link to="/customer/signup">SignUp</Link>
