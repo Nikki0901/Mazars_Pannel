@@ -1,9 +1,8 @@
-
 .StartPage{
     display: flex;
     width:100%;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     height: 600px;
   
     
@@ -12,7 +11,7 @@
     display: flex;
     width:800px;
     border-radius: 10px;
-    box-shadow: 0 10px 5px 5px rgba(0,0,0, 0.1), 0 -10px 5px 5px rgba(0,0,0,0.1);
+    /* box-shadow: 0 10px 5px 5px rgba(0,0,0, 0.1), 0 -10px 5px 5px rgba(0,0,0,0.1); */
     background-color: #fff;
 }
 .signIn{
@@ -59,10 +58,17 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 50px 20px;
+    padding: 25px 20px;
     width:50%;
     font-weight: 600;
 }
+.password-icon-login{
+    position: relative;
+    left: 175px;
+    top:-26px;
+    cursor: pointer;
+}
+
 .signUp button{
     display: flex;
     padding:5px 20px;

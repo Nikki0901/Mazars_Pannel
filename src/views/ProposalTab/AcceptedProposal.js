@@ -178,32 +178,8 @@ function AcceptedProposal() {
             formatter: function nameFormatter(cell, row) {
                 return (
                     <>
-                        <div>
-                            {
-                                row.status == "Inprogress" ?
-                                    <div>
-                                        {row.status}/
-                                        <p className="inprogress">
-                                            {row.statusdescription}
-                                        </p>
-                                    </div>
-                                    :
-                                    row.status == "Customer Declined; Proposal" ?
-                                        <div>
-                                            {row.status}
-                                            <p className="declined">
-                                                {row.statusdescription}
-                                            </p>
-                                        </div> :
-                                        row.status == "Accepted; Proposal" ?
-                                            <div>
-                                                {row.status}
-                                                <p className="completed">
-                                                    {row.statusdescription}
-                                                </p>
-                                            </div> :
-                                            null
-                            }
+                        <div className="completed">
+                            {row.status}
                         </div>
                     </>
                 );
@@ -257,7 +233,7 @@ function AcceptedProposal() {
                         columns={columns}
                         classes="table-responsive"
                     />
-                    
+
                 </CardBody>
             </Card>
         </div>

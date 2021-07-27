@@ -32,11 +32,9 @@ function VerifyOtp() {
     console.log("call useEffect")
 
     var timerOn = true;
-    function timer(remaining) {
-      // var m = Math.floor(remaining / 60);
-      var s = remaining % 60;
 
-      // m = m < 10 ? '0' + m : m;
+    function timer(remaining) {
+      var s = remaining % 60;
       s = s < 10 ? '0' + s : s;
       setTime(s)
       remaining -= 1;
@@ -48,7 +46,6 @@ function VerifyOtp() {
       }
       setDisabled(true)
     }
-
     timer(60);
   }, []);
 
@@ -92,6 +89,7 @@ function VerifyOtp() {
 
     var email = localStorage.getItem("email");
     var uid = localStorage.getItem("uid");
+
     let formData = new FormData();
     formData.append("email", JSON.parse(email));
     formData.append("uid", JSON.parse(uid));
@@ -115,7 +113,7 @@ function VerifyOtp() {
 
   return (
     <>
-      {/* <Header loginOTP="loginOTP" /> */}
+     
       <div class="container">
         <div class="otp">
           <div class="heading text-center">
@@ -159,7 +157,7 @@ function VerifyOtp() {
           </form>
         </div>
       </div>
-      {/* <Footer /> */}
+     
     </>
   );
 }

@@ -96,7 +96,7 @@ function DeclinedProposal() {
         },
         {
             text: "Query No",
-            dataField: "assign_no",      
+            dataField: "assign_no",
             style: {
                 fontSize: "11px",
             },
@@ -185,32 +185,8 @@ function DeclinedProposal() {
             formatter: function nameFormatter(cell, row) {
                 return (
                     <>
-                        <div>
-                            {
-                                row.status == "Inprogress" ?
-                                    <div>
-                                        {row.status}/
-                                        <p className="inprogress">
-                                            {row.statusdescription}
-                                        </p>
-                                    </div>
-                                    :
-                                    row.status == "Customer Declined; Proposal" ?
-                                        <div>
-                                            {row.status}
-                                            <p className="declined">
-                                                {row.statusdescription}
-                                            </p>
-                                        </div> :
-                                        row.status == "Accepted; Proposal" ?
-                                            <div>
-                                                {row.status}
-                                                <p className="completed">
-                                                    {row.statusdescription}
-                                                </p>
-                                            </div> :
-                                            null
-                            }
+                        <div className="declined">
+                            {row.status}
                         </div>
                     </>
                 );
@@ -255,7 +231,7 @@ function DeclinedProposal() {
                     />
                 </CardHeader>
                 <CardBody>
-                <Records records={records} />
+                    <Records records={records} />
 
                     <BootstrapTable
                         bootstrap4

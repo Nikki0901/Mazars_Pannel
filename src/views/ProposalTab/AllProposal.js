@@ -199,16 +199,14 @@ function ProposalTab() {
                                     :
                                     row.status == "Declined; Proposal" ?
                                         <div>
-                                            {row.status}
                                             <p className="declined">
-                                                {row.statusdescription}
+                                                {row.status}
                                             </p>
                                         </div> :
                                         row.status == "Accepted; Proposal" ?
                                             <div>
-                                                {row.status}
-                                                <p className=".completed{">
-                                                    {row.statusdescription}
+                                                <p className="completed">
+                                                    {row.status}
                                                 </p>
                                             </div> :
                                             null

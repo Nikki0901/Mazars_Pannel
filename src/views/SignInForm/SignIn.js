@@ -17,8 +17,6 @@ import VerifyOtpLogin from "../VrerifyOtpLogin/VerifyOtpLogin";
 
 
 
-
-
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("mandatory"),
   p_password: yup.string().required("mandatory"),
@@ -94,8 +92,7 @@ function SignIn(props) {
     <>
       <Header cust_sign="cust_sign" />
       <div className="container">
-
-
+        
         {
           show ? <div>
             <VerifyOtpLogin />
