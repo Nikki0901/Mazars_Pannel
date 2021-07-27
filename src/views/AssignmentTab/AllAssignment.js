@@ -17,13 +17,10 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as Cookies from "js-cookie";
 import { useAlert } from "react-alert";
 import FeedbackIcon from '@material-ui/icons/Feedback';
-import PaymentModal from "./PaymentModal";
-import RejectedModal from "./RejectModal";
 import ViewAllReportModal from "./ViewAllReport";
 import Records from "../../components/Records/Records";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import Alerts from "../../common/Alerts";
-import PaymentIcon from '@material-ui/icons/Payment';
 
 
 
@@ -42,44 +39,7 @@ function AllAssignment() {
 
   const [rejectedItem, setRejectedItem] = useState({});
   const [report, setReport] = useState();
-
-  const [pay, setPay] = useState({
-    pay: "",
-    amount: "",
-    accepted_amount: "",
-    paid_amount: "",
-
-    amount_type: "",
-    amount_fixed: "",
-    amount_hourly: "",
-
-    payment_terms: "",
-    no_of_installment: "",
-    installment_amount: "",
-    due_date: "",
-  });
-
-  const [addPaymentModal, setPaymentModal] = useState(false);
-  const paymentHandler = (key) => {
-    setPaymentModal(!addPaymentModal);
-    setPay({
-      amount: key.accepted_amount,
-      id: key.id,
-      accepted_amount: key.accepted_amount,
-      paid_amount: key.paid_amount,
-
-      amount_type: key.amount_type,
-      amount_fixed: key.amount_fixed,
-      amount_hourly: key.amount_hourly,
-
-
-      payment_terms: key.payment_terms,
-      no_of_installment: key.no_of_installment,
-      installment_amount: key.installment_amount,
-      due_date: key.due_date,
-
-    });
-  };
+  const [dataItem, setDataItem] = useState({});
 
 
 
@@ -95,7 +55,8 @@ function AllAssignment() {
   const ViewReport = (key) => {
     console.log("key - ", key);
     setReportModal(!reportModal);
-    setReport(key);
+    setReport(key.assign_no);
+    setDataItem(key)
   };
 
 
@@ -118,6 +79,8 @@ function AllAssignment() {
         }
       });
   };
+
+
 
   const columns = [
     {
@@ -235,7 +198,7 @@ function AllAssignment() {
                   {row.assignment_draft_report || row.final_report ?
                     <div title="View All Report"
                       style={{ cursor: "pointer", textAlign: "center" }}
-                      onClick={() => ViewReport(row.assign_no)}
+                      onClick={() => ViewReport(row)}
                     >
                       <DescriptionOutlinedIcon color="secondary" />
                     </div>
@@ -243,7 +206,7 @@ function AllAssignment() {
                     null
                   }
 
-                  {row.assignment_draft_report && !row.final_report ? (
+                  {/* {row.assignment_draft_report && !row.final_report ? (
                     row.draft_report == "completed" ?
                       null :
                       <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -284,7 +247,7 @@ function AllAssignment() {
                         </div>
                       </div>
 
-                  ) : null}
+                  ) : null} */}
 
                 </div>
             }
@@ -301,35 +264,9 @@ function AllAssignment() {
         return { fontSize: "12px" };
       },
       formatter: priceFormatter,
-    },
-    // {
-    //   text: "Action",
-    //   dataField: "",
-    //   style: {
-    //     fontSize: "11px",
-    //   },
-    //   headerStyle: () => {
-    //     return { fontSize: "11px", width: "70px" };
-    //   },
-    //   formatter: function (cell, row) {
-    //     return (
-    //       <>
-
-    //         {
-    //           row.status == "Payment Decliend" ? null :
-    //             <div
-    //               style={{ cursor: "pointer" }}
-    //               title="Pay Amount"
-    //               onClick={() => paymentHandler(row)}>
-    //               <PaymentIcon color="primary" />
-    //             </div>
-    //         }
-
-    //       </>
-    //     );
-    //   },
-    // },
+    }
   ];
+
 
   //accept handler
   const acceptHandler = (key) => {
@@ -340,6 +277,8 @@ function AllAssignment() {
     formData.append("id", key.id);
     formData.append("query_no", key.assign_no);
     formData.append("type", 1);
+    // formData.append("docid", docid);
+
 
     axios({
       method: "POST",
@@ -388,39 +327,7 @@ function AllAssignment() {
   };
 
 
-  function schedultTime(cell, row) {
-    // console.log("schedultTime", row);
-    console.log("schedultTime", row.schedule_time);
-    // console.log("setSeconds", setSeconds(row.schedule_time));
 
-    var d = row.schedule_time;
-    var date = new Date(d); // some mock date
-    var milliseconds = date.getTime();
-    console.log("milliseconds - ", milliseconds);
-
-    var date2 = new Date(); // current time
-    var milliseconds2 = date2.getTime();
-    console.log("current - ", milliseconds2);
-
-    var diff = milliseconds - milliseconds2;
-    console.log("diff - ", diff);
-    var total = diff - 900000;
-    console.log("total - ", total);
-
-    if (total > 0 && 900000 > total) {
-      return (
-        <>
-          <div style={{ cursor: "pointer" }} title="Video Chat">
-            <i
-              class="fa fa-video-camera"
-              style={{ color: "red", fontSize: "16px" }}
-              onClick={() => handleJoin(row.id)}
-            ></i>
-          </div>
-        </>
-      );
-    }
-  }
 
   return (
     <>
@@ -444,25 +351,15 @@ function AllAssignment() {
             data={assignmentDisplay}
             columns={columns}
           />
-          <PaymentModal
-            paymentHandler={paymentHandler}
-            addPaymentModal={addPaymentModal}
-            pay={pay}
-            getProposalData={getAssignmentData}
-          />
-
-          <RejectedModal
-            rejectHandler={rejectHandler}
-            rejectModal={rejectModal}
-            rejectedItem={rejectedItem}
-            getPendingforAcceptance={getAssignmentData}
-          />
+        
+          
 
           <ViewAllReportModal
             ViewReport={ViewReport}
             reportModal={reportModal}
             report={report}
             getPendingforAcceptance={getAssignmentData}
+            dataItem={dataItem}
           />
 
         </CardBody>
@@ -472,3 +369,75 @@ function AllAssignment() {
 }
 
 export default AllAssignment;
+
+
+  // const [pay, setPay] = useState({
+  //   pay: "",
+  //   amount: "",
+  //   accepted_amount: "",
+  //   paid_amount: "",
+
+  //   amount_type: "",
+  //   amount_fixed: "",
+  //   amount_hourly: "",
+
+  //   payment_terms: "",
+  //   no_of_installment: "",
+  //   installment_amount: "",
+  //   due_date: "",
+  // });
+
+  // const [addPaymentModal, setPaymentModal] = useState(false);
+  // const paymentHandler = (key) => {
+  //   setPaymentModal(!addPaymentModal);
+  //   setPay({
+  //     amount: key.accepted_amount,
+  //     id: key.id,
+  //     accepted_amount: key.accepted_amount,
+  //     paid_amount: key.paid_amount,
+
+  //     amount_type: key.amount_type,
+  //     amount_fixed: key.amount_fixed,
+  //     amount_hourly: key.amount_hourly,
+
+
+  //     payment_terms: key.payment_terms,
+  //     no_of_installment: key.no_of_installment,
+  //     installment_amount: key.installment_amount,
+  //     due_date: key.due_date,
+
+  //   });
+  // };
+  // function schedultTime(cell, row) {
+  //   // console.log("schedultTime", row);
+  //   console.log("schedultTime", row.schedule_time);
+  //   // console.log("setSeconds", setSeconds(row.schedule_time));
+
+  //   var d = row.schedule_time;
+  //   var date = new Date(d); // some mock date
+  //   var milliseconds = date.getTime();
+  //   console.log("milliseconds - ", milliseconds);
+
+  //   var date2 = new Date(); // current time
+  //   var milliseconds2 = date2.getTime();
+  //   console.log("current - ", milliseconds2);
+
+  //   var diff = milliseconds - milliseconds2;
+  //   console.log("diff - ", diff);
+  //   var total = diff - 900000;
+  //   console.log("total - ", total);
+
+  //   if (total > 0 && 900000 > total) {
+  //     return (
+  //       <>
+  //         <div style={{ cursor: "pointer" }} title="Video Chat">
+  //           <i
+  //             class="fa fa-video-camera"
+  //             style={{ color: "red", fontSize: "16px" }}
+  //             onClick={() => handleJoin(row.id)}
+  //           ></i>
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  // }

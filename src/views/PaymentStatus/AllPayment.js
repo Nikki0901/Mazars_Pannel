@@ -279,13 +279,15 @@ function Paid() {
           <>
 
             {
-              row.status == "Payment Decliend" ? null :
+              row.paid_status == "0" ?
                 <div
                   style={{ cursor: "pointer" }}
                   title="Pay Amount"
                   onClick={() => paymentHandler(row)}>
                   <PaymentIcon color="primary" />
                 </div>
+                :
+                null
             }
 
           </>

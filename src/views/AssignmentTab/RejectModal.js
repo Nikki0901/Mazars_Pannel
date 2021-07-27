@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
@@ -14,28 +14,30 @@ const Schema = yup.object().shape({
 });
 
 function RejectedModal({
-  rejectModal,
-  rejectHandler,
-  rejectedItem,
-  getPendingforAcceptance,
+  nestedModal,
+  toggleNested,
+  dataItem,
+  docData,
 }) {
   const userId = window.localStorage.getItem("userid");
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
-  const alert = useAlert();
 
-  console.log("rejectedItem :", rejectedItem);
+
+  console.log("dataItem :", dataItem);
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
-    formData.append("id", rejectedItem.assign_id);
-    formData.append("query_no", rejectedItem.assign_no);
+    formData.append("id", dataItem.assign_id);
+    formData.append("query_no", dataItem.assign_no);
     formData.append("message", value.p_chat);
     formData.append("type", 2);
+    formData.append("docid", docData.docid);
+
     axios({
       method: "POST",
       url: `${baseUrl}/customers/draftAccept`,
@@ -44,12 +46,12 @@ function RejectedModal({
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          
+          toggleNested()
           var variable = "Submitted Successfully "
           Alerts.SuccessNormal(variable)
 
-          getPendingforAcceptance();
-          rejectHandler();
+          // getPendingforAcceptance();
+          // toggleNested();
         }
       })
       .catch((error) => {
@@ -59,8 +61,8 @@ function RejectedModal({
 
   return (
     <div>
-      <Modal isOpen={rejectModal} toggle={rejectHandler} size="sm">
-        <ModalHeader toggle={rejectHandler}>Discussion Message</ModalHeader>
+      <Modal isOpen={nestedModal} toggle={toggleNested} >
+        <ModalHeader>Discussion</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
@@ -83,12 +85,15 @@ function RejectedModal({
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
+              <Button color="primary" onClick={toggleNested}>Cancel</Button>
             </div>
           </form>
         </ModalBody>
-      </Modal>
-    </div>
+      </Modal >
+
+    </div >
   );
 }
 
 export default RejectedModal;
+

@@ -33,7 +33,6 @@ function LoginForm() {
   };
 
 
-
   const onSubmit = (value) => {
     console.log("value :", value);
 
@@ -50,7 +49,7 @@ function LoginForm() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setShow(true)
-          setEmail(response.data.name)
+          // setEmail(response.data.name)
           setUid(response.data.user_id)
         }
       })
@@ -59,6 +58,14 @@ function LoginForm() {
       });
   };
 
+
+
+  const handleChange = (e) => {
+    console.log("val-", e.target.value);
+    setEmail(e.target.value);
+  };
+
+ 
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -67,14 +74,13 @@ function LoginForm() {
         Would you like to post a query
       </h1>
 
-
       <div className="StartPage">
         <div className="mainContent">
           <div className="signIn">
             <div className="signBtn">
               <div className="boxOverlay">
                 <p style={{ "color": "white", "fontSize": "22px" }}>
-                  For new Customers
+                  For new customers
                 </p>
                 <Button color="primary" variant="contained">
                   <Link
@@ -91,12 +97,12 @@ function LoginForm() {
           </div>
           <div className="signUp">
             <Typography variant="h4" style={{ "margin": "0 0 15px 0" }}>
-              Existing Customers
+             For existing customers
             </Typography>
 
             {
               show ? <div>
-                <VerifyOTP email={email} uid={uid}/>
+                <VerifyOTP email={email} uid={uid} />
               </div>
                 :
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -108,6 +114,7 @@ function LoginForm() {
                       name="p_email"
                       ref={register}
                       placeholder="Enter Email"
+                      onChange={(e) => handleChange(e)}
                     />
                   </div>
 
@@ -130,6 +137,17 @@ function LoginForm() {
                     <button type="submit" className="btn btn-primary btn-sm">
                       Get OTP
                     </button>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                    <Link
+                      to={{
+                        pathname: "/customer/forget-password",
+                        email: `${email}`,
+                      }}
+                    >
+                      Forgot Password
+                    </Link>
                   </div>
                 </form>
             }

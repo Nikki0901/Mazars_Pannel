@@ -87,12 +87,11 @@ function SignIn(props) {
 
 
 
-  // console.log("email", email);
   return (
     <>
       <Header cust_sign="cust_sign" />
       <div className="container">
-        
+
         {
           show ? <div>
             <VerifyOtpLogin />
