@@ -45,7 +45,7 @@ function SignUp(props) {
   var array3 = []
   const [otpMsg, setOtpMsg] = useState();
   const [email, setEmail] = useState([]);
-  const [phone, setPhone] = useState([]);
+  const [phone, setPhone] = useState(" ");
   const [valiEmail, setValiemail] =useState()
   const [city, setCity] = useState([]);
   const [countryState, setCountryState] = useState([]);
@@ -55,21 +55,74 @@ function SignUp(props) {
   const [disabled2, setDisbutton2] = useState(false);
  const [showInput , setshowInput] = useState(false)
   const [password, setPassword] = useState(false);
-  const [passError, setpassError] = useState()
+  const [passError, setpassError] = useState([])
   const [repassword, setRepassword] = useState(false);
   const [passData, setPassData] = useState([])
   const [countryCode, setCountryCode] = useState([])
   const [valiPhone, setValiphone] = useState([]);
+const existMsg = {
+  "color" : "green"
+}
+const notExistMsg = {
+  "color" : "red"
+}
+
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  // Email Validation 
+   const handleChange = (e) => {
   
+      setEmail(e.target.value);
+     
+    if(email.length > 1 && validRegex.test(email) == true){
+         let formData = new FormData();
+      
+        formData.append("email", email);
+        formData.append("type" , 1);
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+       
+        data: formData,
+      })
+      .then(function (response) {
+      
+      setValiemail(response.data.result)
+                  
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+     });
+    }
+    else {
+      setValiemail("")
+    }
+    };
+ 
+
+
+
+
   const togglePasssword = () => {
     setPassword(!password)
   };
 
   const handleChange2 = (e) => {
-    console.log("heoo")
-   
+  
+   console.log(e.target.value)
     setPhone(e.target.value);
-   if(phone.length > 8){
+    console.log(phone)
+    if(isNaN(phone) == true){
+     
+      Swal.fire(
+        "Oops",
+        `error :        
+      Please enter only digit
+        `,
+        "error"
+      );
+      setPhone(" ")
+    }
+  else if(phone.length > 8){
     let formData = new FormData();
      
     formData.append("phone", phone);
@@ -127,31 +180,7 @@ if (passData.search(/[0-9]/) < 0) {
   }
     }
 
-    const handleChange = (e) => {
-    
-     if(e.value){
-      setEmail(e.target.value);
-      let formData = new FormData();
-       
-        formData.append("email", email);
-        formData.append("type" , 1);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-       
-        data: formData,
-      })
-      .then(function (response) {
-        console.log("res-", response); 
-      setValiemail(response.data.result)
-                    console.log(response.data.result)
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-     });
-     }
-    };
- 
+   
 
   
  
@@ -320,7 +349,7 @@ if (passData.search(/[0-9]/) < 0) {
                        
                       </div>
                     )}
-                    {valiEmail}
+                    <p style = {valiEmail && valiEmail.length > 15 ? notExistMsg : existMsg }>{valiEmail}</p>
                   </div>
                 </div>
                 
@@ -447,7 +476,7 @@ if (passData.search(/[0-9]/) < 0) {
                  ref={register}>
                  
                         <option>
-                        {countryCode}
+                       {countryCode}
                         </option>
                   
                    </select>
@@ -467,7 +496,8 @@ if (passData.search(/[0-9]/) < 0) {
                      
                       </div>
                     )}
-                    {valiPhone}
+                      <p style = {valiPhone && valiPhone.length > 23 ? notExistMsg : existMsg }>{valiPhone}</p>
+                   
                   </div>
                 </div>
 
@@ -596,4 +626,3 @@ if (passData.search(/[0-9]/) < 0) {
 }
 
 export default SignUp;
-

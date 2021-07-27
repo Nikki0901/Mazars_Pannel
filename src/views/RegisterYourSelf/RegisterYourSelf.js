@@ -27,7 +27,7 @@ myFun();
   return (
     <>
       <Header cust_sign="cust_sign" />
-      <h1 style={{"textAlign" : "center", "margin" : "20px 0"}}>
+      <h1 style={{"textAlign" : "center", "margin" : "55px 0 30px 0"}}>
   Would you like to post a query
 </h1>
       <div className="StartPage">
@@ -49,7 +49,7 @@ myFun();
           </div>
           <div className="signUp">
           
-         <Typography variant="h4">
+         <Typography variant="h4" style={{"margin" : "0 0 15px 0"}}>
          Existing Customers
          </Typography>
            <form>
