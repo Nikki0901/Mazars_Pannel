@@ -13,6 +13,7 @@ import classNames from "classnames";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import Alerts from "../../common/Alerts";
+import ResendOtp from "./ResendOtp";
 
 
 function NewPassword(props) {
@@ -23,6 +24,8 @@ function NewPassword(props) {
   const [isPasswordShow, setPasswordShow] = useState(false);
   const [isPasswordShow2, setPasswordShow2] = useState(false);
 
+  const [time, setTime] = useState('')
+  const [disabled, setDisabled] = useState(false)
 
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
@@ -31,6 +34,25 @@ function NewPassword(props) {
   const togglePasssword2 = () => {
     setPasswordShow2(!isPasswordShow2)
   };
+
+
+  // useEffect(() => {
+  //   var timerOn = true;
+  //   function timer(remaining) {
+  //     var s = remaining % 60;
+  //     s = s < 10 ? '0' + s : s;
+  //     setTime(s)
+  //     remaining -= 1;
+  //     if (remaining >= 0 && timerOn) {
+  //       setTimeout(function () {
+  //         timer(remaining);
+  //       }, 1000);
+  //       return;
+  //     }
+  //     setDisabled(true)
+  //   }
+  //   timer(60);
+  // }, []);
 
 
   const onSubmit = (value) => {
@@ -74,12 +96,11 @@ function NewPassword(props) {
       <Header cust_sign="cust_sign" />
       <div className="container">
         <div className="form">
-          <div className="heading">
-            <h2>Reset Password</h2>
-          </div>
-
 
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="heading">
+              <h2>Reset Password</h2>
+            </div>
             <div className="row">
               <div className="col-md-12">
                 <div className="mb-3">
@@ -128,6 +149,9 @@ function NewPassword(props) {
                       {errors.p_code.message}
                     </div>
                   )}
+                  <small class="text-center">
+                    Note: OTP is valid for {time} seconds.
+                  </small>
                 </div>
               </div>
 
@@ -136,12 +160,12 @@ function NewPassword(props) {
                   <label className="form-label">New Password</label>
                   <input
                     type={isPasswordShow ? "text" : "password"}
+                    name="p_password"
                     id="password"
                     className={classNames("form-control", {
                       "is-invalid": errors.p_password,
                     })}
                     placeholder="Enter Your Password"
-                    name="p_password"
                     ref={register({
                       required: "This field is required",
                       pattern: {
@@ -196,138 +220,22 @@ function NewPassword(props) {
               </div>
 
             </div>
-
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
-
-
           </form>
 
-
+          <ResendOtp id={id} />
 
 
         </div>
       </div>
       <Footer />
     </>
-  );
+  )
 }
 
 export default NewPassword;
 
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required user id"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_code: yup.string().required("required otp "),
-//   // p_password: yup.string().required("required password"),
-//   // p_confirm_password: yup.string().required("required confirm password"),
-// });
 
 
-
-{/* <form onSubmit={handleSubmit(onSubmit)}>
-
-            <div className="form-group">
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input
-                  type="text"
-                  className={classNames("form-control", {
-                    "is-invalid": errors.p_email,
-                  })}
-                  name="p_email"
-                  placeholder="Enter Email"
-                  defaultValue={id}
-                  ref={register({
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Please enter valid email address",
-                    },
-                  })}
-                />
-                {errors.p_email && (
-                  <div className="invalid-feedback">
-                    {errors.p_email.message}
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
-                <label className="form-label">OTP</label>
-                <input
-                  type="text"
-                  className={classNames("form-control", {
-                    "is-invalid": errors.p_code,
-                  })}
-                  name="p_code"
-                  placeholder="Enter otp"
-                  ref={register({
-                    required: "This field is required",
-                  })}
-                />
-                {errors.p_code && (
-                  <div className="invalid-feedback">
-                    {errors.p_code.message}
-                  </div>
-                )}
-              </div>
-              <label className="form-label">New Password</label>
-              <input
-                type={isPasswordShow ? "text" : "password"}
-                id="password"
-                className={classNames("form-control", {
-                  "is-invalid": errors.p_password,
-                })}
-                placeholder="Enter Your Password"
-                name="p_password"
-                ref={register({
-                  required: "This field is required",
-                  pattern: {
-                    value:
-                      /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                    message:
-                      "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
-                  },
-                })}
-              />
-              <i
-                className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
-                onClick={togglePasssword}
-              />
-              {errors.p_password && (
-                <div className="invalid-feedback">
-                  {errors.p_password.message}
-                </div>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Confirm Password</label>
-              <input
-                type="text"
-                id="password"
-                className={classNames("form-control", {
-                  "is-invalid": errors.p_confirm_password,
-                })}
-                placeholder="Confirm Password"
-                name="p_confirm_password"
-                ref={register({
-                  required: "This field is required",
-                  validate: (value) =>
-                    value === getValues("p_password") ||
-                    "password doesn 't match",
-                })}
-              />
-              {errors.p_confirm_password && (
-                <div className="invalid-feedback">
-                  {errors.p_confirm_password.message}
-                </div>
-              )}
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
-        */}

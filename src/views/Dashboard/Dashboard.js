@@ -125,7 +125,7 @@ function Dashboard() {
             <thead className="query_thead">
               <tr>
                 <th className="left_side"> All Queries</th>
-                <th>{total}</th>
+               {total > 0 ?  <th>{total}</th> : ""}
               </tr>
             </thead>
           </table>
@@ -133,22 +133,22 @@ function Dashboard() {
             <thead className="query_thead">
               <tr>
                 <th className="left_side">Inprogress; Queries</th>
-                <th>{inprogress_queries}</th>
+              {inprogress_queries > 0 ?   <th>{inprogress_queries}</th> : ""}
               </tr>
             </thead>
 
             <tbody className="table_body">
               <tr>
                 <td className="left_side">Inprogress; Allocation</td>
-                <td>{inprogress_allocation}</td>
+               {inprogress_allocation > 0 ?  <td>{inprogress_allocation}</td> : ""}
               </tr>
               <tr>
                 <td className="left_side">Inprogress; Proposals</td>
-                <td>{inprogress_proposal}</td>
+               {inprogress_proposal > 0 ?  <td>{inprogress_proposal}</td> : ""}
               </tr>
               <tr>
                 <td className="left_side">Inprogress; Assignments</td>
-                <td>{inprogress_assignment}</td>
+               {inprogress_assignment > 0 ? <td>{inprogress_assignment}</td> : ""}
               </tr>
             </tbody>
           </table>
@@ -158,13 +158,13 @@ function Dashboard() {
             <thead className="query_thead">
               <tr>
                 <th className="left_side">Completed; Queries</th>
-                <th>{complete_query}</th>
+                {complete_query > 0 ?  <th>{complete_query}</th> : ""}
               </tr>
             </thead>
             <tbody className="table_body">
               <tr>
                 <td className="left_side">Completed; Assignments</td>
-                <td>{complete_query}</td>
+             {complete_query > 0 ?    <td>{complete_query}</td> : ""}
               </tr>
             </tbody>
           </table>
@@ -174,26 +174,26 @@ function Dashboard() {
             <thead className="query_thead">
               <tr>
                 <th className="left_side">Declined; Queries</th>
-                <th>{declined_queries}</th>
+                {declined_queries > 0 ? <th>{declined_queries}</th> : ""}
               </tr>
             </thead>
 
             <tbody className="table_body">
               <tr>
                 <td className="left_side">Admin Declined; Queries</td>
-                <td>{admin_declined_query}</td>
+               {admin_declined_query > 0 ?  <td>{admin_declined_query}</td> : ""}
               </tr>
               <tr>
                 <td className="left_side">Customer Declined; Queries</td>
-                <td>{customer_declined_Query}</td>
+              {customer_declined_Query > 0 ?   <td>{customer_declined_Query}</td> : ""}
               </tr>
               <tr>
                 <td className="left_side">Customer Declined; Proposals</td>
-                <td>{customer_declined_proposal}</td>
+               {customer_declined_proposal > 0 ?  <td>{customer_declined_proposal}</td> : ""}
               </tr>
               <tr>
                 <td className="left_side">Customer Declined; Payment</td>
-                <td>{Customer_declined_payment}</td>
+              {Customer_declined_payment > 0 ?   <td>{Customer_declined_payment}</td> : ""}
               </tr>
             </tbody>
           </table>
@@ -205,7 +205,7 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">All Proposals</th>
-                  <th>{allproposal}</th>
+                {allproposal > 0  ? <th>{allproposal}</th> : ""}
 
                 </tr>
               </thead>
@@ -215,17 +215,17 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Inprogress; Proposals</th>
-                  <th>{InProgress}</th>
+               {InProgress > 0 ?   <th>{InProgress}</th> : ""}
                 </tr>
               </thead>
               <tbody classNameName="table_body">
                 <tr>
                   <td className="left_side">Inprogress; Preparation</td>
-                  <td>{inprogress_preparation}</td>
+                {inprogress_preparation > 0 ?   <td>{inprogress_preparation}</td> : ""}
                 </tr>
                 <tr>
                   <td className="left_side">Inprogress; Acceptance</td>
-                  <td>{inprogress_acceptance}</td>
+                 {inprogress_acceptance > 0 ?  <td>{inprogress_acceptance}</td> : ""}
                 </tr>
               </tbody>
             </table>
@@ -234,7 +234,7 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Accepted; Proposals </th>
-                  <th>{accepted_proposals}</th>
+                 {accepted_proposals > 0 ?  <th>{accepted_proposals}</th> : ""}
                 </tr>
               </thead>
             </table>
@@ -243,7 +243,7 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Customer Declined; Proposals</th>
-                  <th>{declined}</th>
+                {declined > 0 ?   <th>{declined}</th> : ""}
                 </tr>
               </thead>
             </table>
@@ -256,7 +256,7 @@ function Dashboard() {
                 <thead className="assignment_thead">
                   <tr>
                     <th className="left_side">All Assignments</th>
-                    <th>{allassignment}</th>
+                   {allassignment > 0 ?  <th>{allassignment}</th> : ""}
                   </tr>
                 </thead>
               </table>
@@ -266,7 +266,7 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Inprogress; Assignments</th>
-                    <th>{inprogress}</th>
+                    {inprogress > 0 ? <th>{inprogress}</th> : ""}
                   </tr>
                 </thead>
               </table>
@@ -276,7 +276,7 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Completed; Assignments</th>
-                    <th>{complete}</th>
+                   {complete > 0 ?  <th>{complete}</th> : ""}
                   </tr>
                 </thead>
               </table>
@@ -286,7 +286,8 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Customer Declined; Payment</th>
-                    <th>{customer_declined_Pay}</th>
+                  
+              {Customer_declined_payment > 0 ?   <td>{Customer_declined_payment}</td> : ""}
                   </tr>
                 </thead>
               </table>
@@ -299,7 +300,7 @@ function Dashboard() {
                   <thead className="payment_thead">
                     <tr>
                       <th className="left_side">All Payments</th>
-                      <th>{totalpayment}</th>
+                     {totalpayment > 0 ?  <th>{totalpayment}</th>  : ""}
                     </tr>
                   </thead>
                 </table>
@@ -307,7 +308,7 @@ function Dashboard() {
                   <thead className="payment_thead2">
                     <tr>
                       <th className="left_side">Paid</th>
-                      <th>{paid}</th>
+                     {paid > 0 ?  <th>{paid}</th> : ""}
                     </tr>
                   </thead>
                 </table>
@@ -316,7 +317,7 @@ function Dashboard() {
                   <thead className="payment_thead2">
                     <tr>
                       <th className="left_side">Unpaid</th>
-                      <th>{unpaid}</th>
+                     {unpaid > 0 ?  <th>{unpaid}</th> : " "}
                     </tr>
                   </thead>
                 </table>

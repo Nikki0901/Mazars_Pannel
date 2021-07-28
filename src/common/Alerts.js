@@ -25,11 +25,11 @@ const ErrorLogin = () => {
 
 
 // ErrorLogin
-const ErrorOTP = () => {
+const ErrorOTP = (variable) => {
     return (
         Swal.fire(
             "Oops...",
-            "Error : Incorrect otp",
+            ` ${variable} </br> `,
             "error"
         )
     )
@@ -82,16 +82,6 @@ const SuccessReport = (message) => {
 }
 
 
-// SuccessNormal
-const SuccessNormal = (variable) => {
-    return (
-        Swal.fire(
-            'Success',
-            ` ${variable} </br> `,
-            'success'
-        )
-    )
-}
 
 
 // ErrorLogin
@@ -118,6 +108,18 @@ const ErrorEdit = () => {
 
 
 // SuccessNormal
+const SuccessNormal = (variable) => {
+    return (
+        Swal.fire(
+            'Success',
+            ` ${variable} </br> `,
+            'success'
+        )
+    )
+}
+
+
+// ErrorNormal
 const ErrorNormal = (variable) => {
     return (
         Swal.fire(

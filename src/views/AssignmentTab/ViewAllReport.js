@@ -157,7 +157,7 @@ function ViewReport({
                                       marginLeft: "8px",
                                       color: "green"
                                     }}
-                                    onClick={() => toggleNested(p)}      
+                                    onClick={() => toggleNested(p)}
                                   ></i>
                                 </div>
                               </div>
@@ -173,7 +173,18 @@ function ViewReport({
                                   ></i>
                                 </div> :
                                 p.status == "2" ?
-                                  "Discussion" :
+                                  <div title="Discussion">
+                                    <i
+                                      class="fa fa-comments-o"
+                                      style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        marginLeft: "8px",
+                                        color: "green"
+                                      }}
+                                      onClick={() => toggleNested(p)}
+                                    ></i>
+                                  </div> :
                                   null
                           }
                         </td>

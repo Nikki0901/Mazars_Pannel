@@ -10,6 +10,8 @@ import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import VerifyOTP from "./VerifyOTP";
+import classNames from "classnames";
+import Alerts from "../../common/Alerts";
 
 
 const Schema = yup.object().shape({
@@ -48,9 +50,12 @@ function LoginForm() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          Alerts.SuccessNormal("Otp sent to your email.")
           setShow(true)
-          // setEmail(response.data.name)
           setUid(response.data.user_id)
+          localStorage.setItem("email", JSON.stringify(value.p_email))
+        } else if (response.data.code === 0) {
+          Alerts.ErrorNormal("Invalid email or password.")
         }
       })
       .catch((error) => {
@@ -65,7 +70,7 @@ function LoginForm() {
     setEmail(e.target.value);
   };
 
- 
+
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -92,14 +97,12 @@ function LoginForm() {
                   </Link>
                 </Button>
               </div>
-
             </div>
           </div>
           <div className="signUp">
             <Typography variant="h4" style={{ "margin": "0 0 15px 0" }}>
-             For existing customers
+              For existing customers
             </Typography>
-
             {
               show ? <div>
                 <VerifyOTP email={email} uid={uid} />
@@ -107,10 +110,12 @@ function LoginForm() {
                 :
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="form-group">
-                    <label className="form-label">Email *</label>
+                    <label className="form-label">Email <span className="declined">*</span></label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_email,
+                      })}
                       name="p_email"
                       ref={register}
                       placeholder="Enter Email"
@@ -119,10 +124,12 @@ function LoginForm() {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Password *</label>
+                    <label className="form-label">Password <span className="declined">*</span></label>
                     <input
                       type={isPasswordShow ? "text" : "password"}
-                      className="form-control"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_password,
+                      })}
                       name="p_password"
                       placeholder="Enter Password"
                       ref={register}
@@ -139,7 +146,7 @@ function LoginForm() {
                     </button>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                  <div style={{ display: "flex", flexDirection: "row-reverse", color: "black" }}>
                     <Link
                       to={{
                         pathname: "/customer/forget-password",
@@ -151,7 +158,6 @@ function LoginForm() {
                   </div>
                 </form>
             }
-
           </div>
         </div>
       </div>

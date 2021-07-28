@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import "../../assets/css/style.css";
-import "../../assets/css/media.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
@@ -12,258 +10,238 @@ import { useAlert } from "react-alert";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
-import { professionName, country, states, cities } from './data';
+import { professionName, country, states } from './data';
+import { cities } from './city';
 import Alerts from "../../common/Alerts";
-import Button from '@material-ui/core'
-import { array } from "yup/lib/locale";
+import { ResponsiveEmbed } from "react-bootstrap";
 
 
 
-const Schema = yup.object().shape({
-  p_name: yup.string().required("required name"),
-  p_email: yup.string().email("invalid email").required("required email"),
-  p_profession: yup.string().required("required proffesion"),
-  p_state: yup.string().required("required state"),
-  p_city: yup.string().required("required city"),
-  p_phone: yup
-    .string()
-    .required("required phone no")
-    .matches(/^[0-9]+$/, "Must be only digits")
-    .min(10, "Must be exactly 10 digits")
-    .max(20, "max 20 digits"),
-  p_password: yup
-    .string()
-    .required("required password")
-    .min(5, "at least 5 digits")
-    .max(20, "max 20 digits"),
-});
+// const Schema = yup.object().shape({
+//   // p_name: yup.string().required("required name"),
+//   // p_email: yup.string().email("invalid email").required("required email"),
+//   // p_profession: yup.string().required("required proffesion"),
+//   // p_state: yup.string().required("required state"),
+//   // p_city: yup.string().required("required city"),
+//   // p_phone: yup
+//   //   .string()
+//   //   .required("required phone no")
+//   //   .matches(/^[0-9]+$/, "Must be only digits")
+//   //   .min(10, "Must be exactly 10 digits")
+//   //   .max(20, "max 20 digits"),
+//   // p_password: yup
+//   //   .string()
+//   //   .required("required password")
+//   //   .min(5, "at least 5 digits")
+//   //   .max(20, "max 20 digits"),
+// });
 
 
 
 function SignUp(props) {
   const alert = useAlert();
-  const { handleSubmit, register, errors } = useForm({
-    resolver: yupResolver(Schema),
-  });
+  const { handleSubmit, register, errors, getValues } = useForm();
 
-  var array2 = []
-  var array3 = []
+
   const [otpMsg, setOtpMsg] = useState();
-  const [email, setEmail] = useState([]);
-  const [phone, setPhone] = useState([]);
-  const [valiEmail, setValiemail] = useState()
-  const [city, setCity] = useState([]);
-  const [countryState, setCountryState] = useState([]);
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);
   const [disabled, setDisbutton] = useState(true);
   const [disabled2, setDisbutton2] = useState(false);
-  const [showInput, setshowInput] = useState(false)
+
   const [password, setPassword] = useState(false);
   const [passError, setpassError] = useState()
   const [repassword, setRepassword] = useState(false);
   const [passData, setPassData] = useState([])
-  const [countryCode, setCountryCode] = useState([])
   const [valiPhone, setValiphone] = useState([]);
 
 
+  const [State, setState] = useState([]);
+  const [city, setCity] = useState([]);
+  const [countryCode, setCountryCode] = useState([])
+  const [showPlus, setShowPlus] = useState(false)
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [valiEmail, setValiemail] = useState(null)
+  const [invalid, setInvalid] = useState(null)
+  const [numExist, setNumExist] = useState(null)
+  const [numAvail, setNumAvail] = useState(null)
+
   const togglePasssword = () => {
     setPassword(!password)
-  };
-
-  const handleChange2 = (e) => {
-    console.log("heoo")
-
-    setPhone(e.target.value);
-    if (phone.length > 8) {
-      let formData = new FormData();
-
-      formData.append("phone", phone);
-      formData.append("type", 2);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          setValiphone(response.data.result)
-          console.log(response.data.result)
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-    else {
-      setValiphone("")
-    }
   };
 
   const togglePasssword2 = () => {
     setRepassword(!repassword)
   };
 
-  const country2 = []
-  const funValidation = (e) => {
-    setPassData(e.target.value)
-
-    if (passData.length > 0) {
-      if (passData.length < 8) {
-        setpassError("Your password must be at least 8 characters");
-      }
-      if (passData.search(/[!#$%&@? "]/) < 0) {
-        setpassError("Your password must contain at least one special Character.");
-      }
-      if (passData.search(/[a-z]/i) < 0) {
-        setpassError("Your password must contain at least one lower case letter.");
-      }
-      if (passData.search(/[A-Z]/i) < 0) {
-        setpassError("Your password must contain at least Uppercase letter.");
-      }
-      if (passData.search(/[0-9]/) < 0) {
-        setpassError("Your password must contain at least one digit.");
-      }
-    }
-  }
-
-  const handleChange = (e) => {
-
-    if (e.value) {
-      setEmail(e.target.value);
-      let formData = new FormData();
-
-      formData.append("email", email);
-      formData.append("type", 1);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          setValiemail(response.data.result)
-          console.log(response.data.result)
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-  };
-
-
-
-
-
-
 
   const onSubmit = (value) => {
     console.log("value :", value);
 
 
-    let formData = new FormData();
-    formData.append("name", value.p_name);
-    formData.append("email", value.p_email);
-    formData.append("phone", value.p_phone);
-    formData.append("occupation", value.p_profession);
-    formData.append("state", value.p_state);
-    formData.append("city", value.p_city)
-    formData.append("zipCode", value.p_zipCode);
-    formData.append("password", value.p_password);
-    // formData.append("confirmpassword", value.conformpass);
+    // let formData = new FormData();
+    // formData.append("name", value.p_name);
+    // formData.append("email", value.p_email);
+    // formData.append("phone", value.p_phone);
+    // formData.append("occupation", value.p_profession);
+    // formData.append("state", value.p_state);
+    // formData.append("city", value.p_city)
+    // formData.append("zipCode", value.p_zipCode);
+    // formData.append("password", value.p_password);
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/signup`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/customers/signup`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
 
-        if (response.data.code === 1) {
+    //     if (response.data.code === 1) {
 
-          var variable = "Signup successfully."
-          Alerts.SuccessNormal(variable)
+    //       var variable = "Signup successfully."
+    //       Alerts.SuccessNormal(variable)
 
-          localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem(
-            "userNameId",
-            JSON.stringify(response.data.user_id)
-          );
-          localStorage.setItem("name", JSON.stringify(response.data.name));
-          props.history.push("/customer/questionnaire-page");
-        } else if (response.data.code === 0) {
-          console.log("res -", response.data.result);
-          setLoad(false);
-          Swal.fire(
-            "Oops",
-            `error :        
-          ${response.data.message[0] ? response.data.message[0] : ""} 
-          ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
-            ${response.data.message[1] ? response.data.message[1] : ""} 
-            `,
-            "error"
-          );
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+    //       localStorage.setItem("userid", JSON.stringify(response.data.id));
+    //       localStorage.setItem(
+    //         "userNameId",
+    //         JSON.stringify(response.data.user_id)
+    //       );
+    //       localStorage.setItem("name", JSON.stringify(response.data.name));
+    //       props.history.push("/customer/questionnaire-page");
+    //     } else if (response.data.code === 0) {
+    //       console.log("res -", response.data.result);
+    //       setLoad(false);
+    //       Swal.fire(
+    //         "Oops",
+    //         `error :        
+    //       ${response.data.message[0] ? response.data.message[0] : ""} 
+    //       ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
+    //         ${response.data.message[1] ? response.data.message[1] : ""} 
+    //         `,
+    //         "error"
+    //       );
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
   };
 
-  const getOtp = () => {
-    setDisbutton(false)
-    setDisbutton2(true)
-    setshowInput(true)
-    let formData = new FormData();
 
-    formData.append("email", email);
+  const getcountry = (key) => {
+    setShowPlus(true)
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/signupotp`,
-
-      data: formData,
-    })
-      .then(function (response) {
-        setOtpMsg("Opt sent");
-
-        console.log(response.data.result)
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  }
-  const getCity = (key) => {
-    console.log("heool" + key)
-
-    cities.filter((data) => {
-      console.log(data);
-      if (data.state_id == key) {
-
-        array3.push(data)
-      }
-    });
-    setCity(array3)
-  }
-  const getcountryID = (key) => {
-
+    var arrayState = []
     states.filter((data) => {
-
       if (data.country_id == key) {
-
-        array2.push(data)
+        arrayState.push(data)
       }
     });
-    setCountryState(array2)
+    setState(arrayState)
+
     country.filter((data) => {
       if (key == data.id) {
         setCountryCode(data.phoneCode)
       }
     })
+
   };
 
+  const getCity = (key) => {
+    var arrayCity = []
+
+    cities.filter((data) => {
+      if (data.state_id === key) {
+        arrayCity.push(data)
+      }
+    });
+    setCity(arrayCity)
+  }
+
+  //eamil onchange
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+  };
+  //email validaation with api
+  const emailValidation = (key) => {
+
+    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email.match(validRegex)) {
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("type", 1);
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("resEmail-", response);
+          if (response.data.code === 1) {
+            setValiemail(response.data.result)
+            setInvalid('')
+          } else if (response.data.code === 0) {
+            setInvalid(response.data.result)
+            setValiemail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+    else {
+      console.log("error")
+    }
+
+  }
+
+
+  //phone onchange
+  const phoneHandler = (e) => {
+    if (isNaN(e.target.value)) {
+      console.log("please enter no only")
+    } else {
+      setPhone(e.target.value);
+    }
+  };
+
+
+  //phone validaation with api
+  const phoneValidation = () => {
+
+    if (phone.length > 9) {
+      let formData = new FormData();
+      formData.append("phone", phone);
+      formData.append("type", 2);
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            // setValiphone(response.data.result)
+            console.log(response.data.result)
+            setNumAvail(response.data.result);
+            setNumExist('')
+          }
+          else if (response.data.result === 0) {
+            console.log(response.data.result)
+            setNumExist(response.data.result)
+            setNumAvail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+  }
+
+  console.log(numExist)
 
   return (
     <>
@@ -281,53 +259,56 @@ function SignUp(props) {
                 <div className="col-md-6">
 
                   <div className="mb-3">
-                    <label className="form-label">Name<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Name<span className="declined">*</span></label>
                     <input
                       type="text"
+                      name="p_name"
+                      ref={register({
+                        required: "This field is required",
+                      })}
+                      placeholder="Enter Name"
                       className={classNames("form-control", {
                         "is-invalid": errors.p_name,
                       })}
-                      name="p_name"
-                      ref={register}
-                      placeholder="Enter Name"
                     />
-                    {errors.p_name && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
 
                 </div>
+
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Email<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Email<span className="declined">*</span></label>
                     <input
                       type="text"
+                      className="form-control"
+                      name="p_email"
+                      onChange={(e) => emailHandler(e)}
+                      onBlur={emailValidation}
                       className={classNames("form-control", {
                         "is-invalid": errors.p_email,
                       })}
-
-                      onChange={(e) => handleChange(e)}
-                      name="p_email"
+                      placeholder="Enter Your Password"
                       ref={register}
-
-                      placeholder="Enter Email"
                     />
-                    {errors.p_email && (
-                      <div className="invalid-feedback">
+
+                    {
+                      valiEmail ?
+                        <p className="completed">
+                          {valiEmail}
+                        </p>
+                        :
+                        <p className="declined">{invalid}</p>
+                    }
 
 
-                      </div>
-                    )}
-                    {valiEmail}
+
                   </div>
                 </div>
 
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Occupation/ Profession<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Occupation/ Profession<span className="declined">*</span></label>
                     <br />
                     <select
                       className={classNames("form-control", {
@@ -335,7 +316,9 @@ function SignUp(props) {
                       })}
                       name="p_profession"
                       aria-label="Default select example"
-                      ref={register}
+                      ref={register({
+                        required: "This field is required",
+                      })}
                     >
                       <option value="">--select--</option>
                       {professionName.map((p, index) => (
@@ -344,28 +327,23 @@ function SignUp(props) {
                         </option>
                       ))}
                     </select>
-                    {errors.p_profession && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
                 </div>
 
 
-
-
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Country<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Country<span className="declined">*</span></label>
                     <select
                       id="state"
                       name="p_country"
                       className={classNames("form-control", {
-                        "is-invalid": errors.p_state,
+                        "is-invalid": errors.p_country,
                       })}
-                      ref={register}
-                      onChange={(e) => getcountryID(e.target.value)}
+                      ref={register({
+                        required: "This field is required",
+                      })}
+                      onChange={(e) => getcountry(e.target.value)}
                     >
                       <option value="">--select--</option>
                       {country.map((p) => (
@@ -374,52 +352,46 @@ function SignUp(props) {
                         </option>
                       ))}
                     </select>
-                    {errors.p_state && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
                 </div>
 
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">State<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">State<span className="declined">*</span></label>
                     <select
                       id="state"
                       name="p_state"
                       className={classNames("form-control", {
                         "is-invalid": errors.p_state,
                       })}
-                      ref={register}
+                      ref={register({
+                        required: "This field is required",
+                      })}
                       onChange={(e) => getCity(e.target.value)}
                     >
                       <option value="">--select--</option>
-                      {countryState.map((p) => (
-                        <option key={p.id} value={p.country_id}>
+                      {State.map((p) => (
+                        <option key={p.id} value={p.id}>
                           {p.name}
                         </option>
                       ))}
                     </select>
-                    {errors.p_state && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
                 </div>
 
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">City<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">City<span className="declined">*</span></label>
                     <select
                       className={classNames("form-control", {
                         "is-invalid": errors.p_city,
                       })}
                       name="p_city"
-                      ref={register}
+                      ref={register({
+                        required: "This field is required",
+                      })}
                     >
                       <option value="">--select--</option>
                       {city.map((p, index) => (
@@ -428,80 +400,69 @@ function SignUp(props) {
                         </option>
                       ))}
                     </select>
-                    {errors.p_city && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
                 </div>
+
                 <div className="col-md-6">
                   <div className="mb-3">
-
-                    <label className="form-label">Mobile number<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Mobile number<span className="declined">*</span></label>
                     <div className="mobNumber" style={{ "display": "flex" }}>
                       <select
                         name="p_code"
                         disabled={true}
-
-                        ref={register}>
-
+                        ref={register({
+                          required: "This field is required",
+                        })}
+                      >
                         <option>
-                          {countryCode}
+                          {showPlus ? "+" + countryCode : null}
                         </option>
-
                       </select>
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_phone,
+                          "is-invalid": errors.p_code,
                         })}
                         name="p_phone"
                         ref={register}
                         placeholder="Mobile number"
-                        onChange={(e) => handleChange2(e)}
+                        onChange={(e) => phoneHandler(e)}
+                        onBlur={phoneValidation}
                       />
-                    </div>
-                    {errors.p_phone && (
-                      <div className="invalid-feedback">
 
-                      </div>
-                    )}
-                    {valiPhone}
+                    </div>
+                    {numAvail ?
+                      <p className="completed">{numAvail}</p>
+                      :
+                      <p className="declined">{numExist}</p>
+                    }
                   </div>
                 </div>
 
                 <div className="col-md-6">
-
                   <div className="mb-3">
-                    <label className="form-label">Zipcode<sup style={{ "color": "red" }}>*</sup></label>
+                    <label className="form-label">Zipcode<span className="declined">*</span></label>
                     <input
                       type="text"
                       className={classNames("form-control", {
-                        "is-invalid": errors.p_name,
+                        "is-invalid": errors.p_zipCode,
                       })}
                       name="p_zipCode"
-                      ref={register}
+                      ref={register({
+                        required: "This field is required",
+                      })}
                       placeholder="Enter Name"
                     />
-                    {errors.p_name && (
-                      <div className="invalid-feedback">
-
-                      </div>
-                    )}
                   </div>
 
                 </div>
                 <div class="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Password<sup style={{ "color": "red" }}>*</sup></label>
-
+                    <label className="form-label">Password<span className="declined">*</span></label>
 
                     <input
                       type={password ? "text" : "password"}
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_password,
-                      })}
+                      className="form-control"
                       onCopy={(e) => {
                         e.preventDefault();
                         return false
@@ -510,29 +471,41 @@ function SignUp(props) {
                         e.preventDefault();
                         return false
                       }}
-                      onChange={funValidation}
+                      // onChange={funValidation}
                       name="p_password"
-                      ref={register}
-                      placeholder="Enter Password"
+                      className={classNames("form-control", {
+                        "is-invalid": errors.p_password,
+                      })}
+                      placeholder="Enter Your Password"
+                      ref={register({
+                        required: "mandatory",
+                        pattern: {
+                          value:
+                            /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                          message:
+                            "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
+                        },
+                      })}
                     />
                     <i
                       className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
                       onClick={togglePasssword}
                     />
-                    <p style={{ "color": "red" }}>{passError}</p>
-
-
+                    {errors.p_password && (
+                      <div className="invalid-feedback">
+                        {errors.p_password.message}
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div className="mb-3">
-                    <label className="form-label">Re-Type Password</label>
-
+                    <label className="form-label">Confirm Password<span className="declined">*</span></label>
                     <input
                       type={repassword ? "text" : "password"}
                       className={classNames("form-control", {
-                        "is-invalid": errors.cp_password,
+                        "is-invalid": errors.p_confirm_password,
                       })}
                       onCopy={(e) => {
                         e.preventDefault();
@@ -542,39 +515,28 @@ function SignUp(props) {
                         e.preventDefault();
                         return false
                       }}
-                      ref={register}
-                      name="cp_password"
-                      placeholder="Enter Password"
+                      placeholder="Confirm Password"
+                      name="p_confirm_password"
+                      ref={register({
+                        required: "mandatory",
+                        validate: (value) =>
+                          value === getValues("p_password") ||
+                          "password doesn 't match",
+                      })}
                     />
                     <i
                       className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
                       onClick={togglePasssword2}
                     />
-
-
-                    {errors.cp_password && (
+                    {errors.p_confirm_password && (
                       <div className="invalid-feedback">
-
+                        {errors.p_confirm_password.message}
                       </div>
                     )}
-
-
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div className="mb-3">
-                    <button type="submit" className="btn btn-primary" style={{ "margin": "0 20px 0 0" }} disabled={disabled2} onClick={getOtp}>
-                      Get Otp
-                    </button>
 
-                    {showInput == true ? <input
-                      type="text"
-                      disabled={disabled}
-                      style={{ "margin": "0 15px" }} /> : ""}
-                    <p style={{ "color": "green" }}>{otpMsg}</p>
-                  </div>
-                </div>
                 <div class="col-md-6">
                   <div className="mb-3">
                     <button type="submit" className="btn btn-primary">
@@ -583,12 +545,10 @@ function SignUp(props) {
                   </div>
                 </div>
               </div>
-              <p style={{ "textAlign": "right", "color": "red" }}>Mandatory<sup>*</sup></p>
-
-
             </form>
           )}
         </div>
+
       </div>
       <Footer />
     </>
@@ -657,9 +617,6 @@ export default SignUp;
 //   const togglePasssword2 = () => {
 //     setRepassword(!repassword)
 //   };
-
-
-
 
 
 //   useEffect(() => {
@@ -779,7 +736,7 @@ export default SignUp;
 //                 <div className="col-md-6">
 
 //                   <div className="mb-3">
-//                     <label className="form-label">Name<sup style={{ "color": "red" }}>*</sup></label>
+//                     <label className="form-label">Name<span className="declined">*</span></label>
 //                     <input
 //                       type="text"
 //                       className={classNames("form-control", {

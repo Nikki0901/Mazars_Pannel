@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
-import { baseUrl,ReportUrl } from "../../config/config";
+import { baseUrl, ReportUrl } from "../../config/config";
 import {
   Card,
   CardHeader,
@@ -205,54 +205,8 @@ function AllAssignment() {
                     :
                     null
                   }
-
-                  {/* {row.assignment_draft_report && !row.final_report ? (
-                    row.draft_report == "completed" ?
-                      null :
-                      <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                        <div style={{ cursor: "pointer" }} title="Accepted">
-                          <i
-                            class="fa fa-check"
-                            style={{
-                              color: "green",
-                              fontSize: "16px",
-                            }}
-                            onClick={() => acceptHandler(row)}
-                          ></i>
-                        </div>
-
-                        <div title="Send Message">
-                          <Link
-                            to={{
-                              pathname: `/customer/chatting/${row.id}`,
-                              obj: {
-                                message_type: "3",
-                                query_No: row.assign_no,
-                                query_id: row.id,
-                                routes: `/customer/assignment`
-                              }
-                            }}
-                          >
-                            <i
-                              class="fa fa-comments-o"
-                              style={{
-                                fontSize: 16,
-                                cursor: "pointer",
-                                marginLeft: "8px",
-                                color: "green"
-                              }}
-                            ></i>
-                          </Link>
-                        </div>
-                      </div>
-
-                  ) : null} */}
-
                 </div>
             }
-
-
           </>
         );
       },
@@ -267,36 +221,6 @@ function AllAssignment() {
     }
   ];
 
-
-  //accept handler
-  const acceptHandler = (key) => {
-    console.log("acceptHandler", key);
-
-    let formData = new FormData();
-    formData.append("uid", JSON.parse(userId));
-    formData.append("id", key.id);
-    formData.append("query_no", key.assign_no);
-    formData.append("type", 1);
-    // formData.append("docid", docid);
-
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/draftAccept`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("response-", response);
-        if (response.data.code === 1) {
-
-          var variable = "Draft accepted successfully "
-          Alerts.SuccessNormal(variable)
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
 
 
   //tl,phone,email
@@ -351,8 +275,6 @@ function AllAssignment() {
             data={assignmentDisplay}
             columns={columns}
           />
-        
-          
 
           <ViewAllReportModal
             ViewReport={ViewReport}
@@ -371,73 +293,117 @@ function AllAssignment() {
 export default AllAssignment;
 
 
-  // const [pay, setPay] = useState({
-  //   pay: "",
-  //   amount: "",
-  //   accepted_amount: "",
-  //   paid_amount: "",
 
-  //   amount_type: "",
-  //   amount_fixed: "",
-  //   amount_hourly: "",
+// const [pay, setPay] = useState({
+//   pay: "",
+//   amount: "",
+//   accepted_amount: "",
+//   paid_amount: "",
 
-  //   payment_terms: "",
-  //   no_of_installment: "",
-  //   installment_amount: "",
-  //   due_date: "",
-  // });
+//   amount_type: "",
+//   amount_fixed: "",
+//   amount_hourly: "",
 
-  // const [addPaymentModal, setPaymentModal] = useState(false);
-  // const paymentHandler = (key) => {
-  //   setPaymentModal(!addPaymentModal);
-  //   setPay({
-  //     amount: key.accepted_amount,
-  //     id: key.id,
-  //     accepted_amount: key.accepted_amount,
-  //     paid_amount: key.paid_amount,
+//   payment_terms: "",
+//   no_of_installment: "",
+//   installment_amount: "",
+//   due_date: "",
+// });
 
-  //     amount_type: key.amount_type,
-  //     amount_fixed: key.amount_fixed,
-  //     amount_hourly: key.amount_hourly,
+// const [addPaymentModal, setPaymentModal] = useState(false);
+// const paymentHandler = (key) => {
+//   setPaymentModal(!addPaymentModal);
+//   setPay({
+//     amount: key.accepted_amount,
+//     id: key.id,
+//     accepted_amount: key.accepted_amount,
+//     paid_amount: key.paid_amount,
+
+//     amount_type: key.amount_type,
+//     amount_fixed: key.amount_fixed,
+//     amount_hourly: key.amount_hourly,
 
 
-  //     payment_terms: key.payment_terms,
-  //     no_of_installment: key.no_of_installment,
-  //     installment_amount: key.installment_amount,
-  //     due_date: key.due_date,
+//     payment_terms: key.payment_terms,
+//     no_of_installment: key.no_of_installment,
+//     installment_amount: key.installment_amount,
+//     due_date: key.due_date,
 
-  //   });
-  // };
-  // function schedultTime(cell, row) {
-  //   // console.log("schedultTime", row);
-  //   console.log("schedultTime", row.schedule_time);
-  //   // console.log("setSeconds", setSeconds(row.schedule_time));
+//   });
+// };
+// function schedultTime(cell, row) {
+//   // console.log("schedultTime", row);
+//   console.log("schedultTime", row.schedule_time);
+//   // console.log("setSeconds", setSeconds(row.schedule_time));
 
-  //   var d = row.schedule_time;
-  //   var date = new Date(d); // some mock date
-  //   var milliseconds = date.getTime();
-  //   console.log("milliseconds - ", milliseconds);
+//   var d = row.schedule_time;
+//   var date = new Date(d); // some mock date
+//   var milliseconds = date.getTime();
+//   console.log("milliseconds - ", milliseconds);
 
-  //   var date2 = new Date(); // current time
-  //   var milliseconds2 = date2.getTime();
-  //   console.log("current - ", milliseconds2);
+//   var date2 = new Date(); // current time
+//   var milliseconds2 = date2.getTime();
+//   console.log("current - ", milliseconds2);
 
-  //   var diff = milliseconds - milliseconds2;
-  //   console.log("diff - ", diff);
-  //   var total = diff - 900000;
-  //   console.log("total - ", total);
+//   var diff = milliseconds - milliseconds2;
+//   console.log("diff - ", diff);
+//   var total = diff - 900000;
+//   console.log("total - ", total);
 
-  //   if (total > 0 && 900000 > total) {
-  //     return (
-  //       <>
-  //         <div style={{ cursor: "pointer" }} title="Video Chat">
-  //           <i
-  //             class="fa fa-video-camera"
-  //             style={{ color: "red", fontSize: "16px" }}
-  //             onClick={() => handleJoin(row.id)}
-  //           ></i>
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  // }
+//   if (total > 0 && 900000 > total) {
+//     return (
+//       <>
+//         <div style={{ cursor: "pointer" }} title="Video Chat">
+//           <i
+//             class="fa fa-video-camera"
+//             style={{ color: "red", fontSize: "16px" }}
+//             onClick={() => handleJoin(row.id)}
+//           ></i>
+//         </div>
+//       </>
+//     );
+//   }
+// }
+
+{/* {row.assignment_draft_report && !row.final_report ? (
+                    row.draft_report == "completed" ?
+                      null :
+                      <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                        <div style={{ cursor: "pointer" }} title="Accepted">
+                          <i
+                            class="fa fa-check"
+                            style={{
+                              color: "green",
+                              fontSize: "16px",
+                            }}
+                            onClick={() => acceptHandler(row)}
+                          ></i>
+                        </div>
+
+                        <div title="Send Message">
+                          <Link
+                            to={{
+                              pathname: `/customer/chatting/${row.id}`,
+                              obj: {
+                                message_type: "3",
+                                query_No: row.assign_no,
+                                query_id: row.id,
+                                routes: `/customer/assignment`
+                              }
+                            }}
+                          >
+                            <i
+                              class="fa fa-comments-o"
+                              style={{
+                                fontSize: 16,
+                                cursor: "pointer",
+                                marginLeft: "8px",
+                                color: "green"
+                              }}
+                            ></i>
+                          </Link>
+                        </div>
+                      </div>
+
+) : null} */}

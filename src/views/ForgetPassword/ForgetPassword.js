@@ -20,14 +20,15 @@ const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
 });
 
+
 function ForgetPassword(props) {
   console.log("props : ", props.location.email);
 
   const alert = useAlert();
-
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+
 
   const onSubmit = (value) => {
     console.log("value :", value);

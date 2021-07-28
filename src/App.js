@@ -43,6 +43,7 @@ import PaymentStatus from './views/PaymentStatus/PaymentStatus'
 
 
 
+
 //admin routes
 import AdminStart from './pages/Admin/Start/Start'
 import AdminLogin from './pages/Admin/Login/Login'
@@ -148,10 +149,10 @@ function App() {
         <Router>
           <Switch>
 
-            {/* <PublicRouteUser exact path="/" component={Start} /> */}
-            <PublicRouteUser exact path="/" component={Signin} />
+            <PublicRouteUser exact path="/" component={RegisterYourSelf} />
             <PublicRouteUser exact path="/customer/signup" component={SignUp} />
-            <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} />
+            {/* <PublicRouteUser exact path="/customer/register-yourself" component={Signin} /> */}
+            {/* <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} /> */}
             <PublicRouteUser exact path="/customer/verify-otp" component={VerifyOtp} />
             <PublicRouteUser exact path="/customer/otp" component={VerifyOtpLogin} />
             <PublicRouteUser exact path="/customer/forget-password" component={ForgetPassword} />
