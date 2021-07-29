@@ -226,14 +226,18 @@ function SignUp(props) {
           if (response.data.code === 1) {
             // setValiphone(response.data.result)
             console.log(response.data.result)
-            setNumAvail(response.data.result);
             setNumExist('')
+            setNumAvail(response.data.result);
+            
           }
-          else if (response.data.result === 0) {
+          else if (response.data.code === 0) {
             console.log(response.data.result)
-            setNumExist(response.data.result)
             setNumAvail('')
+            setNumExist(response.data.result)
+           
+            console.log("mobile" + setNumExist)
           }
+
         })
         .catch((error) => {
           console.log("erroror - ", error);
