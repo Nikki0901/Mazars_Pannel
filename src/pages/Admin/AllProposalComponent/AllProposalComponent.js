@@ -239,7 +239,7 @@ function AllProposalComponent({ allProposal }) {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "11px", width: "65px" };
+        return { fontSize: "11px", width: "85px" };
       },
       formatter: function (cell, row) {
         return (
@@ -269,12 +269,24 @@ function AllProposalComponent({ allProposal }) {
                 </Link>
               </div>
 
-              <div style={{ cursor: "pointer" }} title="View Proposal">
+              {/* <div style={{ cursor: "pointer" }} title="View Proposal">
                 <i
                   class="fa fa-eye"
                   style={{ color: "green", fontSize: "16px" }}
                   onClick={() => ViewHandler(row)}
                 ></i>
+              </div> */}
+
+              <div style={{ cursor: "pointer" }} title="View Proposal">
+                <a
+                  href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}`}
+                  target="_blank"
+                >
+                  <i
+                    class="fa fa-eye"
+                    style={{ color: "green", fontSize: "16px" }}
+                  />
+                </a>
               </div>
 
             </div>

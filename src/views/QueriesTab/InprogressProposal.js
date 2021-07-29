@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Records from "../../components/Records/Records";
+import CommonServices from "../../common/common";
 
 
 
@@ -134,18 +135,24 @@ function InprogressProposal() {
     },
     {
       text: "Expected Delivery Date",
-      dataField: "Exp_Delivery_Date",
+      dataField: "exp_delivery_date",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function dateFormat(cell, row) {
-        console.log("dt", row.Exp_Delivery_Date);
-        var oldDate = row.Exp_Delivery_Date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.toString().split("-").reverse().join("-");
+        console.log("dt", row.exp_delivery_date);
+
+        return (
+          <>
+            {
+              row.status_code >= "1" ?
+                CommonServices.removeTime(row.exp_delivery_date)
+                :
+                null
+            }
+          </>
+        )
       },
     },
   ];

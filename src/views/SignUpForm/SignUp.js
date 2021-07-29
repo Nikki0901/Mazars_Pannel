@@ -46,14 +46,9 @@ function SignUp(props) {
   const [otpMsg, setOtpMsg] = useState();
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);
-  const [disabled, setDisbutton] = useState(true);
-  const [disabled2, setDisbutton2] = useState(false);
-
   const [password, setPassword] = useState(false);
   const [passError, setpassError] = useState()
   const [repassword, setRepassword] = useState(false);
-  const [passData, setPassData] = useState([])
-  const [valiPhone, setValiphone] = useState([]);
 
 
   const [State, setState] = useState([]);
@@ -66,6 +61,10 @@ function SignUp(props) {
   const [invalid, setInvalid] = useState(null)
   const [numExist, setNumExist] = useState(null)
   const [numAvail, setNumAvail] = useState(null)
+  const [countryName, setCountryName] = useState(null)
+  const [stateName, setStateName] = useState(null)
+
+
 
   const togglePasssword = () => {
     setPassword(!password)
@@ -76,8 +75,156 @@ function SignUp(props) {
   };
 
 
+
+
+  //get country
+  const getcountry = (key) => {
+    setShowPlus(true)
+
+    country.filter((p) => {
+      if (p.id == key) {
+        console.log(p.name)
+        setCountryName(p.name)
+      }
+    });
+
+
+    var arrayState = []
+    states.filter((data) => {
+      if (data.country_id == key) {
+        arrayState.push(data)
+      }
+    });
+    setState(arrayState)
+
+    country.filter((data) => {
+      if (key == data.id) {
+        setCountryCode(data.phoneCode)
+      }
+    })
+
+  };
+
+
+
+  //get city
+  const getCity = (key) => {
+    console.log("state", key)
+
+    states.filter((p) => {
+      if (p.id == key) {
+        console.log("state", p)
+        setStateName(p.name)
+      }
+    });
+
+    var arrayCity = []
+    cities.filter((data) => {
+      if (data.state_id === key) {
+        arrayCity.push(data)
+      }
+    });
+    setCity(arrayCity)
+  }
+
+  //eamil onchange
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+  };
+
+
+  //email validaation with api
+  const emailValidation = (key) => {
+
+    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email.match(validRegex)) {
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("type", 1);
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("resEmail-", response);
+          if (response.data.code === 1) {
+            setValiemail(response.data.result)
+            setInvalid('')
+          } else if (response.data.code === 0) {
+            setInvalid(response.data.result)
+            setValiemail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+    else if (email.length > 0) {
+      console.log("error")
+      setInvalid("invalid email")
+    } else if (email.length === 0) {
+      setInvalid("")
+    }
+  }
+
+
+  //phone onchange
+  const phoneHandler = (e) => {
+    if (isNaN(e.target.value)) {
+      console.log("please enter no only")
+    } else {
+      setPhone(e.target.value);
+    }
+  };
+
+
+  //phone validaation with api
+  const phoneValidation = () => {
+
+    if (phone.length > 9 && phone.length < 15) {
+      let formData = new FormData();
+      formData.append("phone", phone);
+      formData.append("type", 2);
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            // setValiphone(response.data.result)
+            console.log(response.data.result)
+            setNumAvail(response.data.result);
+            setNumExist('')
+          }
+          else if (response.data.code === 0) {
+            console.log(response.data.result)
+            setNumExist(response.data.result)
+            setNumAvail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    } else if (phone.length > 9) {
+      setNumExist("at least you have to type 9 digit")
+    } else if (phone.length < 15) {
+      setNumExist("max 15 digit allow")
+    }
+  }
+
+
+
+
+  //submit form
   const onSubmit = (value) => {
     console.log("value :", value);
+    console.log("countryName :", countryName);
+    console.log("stateName :", stateName);
+
 
 
     // let formData = new FormData();
@@ -85,10 +232,13 @@ function SignUp(props) {
     // formData.append("email", value.p_email);
     // formData.append("phone", value.p_phone);
     // formData.append("occupation", value.p_profession);
-    // formData.append("state", value.p_state);
     // formData.append("city", value.p_city)
     // formData.append("zipCode", value.p_zipCode);
     // formData.append("password", value.p_password);
+    // formData.append("countryName", countryName);
+    // formData.append("state", stateName);
+
+
 
     // axios({
     //   method: "POST",
@@ -130,118 +280,6 @@ function SignUp(props) {
   };
 
 
-  const getcountry = (key) => {
-    setShowPlus(true)
-
-    var arrayState = []
-    states.filter((data) => {
-      if (data.country_id == key) {
-        arrayState.push(data)
-      }
-    });
-    setState(arrayState)
-
-    country.filter((data) => {
-      if (key == data.id) {
-        setCountryCode(data.phoneCode)
-      }
-    })
-
-  };
-
-  const getCity = (key) => {
-    var arrayCity = []
-
-    cities.filter((data) => {
-      if (data.state_id === key) {
-        arrayCity.push(data)
-      }
-    });
-    setCity(arrayCity)
-  }
-
-  //eamil onchange
-  const emailHandler = (e) => {
-    setEmail(e.target.value);
-  };
-  //email validaation with api
-  const emailValidation = (key) => {
-
-    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (email.match(validRegex)) {
-      let formData = new FormData();
-      formData.append("email", email);
-      formData.append("type", 1);
-
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("resEmail-", response);
-          if (response.data.code === 1) {
-            setValiemail(response.data.result)
-            setInvalid('')
-          } else if (response.data.code === 0) {
-            setInvalid(response.data.result)
-            setValiemail('')
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-    else {
-      console.log("error")
-    }
-
-  }
-
-
-  //phone onchange
-  const phoneHandler = (e) => {
-    if (isNaN(e.target.value)) {
-      console.log("please enter no only")
-    } else {
-      setPhone(e.target.value);
-    }
-  };
-
-
-  //phone validaation with api
-  const phoneValidation = () => {
-
-    if (phone.length > 9) {
-      let formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("type", 2);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
-            // setValiphone(response.data.result)
-            console.log(response.data.result)
-            setNumAvail(response.data.result);
-            setNumExist('')
-          }
-          else if (response.data.result === 0) {
-            console.log(response.data.result)
-            setNumExist(response.data.result)
-            setNumAvail('')
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-  }
-
-  console.log(numExist)
 
   return (
     <>
@@ -263,16 +301,13 @@ function SignUp(props) {
                     <input
                       type="text"
                       name="p_name"
-                      ref={register({
-                        required: "This field is required",
-                      })}
+                      ref={register({ required: true })}
                       placeholder="Enter Name"
                       className={classNames("form-control", {
                         "is-invalid": errors.p_name,
                       })}
                     />
                   </div>
-
                 </div>
 
                 <div className="col-md-6">
@@ -280,15 +315,14 @@ function SignUp(props) {
                     <label className="form-label">Email<span className="declined">*</span></label>
                     <input
                       type="text"
-                      className="form-control"
                       name="p_email"
-                      onChange={(e) => emailHandler(e)}
-                      onBlur={emailValidation}
                       className={classNames("form-control", {
                         "is-invalid": errors.p_email,
                       })}
+                      onChange={(e) => emailHandler(e)}
+                      onBlur={emailValidation}
                       placeholder="Enter Your Password"
-                      ref={register}
+                      ref={register({ required: true })}
                     />
 
                     {

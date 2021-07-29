@@ -21,6 +21,8 @@ import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import * as Cookies from "js-cookie";
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import ViewAllReportModal from "./ViewAllReport";
 
 
 
@@ -51,6 +53,16 @@ function AssignmentTab() {
   const [transcode, SetTranscode] = useState("interop");
   const [attendeeMode, SetAttendeeMode] = useState("video");
   const [videoProfile, SetVideoProfile] = useState("480p_4");
+
+
+  const [report, setReport] = useState();
+  const [reportModal, setReportModal] = useState(false);
+  const ViewReport = (key) => {
+    console.log("key - ", key);
+    setReportModal(!reportModal);
+    setReport(key);
+  };
+
 
   useEffect(() => {
     getAssignmentList();
@@ -159,7 +171,7 @@ function AssignmentTab() {
       formatter: function nameFormatter(cell, row) {
         console.log(row);
         return (
-          <>       
+          <>
             <Link
               to={{
                 pathname: `/teamleader/queries/${row.q_id}`,
@@ -261,33 +273,28 @@ function AssignmentTab() {
     {
       text: "Deliverable",
       dataField: "",
+      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            {!row.final_report == "" ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  final
-                </a>
-              </div>
-            ) : row.assignement_draft_report ? (
-              <div>
-                <a
-                  href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
-                  target="_blank"
-                >
-                  <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                  draft
-                </a>
-              </div>
-            ) : null}
+            {
+              row.paid_status == "2" ? null :
+                <div>
+                  {row.assignement_draft_report || row.final_report ?
+                    <div title="View All Report"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => ViewReport(row.assign_no)}
+                    >
+                      <DescriptionOutlinedIcon color="secondary" />
+                    </div>
+                    :
+                    null
+                  }
+                </div>
+            }
           </>
         );
       },
@@ -347,26 +354,26 @@ function AssignmentTab() {
 
 
               {/* {row.final_report ? null : ( */}
-                <div title="upload Pdf">
-                  <p
-                    style={{ cursor: "pointer", color: "red" }}
-                    onClick={() => uploadFinalReport(row)}
-                  >
-                    {row.client_discussion == "completed" &&
-                      row.delivery_report == "completed" &&
-                      row.draft_report == "completed" &&
-                      row.final_discussion == "completed" &&
-                      row.amount == row.paid_amount ? (
-                      <div>
-                        <i
-                          class="fa fa-upload"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                        final
-                      </div>
-                    ) : null}
-                  </p>
-                </div>
+              <div title="upload Pdf">
+                <p
+                  style={{ cursor: "pointer", color: "red" }}
+                  onClick={() => uploadFinalReport(row)}
+                >
+                  {row.client_discussion == "completed" &&
+                    row.delivery_report == "completed" &&
+                    row.draft_report == "completed" &&
+                    row.final_discussion == "completed" &&
+                    row.amount == row.paid_amount ? (
+                    <div>
+                      <i
+                        class="fa fa-upload"
+                        style={{ fontSize: "16px" }}
+                      ></i>
+                      final
+                    </div>
+                  ) : null}
+                </p>
+              </div>
               {/* )} */}
 
 
@@ -659,6 +666,14 @@ function AssignmentTab() {
             getAssignmentList={getAssignmentList}
             id={finalId}
           />
+
+
+          <ViewAllReportModal
+            ViewReport={ViewReport}
+            reportModal={reportModal}
+            report={report}
+            getPendingforAcceptance={getAssignmentList}
+          />
         </CardBody>
       </Card>
     </>
@@ -666,3 +681,49 @@ function AssignmentTab() {
 }
 
 export default AssignmentTab;
+
+
+
+
+
+
+
+
+
+
+
+
+// {
+//   text: "Deliverable",
+//   dataField: "",
+//   headerStyle: () => {
+//     return { fontSize: "12px" };
+//   },
+//   formatter: function (cell, row) {
+//     return (
+//       <>
+//         {!row.final_report == "" ? (
+//           <div>
+//             <a
+//               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
+//               target="_blank"
+//             >
+//               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+//               final
+//             </a>
+//           </div>
+//         ) : row.assignement_draft_report ? (
+//           <div>
+//             <a
+//               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
+//               target="_blank"
+//             >
+//               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
+//               draft
+//             </a>
+//           </div>
+//         ) : null}
+//       </>
+//     );
+//   },
+// },

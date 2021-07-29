@@ -50,7 +50,7 @@ function LoginForm() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          Alerts.SuccessNormal("Otp sent to your email.")
+          Alerts.SuccessNormal("OTP sent to your email.")
           setShow(true)
           setUid(response.data.user_id)
           localStorage.setItem("email", JSON.stringify(value.p_email))
@@ -73,8 +73,7 @@ function LoginForm() {
 
   return (
     <>
-      <Header cust_sign="cust_sign" />
-
+      <Header noSign="noSign" />
       <h1 style={{ "textAlign": "center", "margin": "55px 0 30px 0" }}>
         Would you like to post a query
       </h1>

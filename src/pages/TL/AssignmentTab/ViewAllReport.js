@@ -20,7 +20,7 @@ function ViewReport({
   report,
   getPendingforAcceptance,
 }) {
-  const userId = window.localStorage.getItem("adminkey");
+  const userId = window.localStorage.getItem("tlkey");
   const [data, setData] = useState([]);
 
 

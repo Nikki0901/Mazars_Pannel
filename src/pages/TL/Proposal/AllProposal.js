@@ -213,6 +213,18 @@ function AllProposal() {
                                         </Link>
                                     </div>
                             }
+
+                            <div style={{ cursor: "pointer",marginLeft:"8px" }} title="View Proposal">
+                                <a
+                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.id}`}
+                                    target="_blank"
+                                >
+                                    <i
+                                        class="fa fa-eye"
+                                        style={{ color: "green", fontSize: "16px" }}
+                                    />
+                                </a>
+                            </div>
                         </div>
                     </>
                 );

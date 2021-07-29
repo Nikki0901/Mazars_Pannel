@@ -88,23 +88,11 @@ function Header({ id, cust_sign, admin, mtl, mtp, noSign, loginOTP }) {
               <ul class="menu">
                 <li>
                   <Link to="/">Signin</Link>
-                </li>
-                <li>
-                  <Link to="/customer/signup">SignUp</Link>
-                </li>
+                </li>             
               </ul>
             </div>
           )}
-          {/* 
-         {noSign && (
-            <div>
-              <ul class="menu">
-            
-              </ul>
-            </div>
-          )} */}
-
-
+         
           {admin && (
             <ul class="menu">
               <li>
@@ -138,3 +126,6 @@ function Header({ id, cust_sign, admin, mtl, mtp, noSign, loginOTP }) {
 }
 
 export default Header;
+ {/* <li>
+                  <Link to="/customer/signup">SignUp</Link>
+                </li> */}

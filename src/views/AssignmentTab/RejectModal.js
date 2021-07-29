@@ -18,6 +18,7 @@ function RejectedModal({
   toggleNested,
   dataItem,
   docData,
+  getData
 }) {
   const userId = window.localStorage.getItem("userid");
   const { handleSubmit, register, reset, errors } = useForm({
@@ -46,12 +47,10 @@ function RejectedModal({
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          toggleNested()
+          toggleNested();
+          getData();
           var variable = "Submitted Successfully "
           Alerts.SuccessNormal(variable)
-
-          // getPendingforAcceptance();
-          // toggleNested();
         }
       })
       .catch((error) => {

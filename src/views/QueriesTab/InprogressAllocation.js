@@ -20,6 +20,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 import Swal from "sweetalert2";
+import CommonServices from "../../common/common";
 
 
 function InprogressAllocation() {
@@ -177,11 +178,17 @@ function InprogressAllocation() {
       },
       formatter: function dateFormat(cell, row) {
         console.log("dt", row.exp_delivery_date);
-        var oldDate = row.exp_delivery_date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.toString().split("-").reverse().join("-");
+
+        return (
+          <>
+            {
+              row.status_code >= "1" ?
+                CommonServices.removeTime(row.exp_delivery_date)
+                :
+                null
+            }
+          </>
+        )
       },
     },
     {
@@ -341,7 +348,7 @@ function InprogressAllocation() {
       });
   };
 
-  
+
   return (
     <div>
       <Card>

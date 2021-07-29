@@ -36,23 +36,23 @@ function NewPassword(props) {
   };
 
 
-  // useEffect(() => {
-  //   var timerOn = true;
-  //   function timer(remaining) {
-  //     var s = remaining % 60;
-  //     s = s < 10 ? '0' + s : s;
-  //     setTime(s)
-  //     remaining -= 1;
-  //     if (remaining >= 0 && timerOn) {
-  //       setTimeout(function () {
-  //         timer(remaining);
-  //       }, 1000);
-  //       return;
-  //     }
-  //     setDisabled(true)
-  //   }
-  //   timer(60);
-  // }, []);
+  useEffect(() => {
+    var timerOn = true;
+    function timer(remaining) {
+      var s = remaining % 60;
+      s = s < 10 ? '0' + s : s;
+      setTime(s)
+      remaining -= 1;
+      if (remaining >= 0 && timerOn) {
+        setTimeout(function () {
+          timer(remaining);
+        }, 1000);
+        return;
+      }
+      setDisabled(true)
+    }
+    timer(10);
+  }, [id]);
 
 
   const onSubmit = (value) => {
@@ -91,6 +91,7 @@ function NewPassword(props) {
       });
   };
 
+
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -102,9 +103,10 @@ function NewPassword(props) {
               <h2>Reset Password</h2>
             </div>
             <div className="row">
+
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Email</label>
+                  <label className="form-label">Email<span className="declined">*</span></label>
                   <input
                     type="text"
                     className={classNames("form-control", {
@@ -129,35 +131,9 @@ function NewPassword(props) {
                 </div>
               </div>
 
-
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">OTP</label>
-                  <input
-                    type="text"
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_code,
-                    })}
-                    name="p_code"
-                    placeholder="Enter otp"
-                    ref={register({
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.p_code && (
-                    <div className="invalid-feedback">
-                      {errors.p_code.message}
-                    </div>
-                  )}
-                  <small class="text-center">
-                    Note: OTP is valid for {time} seconds.
-                  </small>
-                </div>
-              </div>
-
-              <div className="col-md-12">
-                <div className="mb-3">
-                  <label className="form-label">New Password</label>
+                  <label className="form-label">New Password<span className="declined">*</span></label>
                   <input
                     type={isPasswordShow ? "text" : "password"}
                     name="p_password"
@@ -188,10 +164,9 @@ function NewPassword(props) {
                 </div>
               </div>
 
-
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Confirm Password</label>
+                  <label className="form-label">Confirm Password<span className="declined">*</span></label>
                   <input
                     type={isPasswordShow2 ? "text" : "password"}
                     id="password"
@@ -206,6 +181,10 @@ function NewPassword(props) {
                         value === getValues("p_password") ||
                         "password doesn 't match",
                     })}
+                    onPaste={((e) => {
+                      e.preventDefault();
+                      return false;
+                    })}i
                   />
                   <i
                     className={`fa ${isPasswordShow2 ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -219,14 +198,42 @@ function NewPassword(props) {
                 </div>
               </div>
 
+              <div className="col-md-12">
+                <div className="mb-3">
+                  <label className="form-label">OTP<span className="declined">*</span></label>
+                  <input
+                    type="text"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_code,
+                    })}
+                    name="p_code"
+                    placeholder="Enter otp"
+                    ref={register({
+                      required: "This field is required",
+                    })}
+                  />
+                  {errors.p_code && (
+                    <div className="invalid-feedback">
+                      {errors.p_code.message}
+                    </div>
+                  )}
+                  <small class="text-center">
+                    Note: OTP is valid for {time} seconds.
+                  </small>
+                </div>
+              </div>
             </div>
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </form>
 
-          <ResendOtp id={id} />
-
+          {
+            disabled ?
+              <ResendOtp id={id} setDisabled={setDisabled} />
+              :
+              null
+          }
 
         </div>
       </div>

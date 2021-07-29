@@ -54,7 +54,7 @@ function RejectedModal({
   return (
     <div>
       <Modal isOpen={addPaymentModal} toggle={rejectHandler} size="sm">
-        <ModalHeader toggle={rejectHandler}>Rejected Reason</ModalHeader>
+        <ModalHeader toggle={rejectHandler}>Decline Payment</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
@@ -63,10 +63,10 @@ function RejectedModal({
                   "is-invalid": errors.p_chat,
                 })}
                 id="textarea"
-                rows="4"
+                rows="6"
                 name="p_chat"
                 ref={register}
-                placeholder="enter text"
+                placeholder="enter"
               ></textarea>
 
               {errors.p_chat && (

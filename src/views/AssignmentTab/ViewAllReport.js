@@ -214,6 +214,7 @@ function ViewReport({
         nestedModal={nestedModal}
         dataItem={dataItem}
         docData={docData}
+        getData={getData}
       />
     </div>
   );
