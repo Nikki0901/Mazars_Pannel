@@ -14,6 +14,7 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import { ResponsiveEmbed } from "react-bootstrap";
+import Select from 'react-select';
 
 
 
@@ -245,8 +246,39 @@ function SignUp(props) {
     }
   }
 
-  console.log(numExist)
-
+ // Search with select options
+ const option2 = city.map(d => ({
+   label : d.name,
+   value : d.city
+ }))
+ const groupStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+const groupBadgeStyles = {
+  backgroundColor: '#EBECF0',
+  borderRadius: '2em',
+  color: '#172B4D',
+  display: 'inline-block',
+  fontSize: 12,
+  fontWeight: 'normal',
+  lineHeight: '1',
+  minWidth: 1,
+  padding: '0.16666666666667em 0.5em',
+  textAlign: 'center',
+};
+const formatGroupLabel = data => (
+ 
+  <div style={groupStyles}>
+    <span>{data.label}</span>
+    
+    <span style={groupBadgeStyles}>{data.options.length}</span>
+  </div>
+);
+ const tryHandler = (e) => {
+   console.log(e)
+ }
   return (
     <>
       <Header cust_sign="cust_sign" />
@@ -388,7 +420,7 @@ function SignUp(props) {
                 <div className="col-md-6">
                   <div className="mb-3">
                     <label className="form-label">City<span className="declined">*</span></label>
-                    <select
+                    {/* <select
                       className={classNames("form-control", {
                         "is-invalid": errors.p_city,
                       })}
@@ -403,7 +435,13 @@ function SignUp(props) {
                           {p.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <Select
+  
+    options={option2}
+    formatGroupLabel={formatGroupLabel}
+    
+  />
                   </div>
                 </div>
 
