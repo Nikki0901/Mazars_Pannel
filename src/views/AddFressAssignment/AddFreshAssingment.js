@@ -22,6 +22,7 @@ import {
   Table,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import { SettingsApplications } from "@material-ui/icons";
 
 
 
@@ -48,10 +49,14 @@ function AddFreshAssingment(props) {
 
   const [load, setLoad] = useState(false);
   const [selectError, setSelectError] = useState()
-
-
+  const [selectError2, setSelectError2] = useState()
+  const [specific, setSpecific] = useState();
   const valiFun = (e) => {
     setcustError("")
+  }
+  const valiFun2 = (e) => {
+    setSelectError2("")
+    setSpecific(e.target.value);
   }
   const purPoseQuery = (e) => {
     setSelectError("")
@@ -62,21 +67,16 @@ function AddFreshAssingment(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    if (setPurposeOption == '') {
-      setSelectError("Please select atleast one value")
-    }
-    if (selectedOption == '') {
-      setSelectError("Please select atleast one value")
-    }
-    else {
-      setSelectError("")
-    }
     const a = value.p_fact;
-    const b = value.p_case_name;
+    const b = value.users;
     if (a == '') {
       setcustError("This feild is required");
+      console.log(b)
     }
-
+  
+else if(purposeOption < 1) {
+  setSelectError("At lease one value should be enter")
+}
     else {
       setcustError(" ");
       setLoad(true);
@@ -235,6 +235,7 @@ function AddFreshAssingment(props) {
                                   className="form-control"
                                   ref={register}
                                   name={`users[${index}].query`}
+                                  onChange = {(e) =>valiFun2(e)}
                                   placeholder="Specify your query"
                                   defaultValue={`${item.query}`}
                                 />
@@ -248,6 +249,7 @@ function AddFreshAssingment(props) {
                             ) : null}
                           </div>
                         ))}
+                        <p className="declined">{selectError2}</p>
                     </div>
 
                     <div className="col-md-6">

@@ -127,6 +127,7 @@ function SignIn(props) {
                     </div>
                     <div className="col-md-12">
                       <div className="mb-3">
+                    
                         <label className="form-label">Password *</label>
                         <input
                           type={isPasswordShow ? "text" : "password"}
@@ -162,7 +163,9 @@ function SignIn(props) {
                     >
                       Forgot Password
                     </Link>
+                  
                   </div>
+                 
                 </form>
               )}
             </div>

@@ -88,7 +88,7 @@ function LoginForm() {
                   For new customers
                 </p>
                 <Button color="primary" variant="contained">
-                  <Link
+                  <Link className="SignUpLink"
                     to={{
                       pathname: "/customer/signup",
                     }}
@@ -108,7 +108,7 @@ function LoginForm() {
                 <VerifyOTP email={email} uid={uid} />
               </div>
                 :
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} className="signInForm">
                   <div className="form-group">
                     <label className="form-label">Email <span className="declined">*</span></label>
                     <input
@@ -156,10 +156,16 @@ function LoginForm() {
                       Forgot Password
                     </Link>
                   </div>
+                
                 </form>
+              
             }
+             <p style={{"color" :"red", "fontWeight" : "400"}} className="signMendatary">mandatory<sup className="declined">*</sup></p>
           </div>
+       
+         
         </div>
+       
       </div>
       <Footer />
     </>

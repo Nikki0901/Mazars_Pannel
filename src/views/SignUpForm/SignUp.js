@@ -67,7 +67,15 @@ function SignUp(props) {
   const [invalid, setInvalid] = useState(null)
   const [numExist, setNumExist] = useState(null)
   const [numAvail, setNumAvail] = useState(null)
-
+  const [countryId, setCountryId] = useState(null)
+  const [indNumError, setIndNumError] = useState(null)
+  const [zipCode, setZipCode] = useState('')
+  const [zipError, setZipError] = useState(null)
+  const CountryNumStyle= {
+    "display" : "flex", 
+    "width" : "76px", 
+    "textAlign" : "center"
+  }
   const togglePasssword = () => {
     setPassword(!password)
   };
@@ -131,10 +139,17 @@ function SignUp(props) {
   };
 
 
-  const getcountry = (key) => {
+const getcountry = (key) => {
     setShowPlus(true)
+   
+if(key == 101){
+ setCountryId(key)
+}
+else{
+  setCountryId("")
+}
 
-    var arrayState = []
+var arrayState = []
     states.filter((data) => {
       if (data.country_id == key) {
         arrayState.push(data)
@@ -145,10 +160,9 @@ function SignUp(props) {
     country.filter((data) => {
       if (key == data.id) {
         setCountryCode(data.phoneCode)
-      }
-    })
-
-  };
+  }
+ })
+};
 
   const getCity = (key) => {
     var arrayCity = []
@@ -202,18 +216,40 @@ function SignUp(props) {
 
   //phone onchange
   const phoneHandler = (e) => {
+ 
     if (isNaN(e.target.value)) {
-      console.log("please enter no only")
-    } else {
-      setPhone(e.target.value);
+      setNumExist('Please enter number only')
+    } 
+    else{
+      setPhone(e.target.value)
     }
+     if (phone.length > 10)  {
+      setIndNumError("")
+     
+    } 
+    
   };
 
 
   //phone validaation with api
   const phoneValidation = () => {
-
-    if (phone.length > 9) {
+    console.log(phone.length)
+    if(countryId && phone.length > 10){
+      console.log(phone.length)
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Maximum 10 value should be enter")
+    }
+  else if(countryId && phone.length < 10) {
+    console.log(phone.length)
+    setNumAvail("")
+    setNumExist("")
+    setIndNumError("Minimum 10 value should be enter")
+  }
+   
+   else   {
+      setIndNumError("")
+  console.log(countryId)
       let formData = new FormData();
       formData.append("phone", phone);
       formData.append("type", 2);
@@ -241,7 +277,7 @@ function SignUp(props) {
 
         })
         .catch((error) => {
-          console.log("erroror - ", error);
+          // console.log("erroror - ", error);
         });
     }
   }
@@ -278,6 +314,26 @@ const formatGroupLabel = data => (
 );
  const tryHandler = (e) => {
    console.log(e)
+ }
+ const zipValue = (e) => {
+  if(isNaN(e.target.value)){
+    setZipError("Please enter number only")
+  }
+  else{
+    setZipCode(e.target.value)
+    setZipError("")
+  }
+ }
+ const zipVali2 = (e) => {
+if(countryId && zipCode && zipCode.length < 5){
+  setZipError("")
+  console.log(zipCode.length)
+}
+else if(countryId && zipCode && zipCode.length > 6){
+  setZipError("Maximum 6 digit allowed")
+  console.log(zipCode.length)
+}
+ 
  }
   return (
     <>
@@ -452,6 +508,7 @@ const formatGroupLabel = data => (
                       <select
                         name="p_code"
                         disabled={true}
+                        style={CountryNumStyle}
                         ref={register({
                           required: "This field is required",
                         })}
@@ -473,14 +530,17 @@ const formatGroupLabel = data => (
                       />
 
                     </div>
-                    {
+                    {indNumError ?  <p className="declined">{indNumError}</p> :  <>
+                   {
                       numAvail ?
                         <p className="completed"> {numAvail}
                         </p>
                         :
                         <p className="declined">{numExist}</p>
                     }
-
+                   </>}
+                     
+                    
                   </div>
                 </div>
 
@@ -497,7 +557,11 @@ const formatGroupLabel = data => (
                         required: "This field is required",
                       })}
                       placeholder="Enter Name"
+                      onChange = {(e) => zipValue(e)}
+                      onBlur={zipVali2}
+                      
                     />
+                    <p className="declined">{zipError}</p>
                   </div>
 
                 </div>
