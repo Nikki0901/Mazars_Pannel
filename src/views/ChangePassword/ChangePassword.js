@@ -86,7 +86,7 @@ function ChangePassword(props) {
             <div className="row">
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Email </label>
+                  <label className="form-label">Email<span className="declined">*</span></label>
                   <input
                     type="text"
                     className={classNames("form-control", {
@@ -95,7 +95,7 @@ function ChangePassword(props) {
                     name="p_email"
                     placeholder="Enter email id"
                     ref={register({
-                      required: "This field is required",
+                      required: "mandatory",
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                         message: "Please enter valid email address",
@@ -113,7 +113,7 @@ function ChangePassword(props) {
 
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">New Password</label>
+                  <label className="form-label">New Password<span className="declined">*</span></label>
                   <input
                     type={isPasswordShow ? "text" : "password"}
                     id="password"
@@ -127,7 +127,7 @@ function ChangePassword(props) {
                     placeholder="Enter Your Password"
                     name="p_password"
                     ref={register({
-                      required: "This field is required",
+                      required: "mandatory",
                       pattern: {
                         value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
                         message:
@@ -150,7 +150,7 @@ function ChangePassword(props) {
 
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Confirm Password</label>
+                  <label className="form-label">Confirm Password<span className="declined">*</span></label>
                   <input
                     onPaste={((e) => {
                       e.preventDefault();
@@ -164,7 +164,7 @@ function ChangePassword(props) {
                     placeholder="Confirm Password"
                     name="p_confirm_password"
                     ref={register({
-                      required: "This field is required",
+                      required: "mandatory",
                       validate: (value) =>
                         value === getValues("p_password") ||
                         "password doesn 't match",
@@ -192,6 +192,11 @@ function ChangePassword(props) {
                 Cancle
               </Button>
             </Link>
+
+            <br /><br />
+            <p>
+              <span className="declined">*Mandatory</span>
+            </p>
 
           </form>
         </div>

@@ -2,19 +2,19 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import Alerts from "../../common/Alerts";
 
 
 
-function ResendOtp({ id, setDisabled, getTime }) {
+function ResendOtp({ email, phone, setDisabled, getTime }) {
 
     const { handleSubmit, errors, reset } = useForm();
 
     const onSubmit = (value) => {
-
-
         let formData = new FormData();
-        formData.append("email", id);
-        formData.append("p", "forgot");
+        formData.append("email", email);
+        formData.append("phone", phone);
+        formData.append("p", "registration");
 
         axios({
             method: "POST",
@@ -24,6 +24,7 @@ function ResendOtp({ id, setDisabled, getTime }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    Alerts.SuccessNormal("OTP sent to your email address.")
                     setDisabled(false)
                     getTime();
                 }

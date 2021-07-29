@@ -13,7 +13,8 @@ import { Spinner } from "reactstrap";
 import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
-import { ResponsiveEmbed } from "react-bootstrap";
+import ResendOtp from "./ResendOtp";
+
 
 
 
@@ -49,11 +50,11 @@ function SignUp(props) {
   const [password, setPassword] = useState(false);
   const [passError, setpassError] = useState()
   const [repassword, setRepassword] = useState(false);
-
+  const [show, setShow] = useState(false);
 
   const [State, setState] = useState([]);
   const [city, setCity] = useState([]);
-  const [countryCode, setCountryCode] = useState([])
+  const [countryCode, setCountryCode] = useState('')
   const [showPlus, setShowPlus] = useState(false)
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -64,6 +65,10 @@ function SignUp(props) {
   const [countryName, setCountryName] = useState(null)
   const [stateName, setStateName] = useState(null)
 
+  const [countryId, setCountryId] = useState(null)
+  const [indNumError, setIndNumError] = useState(null)
+  const [zipCode, setZipCode] = useState('')
+  const [zipError, setZipError] = useState(null)
 
 
   const togglePasssword = () => {
@@ -75,19 +80,55 @@ function SignUp(props) {
   };
 
 
+  const [time, setTime] = useState('')
+  const [disabled, setDisabled] = useState(false)
+
+
+  useEffect(() => {
+    getTime()
+  }, [load]);
+
+
+  const getTime = () => {
+    console.log("get time")
+
+    if (load) {
+      var timerOn = true;
+      function timer(remaining) {
+        var s = remaining % 60;
+        s = s < 10 ? '0' + s : s;
+        setTime(s)
+        remaining -= 1;
+        if (remaining >= 0 && timerOn) {
+          setTimeout(function () {
+            timer(remaining);
+          }, 1000);
+          return;
+        }
+        setDisabled(true)
+      }
+      timer(20);
+    }
+  }
 
 
   //get country
   const getcountry = (key) => {
     setShowPlus(true)
 
+    if (key == 101) {
+      setCountryId(key)
+    }
+    else {
+      setCountryId("")
+    }
+
     country.filter((p) => {
       if (p.id == key) {
-        console.log(p.name)
+        setCountryCode(p.phoneCode)
         setCountryName(p.name)
       }
     });
-
 
     var arrayState = []
     states.filter((data) => {
@@ -96,24 +137,15 @@ function SignUp(props) {
       }
     });
     setState(arrayState)
-
-    country.filter((data) => {
-      if (key == data.id) {
-        setCountryCode(data.phoneCode)
-      }
-    })
-
   };
-
 
 
   //get city
   const getCity = (key) => {
-    console.log("state", key)
+
 
     states.filter((p) => {
       if (p.id == key) {
-        console.log("state", p)
         setStateName(p.name)
       }
     });
@@ -173,17 +205,35 @@ function SignUp(props) {
   //phone onchange
   const phoneHandler = (e) => {
     if (isNaN(e.target.value)) {
-      console.log("please enter no only")
-    } else {
-      setPhone(e.target.value);
+      setNumExist('Please enter number only')
+    }
+    else {
+      setPhone(e.target.value)
+    }
+    if (phone.length > 10) {
+      setIndNumError("")
     }
   };
 
-
   //phone validaation with api
   const phoneValidation = () => {
+    console.log(phone.length)
+    if (countryId && phone.length > 10) {
+      console.log(phone.length)
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Maximum 10 value should be enter")
+    }
+    else if (countryId && phone.length < 10) {
+      console.log(phone.length)
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Minimum 10 value should be enter")
+    }
 
-    if (phone.length > 9 && phone.length < 15) {
+    else {
+      setIndNumError("")
+      console.log(countryId)
       let formData = new FormData();
       formData.append("phone", phone);
       formData.append("type", 2);
@@ -197,88 +247,152 @@ function SignUp(props) {
           if (response.data.code === 1) {
             // setValiphone(response.data.result)
             console.log(response.data.result)
-            setNumAvail(response.data.result);
             setNumExist('')
+            setNumAvail(response.data.result);
+
           }
           else if (response.data.code === 0) {
             console.log(response.data.result)
-            setNumExist(response.data.result)
             setNumAvail('')
+            setNumExist(response.data.result)
+
+            console.log("mobile" + setNumExist)
+          }
+
+        })
+        .catch((error) => {
+          // console.log("erroror - ", error);
+        });
+    }
+  }
+
+
+  //zip oncahnge
+  const zipValue = (e) => {
+    if (isNaN(e.target.value)) {
+      setZipError("Please enter number only")
+    }
+    else {
+      setZipCode(e.target.value)
+      setZipError("")
+    }
+  }
+
+  // onblur
+  const zipVali2 = (e) => {
+    if (countryId && zipCode && zipCode.length < 5) {
+      setZipError("")
+      console.log(zipCode.length)
+    }
+    else if (countryId && zipCode && zipCode.length > 6) {
+      setZipError("Maximum 6 digit allowed")
+      console.log(zipCode.length)
+    }
+
+  }
+
+
+  //submit form
+
+  const onSubmit = (value) => {
+    console.log("value :", value);
+    console.log("countryName :", countryName);
+    console.log("stateName :", stateName);
+    console.log("countryCode :", countryCode);
+
+    let formData = new FormData();
+    formData.append("name", value.p_name);
+    formData.append("email", value.p_email);
+    formData.append("phone", value.p_phone);
+    formData.append("occupation", value.p_profession);
+    formData.append("city", value.p_city)
+    formData.append("pincode", value.p_zipCode);
+    formData.append("password", value.p_password);
+    formData.append("rpassword", value.p_confirm_password);
+    formData.append("otp", value.p_otp);
+    formData.append("country", countryName);
+    formData.append("state", stateName);
+    formData.append("stdcode", countryCode);
+
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/signup`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+
+        if (response.data.code === 1) {
+
+          var variable = "Signup successfully."
+          Alerts.SuccessNormal(variable)
+
+          localStorage.setItem("userid", JSON.stringify(response.data.id));
+          localStorage.setItem(
+            "userNameId",
+            JSON.stringify(response.data.user_id)
+          );
+          localStorage.setItem("name", JSON.stringify(response.data.name));
+          props.history.push("/customer/questionnaire-page");
+        } else if (response.data.code === 0) {
+          console.log("res -", response.data.result);
+          setLoad(false);
+          Swal.fire(
+            "Oops",
+            `error :        
+          ${response.data.message[0] ? response.data.message[0] : ""} 
+          ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
+            ${response.data.message[1] ? response.data.message[1] : ""} 
+            `,
+            "error"
+          );
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
+  //get OTP
+  const getOtp = () => {
+    console.log("call otp")
+    if (email && phone) {
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("p", "registration");
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/forgototp`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoad(true)
+            setShow(true)
+            Alerts.SuccessNormal("OTP sent to your email address.")
+          } else if (response.data.code === 0) {
+            Alerts.ErrorNormal("Error.")
           }
         })
         .catch((error) => {
           console.log("erroror - ", error);
         });
-    } else if (phone.length > 9) {
-      setNumExist("at least you have to type 9 digit")
-    } else if (phone.length < 15) {
-      setNumExist("max 15 digit allow")
     }
   }
 
 
-
-
-  //submit form
-  const onSubmit = (value) => {
-    console.log("value :", value);
-    console.log("countryName :", countryName);
-    console.log("stateName :", stateName);
-
-
-
-    // let formData = new FormData();
-    // formData.append("name", value.p_name);
-    // formData.append("email", value.p_email);
-    // formData.append("phone", value.p_phone);
-    // formData.append("occupation", value.p_profession);
-    // formData.append("city", value.p_city)
-    // formData.append("zipCode", value.p_zipCode);
-    // formData.append("password", value.p_password);
-    // formData.append("countryName", countryName);
-    // formData.append("state", stateName);
-
-
-
-    // axios({
-    //   method: "POST",
-    //   url: `${baseUrl}/customers/signup`,
-    //   data: formData,
-    // })
-    //   .then(function (response) {
-    //     console.log("res-", response);
-
-    //     if (response.data.code === 1) {
-
-    //       var variable = "Signup successfully."
-    //       Alerts.SuccessNormal(variable)
-
-    //       localStorage.setItem("userid", JSON.stringify(response.data.id));
-    //       localStorage.setItem(
-    //         "userNameId",
-    //         JSON.stringify(response.data.user_id)
-    //       );
-    //       localStorage.setItem("name", JSON.stringify(response.data.name));
-    //       props.history.push("/customer/questionnaire-page");
-    //     } else if (response.data.code === 0) {
-    //       console.log("res -", response.data.result);
-    //       setLoad(false);
-    //       Swal.fire(
-    //         "Oops",
-    //         `error :        
-    //       ${response.data.message[0] ? response.data.message[0] : ""} 
-    //       ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
-    //         ${response.data.message[1] ? response.data.message[1] : ""} 
-    //         `,
-    //         "error"
-    //       );
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("erroror - ", error);
-    //   });
+  const OtpButton = () => {
+    return (
+      <>
+        <button type="submit" class="btn btn-success" onClick={getOtp}>Get OTP</button>
+      </>
+    );
   };
-
 
 
   return (
@@ -289,300 +403,334 @@ function SignUp(props) {
           <div className="heading">
             <h2>Customer Register</h2>
           </div>
-          {load ? (
-            <Spinner size="sm" color="primary" />
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
-              <div className="row">
-                <div className="col-md-6">
 
-                  <div className="mb-3">
-                    <label className="form-label">Name<span className="declined">*</span></label>
-                    <input
-                      type="text"
-                      name="p_name"
-                      ref={register({ required: true })}
-                      placeholder="Enter Name"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_name,
-                      })}
-                    />
-                  </div>
-                </div>
+          <>
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
+                <div className="row">
+                  <div className="col-md-6">
 
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Email<span className="declined">*</span></label>
-                    <input
-                      type="text"
-                      name="p_email"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_email,
-                      })}
-                      onChange={(e) => emailHandler(e)}
-                      onBlur={emailValidation}
-                      placeholder="Enter Your Password"
-                      ref={register({ required: true })}
-                    />
-
-                    {
-                      valiEmail ?
-                        <p className="completed">
-                          {valiEmail}
-                        </p>
-                        :
-                        <p className="declined">{invalid}</p>
-                    }
-
-
-
-                  </div>
-                </div>
-
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Occupation/ Profession<span className="declined">*</span></label>
-                    <br />
-                    <select
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_profession,
-                      })}
-                      name="p_profession"
-                      aria-label="Default select example"
-                      ref={register({
-                        required: "This field is required",
-                      })}
-                    >
-                      <option value="">--select--</option>
-                      {professionName.map((p, index) => (
-                        <option key={index} value={p.city}>
-                          {p.city}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Country<span className="declined">*</span></label>
-                    <select
-                      id="state"
-                      name="p_country"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_country,
-                      })}
-                      ref={register({
-                        required: "This field is required",
-                      })}
-                      onChange={(e) => getcountry(e.target.value)}
-                    >
-                      <option value="">--select--</option>
-                      {country.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">State<span className="declined">*</span></label>
-                    <select
-                      id="state"
-                      name="p_state"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_state,
-                      })}
-                      ref={register({
-                        required: "This field is required",
-                      })}
-                      onChange={(e) => getCity(e.target.value)}
-                    >
-                      <option value="">--select--</option>
-                      {State.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">City<span className="declined">*</span></label>
-                    <select
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_city,
-                      })}
-                      name="p_city"
-                      ref={register({
-                        required: "This field is required",
-                      })}
-                    >
-                      <option value="">--select--</option>
-                      {city.map((p, index) => (
-                        <option key={index} value={p.city}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Mobile number<span className="declined">*</span></label>
-                    <div className="mobNumber" style={{ "display": "flex" }}>
-                      <select
-                        name="p_code"
-                        disabled={true}
-                        ref={register({
-                          required: "This field is required",
+                    <div className="mb-3">
+                      <label className="form-label">Name<span className="declined">*</span></label>
+                      <input
+                        type="text"
+                        name="p_name"
+                        ref={register({ required: true })}
+                        placeholder="Enter Name"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_name,
                         })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Email<span className="declined">*</span></label>
+                      <input
+                        type="text"
+                        name="p_email"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email,
+                        })}
+                        onChange={(e) => emailHandler(e)}
+                        onBlur={emailValidation}
+                        placeholder="Enter Your Password"
+                        ref={register({ required: true })}
+                      />
+
+                      {
+                        valiEmail ?
+                          <p className="completed">
+                            {valiEmail}
+                          </p>
+                          :
+                          <p className="declined">{invalid}</p>
+                      }
+
+
+
+                    </div>
+                  </div>
+
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Occupation/ Profession<span className="declined">*</span></label>
+                      <br />
+                      <select
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_profession,
+                        })}
+                        name="p_profession"
+                        aria-label="Default select example"
+                        ref={register({ required: true })}
                       >
-                        <option>
-                          {showPlus ? "+" + countryCode : null}
-                        </option>
+                        <option value="">--select--</option>
+                        {professionName.map((p, index) => (
+                          <option key={index} value={p.city}>
+                            {p.city}
+                          </option>
+                        ))}
                       </select>
+                    </div>
+                  </div>
+
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Country<span className="declined">*</span></label>
+                      <select
+                        id="state"
+                        name="p_country"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_country,
+                        })}
+                        ref={register({ required: true })}
+                        onChange={(e) => getcountry(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        {country.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">State<span className="declined">*</span></label>
+                      <select
+                        id="state"
+                        name="p_state"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_state,
+                        })}
+                        ref={register({ required: true })}
+                        onChange={(e) => getCity(e.target.value)}
+                      >
+                        <option value="">--select--</option>
+                        {State.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">City<span className="declined">*</span></label>
+                      <select
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_city,
+                        })}
+                        name="p_city"
+                        ref={register({ required: true })}
+                      >
+                        <option value="">--select--</option>
+                        {city.map((p, index) => (
+                          <option key={index} value={p.city}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Mobile number<span className="declined">*</span></label>
+                      <div className="mobNumber" style={{ "display": "flex" }}>
+                        <select
+                          name="p_code"
+                          disabled={true}
+                          ref={register({ required: true })}
+                        >
+                          <option>
+                            {showPlus ? "+" + countryCode : null}
+                          </option>
+                        </select>
+                        <input
+                          type="text"
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_phone,
+                          })}
+                          name="p_phone"
+                          ref={register({ required: true })}
+                          placeholder="Mobile number"
+                          onChange={(e) => phoneHandler(e)}
+                          onBlur={phoneValidation}
+                        />
+
+                      </div>
+                      {indNumError ? <p className="declined">{indNumError}</p> : <>
+                        {
+                          numAvail ?
+                            <p className="completed"> {numAvail}
+                            </p>
+                            :
+                            <p className="declined">{numExist}</p>
+                        }
+                      </>}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Zipcode<span className="declined">*</span></label>
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_code,
+                          "is-invalid": errors.p_zipCode,
                         })}
-                        name="p_phone"
-                        ref={register}
-                        placeholder="Mobile number"
-                        onChange={(e) => phoneHandler(e)}
-                        onBlur={phoneValidation}
+                        name="p_zipCode"
+                        ref={register({ required: true })}
+                        placeholder="Enter Name"
+                        onChange={(e) => zipValue(e)}
+                        onBlur={zipVali2}
                       />
-
                     </div>
-                    {numAvail ?
-                      <p className="completed">{numAvail}</p>
-                      :
-                      <p className="declined">{numExist}</p>
+                    <p className="declined">{zipError}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Password<span className="declined">*</span></label>
+
+                      <input
+                        type={password ? "text" : "password"}
+                        className="form-control"
+                        onCopy={(e) => {
+                          e.preventDefault();
+                          return false
+                        }}
+                        onPaste={(e) => {
+                          e.preventDefault();
+                          return false
+                        }}
+                        // onChange={funValidation}
+                        name="p_password"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_password,
+                        })}
+                        placeholder="Enter Your Password"
+                        ref={register({
+                          required: "mandatory",
+                          pattern: {
+                            value:
+                              /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                            message:
+                              "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
+                          },
+                        })}
+                      />
+                      <i
+                        className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                        onClick={togglePasssword}
+                      />
+                      {errors.p_password && (
+                        <div className="invalid-feedback">
+                          {errors.p_password.message}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div className="mb-3">
+                      <label className="form-label">Confirm Password<span className="declined">*</span></label>
+                      <input
+                        type={repassword ? "text" : "password"}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_confirm_password,
+                        })}
+                        onCopy={(e) => {
+                          e.preventDefault();
+                          return false
+                        }}
+                        onPaste={(e) => {
+                          e.preventDefault();
+                          return false
+                        }}
+                        placeholder="Confirm Password"
+                        name="p_confirm_password"
+                        ref={register({
+                          required: "mandatory",
+                          validate: (value) =>
+                            value === getValues("p_password") ||
+                            "password doesn 't match",
+                        })}
+                      />
+                      <i
+                        className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
+                        onClick={togglePasssword2}
+                      />
+                      {errors.p_confirm_password && (
+                        <div className="invalid-feedback">
+                          {errors.p_confirm_password.message}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {
+                    show ?
+                      <div class="col-md-6">
+                        <div className="mb-3">
+                          <label className="form-label">OTP<span className="declined">*</span></label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="p_otp"
+                            ref={register}
+                            placeholder="Enter your OTP"
+                          />
+                          <small class="text-center">
+                            Note: OTP is valid for {time} seconds.
+                          </small>
+                        </div>
+                      </div>
+                      : null
+                  }
+                  <div class="col-md-6">
+                    {
+                      show ?
+                        <>
+                          {
+                            disabled ?
+                              null
+                              :
+                              <button type="submit" className="btn btn-primary">
+                                Submit
+                              </button>
+                          }
+                        </>
+                        :
+                        <OtpButton />
                     }
                   </div>
                 </div>
+              </form>
 
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Zipcode<span className="declined">*</span></label>
-                    <input
-                      type="text"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_zipCode,
-                      })}
-                      name="p_zipCode"
-                      ref={register({
-                        required: "This field is required",
-                      })}
-                      placeholder="Enter Name"
-                    />
-                  </div>
+              {
+                disabled ?
+                  <ResendOtp setDisabled={setDisabled} getTime={getTime} email={email} phone={phone} />
+                  :
+                  null
+              }
 
-                </div>
-                <div class="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Password<span className="declined">*</span></label>
-
-                    <input
-                      type={password ? "text" : "password"}
-                      className="form-control"
-                      onCopy={(e) => {
-                        e.preventDefault();
-                        return false
-                      }}
-                      onPaste={(e) => {
-                        e.preventDefault();
-                        return false
-                      }}
-                      // onChange={funValidation}
-                      name="p_password"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_password,
-                      })}
-                      placeholder="Enter Your Password"
-                      ref={register({
-                        required: "mandatory",
-                        pattern: {
-                          value:
-                            /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                          message:
-                            "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
-                        },
-                      })}
-                    />
-                    <i
-                      className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
-                      onClick={togglePasssword}
-                    />
-                    {errors.p_password && (
-                      <div className="invalid-feedback">
-                        {errors.p_password.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div className="mb-3">
-                    <label className="form-label">Confirm Password<span className="declined">*</span></label>
-                    <input
-                      type={repassword ? "text" : "password"}
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_confirm_password,
-                      })}
-                      onCopy={(e) => {
-                        e.preventDefault();
-                        return false
-                      }}
-                      onPaste={(e) => {
-                        e.preventDefault();
-                        return false
-                      }}
-                      placeholder="Confirm Password"
-                      name="p_confirm_password"
-                      ref={register({
-                        required: "mandatory",
-                        validate: (value) =>
-                          value === getValues("p_password") ||
-                          "password doesn 't match",
-                      })}
-                    />
-                    <i
-                      className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
-                      onClick={togglePasssword2}
-                    />
-                    {errors.p_confirm_password && (
-                      <div className="invalid-feedback">
-                        {errors.p_confirm_password.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-
-                <div class="col-md-6">
-                  <div className="mb-3">
-                    <button type="submit" className="btn btn-primary">
-                      Submit
-                    </button>
-                  </div>
-                </div>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <span className="declined">*Mandatory</span>
               </div>
-            </form>
-          )}
-        </div>
+            </div>
+          </>
 
+        </div>
       </div>
       <Footer />
     </>
@@ -591,416 +739,46 @@ function SignUp(props) {
 
 export default SignUp;
 
+ // const phoneHandler = (e) => {
+  //   if (isNaN(e.target.value)) {
+  //     console.log("please enter no only")
+  //   } else {
+  //     setPhone(e.target.value);
+  //   }
+  // };
 
-// import React, { useState, useEffect } from "react";
-// import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
-// import "../../assets/css/style.css";
-// import "../../assets/css/media.css";
-// import Header from "../../components/Header/Header";
-// import Footer from "../../components/Footer/Footer";
-// import axios from "axios";
-// import { baseUrl } from "../../config/config";
-// import { useAlert } from "react-alert";
-// import classNames from "classnames";
-// import Swal from "sweetalert2";
-// import { Spinner } from "reactstrap";
-// import Alerts from "../../common/Alerts";
+   // const phoneValidation = () => {
 
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required name"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_profession: yup.string().required("required proffesion"),
-//   p_state: yup.string().required("required state"),
-//   p_city: yup.string().required("mandatory"),
-//   p_phone: yup
-//     .string()
-//     .required("required phone no")
-//     .matches(/^[0-9]+$/, "Must be only digits")
-//     .min(10, "Must be exactly 10 digits")
-//     .max(20, "max 20 digits"),
-//   p_password: yup
-//     .string()
-//     .required("required password")
-//     .min(5, "at least 5 digits")
-//     .max(20, "max 20 digits"),
-// });
-
-// function SignUp(props) {
-//   const alert = useAlert();
-//   const { handleSubmit, register, errors } = useForm({
-//     resolver: yupResolver(Schema),
-//   });
-
-//   const [states, setStates] = useState([]);
-//   const [city, setCity] = useState([]);
-//   const [name, setName] = useState("");
-//   const [load, setLoad] = useState(false);
-//   const [store, setStore] = useState(0);
-//   const [disabled, setDisbutton] = useState(true);
-//   const [disabled2, setDisbutton2] = useState(false);
-//   const [showInput, setshowInput] = useState(false)
-//   const [password, setPassword] = useState(false);
-//   const togglePasssword = () => {
-//     setPassword(!password)
-//   };
-
-
-//   const [repassword, setRepassword] = useState(false);
-//   const togglePasssword2 = () => {
-//     setRepassword(!repassword)
-//   };
-
-
-//   useEffect(() => {
-//     const getStates = () => {
-//       // console.log(`${baseUrl}/customers/getState`)
-//       axios.get(`${baseUrl}/customers/getState`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setStates(res.data.result);
-//         }
-//       });
-//     };
-//     getStates();
-//   }, []);
-
-//   useEffect(() => {
-//     const getCity = () => {
-//       axios
-//         .get(`${baseUrl}/customers/getCity?state_id=${store}`)
-//         .then((res) => {
-//           console.log(res);
-//           if (res.data.code === 1) {
-//             setCity(res.data.result);
-//           }
-//         });
-//     };
-
-//     getCity();
-//   }, [store]);
-
-
-//   const onSubmit = (value) => {
-//     console.log("value :", value);
-
-//     // setLoad(true);
-
-//     let formData = new FormData();
-//     formData.append("name", value.p_name);
-//     formData.append("email", value.p_email);
-//     formData.append("phone", value.p_phone);
-//     formData.append("occupation", value.p_profession);
-//     formData.append("state", value.p_state);
-//     formData.append("city", value.p_city);
-//     formData.append("password", value.p_password);
-//     // formData.append("confirmpassword", value.conformpass);
-
-//     axios({
-//       method: "POST",
-//       url: `${baseUrl}/customers/signup`,
-//       data: formData,
-//     })
-//       .then(function (response) {
-//         console.log("res-", response);
-
-//         if (response.data.code === 1) {
-
-//           var variable = "Signup successfully."
-//           Alerts.SuccessNormal(variable)
-
-//           localStorage.setItem("userid", JSON.stringify(response.data.id));
-//           localStorage.setItem(
-//             "userNameId",
-//             JSON.stringify(response.data.user_id)
-//           );
-//           localStorage.setItem("name", JSON.stringify(response.data.name));
-//           props.history.push("/customer/questionnaire-page");
-//         } else if (response.data.code === 0) {
-//           console.log("res -", response.data.result);
-//           setLoad(false);
-//           Swal.fire(
-//             "Oops",
-//             `error :        
-//           ${response.data.message[0] ? response.data.message[0] : ""} 
-//           ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
-//             ${response.data.message[1] ? response.data.message[1] : ""} 
-//             `,
-//             "error"
-//           );
-//         }
-//       })
-//       .catch((error) => {
-//         console.log("erroror - ", error);
-//       });
-//   };
-
-
-//   const getID = (key) => {
-//     setStore(key);
-
-//     states.filter((data) => {
-//       if (data.id == key) {
-//         console.log("Name", data.name);
-//         setName(data.name);
-//       }
-//     });
-//   };
-//   const getOtp = () => {
-//     setDisbutton(false)
-//     setDisbutton2(true)
-//     setshowInput(true)
-//   }
-
-
-//   return (
-//     <>
-//       <Header cust_sign="cust_sign" />
-//       <div className="container">
-//         <div className="form">
-//           <div className="heading">
-//             <h2>Customer Register</h2>
-//           </div>
-//           {load ? (
-//             <Spinner size="sm" color="primary" />
-//           ) : (
-//             <form onSubmit={handleSubmit(onSubmit)}>
-//               <div className="row">
-//                 <div className="col-md-6">
-
-//                   <div className="mb-3">
-//                     <label className="form-label">Name<span className="declined">*</span></label>
-//                     <input
-//                       type="text"
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_name,
-//                       })}
-//                       name="p_name"
-//                       ref={register}
-//                       placeholder="Enter Name"
-//                     />
-//                     {errors.p_name && (
-//                       <div className="invalid-feedback">
-//                         <p style={{ "color": "red" }}>mandatory</p>
-//                       </div>
-//                     )}
-//                   </div>
-
-//                 </div>
-//                 <div className="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">Email<sup style={{ "color": "red" }}>*</sup></label>
-//                     <input
-//                       type="text"
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_email,
-//                       })}
-//                       name="p_email"
-//                       ref={register}
-//                       placeholder="Enter Email"
-//                     />
-//                     {errors.p_email && (
-//                       <div className="invalid-feedback">
-//                         <p style={{ "color": "red" }}>mandatory</p>
-//                       </div>
-//                     )}
-//                   </div>
-//                 </div>
-//                 <div className="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">Phone number<sup style={{ "color": "red" }}>*</sup></label>
-//                     <input
-//                       type="text"
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_phone,
-//                       })}
-//                       name="p_phone"
-//                       ref={register}
-//                       placeholder="Phone number"
-//                     />
-//                     {errors.p_phone && (
-//                       <div className="invalid-feedback">
-
-//                       </div>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 <div className="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">Occupation/ Profession<sup style={{ "color": "red" }}>*</sup></label>
-//                     <br />
-//                     <select
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_profession,
-//                       })}
-//                       name="p_profession"
-//                       aria-label="Default select example"
-//                       ref={register}
-//                     >
-//                       <option value="">--select--</option>
-//                       {professionName.map((p, index) => (
-//                         <option key={index} value={p.city}>
-//                           {p.city}
-//                         </option>
-//                       ))}
-//                     </select>
-//                     {errors.p_profession && (
-//                       <div className="invalid-feedback">
-
-//                       </div>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 <div class="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">Password<sup style={{ "color": "red" }}>*</sup></label>
-
-
-//                     <input
-//                       type="password"
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_password,
-//                       })}
-//                       onCopy={(e) => {
-//                         e.preventDefault();
-//                         return false
-//                       }}
-//                       onPaste={(e) => {
-//                         e.preventDefault();
-//                         return false
-//                       }}
-//                       name="p_password"
-//                       ref={register}
-//                       placeholder="Enter Password"
-//                     />
-//                     <i
-//                       className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
-//                       onClick={togglePasssword}
-//                     />
-
-
-//                     {errors.p_password && (
-//                       <div className="invalid-feedback">
-
-//                       </div>
-//                     )}
-
-//                   </div>
-//                 </div>
-
-//                 <div class="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">Re-Type Password</label>
-
-//                     <input
-//                       type={repassword ? "text" : "password"}
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.cp_password,
-//                       })}
-//                       ref={register}
-//                       name="cp_password"
-//                       placeholder="Enter Password"
-//                     />
-//                     <i
-//                       className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
-//                       onClick={togglePasssword2}
-//                     />
-//                     {errors.cp_password && (
-//                       <div className="invalid-feedback">
-
-//                       </div>
-//                     )}
-
-
-//                   </div>
-//                 </div>
-
-//                 <div className="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">State<sup style={{ "color": "red" }}>*</sup></label>
-//                     <select
-//                       id="state"
-//                       name="p_state"
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_state,
-//                       })}
-//                       ref={register}
-//                       onChange={(e) => getID(e.target.value)}
-//                     >
-//                       <option value="">--select--</option>
-//                       {states.map((p) => (
-//                         <option key={p.id} value={p.id}>
-//                           {p.name}
-//                         </option>
-//                       ))}
-//                     </select>
-//                     {errors.p_state && (
-//                       <div className="invalid-feedback">
-
-//                       </div>
-//                     )}
-//                   </div>
-//                 </div>
-//                 <div className="col-md-6">
-//                   <div className="mb-3">
-//                     <label className="form-label">City<sup style={{ "color": "red" }}>*</sup></label>
-//                     <select
-//                       className={classNames("form-control", {
-//                         "is-invalid": errors.p_city,
-//                       })}
-//                       name="p_city"
-//                       ref={register}
-//                     >
-//                       <option value="">--select--</option>
-//                       {city.map((p, index) => (
-//                         <option key={index} value={p.city}>
-//                           {p.city}
-//                         </option>
-//                       ))}
-//                     </select>
-//                     {errors.p_city && (
-//                       <div className="invalid-feedback">
-//                         {errors.p_city.message}
-//                       </div>
-//                     )}
-//                   </div>
-//                 </div>
-
-//               </div>
-//               <button type="submit" className="btn btn-primary" style={{ "margin": "0 20px 0 0" }} disabled={disabled2} onClick={getOtp}>
-//                 Get Otp
-//               </button>
-//               {showInput == true ? <input
-//                 type="text"
-//                 disabled={disabled}
-//                 style={{ "margin": "0 15px" }} /> : ""}
-//               <button type="submit" className="btn btn-primary">
-//                 Submit
-//               </button>
-//             </form>
-//           )}
-//         </div>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// }
-
-// export default SignUp;
-
-// const professionName = [
-//   { city: "CA" },
-//   { city: "NON-CA" },
-//   { city: "CFO" },
-//   { city: "CEO" },
-//   { city: "FINANCE HEAD" },
-//   { city: "ACCOUNTS MANAGER" },
-//   { city: "ACCOUNTANT" },
-//   { city: "TAX PROFESSIONAL" },
-//   { city: "OTHERS" },
-// ];
-
+  //   if (phone.length > 9 && phone.length < 15) {
+  //     let formData = new FormData();
+  //     formData.append("phone", phone);
+  //     formData.append("type", 2);
+  //     axios({
+  //       method: "POST",
+  //       url: `${baseUrl}/customers/validateregistration`,
+  //       data: formData,
+  //     })
+  //       .then(function (response) {
+  //         console.log("res-", response);
+  //         if (response.data.code === 1) {
+  //           // setValiphone(response.data.result)
+  //           console.log(response.data.result)
+  //           setNumAvail(response.data.result);
+  //           setNumExist('')
+  //         }
+  //         else if (response.data.code === 0) {
+  //           console.log(response.data.result)
+  //           setNumExist(response.data.result)
+  //           setNumAvail('')
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log("erroror - ", error);
+  //       });
+  //   } else if (phone.length > 9) {
+  //     setNumExist("at least you have to type 9 digit")
+  //   } else if (phone.length < 15) {
+  //     setNumExist("max 15 digit allow")
+  //   }
+  // }
 

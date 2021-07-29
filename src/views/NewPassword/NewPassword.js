@@ -16,6 +16,7 @@ import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
 
 
+
 function NewPassword(props) {
   const alert = useAlert();
   const { register, handleSubmit, errors, getValues, reset } = useForm();
@@ -37,6 +38,10 @@ function NewPassword(props) {
 
 
   useEffect(() => {
+    getTime()
+  }, []);
+
+  const getTime = () => {
     var timerOn = true;
     function timer(remaining) {
       var s = remaining % 60;
@@ -51,8 +56,8 @@ function NewPassword(props) {
       }
       setDisabled(true)
     }
-    timer(10);
-  }, [id]);
+    timer(120);
+  }
 
 
   const onSubmit = (value) => {
@@ -77,8 +82,6 @@ function NewPassword(props) {
           var variable = "Reset Password Successfully "
           Alerts.SuccessNormal(variable)
 
-
-
           reset();
           props.history.push("/customer/signin");
         } else if (response.data.code === 0) {
@@ -90,7 +93,6 @@ function NewPassword(props) {
         console.log("erroror - ", error);
       });
   };
-
 
   return (
     <>
@@ -151,6 +153,10 @@ function NewPassword(props) {
                           "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
                       },
                     })}
+                    onPaste={((e) => {
+                      e.preventDefault();
+                      return false;
+                    })}
                   />
                   <i
                     className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -184,7 +190,7 @@ function NewPassword(props) {
                     onPaste={((e) => {
                       e.preventDefault();
                       return false;
-                    })}i
+                    })}
                   />
                   <i
                     className={`fa ${isPasswordShow2 ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -207,7 +213,7 @@ function NewPassword(props) {
                       "is-invalid": errors.p_code,
                     })}
                     name="p_code"
-                    placeholder="Enter otp"
+                    placeholder="Enter OTP"
                     ref={register({
                       required: "This field is required",
                     })}
@@ -223,17 +229,27 @@ function NewPassword(props) {
                 </div>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
+            {
+              disabled ?
+                <button type="submit" className="btn btn-primary" disabled>
+                  Submit
+                </button>
+                :
+                <button type="submit" className="btn btn-primary" >
+                  Submit
+                </button>
+            }
           </form>
 
           {
             disabled ?
-              <ResendOtp id={id} setDisabled={setDisabled} />
+              <ResendOtp id={id} setDisabled={setDisabled} getTime={getTime} />
               :
               null
           }
+
+
+          <span className="declined">*Mandatory</span>
 
         </div>
       </div>

@@ -279,7 +279,7 @@ function AllProposalComponent({ allProposal }) {
 
               <div style={{ cursor: "pointer" }} title="View Proposal">
                 <a
-                  href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}`}
+                  href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
                   target="_blank"
                 >
                   <i

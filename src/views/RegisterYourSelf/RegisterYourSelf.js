@@ -50,7 +50,7 @@ function LoginForm() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          Alerts.SuccessNormal("OTP sent to your email.")
+          Alerts.SuccessNormal("OTP sent to your email address.")
           setShow(true)
           setUid(response.data.user_id)
           localStorage.setItem("email", JSON.stringify(value.p_email))
@@ -62,7 +62,6 @@ function LoginForm() {
         console.log("erroror - ", error);
       });
   };
-
 
 
   const handleChange = (e) => {
@@ -98,6 +97,7 @@ function LoginForm() {
               </div>
             </div>
           </div>
+
           <div className="signUp">
             <Typography variant="h4" style={{ "margin": "0 0 15px 0" }}>
               For existing customers
@@ -145,19 +145,27 @@ function LoginForm() {
                     </button>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "row-reverse", color: "black" }}>
-                    <Link
-                      to={{
-                        pathname: "/customer/forget-password",
-                        email: `${email}`,
-                      }}
-                    >
-                      Forgot Password
-                    </Link>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span className="declined">*Mandatory</span>
+                    <div style={{ color: "black" }}>
+                      <Link
+                        to={{
+                          pathname: "/customer/forget-password",
+                          email: `${email}`,
+                        }}
+                      >
+                        Forgot Password
+                      </Link>
+                    </div>
+
                   </div>
+
                 </form>
             }
+
           </div>
+
+
         </div>
       </div>
       <Footer />

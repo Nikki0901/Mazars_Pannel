@@ -94,7 +94,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
         <div class="col-sm-3" style={{ marginTop: "38px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div class="form-group">
-              <label>Category *</label>
+              <label>Category <span className="declined">*</span></label>
               <select
                 className="form-control"
                 name="p_tax"
@@ -119,7 +119,7 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
             </div>
 
             <div class="form-group">
-              <label>Sub Category *</label>
+              <label>Sub Category <span className="declined">*</span></label>
               <select
                 name="p_tax2"
                 className={classNames("form-control", {
@@ -186,7 +186,9 @@ function CategorySelect({ addfreshbtn, startbtn }, props) {
 
             </div>
 
-
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <span className="declined">*Mandatory</span>
+            </div>
           </form>
 
           <Modal isOpen={modal} toggle={toggle}>

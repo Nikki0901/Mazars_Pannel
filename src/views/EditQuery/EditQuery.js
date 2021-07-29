@@ -219,7 +219,7 @@ function EditQuery(props) {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="mb-3">
-                      <label className="form-label">Facts of the case *</label>
+                      <label className="form-label">Facts of the case <span className="declined">*</span></label>
                       <textarea
                         className="form-control"
                         id="textarea"
@@ -233,8 +233,8 @@ function EditQuery(props) {
                   <div className="col-md-6">
                     <div className="question_query mb-2">
                       <label className="form-label">
-                        Specific Questions for advisory *
-                      </label> 
+                        Specific Questions for advisory <span className="declined">*</span>
+                      </label>
                       <div
                         className="btn btn-primary"
                         onClick={() => append({ query: "" })}
@@ -398,7 +398,7 @@ function EditQuery(props) {
                   <div className="col-md-6">
                     <div className="mb-3">
                       <label className="form-label">
-                        Purpose for which Opinion is sought *
+                        Purpose for which Opinion is sought <span className="declined">*</span>
                       </label>
                       <Select
                         closeMenuOnSelect={false}
@@ -414,6 +414,10 @@ function EditQuery(props) {
                 <button type="submit" className="btn btn-primary">
                   Update
                 </button>
+
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <span className="declined">*Mandatory</span>
+                </div>
               </form>
             )}
           </div>

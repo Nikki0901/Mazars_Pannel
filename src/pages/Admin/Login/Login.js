@@ -14,10 +14,10 @@ import Alerts from "../../../common/Alerts";
 
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("required email"),
+  p_email: yup.string().email("invalid email").required("mandatory"),
   password: yup
     .string()
-    .required("required password")
+    .required("mandatory")
     .min(5, "at least 5 digits")
     .max(20, "max 20 digits"),
 });
@@ -81,7 +81,7 @@ function Login(props) {
             <div className="row">
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Email</label>
+                  <label className="form-label">Email<span className="declined">*</span></label>
                   <input
                     type="text"
                     className={classNames("form-control", {
@@ -101,7 +101,7 @@ function Login(props) {
               </div>
               <div className="col-md-12">
                 <div className="mb-3">
-                  <label className="form-label">Password</label>
+                  <label className="form-label">Password<span className="declined">*</span></label>
                   <input
                     type={isPasswordShow ? "text" : "password"}
                     className={classNames("form-control", {
@@ -140,6 +140,8 @@ function Login(props) {
               {/* <Link to={`/admin/forget-password`}>Forgot Password</Link> */}
             </div>
           </form>
+
+          <span className="declined">*Mandatory</span>
         </div>
       </div>
       <Footer />

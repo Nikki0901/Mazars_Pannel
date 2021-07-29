@@ -63,10 +63,10 @@ function AddFreshAssingment(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
     if (setPurposeOption == '') {
-      setSelectError("Please select atleast one value")
+      setSelectError("mandatory")
     }
     if (selectedOption == '') {
-      setSelectError("Please select atleast one value")
+      setSelectError("mandatory")
     }
     else {
       setSelectError("")
@@ -74,7 +74,7 @@ function AddFreshAssingment(props) {
     const a = value.p_fact;
     const b = value.p_case_name;
     if (a == '') {
-      setcustError("This feild is required");
+      setcustError("mandatory");
     }
 
     else {
@@ -120,7 +120,6 @@ function AddFreshAssingment(props) {
           console.log("res-", response);
           if (response.data.code === 1) {
             reset();
-
 
             var message = response.data.message
             if (message == "") {
@@ -196,7 +195,7 @@ function AddFreshAssingment(props) {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="mb-3">
-                        <label className="form-label">Facts of the case *</label>
+                        <label className="form-label">Facts of the case <span className="declined">*</span></label>
                         <textarea
                           className="form-control"
                           id="textarea"
@@ -212,7 +211,7 @@ function AddFreshAssingment(props) {
                     <div className="col-md-6">
                       <div className="question_query mb-2">
                         <label className="form-label">
-                          Specific Questions for advisory *
+                          Specific Questions for advisory <span className="declined">*</span>
                         </label>
                         <div
                           className="btn btn-primary"
@@ -359,7 +358,7 @@ function AddFreshAssingment(props) {
                     <div className="col-md-6">
                       <div className="mb-3">
                         <label className="form-label">
-                          Purpose for which Opinion is sought *
+                          Purpose for which Opinion is sought <span className="declined">*</span>
                         </label>
                         <Select
                           closeMenuOnSelect={false}
@@ -375,6 +374,10 @@ function AddFreshAssingment(props) {
                   <button type="submit" className="btn btn-primary">
                     Submit
                   </button>
+
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <span className="declined">*Mandatory</span>
+                  </div>
                 </form>
               )}
             </div>
