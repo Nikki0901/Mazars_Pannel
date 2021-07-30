@@ -250,6 +250,7 @@ function SignUp(props) {
             setNumExist('')
             setNumAvail(response.data.result);
 
+            
           }
           else if (response.data.code === 0) {
             console.log(response.data.result)
@@ -293,7 +294,6 @@ function SignUp(props) {
 
 
   //submit form
-
   const onSubmit = (value) => {
     console.log("value :", value);
     console.log("countryName :", countryName);
@@ -377,7 +377,10 @@ function SignUp(props) {
             Alerts.SuccessNormal("OTP sent to your email address.")
           } else if (response.data.code === 0) {
             Alerts.ErrorNormal("Error.")
+           
+            console.log("mobile" + setNumExist)
           }
+
         })
         .catch((error) => {
           console.log("erroror - ", error);
@@ -597,6 +600,14 @@ function SignUp(props) {
                       />
                     </div>
                     <p className="declined">{zipError}</p>
+                    {
+                      numAvail ?
+                        <p className="completed"> {numAvail}
+                        </p>
+                        :
+                        <p className="declined">{numExist}</p>
+                    }
+
                   </div>
                   <div class="col-md-6">
                     <div className="mb-3">
@@ -738,48 +749,4 @@ function SignUp(props) {
 export default SignUp;
 
 
-
-
- // const phoneHandler = (e) => {
-  //   if (isNaN(e.target.value)) {
-  //     console.log("please enter no only")
-  //   } else {
-  //     setPhone(e.target.value);
-  //   }
-  // };
-
-   // const phoneValidation = () => {
-
-  //   if (phone.length > 9 && phone.length < 15) {
-  //     let formData = new FormData();
-  //     formData.append("phone", phone);
-  //     formData.append("type", 2);
-  //     axios({
-  //       method: "POST",
-  //       url: `${baseUrl}/customers/validateregistration`,
-  //       data: formData,
-  //     })
-  //       .then(function (response) {
-  //         console.log("res-", response);
-  //         if (response.data.code === 1) {
-  //           // setValiphone(response.data.result)
-  //           console.log(response.data.result)
-  //           setNumAvail(response.data.result);
-  //           setNumExist('')
-  //         }
-  //         else if (response.data.code === 0) {
-  //           console.log(response.data.result)
-  //           setNumExist(response.data.result)
-  //           setNumAvail('')
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.log("erroror - ", error);
-  //       });
-  //   } else if (phone.length > 9) {
-  //     setNumExist("at least you have to type 9 digit")
-  //   } else if (phone.length < 15) {
-  //     setNumExist("max 15 digit allow")
-  //   }
-  // }
 
