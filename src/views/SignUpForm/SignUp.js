@@ -612,8 +612,7 @@ function SignUp(props) {
                         onPaste={(e) => {
                           e.preventDefault();
                           return false
-                        }}
-                        // onChange={funValidation}
+                        }}   
                         name="p_password"
                         className={classNames("form-control", {
                           "is-invalid": errors.p_password,
@@ -622,8 +621,7 @@ function SignUp(props) {
                         ref={register({
                           required: "mandatory",
                           pattern: {
-                            value:
-                              /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                            value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
                             message:
                               "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
                           },
@@ -660,7 +658,7 @@ function SignUp(props) {
                         placeholder="Confirm Password"
                         name="p_confirm_password"
                         ref={register({
-                          required: "mandatory",
+                          required: true,
                           validate: (value) =>
                             value === getValues("p_password") ||
                             "password doesn 't match",
@@ -738,6 +736,9 @@ function SignUp(props) {
 }
 
 export default SignUp;
+
+
+
 
  // const phoneHandler = (e) => {
   //   if (isNaN(e.target.value)) {

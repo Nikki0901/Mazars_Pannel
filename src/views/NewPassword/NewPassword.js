@@ -145,10 +145,9 @@ function NewPassword(props) {
                     })}
                     placeholder="Enter Your Password"
                     ref={register({
-                      required: "This field is required",
+                      required: "mandatory",
                       pattern: {
-                        value:
-                          /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                        value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
                         message:
                           "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
                       },
