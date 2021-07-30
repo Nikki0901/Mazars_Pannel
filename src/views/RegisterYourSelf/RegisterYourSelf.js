@@ -1,4 +1,3 @@
-
 import { useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
@@ -14,6 +13,7 @@ import VerifyOTP from "./VerifyOTP";
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
+
 
 
 const Schema = yup.object().shape({

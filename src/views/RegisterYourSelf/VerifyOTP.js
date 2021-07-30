@@ -116,7 +116,7 @@ function VerifyOTP({ email, uid }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    Alerts.SuccessNormal("An otp sent to your mail")
+                    Alerts.SuccessNormal("An OTP sent to your mail")
                     setDisabled(false)
                 }
                 else if (response.data.code === 0) {
@@ -144,7 +144,7 @@ function VerifyOTP({ email, uid }) {
                                 })}
                                 name="p_otp"
                                 ref={register}
-                                placeholder="Enter your otp"
+                                placeholder="Enter your OTP"
                                 onChange={(e) => validOtp(e)}
                             />
                             <small class="text-center">

@@ -359,7 +359,7 @@ function SignUp(props) {
             setShow(true)
             Alerts.SuccessNormal("OTP sent to your email address.")
           } else if (response.data.code === 0) {
-            Alerts.ErrorNormal("Incorrect OTP .")
+            Alerts.ErrorNormal("Incorrect OTP , please try again.")
           }
         })
         .catch((error) => {
