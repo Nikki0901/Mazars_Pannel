@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Header from "../../components/Header/Header";
-import Footer from '../../components/Footer/Footer'
 import axios from 'axios'
 import { baseUrl } from "../../config/config";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,13 +13,14 @@ const Schema = yup.object().shape({
     p_otp: yup.string().required("mandatory"),
 });
 
+
 function VerifyOTP({ email, uid }) {
     const { handleSubmit, register, errors, reset } = useForm({
         resolver: yupResolver(Schema),
     });
 
     const history = useHistory();
-    const [time, setTime] = useState('')
+    const [time, setTime] = useState('');
     const [disabled, setDisabled] = useState(false)
     const [num, changeNum] = useState(false);
 
@@ -158,7 +157,7 @@ function VerifyOTP({ email, uid }) {
                 <div className="form-group">
                     {
                         disabled ?
-                            <button type="submit" class="btn btn-success" onClick={resendOtp}>RESEND OTP</button>
+                            <button type="submit" class="btn btn-success btn-sm" onClick={resendOtp}>RESEND OTP</button>
                             :
                             <button type="submit" className="btn btn-primary btn-sm">
                                 Login
@@ -169,6 +168,7 @@ function VerifyOTP({ email, uid }) {
         </div>
     );
 }
+
 
 export default VerifyOTP;
 

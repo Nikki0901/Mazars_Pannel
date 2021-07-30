@@ -14,34 +14,21 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
+import GetOTP from "./GetOTP";
+import Mandatory from "../../components/Common/Mandatory";
 
 
 
 
-// const Schema = yup.object().shape({
-//   // p_name: yup.string().required("required name"),
-//   // p_email: yup.string().email("invalid email").required("required email"),
-//   // p_profession: yup.string().required("required proffesion"),
-//   // p_state: yup.string().required("required state"),
-//   // p_city: yup.string().required("required city"),
-//   // p_phone: yup
-//   //   .string()
-//   //   .required("required phone no")
-//   //   .matches(/^[0-9]+$/, "Must be only digits")
-//   //   .min(10, "Must be exactly 10 digits")
-//   //   .max(20, "max 20 digits"),
-//   // p_password: yup
-//   //   .string()
-//   //   .required("required password")
-//   //   .min(5, "at least 5 digits")
-//   //   .max(20, "max 20 digits"),
-// });
 
 
 
 function SignUp(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, getValues } = useForm();
+
+  // const otp = 0;
+  const [display, setDisplay] = useState(false);
 
 
   const [otpMsg, setOtpMsg] = useState();
@@ -69,7 +56,7 @@ function SignUp(props) {
   const [indNumError, setIndNumError] = useState(null)
   const [zipCode, setZipCode] = useState('')
   const [zipError, setZipError] = useState(null)
-
+  const [passData1, setPassData1] = useState([])
 
   const togglePasssword = () => {
     setPassword(!password)
@@ -78,7 +65,6 @@ function SignUp(props) {
   const togglePasssword2 = () => {
     setRepassword(!repassword)
   };
-
 
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
@@ -107,7 +93,7 @@ function SignUp(props) {
         }
         setDisabled(true)
       }
-      timer(20);
+      timer(120);
     }
   }
 
@@ -158,6 +144,7 @@ function SignUp(props) {
     });
     setCity(arrayCity)
   }
+
 
   //eamil onchange
   const emailHandler = (e) => {
@@ -250,7 +237,7 @@ function SignUp(props) {
             setNumExist('')
             setNumAvail(response.data.result);
 
-            
+
           }
           else if (response.data.code === 0) {
             console.log(response.data.result)
@@ -279,6 +266,7 @@ function SignUp(props) {
     }
   }
 
+
   // onblur
   const zipVali2 = (e) => {
     if (countryId && zipCode && zipCode.length < 5) {
@@ -293,12 +281,51 @@ function SignUp(props) {
   }
 
 
+  //password
+  const valiPassword = (e) => {
+    let arr3 = []
+    arr3.push(e.target.value)
+    setPassData1(...arr3)
+    console.log(e.target.value.length)
+    if (arr3.length >= 0) {
+
+      if (e.target.value == false) {
+        setpassError("");
+      }
+      else if (e.target.value.search(/[a-z]/) === -1) {
+        setpassError("Your password must be atleaset one lower case letter")
+      }
+      else if (e.target.value.search(/[A-Z]/) === -1) {
+        setpassError("Your password must be at least one upper letter");
+      }
+
+      else if (e.target.value.search(/[0-9]/) === -1) {
+        setpassError("Your password must contain at least one digit.");
+
+      }
+
+      else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
+        setpassError("Your password must contain at least one special Character.");
+
+      }
+      else if (e.target.value.length < 8) {
+        setpassError("Your password must be at least 8 characters");
+      }
+      else {
+        setpassError("")
+      }
+    }
+    else {
+      setpassError("")
+    }
+  }
+
+
   //submit form
   const onSubmit = (value) => {
     console.log("value :", value);
-    console.log("countryName :", countryName);
-    console.log("stateName :", stateName);
-    console.log("countryCode :", countryCode);
+
+    console.log("display :", display);
 
     let formData = new FormData();
     formData.append("name", value.p_name);
@@ -314,51 +341,7 @@ function SignUp(props) {
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/signup`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-
-        if (response.data.code === 1) {
-
-          var variable = "Signup successfully."
-          Alerts.SuccessNormal(variable)
-
-          localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem(
-            "userNameId",
-            JSON.stringify(response.data.user_id)
-          );
-          localStorage.setItem("name", JSON.stringify(response.data.name));
-          props.history.push("/customer/questionnaire-page");
-        } else if (response.data.code === 0) {
-          console.log("res -", response.data.result);
-          setLoad(false);
-          Swal.fire(
-            "Oops",
-            `error :        
-          ${response.data.message[0] ? response.data.message[0] : ""} 
-          ${response.data.message[0] && response.data.message[1] ? "and" : ""} 
-            ${response.data.message[1] ? response.data.message[1] : ""} 
-            `,
-            "error"
-          );
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-
-  //get OTP
-  const getOtp = () => {
-    console.log("call otp")
-    if (email && phone) {
+    if (display) {
       let formData = new FormData();
       formData.append("email", email);
       formData.append("phone", phone);
@@ -376,40 +359,67 @@ function SignUp(props) {
             setShow(true)
             Alerts.SuccessNormal("OTP sent to your email address.")
           } else if (response.data.code === 0) {
-            Alerts.ErrorNormal("Error.")
-           
-            console.log("mobile" + setNumExist)
+            Alerts.ErrorNormal("Incorrect OTP .")
           }
-
         })
         .catch((error) => {
           console.log("erroror - ", error);
         });
+      return false
     }
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/signup`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          var variable = "Signup successfully."
+          Alerts.SuccessNormal(variable)
+
+          localStorage.setItem("userid", JSON.stringify(response.data.id));
+          localStorage.setItem(
+            "userNameId",
+            JSON.stringify(response.data.user_id)
+          );
+          localStorage.setItem("name", JSON.stringify(response.data.name));
+          props.history.push("/customer/dashboard");
+        } else if (response.data.code === 0) {
+          console.log("res -", response.data.result);
+          setLoad(false);
+          Alerts.ErrorNormal("Error.")
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
+  //setotp
+  const setOtp = () => {
+    setDisplay(false)
   }
 
-
-  const OtpButton = () => {
-    return (
-      <>
-        <button type="submit" class="btn btn-success" onClick={getOtp}>Get OTP</button>
-      </>
-    );
-  };
+  //get OTP
+  const getOtp = () => {
+    setDisplay(true)
+  }
 
 
   return (
     <>
       <Header cust_sign="cust_sign" />
       <div className="container">
+
         <div className="form">
           <div className="heading">
             <h2>Customer Register</h2>
           </div>
-
           <>
             <div>
-              <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
                   <div className="col-md-6">
 
@@ -441,7 +451,6 @@ function SignUp(props) {
                         placeholder="Enter Your Password"
                         ref={register({ required: true })}
                       />
-
                       {
                         valiEmail ?
                           <p className="completed">
@@ -450,12 +459,8 @@ function SignUp(props) {
                           :
                           <p className="declined">{invalid}</p>
                       }
-
-
-
                     </div>
                   </div>
-
 
                   <div className="col-md-6">
                     <div className="mb-3">
@@ -594,28 +599,20 @@ function SignUp(props) {
                         })}
                         name="p_zipCode"
                         ref={register({ required: true })}
-                        placeholder="Enter Name"
+                        placeholder="Enter Zipcode"
                         onChange={(e) => zipValue(e)}
                         onBlur={zipVali2}
                       />
                     </div>
                     <p className="declined">{zipError}</p>
-                    {
-                      numAvail ?
-                        <p className="completed"> {numAvail}
-                        </p>
-                        :
-                        <p className="declined">{numExist}</p>
-                    }
-
                   </div>
+
                   <div class="col-md-6">
                     <div className="mb-3">
                       <label className="form-label">Password<span className="declined">*</span></label>
-
                       <input
                         type={password ? "text" : "password"}
-                        className="form-control"
+                        ref={register({ required: true })}
                         onCopy={(e) => {
                           e.preventDefault();
                           return false
@@ -623,30 +620,19 @@ function SignUp(props) {
                         onPaste={(e) => {
                           e.preventDefault();
                           return false
-                        }}   
+                        }}
                         name="p_password"
                         className={classNames("form-control", {
                           "is-invalid": errors.p_password,
                         })}
                         placeholder="Enter Your Password"
-                        ref={register({
-                          required: "mandatory",
-                          pattern: {
-                            value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                            message:
-                              "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
-                          },
-                        })}
+                        onChange={(e) => valiPassword(e)}
                       />
                       <i
                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
                         onClick={togglePasssword}
                       />
-                      {errors.p_password && (
-                        <div className="invalid-feedback">
-                          {errors.p_password.message}
-                        </div>
-                      )}
+                      <p className="declined">{passError}</p>
                     </div>
                   </div>
 
@@ -709,18 +695,9 @@ function SignUp(props) {
                   <div class="col-md-6">
                     {
                       show ?
-                        <>
-                          {
-                            disabled ?
-                              null
-                              :
-                              <button type="submit" className="btn btn-primary">
-                                Submit
-                              </button>
-                          }
-                        </>
+                        <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
                         :
-                        <OtpButton />
+                        <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
                     }
                   </div>
                 </div>
@@ -728,14 +705,12 @@ function SignUp(props) {
 
               {
                 disabled ?
-                  <ResendOtp setDisabled={setDisabled} getTime={getTime} email={email} phone={phone} />
+                  <ResendOtp setDisabled={setDisabled} getTime={getTime} 
+                  email={email} phone={phone} setLoad={setLoad} />
                   :
                   null
               }
-
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <span className="declined">*Mandatory</span>
-              </div>
+              <Mandatory />
             </div>
           </>
 
@@ -747,6 +722,4 @@ function SignUp(props) {
 }
 
 export default SignUp;
-
-
 

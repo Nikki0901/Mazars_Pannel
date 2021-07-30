@@ -151,7 +151,7 @@ function App() {
 
             <PublicRouteUser exact path="/" component={RegisterYourSelf} />
             <PublicRouteUser exact path="/customer/signup" component={SignUp} />
-            {/* <PublicRouteUser exact path="/customer/register-yourself" component={Signin} /> */}
+            <PublicRouteUser exact path="/customer/signin" component={Signin} />
             {/* <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} /> */}
             <PublicRouteUser exact path="/customer/verify-otp" component={VerifyOtp} />
             <PublicRouteUser exact path="/customer/otp" component={VerifyOtpLogin} />

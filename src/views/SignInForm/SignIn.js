@@ -43,41 +43,41 @@ function SignIn(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
-    setLoad(true);
+    // setLoad(true);
 
-    let formData = new FormData();
-    formData.append("user_id", value.p_email);
-    formData.append("password", value.p_password);
+    // let formData = new FormData();
+    // formData.append("user_id", value.p_email);
+    // formData.append("password", value.p_password);
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/login`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        console.log("otp-", response.data["otp "]);
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/customers/login`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
+    //     console.log("otp-", response.data["otp "]);
 
-        if (response.data.code === 1) {
+    //     if (response.data.code === 1) {
 
-          localStorage.setItem("email", JSON.stringify(value.p_email))
-          localStorage.setItem("uid", JSON.stringify(response.data.user_id))
+    //       localStorage.setItem("email", JSON.stringify(value.p_email))
+    //       localStorage.setItem("uid", JSON.stringify(response.data.user_id))
 
-          setShow(true)
-          // Alerts.SuccessLogin()
-          // localStorage.setItem("userid", JSON.stringify(response.data.user_id));
-          // localStorage.setItem("name", JSON.stringify(response.data.name));
+    //       setShow(true)
+    //       // Alerts.SuccessLogin()
+    //       // localStorage.setItem("userid", JSON.stringify(response.data.user_id));
+    //       // localStorage.setItem("name", JSON.stringify(response.data.name));
 
-          // props.history.push("/customer/otp");
-        } else if (response.data.code === 0) {
-          console.log(response.data.result);
-          setLoad(false);
-          Alerts.ErrorLogin()
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+    //       // props.history.push("/customer/otp");
+    //     } else if (response.data.code === 0) {
+    //       console.log(response.data.result);
+    //       setLoad(false);
+    //       Alerts.ErrorLogin()
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
   };
 
   const handleChange = (e) => {

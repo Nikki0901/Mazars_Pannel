@@ -67,7 +67,7 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
 }
 .password-icon-login{
     position: relative;
-    left: 175px;
+    left: 250px;
     top:-26px;
     cursor: pointer;
 }
@@ -83,4 +83,7 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
     font-weight: 800;
     color:#000;
     text-align: center;
+}
+.form_login{
+    width: 80%;
 }

@@ -1,3 +1,4 @@
+
 import { useRef, useState } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
@@ -12,6 +13,7 @@ import { baseUrl } from "../../config/config";
 import VerifyOTP from "./VerifyOTP";
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
+import Mandatory from "../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
@@ -90,6 +92,7 @@ function LoginForm() {
                     to={{
                       pathname: "/customer/signup",
                     }}
+                    style={{color:"white"}}
                   >
                     Sign Up
                   </Link>
@@ -107,47 +110,46 @@ function LoginForm() {
                 <VerifyOTP email={email} uid={uid} />
               </div>
                 :
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="form-group">
-                    <label className="form-label">Email <span className="declined">*</span></label>
-                    <input
-                      type="text"
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_email,
-                      })}
-                      name="p_email"
-                      ref={register}
-                      placeholder="Enter Email"
-                      onChange={(e) => handleChange(e)}
-                    />
-                  </div>
+                <div className="form_login">
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="form-group">
+                      <label className="form-label">Email <span className="declined">*</span></label>
+                      <input
+                        type="text"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email,
+                        })}
+                        name="p_email"
+                        ref={register}
+                        placeholder="Enter Email"
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Password <span className="declined">*</span></label>
-                    <input
-                      type={isPasswordShow ? "text" : "password"}
-                      className={classNames("form-control", {
-                        "is-invalid": errors.p_password,
-                      })}
-                      name="p_password"
-                      placeholder="Enter Password"
-                      ref={register}
-                    />
-                    <i
-                      className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
-                      onClick={togglePasssword}
-                    />
+                    <div className="form-group">
+                      <label className="form-label">Password <span className="declined">*</span></label>
+                      <input
+                        type={isPasswordShow ? "text" : "password"}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_password,
+                        })}
+                        name="p_password"
+                        placeholder="Enter Password"
+                        ref={register}
+                      />
+                      <i
+                        className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
+                        onClick={togglePasssword}
+                      />
 
-                  </div>
-                  <div className="form-group">
-                    <button type="submit" className="btn btn-primary btn-sm">
-                      Get OTP
-                    </button>
-                  </div>
+                    </div>
+                    <div className="form-group">
+                      <button type="submit" className="btn btn-primary btn-sm">
+                        Get OTP
+                      </button>
+                    </div>
 
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span className="declined">*Mandatory</span>
-                    <div style={{ color: "black" }}>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
                       <Link
                         to={{
                           pathname: "/customer/forget-password",
@@ -157,10 +159,9 @@ function LoginForm() {
                         Forgot Password
                       </Link>
                     </div>
-
-                  </div>
-
-                </form>
+                    <Mandatory />
+                  </form>
+                </div>
             }
 
           </div>

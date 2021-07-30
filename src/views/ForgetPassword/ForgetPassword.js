@@ -35,7 +35,7 @@ function ForgetPassword(props) {
 
     let formData = new FormData();
     formData.append("email", value.p_email);
-    formData.append("p","forgot");
+    formData.append("p", "forgot");
 
 
     axios({
@@ -100,6 +100,11 @@ function ForgetPassword(props) {
             <button type="submit" className="btn btn-primary">
               Get OTP
             </button>
+            <Link to="/" style={{ "margin": "10px" }}>
+              <button type="submit" className="btn btn-secondary">
+                Cancel
+              </button>
+            </Link>
           </form>
         </div>
       </div>
