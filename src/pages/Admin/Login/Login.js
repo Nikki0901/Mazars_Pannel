@@ -15,13 +15,14 @@ import Mandatory from "../../../components/Common/Mandatory";
 import VerifyOtpLogin from "./VerifyOtpLogin";
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("mandatory"),
+  p_email: yup.string().email("invalid email").required(""),
   password: yup
     .string()
-    .required("mandatory")
+    .required("")
     .min(5, "at least 5 digits")
     .max(20, "max 20 digits"),
 });
+
 
 function Login(props) {
   const alert = useAlert();

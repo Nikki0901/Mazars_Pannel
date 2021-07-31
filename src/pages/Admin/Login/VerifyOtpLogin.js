@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../../common/Alerts";
+import Mandatory from "../../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
-  p_otp: yup.string().required("mandatory"),
+  p_otp: yup.string().required(""),
 });
 
 
@@ -25,13 +26,12 @@ function VerifyOtp({ email, uid }) {
   const history = useHistory();
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const [num, changeNum] = useState(false);
 
 
   useEffect(() => {
-    console.log("call useEffect")
-
+    console.log("call useEffect button")
     var timerOn = true;
-
     function timer(remaining) {
       var s = remaining % 60;
       s = s < 10 ? '0' + s : s;
@@ -44,9 +44,36 @@ function VerifyOtp({ email, uid }) {
         return;
       }
       setDisabled(true)
+
+    }
+    timer(60);
+  }, [num]);
+
+  useEffect(() => {
+    console.log("call useEffect")
+    var timerOn = true;
+    function timer(remaining) {
+      var s = remaining % 60;
+      s = s < 10 ? '0' + s : s;
+      setTime(s)
+      remaining -= 1;
+      if (remaining >= 0 && timerOn) {
+        setTimeout(function () {
+          timer(remaining);
+        }, 1000);
+        return;
+      }
+      setDisabled(true)
+
     }
     timer(60);
   }, []);
+
+  const validOtp = (e) => {
+    if (isNaN(e.target.value)) {
+      Alerts.ErrorNormal("Please enter number only")
+    }
+  }
 
 
 
@@ -86,7 +113,7 @@ function VerifyOtp({ email, uid }) {
 
 
   const resendOtp = () => {
-
+    changeNum(true)
     let formData = new FormData();
     formData.append("email", email);
     formData.append("uid", uid);
@@ -119,7 +146,7 @@ function VerifyOtp({ email, uid }) {
       <div class="container">
         <div class="otp">
           <div class="heading text-center">
-            <h2>Verify Your OTP *</h2>
+            <h2>Verify Your OTP</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             {
@@ -127,6 +154,7 @@ function VerifyOtp({ email, uid }) {
                 null
                 :
                 <div class="form-group">
+                  <label className="form-label">Enter OTP <span className="declined">*</span></label>
                   <input
                     type="text"
                     className={classNames("form-control", {
@@ -136,6 +164,7 @@ function VerifyOtp({ email, uid }) {
                     placeholder="Enter Your OTP Here"
                     ref={register}
                     name="p_otp"
+                    onChange={(e) => validOtp(e)}
                   />
                   {errors.p_otp && (
                     <div className="invalid-feedback">
@@ -145,6 +174,7 @@ function VerifyOtp({ email, uid }) {
                   <small class="text-center">
                     Note: OTP is valid for {time} seconds.
                   </small>
+                  <Mandatory />
                 </div>
             }
 
@@ -157,6 +187,7 @@ function VerifyOtp({ email, uid }) {
               }
             </div>
           </form>
+
         </div>
       </div>
 

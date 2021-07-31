@@ -90,7 +90,7 @@ function SignUp(props) {
         }
         setDisabled(true)
       }
-      timer(120);
+      timer(60);
     }
   }
 
