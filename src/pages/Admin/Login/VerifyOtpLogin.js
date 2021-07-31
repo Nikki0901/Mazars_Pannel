@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Header from "../../components/Header/Header";
-import Footer from '../../components/Footer/Footer'
 import axios from 'axios'
-import { baseUrl } from "../../config/config";
+import { baseUrl } from "../../../config/config";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { useHistory } from "react-router-dom";
-import Alerts from "../../common/Alerts";
+import Alerts from "../../../common/Alerts";
 
 
 const Schema = yup.object().shape({
@@ -16,16 +14,17 @@ const Schema = yup.object().shape({
 });
 
 
-function VerifyOtp() {
+function VerifyOtp({ email, uid }) {
+  console.log("email :", email);
+  console.log("uid :", uid);
+
+
   const { handleSubmit, register, errors, reset } = useForm({
     resolver: yupResolver(Schema),
   });
   const history = useHistory();
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
-  // const [uid, setUid] = useState('')
-  // const [otp, setOtp] = useState('')
-
 
 
   useEffect(() => {
@@ -53,15 +52,14 @@ function VerifyOtp() {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-    var myemail = localStorage.getItem("email");
 
     let formData = new FormData();
-    formData.append("email", JSON.parse(myemail));
+    formData.append("email", email);
     formData.append("otp", value.p_otp);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/verifyloginotp`,
+      url: `${baseUrl}/admin/verifyloginotp`,
       data: formData,
     })
       .then(function (response) {
@@ -70,11 +68,14 @@ function VerifyOtp() {
 
         if (response.data.code == 1) {
           Alerts.SuccessLogin()
-          localStorage.setItem("userid", JSON.stringify(response.data.user_id));
-          localStorage.setItem("name", JSON.stringify(response.data.name));
-          history.push("/customer/dashboard");
+          localStorage.setItem(
+            "adminkey",
+            JSON.stringify(response.data["user id"])
+          );
+          history.push("/admin/dashboard");
+
         } else {
-          Alerts.ErrorOTP()
+          Alerts.ErrorNormal("Incorrect OTP")
           reset();
         }
       })
@@ -85,24 +86,24 @@ function VerifyOtp() {
 
 
   const resendOtp = () => {
-    // props.history.push("/customer/signin");
-
-    var email = localStorage.getItem("email");
-    var uid = localStorage.getItem("uid");
 
     let formData = new FormData();
-    formData.append("email", JSON.parse(email));
-    formData.append("uid", JSON.parse(uid));
+    formData.append("email", email);
+    formData.append("uid", uid);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/regenrateotp`,
+      url: `${baseUrl}/admin/regenrateotp`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          Alerts.SuccessNormal("An OTP sent to your mail")
           setDisabled(false)
+        }
+        else if (response.data.code === 0) {
+          Alerts.ErrorNormal("Some thing went wrong, please try again")
         }
       })
       .catch((error) => {
@@ -111,9 +112,10 @@ function VerifyOtp() {
   }
 
 
+
   return (
     <>
-     
+
       <div class="container">
         <div class="otp">
           <div class="heading text-center">
@@ -157,7 +159,7 @@ function VerifyOtp() {
           </form>
         </div>
       </div>
-     
+
     </>
   );
 }

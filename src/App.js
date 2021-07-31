@@ -4,23 +4,16 @@ import "./App.css";
 import { positions, Provider, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-// import 'bulma/css/bulma.css'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 
 
 
 //user routes
-import Signin from './views/SignInForm/SignIn'
+import Login from './views/Login/Login'
 import SignUp from './views/SignUpForm/SignUp'
-import VerifyOtp from './views/VerifyOtp/VerifyOtp'
-import VerifyOtpLogin from './views/VrerifyOtpLogin/VerifyOtpLogin'
-import RegisterYourSelf from './views/RegisterYourSelf/RegisterYourSelf'
-import Start from './views/Start/Start'
 import Dashboard from './views/Dashboard/Dashboard'
 import MyAssingment from './views/MyAssingment/MyAssingment'
 import AddFreshAssingment from './views/AddFressAssignment/AddFreshAssingment'
-import QuestionnairePage from './views/QuestionnairePage/QuestionnairePage'
-// import Layout from './components/Layout/Layout'
 import SelectCategoryPage from './views/SelectCategoryPage/SelectCategoryPage'
 import QueriesTab from './views/QueriesTab/QueriesTab'
 import ProposalTab from './views/ProposalTab/ProposalTab'
@@ -149,18 +142,12 @@ function App() {
         <Router>
           <Switch>
 
-            <PublicRouteUser exact path="/" component={RegisterYourSelf} />
+            <PublicRouteUser exact path="/" component={Login} />
             <PublicRouteUser exact path="/customer/signup" component={SignUp} />
-            <PublicRouteUser exact path="/customer/signin" component={Signin} />
-            {/* <PublicRouteUser exact path="/customer/register-yourself" component={RegisterYourSelf} /> */}
-            <PublicRouteUser exact path="/customer/verify-otp" component={VerifyOtp} />
-            <PublicRouteUser exact path="/customer/otp" component={VerifyOtpLogin} />
             <PublicRouteUser exact path="/customer/forget-password" component={ForgetPassword} />
             <PublicRouteUser exact path="/customer/new-password/:id" component={NewPassword} />
 
-
-
-            <PrivateRouteUser exact path="/customer/questionnaire-page" component={QuestionnairePage} />
+        
             <PrivateRouteUser exact path="/customer/select-category" component={SelectCategoryPage} />
             <PrivateRouteUser exact path="/customer/dashboard" component={Dashboard} />
             <PrivateRouteUser exact path="/customer/my-assingment/:id" component={MyAssingment} />

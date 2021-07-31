@@ -22,15 +22,12 @@ import Mandatory from "../../components/Common/Mandatory";
 
 
 
-
 function SignUp(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, getValues } = useForm();
 
-  // const otp = 0;
+  
   const [display, setDisplay] = useState(false);
-
-
   const [otpMsg, setOtpMsg] = useState();
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);

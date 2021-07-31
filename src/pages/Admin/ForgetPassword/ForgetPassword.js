@@ -31,24 +31,24 @@ function ForgetPassword(props) {
     let formData = new FormData();
     formData.append("email", value.p_email);
 
-    // axios({
-    //   method: "POST",
-    //   url: `${baseUrl}/customers/forgototp`,
-    //   data: formData,
-    // })
-    //   .then(function (response) {
-    //     console.log("res-", response);
-    //     if (response.data.code === 1) {
-    //       alert.success("otp send your email !");
-    //       props.history.push("/admin/new-password");
-    //     } else if (response.data.code === 0) {
-    //       console.log(response.data.result);   
-    //       Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("erroror - ", error);
-    //   });
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/forgototp`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          alert.success("otp send your email !");
+          props.history.push("/admin/new-password");
+        } else if (response.data.code === 0) {
+          console.log(response.data.result);   
+          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
   };
 
   const valueHandler = () => {
@@ -70,7 +70,6 @@ function ForgetPassword(props) {
             <h2>Forgot Password</h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-
 
             <div className="mb-3">
               <label className="form-label">Email</label>
