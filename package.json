@@ -29,6 +29,7 @@
     "react": "^17.0.1",
     "react-alert": "^7.0.2",
     "react-alert-template-basic": "^1.0.0",
+    "react-autosuggest": "^10.1.0",
     "react-bootstrap": "^1.5.2",
     "react-bootstrap-table-next": "^4.0.3",
     "react-date-picker": "^8.0.7",

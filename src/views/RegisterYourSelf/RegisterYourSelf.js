@@ -11,6 +11,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import VerifyOTP from "./VerifyOTP";
 import classNames from "classnames";
+import Mandatory from '../../components/Common/Mandatory'
 import Alerts from "../../common/Alerts";
 
 
@@ -100,15 +101,16 @@ function LoginForm() {
             </div>
           </div>
           <div className="signUp">
-            <Typography variant="h4" style={{ "margin": "0 0 15px 0" }}>
+            <Typography variant="h4" style={{ "margin": "5px auto" }}>
               For existing customers
             </Typography>
             {
-              show ? <div>
+              show ? <div className="customForm">
                 <VerifyOTP email={email} uid={uid} />
               </div>
                 :
-                <form onSubmit={handleSubmit(onSubmit)} className="signInForm">
+     <div className="customForm">
+           <form onSubmit={handleSubmit(onSubmit)} className="signInForm">
                   <div className="form-group">
                     <label className="form-label">Email <span className="declined">*</span></label>
                     <input
@@ -146,7 +148,7 @@ function LoginForm() {
                     </button>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "row-reverse", color: "black" }}>
+                  <div style={{ display: "flex",  color: "black" }}>
                     <Link
                       to={{
                         pathname: "/customer/forget-password",
@@ -157,10 +159,11 @@ function LoginForm() {
                     </Link>
                   </div>
                 
-                </form>
+          </form>
+      </div>
               
             }
-             <p style={{"color" :"red", "fontWeight" : "400"}} className="signMendatary">mandatory<sup className="declined">*</sup></p>
+             <Mandatory />
           </div>
        
          
