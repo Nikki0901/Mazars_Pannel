@@ -23,3 +23,7 @@
     flex-wrap: wrap;
     align-items: flex-end;
 }
+.submit_c{
+    display: flex;
+    align-items: center;
+}

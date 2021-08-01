@@ -61,16 +61,20 @@ function SignUp(props) {
   const[noPassMatch, setnoPassMatch] = useState()
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
- 
+ const [valiOtp, setvaliOtp] = useState()
   const [passMatch, setPassmatch] = useState()
-  // Css
+  
    //Css
    const CountryNumStyle= {
     "display" : "flex", 
     "width" : "76px", 
     "textAlign" : "center"
   }
-
+// cusSub
+const cusSub = {
+  "display" : "flex", 
+  "alignItems" : "center"
+}
   // Toggle Password
   const togglePasssword = () => {
     setPassword(!password)
@@ -105,7 +109,7 @@ function SignUp(props) {
         }
         setDisabled(true)
       }
-      timer(120);
+      timer(60);
     }
   }
 
@@ -160,6 +164,10 @@ var arrayState = []
   //eamil onchange
   const emailHandler = (e) => {
     setEmail(e.target.value);
+    console.log(e.target.value.length)
+    if(e.target.value.length < 1){
+      setWemail("")
+    }
   };
 
 
@@ -206,6 +214,7 @@ var arrayState = []
         setIndNumError("")
         setNumAvail("");
       setNumExist('Please enter number only')
+      e.target.value = ""
     } 
     
     else{
@@ -280,6 +289,7 @@ var arrayState = []
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
       setZipError("Please enter number only")
+      e.target.value("")
     }
     else {
       setZipCode(e.target.value)
@@ -352,6 +362,16 @@ else{
   setPassmatch("")
   setnoPassMatch("Password doesn't match")
 }
+}
+const otpVali= (e) => {
+  if(isNaN(e.target.value)){
+    setvaliOtp("Please enter number only")
+    e.target.value = ""
+  }
+  else{
+    setvaliOtp("")
+   
+  }
 }
   //submit form
   const onSubmit = (value) => {
@@ -717,8 +737,10 @@ else{
                             className="form-control"
                             name="p_otp"
                             ref={register}
+                            onChange={otpVali}
                             placeholder="Enter your OTP"
                           />
+                         <p className="declined"> {valiOtp ? valiOtp : ""}</p> 
                           <small class="text-center">
                             Note: OTP is valid for {time} seconds.
                           </small>
@@ -726,10 +748,16 @@ else{
                       </div>
                       : null
                   }
-                  <div class="col-md-6">
+                  <div class="col-md-6" style={cusSub}>
                     {
                       show ?
-                        <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                        <div>
+                          {
+                            disabled ? null
+                              :
+                              <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                          }
+                        </div>
                         :
                         <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
                     }
@@ -739,8 +767,8 @@ else{
 
               {
                 disabled ?
-                  <ResendOtp setDisabled={setDisabled} getTime={getTime} 
-                  email={email} phone={phone} setLoad={setLoad} />
+                  <ResendOtp setDisabled={setDisabled} getTime={getTime}
+                    email={email} phone={phone} setLoad={setLoad} />
                   :
                   null
               }
