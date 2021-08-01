@@ -49,13 +49,29 @@ function SignUp(props) {
   const [numAvail, setNumAvail] = useState(null)
   const [countryName, setCountryName] = useState(null)
   const [stateName, setStateName] = useState(null)
-
+ 
   const [countryId, setCountryId] = useState(null)
   const [indNumError, setIndNumError] = useState(null)
   const [zipCode, setZipCode] = useState('')
   const [zipError, setZipError] = useState(null)
   const [passData1, setPassData1] = useState([])
+  const[wEmail, setWemail] = useState();
+  const [goNumError, setgoNumError] = useState();
+  const [value, setValue] = useState()
+  const[noPassMatch, setnoPassMatch] = useState()
+  const [time, setTime] = useState('')
+  const [disabled, setDisabled] = useState(false)
+ 
+  const [passMatch, setPassmatch] = useState()
+  // Css
+   //Css
+   const CountryNumStyle= {
+    "display" : "flex", 
+    "width" : "76px", 
+    "textAlign" : "center"
+  }
 
+  // Toggle Password
   const togglePasssword = () => {
     setPassword(!password)
   };
@@ -64,9 +80,7 @@ function SignUp(props) {
     setRepassword(!repassword)
   };
 
-  const [time, setTime] = useState('')
-  const [disabled, setDisabled] = useState(false)
-
+  
 
   useEffect(() => {
     getTime()
@@ -99,29 +113,28 @@ function SignUp(props) {
   //get country
   const getcountry = (key) => {
     setShowPlus(true)
+   
+if(key == 101){
+ setCountryId(key)
+}
+else{
+  setCountryId("")
+}
 
-    if (key == 101) {
-      setCountryId(key)
-    }
-    else {
-      setCountryId("")
-    }
-
-    country.filter((p) => {
-      if (p.id == key) {
-        setCountryCode(p.phoneCode)
-        setCountryName(p.name)
-      }
-    });
-
-    var arrayState = []
+var arrayState = []
     states.filter((data) => {
       if (data.country_id == key) {
         arrayState.push(data)
       }
     });
     setState(arrayState)
-  };
+
+    country.filter((data) => {
+      if (key == data.id) {
+        setCountryCode(data.phoneCode)
+  }
+ })
+};
 
 
   //get city
@@ -155,6 +168,7 @@ function SignUp(props) {
 
     var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email.match(validRegex)) {
+      setWemail("");
       let formData = new FormData();
       formData.append("email", email);
       formData.append("type", 1);
@@ -178,47 +192,56 @@ function SignUp(props) {
           console.log("erroror - ", error);
         });
     }
-    else if (email.length > 0) {
-      console.log("error")
-      setInvalid("invalid email")
-    } else if (email.length === 0) {
-      setInvalid("")
+    else {
+      setWemail("invalid email")
     }
+
   }
 
 
   //phone onchange
   const phoneHandler = (e) => {
+ 
     if (isNaN(e.target.value)) {
+        setIndNumError("")
+        setNumAvail("");
       setNumExist('Please enter number only')
-    }
-    else {
+    } 
+    
+    else{
+      setNumAvail("");
+      setNumExist("");
       setPhone(e.target.value)
     }
-    if (phone.length > 10) {
-      setIndNumError("")
-    }
+     
+    
+    
   };
 
   //phone validaation with api
   const phoneValidation = () => {
     console.log(phone.length)
-    if (countryId && phone.length > 10) {
+    if(countryId && phone.length > 10){
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
       setIndNumError("Maximum 10 value should be enter")
     }
-    else if (countryId && phone.length < 10) {
-      console.log(phone.length)
-      setNumAvail("")
+  else if(countryId && phone.length < 10) {
+    console.log(phone.length)
+    setNumAvail("")
+    setNumExist("")
+    setIndNumError("Minimum 10 value should be enter")
+  }
+  else if(!countryId && phone.length > 15){
+    setNumAvail("")
       setNumExist("")
-      setIndNumError("Minimum 10 value should be enter")
-    }
-
-    else {
+      setIndNumError("Maximum 15 value should be enter")
+  }
+   
+   else   {
       setIndNumError("")
-      console.log(countryId)
+  console.log(countryId)
       let formData = new FormData();
       formData.append("phone", phone);
       formData.append("type", 2);
@@ -234,14 +257,13 @@ function SignUp(props) {
             console.log(response.data.result)
             setNumExist('')
             setNumAvail(response.data.result);
-
-
+            
           }
           else if (response.data.code === 0) {
             console.log(response.data.result)
             setNumAvail('')
             setNumExist(response.data.result)
-
+           
             console.log("mobile" + setNumExist)
           }
 
@@ -251,6 +273,7 @@ function SignUp(props) {
         });
     }
   }
+
 
 
   //zip oncahnge
@@ -319,6 +342,17 @@ function SignUp(props) {
   }
 
 
+// confirm Password
+const conPass = (e) => {
+if( e.target.value  ===passData1){
+  setnoPassMatch("")
+ setPassmatch("Password Match")
+}
+else{
+  setPassmatch("")
+  setnoPassMatch("Password doesn't match")
+}
+}
   //submit form
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -450,13 +484,15 @@ function SignUp(props) {
                         ref={register({ required: true })}
                       />
                       {
-                        valiEmail ?
-                          <p className="completed">
-                            {valiEmail}
-                          </p>
-                          :
-                          <p className="declined">{invalid}</p>
-                      }
+                      wEmail ? <p className="declined">{wEmail}</p> : <>
+                      {valiEmail ?
+                        <p className="completed">
+                          {valiEmail}
+                        </p>
+                        :
+                        <p className="declined">{invalid}</p>}
+                        </>
+                    }
                     </div>
                   </div>
 
