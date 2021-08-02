@@ -20,7 +20,7 @@ function PaymentModal({
   const alert = useAlert();
   const history = useHistory();
 
-  const { id, amount, accepted_amount, paid_amount,
+  const { assign_id, amount, accepted_amount, paid_amount,
     payment_terms, no_of_installment, installment_amount,
     due_date, amount_type, amount_fixed, amount_hourly
   } = pay;
@@ -31,7 +31,7 @@ function PaymentModal({
     console.log("value :", value);
 
     let formData = new FormData();
-    formData.append("id", id);
+    formData.append("id", assign_id);
     formData.append("status", 8);
     formData.append("amount", value.p_amount);
 

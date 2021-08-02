@@ -14,10 +14,8 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
-import GetOTP from "./GetOTP";
+// import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
-
-
 
 
 
@@ -26,7 +24,7 @@ function SignUp(props) {
   const alert = useAlert();
   const { handleSubmit, register, errors, getValues } = useForm();
 
-  
+
   const [display, setDisplay] = useState(false);
   const [otpMsg, setOtpMsg] = useState();
   const [load, setLoad] = useState(false);
@@ -338,6 +336,7 @@ function SignUp(props) {
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
+    //get otp
     if (display) {
       let formData = new FormData();
       formData.append("email", email);
@@ -356,7 +355,7 @@ function SignUp(props) {
             setShow(true)
             Alerts.SuccessNormal("OTP sent to your email address.")
           } else if (response.data.code === 0) {
-            Alerts.ErrorNormal("Incorrect OTP , please try again.")
+            Alerts.ErrorNormal("Error")
           }
         })
         .catch((error) => {
@@ -374,18 +373,14 @@ function SignUp(props) {
         if (response.data.code === 1) {
           var variable = "Signup successfully."
           Alerts.SuccessNormal(variable)
-
           localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem(
-            "userNameId",
-            JSON.stringify(response.data.user_id)
-          );
+          // localStorage.setItem("userNameId", JSON.stringify(response.data.user_id));
           localStorage.setItem("name", JSON.stringify(response.data.name));
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
           setLoad(false);
-          Alerts.ErrorNormal("Error.")
+          Alerts.ErrorNormal("Incorrect OTP , please try again.")
         }
       })
       .catch((error) => {
@@ -677,14 +672,20 @@ function SignUp(props) {
                           <label className="form-label">OTP<span className="declined">*</span></label>
                           <input
                             type="text"
-                            className="form-control"
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_otp,
+                            })}
                             name="p_otp"
-                            ref={register}
+                            ref={register({ required: true })}
                             placeholder="Enter your OTP"
                           />
-                          <small class="text-center">
-                            Note: OTP is valid for {time} seconds.
-                          </small>
+                          {
+                            disabled ? null
+                              :
+                              <small class="text-center">
+                                Note: OTP is valid for {time} seconds.
+                              </small>
+                          }
                         </div>
                       </div>
                       : null
@@ -692,7 +693,13 @@ function SignUp(props) {
                   <div class="col-md-6">
                     {
                       show ?
-                        <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                        <div>
+                          {
+                            disabled ? null
+                              :
+                              <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                          }
+                        </div>
                         :
                         <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
                     }
@@ -702,8 +709,8 @@ function SignUp(props) {
 
               {
                 disabled ?
-                  <ResendOtp setDisabled={setDisabled} getTime={getTime} 
-                  email={email} phone={phone} setLoad={setLoad} />
+                  <ResendOtp setDisabled={setDisabled} getTime={getTime}
+                    email={email} phone={phone} setLoad={setLoad} />
                   :
                   null
               }

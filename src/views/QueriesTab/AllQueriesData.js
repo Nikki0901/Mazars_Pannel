@@ -302,12 +302,12 @@ function AllQueriesData() {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to decline query ?",
+            text: "Do you want to delete query ?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, decline it!",
+            confirmButtonText: "Yes, deleted it!",
         }).then((result) => {
             if (result.value) {
                 deleteCliente(id);
@@ -328,7 +328,7 @@ function AllQueriesData() {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    Swal.fire("", "Query declined successfully.", "success");
+                    Swal.fire("", "Query deleted successfully.", "success");
                     getQueriesData();
                 } else {
                     Swal.fire("Oops...", "Errorr ", "error");

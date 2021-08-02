@@ -102,7 +102,7 @@ function ProposalComponent(props) {
 
     var lumsum = value.p_inst_date
     setDate(lumsum)
-console.log(lumsum)
+    console.log(lumsum)
     let formData = new FormData();
 
     formData.append("assign_no", assingNo);
@@ -224,7 +224,7 @@ console.log(lumsum)
     if (isNaN(e.target.value)) {
       setdiserror("Please enter digit only");
     }
-    else{
+    else {
       setdiserror("");
     }
     setTotalAmount(e.target.value);
@@ -292,7 +292,7 @@ console.log(lumsum)
 
                   />
                 </div>
-                <p style={{"color" : "red"}}>{diserror}</p>
+                <p style={{ "color": "red" }}>{diserror}</p>
                 <div class="form-group">
                   <label>Scope of Work</label>
                   <textarea
@@ -375,7 +375,7 @@ console.log(lumsum)
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                       totalAmount={totalAmount}
-                    
+
                       min={item}
                       item={item}
                     />
@@ -428,7 +428,6 @@ const no_installments = [
 ];
 
 
-
 // import React, { useState, useEffect } from "react";
 // import { useForm, useFieldArray } from "react-hook-form";
 // import axios from "axios";
@@ -443,6 +442,7 @@ const no_installments = [
 //   Row,
 //   Col,
 //   Table,
+//   Alert,
 // } from "reactstrap";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
@@ -465,10 +465,7 @@ const no_installments = [
 
 //   const alert = useAlert();
 //   const history = useHistory();
-
-//   const { handleSubmit, register, errors,reset} = useForm({
-//     resolver: yupResolver(Schema),
-//   });
+//   const { handleSubmit, register, reset } = useForm();
 
 
 //   const userid = window.localStorage.getItem("tlkey");
@@ -478,7 +475,7 @@ const no_installments = [
 //   const [assignId, setAssignID] = useState("");
 //   const [assingNo, setAssingNo] = useState("");
 //   const [store, setStore] = useState(null);
-
+//   const [diserror, setdiserror] = useState("")
 //   const [payment, setPayment] = useState([]);
 //   const [installment, setInstallment] = useState([]);
 
@@ -486,6 +483,8 @@ const no_installments = [
 //   const [date, setDate] = useState();
 
 //   const [error, setError] = useState('');
+
+
 //   const [totalAmount, setTotalAmount] = useState(null);
 
 
@@ -529,11 +528,11 @@ const no_installments = [
 
 
 //   const onSubmit = (value) => {
-//     console.log("data --",value);
+//     console.log(value);
 
 //     var lumsum = value.p_inst_date
 //     setDate(lumsum)
-
+// console.log(lumsum)
 //     let formData = new FormData();
 
 //     formData.append("assign_no", assingNo);
@@ -557,21 +556,20 @@ const no_installments = [
 
 
 //     console.log("amount -", amount)
+//     // console.log("date -", date)
 //     console.log("payment -", payment.value)
 
 
 //     if (payment.value == "installment") {
+
 //       let sum = amount.reduce(myFunction)
 //       function myFunction(total, value) {
 //         return Number(total) + Number(value);
 //       }
-
 //       console.log("sum -", sum)
 //       if (value.p_fixed != sum) {
-//         console.log(`installment amount should be eqaul to ${value.p_fixed}`)
-//         setError(`installment amount should be eqaul to ${value.p_fixed}`)
+//         Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
 //       }
-
 //       else {
 //         axios({
 //           method: "POST",
@@ -585,7 +583,6 @@ const no_installments = [
 
 //               var variable = "Proposal Successfully Sent "
 //               Alerts.SuccessNormal(variable)
-
 //               history.push("/teamleader/proposal");
 //             }
 //           })
@@ -594,12 +591,37 @@ const no_installments = [
 //           });
 //       }
 //     }
+//     else {
+//       axios({
+//         method: "POST",
+//         url: `${baseUrl}/tl/uploadProposal`,
+//         data: formData,
+//       })
+//         .then(function (response) {
+//           console.log("res-", response);
+//           if (response.data.code === 1) {
+//             reset();
+
+//             var variable = "Proposal Successfully Sent "
+//             Alerts.SuccessNormal(variable)
+
+//             history.push("/teamleader/proposal");
+//           }
+//         })
+//         .catch((error) => {
+//           console.log("erroror - ", error);
+//         });
+//     }
+
+
 //   };
 
 
 
+
+
 //   const paymentAmount = (data) => {
-//     // console.log("paymentAmount", data)
+//     console.log("paymentAmount", data)
 
 //     var array1 = []
 //     Object.entries(data).map(([key, value]) => {
@@ -612,7 +634,7 @@ const no_installments = [
 //   };
 
 //   const paymentDate = (data) => {
-//     // console.log("paymentDate", data)
+//     console.log("paymentDate", data)
 
 //     var array2 = []
 //     Object.entries(data).map(([key, value]) => {
@@ -629,6 +651,12 @@ const no_installments = [
 
 //   const handleChange = (e) => {
 //     console.log("val-", e.target.value);
+//     if (isNaN(e.target.value)) {
+//       setdiserror("Please enter digit only");
+//     }
+//     else{
+//       setdiserror("");
+//     }
 //     setTotalAmount(e.target.value);
 //   };
 
@@ -658,10 +686,8 @@ const no_installments = [
 //         <CardBody>
 //           <form onSubmit={handleSubmit(onSubmit)}>
 //             <p style={{ color: "red" }}>{error}</p>
-
 //             <div style={{ display: "flex" }}>
 //               <div class="col-md-6">
-
 //                 <div class="form-group">
 //                   <label>Query No.</label>
 //                   <input
@@ -672,7 +698,6 @@ const no_installments = [
 //                     ref={register}
 //                   />
 //                 </div>
-
 //                 <div class="form-group">
 //                   <label>Fee</label>
 //                   <select
@@ -688,15 +713,16 @@ const no_installments = [
 //                 <div class="form-group">
 //                   <label>Fixed Price</label>
 //                   <input
-//                     type="number"
+//                     type="text"
 //                     name="p_fixed"
 //                     className="form-control"
 //                     ref={register}
 //                     placeholder="Enter Fixed Price"
 //                     onChange={(e) => handleChange(e)}
+
 //                   />
 //                 </div>
-
+//                 <p style={{"color" : "red"}}>{diserror}</p>
 //                 <div class="form-group">
 //                   <label>Scope of Work</label>
 //                   <textarea
@@ -708,6 +734,7 @@ const no_installments = [
 //                     placeholder="Enter Proposal Description"
 //                   ></textarea>
 //                 </div>
+
 //               </div>
 
 //               <div class="col-md-6">
@@ -778,6 +805,7 @@ const no_installments = [
 //                       paymentAmount={paymentAmount}
 //                       paymentDate={paymentDate}
 //                       totalAmount={totalAmount}
+
 //                       min={item}
 //                       item={item}
 //                     />
@@ -829,72 +857,4 @@ const no_installments = [
 //   },
 // ];
 
-
-{/* {store == "hourly" && (
-                  <div class="form-group">
-                    <label>Hourly basis</label>
-                    <input
-                      type="text"
-                      name="p_hourly"
-                      className="form-control"
-                      ref={register}
-                      placeholder="Enter Hourly basis"
-                    />
-                  </div>
-                )}
-                {store == "mixed" && (
-                  <div>
-                    <div class="form-group">
-                      <label>Mixed</label>
-                      <input
-                        type="text"
-                        name="p_fixed"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Fixed Price"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <input
-                        type="text"
-                        name="p_hourly"
-                        className="form-control"
-                        ref={register}
-                        placeholder="Enter Hourly basis"
-                      />
-                    </div>
-                  </div>
-                )} */}
-
-
-// var date = value.p_date.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$1-$2");
-// var todaysDate = new Date();
-
-
-{
-  /* <select
-                    class="form-control"
-                    ref={register}
-                    name="p_assingment"
-                    onChange={(e) => getID(e.target.value)}
-                  >
-                    <option value="">--select--</option>
-                    {incompleteData.map((p, index) => (
-                      <option key={index} value={p.id}>
-                        {p.assign_no}
-                      </option>
-                    ))}
-                  </select> */
-}
-
-// const getID = (key) => {
-//     setId(key);
-//     incompleteData.filter((data) => {
-//       if (data.id == key) {
-//         console.log("assingNo", data.assign_no);
-//         setAssingNo(data.assign_no);
-//         setAssignID(data.id);
-//       }
-//     });
-//   };
 

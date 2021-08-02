@@ -14,8 +14,8 @@ import { useHistory } from "react-router-dom";
 
 
 const Schema = yup.object().shape({
-  p_tax: yup.string().required("required"),
-  p_tax2: yup.string().required("required"),
+  p_tax: yup.string().required(""),
+  p_tax2: yup.string().required(""),
 });
 
 

@@ -39,6 +39,7 @@ function Paid() {
     amount: "",
     accepted_amount: "",
     paid_amount: "",
+    assign_id:'',
 
     amount_type: "",
     amount_fixed: "",
@@ -55,7 +56,7 @@ function Paid() {
     setPaymentModal(!addPaymentModal);
     setPay({
       amount: key.accepted_amount,
-      id: key.id,
+      assign_id: key.assign_id,
       accepted_amount: key.accepted_amount,
       paid_amount: key.paid_amount,
 

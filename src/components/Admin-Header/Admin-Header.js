@@ -40,8 +40,8 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 
 
 
-  const CustEmail = window.localStorage.getItem("email");
-  const adminEmail = window.localStorage.getItem("adminss");
+  const CustEmail = window.localStorage.getItem("name");
+  const adminEmail = window.localStorage.getItem("admin");
  
   
   return (

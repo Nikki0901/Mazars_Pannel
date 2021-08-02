@@ -290,11 +290,42 @@ function Demo() {
     history.push("/customer/meeting");
   };
 
-  const Label = (props) => {
-    if (props.text === "Details") {
+
+  const messages = {
+    moreInformationLabel: ""
+  };
+
+
+  const BooleanEditor = (props) => {
+    if (props.label === "All Day" || props.label === "Repeat") {
       return null;
     }
-    return <AppointmentForm.Label {...props} />;
+    return <AppointmentForm.BooleanEditor {...props} />;
+  };
+
+  const TextEditor = (props) => {
+    return <AppointmentForm.TextEditor {...props} />;
+  };
+
+
+  //basic layout
+  const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
+    console.log("appointmentData", appointmentData);
+    return (
+      <AppointmentForm.BasicLayout
+        appointmentData={appointmentData}
+        onFieldChange={onFieldChange}
+        {...restProps}
+      >
+
+        <AppointmentForm.Label text="All Users"  type="title" />
+        <AppointmentForm.TextEditor
+          value={appointmentData.username}
+          readOnly
+        />
+
+      </AppointmentForm.BasicLayout>
+    );
   };
 
   return (
@@ -318,7 +349,16 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
+
+
+        {/* <AppointmentForm
+          readOnly
+        /> */}
+
         <AppointmentForm
+          basicLayoutComponent={BasicLayout}
+          textEditorComponent={TextEditor}
+          booleanEditorComponent={BooleanEditor}
           readOnly
         />
 

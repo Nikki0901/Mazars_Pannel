@@ -73,7 +73,6 @@ function Demo() {
   };
 
 
-
   const mapAppointmentData = (appointment) => ({
     id: appointment.id,
     startDate: appointment.start,
@@ -85,7 +84,9 @@ function Demo() {
     vend: appointment.vend,
     user: appointment.user.split(','),
     owner: appointment.owner,
+    username: appointment.username,
   });
+
 
   const getAssignmentNo = () => {
     axios
@@ -129,7 +130,7 @@ function Demo() {
     },
     {
       fieldName: "user",
-      title: "Users",
+      title: "Select Users",
       instances: owner,
       allowMultiple: true,
     },
@@ -383,7 +384,37 @@ function Demo() {
     }
   };
 
-  console.log("tread", read)
+  const BooleanEditor = (props) => {
+    if (props.label === "All Day" || props.label === "Repeat") {
+      return null;
+    }
+    return <AppointmentForm.BooleanEditor {...props} />;
+  };
+
+  const TextEditor = (props) => {
+    return <AppointmentForm.TextEditor {...props} />;
+  };
+
+
+  //basic layout
+  const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
+    console.log("appointmentData", appointmentData);
+    return (
+      <AppointmentForm.BasicLayout
+        appointmentData={appointmentData}
+        onFieldChange={onFieldChange}
+        {...restProps}
+      >
+
+        <AppointmentForm.Label text="All Users" type="title" />
+        <AppointmentForm.TextEditor
+          value={appointmentData.username}
+          readOnly
+        />
+
+      </AppointmentForm.BasicLayout>
+    );
+  };
 
   return (
     <Paper>
@@ -406,11 +437,12 @@ function Demo() {
 
         <AppointmentTooltip showOpenButton />
 
-        {/* {
-          !read ?
-            <AppointmentForm readOnly /> : */}
-        <AppointmentForm />
 
+        <AppointmentForm
+          basicLayoutComponent={BasicLayout}
+          textEditorComponent={TextEditor}
+          booleanEditorComponent={BooleanEditor}
+        />
 
         <Resources
           data={resources}

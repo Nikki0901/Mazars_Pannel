@@ -63,10 +63,10 @@ function AddFreshAssingment(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
     if (setPurposeOption == '') {
-      setSelectError("mandatory")
+      setSelectError("")
     }
     if (selectedOption == '') {
-      setSelectError("mandatory")
+      setSelectError("")
     }
     else {
       setSelectError("")
@@ -74,7 +74,7 @@ function AddFreshAssingment(props) {
     const a = value.p_fact;
     const b = value.p_case_name;
     if (a == '') {
-      setcustError("mandatory");
+      setcustError("");
     }
 
     else {
