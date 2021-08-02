@@ -374,9 +374,8 @@ function SignUp(props) {
           var variable = "Signup successfully."
           Alerts.SuccessNormal(variable)
           localStorage.setItem("userid", JSON.stringify(response.data.id));
-          // localStorage.setItem("userNameId", JSON.stringify(response.data.user_id));
-          localStorage.setItem("name", JSON.stringify(response.data.name));
-          props.history.push("/customer/dashboard");
+          localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+          props.history.push("/customer/select-category");
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
           setLoad(false);

@@ -11,6 +11,7 @@ import Layout from "../../components/Layout/Layout";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import Alerts from "../../common/Alerts";
+import Mandatory from "../../components/Common/Mandatory";
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required user id"),
@@ -189,16 +190,13 @@ function ChangePassword(props) {
             </Button>
             <Link to="/customer/dashboard" style={{ "margin": "10px" }}>
               <Button type="submit" variant="contained" color="secondary">
-                Cancle
+                Cancel
               </Button>
             </Link>
 
-            <br /><br />
-            <p>
-              <span className="declined">*Mandatory</span>
-            </p>
-
           </form>
+
+          <Mandatory />
         </div>
       </div>
     </Layout>

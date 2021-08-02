@@ -17,8 +17,8 @@ import Mandatory from "../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("mandatory"),
-  p_password: yup.string().required("mandatory"),
+  p_email: yup.string().email("invalid email").required(""),
+  p_password: yup.string().required(""),
 });
 
 
@@ -55,7 +55,6 @@ function LoginForm() {
           Alerts.SuccessNormal("OTP sent to your email address.")
           setShow(true)
           setUid(response.data.user_id)
-          localStorage.setItem("email", JSON.stringify(value.p_email))
         } else if (response.data.code === 0) {
           Alerts.ErrorNormal("Invalid email or password.")
         }
@@ -92,7 +91,7 @@ function LoginForm() {
                     to={{
                       pathname: "/customer/signup",
                     }}
-                    style={{color:"white"}}
+                    style={{ color: "white" }}
                   >
                     Sign Up
                   </Link>
@@ -120,7 +119,7 @@ function LoginForm() {
                           "is-invalid": errors.p_email,
                         })}
                         name="p_email"
-                        ref={register}
+                        ref={register({ required: true })}
                         placeholder="Enter Email"
                         onChange={(e) => handleChange(e)}
                       />
@@ -135,7 +134,7 @@ function LoginForm() {
                         })}
                         name="p_password"
                         placeholder="Enter Password"
-                        ref={register}
+                        ref={register({ required: true })}
                       />
                       <i
                         className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
@@ -165,8 +164,6 @@ function LoginForm() {
             }
 
           </div>
-
-
         </div>
       </div>
       <Footer />

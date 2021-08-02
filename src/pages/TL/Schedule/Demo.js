@@ -122,7 +122,7 @@ function Demo() {
     },
     {
       fieldName: "user",
-      title: "Select Users",
+      title: "Users",
       instances: owner,
       allowMultiple: true,
     },
@@ -367,30 +367,6 @@ function Demo() {
   };
 
 
-  const TextEditor = (props) => {
-    return <AppointmentForm.TextEditor {...props} />;
-  };
-
-
-  //basic layout
-  const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
-    console.log("appointmentData", appointmentData);
-    return (
-      <AppointmentForm.BasicLayout
-        appointmentData={appointmentData}
-        onFieldChange={onFieldChange}
-        {...restProps}
-      >
-
-        <AppointmentForm.Label text="All Users" type="title" />
-        <AppointmentForm.TextEditor
-          value={appointmentData.username}
-          readOnly
-        />
-
-      </AppointmentForm.BasicLayout>
-    );
-  };
 
   return (
     <Paper>
@@ -412,9 +388,7 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm
-          basicLayoutComponent={BasicLayout}
-          textEditorComponent={TextEditor}
+        <AppointmentForm   
           booleanEditorComponent={BooleanEditor}
         />
 

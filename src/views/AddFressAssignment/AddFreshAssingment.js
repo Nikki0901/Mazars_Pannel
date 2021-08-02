@@ -120,7 +120,6 @@ function AddFreshAssingment(props) {
           console.log("res-", response);
           if (response.data.code === 1) {
             reset();
-
             var message = response.data.message
             if (message == "") {
               Swal.fire(

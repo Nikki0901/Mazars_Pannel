@@ -91,7 +91,7 @@ function ViewReport({
       });
   };
 
-  console.log("dataItem", dataItem.final_report);
+
 
 
   return (
@@ -107,7 +107,10 @@ function ViewReport({
                 <th scope="row">Document</th>
                 <th scope="row">Report Type</th>
                 {
-                  dataItem.final_report ? null : <th scope="row">Action</th>
+                  dataItem ?
+                    dataItem.final_report ? null : <th scope="row">Action</th>
+                    :
+                    null
                 }
               </tr>
             </thead>

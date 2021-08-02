@@ -3,21 +3,20 @@ import "../../assets/css/style.css";
 import { Link, useHistory } from "react-router-dom";
 import NavWrapper from "./NavWrapper";
 
+
 function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
   let history = useHistory();
-  // const userId = window.localStorage.getItem("userid");
 
   const custLogout = () => {
     localStorage.removeItem("userid");
-    localStorage.removeItem("name");
-    localStorage.removeItem("uid");
+    localStorage.removeItem("custEmail");
     localStorage.removeItem("category");
     history.push("/");
   };
 
   const adminLogout = () => {
     localStorage.removeItem("adminkey");
-    localStorage.removeItem("count_PFA");
+    localStorage.removeItem("adminEmail");
     history.push("/admin/login");
   };
 
@@ -40,8 +39,8 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 
 
 
-  const CustEmail = window.localStorage.getItem("name");
-  const adminEmail = window.localStorage.getItem("admin");
+  const CustEmail = window.localStorage.getItem("custEmail");
+  const adminEmail = window.localStorage.getItem("adminEmail");
  
   
   return (
@@ -75,38 +74,3 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 }
 
 export default AdminHeader;
-
-// {adminUserId && (
-//   <ul class="nav navbar-nav float-right">
-//     <li class="dropdown dropdown-user nav-item">
-//       <a
-//         class="dropdown-toggle nav-link dropdown-user-link"
-//         href="#"
-//         data-toggle="dropdown"
-//         aria-expanded="false"
-//       >
-//         <span class="pr-2">Admin</span>
-//         <span class="avatar avatar-online">
-//           <img
-//             src="https://cdn1.vectorstock.com/i/1000x1000/40/30/user-glyph-icon-web-and-mobile-admin-sign-vector-18444030.jpg"
-//             alt="avatar"
-//           />
-//           <i style={{ paddingLeft: "6px" }}></i>
-//         </span>
-//       </a>
-
-//       <div class="dropdown-menu dropdown-menu-right">
-//         <div class="arrow_box_right">
-//           <p
-//             class="dropdown-item"
-//             onClick={custLogout}
-//             style={{ cursor: "pointer" }}
-//           >
-//             <i class="fa fa-sign-out"></i>
-//             Logout
-//           </p>
-//         </div>
-//       </div>
-//     </li>
-//   </ul>
-// )}

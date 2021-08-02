@@ -96,7 +96,7 @@ function VerifyOtp({ email, uid }) {
         if (response.data.code == 1) {
           Alerts.SuccessLogin()
           localStorage.setItem("adminkey", JSON.stringify(response.data["user id"]));
-          localStorage.setItem("admin", JSON.stringify(response.data.name));
+          localStorage.setItem("adminEmail", JSON.stringify(response.data.name));
           history.push("/admin/dashboard");
 
         } else {

@@ -9,7 +9,7 @@ import './index.css'
 import CommonServices from "../../common/common";
 
 function NavWrapper(props) {
-  const { color, logout, name ,email } = props;
+  const { color, logout, name, email } = props;
 
   const history = useHistory();
   const userId = window.localStorage.getItem("userid");
@@ -96,13 +96,13 @@ function NavWrapper(props) {
                   <div class="arrow_box_right">
 
                     {name == "customer" && (
-                      <div class="dropdown-item"
-                        style={{ cursor: "pointer" }}>
-                        <VpnKeyIcon />
-                        <Link to="/customer/change-password">
+                      <Link to="/customer/change-password">
+                        <div class="dropdown-item"
+                          style={{ cursor: "pointer" }}>
+                          <VpnKeyIcon />
                           <span style={{ marginLeft: "3px" }}>Change Password</span>
-                        </Link>
-                      </div>
+                        </div>
+                      </Link>
                     )}
 
                     <div

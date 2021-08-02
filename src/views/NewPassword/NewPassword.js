@@ -83,7 +83,7 @@ function NewPassword(props) {
           Alerts.SuccessNormal(variable)
 
           reset();
-          props.history.push("/customer/signin");
+          props.history.push("/");
         } else if (response.data.code === 0) {
           console.log(response.data.result);
           Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
