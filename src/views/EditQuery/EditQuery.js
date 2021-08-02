@@ -13,7 +13,8 @@ import Select from "react-select";
 import DeleteQuery from "./DeleteQuery";
 import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
-
+import Mandatory from "../../components/Common/Mandatory";
+import classNames from "classnames";
 
 
 function EditQuery(props) {
@@ -36,7 +37,7 @@ function EditQuery(props) {
   const userId = window.localStorage.getItem("userid");
   const category = window.localStorage.getItem("category");
 
-  // const [selectedData, setSelectedData] = useState("");
+  
   const [queryDocs, setQueryDocs] = useState([]);
   const [load, setLoad] = useState(false);
   const [selectedOption, setSelectedOption] = useState([]);
@@ -113,7 +114,7 @@ function EditQuery(props) {
       }
     }
     formData.append("fact", value.fact_case);
-    formData.append("specific", JSON.stringify(value.specific));
+    formData.append("specific", JSON.stringify(value.users));
     formData.append("timelines", value.p_timelines);
     formData.append("user", JSON.parse(userId));
     formData.append("id", id);
@@ -221,11 +222,13 @@ function EditQuery(props) {
                     <div className="mb-3">
                       <label className="form-label">Facts of the case <span className="declined">*</span></label>
                       <textarea
-                        className="form-control"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.fact_case,
+                        })}
                         id="textarea"
                         rows="6"
                         name="fact_case"
-                        ref={register}
+                        ref={register({ required: true })}
                       ></textarea>
                     </div>
                   </div>
@@ -247,11 +250,14 @@ function EditQuery(props) {
                       <div className="question_query_field mb-2" key={index}>
                         <input
                           type="text"
-                          className="form-control"
+                          className={classNames("form-control", {
+                            "is-invalid": errors.users,
+                          })}
                           ref={register}
-                          name={`specific[${index}].query`}
+                          name={`users[${index}].query`}
                           defaultValue={`${item.query}`}
                           placeholder="Specify your query"
+                          ref={register({ required: true })}
                         />
                         <div
                           className="btn btn-primary ml-2"
@@ -414,13 +420,10 @@ function EditQuery(props) {
                 <button type="submit" className="btn btn-primary">
                   Update
                 </button>
-
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <span className="declined">*Mandatory</span>
-                </div>
               </form>
             )}
           </div>
+          <Mandatory />
         </CardHeader>
       </Card>
     </Layout>

@@ -271,7 +271,7 @@ function CustomerFilter(props) {
           }
         });
     }
-    if (paid == "paid") {
+    if (unpaid == "unpaid") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
@@ -286,7 +286,7 @@ function CustomerFilter(props) {
           }
         });
     }
-    if (unpaid == "unpaid") {
+    if (paid == "paid") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(id)}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
@@ -301,6 +301,8 @@ function CustomerFilter(props) {
           }
         });
     }
+
+    
   };
 
   const Reset = () => {

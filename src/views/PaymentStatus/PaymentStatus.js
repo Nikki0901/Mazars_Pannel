@@ -61,10 +61,6 @@ function PaymentStatus(props) {
 
 
 
-
-
-
-
   const myStyle1 = {
     backgroundColor: "grey",
     padding: "12px",

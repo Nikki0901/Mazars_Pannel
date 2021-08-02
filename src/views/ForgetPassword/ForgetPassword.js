@@ -49,7 +49,6 @@ function ForgetPassword(props) {
 
           var variable = "OTP sent to your email address. "
           Alerts.SuccessNormal(variable)
-
           props.history.push(`/customer/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
           console.log(response.data.result);

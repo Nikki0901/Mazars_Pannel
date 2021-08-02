@@ -21,8 +21,10 @@ function TeamFilter(props) {
     completeAssignment,
     AllProposal,
     InprogressProposal,
-    paymentStatus,
     assignment,
+    AllPayment,
+    Unpaid,
+    Paid
   } = props;
   const userid = window.localStorage.getItem("tlkey");
 
@@ -215,10 +217,42 @@ function TeamFilter(props) {
     }
 
 
-    if (paymentStatus == "paymentStatus") {
+    if (AllPayment == "AllPayment") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (Unpaid == "Unpaid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 1) {
+            if (res.data.result) {
+              setData(res.data.result);
+              setRecords(res.data.result.length);
+            }
+          }
+        });
+    }
+
+    if (Paid == "Paid") {
+      axios
+        .get(
+          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -403,7 +437,7 @@ function TeamFilter(props) {
                     </select>
                   )}
 
-                  {paymentStatus == "paymentStatus" && (
+                  {AllPayment == "AllPayment" && (
                     <select
                       className="form-select form-control"
                       name="p_status"

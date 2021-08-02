@@ -8,13 +8,11 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
-import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
 import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
-// import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
 
 
@@ -33,6 +31,7 @@ function SignUp(props) {
   const [passError, setpassError] = useState()
   const [repassword, setRepassword] = useState(false);
   const [show, setShow] = useState(false);
+
 
   const [State, setState] = useState([]);
   const [city, setCity] = useState([]);
@@ -288,23 +287,23 @@ function SignUp(props) {
         setpassError("");
       }
       else if (e.target.value.search(/[a-z]/) === -1) {
-        setpassError("Your password must be atleaset one lower case letter")
+        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
       }
       else if (e.target.value.search(/[A-Z]/) === -1) {
-        setpassError("Your password must be at least one upper letter");
+        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
       }
 
       else if (e.target.value.search(/[0-9]/) === -1) {
-        setpassError("Your password must contain at least one digit.");
+        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
 
       }
 
       else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
-        setpassError("Your password must contain at least one special Character.");
+        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
 
       }
       else if (e.target.value.length < 8) {
-        setpassError("Your password must be at least 8 characters");
+        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
       }
       else {
         setpassError("")
@@ -320,7 +319,6 @@ function SignUp(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
-    console.log("display :", display);
 
     let formData = new FormData();
     formData.append("name", value.p_name);

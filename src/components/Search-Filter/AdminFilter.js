@@ -221,7 +221,7 @@ function AdminFilter(props) {
         });
     }
 
-    if (paid == "paid") {
+    if (unpaid == "unpaid") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
@@ -237,7 +237,7 @@ function AdminFilter(props) {
         });
     }
 
-    if (unpaid == "unpaid") {
+    if (paid == "paid") {
       axios
         .get(
           `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`

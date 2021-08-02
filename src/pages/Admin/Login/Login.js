@@ -57,7 +57,7 @@ function Login(props) {
         if (response.data.code === 1) {
           setShow(true)
           Alerts.SuccessNormal("OTP sent to your email address.")
-          setUid(response.data["user id"])       
+          setUid(response.data["user id"])
         } else if (response.data.code === 0) {
           Alerts.ErrorNormal("Invalid email or password.")
         }
@@ -80,7 +80,7 @@ function Login(props) {
 
         {
           show ? <div>
-            <VerifyOtpLogin email={email} uid={uid}/>
+            <VerifyOtpLogin email={email} uid={uid} />
           </div>
             :
             <div class="form">
@@ -137,16 +137,16 @@ function Login(props) {
                   Submit
                 </button>
 
-                {/* <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-              <Link
-                to={{
-                  pathname: "/admin/forget-password",
-                  email: `${email}`,
-                }}
-              >
-                Forgot Password
-              </Link>
-            </div> */}
+                <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                  <Link
+                    to={{
+                      pathname: "/admin/forget-password",
+                      email: `${email}`,
+                    }}
+                  >
+                    Forgot Password
+                  </Link>
+                </div>
 
                 <Mandatory />
               </form>

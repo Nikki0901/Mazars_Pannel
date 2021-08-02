@@ -42,6 +42,7 @@ function Dashboard() {
   });
 
 
+
   const { total, inprogress_queries,
     inprogress_allocation, inprogress_proposal,
     inprogress_assignment, complete_query,
@@ -56,7 +57,6 @@ function Dashboard() {
     customer_declined_Pay,
     paid, unpaid, totalpayment,
   } = allQueries;
-
 
 
 
@@ -119,13 +119,12 @@ function Dashboard() {
     <Layout custDashboard="custDashboard" custUserId={userId}>
 
       <div className="row">
-
         <div className="col-md-3 content_header">
           <table className="table table-striped first main_table">
             <thead className="query_thead">
               <tr>
                 <th className="left_side"> All Queries</th>
-               {total > 0 ?  <th>{total}</th> : ""}
+                <th>{total}</th>
               </tr>
             </thead>
           </table>
@@ -133,79 +132,79 @@ function Dashboard() {
             <thead className="query_thead">
               <tr>
                 <th className="left_side">Inprogress; Queries</th>
-              {inprogress_queries > 0 ?   <th>{inprogress_queries}</th> : ""}
+                <th>{inprogress_queries}</th>
               </tr>
             </thead>
 
             <tbody className="table_body">
               <tr>
                 <td className="left_side">Inprogress; Allocation</td>
-               {inprogress_allocation > 0 ?  <td>{inprogress_allocation}</td> : ""}
+                <td>{inprogress_allocation}</td>
               </tr>
               <tr>
                 <td className="left_side">Inprogress; Proposals</td>
-               {inprogress_proposal > 0 ?  <td>{inprogress_proposal}</td> : ""}
+                <td>{inprogress_proposal}</td>
               </tr>
               <tr>
                 <td className="left_side">Inprogress; Assignments</td>
-               {inprogress_assignment > 0 ? <td>{inprogress_assignment}</td> : ""}
+                <td>{inprogress_assignment}</td>
               </tr>
             </tbody>
           </table>
 
+          {inprogress_queries !== 0 ? <>
+            <table className="table table-striped third main_table">
+              <thead className="query_thead">
+                <tr>
+                  <th className="left_side">Completed; Queries</th>
+                  <th>{complete_query}</th>
+                </tr>
+              </thead>
+              <tbody className="table_body">
+                <tr>
+                  <td className="left_side">Completed; Assignments</td>
+                  <td>{complete_query}</td>
+                </tr>
+              </tbody>
+            </table>
+            {complete_query !== 0 ? <>
 
-          <table className="table table-striped third main_table">
-            <thead className="query_thead">
-              <tr>
-                <th className="left_side">Completed; Queries</th>
-                {complete_query > 0 ?  <th>{complete_query}</th> : ""}
-              </tr>
-            </thead>
-            <tbody className="table_body">
-              <tr>
-                <td className="left_side">Completed; Assignments</td>
-             {complete_query > 0 ?    <td>{complete_query}</td> : ""}
-              </tr>
-            </tbody>
-          </table>
+              <table className="table table-striped forth main_table">
+                <thead className="query_thead">
+                  <tr>
+                    <th className="left_side">Declined; Queries</th>
+                    <th>{declined_queries}</th>
+                  </tr>
+                </thead>
 
-
-          <table className="table table-striped forth main_table">
-            <thead className="query_thead">
-              <tr>
-                <th className="left_side">Declined; Queries</th>
-                {declined_queries > 0 ? <th>{declined_queries}</th> : ""}
-              </tr>
-            </thead>
-
-            <tbody className="table_body">
-              <tr>
-                <td className="left_side">Admin Declined; Queries</td>
-               {admin_declined_query > 0 ?  <td>{admin_declined_query}</td> : ""}
-              </tr>
-              <tr>
-                <td className="left_side">Customer Declined; Queries</td>
-              {customer_declined_Query > 0 ?   <td>{customer_declined_Query}</td> : ""}
-              </tr>
-              <tr>
-                <td className="left_side">Customer Declined; Proposals</td>
-               {customer_declined_proposal > 0 ?  <td>{customer_declined_proposal}</td> : ""}
-              </tr>
-              <tr>
-                <td className="left_side">Customer Declined; Payment</td>
-              {Customer_declined_payment > 0 ?   <td>{Customer_declined_payment}</td> : ""}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        {allQueries.allproposal ? <>
+                <tbody className="table_body">
+                  <tr>
+                    <td className="left_side">Admin Declined; Queries</td>
+                    <td>{admin_declined_query}</td>
+                  </tr>
+                  <tr>
+                    <td className="left_side">Customer Declined; Queries</td>
+                    <td>{customer_declined_Query}</td>
+                  </tr>
+                  <tr>
+                    <td className="left_side">Customer Declined; Proposals</td>
+                    <td>{customer_declined_proposal}</td>
+                  </tr>
+                  <tr>
+                    <td className="left_side">Customer Declined; Payment</td>
+                    <td>{Customer_declined_payment}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </> : ""}   </> : ""}   </div>
+        {allproposal !== 0 ? <>
           <div className="col-md-3 content_header">
 
             <table className="table table-striped fifth main_table">
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">All Proposals</th>
-                {allproposal > 0  ? <th>{allproposal}</th> : ""}
+                  <th>{allproposal}</th>
 
                 </tr>
               </thead>
@@ -215,17 +214,17 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Inprogress; Proposals</th>
-               {InProgress > 0 ?   <th>{InProgress}</th> : ""}
+                  <th>{InProgress}</th>
                 </tr>
               </thead>
               <tbody classNameName="table_body">
                 <tr>
                   <td className="left_side">Inprogress; Preparation</td>
-                {inprogress_preparation > 0 ?   <td>{inprogress_preparation}</td> : ""}
+                  <td>{inprogress_preparation}</td>
                 </tr>
                 <tr>
                   <td className="left_side">Inprogress; Acceptance</td>
-                 {inprogress_acceptance > 0 ?  <td>{inprogress_acceptance}</td> : ""}
+                  <td>{inprogress_acceptance}</td>
                 </tr>
               </tbody>
             </table>
@@ -234,7 +233,7 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Accepted; Proposals </th>
-                 {accepted_proposals > 0 ?  <th>{accepted_proposals}</th> : ""}
+                  <th>{accepted_proposals}</th>
                 </tr>
               </thead>
             </table>
@@ -243,20 +242,18 @@ function Dashboard() {
               <thead className="proposal_thead">
                 <tr>
                   <th className="left_side">Customer Declined; Proposals</th>
-                {declined > 0 ?   <th>{declined}</th> : ""}
+                  <th>{declined}</th>
                 </tr>
               </thead>
             </table>
-
-
           </div>
-          {allQueries.allassignment ? <>
+          {allassignment !== 0 ? <>
             <div className="col-md-3 content_header">
               <table className="table table-striped ninth main_table">
                 <thead className="assignment_thead">
                   <tr>
                     <th className="left_side">All Assignments</th>
-                   {allassignment > 0 ?  <th>{allassignment}</th> : ""}
+                    <th>{allassignment}</th>
                   </tr>
                 </thead>
               </table>
@@ -266,7 +263,7 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Inprogress; Assignments</th>
-                    {inprogress > 0 ? <th>{inprogress}</th> : ""}
+                    <th>{inprogress}</th>
                   </tr>
                 </thead>
               </table>
@@ -276,7 +273,7 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Completed; Assignments</th>
-                   {complete > 0 ?  <th>{complete}</th> : ""}
+                    <th>{complete}</th>
                   </tr>
                 </thead>
               </table>
@@ -286,21 +283,20 @@ function Dashboard() {
 
                   <tr>
                     <th className="left_side">Customer Declined; Payment</th>
-                  
-              {Customer_declined_payment > 0 ?   <td>{Customer_declined_payment}</td> : ""}
+                    <th>{customer_declined_Pay}</th>
                   </tr>
                 </thead>
               </table>
             </div>
+            {totalpayment !== 0 ? <>
 
-            {allQueries.totalpayment ? <>
               <div className="col-md-3 content_header">
 
                 <table className="table table-striped twelvth main_table">
                   <thead className="payment_thead">
                     <tr>
                       <th className="left_side">All Payments</th>
-                     {totalpayment > 0 ?  <th>{totalpayment}</th>  : ""}
+                      <th>{totalpayment}</th>
                     </tr>
                   </thead>
                 </table>
@@ -308,7 +304,7 @@ function Dashboard() {
                   <thead className="payment_thead2">
                     <tr>
                       <th className="left_side">Paid</th>
-                     {paid > 0 ?  <th>{paid}</th> : ""}
+                      <th>{paid}</th>
                     </tr>
                   </thead>
                 </table>
@@ -317,12 +313,12 @@ function Dashboard() {
                   <thead className="payment_thead2">
                     <tr>
                       <th className="left_side">Unpaid</th>
-                     {unpaid > 0 ?  <th>{unpaid}</th> : " "}
+                      <th>{unpaid}</th>
                     </tr>
                   </thead>
                 </table>
               </div>
-            </> : ""} </> : ""} </> : ""} </div>
+            </> : ""} </> : ""}  </> : ""}  </div>
 
     </Layout>
   );

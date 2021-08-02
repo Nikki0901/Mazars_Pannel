@@ -7,9 +7,10 @@ import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// import NewPassword from "../NewPassword/NewPassword";
+import Alerts from "../../../common/Alerts";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -33,16 +34,18 @@ function ForgetPassword(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/forgototp`,
+      url: `${baseUrl}/admin/forgototp`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("otp send your email !");
-          props.history.push("/admin/new-password");
+          var variable = "OTP sent to your email address. "
+          Alerts.SuccessNormal(variable)
+          props.history.push(`/admin/new-password/${value.p_email}`)
+
         } else if (response.data.code === 0) {
-          console.log(response.data.result);   
+          console.log(response.data.result);
           Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
         }
       })
@@ -60,7 +63,7 @@ function ForgetPassword(props) {
       return item
     }
   }
-  
+
   return (
     <>
       <Header admin="admin" />
@@ -89,8 +92,13 @@ function ForgetPassword(props) {
             </div>
 
             <button type="submit" className="btn btn-primary">
-              Submit
+              Get OTP
             </button>
+            <Link to="/admin/login" style={{ "margin": "10px" }}>
+              <button type="submit" className="btn btn-secondary">
+                Cancel
+              </button>
+            </Link>
 
           </form>
         </div>

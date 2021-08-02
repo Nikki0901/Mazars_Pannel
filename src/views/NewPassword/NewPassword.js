@@ -145,7 +145,7 @@ function NewPassword(props) {
                     })}
                     placeholder="Enter Your Password"
                     ref={register({
-                      required: "mandatory",
+                      required: true,
                       pattern: {
                         value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
                         message:
@@ -181,7 +181,7 @@ function NewPassword(props) {
                     placeholder="Confirm Password"
                     name="p_confirm_password"
                     ref={register({
-                      required: "This field is required",
+                      required: true,
                       validate: (value) =>
                         value === getValues("p_password") ||
                         "password doesn 't match",
@@ -214,7 +214,7 @@ function NewPassword(props) {
                     name="p_code"
                     placeholder="Enter OTP"
                     ref={register({
-                      required: "This field is required",
+                      required: true,
                     })}
                   />
                   {errors.p_code && (

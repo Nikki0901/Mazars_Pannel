@@ -170,9 +170,11 @@ function App() {
             <PrivateRouteUser exact path="/customer/paymentstatus" component={PaymentStatus} />
 
 
-
             <PublicRouteAdmin exact path="/admin/start" component={AdminStart} />
             <PublicRouteAdmin exact path="/admin/login" component={AdminLogin} />
+            <PublicRouteAdmin exact path="/admin/forget-password" component={AdminForgetPassword} />
+            <PublicRouteAdmin exact path="/admin/new-password/:id" component={AdminNewPassword} />
+
             <PrivateRouteAdmin exact path="/admin/dashboard" component={AdminDashboard} />
             <PrivateRouteAdmin exact path="/admin/addnewtl" component={AdminNewTeamLeader} />
             <PrivateRouteAdmin exact path="/admin/addnewtp" component={AdminNewTaxProf} />
@@ -188,8 +190,6 @@ function App() {
             <PrivateRouteAdmin exact path="/admin/edittl/:id" component={AdminEditTL} />
             <PrivateRouteAdmin exact path="/admin/edittp/:id" component={AdminEditTP} />
             <PrivateRouteAdmin exact path="/admin/pending/:id" component={AdminPendingRecevived} />
-            <PrivateRouteAdmin exact path="/admin/forget-password" component={AdminForgetPassword} />
-            <PrivateRouteAdmin exact path="/admin/new-password" component={AdminNewPassword} />
             <PrivateRouteAdmin exact path="/admin/query_rejection/:id" component={AdminQueryRejection} />
             <PrivateRouteAdmin exact path="/admin/schedule" component={AdminSchedule} />
             <PrivateRouteAdmin exact path="/admin/meeting" component={AdminMeetingComponent} />

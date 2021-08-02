@@ -12,11 +12,6 @@ import CustomerDeclinedPayment from "./CustomerDeclinedPayment";
 
 
 
-
-
-
-
-
 function AssignmentTab(props) {
   const userId = window.localStorage.getItem("userid");
 
