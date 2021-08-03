@@ -140,24 +140,29 @@ function LoginForm() {
                         className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
                         onClick={togglePasssword}
                       />
-
                     </div>
+
+                    <div className="form-group">
+                      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <Link
+                          to={{
+                            pathname: "/customer/forget-password",
+                            email: `${email}`,
+                          }}
+                        >
+                          Forgot Password
+                        </Link>
+                      </div>
+                    </div>
+
+
                     <div className="form-group">
                       <button type="submit" className="btn btn-primary btn-sm">
                         Get OTP
                       </button>
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <Link
-                        to={{
-                          pathname: "/customer/forget-password",
-                          email: `${email}`,
-                        }}
-                      >
-                        Forgot Password
-                      </Link>
-                    </div>
+
                     <Mandatory />
                   </form>
                 </div>
