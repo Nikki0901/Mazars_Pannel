@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
 import { Button, Typography } from "@material-ui/core";
@@ -31,10 +31,41 @@ function LoginForm() {
   const [email, setEmail] = useState();
   const [uid, setUid] = useState('')
 
+  const [time, setTime] = useState('');
+  const [disabled, setDisabled] = useState(false)
+  const [load, setLoad] = useState(false);
+
   const [isPasswordShow, setPasswordShow] = useState(false);
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
   };
+
+
+  useEffect(() => {
+    getTime()
+  }, [load]);
+
+  const getTime = () => {
+    // console.log("get time")
+    if (load) {
+      var timerOn = true;
+      function timer(remaining) {
+        var s = remaining % 60;
+        s = s < 10 ? '0' + s : s;
+        setTime(s)
+        remaining -= 1;
+        if (remaining >= 0 && timerOn) {
+          setTimeout(function () {
+            timer(remaining);
+          }, 1000);
+          return;
+        }
+        setDisabled(true)
+      }
+      timer(60);
+    }
+  }
+
 
 
   const onSubmit = (value) => {
@@ -54,6 +85,7 @@ function LoginForm() {
         if (response.data.code === 1) {
           Alerts.SuccessNormal("OTP sent to your email address.")
           setShow(true)
+          setLoad(true)
           setUid(response.data.user_id)
         } else if (response.data.code === 0) {
           Alerts.ErrorNormal("Invalid email or password.")
@@ -106,7 +138,8 @@ function LoginForm() {
             </Typography>
             {
               show ? <div>
-                <VerifyOTP email={email} uid={uid} />
+                <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad}
+                  setDisabled={setDisabled} disabled={disabled} />
               </div>
                 :
                 <div className="form_login">

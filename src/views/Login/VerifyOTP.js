@@ -14,59 +14,62 @@ const Schema = yup.object().shape({
 });
 
 
-function VerifyOTP({ email, uid }) {
+function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
     const { handleSubmit, register, errors, reset } = useForm({
         resolver: yupResolver(Schema),
     });
 
     const history = useHistory();
-    const [time, setTime] = useState('');
-    const [disabled, setDisabled] = useState(false)
-    const [num, changeNum] = useState(false);
+    const [setText, noSetText ]= useState()
 
-    useEffect(() => {
-        console.log("call useEffect button")
-        var timerOn = true;
-        function timer(remaining) {
-            var s = remaining % 60;
-            s = s < 10 ? '0' + s : s;
-            setTime(s)
-            remaining -= 1;
-            if (remaining >= 0 && timerOn) {
-                setTimeout(function () {
-                    timer(remaining);
-                }, 1000);
-                return;
-            }
-            setDisabled(true)
+    // const [num, changeNum] = useState(false);
 
-        }
-        timer(60);
-    }, [num]);
 
-    useEffect(() => {
-        console.log("call useEffect")
-        var timerOn = true;
-        function timer(remaining) {
-            var s = remaining % 60;
-            s = s < 10 ? '0' + s : s;
-            setTime(s)
-            remaining -= 1;
-            if (remaining >= 0 && timerOn) {
-                setTimeout(function () {
-                    timer(remaining);
-                }, 1000);
-                return;
-            }
-            setDisabled(true)
 
-        }
-        timer(60);
-    }, []);
+    // useEffect(() => {
+    //     console.log("call useEffect button")
+    //     var timerOn = true;
+    //     function timer(remaining) {
+    //         var s = remaining % 60;
+    //         s = s < 10 ? '0' + s : s;
+    //         setTime(s)
+    //         remaining -= 1;
+    //         if (remaining >= 0 && timerOn) {
+    //             setTimeout(function () {
+    //                 timer(remaining);
+    //             }, 1000);
+    //             return;
+    //         }
+    //         setDisabled(true)
+
+    //     }
+    //     timer(60);
+    // }, [num]);
+
+    // useEffect(() => {
+    //     console.log("call useEffect")
+    //     var timerOn = true;
+    //     function timer(remaining) {
+    //         var s = remaining % 60;
+    //         s = s < 10 ? '0' + s : s;
+    //         setTime(s)
+    //         remaining -= 1;
+    //         if (remaining >= 0 && timerOn) {
+    //             setTimeout(function () {
+    //                 timer(remaining);
+    //             }, 1000);
+    //             return;
+    //         }
+    //         setDisabled(true)
+
+    //     }
+    //     timer(60);
+    // }, []);
 
     const validOtp = (e) => {
         if (isNaN(e.target.value)) {
-            Alerts.ErrorNormal("Please enter number only")
+            e.target.value = ""
+            noSetText("Please enter number only")
         }
     }
 
@@ -102,8 +105,10 @@ function VerifyOTP({ email, uid }) {
     }
 
 
+
     const resendOtp = () => {
-        changeNum(true)
+        // changeNum(true)
+
         let formData = new FormData();
         formData.append("email", email);
         formData.append("uid", uid);
@@ -117,6 +122,7 @@ function VerifyOTP({ email, uid }) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
                     Alerts.SuccessNormal("An OTP sent to your mail")
+                    setLoad(true)
                     setDisabled(false)
                 }
                 else if (response.data.code === 0) {
@@ -143,10 +149,11 @@ function VerifyOTP({ email, uid }) {
                                     "is-invalid": errors.p_otp,
                                 })}
                                 name="p_otp"
-                                ref={register}
+                                ref={register({ required: true })}
                                 placeholder="Enter your OTP"
                                 onChange={(e) => validOtp(e)}
                             />
+                            <p className="declinedOtp">{setText ? setText : ""}</p>
                             <small class="text-center">
                                 Note: OTP is valid for {time} seconds.
                             </small>

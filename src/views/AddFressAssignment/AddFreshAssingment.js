@@ -65,17 +65,17 @@ function AddFreshAssingment(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
-    if (setPurposeOption == '') {
-      setSelectError("man")
-    }
-    if (selectedOption == '') {
-      setSelectError("man")
-    }
-    else {
-      setSelectError("man")
-    }
+    // if (setPurposeOption == '') {
+    //   setSelectError("man")
+    // }
+    // if (selectedOption == '') {
+    //   setSelectError("man")
+    // }
+    // else {
+    //   setSelectError("man")
+    // }
 
-  
+
     setLoad(true);
     let formData = new FormData();
 
@@ -118,6 +118,7 @@ function AddFreshAssingment(props) {
         if (response.data.code === 1) {
           reset();
           var message = response.data.message
+          var query_no = response.data.query_no
           if (message == "") {
             Swal.fire(
               "Success",
@@ -138,7 +139,9 @@ function AddFreshAssingment(props) {
           } else if (message.success) {
             Swal.fire({
               title: 'Success',
-              html: `<p>${message.success}</p>`,
+              html: `<p>Query no.- ${query_no} has been submitted successfully. Mazars team will contact you shortly.
+              </p> <br/>
+               <p>${message.success}</p>`,
               icon: 'success',
             })
           }
