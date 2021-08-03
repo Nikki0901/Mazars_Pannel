@@ -238,8 +238,7 @@ function Demo() {
         .then(function (response) {
           console.log("res post-", response);
           if (response.data.code === 1) {
-            var msg = "Successfully added"
-            Alerts.SuccessNormal(msg)
+            Alerts.SuccessNormal("New call successfully scheduled.")
           } else if (response.data.code === 0) {
             var msg = response.data.result
             Alerts.ErrorNormal(msg)
@@ -347,7 +346,7 @@ function Demo() {
           axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
             if (res.data.code === 1) {
-              Swal.fire("Deleted!", "Your Schedule has been deleted.", "success");
+              Swal.fire("Deleted!", "Scheduled call  has been deleted.", "success");
               getData();
             } else {
               Swal.fire("Oops...", "Errorr ", "error");

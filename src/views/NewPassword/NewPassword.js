@@ -147,9 +147,9 @@ function NewPassword(props) {
                     ref={register({
                       required: true,
                       pattern: {
-                        value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                         message:
-                          "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
+                          "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                       },
                     })}
                     onPaste={((e) => {

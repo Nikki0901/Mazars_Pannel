@@ -11,6 +11,8 @@ import Alerts from "../../../common/Alerts";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import Mandatory from "../../../components/Common/Mandatory";
+
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required("required email"),
@@ -40,13 +42,11 @@ function ForgetPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          var variable = "OTP sent to your email address. "
-          Alerts.SuccessNormal(variable)
+          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           props.history.push(`/admin/new-password/${value.p_email}`)
 
         } else if (response.data.code === 0) {
-          console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Alerts.ErrorNormal("Error.")
         }
       })
       .catch((error) => {
@@ -56,9 +56,10 @@ function ForgetPassword(props) {
 
   const valueHandler = () => {
     var item = props.location.email
+
+    console.log("item : ", item)
     if (item == "null") {
       console.log("item : ", item)
-      // return '';
     } else {
       return item
     }
@@ -99,7 +100,7 @@ function ForgetPassword(props) {
                 Cancel
               </button>
             </Link>
-
+            <Mandatory />
           </form>
         </div>
       </div>

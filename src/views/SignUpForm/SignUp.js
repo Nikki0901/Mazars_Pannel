@@ -310,44 +310,6 @@ function SignUp(props) {
   }
 
 
-  //password
-  const valiPassword = (e) => {
-    let arr3 = []
-    arr3.push(e.target.value)
-    setPassData1(...arr3)
-    console.log(e.target.value.length)
-    if (arr3.length >= 0) {
-
-      if (e.target.value == false) {
-        setpassError("");
-      }
-      else if (e.target.value.search(/[a-z]/) === -1) {
-        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
-      }
-      else if (e.target.value.search(/[A-Z]/) === -1) {
-        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-      }
-
-      else if (e.target.value.search(/[0-9]/) === -1) {
-        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
-      }
-
-      else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
-        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
-      }
-      else if (e.target.value.length < 8) {
-        setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-      }
-      else {
-        setpassError("")
-      }
-    }
-    else {
-      setpassError("")
-    }
-  }
 
 
 
@@ -398,7 +360,7 @@ function SignUp(props) {
           if (response.data.code === 1) {
             setLoad(true)
             setShow(true)
-            Alerts.SuccessNormal("OTP sent to your email address.")
+            Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           } else if (response.data.code === 0) {
             Alerts.ErrorNormal("Error")
           }
@@ -662,7 +624,6 @@ function SignUp(props) {
                       <label className="form-label">Password<span className="declined">*</span></label>
                       <input
                         type={password ? "text" : "password"}
-                        ref={register({ required: true })}
                         onCopy={(e) => {
                           e.preventDefault();
                           return false
@@ -671,12 +632,20 @@ function SignUp(props) {
                           e.preventDefault();
                           return false
                         }}
-                        name="p_password"
                         className={classNames("form-control", {
                           "is-invalid": errors.p_password || passError,
                         })}
+                        name="p_password"
                         placeholder="Enter Your Password"
-                        onChange={(e) => valiPassword(e)}
+                        ref={register({
+                          required: true,
+                          pattern: {
+                            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
+                            message:
+                              "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                          },
+                        })}
+                        // onChange={(e) => valiPassword(e)}
                       />
                       <i
                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -787,6 +756,47 @@ function SignUp(props) {
 }
 
 export default SignUp;
+
+
+
+  //password
+  // const valiPassword = (e) => {
+  //   let arr3 = []
+  //   arr3.push(e.target.value)
+  //   setPassData1(...arr3)
+  //   console.log(e.target.value.length)
+  //   if (arr3.length >= 0) {
+
+  //     if (e.target.value == false) {
+  //       setpassError("");
+  //     }
+  //     else if (e.target.value.search(/[a-z]/) === -1) {
+  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
+  //     }
+  //     else if (e.target.value.search(/[A-Z]/) === -1) {
+  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
+  //     }
+
+  //     else if (e.target.value.search(/[0-9]/) === -1) {
+  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
+
+  //     }
+
+  //     else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
+  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
+
+  //     }
+  //     else if (e.target.value.length < 8) {
+  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
+  //     }
+  //     else {
+  //       setpassError("")
+  //     }
+  //   }
+  //   else {
+  //     setpassError("")
+  //   }
+  // }
 
 
 // import React, { useState, useEffect } from "react";

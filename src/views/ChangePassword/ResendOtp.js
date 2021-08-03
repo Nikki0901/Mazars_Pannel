@@ -24,7 +24,7 @@ function ResendOtp({ email,  setDisabled, getTime, setLoad }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    Alerts.SuccessNormal("OTP sent to your email address.")
+                    Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
                     setDisabled(false)
                     getTime();
                     setLoad(true)

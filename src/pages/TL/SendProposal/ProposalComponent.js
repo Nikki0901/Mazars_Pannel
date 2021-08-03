@@ -151,8 +151,7 @@ function ProposalComponent(props) {
             if (response.data.code === 1) {
               reset();
 
-              var variable = "Proposal Successfully Sent "
-              Alerts.SuccessNormal(variable)
+              Alerts.SuccessNormal("Proposal successfully sent")
               history.push("/teamleader/proposal");
             }
           })

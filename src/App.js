@@ -203,6 +203,8 @@ function App() {
             <PublicRouteTL exact path="/teamleader/login" component={TlLogin} />
             <PublicRouteTL exact path="/teamleader/forget-password" component={TlForgetPassword} />
             <PublicRouteTL exact path="/teamleader/new-password/:id" component={TlNewPassword} />
+          
+           
             <PrivateRouteTL exact path="/teamleader/dashboard" component={TlDashboard} />
             <PrivateRouteTL exact path="/teamleader/addnew" component={TlAddNew} />
             <PrivateRouteTL exact path="/teamleader/addteamprof" component={TlAddTeamProf} />

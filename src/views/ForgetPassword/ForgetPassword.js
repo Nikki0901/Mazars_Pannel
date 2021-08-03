@@ -17,7 +17,7 @@ import Alerts from "../../common/Alerts";
 
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("required email"),
+  p_email: yup.string().email("invalid email").required(""),
 });
 
 
@@ -46,9 +46,7 @@ function ForgetPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-
-          var variable = "OTP sent to your email address. "
-          Alerts.SuccessNormal(variable)
+          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           props.history.push(`/customer/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
           console.log(response.data.result);
@@ -62,9 +60,8 @@ function ForgetPassword(props) {
 
   const valueHandler = () => {
     var item = props.location.email
-    if (item == "null") {
+    if (item == "undefined") {
       console.log("item : ", item)
-      // return '';
     } else {
       return item
     }

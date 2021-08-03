@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
+import Alerts from "../../../common/Alerts";
 
 
 
@@ -22,6 +23,7 @@ function ResendOtp({ id, setDisabled, getTime }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
                     setDisabled(false)
                     getTime();
                 }

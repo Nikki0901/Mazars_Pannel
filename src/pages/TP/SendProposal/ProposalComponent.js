@@ -13,6 +13,7 @@ import {
   Col,
   Table,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 function ProposalComponent(props) {
   const { id } = props;
@@ -90,7 +91,7 @@ function ProposalComponent(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           reset();
-          alert.success(<Msg />);
+          Alerts.SuccessNormal("Proposal successfully sent")
           history.push("/taxprofessional/proposal");
         }
       })
@@ -99,14 +100,6 @@ function ProposalComponent(props) {
       });
   };
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "10px" }}>proposal successfully sent</p>
-      </>
-    );
-  };
 
   return (
     <>

@@ -54,11 +54,8 @@ function Feedback() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-
           reset();
-          var variable = "Feedback Successfully Sent "
-          Alerts.SuccessNormal(variable)
-
+          Alerts.SuccessNormal("Feedback successfully sent.")
           history.push({
             pathname: `/customer/queries`,
             index: 0,

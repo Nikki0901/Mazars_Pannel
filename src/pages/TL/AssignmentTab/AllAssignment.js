@@ -53,14 +53,15 @@ function AssignmentTab() {
   const [transcode, SetTranscode] = useState("interop");
   const [attendeeMode, SetAttendeeMode] = useState("video");
   const [videoProfile, SetVideoProfile] = useState("480p_4");
-
+  const [dataItem, setDataItem] = useState({});
 
   const [report, setReport] = useState();
   const [reportModal, setReportModal] = useState(false);
   const ViewReport = (key) => {
     console.log("key - ", key);
     setReportModal(!reportModal);
-    setReport(key);
+    setReport(key.assign_no);
+    setDataItem(key)
   };
 
 
@@ -286,7 +287,7 @@ function AssignmentTab() {
                   {row.assignement_draft_report || row.final_report ?
                     <div title="View All Report"
                       style={{ cursor: "pointer" }}
-                      onClick={() => ViewReport(row.assign_no)}
+                      onClick={() => ViewReport(row)}
                     >
                       <DescriptionOutlinedIcon color="secondary" />
                     </div>
@@ -671,8 +672,8 @@ function AssignmentTab() {
           <ViewAllReportModal
             ViewReport={ViewReport}
             reportModal={reportModal}
-            report={report}
-            getPendingforAcceptance={getAssignmentList}
+            report={report} 
+            dataItem={dataItem}
           />
         </CardBody>
       </Card>

@@ -17,7 +17,7 @@ const PrivateRouteUser = ({ component: Component, ...rest }) => {
         } else {
           return (
             <>
-              <Redirect to={"/customer/signin"} />
+              <Redirect to={"/"} />
             </>
           )
         }

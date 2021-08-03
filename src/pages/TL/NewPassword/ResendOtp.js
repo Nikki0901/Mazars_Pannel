@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
-import Alerts from "../../common/Alerts";
+import { baseUrl } from "../../../config/config";
+import Alerts from "../../../common/Alerts";
 
 
 
@@ -12,14 +12,12 @@ function ResendOtp({ id, setDisabled, getTime }) {
 
     const onSubmit = (value) => {
 
-
         let formData = new FormData();
         formData.append("email", id);
-        formData.append("p", "forgot");
-
+      
         axios({
             method: "POST",
-            url: `${baseUrl}/customers/forgototp`,
+            url: `${baseUrl}/tl/forgototp`,
             data: formData,
         })
             .then(function (response) {

@@ -8,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import CommonServices from "../../common/common";
-import { Link, useHistory } from "react-router-dom";
 import RejectedModal from "./RejectModal";
 
 

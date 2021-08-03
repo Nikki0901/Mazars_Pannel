@@ -90,7 +90,7 @@ function ChangePassword(props) {
           if (response.data.code === 1) {
             setLoad(true)
             setShow(true)
-            Alerts.SuccessNormal("OTP sent to your email address.")
+            Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           } else if (response.data.code === 0) {
             Alerts.ErrorNormal("Error")
           }
@@ -188,12 +188,13 @@ function ChangePassword(props) {
                     ref={register({
                       required: true,
                       pattern: {
-                        value: /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                         message:
-                          "UpperCase, LowerCase, Number/SpecialChar and min 8 Chars",
+                          "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                       },
                     })}
                   />
+                 
                   <i
                     className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
                     onClick={togglePasssword}

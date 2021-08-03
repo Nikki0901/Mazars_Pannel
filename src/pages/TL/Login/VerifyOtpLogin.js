@@ -69,13 +69,13 @@ function VerifyOtp({ email, uid }) {
     timer(60);
   }, []);
 
+
+
   const validOtp = (e) => {
     if (isNaN(e.target.value)) {
       Alerts.ErrorNormal("Please enter number only")
     }
   }
-
-
 
   const onSubmit = (value) => {
     console.log("value :", value);
@@ -86,21 +86,19 @@ function VerifyOtp({ email, uid }) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/admin/verifyloginotp`,
+      url: `${baseUrl}/tl/verifyloginotp`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
-        console.log("res-", response.data["otp "]);
-
+  
         if (response.data.code == 1) {
           Alerts.SuccessLogin()
-          localStorage.setItem("adminkey", JSON.stringify(response.data["user id"]));
-          localStorage.setItem("adminEmail", JSON.stringify(response.data.name));
-          history.push("/admin/dashboard");
-
+          localStorage.setItem("tlkey", JSON.stringify(response.data.user_id));
+          localStorage.setItem("tlEmail", JSON.stringify(response.data.name));
+          history.push("/teamleader/dashboard");
         } else {
-          Alerts.ErrorNormal("Incorrect OTP")
+          Alerts.ErrorNormal("Incorrect OTP. Please try again.")
           reset();
         }
       })
@@ -118,7 +116,7 @@ function VerifyOtp({ email, uid }) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/admin/regenrateotp`,
+      url: `${baseUrl}/tl/regenrateotp`,
       data: formData,
     })
       .then(function (response) {

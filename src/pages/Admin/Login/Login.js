@@ -14,6 +14,7 @@ import Alerts from "../../../common/Alerts";
 import Mandatory from "../../../components/Common/Mandatory";
 import VerifyOtpLogin from "./VerifyOtpLogin";
 
+
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required(""),
   password: yup
@@ -32,9 +33,9 @@ function Login(props) {
   });
 
   const [email, setEmail] = useState(null);
-  const [isPasswordShow, setPasswordShow] = useState(false);
   const [show, setShow] = useState(false);
   const [uid, setUid] = useState('')
+  const [isPasswordShow, setPasswordShow] = useState(false);
 
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
@@ -56,7 +57,7 @@ function Login(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setShow(true)
-          Alerts.SuccessNormal("OTP sent to your email address.")
+          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           setUid(response.data["user id"])
         } else if (response.data.code === 0) {
           Alerts.ErrorNormal("Invalid email or password.")

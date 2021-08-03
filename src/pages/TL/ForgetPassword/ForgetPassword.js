@@ -7,15 +7,15 @@ import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// import NewPassword from "../NewPassword/NewPassword";
 import classNames from "classnames";
-import Swal from "sweetalert2";
+import Alerts from "../../../common/Alerts";
+import { Link } from "react-router-dom";
+import Mandatory from "../../../components/Common/Mandatory";
+
 
 const Schema = yup.object().shape({
-  p_email: yup.string().email("invalid email").required("required email"),
+  p_email: yup.string().email("invalid email").required(""),
 });
-
-
 
 function ForgetPassword(props) {
   const alert = useAlert();
@@ -30,22 +30,19 @@ function ForgetPassword(props) {
 
     let formData = new FormData();
     formData.append("email", value.p_email);
-    formData.append("type", "tl");
-
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/forgototp`,
+      url: `${baseUrl}/tl/forgototp`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("otp send your email !");
-          props.history.push(`/teamleader/new-password/${value.p_email}`);
+          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          props.history.push(`/teamleader/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
-          console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Alerts.ErrorNormal("Error.")
         }
       })
       .catch((error) => {
@@ -95,9 +92,15 @@ function ForgetPassword(props) {
             </div>
 
             <button type="submit" className="btn btn-primary">
-              Submit
+              Get OTP
             </button>
+            <Link to="/teamleader/login" style={{ "margin": "10px" }}>
+              <button type="submit" className="btn btn-secondary">
+                Cancel
+              </button>
+            </Link>
 
+            <Mandatory />
           </form>
         </div>
       </div>

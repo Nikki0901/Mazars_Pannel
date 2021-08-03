@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl, ReportUrl } from "../../../config/config";
@@ -8,6 +8,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import CommonServices from "../../../common/common";
+import RejectedModal from "./RejectModal";
+
+
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
@@ -18,14 +21,25 @@ function ViewReport({
   reportModal,
   ViewReport,
   report,
-  getPendingforAcceptance,
+  dataItem
 }) {
   const userId = window.localStorage.getItem("tlkey");
   const [data, setData] = useState([]);
 
+  const [docData, setDocData] = useState({});
+
+
+  const [nestedModal, setNestedModal] = useState(false);
+  const toggleNested = (key) => {
+    setNestedModal(!nestedModal);
+    setDocData(key)
+  }
 
   useEffect(() => {
+    getData();
+  }, [report]);
 
+  const getData = () => {
     let formData = new FormData();
     formData.append("assign_no", report);
     formData.append("uid", JSON.parse(userId));
@@ -45,8 +59,9 @@ function ViewReport({
       .catch((error) => {
         console.log("erroror - ", error);
       });
+  }
 
-  }, [report]);
+
 
 
 
@@ -103,7 +118,7 @@ function ViewReport({
                                       style={{
                                         color: "blue",
                                         fontSize: "16px",
-                                      }}                                  
+                                      }}
                                     ></i>
                                   </div>
 
@@ -114,8 +129,9 @@ function ViewReport({
                                         fontSize: 16,
                                         cursor: "pointer",
                                         marginLeft: "8px",
-                                        color: "blue"
+                                        color: "green"
                                       }}
+                                      onClick={() => toggleNested(p)}
                                     ></i>
                                   </div>
                                 </div>
@@ -138,9 +154,11 @@ function ViewReport({
                                           fontSize: 16,
                                           cursor: "pointer",
                                           marginLeft: "8px",
-                                          color: "blue"
+                                          color: "green"
                                         }}
+                                        onClick={() => toggleNested(p)}
                                       ></i>
+
                                     </div> :
                                     null
                             }
@@ -154,8 +172,24 @@ function ViewReport({
               ))
               : null}
           </table>
+
+          <Modal isOpen={nestedModal} toggle={toggleNested} >
+            <ModalHeader>Nested Modal title</ModalHeader>
+            <ModalBody>Stuff and things</ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={toggleNested}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
         </ModalBody>
       </Modal>
+
+      <RejectedModal
+        toggleNested={toggleNested}
+        nestedModal={nestedModal}
+        dataItem={dataItem}
+        docData={docData}
+        getData={getData}
+      />
     </div>
   );
 }

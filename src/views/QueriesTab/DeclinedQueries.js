@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Records from "../../components/Records/Records";
+import CommonServices from "../../common/common";
 
 
 
@@ -146,17 +147,9 @@ function DeclinedQueries() {
       dataField: "Exp_Delivery_Date",
       sort: true,
       headerStyle: () => {
-        return { fontSize: "12px" };
+          return { fontSize: "12px" };
       },
-      formatter: function dateFormat(cell, row) {
-        console.log("dt", row.Exp_Delivery_Date);
-        var oldDate = row.Exp_Delivery_Date;
-        if (oldDate == null) {
-          return null;
-        }
-        return oldDate.toString().split("-").reverse().join("-");
-      },
-    },
+  },
   ];
 
   return (

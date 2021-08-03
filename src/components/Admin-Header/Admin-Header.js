@@ -22,6 +22,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 
   const tlLogout = () => {
     localStorage.removeItem("tlkey");
+    localStorage.removeItem("tlEmail");
     history.push("/teamleader/login");
   };
 
@@ -41,6 +42,8 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
 
   const CustEmail = window.localStorage.getItem("custEmail");
   const adminEmail = window.localStorage.getItem("adminEmail");
+  const tlEmail = window.localStorage.getItem("tlEmail");
+
  
   
   return (
@@ -62,7 +65,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         )}
 
         {TLuserId && <NavWrapper color="#BC85A3" logout={tlLogout}
-          name="teamleader" email={adminEmail}
+          name="teamleader" email={tlEmail}
         />}
 
         {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout}
