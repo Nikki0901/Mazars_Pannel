@@ -397,9 +397,7 @@ function SignUp(props) {
 
   //setotp
   const setOtp = () => {
-
     setDisplay(false)
-
   }
 
   //get OTP
@@ -779,7 +777,6 @@ export default SignUp;
 
   //     else if (e.target.value.search(/[0-9]/) === -1) {
   //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
   //     }
 
   //     else if (e.target.value.search(/[!#$%&@? "]/) === -1) {

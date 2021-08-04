@@ -106,35 +106,11 @@ function ViewReport({
                     <td>
                       {
                         p.stages_type == "2" ?
-
                           <div>
                             {
                               p.status == "0" ?
-                                <div style={{ display: "flex", justifyContent: "space-around" }}>
+                                "Pending"
 
-                                  <div style={{ cursor: "pointer" }} title="Accept">
-                                    <i
-                                      class="fa fa-check"
-                                      style={{
-                                        color: "blue",
-                                        fontSize: "16px",
-                                      }}
-                                    ></i>
-                                  </div>
-
-                                  <div title="Discussion">
-                                    <i
-                                      class="fa fa-comments-o"
-                                      style={{
-                                        fontSize: 16,
-                                        cursor: "pointer",
-                                        marginLeft: "8px",
-                                        color: "green"
-                                      }}
-                                      onClick={() => toggleNested(p)}
-                                    ></i>
-                                  </div>
-                                </div>
                                 :
                                 p.status == "1" ?
                                   <div style={{ cursor: "pointer" }} title="Customer Accepted">
@@ -195,3 +171,30 @@ function ViewReport({
 }
 
 export default ViewReport;
+
+
+ // <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                                //   <div style={{ cursor: "pointer" }} title="Accept">
+                                //     <i
+                                //       class="fa fa-check"
+                                //       style={{
+                                //         color: "blue",
+                                //         fontSize: "16px",
+                                //       }}
+                                //     ></i>
+                                //   </div>
+
+                                //   <div title="Discussion">
+                                //     <i
+                                //       class="fa fa-comments-o"
+                                //       style={{
+                                //         fontSize: 16,
+                                //         cursor: "pointer",
+                                //         marginLeft: "8px",
+                                //         color: "green"
+                                //       }}
+                                //       onClick={() => toggleNested(p)}
+                                //     ></i>
+                                //   </div>
+                                // </div>

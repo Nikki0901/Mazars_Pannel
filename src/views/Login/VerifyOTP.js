@@ -92,7 +92,7 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                 if (response.data.code == 1) {
                     Alerts.SuccessLogin()
                     localStorage.setItem("userid", JSON.stringify(response.data.user_id));
-                    localStorage.setItem("custEmail", JSON.stringify(response.data.name));
+                    localStorage.setItem("custEmail", JSON.stringify(response.data.name));  
                     history.push("/customer/dashboard");
                 } else {
                     Alerts.ErrorNormal("Incorrect OTP")
