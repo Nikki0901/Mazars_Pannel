@@ -194,41 +194,32 @@ function AllQueriesData() {
                                     display: "flex",
                                     justifyContent: "space-around"
                                 }}>
-
-                                    <div style={{ display: "flex" }}>
-                                        {
-                                            row.status_code < 2 ?
-                                                <div style={{ display: "flex", justifyContent: "space-around" }}>
-                                                    <div title="Update Query">
-                                                        <Link to={`/customer/edit-query/${row.id}`}>
-                                                            <i
-                                                                className="fa fa-edit"
-                                                                style={{
-                                                                    fontSize: 16,
-                                                                    cursor: "pointer",
-                                                                    marginLeft: "8px",
-                                                                }}
-                                                            ></i>
-                                                        </Link>
-                                                    </div>
-                                                    <div title="Delete Query">
+                                    {
+                                        row.status == "0" || "1" || "3" ?
+                                            <div>
+                                                <div title="Update Query">
+                                                    <Link to={`/customer/edit-query/${row.id}`}>
                                                         <i
-                                                            className="fa fa-trash"
+                                                            className="fa fa-edit"
                                                             style={{
                                                                 fontSize: 16,
                                                                 cursor: "pointer",
-                                                                marginLeft: "8px",
                                                             }}
-                                                            onClick={() => del(row.id)}
                                                         ></i>
-                                                    </div>
+                                                    </Link>
                                                 </div>
-                                                :
-                                                null
-                                        }
 
-                                        {
-                                            row.status_code > 2 ?
+                                                <div title="Delete Query">
+                                                    <i
+                                                        className="fa fa-trash"
+                                                        style={{
+                                                            fontSize: 16,
+                                                            cursor: "pointer",
+
+                                                        }}
+                                                        onClick={() => del(row.id)}
+                                                    ></i>
+                                                </div>
                                                 <div title="Send Message">
                                                     <Link
                                                         to={{
@@ -246,49 +237,72 @@ function AllQueriesData() {
                                                             style={{
                                                                 fontSize: 16,
                                                                 cursor: "pointer",
-
                                                                 color: "blue"
                                                             }}
                                                         ></i>
                                                     </Link>
                                                 </div>
-                                                :
-                                                null
-                                        }
 
-                                        {
-                                            row.status_code > 4 ?
-                                                <div style={{ display: "flex" }}>
-                                                    <div title="Send Feedback"
-                                                        style={{
-                                                            cursor: "pointer",
-                                                            marginLeft: "5px",
-                                                        }}>
-                                                        <Link
-                                                            to={{
-                                                                pathname: `/customer/feedback/${row.assign_no}`,
-                                                                obj: {
-                                                                    routes: `/customer/queries`
-                                                                }
-                                                            }}
-                                                        >
-                                                            <FeedbackIcon />
-                                                        </Link>
-                                                    </div>
-                                                    <div title="Upload Additional Documents"
-                                                        style={{ cursor: "pointer" }}
-                                                        onClick={() => additionalHandler(row.assign_no)}
+
+                                            </div> :
+                                            null
+                                    }
+
+                                    {
+                                        row.status == "4" || "9" ?
+                                            <div>
+                                                <div title="Send Message">
+                                                    <Link
+                                                        to={{
+                                                            pathname: `/customer/chatting/${row.id}`,
+                                                            obj: {
+                                                                message_type: "4",
+                                                                query_No: row.assign_no,
+                                                                query_id: row.id,
+                                                                routes: `/customer/queries`
+                                                            }
+                                                        }}
                                                     >
-                                                        <PublishIcon color="secondary" />
-                                                    </div>
+                                                        <i
+                                                            class="fa fa-comments-o"
+                                                            style={{
+                                                                fontSize: 16,
+                                                                cursor: "pointer",
+                                                                color: "blue"
+                                                            }}
+                                                        ></i>
+                                                    </Link>
                                                 </div>
-                                                :
-                                                null
-                                        }
-                                    </div>
+                                                <div title="Send Feedback"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}>
+                                                    <Link
+                                                        to={{
+                                                            pathname: `/customer/feedback/${row.assign_no}`,
+                                                            obj: {
+                                                                routes: `/customer/queries`
+                                                            }
+                                                        }}
+                                                    >
+                                                        <FeedbackIcon />
+                                                    </Link>
+                                                </div>
+                                                <div title="Upload Additional Documents"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => additionalHandler(row.assign_no)}
+                                                >
+                                                    <PublishIcon color="secondary" />
+                                                </div>
+
+                                            </div>
+                                            :
+                                            null
+                                    }
 
 
                                 </div>
+
                         }
                     </>
                 );

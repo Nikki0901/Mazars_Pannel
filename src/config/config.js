@@ -20,7 +20,6 @@ export const ReportUrl = "http://13.232.121.233/mazarsapi/assets/upload/report";
 
 
 
-// http://mazarsapi.multitvsolution.com/mazarapi/v1/customers/getQueryDetails?id=35
 
 
 
