@@ -44,7 +44,7 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
     left:0;
     bottom:0;
     right:0;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -93,11 +93,11 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
     cursor: pointer;
 }
 .SignUpLink{
-    color:#fff !important;
+   color:#fff !important;
 }
 .signUp button{
     display: flex;
-    padding:5px 20px;
+   
     margin: auto;
     font-size:22px;
 }

@@ -132,16 +132,9 @@ function ProposalComponent(props) {
 
     if (payment.value == "installment") {
 
-      let sum = amount.reduce(myFunction)
-      function myFunction(total, value) {
-        return Number(total) + Number(value);
-      }
-      console.log("sum -", sum)
-      if (value.p_fixed != sum) {
-        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
-      }
-      else {
-        axios({
+     
+     
+             axios({
           method: "POST",
           url: `${baseUrl}/tl/uploadProposal`,
           data: formData,
@@ -158,7 +151,7 @@ function ProposalComponent(props) {
           .catch((error) => {
             console.log("erroror - ", error);
           });
-      }
+      
     }
     else {
       axios({

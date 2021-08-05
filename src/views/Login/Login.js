@@ -116,10 +116,10 @@ function LoginForm() {
     <div className="signIn">
       <div className="signBtn">
         <div className="boxOverlay">
-          <p style={{ "color": "white", "fontSize": "22px" }}>
-            For new customers
-          </p>
-          <Button color="primary" variant="contained">
+        <Typography variant="h4"  style={{ "margin": "5px auto", "color" : "#fff" }}>
+        For new customers
+      </Typography>
+          <Button variant="contained" color="primary" >
             <Link className="SignUpLink"
               to={{
                 pathname: "/customer/signup",
@@ -132,7 +132,7 @@ function LoginForm() {
       </div>
     </div>
     <div className="signUp">
-      <Typography variant="h4" style={{ "margin": "5px auto" }}>
+      <Typography variant="h4" style={{ "margin": "5px auto" , "color" : "#2b345f"}}>
         For existing customers
       </Typography>
       {
@@ -184,10 +184,10 @@ function LoginForm() {
               </Link>
             </div>
             </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-sm">
-                Get OTP
-              </button>
+            <div className="loginBtn">
+              <Button type ="submit" variant="contained" color="primary">
+                Login
+              </Button>
             </div>
 
            
