@@ -129,38 +129,43 @@ function EditComponent() {
 
     payment.label == "lumpsum" ?
       formData.append("due_date", lumsum) :
-      formData.append("due_date", date)
+      payment.label == "installment" ?
+        formData.append("due_date", date) :
+        formData.append("due_date", "")
+
 
     if (payment.value == "installment") {
-      let sum = amount.reduce(myFunction)
-      function myFunction(total, value) {
-        return Number(total) + Number(value);
+
+      if (amount) {
+        var sum = amount.reduce(myFunction)
+        function myFunction(total, value) {
+          return Number(total) + Number(value);
+        }
       }
       if (value.p_fixed != sum) {
         console.log(`installment amount should be eqaul to ${value.p_fixed}`)
         Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
       }
-      else {
-        axios({
-          method: "POST",
-          url: `${baseUrl}/tl/updateProposal`,
-          data: formData,
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/updateProposal`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            reset();
+
+            var variable = "Proposal Successfully Sent "
+            Alerts.SuccessNormal(variable)
+
+            history.push("/teamleader/proposal");
+          }
         })
-          .then(function (response) {
-            console.log("res-", response);
-            if (response.data.code === 1) {
-              reset();
-
-              var variable = "Proposal Successfully Sent "
-              Alerts.SuccessNormal(variable)
-
-              history.push("/teamleader/proposal");
-            }
-          })
-          .catch((error) => {
-            console.log("erroror - ", error);
-          });
-      }
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
     }
     else {
       axios({
@@ -171,7 +176,6 @@ function EditComponent() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-            // getQuery();
 
             var variable = "Proposal Updated Successfully "
             Alerts.SuccessNormal(variable)
@@ -201,11 +205,8 @@ function EditComponent() {
 
     var array1 = []
     Object.entries(data).map(([key, value]) => {
-      console.log("val", value);
       array1.push(value)
     });
-    console.log("array1", array1);
-
     setAmount(array1);
   };
 
@@ -214,10 +215,8 @@ function EditComponent() {
 
     var array2 = []
     Object.entries(data).map(([key, value]) => {
-      console.log("val", value);
       array2.push(value)
     });
-    console.log("array2", array2);
     setDate(array2);
   };
 

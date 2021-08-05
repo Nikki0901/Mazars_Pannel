@@ -151,12 +151,27 @@ function AcceptedProposal({ acceptedProposal }) {
     },
     {
       text: "Status",
-      dataField: "status",
       style: {
         fontSize: "11px",
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+
+              {
+                row.status == "Accepted; Proposal" ?
+                  <p className="completed">
+                    {row.status}
+                  </p> :
+                  null
+              }
+            </div>
+          </>
+        );
       },
     },
     {

@@ -19,9 +19,10 @@ import Alerts from "../../../common/Alerts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Mandatory from "../../../components/Common/Mandatory";
 
 const Schema = yup.object().shape({
-    p_notes: yup.string().required("required"),
+    p_notes: yup.string().required(""),
 });
 
 
@@ -121,6 +122,7 @@ function QueryRejection(props) {
                         </div>
                         <div class="col-lg-2 col-xl-2 col-md-12"></div>
                     </div>
+                    <Mandatory />
 
                 </CardHeader>
             </Card>

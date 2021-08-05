@@ -28,16 +28,16 @@ function TaxProfessionalsTab() {
   }, []);
 
   const getTaxProf = () => {
-    TaxProffesionalService.getAll()
-      .then((response) => {
-        setData(response.data.result);
-        setTpCount(response.data.result.length);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setData(res.data.result);
+        setTpCount(res.data.result.length);
+      }
+    });
   };
+
+  
 
   const columns = [
     {
@@ -169,7 +169,7 @@ function TaxProfessionalsTab() {
         console.log("erroror - ", error);
       });
   };
-  
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -201,12 +201,16 @@ function TaxProfessionalsTab() {
 }
 
 export default TaxProfessionalsTab;
+
+
 // const getTaxProf = () => {
-//   axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
-//     console.log(res);
-//     if (res.data.code === 1) {
-//       setData(res.data.result);
-//       setTpCount(res.data.result.length);
-//     }
-//   });
+//   TaxProffesionalService.getAll()
+//     .then((response) => {
+//       setData(response.data.result);
+//       setTpCount(response.data.result.length);
+//       console.log(response.data);
+//     })
+//     .catch((e) => {
+//       console.log(e);
+//     });
 // };

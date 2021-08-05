@@ -19,10 +19,11 @@ import {
 import { useHistory } from "react-router-dom";
 import Alerts from "../../../common/Alerts";
 import classNames from "classnames";
+import Mandatory from "../../../components/Common/Mandatory";
 
 const Schema = yup.object().shape({
-  msg_type: yup.string().required("required message type"),
-  p_message: yup.string().required("required message"),
+  msg_type: yup.string().required(""),
+  p_message: yup.string().required(""),
 });
 
 
@@ -167,14 +168,13 @@ function Chatting(props) {
                     </div>
                   )}
                 </div>
-
                 <button type="submit" className="btn btn-primary">
                   Send
                 </button>
               </div>
             </div>
-
           </form>
+          <Mandatory />
         </CardBody>
 
       </Card>

@@ -107,11 +107,11 @@ function EditQuery(props) {
     console.log(value.p_Softcopy_digital)
     console.log(value.p_Softcopy_physical)
     if (purposeOption < 1) {
-      setSelectError("At lease one value should be enter")
+      setSelectError("At least one value should be enter")
     }
     else if (value.p_Softcopy_word === false && value.p_Softcopy_digital === false && value.p_Softcopy_physical === false) {
       console.log("checked")
-      setCheckerror("you have to select atleart one value")
+      setCheckerror("you have to select at least one value")
     }
     else {
       setLoad(true);
@@ -159,7 +159,7 @@ function EditQuery(props) {
             if (message == "") {
               Swal.fire(
                 "Success",
-                `Query successfully updated.`,
+                `Query Updated Successfully.`,
                 "success"
               )
             } else if (message.invalid) {

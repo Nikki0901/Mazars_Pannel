@@ -35,7 +35,7 @@ function RejectedModal({
     formData.append("id", dataItem.q_id);
     formData.append("query_no", dataItem.assign_no);
     formData.append("message", value.p_chat);
-    formData.append("type", 2);
+    formData.append("type", 1);
     formData.append("docid", docData.docid);
 
     axios({

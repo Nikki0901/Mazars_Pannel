@@ -48,7 +48,6 @@ function AllProposalComponent({ allProposal }) {
 
   const columns = [
     {
-      dataField: "",
       text: "S.No",
       formatter: (cellContent, row, rowIndex) => {
         return rowIndex + 1;
@@ -177,26 +176,25 @@ function AllProposalComponent({ allProposal }) {
         return (
           <>
             <div>
-              {row.status}/
               {
                 row.status == "Inprogress" ?
-                  <p className="inprogress">
-
-                    {row.statusdescription}
-                  </p>
+                  <div>
+                    {row.status}/
+                    <p className="inprogress">
+                      {row.statusdescription}
+                    </p>
+                  </div>
                   :
                   row.status == "Customer Declined; Proposal" ?
                     <p className="declined">
-
-                      {row.statusdescription}
+                      {row.status}
                     </p> :
                     row.status == "Accepted; Proposal" ?
                       <p className="completed">
-                        {row.statusdescription}
+                        {row.status}
                       </p> :
                       null
               }
-
             </div>
           </>
         );

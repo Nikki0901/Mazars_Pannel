@@ -179,7 +179,7 @@ function VerifyOtp({ email, uid }) {
             <div class="text-center">
               {
                 disabled ?
-                  <button type="submit" class="btn btn-success" onClick={resendOtp}>RESEND OTP</button>
+                  <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
                   :
                   <button type="submit" class="btn btn-primary">VERIFY OTP</button>
               }

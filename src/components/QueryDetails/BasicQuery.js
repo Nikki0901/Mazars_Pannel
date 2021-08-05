@@ -36,7 +36,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
             </tr>
             <tr>
               <th scope="row">Customer ID</th>
-              <td>{p.user_id}</td>
+              <td>{p.email}</td>
             </tr>
             <tr>
               <th scope="row">Category</th>

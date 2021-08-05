@@ -188,6 +188,30 @@ function AllQuery() {
                                         ""
                                 }
                             </Link>
+
+                            <div title="Send Message">
+                                <Link
+                                    to={{
+                                        pathname: `/teamleader/chatting/${row.id}`,
+                                        obj: {
+                                            message_type: "2",
+                                            query_No: row.assign_no,
+                                            query_id: row.id,
+                                            routes: `/teamleader/proposal`
+                                        }
+                                    }}
+                                >
+                                    <i
+                                        class="fa fa-comments-o"
+                                        style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            marginLeft: "8px",
+                                            color: "blue"
+                                        }}
+                                    ></i>
+                                </Link>
+                            </div>
                         </div>
                     </>
                 );

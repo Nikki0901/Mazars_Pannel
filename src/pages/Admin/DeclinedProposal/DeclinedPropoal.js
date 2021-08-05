@@ -37,7 +37,7 @@ function DeclinedProposal({ declinedProposal }) {
     });
   };
 
- 
+
 
   const columns = [
     {
@@ -160,12 +160,27 @@ function DeclinedProposal({ declinedProposal }) {
     },
     {
       text: "Status",
-      dataField: "status",
       style: {
         fontSize: "11px",
       },
       headerStyle: () => {
         return { fontSize: "11px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              {
+                row.status == "Customer Declined; Proposal" ?
+                  <p className="declined">
+                    {row.status}
+                  </p> :
+                  null
+              }
+
+            </div>
+          </>
+        );
       },
     },
     {
@@ -209,19 +224,19 @@ function DeclinedProposal({ declinedProposal }) {
   return (
     <>
       <Card>
-      <CardHeader>
-      <AdminFilter
+        <CardHeader>
+          <AdminFilter
             setData={setProposalDisplay}
             getData={getDeclinedProposal}
             declinedProposal="declinedProposal"
             setRecords={setRecords}
             records={records}
           />
-  
+
         </CardHeader>
         <CardBody>
-        <Records records={records} />
-        <BootstrapTable
+          <Records records={records} />
+          <BootstrapTable
             bootstrap4
             keyField="id"
             data={proposalDisplay}

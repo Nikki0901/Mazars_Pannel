@@ -9,6 +9,7 @@ import * as yup from "yup";
 import classNames from "classnames";
 import CommonServices from "../../../common/common";
 import RejectedModal from "./RejectModal";
+import DiscardReport from "./DiscardReport";
 
 
 
@@ -32,6 +33,12 @@ function ViewReport({
   const [nestedModal, setNestedModal] = useState(false);
   const toggleNested = (key) => {
     setNestedModal(!nestedModal);
+    setDocData(key)
+  }
+
+  const [discardModal, setDiscardModal] = useState(false);
+  const toggleDiscard = (key) => {
+    setDiscardModal(!discardModal);
     setDocData(key)
   }
 
@@ -67,7 +74,7 @@ function ViewReport({
 
   return (
     <div>
-      <Modal isOpen={reportModal} toggle={ViewReport} size="md" scrollable>
+      <Modal isOpen={reportModal} toggle={ViewReport} size="lg" scrollable>
         <ModalHeader toggle={ViewReport}>View All Reports</ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
@@ -110,7 +117,6 @@ function ViewReport({
                             {
                               p.status == "0" ?
                                 "Pending"
-
                                 :
                                 p.status == "1" ?
                                   <div style={{ cursor: "pointer" }} title="Customer Accepted">
@@ -119,23 +125,40 @@ function ViewReport({
                                       style={{
                                         color: "blue",
                                         fontSize: "16px",
+                                        marginLeft: "10px"
                                       }}
                                     ></i>
                                   </div> :
                                   p.status == "2" ?
-                                    <div title="Discussion">
-                                      <i
-                                        class="fa fa-comments-o"
-                                        style={{
-                                          fontSize: 16,
-                                          cursor: "pointer",
-                                          marginLeft: "8px",
-                                          color: "green"
-                                        }}
-                                        onClick={() => toggleNested(p)}
-                                      ></i>
+                                    <div style={{ display: "flex", justifyContent: "space-around" }}>
+                                      <div title="Discussion">
+                                        <i
+                                          class="fa fa-comments-o"
+                                          style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            marginLeft: "8px",
+                                            color: "green"
+                                          }}
+                                          onClick={() => toggleNested(p)}
+                                        ></i>
 
-                                    </div> :
+                                      </div>
+                                      <div title="Discard">
+                                        <i
+                                          class="fa fa-times"
+                                          style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            marginLeft: "8px",
+                                            color: "red"
+                                          }}
+                                          onClick={() => toggleDiscard(p)}
+                                        ></i>
+
+                                      </div>
+                                    </div>
+                                    :
                                     null
                             }
                           </div>
@@ -166,35 +189,18 @@ function ViewReport({
         docData={docData}
         getData={getData}
       />
+
+
+      <DiscardReport
+        toggleDiscard={toggleDiscard}
+        discardModal={discardModal}
+        dataItem={dataItem}
+        docData={docData}
+        getData={getData}
+      />
+
     </div>
   );
 }
 
 export default ViewReport;
-
-
- // <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                                //   <div style={{ cursor: "pointer" }} title="Accept">
-                                //     <i
-                                //       class="fa fa-check"
-                                //       style={{
-                                //         color: "blue",
-                                //         fontSize: "16px",
-                                //       }}
-                                //     ></i>
-                                //   </div>
-
-                                //   <div title="Discussion">
-                                //     <i
-                                //       class="fa fa-comments-o"
-                                //       style={{
-                                //         fontSize: 16,
-                                //         cursor: "pointer",
-                                //         marginLeft: "8px",
-                                //         color: "green"
-                                //       }}
-                                //       onClick={() => toggleNested(p)}
-                                //     ></i>
-                                //   </div>
-                                // </div>

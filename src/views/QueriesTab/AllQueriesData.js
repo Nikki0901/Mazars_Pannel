@@ -190,13 +190,10 @@ function AllQueriesData() {
                             row.status == "Declined Query" ?
                                 null
                                 :
-                                <div style={{
-                                    display: "flex",
-                                    justifyContent: "space-around"
-                                }}>
+                                <div>
                                     {
-                                        row.status == "0" || "1" || "3" ?
-                                            <div>
+                                        row.status_code == "0" || row.status_code == "1" || row.status_code == "3" ?
+                                            <div style={{ display: "flex", justifyContent: "space-around" }}>
                                                 <div title="Update Query">
                                                     <Link to={`/customer/edit-query/${row.id}`}>
                                                         <i
@@ -249,8 +246,30 @@ function AllQueriesData() {
                                     }
 
                                     {
-                                        row.status == "4" || "9" ?
-                                            <div>
+                                        row.status_code == "4" || row.status_code == "9" || row.status_code == "2"?
+                                            <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                                                <div title="Send Feedback"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}>
+                                                    <Link
+                                                        to={{
+                                                            pathname: `/customer/feedback/${row.assign_no}`,
+                                                            obj: {
+                                                                routes: `/customer/queries`
+                                                            }
+                                                        }}
+                                                    >
+                                                        <FeedbackIcon />
+                                                    </Link>
+                                                </div>
+                                                <div title="Upload Additional Documents"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => additionalHandler(row.assign_no)}
+                                                >
+                                                    <PublishIcon color="secondary" />
+                                                </div>
                                                 <div title="Send Message">
                                                     <Link
                                                         to={{
@@ -273,28 +292,6 @@ function AllQueriesData() {
                                                         ></i>
                                                     </Link>
                                                 </div>
-                                                <div title="Send Feedback"
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}>
-                                                    <Link
-                                                        to={{
-                                                            pathname: `/customer/feedback/${row.assign_no}`,
-                                                            obj: {
-                                                                routes: `/customer/queries`
-                                                            }
-                                                        }}
-                                                    >
-                                                        <FeedbackIcon />
-                                                    </Link>
-                                                </div>
-                                                <div title="Upload Additional Documents"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => additionalHandler(row.assign_no)}
-                                                >
-                                                    <PublishIcon color="secondary" />
-                                                </div>
-
                                             </div>
                                             :
                                             null

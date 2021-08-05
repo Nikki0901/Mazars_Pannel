@@ -20,8 +20,8 @@ import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
-import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import PaymentIcon from '@material-ui/icons/Payment';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import RejectedModal from "./RejectedModal";
 
 
@@ -274,29 +274,14 @@ function AllPayment() {
                 return (
                     <>
 
-                        <div style={{ display: "flex", justifyContent: "space-between", width: "60px" }}>
-                            {
-                                row.paid_status == "0" ? null :
-                                    <div title="Payment History"
-                                        onClick={() => toggle(row.assign_id)}
-                                        style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
-                                    >
-                                        <ChangeHistoryIcon />
-                                    </div>
-                            }
+                        <div style={{ display: "flex", justifyContent: "space-between", width: "90px" }}>
 
-                            {
-                                (row.paid_status == "0") ?
-                                    <div title="Payment decline"
-                                        onClick={() => rejectHandler(row)}
-                                        style={{ color: "red", fontSize: "16px", cursor: "pointer" }}
-                                    >
-                                        <PaymentIcon />
-                                    </div>
-                                    :
-                                    null
-                            }
-
+                            <div title="Payment History"
+                                onClick={() => toggle(row.assign_id)}
+                                style={{ color: "green", fontSize: "16px", cursor: "pointer" }}
+                            >
+                                <AssessmentIcon />
+                            </div>
                             <div title="Send Message">
                                 <Link
                                     to={{
@@ -312,14 +297,27 @@ function AllPayment() {
                                     <i
                                         class="fa fa-comments-o"
                                         style={{
-                                            fontSize: 16,
+                                            fontSize: 18,
                                             cursor: "pointer",
-                                            marginLeft: "8px",
                                             color: "blue"
                                         }}
                                     ></i>
                                 </Link>
                             </div>
+                            <div>
+                                {
+                                    row.paid_status == "0" ?
+                                        <div title="Payment decline"
+                                            onClick={() => rejectHandler(row)}
+                                            style={{ color: "red", fontSize: "16px", cursor: "pointer" }}
+                                        >
+                                            <PaymentIcon />
+                                        </div>
+                                        : null
+                                }
+                            </div>
+
+
                         </div>
                     </>
                 );

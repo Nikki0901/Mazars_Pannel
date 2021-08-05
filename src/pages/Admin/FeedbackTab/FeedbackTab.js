@@ -12,7 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-import FeedbackService from "../../../config/services/QueryDetails";
+// import FeedbackService from "../../../config/services/QueryDetails";
 import CommonServices from "../../../common/common";
 import { useAlert } from "react-alert";
 
@@ -28,15 +28,15 @@ function FeedbackTab() {
   }, []);
 
   const getFeedback = () => {
-    FeedbackService.getAll()
-      .then((response) => {
-        setFeedBackData(response.data.result);
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setFeedBackData(res.data.result);
+      }
+    });
   };
+
+ 
 
   const columns = [
     {
@@ -176,11 +176,14 @@ export default FeedbackTab;
 
 
 
-// const getFeedback = () => {
-//   axios.get(`${baseUrl}/customers/getFeedback`).then((res) => {
-//     console.log(res);
-//     if (res.data.code === 1) {
-//       setFeedBackData(res.data.result);
-//     }
-//   });
-// };
+
+ // const getFeedback = () => {
+  //   FeedbackService.getAll()
+  //     .then((response) => {
+  //       setFeedBackData(response.data.result);
+  //       console.log(response.data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // };

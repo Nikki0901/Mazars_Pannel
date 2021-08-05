@@ -52,18 +52,18 @@ function AddFreshAssingment(props) {
   const [load, setLoad] = useState(false);
   const [selectError, setSelectError] = useState()
 
-const remError = () => {
-  setCheckerror("")
-}
+  const remError = () => {
+    setCheckerror("")
+  }
   const valiFun = (e) => {
     setcustError("")
   }
   const purPoseQuery = (e) => {
     setSelectError("")
     setPurposeOption(e)
-
   }
 
+  
   const onSubmit = (value) => {
 
     const a = value.p_fact;
@@ -72,101 +72,101 @@ const remError = () => {
       setcustError("This feild is required");
       console.log(b)
     }
-  
-else if(purposeOption < 1) {
-  setSelectError("At lease one value should be enter")
-}
-else if(value.p_format_word === false && value.p_format_digital === false && value.p_format_physically === false){
-  console.log("catch")
-  setCheckerror("you have to select atleart one value")
 
-}
-else{
-    setLoad(true);
-    let formData = new FormData();
-
-    var uploadImg = value.upload;
-    if (uploadImg) {
-      for (var i = 0; i < uploadImg.length; i++) {
-        console.log("pics", value.upload[i].pics[0]);
-        let a = value.upload[i].pics[0];
-        formData.append("upload_1[]", a);
-      }
+    else if (purposeOption < 1) {
+      setSelectError("At least one value should be enter")
+    }
+    else if (value.p_format_word === false && value.p_format_digital === false && value.p_format_physically === false) {
+      console.log("catch")
+      setCheckerror("you have to select at least one value")
     }
 
-    formData.append("fact", value.p_fact);
-    formData.append("specific", JSON.stringify(value.users));
-    formData.append("timelines", value.p_timelines);
-    formData.append("user", JSON.parse(userId));
-    formData.append("cid", JSON.parse(category));
-    formData.append("softcopy_word", Number(value.p_format_word));
-    formData.append(
-      "softcopy_digitally_assigned",
-      Number(value.p_format_digital)
-    );
-    formData.append(
-      "printout_physically_assigned",
-      Number(value.p_format_physically)
-    );
-    formData.append("case_name", value.p_case_name);
-    formData.append("assessment_year", JSON.stringify(selectedOption));
-    formData.append("purpose", JSON.stringify(purposeOption));
+    else {
+      setLoad(true);
+      let formData = new FormData();
+
+      var uploadImg = value.upload;
+      if (uploadImg) {
+        for (var i = 0; i < uploadImg.length; i++) {
+          console.log("pics", value.upload[i].pics[0]);
+          let a = value.upload[i].pics[0];
+          formData.append("upload_1[]", a);
+        }
+      }
+
+      formData.append("fact", value.p_fact);
+      formData.append("specific", JSON.stringify(value.users));
+      formData.append("timelines", value.p_timelines);
+      formData.append("user", JSON.parse(userId));
+      formData.append("cid", JSON.parse(category));
+      formData.append("softcopy_word", Number(value.p_format_word));
+      formData.append(
+        "softcopy_digitally_assigned",
+        Number(value.p_format_digital)
+      );
+      formData.append(
+        "printout_physically_assigned",
+        Number(value.p_format_physically)
+      );
+      formData.append("case_name", value.p_case_name);
+      formData.append("assessment_year", JSON.stringify(selectedOption));
+      formData.append("purpose", JSON.stringify(purposeOption));
 
 
-    axios
-      .post(`${baseUrl}/customers/PostQuestion`, formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          reset();
-          var message = response.data.message
-          var query_no = response.data.query_no
-          if (message == "") {
-            Swal.fire(
-              "Success",
-              `Query successfully added.`,
-              "success"
-            )
-          } else if (message.invalid) {
-            Swal.fire({
-              title: 'Error !',
-              html: `<p class="text-danger">${message.invalid}</p>`,
-            })
-          } else if (message.faill && message.success) {
-            Swal.fire({
-              title: 'Success',
-              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
-              icon: 'success',
-            })
-          } else if (message.success) {
-            Swal.fire({
-              title: 'Success',
-              html: `<p>Query no.- ${query_no} has been submitted successfully. Mazars team will contact you shortly.
+      axios
+        .post(`${baseUrl}/customers/PostQuestion`, formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            reset();
+            var message = response.data.message
+            var query_no = response.data.query_no
+            if (message == "") {
+              Swal.fire(
+                "Success",
+                `Query successfully added.`,
+                "success"
+              )
+            } else if (message.invalid) {
+              Swal.fire({
+                title: 'Error !',
+                html: `<p class="text-danger">${message.invalid}</p>`,
+              })
+            } else if (message.faill && message.success) {
+              Swal.fire({
+                title: 'Success',
+                html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+                icon: 'success',
+              })
+            } else if (message.success) {
+              Swal.fire({
+                title: 'Success',
+                html: `<p>Query no.- ${query_no} has been submitted successfully. Mazars team will contact you shortly.
               </p> <br/>
                <p>${message.success}</p>`,
-              icon: 'success',
-            })
-          }
-          else if (message.faill) {
-            Swal.fire({
-              title: 'Error !',
-              html: `<p class="text-danger">${message.faill}</p>`,
-              icon: 'error',
-            })
-          }
+                icon: 'success',
+              })
+            }
+            else if (message.faill) {
+              Swal.fire({
+                title: 'Error !',
+                html: `<p class="text-danger">${message.faill}</p>`,
+                icon: 'error',
+              })
+            }
 
-          props.history.push("/customer/dashboard");
-        } else {
-          setLoad(false);
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+            props.history.push("/customer/dashboard");
+          } else {
+            setLoad(false);
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
     }
   };
 
@@ -228,31 +228,28 @@ else{
 
                       {fields.length > 0 &&
                         fields.map((item, index) => (
-                          <div>
-                            {fields.length < 5 ? (
-                              <div
-                                className="question_query_field mb-2"
-                                key={index}
-                              >
-                                <input
-                                  type="text"
-                                  className={classNames("form-control", {
-                                    "is-invalid": errors.users,
-                                  })}
-                                  ref={register({ required: true })}
-                                  name={`users[${index}].query`}
-                                  placeholder="Specify your query"
-                                  defaultValue={`${item.query}`}
-                                />
-                                <div
-                                  className="btn btn-primary ml-2"
-                                  onClick={() => remove(index)}
-                                >
-                                  -
-                                </div>
-                              </div>
-                            ) : null}
+                          <div
+                            className="question_query_field mb-2"
+                            key={index}
+                          >
+                            <input
+                              type="text"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.users,
+                              })}
+                              ref={register({ required: true })}
+                              name={`users[${index}].query`}
+                              placeholder="Specify your query"
+                              defaultValue={`${item.query}`}
+                            />
+                            <div
+                              className="btn btn-primary ml-2"
+                              onClick={() => remove(index)}
+                            >
+                              -
+                            </div>
                           </div>
+
                         ))}
                     </div>
 
@@ -332,7 +329,7 @@ else{
                             Printout- Physically Signed
                           </label>
                         </div>
-                      <p className="declined">{custcheckError}</p>
+                        <p className="declined">{custcheckError}</p>
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -373,12 +370,12 @@ else{
                         </label>
                         <Select
                           closeMenuOnSelect={false}
-                           className= {selectError ? "customError" : ""}
+                          className={selectError ? "customError" : ""}
                           onChange={purPoseQuery}
                           isMulti
                           options={purpose}
                         />
-                       
+
                       </div>
                     </div>
                   </div>

@@ -5,7 +5,6 @@ import { baseUrl } from "../../config/config";
 import Alerts from "../../common/Alerts";
 
 
-
 function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email, phone, setDisabled, getTime, setLoad }) {
 
     const { handleSubmit, errors, reset } = useForm();
@@ -46,7 +45,7 @@ function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email, p
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div style={{ paddingTop: "10px" }}>
-                    <button type="submit" class="btn btn-success">RESEND OTP</button>
+                    <button type="submit" class="btn btn-success">SEND OTP</button>
                 </div>
             </form>
         </>

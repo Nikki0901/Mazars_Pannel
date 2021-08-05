@@ -253,65 +253,57 @@ function ProposalTab() {
                     <>
                         {row.statuscode === "6" ? null : (
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div>
-                                    {row.negotiated_amount === "0" &&
-                                        row.accepted_amount === "0" ? (
-                                        <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
-                                            <div style={{ cursor: "pointer" }} title="Proposal Accepted">
-                                                <Link to={`/customer/proposal_view/${row.q_id}`}>
-                                                    <i
-                                                        class="fa fa-check"
-                                                        style={{
-                                                            color: "blue",
-                                                            fontSize: "16px",
-                                                        }}
-                                                    ></i>
-                                                </Link>
-                                            </div>
-                                            <div style={{ cursor: "pointer" }} title="Rejected">
-                                                <i
-                                                    class="fa fa-times"
-                                                    style={{ color: "red", fontSize: "16px" }}
-                                                    onClick={() => rejected(row.q_id)}
-                                                ></i>
-                                            </div>
-                                            <div title="Send Message">
-                                                <Link
-                                                    to={{
-                                                        pathname: `/customer/chatting/${row.q_id}`,
-                                                        obj: {
-                                                            message_type: "2",
-                                                            query_No: row.assign_no,
-                                                            query_id: row.q_id,
-                                                            routes: `/customer/proposal`
-                                                        }
-                                                    }}
-                                                >
-                                                    <i
-                                                        class="fa fa-comments-o"
-                                                        style={{
-                                                            fontSize: 16,
-                                                            cursor: "pointer",
-                                                            marginLeft: "8px",
-                                                            color: "blue"
-                                                        }}
-                                                    ></i>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    ) : null}
+
+                                <div title="Send Message">
+                                    <Link
+                                        to={{
+                                            pathname: `/customer/chatting/${row.q_id}`,
+                                            obj: {
+                                                message_type: "2",
+                                                query_No: row.assign_no,
+                                                query_id: row.q_id,
+                                                routes: `/customer/proposal`
+                                            }
+                                        }}
+                                    >
+                                        <i
+                                            class="fa fa-comments-o"
+                                            style={{
+                                                fontSize: 16,
+                                                cursor: "pointer",
+                                                marginLeft: "8px",
+                                                color: "blue"
+                                            }}
+                                        ></i>
+                                    </Link>
                                 </div>
-                                {/* <div style={{ cursor: "pointer" }} title="View Proposal">
-                                    <i
-                                        class="fa fa-eye"
-                                        style={{ color: "green", fontSize: "16px" }}
-                                        onClick={() => ViewHandler(row)}
-                                    ></i>
-                                </div> */}
+
+                                {row.negotiated_amount === "0" &&
+                                    row.accepted_amount === "0" ? (
+                                    <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
+                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
+                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                <i
+                                                    class="fa fa-check"
+                                                    style={{
+                                                        color: "blue",
+                                                        fontSize: "16px",
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+                                        <div style={{ cursor: "pointer" }} title="Rejected">
+                                            <i
+                                                class="fa fa-times"
+                                                style={{ color: "red", fontSize: "16px" }}
+                                                onClick={() => rejected(row.q_id)}
+                                            ></i>
+                                        </div>
+
+                                    </div>
+                                ) : null}
                             </div>
                         )}
-
-
                     </>
                 );
             },

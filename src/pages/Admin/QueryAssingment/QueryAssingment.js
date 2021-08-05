@@ -19,12 +19,13 @@ import Alerts from "../../../common/Alerts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Mandatory from "../../../components/Common/Mandatory";
 
 
 
 const Schema = yup.object().shape({
-  p_taxprof: yup.string().required("required team leader"),
-  p_expdeldate: yup.string().required("required  Exp. delivery date "),
+  p_taxprof: yup.string().required(""),
+  p_expdeldate: yup.string().required(""),
 });
 
 
@@ -328,6 +329,8 @@ function QueryAssingment(props) {
                   </tbody>
                 </table>
               </form>
+              <Mandatory />
+
             </div>
           </div>
         </CardHeader>
@@ -337,38 +340,3 @@ function QueryAssingment(props) {
 }
 
 export default QueryAssingment;
-
-// <Card>
-//         <CardHeader>
-//           <Row>
-//             <Col md="4">
-//               <button
-//                 class="btn btn-success ml-3"
-//                 onClick={() => history.goBack()}
-//               >
-//                 <i class="fas fa-arrow-left mr-2"></i>
-//                 Go Back
-//               </button>
-//             </Col>
-//             <Col md="8">
-//               <h4>Add Assignment Stages (Max 5)</h4>
-//             </Col>
-//           </Row>
-//         </CardHeader>
-//         <CardHeader></CardHeader>
-//       </Card>
-
-// d2.getDate() + "/" + (d2.getMonth() + 1) + "/" + d2.getFullYear();
-// <Link
-//   to={{
-//     pathname: `/admin/queriestab`,
-//     index: 1,
-//   }}
-// />;
-
-// <Redirect
-//   to={{
-//     pathname: `/admin/queriestab`,
-//     index: 1,
-//   }}
-// />;

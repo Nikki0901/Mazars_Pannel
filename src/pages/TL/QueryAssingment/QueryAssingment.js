@@ -19,11 +19,12 @@ import Alerts from "../../../common/Alerts";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Mandatory from "../../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
-  p_taxprof: yup.string().required("required team leader"),
-  p_expdeldate: yup.string().required("required  Exp. delivery date "),
+  p_taxprof: yup.string().required(""),
+  p_expdeldate: yup.string().required(""),
 });
 
 
@@ -309,6 +310,7 @@ function QueryAssingment() {
                     </tbody>
                   </table>
                 </form>
+                <Mandatory />
               </div>
             </div>
           </div>

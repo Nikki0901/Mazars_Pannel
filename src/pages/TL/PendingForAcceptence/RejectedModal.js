@@ -3,13 +3,13 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
+import Alerts from "../../../common/Alerts";
 
 const Schema = yup.object().shape({
-  p_chat: yup.string().required("required discussion"),
+  p_chat: yup.string().required(""),
 });
 
 function RejectedModal({
@@ -22,7 +22,7 @@ function RejectedModal({
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
-  const alert = useAlert();
+
   const { id, allocation_id } = pay;
 
   // console.log("pay :", pay);
@@ -45,7 +45,7 @@ function RejectedModal({
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("Query rejected !");
+          Alerts.SuccessNormal("Query successfully rejected")
           getPendingforAcceptance();
           rejectHandler();
         }
@@ -57,7 +57,7 @@ function RejectedModal({
 
   return (
     <div>
-      <Modal isOpen={addPaymentModal} toggle={rejectHandler} size="sm">
+      <Modal isOpen={addPaymentModal} toggle={rejectHandler} size="md">
         <ModalHeader toggle={rejectHandler}>Rejected Reason</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,12 +70,8 @@ function RejectedModal({
                 rows="4"
                 name="p_chat"
                 ref={register}
-                placeholder="enter text"
+                placeholder="enter text here..."
               ></textarea>
-
-              {errors.p_chat && (
-                <div className="invalid-feedback">{errors.p_chat.message}</div>
-              )}
             </div>
             <div class="modal-footer">
               <button type="submit" className="btn btn-primary">

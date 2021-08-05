@@ -50,14 +50,23 @@ function InprogressProposal() {
             formatter: (cellContent, row, rowIndex) => {
                 return rowIndex + 1;
             },
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px", width: "50px" };
+                return { fontSize: "11px", width: "60px" };
             },
         },
         {
             dataField: "query_date",
             text: "Date",
             sort: true,
+            style: {
+                fontSize: "11px",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
             formatter: function dateFormat(cell, row) {
                 console.log("dt", row.query_date);
                 var oldDate = row.query_date;
@@ -70,19 +79,21 @@ function InprogressProposal() {
         {
             text: "Query No",
             dataField: "assign_no",
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "11px" };
             },
             formatter: function nameFormatter(cell, row) {
                 console.log(row);
                 return (
                     <>
-                        {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
+
                         <Link
                             to={{
                                 pathname: `/teamleader/queries/${row.id}`,
                                 routes: "proposal",
-                                index: 1,
                             }}
                         >
                             {row.assign_no}
@@ -95,38 +106,128 @@ function InprogressProposal() {
             text: "Category",
             dataField: "parent_id",
             sort: true,
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "11px" };
             },
         },
         {
             text: "Sub Category",
             dataField: "cat_name",
             sort: true,
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "11px" };
             },
         },
         {
-            text: "Customer Name",
-            dataField: "name",
+            text: "Date of Proposal",
+            dataField: "DateofProposal",
             sort: true,
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "11px" };
+            },
+            formatter: function dateFormat(cell, row) {
+                console.log("dt", row.DateofProposal);
+                var oldDate = row.DateofProposal;
+                if (oldDate == null) {
+                    return null;
+                }
+                return oldDate.toString().split("-").reverse().join("-");
+            },
+        },
+        {
+            text: "Date of acceptance / decline of Proposal",
+            dataField: "cust_accept_date",
+            sort: true,
+            style: {
+                fontSize: "11px",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
+            formatter: function dateFormat(cell, row) {
+                console.log("dt", row.cust_accept_date);
+                var oldDate = row.cust_accept_date;
+                if (oldDate == null) {
+                    return null;
+                }
+                return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
             },
         },
         {
             text: "Status",
-            dataField: "status",
+            style: {
+                fontSize: "11px",
+            },
             headerStyle: () => {
-                return { fontSize: "12px" };
+                return { fontSize: "11px" };
+            },
+            formatter: function nameFormatter(cell, row) {
+                return (
+                    <>
+                        <div>
+                            {row.status}/
+                            {
+                                row.status == "Inprogress" ?
+                                    <p className="inprogress">
+
+                                        {row.statusdescription}
+                                    </p>
+                                    :
+                                    row.status == "Customer Declined; Proposal" ?
+                                        <p className="declined">
+
+                                            {row.statusdescription}
+                                        </p> :
+                                        row.status == "Accepted; Proposal" ?
+                                            <p className="completed">
+                                                {row.statusdescription}
+                                            </p> :
+                                            null
+                            }
+
+
+                        </div>
+                    </>
+                );
+            },
+        },
+        {
+            dataField: "ProposedAmount",
+            text: "Proposed Amount",
+            sort: true,
+            style: {
+                fontSize: "11px",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
+        },
+        {
+            dataField: "accepted_amount",
+            text: "Accepted Amount ",
+            sort: true,
+            style: {
+                fontSize: "11px",
+                color: "#21a3ce",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px", color: "#21a3ce" };
             },
         },
         {
             text: "Action",
             dataField: "",
             headerStyle: () => {
-                return { fontSize: "12px",width: "80px" };
+                return { fontSize: "12px", width: "90px" };
             },
             formatter: function (cell, row) {
                 return (
@@ -184,6 +285,18 @@ function InprogressProposal() {
                                         </Link>
                                     </div>
                             }
+
+                            <div style={{ cursor: "pointer", marginLeft: "8px" }} title="View Proposal">
+                                <a
+                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.id}`}
+                                    target="_blank"
+                                >
+                                    <i
+                                        class="fa fa-eye"
+                                        style={{ color: "green", fontSize: "16px" }}
+                                    />
+                                </a>
+                            </div>
                         </div>
                     </>
                 );

@@ -17,9 +17,10 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
+import Mandatory from "../../components/Common/Mandatory";
 
 const Schema = yup.object().shape({
-  p_feedback: yup.string().required("required feedback"),
+  p_feedback: yup.string().required(""),
 });
 
 
@@ -129,6 +130,8 @@ function Feedback() {
             </div>
 
           </form>
+          <Mandatory />
+
         </CardBody>
       </Card>
 

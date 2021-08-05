@@ -18,11 +18,12 @@ import {
 } from "reactstrap";
 import Alerts from "../../common/Alerts";
 import classNames from "classnames";
+import Mandatory from "../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
-  message_type: yup.string().required("required message type"),
-  p_message: yup.string().required("required message"),
+  message_type: yup.string().required(""),
+  p_message: yup.string().required(""),
 });
 
 
@@ -176,8 +177,9 @@ function Chatting(props) {
                 </button>
               </div>
             </div>
-
           </form>
+          <Mandatory />
+
         </CardBody>
 
       </Card>

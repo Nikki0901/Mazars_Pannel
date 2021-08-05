@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { Link, useHistory } from "react-router-dom";
-import { useAlert } from "react-alert";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -11,10 +10,10 @@ import {
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import RejectedModal from "./RejectedModal";
+import Alerts from "../../../common/Alerts";
 
 
 function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
-  const alert = useAlert();
   const userid = window.localStorage.getItem("tlkey");
 
   const [pendingData, setPendingData] = useState([]);
@@ -205,7 +204,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          alert.success("Query accepted !");
+          Alerts.SuccessNormal("Query successfully accepted")
           getPendingforAcceptance();
           updateTab(1);
         }
