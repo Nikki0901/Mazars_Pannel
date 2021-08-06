@@ -121,9 +121,9 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                 <div className="form-group">
                     {
                         disabled ?
-                            <button type="submit" class="btn btn-success btn-sm" onClick={resendOtp}>SEND OTP</button>
+                            <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
                             :
-                            <button type="submit" className="btn btn-primary btn-sm">
+                            <button type="submit" className="btn btn-primary">
                                 Login
                             </button>
                     }
