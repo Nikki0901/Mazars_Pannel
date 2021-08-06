@@ -56,7 +56,7 @@ function NewPassword(props) {
       }
       setDisabled(true)
     }
-    timer(120);
+    timer(60);
   }
 
 
@@ -233,9 +233,7 @@ function NewPassword(props) {
             </div>
             {
               disabled ?
-                <button type="submit" className="btn btn-primary" disabled>
-                  Submit
-                </button>
+               ""
                 :
                 <button type="submit" className="btn btn-primary" >
                   Submit

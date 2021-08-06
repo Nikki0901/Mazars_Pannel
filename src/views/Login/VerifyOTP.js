@@ -8,19 +8,20 @@ import classNames from "classnames";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
-
+import {BounceLoader, BeatLoader, BarLoader} from 'react-spinners';
 const Schema = yup.object().shape({
     p_otp: yup.string().required("mandatory"),
 });
 
 
-function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
+function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled, setShowLoad, setLoadState}) {
     const { handleSubmit, register, errors, reset } = useForm({
         resolver: yupResolver(Schema),
     });
-
+    
     const history = useHistory();
     const [setText, noSetText ]= useState()
+
 
     const validOtp = (e) => {
         if (isNaN(e.target.value)) {
@@ -30,8 +31,8 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
     }
 
     const onSubmit = (value) => {
-        console.log("value :", value);
-
+      
+      
         let formData = new FormData();
         formData.append("email", email);
         formData.append("otp", value.p_otp);
@@ -46,12 +47,15 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                 console.log("res-", response.data["otp "]);
 
                 if (response.data.code == 1) {
+                    
                     Alerts.SuccessLogin()
                     localStorage.setItem("userid", JSON.stringify(response.data.user_id));
                     localStorage.setItem("custEmail", JSON.stringify(response.data.name));  
-                    history.push("/customer/select-category");
+                    history.push("customer/dashboard");
                 } else {
                     Alerts.ErrorNormal("Incorrect OTP")
+                   
+                    
                     reset();
                 }
             })
@@ -61,9 +65,12 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
     }
 
 
-    const resendOtp = () => {
-        // changeNum(true)
 
+    const resendOtp = () => {
+     setLoadState(true)
+        noSetText(" ")
+      
+        setShowLoad(false)
         let formData = new FormData();
         formData.append("email", email);
         formData.append("uid", uid);
@@ -76,11 +83,18 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    
+                   
+                    // upDateTime(true)
                     Alerts.SuccessNormal("An OTP sent to your mail")
                     setLoad(true)
                     setDisabled(false)
+                    setLoadState(false)
+                    setShowLoad(true)
                 }
                 else if (response.data.code === 0) {
+                    setShowLoad(true)
+                    setLoadState(false)
                     Alerts.ErrorNormal("Some thing went wrong, please try again")
                 }
             })
@@ -90,8 +104,10 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+
+       <div>
+        
+        <form onSubmit={handleSubmit(onSubmit)}>
                 {
                     disabled ?
                         null
@@ -106,24 +122,24 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                                 name="p_otp"
                                 ref={register({ required: true })}
                                 placeholder="Enter your OTP"
-                                autocomplete="off"
                                 onChange={(e) => validOtp(e)}
                             />
-                            <p className="declinedOtp">{setText ? setText : ""}</p>
+                            <p className="declinedmsg">{setText ? setText : ""}</p>
                             <small class="text-center">
                                 Note: OTP is valid for {time} seconds.
                             </small>
-                           
+                            
                         </div>
 
                 }
+
 
                 <div className="form-group">
                     {
                         disabled ?
                             <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
                             :
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-success">
                                 Login
                             </button>
                     }
@@ -136,4 +152,3 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
 
 
 export default VerifyOTP;
-
