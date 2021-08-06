@@ -399,7 +399,6 @@ function SignUp(props) {
 
   //get OTP
   const getOtp = () => {
-
     if (invalid || wEmail || indNumError || zipError || passError) {
       setDisplay(false)
     }
@@ -640,13 +639,17 @@ function SignUp(props) {
                               "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                           },
                         })}
-                        autocomplete="off"
+                      // autocomplete="off"
                       />
                       <i
                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
                         onClick={togglePasssword}
                       />
-                      <p className="declined">{passError}</p>
+                      {errors.p_password && (
+                        <div className="invalid-feedback">
+                          {errors.p_password.message}
+                        </div>
+                      )}
                     </div>
                   </div>
 

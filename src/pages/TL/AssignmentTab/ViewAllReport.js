@@ -8,6 +8,7 @@ import CommonServices from "../../../common/common";
 import RejectedModal from "./RejectModal";
 import Alerts from "../../../common/Alerts";
 import Swal from "sweetalert2";
+import DiscardReport from "./DiscardReport";
 
 
 const Schema = yup.object().shape({
@@ -32,17 +33,23 @@ function ViewReport({
     setDocData(key)
   }
 
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    // setDocData(report)
+  }
+
 
   //check
   const toggleDiscard = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to reject ?",
+      text: "Do you want to discard ?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, rejected it!",
+      confirmButtonText: "Yes, discarded it!",
     }).then((result) => {
       if (result.value) {
         deleteCliente(id);
@@ -67,7 +74,7 @@ function ViewReport({
         console.log("response-", response);
         if (response.data.code === 1) {
           getData()
-          Alerts.SuccessNormal("Rejected Successfully")
+          Alerts.SuccessNormal("Discarded Successfully")
         }
       })
       .catch((error) => {
@@ -110,7 +117,16 @@ function ViewReport({
   return (
     <div>
       <Modal isOpen={reportModal} toggle={ViewReport} size="lg" scrollable>
-        <ModalHeader toggle={ViewReport}>View All Reports</ModalHeader>
+        <ModalHeader toggle={ViewReport}>
+          <div style={{display:"flex",justifyContent:"space-between",width:"55vw"}}>
+            <span>View All Reports</span>
+            <span>
+              <button class="btn btn-success" onClick={() => ViewDiscussionToggel()}>
+                View Discussion
+              </button>
+            </span>
+          </div>
+        </ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
             <thead>
@@ -151,7 +167,7 @@ function ViewReport({
                           <div>
                             {
                               p.status == "0" ?
-                              <p style={{ color: "red" }}>Pending</p>
+                                <p style={{ color: "red" }}>Pending</p>
                                 :
                                 p.status == "1" ?
                                   <div style={{ cursor: "pointer" }} title="Customer Accepted">
@@ -226,13 +242,13 @@ function ViewReport({
       />
 
 
-      {/* <DiscardReport
-        toggleDiscard={toggleDiscard}
-        discardModal={discardModal}
-        dataItem={dataItem}
-        docData={docData}
+      <DiscardReport
+        ViewDiscussionToggel={ViewDiscussionToggel}
+        ViewDiscussion={ViewDiscussion}
+        // dataItem={dataItem}
+        report={report}
         getData={getData}
-      /> */}
+      />
 
     </div>
   );

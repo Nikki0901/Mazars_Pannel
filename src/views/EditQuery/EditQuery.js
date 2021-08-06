@@ -154,7 +154,6 @@ function EditQuery(props) {
         .then(function (response) {
 
           if (response.data.code === 1) {
-
             var message = response.data.message
             if (message == "") {
               Swal.fire(
@@ -167,24 +166,13 @@ function EditQuery(props) {
                 title: 'Error !',
                 html: `<p class="text-danger">${message.invalid}</p>`,
               })
-            } else if (message.faill && message.success) {
-              Swal.fire({
-                title: 'Success',
-                html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
-                icon: 'success',
-              })
-            } else if (message.success) {
-              Swal.fire({
-                title: 'Success',
-                html: `<p>${message.success}</p>`,
-                icon: 'success',
-              })
             }
             else if (message.faill) {
               Swal.fire({
-                title: 'Error !',
-                html: `<p class="text-danger">${message.faill}</p>`,
-                icon: 'error',
+                title: 'Success !',
+                html: `<p>Query Updated Successfully.</p>
+                <br/><p class="text-danger"> ${message.faill}</p>`,
+                icon: 'success',
               })
             }
             props.history.push("/customer/queries");

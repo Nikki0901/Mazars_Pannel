@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
@@ -60,15 +61,17 @@ function LoginForm() {
           return;
         }
         setDisabled(true)
+        setLoad(false)
       }
       timer(60);
     }
+
   }
 
 
 
   const onSubmit = (value) => {
-    console.log("value :", value);
+
     setShowLoad(false)
     setLoadState(true)
     let formData = new FormData();
@@ -106,7 +109,10 @@ function LoginForm() {
     setEmail(e.target.value);
   };
 
-
+  // const upDateTime = (key) => {
+  //   console.log(key)
+  // setLoad(key);
+  // }
   return (
     <>
 
@@ -148,8 +154,8 @@ function LoginForm() {
             {
               show ? <div className="customForm">
 
-                <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad}
-                  setDisabled={setDisabled} disabled={disabled} />
+                <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad} setLoadState={setLoadState}
+                  setDisabled={setDisabled} disabled={disabled} setShowLoad={setShowLoad} />
               </div>
                 :
                 <div className="customForm">
@@ -206,6 +212,8 @@ function LoginForm() {
             }
             <Mandatory />
           </div>
+
+
         </div>
 
       </div> : ""}
@@ -215,7 +223,6 @@ function LoginForm() {
 }
 
 export default LoginForm;
-
 // import { useRef, useState, useEffect } from "react";
 // import Header from "../../components/Header/Header";
 // import Footer from '../../components/Footer/Footer';

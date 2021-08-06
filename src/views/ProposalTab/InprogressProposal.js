@@ -7,10 +7,6 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardTitle,
-    Row,
-    Col,
-    Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./index.css";
@@ -272,9 +268,33 @@ function InprogressProposal() {
             formatter: function (cell, row) {
                 return (
                     <>
-
                         {row.statuscode === "6" ? null : (
-                            <div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+                                <div title="Send Message">
+                                    <Link
+                                        to={{
+                                            pathname: `/customer/chatting/${row.q_id}`,
+                                            obj: {
+                                                message_type: "2",
+                                                query_No: row.assign_no,
+                                                query_id: row.q_id,
+                                                routes: `/customer/proposal`
+                                            }
+                                        }}
+                                    >
+                                        <i
+                                            class="fa fa-comments-o"
+                                            style={{
+                                                fontSize: 16,
+                                                cursor: "pointer",
+                                                marginLeft: "8px",
+                                                color: "blue"
+                                            }}
+                                        ></i>
+                                    </Link>
+                                </div>
+
                                 {row.negotiated_amount === "0" &&
                                     row.accepted_amount === "0" ? (
                                     <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
@@ -289,37 +309,12 @@ function InprogressProposal() {
                                                 ></i>
                                             </Link>
                                         </div>
-
                                         <div style={{ cursor: "pointer" }} title="Rejected">
                                             <i
                                                 class="fa fa-times"
                                                 style={{ color: "red", fontSize: "16px" }}
                                                 onClick={() => rejected(row.q_id)}
                                             ></i>
-                                        </div>
-
-                                        <div title="Send Message">
-                                            <Link
-                                                to={{
-                                                    pathname: `/customer/chatting/${row.q_id}`,
-                                                    obj: {
-                                                        message_type: "2",
-                                                        query_No: row.assign_no,
-                                                        query_id: row.q_id,
-                                                        routes: `/customer/proposal`
-                                                    }
-                                                }}
-                                            >
-                                                <i
-                                                    class="fa fa-comments-o"
-                                                    style={{
-                                                        fontSize: 16,
-                                                        cursor: "pointer",
-                                                        marginLeft: "8px",
-                                                        color: "blue"
-                                                    }}
-                                                ></i>
-                                            </Link>
                                         </div>
 
                                     </div>

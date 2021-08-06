@@ -15,8 +15,6 @@ import { useParams } from "react-router-dom";
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
 
-
-
 function NewPassword(props) {
   const alert = useAlert();
   const { register, handleSubmit, errors, getValues, reset } = useForm();
@@ -233,9 +231,7 @@ function NewPassword(props) {
             </div>
             {
               disabled ?
-                <button type="submit" className="btn btn-primary" disabled>
-                  Submit
-                </button>
+                ""
                 :
                 <button type="submit" className="btn btn-primary" >
                   Submit
