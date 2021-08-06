@@ -125,8 +125,6 @@ import PublicRouteTL from './Service/PublicRouteTL'
 import PublicRouteTP from './Service/PublicRouteTP'
 
 
-
-
 const options = {
   timeout: 4000,
   position: positions.TOP_CENTER,

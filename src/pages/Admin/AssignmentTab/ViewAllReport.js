@@ -52,7 +52,7 @@ function ViewReport({
 
   return (
     <div>
-      <Modal isOpen={reportModal} toggle={ViewReport} size="md" scrollable>
+      <Modal isOpen={reportModal} toggle={ViewReport} size="lg" scrollable>
         <ModalHeader toggle={ViewReport}>View All Reports</ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
@@ -91,7 +91,6 @@ function ViewReport({
                     <td>
                       {
                         p.stages_type == "2" ?
-
                           <div>
                             {
                               p.status == "0" ?
@@ -103,7 +102,7 @@ function ViewReport({
                                       style={{
                                         color: "blue",
                                         fontSize: "16px",
-                                      }}                                  
+                                      }}
                                     ></i>
                                   </div>
 
@@ -142,7 +141,9 @@ function ViewReport({
                                         }}
                                       ></i>
                                     </div> :
-                                    null
+                                    p.status == "3" ?
+                                      <p style={{ color: "red" }}>Discarded</p> :
+                                      null
                             }
                           </div>
                           :

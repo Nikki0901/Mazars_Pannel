@@ -63,7 +63,7 @@ function AddFreshAssingment(props) {
     setPurposeOption(e)
   }
 
-  
+
   const onSubmit = (value) => {
 
     const a = value.p_fact;
@@ -111,8 +111,6 @@ function AddFreshAssingment(props) {
       formData.append("case_name", value.p_case_name);
       formData.append("assessment_year", JSON.stringify(selectedOption));
       formData.append("purpose", JSON.stringify(purposeOption));
-
-
       axios
         .post(`${baseUrl}/customers/PostQuestion`, formData, {
           headers: {
@@ -126,39 +124,29 @@ function AddFreshAssingment(props) {
             var message = response.data.message
             var query_no = response.data.query_no
             if (message == "") {
-              Swal.fire(
-                "Success",
-                `Query successfully added.`,
-                "success"
-              )
+              Swal.fire({
+                title: 'Success !',
+                html: `<p>Query no.- ${query_no} has been submitted successfully.
+                 Mazars team will contact you shortly.
+                </p>`,
+                icon: 'success',
+              })
             } else if (message.invalid) {
               Swal.fire({
                 title: 'Error !',
                 html: `<p class="text-danger">${message.invalid}</p>`,
               })
-            } else if (message.faill && message.success) {
-              Swal.fire({
-                title: 'Success',
-                html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
-                icon: 'success',
-              })
-            } else if (message.success) {
-              Swal.fire({
-                title: 'Success',
-                html: `<p>Query no.- ${query_no} has been submitted successfully. Mazars team will contact you shortly.
-              </p> <br/>
-               <p>${message.success}</p>`,
-                icon: 'success',
-              })
             }
             else if (message.faill) {
               Swal.fire({
-                title: 'Error !',
-                html: `<p class="text-danger">${message.faill}</p>`,
-                icon: 'error',
+                title: 'Success !',
+                html: `<p>Query no.- ${query_no} has been submitted successfully.
+                 Mazars team will contact you shortly.
+                </p> 
+                <br/><p class="text-danger">${message.faill}</p>`,
+                icon: 'success',
               })
             }
-
             props.history.push("/customer/dashboard");
           } else {
             setLoad(false);

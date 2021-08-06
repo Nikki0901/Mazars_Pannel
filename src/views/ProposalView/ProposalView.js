@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import TermsConditions from "./TermsConditions";
 import CommonServices from "../../common/common";
 import Alerts from "../../common/Alerts";
+import classNames from "classnames";
 
 
 
@@ -260,23 +261,25 @@ function ProposalView(props) {
               <div className="mb-3">
                 <div className="form-check">
                   <input
-                    className="form-check-input"
+                    className={classNames("form-check-input", {
+                      "is-invalid": errors.p_terms_condition,
+                    })}
                     type="checkbox"
                     name="p_terms_condition"
-                    ref={register}
+                    ref={register({ required: "Please Select checkbox" })}
                   />
                   <label className="form-check-label"
                     title="Read"
                     style={{ cursor: "pointer" }}
                     onClick={() => readTerms()}
                   >
-                    General terms & condition
+                    Engagement Letter
                   </label>
                 </div>
                 <br />
                 <div className="form-check">
                   <button type="submit" className="btn btn-primary">
-                    Submit
+                    Accept
                   </button>
                 </div>
 
@@ -289,7 +292,7 @@ function ProposalView(props) {
         <TermsConditions
           readTerms={readTerms}
           addPaymentModal={addPaymentModal}
-        // getProposalData={getProposalDetails}
+          id={id}
         />
       </Card>
     </Layout>

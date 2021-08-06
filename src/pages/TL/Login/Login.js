@@ -118,6 +118,7 @@ function Login(props) {
                         })}
                         name="password"
                         placeholder="Enter Password"
+                        autocomplete="off"
                         ref={register}
                       />
                       <i

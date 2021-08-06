@@ -2,7 +2,6 @@ import React from "react";
 import Alerts from "../../../common/Alerts";
 
 
-
 export default class YourComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -40,8 +39,6 @@ export default class YourComponent extends React.Component {
 
 
 
-    
-
     render() {
 
         var amount = this.props.installment_amount
@@ -50,7 +47,7 @@ export default class YourComponent extends React.Component {
         const installment_amount = amount.split(',');
         const due_date = date.split(',');
 
-    
+
 
         var fieldsArray = [];
 
@@ -85,7 +82,6 @@ export default class YourComponent extends React.Component {
             );
         }
 
-        // console.log("values - ", this.state.values);
 
         return (
             <div className="inputs">
@@ -97,7 +93,6 @@ export default class YourComponent extends React.Component {
 
 
 
-
 // import React, { useState, useEffect } from "react";
 
 
@@ -105,12 +100,15 @@ export default class YourComponent extends React.Component {
 
 //     const [values, setValues] = useState([]);
 
-//     const handleChange1 = (e,i) => {
+//     const handleChange1 = (e, i) => {
 //         console.log("handleChange1", e.target.value)
-//         console.log("i", i)
-//         values[i] = e.target.value;
-//         setValues(values)
+
+//         // setValues(...values, [i] = e.target.value)
+//         setValues({ ...values, [i]: e.target.value });
 //     }
+//     console.log("values", values)
+
+
 
 //     var fieldsArray = [];
 
@@ -123,15 +121,15 @@ export default class YourComponent extends React.Component {
 //                         type="text"
 //                         className="form-control"
 //                         name={values[i]}
-//                         onChange={(e) => handleChange1(e,i)}
-                
+//                         onChange={(e) => handleChange1(e, i)}
+
 //                     />
 //                 </div>
 //             </div >
 //         );
 //     }
 
-//     console.log("values", values)
+
 
 //     return (
 //         <div className="inputs">

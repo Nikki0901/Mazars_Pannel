@@ -12,9 +12,8 @@ import {
   CardTitle,
   Row,
   Col,
-  Table,
-  Tooltip,
 } from "reactstrap";
+import Alerts from "../../../common/Alerts";
 
 function AddAssingmentStages() {
   const alert = useAlert();
@@ -35,7 +34,7 @@ function AddAssingmentStages() {
       .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}`)
       .then((res) => {
         console.log(res);
-        console.log("dt -",res.data.result[0].client_discussion);
+        console.log("dt -", res.data.result[0].client_discussion);
 
         if (res.data.code === 1) {
           setAssignmentstages(res.data.result);
@@ -50,7 +49,6 @@ function AddAssingmentStages() {
 
     let formData = new FormData();
 
-    // formData.append("user", JSON.parse(userid));
     formData.append("q_id", id);
     formData.append("user_id", JSON.parse(userid));
     formData.append("stage_1_status", value.client_discussion);
@@ -67,7 +65,7 @@ function AddAssingmentStages() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success(<Msg />);
+          Alerts.SuccessNormal("Assignment successfully added")
           getAssignmentList();
           history.push("/teamleader/assignment");
         }
@@ -77,16 +75,6 @@ function AddAssingmentStages() {
       });
   };
 
-  //alert msg
-  const Msg = () => {
-    return (
-      <>
-        <p style={{ fontSize: "10px" }}>Assignment successfully added </p>
-      </>
-    );
-  };
-
-  console.log("clientDiscussion", clientDiscussion);
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -112,10 +100,10 @@ function AddAssingmentStages() {
             {assignmentStages.map((p, i) => (
               <>
                 {p.client_discussion == "completed" &&
-                p.delivery_report == "completed" &&
-                p.draft_report == "completed" &&
-                p.final_discussion == "completed" &&
-                p.other_stage == "completed" ? (
+                  p.delivery_report == "completed" &&
+                  p.draft_report == "completed" &&
+                  p.final_discussion == "completed" &&
+                  p.other_stage == "completed" ? (
                   <div class="col-md-12">
                     <div class="col-md-8">
                       <br />
@@ -238,7 +226,7 @@ function AddAssingmentStages() {
                                   paddingTop: "30px",
                                 }}
                               >
-                                Complete
+                                Awaiting Completion
                               </label>
                             </div>
                           </div>
@@ -300,7 +288,7 @@ function AddAssingmentStages() {
                             </select>
                           </div>
                         </div>
-                       
+
                         {/* <div class="col-md-4">
                           <div class="form-group">
                             <div>
@@ -316,7 +304,7 @@ function AddAssingmentStages() {
                             </div>
                           </div>
                         </div> */}
-                        
+
                       </div>
 
                       <div class="row">
@@ -433,39 +421,48 @@ function AddAssingmentStages() {
                         </div>
                       </div>
 
-                      <div class="row">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <label
-                              style={{
-                                fontSize: "20px",
-                                fontWeight: "500",
-                                paddingTop: "30px",
-                              }}
-                            >
-                              Complete
-                            </label>
+                      {p.accepted_amount == p.paid_amount &&
+                        (
+                          p.client_discussion == "completed" &&
+                          p.draft_report == "completed" &&
+                          p.delivery_report == "completed" &&
+                          p.final_discussion == "completed"
+                        ) ?
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label
+                                style={{
+                                  fontSize: "20px",
+                                  fontWeight: "500",
+                                  paddingTop: "30px",
+                                }}
+                              >
+                                Awaiting Completion
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <select
+                                class="form-control"
+                                ref={register}
+                                name="other_stage"
+                              >
+                                <option value="inprogress">Inprogress</option>
+                                <option value="completed">Completed</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <div></div>
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <select
-                              class="form-control"
-                              ref={register}
-                              name="other_stage"
-                            >
-                              <option value="inprogress">Inprogress</option>
-                              <option value="completed">Completed</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <div></div>
-                          </div>
-                        </div>
-                      </div>
-
+                        :
+                        null
+                      }
                       <br />
                       <div class="form-group">
                         <button type="submit" class="btn btn-primary">

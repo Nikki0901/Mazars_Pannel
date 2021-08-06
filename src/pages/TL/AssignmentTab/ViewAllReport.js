@@ -3,14 +3,11 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl, ReportUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import classNames from "classnames";
 import CommonServices from "../../../common/common";
 import RejectedModal from "./RejectModal";
-import DiscardReport from "./DiscardReport";
-
+import Alerts from "../../../common/Alerts";
+import Swal from "sweetalert2";
 
 
 const Schema = yup.object().shape({
@@ -26,7 +23,6 @@ function ViewReport({
 }) {
   const userId = window.localStorage.getItem("tlkey");
   const [data, setData] = useState([]);
-
   const [docData, setDocData] = useState({});
 
 
@@ -36,11 +32,50 @@ function ViewReport({
     setDocData(key)
   }
 
-  const [discardModal, setDiscardModal] = useState(false);
-  const toggleDiscard = (key) => {
-    setDiscardModal(!discardModal);
-    setDocData(key)
-  }
+
+  //check
+  const toggleDiscard = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to reject ?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, rejected it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteCliente(id);
+      }
+    });
+  };
+
+  const deleteCliente = (id) => {
+    let formData = new FormData();
+    formData.append("uid", JSON.parse(userId));
+    formData.append("id", dataItem.q_id);
+    formData.append("query_no", dataItem.assign_no);
+    formData.append("type", 2);
+    formData.append("docid", id.docid);
+
+    axios({
+      method: "POST",
+      url: `${baseUrl}/tl/draftDiscussion`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("response-", response);
+        if (response.data.code === 1) {
+          getData()
+          Alerts.SuccessNormal("Rejected Successfully")
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
 
   useEffect(() => {
     getData();
@@ -116,7 +151,7 @@ function ViewReport({
                           <div>
                             {
                               p.status == "0" ?
-                                "Pending"
+                              <p style={{ color: "red" }}>Pending</p>
                                 :
                                 p.status == "1" ?
                                   <div style={{ cursor: "pointer" }} title="Customer Accepted">
@@ -142,7 +177,6 @@ function ViewReport({
                                           }}
                                           onClick={() => toggleNested(p)}
                                         ></i>
-
                                       </div>
                                       <div title="Discard">
                                         <i
@@ -155,11 +189,12 @@ function ViewReport({
                                           }}
                                           onClick={() => toggleDiscard(p)}
                                         ></i>
-
                                       </div>
                                     </div>
                                     :
-                                    null
+                                    p.status == "3" ?
+                                      <p style={{ color: "red" }}>Discarded</p> :
+                                      null
                             }
                           </div>
                           :
@@ -191,13 +226,13 @@ function ViewReport({
       />
 
 
-      <DiscardReport
+      {/* <DiscardReport
         toggleDiscard={toggleDiscard}
         discardModal={discardModal}
         dataItem={dataItem}
         docData={docData}
         getData={getData}
-      />
+      /> */}
 
     </div>
   );

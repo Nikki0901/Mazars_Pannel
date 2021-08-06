@@ -101,6 +101,7 @@ function Login(props) {
                         name="p_email"
                         ref={register}
                         placeholder="Enter Email"
+                        autocomplete="off"
                         onChange={(e) => handleChange(e)}
                       />
                       {errors.p_email && (

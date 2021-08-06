@@ -144,6 +144,7 @@ function NewPassword(props) {
                       "is-invalid": errors.p_password,
                     })}
                     placeholder="Enter Your Password"
+                    autocomplete="off"
                     ref={register({
                       required: true,
                       pattern: {
@@ -180,6 +181,7 @@ function NewPassword(props) {
                     })}
                     placeholder="Confirm Password"
                     name="p_confirm_password"
+                    autocomplete="off"
                     ref={register({
                       required: true,
                       validate: (value) =>
@@ -213,6 +215,7 @@ function NewPassword(props) {
                     })}
                     name="p_code"
                     placeholder="Enter OTP"
+                    autocomplete="off"
                     ref={register({
                       required: true,
                     })}

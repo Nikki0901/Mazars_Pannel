@@ -17,13 +17,14 @@ import {
 import Payment from "./Payment";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
+import classNames from "classnames";
 
 
 
 function EditComponent() {
 
   const alert = useAlert();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, errors } = useForm();
   const userid = window.localStorage.getItem("tlkey");
 
   const [custId, setCustId] = useState("");
@@ -271,19 +272,19 @@ function EditComponent() {
                     name="p_type"
                     onChange={(e) => setStore(e.target.value)}
                   >
-                    {/* <option value="">--select type--</option> */}
                     <option value="fixed">Fixed Price</option>
                   </select>
                 </div>
-
 
                 <div class="form-group">
                   <label>Fixed Price</label>
                   <input
                     type="text"
                     name="p_fixed"
-                    className="form-control"
-                    ref={register}
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_fixed,
+                    })}
+                    ref={register({ required: true })}
                     placeholder="Enter Fixed Price"
                     defaultValue={fixed_amount}
                     onChange={handleChange}
@@ -294,12 +295,14 @@ function EditComponent() {
                 <div class="form-group">
                   <label>Scope of Work</label>
                   <textarea
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.description,
+                    })}
                     id="textarea"
                     rows="3"
                     name="description"
                     defaultValue={description}
-                    ref={register}
+                    ref={register({ required: true })}
                   ></textarea>
                 </div>
               </div>

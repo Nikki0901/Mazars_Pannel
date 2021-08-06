@@ -199,7 +199,7 @@ function AssignmentTab() {
                                 {row.final_discussion}
                             </p>
                             <p>
-                                <span style={{ fontWeight: "bold" }}>Delivery of report :</span>
+                                <span style={{ fontWeight: "bold" }}>Delivery of Final Report :</span>
                                 {row.delivery_report}
                             </p>
                             <p>

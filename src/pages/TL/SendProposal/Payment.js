@@ -1,5 +1,4 @@
 import React from "react";
-import { useAlert } from "react-alert";
 import Alerts from "../../../common/Alerts";
 
 
@@ -10,12 +9,16 @@ export default class Payment extends React.Component {
         this.state = {
             values: [],
             dates: [],
-
         };
     }
 
     handleChange1(i, e) {
-
+        if (isNaN(e.target.value)) {
+            this.setState({ error: "Please insert only digit" })
+        }
+        else {
+            this.setState({ error: "" })
+        }
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },
@@ -49,6 +52,7 @@ export default class Payment extends React.Component {
                             name={this.state.values[i]}
                             onChange={this.handleChange1.bind(this, i)}
                         />
+                        <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
                     </div>
 
                     <div class="col-md-6">

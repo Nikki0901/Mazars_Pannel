@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 import {
   Card,
@@ -14,28 +13,17 @@ import {
   Table,
   Alert,
 } from "reactstrap";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import classNames from "classnames";
 import Payment from "./Payment";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
 
 
-const Schema = yup.object().shape({
-  misc_1: yup.string().required("required misc_1"),
-  misc_2: yup.string().required("required proposal description"),
-  p_payable: yup.string().required("required payable"),
-});
-
 
 function ProposalComponent(props) {
   const { id } = props;
-
-
   const history = useHistory();
-  const { handleSubmit, register, reset } = useForm();
-
+  const { handleSubmit, register, reset, errors } = useForm();
 
   const userid = window.localStorage.getItem("tlkey");
 
@@ -270,8 +258,10 @@ function ProposalComponent(props) {
                   <input
                     type="text"
                     name="p_fixed"
-                    className="form-control"
-                    ref={register}
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_fixed,
+                    })}
+                    ref={register({ required: true })}
                     placeholder="Enter Fixed Price"
                     onChange={(e) => handleChange(e)}
                   />
@@ -280,11 +270,13 @@ function ProposalComponent(props) {
                 <div class="form-group">
                   <label>Scope of Work</label>
                   <textarea
-                    className="form-control"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.description,
+                    })}
                     id="textarea"
                     rows="3"
                     name="description"
-                    ref={register}
+                    ref={register({ required: true })}
                     placeholder="Enter Proposal Description"
                   ></textarea>
                 </div>
@@ -397,3 +389,11 @@ const no_installments = [
   },
 ];
 
+
+
+
+// const Schema = yup.object().shape({
+//   misc_1: yup.string().required("required misc_1"),
+//   misc_2: yup.string().required("required proposal description"),
+//   p_payable: yup.string().required("required payable"),
+// });

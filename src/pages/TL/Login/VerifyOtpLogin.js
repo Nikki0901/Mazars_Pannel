@@ -160,6 +160,7 @@ function VerifyOtp({ email, uid }) {
                     placeholder="Enter Your OTP Here"
                     ref={register}
                     name="p_otp"
+                    autocomplete="off"
                     onChange={(e) => validOtp(e)}
                   />
                   {errors.p_otp && (

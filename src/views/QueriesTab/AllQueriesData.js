@@ -246,7 +246,7 @@ function AllQueriesData() {
                                     }
 
                                     {
-                                        row.status_code == "4" || row.status_code == "9" || row.status_code == "2"?
+                                        row.status_code == "4" || row.status_code == "9" || row.status_code == "2" ?
                                             <div style={{ display: "flex", justifyContent: "space-around" }}>
 
                                                 <div title="Send Feedback"
@@ -264,12 +264,15 @@ function AllQueriesData() {
                                                         <FeedbackIcon />
                                                     </Link>
                                                 </div>
-                                                <div title="Upload Additional Documents"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => additionalHandler(row.assign_no)}
-                                                >
-                                                    <PublishIcon color="secondary" />
-                                                </div>
+                                                {
+                                                    row.delivery_report == "completed" ? null :
+                                                        <div title="Upload Additional Documents"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() => additionalHandler(row.assign_no)}
+                                                        >
+                                                            <PublishIcon color="secondary" />
+                                                        </div>
+                                                 }
                                                 <div title="Send Message">
                                                     <Link
                                                         to={{
@@ -296,8 +299,6 @@ function AllQueriesData() {
                                             :
                                             null
                                     }
-
-
                                 </div>
 
                         }

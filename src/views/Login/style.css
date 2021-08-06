@@ -7,13 +7,22 @@
   
     
 }
-
+.loading{
+    display: flex;
+ z-index: 99999;
+    flex-direction: column;
+    width:100%;
+    height:100%;
+    justify-content: center;
+    align-items: center;
+}
 .mainContent{
     display: flex;
-    width:800px;
+    width:1000px;
     border-radius: 10px;
     max-height: 400px;
     height:100%;
+    /* box-shadow: 0 10px 5px 5px rgba(0,0,0, 0.1), 0 -10px 5px 5px rgba(0,0,0,0.1); */
     background-color: #fff;
 }
 .signIn{
@@ -43,7 +52,7 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
     left:0;
     bottom:0;
     right:0;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -52,44 +61,60 @@ background-image:url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b
 .signBtn h4{
     color:#000;
 }
-.signBtn button{
-    padding: 10px 20px;
+
+.signMendatary{
+    position: absolute;
+    bottom: 15px;
+    left: 50px;
+   
+}
+
+.customForm{
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    min-height: 320px;
+    height:100%;
+}
+
+.signInForm{
+  display: flex;
+  flex-direction: column;
+    width: 80%;
+    padding: 10px 28px;
+}
+.passForm{
+    line-height: 10px;
+    margin-bottom: 0px !important;
 }
 .signUp{
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    padding: 25px 20px;
+    padding: 10px 0px;
     width:50%;
     font-weight: 600;
+    height:300px;
 }
 .password-icon-login{
     position: relative;
-    left: 250px;
+    left: 285px;
     top:-26px;
     cursor: pointer;
 }
-
+.SignUpLink{
+   color:#fff !important;
+}
 .signUp button{
     display: flex;
-    padding:5px 20px;
+   
     margin: auto;
-    font-size:22px;
+
 }
 .signUp p{
     font-size: 20px;
     font-weight: 800;
     color:#000;
     text-align: center;
-}
-.form_login{
-    width: 80%;
-}
-
-.declinedOtp{
-    color:red !important;
-    font-weight: 400 !important;
-    font-size: 15px !important;
-    text-align: left !important;
 }

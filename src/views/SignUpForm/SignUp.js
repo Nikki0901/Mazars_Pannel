@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import classNames from "classnames";
-import Swal from "sweetalert2";
 import { Spinner } from "reactstrap";
 import { professionName, country, states } from './data';
 import { cities } from './city';
@@ -382,7 +379,7 @@ function SignUp(props) {
           Alerts.SuccessNormal(variable)
           localStorage.setItem("userid", JSON.stringify(response.data.id));
           localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
-          props.history.push("/customer/dashboard");
+          props.history.push("/customer/select-category");
         } else if (response.data.code === 0) {
           console.log("res -", response.data.result);
           setLoad(false);
@@ -643,7 +640,7 @@ function SignUp(props) {
                               "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                           },
                         })}
-                        // onChange={(e) => valiPassword(e)}
+                        autocomplete="off"
                       />
                       <i
                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -677,6 +674,7 @@ function SignUp(props) {
                             value === getValues("p_password") ||
                             "password doesn 't match",
                         })}
+                        autocomplete="off"
                       />
                       <i
                         className={`fa ${repassword ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -704,6 +702,7 @@ function SignUp(props) {
                             ref={register({ required: true })}
                             onChange={otpVali}
                             placeholder="Enter your OTP"
+                            autocomplete="off"
                           />
                           <p className="declined"> {valiOtp ? valiOtp : ""}</p>
                           {
@@ -728,7 +727,7 @@ function SignUp(props) {
                           }
                         </div>
                         :
-                        <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
+                        <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
                     }
                   </div>
                 </div>

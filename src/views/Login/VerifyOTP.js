@@ -22,50 +22,6 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
     const history = useHistory();
     const [setText, noSetText ]= useState()
 
-    // const [num, changeNum] = useState(false);
-
-
-
-    // useEffect(() => {
-    //     console.log("call useEffect button")
-    //     var timerOn = true;
-    //     function timer(remaining) {
-    //         var s = remaining % 60;
-    //         s = s < 10 ? '0' + s : s;
-    //         setTime(s)
-    //         remaining -= 1;
-    //         if (remaining >= 0 && timerOn) {
-    //             setTimeout(function () {
-    //                 timer(remaining);
-    //             }, 1000);
-    //             return;
-    //         }
-    //         setDisabled(true)
-
-    //     }
-    //     timer(60);
-    // }, [num]);
-
-    // useEffect(() => {
-    //     console.log("call useEffect")
-    //     var timerOn = true;
-    //     function timer(remaining) {
-    //         var s = remaining % 60;
-    //         s = s < 10 ? '0' + s : s;
-    //         setTime(s)
-    //         remaining -= 1;
-    //         if (remaining >= 0 && timerOn) {
-    //             setTimeout(function () {
-    //                 timer(remaining);
-    //             }, 1000);
-    //             return;
-    //         }
-    //         setDisabled(true)
-
-    //     }
-    //     timer(60);
-    // }, []);
-
     const validOtp = (e) => {
         if (isNaN(e.target.value)) {
             e.target.value = ""
@@ -93,7 +49,7 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                     Alerts.SuccessLogin()
                     localStorage.setItem("userid", JSON.stringify(response.data.user_id));
                     localStorage.setItem("custEmail", JSON.stringify(response.data.name));  
-                    history.push("/customer/dashboard");
+                    history.push("/customer/select-category");
                 } else {
                     Alerts.ErrorNormal("Incorrect OTP")
                     reset();
@@ -103,7 +59,6 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                 console.log("erroror - ", error);
             });
     }
-
 
 
     const resendOtp = () => {
@@ -151,17 +106,17 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled }) {
                                 name="p_otp"
                                 ref={register({ required: true })}
                                 placeholder="Enter your OTP"
+                                autocomplete="off"
                                 onChange={(e) => validOtp(e)}
                             />
                             <p className="declinedOtp">{setText ? setText : ""}</p>
                             <small class="text-center">
                                 Note: OTP is valid for {time} seconds.
                             </small>
-                            <Mandatory />
+                           
                         </div>
 
                 }
-
 
                 <div className="form-group">
                     {

@@ -193,6 +193,7 @@ function ChangePassword(props) {
                           "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                       },
                     })}
+                    autocomplete="off"
                   />
                  
                   <i
@@ -229,6 +230,7 @@ function ChangePassword(props) {
                         value === getValues("p_password") ||
                         "password doesn 't match",
                     })}
+                    autocomplete="off"
                   />
                   <i
                     className={`fa ${isPasswordShow2 ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -256,6 +258,7 @@ function ChangePassword(props) {
                         name="p_otp"
                         ref={register({ required: true })}
                         placeholder="Enter your OTP"
+                        autocomplete="off"
                       />
                       {
                         disabled ? null
