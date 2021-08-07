@@ -129,7 +129,11 @@ function VerifyOTP({ email, uid, time, setLoad, setDisabled, disabled, setShowLo
                                 Note: OTP is valid for {time} seconds.
                             </small>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+                            
+>>>>>>> 8819043217becd4d9e597a65a60560cd208d7cc4
 =======
                             
 >>>>>>> 8819043217becd4d9e597a65a60560cd208d7cc4
