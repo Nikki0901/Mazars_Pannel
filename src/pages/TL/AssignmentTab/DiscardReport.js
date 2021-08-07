@@ -3,89 +3,62 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import classNames from "classnames";
+import CommonServices from "../../../common/common";
 import Alerts from "../../../common/Alerts";
 
-const Schema = yup.object().shape({
-  p_chat: yup.string().required("required discussion"),
-});
 
 function DiscardReport({
-  discardModal,
-  toggleDiscard,
-  dataItem,
-  docData,
+  ViewDiscussion,
+  ViewDiscussionToggel,
+  report,
   getData
 }) {
   const userId = window.localStorage.getItem("tlkey");
-  const { handleSubmit, register, reset, errors } = useForm({
-    resolver: yupResolver(Schema),
-  });
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    getHistory();
+  }, [report]);
 
-  console.log("dataItem :", dataItem);
-
-  const onSubmit = (value) => {
-    console.log("value :", value);
-
-    let formData = new FormData();
-    formData.append("uid", JSON.parse(userId));
-    formData.append("id", dataItem.q_id);
-    formData.append("query_no", dataItem.assign_no);
-    formData.append("message", value.p_chat);
-    formData.append("type", 2);
-    formData.append("docid", docData.docid);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/draftDiscussion`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("response-", response);
-        if (response.data.code === 1) {
-          toggleDiscard();
-          getData();
-          var variable = "Submitted Successfully "
-          Alerts.SuccessNormal(variable)
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+  const getHistory = () => {
+    axios.get(`${baseUrl}/customers/getNotification?id=${JSON.parse(userId)}&q_no=${report}`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setData(res.data.result);
+      }
+    });
   };
+
+
 
   return (
     <div>
-      <Modal isOpen={discardModal} toggle={toggleDiscard} >
-        <ModalHeader>Discard </ModalHeader>
+      <Modal isOpen={ViewDiscussion} toggle={ViewDiscussionToggel} size="lg" scrollable>
+        <ModalHeader>Discussion History </ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
-              <textarea
-                className={classNames("form-control", {
-                  "is-invalid": errors.p_chat,
-                })}
-                id="textarea"
-                rows="4"
-                name="p_chat"
-                ref={register}
-                placeholder="enter text here"
-              ></textarea>
-
-              {errors.p_chat && (
-                <div className="invalid-feedback">{errors.p_chat.message}</div>
-              )}
-            </div>
-            <div class="modal-footer">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-              <Button color="primary" onClick={toggleDiscard}>Cancel</Button>
-            </div>
-          </form>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="row">S.No</th>
+                <th scope="row">Date</th>
+                <th scope="row">Message</th>
+              </tr>
+            </thead>
+            {data.length > 0
+              ? data.map((p, i) => (
+                <tbody>
+                  <tr>
+                    <td>{i + 1}</td>
+                    <td>{CommonServices.removeTime(p.read_date)}</td>
+                    <td>{p.message}</td>
+                  </tr>
+                </tbody>
+              ))
+              : null}
+          </table>
+          <div class="modal-footer">
+            <Button color="primary" onClick={ViewDiscussionToggel}>Cancel</Button>
+          </div>
         </ModalBody>
       </Modal >
 

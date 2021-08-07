@@ -400,7 +400,6 @@ console.log("confirdPassword" + value.p_confirm_password)
 
   //get OTP
   const getOtp = () => {
-
     if (invalid || wEmail || indNumError || zipError || passError) {
       setDisplay(false)
     }

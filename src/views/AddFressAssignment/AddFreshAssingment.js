@@ -1,26 +1,19 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import React, { useState, useEffect } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useAlert } from "react-alert";
 import Select from "react-select";
 import './style.css'
 import { Spinner } from "reactstrap";
-import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
 import { purpose, assessment_year } from "./data";
 import Layout from "../../components/Layout/Layout";
 import {
   Card,
   CardHeader,
-  CardBody,
-  CardTitle,
   Row,
   Col,
-  Table,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import Mandatory from "../../components/Common/Mandatory";

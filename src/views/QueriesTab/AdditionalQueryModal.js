@@ -42,9 +42,6 @@ function AdditionalQueryModal({
         console.log("res-", response);
         if (response.data.code === 1) {
 
-          // var variable = "Document Uploaded Successfully"
-          // Alerts.SuccessNormal(variable)
-
           var message = response.data.message
           if (message.invalid) {
             Swal.fire({
@@ -66,9 +63,9 @@ function AdditionalQueryModal({
           }
           else if (message.faill) {
             Swal.fire({
-              title: 'Error !',
+              title: 'Success !',
               html: `<p class="text-danger">${message.faill}</p>`,
-              icon: 'error',
+              icon: 'success',
             })
           }
 

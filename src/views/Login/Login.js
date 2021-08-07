@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import Footer from '../../components/Footer/Footer';
@@ -70,7 +71,6 @@ function LoginForm() {
 
 
   const onSubmit = (value) => {
-   
     setShowLoad(false)
          setLoadState(true)
     let formData = new FormData();
@@ -108,33 +108,27 @@ function LoginForm() {
     setEmail(e.target.value);
   };
 
-// const upDateTime = (key) => {
-//   console.log(key)
-// setLoad(key);
-// }
+  // const upDateTime = (key) => {
+  //   console.log(key)
+  // setLoad(key);
+  // }
   return (
     <>
-   
-   <Header noSign="noSign" />
+       <Header cust_sign="cust_sign" />
 
 <h1 style={{ "textAlign": "center", "margin": "55px 0 30px 0" }}>
   Would you like to post a query
 </h1>
-<div className="loading">
-  <BounceLoader size={24} color="green" loading = {loadState}/>
-    <BeatLoader size = {48} color="red" loading = {loadState}/>
-    <BarLoader size={72}  color ="orange" loading = {loadState}/>
-  </div>
-{showLoad === true ? <div className="StartPage">
+
+<div className="StartPage">
   <div className="mainContent">
- 
     <div className="signIn">
       <div className="signBtn">
         <div className="boxOverlay">
         <Typography variant="h4"  style={{ "margin": "5px auto", "color" : "#fff" }}>
         For new customers
       </Typography>
-          <button className="btn btn-success">
+          <Button variant="contained" color="primary" >
             <Link className="SignUpLink"
               to={{
                 pathname: "/customer/signup",
@@ -142,7 +136,7 @@ function LoginForm() {
             >
               Sign Up
             </Link>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -153,8 +147,8 @@ function LoginForm() {
       {
         show ? <div className="customForm">
           
-          <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad} setLoadState={setLoadState}
-            setDisabled={setDisabled} disabled={disabled} setShowLoad= {setShowLoad}/>
+          <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad}
+            setDisabled={setDisabled} disabled={disabled} />
         </div>
           :
 <div className="customForm">
@@ -173,7 +167,7 @@ function LoginForm() {
               />
             </div>
 
-            <div className="form-group passForm ">
+            <div className="form-group">
               <label className="form-label">Password <span className="declined">*</span></label>
               <input
                 type={isPasswordShow ? "text" : "password"}
@@ -188,9 +182,7 @@ function LoginForm() {
                 className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
                 onClick={togglePasssword}
               />
-              </div>
-            
-<div style={{ display: "flex", margin: "0 0 30px 0",  justifyContent : "flex-end" }}>
+<div style={{ display: "flex",  justifyContent : "flex-end" }}>
               <Link
                 to={{
                   pathname: "/customer/forget-password",
@@ -199,13 +191,13 @@ function LoginForm() {
               >
                 Forgot Password
               </Link>
-    
             </div>
-          
-              <button className="btn btn-success" type ="submit">
-              Send OTP
-              </button>
-          
+            </div>
+            <div className="loginBtn">
+              <Button type ="submit" variant="contained" color="primary">
+                Login
+              </Button>
+            </div>
 
            
           
@@ -219,10 +211,9 @@ function LoginForm() {
    
   </div>
  
-</div> : ""}
+</div>
 <Footer />
 </>
   );
 }
-
 export default LoginForm;

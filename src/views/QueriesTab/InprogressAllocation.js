@@ -194,112 +194,131 @@ function InprogressAllocation() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px", textAlign: "center", width: "130px" };
+          return { fontSize: "12px", textAlign: "center", width: "130px" };
       },
       formatter: function (cell, row) {
-        return (
-          <>
-            {
-              row.status == "Declined Query" ?
-                null
-                :
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-around"
-                }}>
+          return (
+              <>
+                  {
+                      row.status == "Declined Query" ?
+                          null
+                          :
+                          <div>
+                              {
+                                  row.status_code == "0" || row.status_code == "1" || row.status_code == "3" ?
+                                      <div style={{ display: "flex", justifyContent: "space-around" }}>
+                                          <div title="Update Query">
+                                              <Link to={`/customer/edit-query/${row.id}`}>
+                                                  <i
+                                                      className="fa fa-edit"
+                                                      style={{
+                                                          fontSize: 16,
+                                                          cursor: "pointer",
+                                                      }}
+                                                  ></i>
+                                              </Link>
+                                          </div>
 
-                  <div>
-                    {
-                      row.status_code < 2 ?
-                        <div style={{ display: "flex" }}>
-                          <div title="Update Query">
-                            <Link to={`/customer/edit-query/${row.id}`}>
-                              <i
-                                className="fa fa-edit"
-                                style={{
-                                  fontSize: 16,
-                                  cursor: "pointer",
-                                  marginLeft: "8px",
-                                }}
-                              ></i>
-                            </Link>
+                                          <div title="Delete Query">
+                                              <i
+                                                  className="fa fa-trash"
+                                                  style={{
+                                                      fontSize: 16,
+                                                      cursor: "pointer",
+
+                                                  }}
+                                                  onClick={() => del(row.id)}
+                                              ></i>
+                                          </div>
+                                          <div title="Send Message">
+                                              <Link
+                                                  to={{
+                                                      pathname: `/customer/chatting/${row.id}`,
+                                                      obj: {
+                                                          message_type: "4",
+                                                          query_No: row.assign_no,
+                                                          query_id: row.id,
+                                                          routes: `/customer/queries`
+                                                      }
+                                                  }}
+                                              >
+                                                  <i
+                                                      class="fa fa-comments-o"
+                                                      style={{
+                                                          fontSize: 16,
+                                                          cursor: "pointer",
+                                                          color: "blue"
+                                                      }}
+                                                  ></i>
+                                              </Link>
+                                          </div>
+
+
+                                      </div> :
+                                      null
+                              }
+
+                              {
+                                  row.status_code == "4" || row.status_code == "9" || row.status_code == "2" ?
+                                      <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+                                          <div title="Send Feedback"
+                                              style={{
+                                                  cursor: "pointer",
+                                              }}>
+                                              <Link
+                                                  to={{
+                                                      pathname: `/customer/feedback/${row.assign_no}`,
+                                                      obj: {
+                                                          routes: `/customer/queries`
+                                                      }
+                                                  }}
+                                              >
+                                                  <FeedbackIcon />
+                                              </Link>
+                                          </div>
+                                          {
+                                              row.delivery_report == "completed" ? null :
+                                                  <div title="Upload Additional Documents"
+                                                      style={{ cursor: "pointer" }}
+                                                      onClick={() => additionalHandler(row.assign_no)}
+                                                  >
+                                                      <PublishIcon color="secondary" />
+                                                  </div>
+                                           }
+                                          <div title="Send Message">
+                                              <Link
+                                                  to={{
+                                                      pathname: `/customer/chatting/${row.id}`,
+                                                      obj: {
+                                                          message_type: "4",
+                                                          query_No: row.assign_no,
+                                                          query_id: row.id,
+                                                          routes: `/customer/queries`
+                                                      }
+                                                  }}
+                                              >
+                                                  <i
+                                                      class="fa fa-comments-o"
+                                                      style={{
+                                                          fontSize: 16,
+                                                          cursor: "pointer",
+                                                          color: "blue"
+                                                      }}
+                                                  ></i>
+                                              </Link>
+                                          </div>
+                                      </div>
+                                      :
+                                      null
+                              }
                           </div>
 
-                          <div title="Delete Query">
-                            {
-                              row.status_code < 1 ?
-                                <i
-                                  className="fa fa-trash"
-                                  style={{
-                                    fontSize: 16,
-                                    cursor: "pointer",
-                                    marginLeft: "8px",
-                                  }}
-                                  onClick={() => del(row.id)}
-                                ></i>
-                                : null
-                            }
-
-                          </div>
-                        </div>
-                        :
-                        <div style={{ display: "flex" }}>
-
-                          <div title="Send Message">
-                            <Link
-                              to={{
-                                pathname: `/customer/chatting/${row.id}`,
-                                obj: {
-                                  message_type: "4",
-                                  query_No: row.assign_no,
-                                  query_id: row.id,
-                                  routes: `/customer/queries`
-                                }
-                              }}
-                            >
-                              <i
-                                class="fa fa-comments-o"
-                                style={{
-                                  fontSize: 16,
-                                  cursor: "pointer",
-
-                                  color: "blue"
-                                }}
-                              ></i>
-                            </Link>
-                          </div>
-
-                          <div title="Send Feedback"
-                            style={{
-                              cursor: "pointer",
-                              marginLeft: "5px",
-                            }}>
-                            <Link
-                              to={{
-                                pathname: `/customer/feedback/${row.assign_no}`,
-                                obj: {
-                                  routes: `/customer/queries`
-                                }
-                              }}
-                            >
-                              <FeedbackIcon />
-                            </Link>
-                          </div>
-                          <div title="Upload Additional Documents"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => additionalHandler(row.assign_no)}
-                          >
-                            <PublishIcon color="secondary" />
-                          </div>
-                        </div>
-                    }
-                  </div>
-                </div>
-            }
-          </>
-        );
+                  }
+              </>
+          );
       },
-    },
+  },
   ];
 
 

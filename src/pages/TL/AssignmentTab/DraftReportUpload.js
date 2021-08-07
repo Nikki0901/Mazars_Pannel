@@ -57,9 +57,9 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
       }
       else if (message.faill) {
         Swal.fire({
-          title: 'Error !',
+          title: 'Success',
           html: `<p class="text-danger">${message.faill}</p>`,
-          icon: 'error',
+          icon: 'success',
         })
       }
       getAssignmentList();
