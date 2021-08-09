@@ -6,7 +6,7 @@ import Alerts from "../../common/Alerts";
 
 
 
-function ResendOtp({ id, setDisabled, getTime }) {
+function ResendOtp({ id, setDisabled, getTime ,setLoad }) {
 
     const { handleSubmit, errors, reset } = useForm();
 
@@ -27,6 +27,7 @@ function ResendOtp({ id, setDisabled, getTime }) {
                 if (response.data.code === 1) {
                     Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
                     setDisabled(false)
+                    setLoad(true)
                     getTime();
                 }
             })

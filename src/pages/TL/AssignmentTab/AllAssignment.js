@@ -353,28 +353,28 @@ function AssignmentTab() {
               ) : null}
 
 
-              {/* {row.final_report ? null : ( */}
-              <div title="upload Pdf">
-                <p
-                  style={{ cursor: "pointer", color: "red" }}
-                  onClick={() => uploadFinalReport(row)}
-                >
-                  {row.client_discussion == "completed" &&
-                    row.delivery_report == "completed" &&
-                    row.draft_report == "completed" &&
-                    row.final_discussion == "completed" &&
-                    row.amount == row.paid_amount ? (
-                    <div>
-                      <i
-                        class="fa fa-upload"
-                        style={{ fontSize: "16px" }}
-                      ></i>
-                      final
-                    </div>
-                  ) : null}
-                </p>
-              </div>
-              {/* )} */}
+              {row.final_report ? null : (
+                <div title="upload Pdf">
+                  <p
+                    style={{ cursor: "pointer", color: "red" }}
+                    onClick={() => uploadFinalReport(row)}
+                  >
+                    {row.client_discussion == "completed" &&
+                      row.delivery_report == "completed" &&
+                      row.draft_report == "completed" &&
+                      row.final_discussion == "completed" &&
+                      row.amount == row.paid_amount ? (
+                      <div>
+                        <i
+                          class="fa fa-upload"
+                          style={{ fontSize: "16px" }}
+                        ></i>
+                        final
+                      </div>
+                    ) : null}
+                  </p>
+                </div>
+              )}
 
 
               {row.vstart < 11 &&
@@ -671,7 +671,7 @@ function AssignmentTab() {
           <ViewAllReportModal
             ViewReport={ViewReport}
             reportModal={reportModal}
-            report={report} 
+            report={report}
             dataItem={dataItem}
           />
         </CardBody>

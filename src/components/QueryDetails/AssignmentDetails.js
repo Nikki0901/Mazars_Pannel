@@ -90,7 +90,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal, reports, ass
                 </tr>
                 <tr>
                   <td>Awaiting Completion</td>
-                  {/* <td>{CommonServices.capitalizeFirstLetter(p.other_stage)}</td> */}
+                  <td>{CommonServices.capitalizeFirstLetter(p.other_stage)}</td>
                 </tr>
               </td>
             </tr>

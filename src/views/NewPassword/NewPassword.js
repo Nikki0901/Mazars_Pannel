@@ -25,6 +25,7 @@ function NewPassword(props) {
 
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const [load, setLoad] = useState(true);
 
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
@@ -40,21 +41,25 @@ function NewPassword(props) {
   }, []);
 
   const getTime = () => {
-    var timerOn = true;
-    function timer(remaining) {
-      var s = remaining % 60;
-      s = s < 10 ? '0' + s : s;
-      setTime(s)
-      remaining -= 1;
-      if (remaining >= 0 && timerOn) {
-        setTimeout(function () {
-          timer(remaining);
-        }, 1000);
-        return;
+    if (load) {
+      var timerOn = true;
+      function timer(remaining) {
+        var s = remaining % 60;
+        s = s < 10 ? '0' + s : s;
+        setTime(s)
+        remaining -= 1;
+        if (remaining >= 0 && timerOn) {
+          setTimeout(function () {
+            timer(remaining);
+          }, 1000);
+          return;
+        }
+        setDisabled(true)
       }
-      setDisabled(true)
+      setLoad(false)
+      timer(60);
     }
-    timer(120);
+
   }
 
 
@@ -76,7 +81,6 @@ function NewPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-
           var variable = "Reset Password Successfully "
           Alerts.SuccessNormal(variable)
 
@@ -241,7 +245,7 @@ function NewPassword(props) {
 
           {
             disabled ?
-              <ResendOtp id={id} setDisabled={setDisabled} getTime={getTime} />
+              <ResendOtp id={id} setDisabled={setDisabled} getTime={getTime} setLoad={setLoad} />
               :
               null
           }

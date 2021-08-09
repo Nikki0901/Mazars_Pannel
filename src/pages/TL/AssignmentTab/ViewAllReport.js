@@ -15,7 +15,6 @@ const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
 });
 
-
 function ViewReport({
   reportModal,
   ViewReport,
@@ -83,7 +82,6 @@ function ViewReport({
   };
 
 
-
   useEffect(() => {
     getData();
   }, [report]);
@@ -109,9 +107,6 @@ function ViewReport({
         console.log("erroror - ", error);
       });
   }
-
-
-
 
 
   return (

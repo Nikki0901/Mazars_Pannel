@@ -121,9 +121,7 @@ function LoginForm() {
       <h1 style={{ "textAlign": "center", "margin": "55px 0 30px 0" }}>
         Would you like to post a query
       </h1>
-      <div className="loading">
-        <BounceLoader size={24} color="green" loading={loadState} />
-        <BeatLoader size={48} color="red" loading={loadState} />
+      <div className="loading">      
         <BarLoader size={72} color="orange" loading={loadState} />
       </div>
       {showLoad === true ? <div className="StartPage">
@@ -223,6 +221,9 @@ function LoginForm() {
 }
 
 export default LoginForm;
+
+
+
 // import { useRef, useState, useEffect } from "react";
 // import Header from "../../components/Header/Header";
 // import Footer from '../../components/Footer/Footer';
