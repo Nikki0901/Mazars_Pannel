@@ -1,5 +1,4 @@
 import React from "react";
-import Alerts from "../../../common/Alerts";
 
 
 export default class YourComponent extends React.Component {
@@ -8,19 +7,23 @@ export default class YourComponent extends React.Component {
         this.state = {
             values: [],
             dates: [],
-            error: ""
+            isLoading: true
         };
     }
 
+
+    amount = this.props.installment_amount
+    installment_amount = this.amount.split(',');
+    temp = this.installment_amount
     handleChange1(i, e) {
-        if (isNaN(e.target.value)) {
-            this.setState({ error: "Please insert only digit" })
-        }
-        else {
-            this.setState({ error: "" })
-        }
+        const { value } = e.target
+        this.temp[i] = value
+        console.log(this.temp)
+    
         this.setState({
-            values: { ...this.state.values, [i]: e.target.value }
+            values: {
+              ...this.temp
+            }
         },
             () => {
                 this.props.paymentAmount(this.state.values)
@@ -37,6 +40,20 @@ export default class YourComponent extends React.Component {
             })
     }
 
+    componentDidMount() {
+        this.setState({ isLoading: false });
+
+        var amount = this.props.installment_amount
+        var date = this.props.due_date
+
+        const installment_amount = amount.split(',');
+        const due_date = date.split(',');
+
+
+        this.props.paymentAmount(installment_amount);
+        this.props.paymentDate(due_date)
+    }
+
 
 
     render() {
@@ -47,9 +64,8 @@ export default class YourComponent extends React.Component {
         const installment_amount = amount.split(',');
         const due_date = date.split(',');
 
-
-
         var fieldsArray = [];
+
 
         for (var i = 0; i < this.props.installment; i++) {
             fieldsArray.push(
@@ -63,9 +79,7 @@ export default class YourComponent extends React.Component {
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
-                        <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
                     </div>
-
 
                     <div class="col-md-6">
                         <label>Due Dates</label>
@@ -77,12 +91,13 @@ export default class YourComponent extends React.Component {
                             defaultValue={due_date[i]}
                         />
                     </div>
-                </div >
-
+                </div>
             );
         }
 
-
+        if (this.state.isLoading) {
+            return <div>Loading...</div>
+        }
         return (
             <div className="inputs">
                 {fieldsArray}

@@ -55,7 +55,7 @@ function NewPassword(props) {
       }
       setDisabled(true)
     }
-    timer(120);
+    timer(60);
   }
 
 

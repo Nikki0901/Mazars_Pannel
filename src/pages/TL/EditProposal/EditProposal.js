@@ -32,6 +32,9 @@ function EditComponent() {
   const [amount, setAmount] = useState();
   const [date, setDate] = useState();
 
+  const [load, setLoad] = useState(true);
+
+
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
@@ -102,10 +105,12 @@ function EditComponent() {
 
 
 
+
+
   const onSubmit = (value) => {
     console.log(value);
 
-    console.log("amount", amount);
+    // console.log("amount", amount);
     console.log("date", date);
 
 
@@ -133,6 +138,7 @@ function EditComponent() {
       payment.label == "installment" ?
         formData.append("due_date", date) :
         formData.append("due_date", "")
+
 
 
     if (payment.value == "installment") {
@@ -198,8 +204,8 @@ function EditComponent() {
     else {
       setdiserror("");
     }
-
   };
+
 
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
@@ -223,7 +229,6 @@ function EditComponent() {
 
 
   console.log("installment : ", installment.label)
-
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -366,13 +371,16 @@ function EditComponent() {
                     ?
                     ""
                     :
+                    installment_amount &&
                     <Payment
                       installment={installment.label}
                       paymentAmount={paymentAmount}
                       paymentDate={paymentDate}
                       installment_amount={installment_amount}
                       due_date={due_date}
+                      getQuery={getQuery}
                     />
+
                 }
               </div>
             </div>

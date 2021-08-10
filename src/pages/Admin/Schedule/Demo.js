@@ -151,7 +151,10 @@ function Demo() {
 
   const B = (key) => {
     console.log("call B", key)
-    setRead(key)
+    if (key === false) {
+      setRead(true)
+      console.log("read", read)
+    }
   }
 
 
@@ -165,7 +168,6 @@ function Demo() {
   }) => (
     <Appointments.Appointment {...restProps}>
       <div style={{ display: "flex" }} onDoubleClick={() => B(data.owner)}>
-
         {
           console.log("data", data)
         }
@@ -383,6 +385,7 @@ function Demo() {
     }
   };
 
+
   const BooleanEditor = (props) => {
     if (props.label === "All Day" || props.label === "Repeat") {
       return null;
@@ -403,13 +406,11 @@ function Demo() {
         onFieldChange={onFieldChange}
         {...restProps}
       >
-
-        <AppointmentForm.Label text="All Participants"  type="title" />
+        <AppointmentForm.Label text="All Participants" type="title" />
         <AppointmentForm.TextEditor
           value={appointmentData.username}
           readOnly
         />
-
       </AppointmentForm.BasicLayout>
     );
   };
@@ -436,16 +437,23 @@ function Demo() {
 
         <AppointmentTooltip showOpenButton />
 
-
-        <AppointmentForm      
-          booleanEditorComponent={BooleanEditor}
-          basicLayoutComponent={BasicLayout}
-          textEditorComponent={TextEditor}
-        />
+        {
+          read ?
+            <AppointmentForm
+              readOnly
+            />
+            :
+            <AppointmentForm
+              booleanEditorComponent={BooleanEditor}
+              basicLayoutComponent={BasicLayout}
+              textEditorComponent={TextEditor}
+            />
+        }
 
         <Resources
           data={resources}
         />
+
       </Scheduler>
     </Paper>
   );
