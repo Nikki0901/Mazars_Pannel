@@ -15,6 +15,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
 import Alerts from "../../common/Alerts";
+import Swal from "sweetalert2";
 
 
 
@@ -49,32 +50,7 @@ function InprogressProposal() {
     };
 
 
-    // rejected proposal
-    const rejected = (key) => {
-        console.log("rej", key);
 
-        let formData = new FormData();
-        formData.append("id", key);
-        formData.append("status", 6);
-
-        axios({
-            method: "POST",
-            url: `${baseUrl}/customers/ProposalAccept`,
-            data: formData,
-        })
-            .then(function (response) {
-                console.log("res-", response);
-                if (response.data.code === 1) {
-                    setRejected(false);
-                    getProposalData();
-                    var variable = "Proposal rejected successfully."
-                    Alerts.SuccessNormal(variable)
-                }
-            })
-            .catch((error) => {
-                console.log("erroror - ", error);
-            });
-    };
 
 
 
@@ -328,6 +304,53 @@ function InprogressProposal() {
     ];
 
 
+    //rejected
+    const rejected = (id) => {
+        console.log("del", id);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to reject proposal?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, rejected it!",
+        }).then((result) => {
+            if (result.value) {
+                deleteCliente(id);
+            }
+        });
+    };
+
+
+    // delete data
+    const deleteCliente = (key) => {
+
+        let formData = new FormData();
+        formData.append("id", key);
+        formData.append("status", 6);
+
+        axios({
+            method: "POST",
+            url: `${baseUrl}/customers/ProposalAccept`,
+            data: formData,
+        })
+            .then(function (response) {
+                console.log("res-", response);
+                if (response.data.code === 1) {
+                    setRejected(false);
+                    Swal.fire("Rejected!", "Proposal rejected successfully.", "success");
+                    getProposalData();
+                } else {
+                    Swal.fire("Oops...", "Errorr ", "error");
+                }
+            })
+            .catch((error) => {
+                console.log("erroror - ", error);
+            });
+
+    };
+
     return (
         <div>
             <Card>
@@ -351,7 +374,7 @@ function InprogressProposal() {
                         columns={columns}
                         classes="table-responsive"
                     />
-                   
+
                 </CardBody>
             </Card>
         </div>

@@ -58,7 +58,8 @@ function AddFreshAssingment(props) {
 
 
   const onSubmit = (value) => {
-
+    console.log(value)
+    
     const a = value.p_fact;
     const b = value.users;
     if (a == '') {
@@ -71,7 +72,7 @@ function AddFreshAssingment(props) {
     }
     else if (value.p_format_word === false && value.p_format_digital === false && value.p_format_physically === false) {
       console.log("catch")
-      setCheckerror("you have to select at least one value")
+      setCheckerror("you have to select at least one")
     }
 
     else {

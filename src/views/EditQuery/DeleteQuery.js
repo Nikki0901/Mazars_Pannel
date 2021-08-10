@@ -16,12 +16,12 @@ function DeleteQuery({ id }) {
 
     Swal.fire({
       title: "Are you sure?",
-      text: "It will permanently deleted !",
+      text: "Do you want to delete query ?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, deleted it!",
     }).then((result) => {
       if (result.value) {
         deleteCliente(id);
@@ -42,7 +42,7 @@ function DeleteQuery({ id }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          Swal.fire("", "Query deleted successfully.", "success");
           history.push("/customer/queries");
         } else {
           Swal.fire("Oops...", "Errorr ", "error");

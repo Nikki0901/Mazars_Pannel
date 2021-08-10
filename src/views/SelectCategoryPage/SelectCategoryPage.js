@@ -28,7 +28,7 @@ function SelectCategoryPage() {
               </button>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "center" }}>
-              <p style={{ fontSize: "20px" }}>Select Category</p>
+              <p style={{ fontSize: "20px" }}>Add Fresh Query</p>
             </Col>
           </Row>
         </CardHeader>

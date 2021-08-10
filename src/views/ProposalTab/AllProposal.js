@@ -319,12 +319,12 @@ function ProposalTab() {
         console.log("del", id);
         Swal.fire({
             title: "Are you sure?",
-            text: "It will permanently rejected !",
+            text: "Do you want to reject proposal?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes",
+            confirmButtonText: "Yes, rejected it!",
         }).then((result) => {
             if (result.value) {
                 deleteCliente(id);
