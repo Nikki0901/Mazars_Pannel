@@ -3,14 +3,12 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl, ReportUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import classNames from "classnames";
 import CommonServices from "../../../common/common";
+import DiscardReport from "./DiscardReport";
 
 const Schema = yup.object().shape({
-  p_chat: yup.string().required("required discussion"),
+  p_chat: yup.string().required(""),
 });
 
 
@@ -23,9 +21,16 @@ function ViewReport({
   const userId = window.localStorage.getItem("adminkey");
   const [data, setData] = useState([]);
 
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+  }
 
   useEffect(() => {
+    getData();
+  }, [report]);
 
+  const getData = () => {
     let formData = new FormData();
     formData.append("assign_no", report);
     formData.append("uid", JSON.parse(userId));
@@ -45,15 +50,21 @@ function ViewReport({
       .catch((error) => {
         console.log("erroror - ", error);
       });
-
-  }, [report]);
-
-
+  }
 
   return (
     <div>
       <Modal isOpen={reportModal} toggle={ViewReport} size="lg" scrollable>
-        <ModalHeader toggle={ViewReport}>View All Reports</ModalHeader>
+        <ModalHeader toggle={ViewReport}>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "55vw" }}>
+            <span>View All Reports</span>
+            <span>
+              <button class="btn btn-success" onClick={() => ViewDiscussionToggel()}>
+                View Discussion
+              </button>
+            </span>
+          </div>
+        </ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
             <thead>
@@ -157,6 +168,13 @@ function ViewReport({
           </table>
         </ModalBody>
       </Modal>
+
+      <DiscardReport
+        ViewDiscussionToggel={ViewDiscussionToggel}
+        ViewDiscussion={ViewDiscussion}
+        report={report}
+        getData={getData}
+      />
     </div>
   );
 }

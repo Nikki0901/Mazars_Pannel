@@ -18,6 +18,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
+import Loader from "../../components/Loader/Loader";
+
 
 const Schema = yup.object().shape({
   p_feedback: yup.string().required(""),
@@ -27,8 +29,6 @@ const Schema = yup.object().shape({
 
 function Feedback() {
 
-
-
   const { handleSubmit, register, errors, reset } = useForm({
     resolver: yupResolver(Schema),
   });
@@ -37,11 +37,12 @@ function Feedback() {
   const { id } = useParams();
   const userId = window.localStorage.getItem("userid");
 
+  const [loading, setLoading] = useState(false);
 
 
   const onSubmit = (value) => {
     console.log("value :", value)
-
+    setLoading(true)
     let formData = new FormData();
     formData.append("assign_no", id);
     formData.append("feedback", value.p_feedback);
@@ -55,12 +56,15 @@ function Feedback() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           reset();
           Alerts.SuccessNormal("Feedback successfully sent.")
           history.push({
             pathname: `/customer/queries`,
             index: 0,
           });
+        } if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -90,48 +94,54 @@ function Feedback() {
         </CardHeader>
 
         <CardBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="row" style={{ display: "flex", justifyContent: "center" }}>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Query No.</label>
-                  <input
-                    type="text"
-                    name="p_query"
-                    className="form-control"
-                    ref={register}
-                    value={id}
-                    disabled
-                  />
-                </div>
+          {
+            loading ?
+              <Loader />
+              :
+              <>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="row" style={{ display: "flex", justifyContent: "center" }}>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Query No.</label>
+                        <input
+                          type="text"
+                          name="p_query"
+                          className="form-control"
+                          ref={register}
+                          value={id}
+                          disabled
+                        />
+                      </div>
 
 
-                <div class="form-group">
-                  <label>Feedback</label>
-                  <textarea
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_feedback,
-                    })}
-                    placeholder="Feedback text here"
-                    rows="5"
-                    ref={register}
-                    name="p_feedback"
-                  ></textarea>
-                  {errors.p_feedback && (
-                    <div className="invalid-feedback">
-                      {errors.p_feedback.message}
+                      <div class="form-group">
+                        <label>Feedback</label>
+                        <textarea
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_feedback,
+                          })}
+                          placeholder="Feedback text here"
+                          rows="5"
+                          ref={register}
+                          name="p_feedback"
+                        ></textarea>
+                        {errors.p_feedback && (
+                          <div className="invalid-feedback">
+                            {errors.p_feedback.message}
+                          </div>
+                        )}
+                      </div>
+                      <button type="submit" className="btn btn-primary">
+                        submit
+                      </button>
                     </div>
-                  )}
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  submit
-                </button>
-              </div>
-            </div>
+                  </div>
 
-          </form>
-          <Mandatory />
-
+                </form>
+                <Mandatory />
+              </>
+          }
         </CardBody>
       </Card>
 

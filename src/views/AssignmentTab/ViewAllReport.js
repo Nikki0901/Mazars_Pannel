@@ -222,13 +222,13 @@ function ViewReport({
               : null}
           </table>
 
-          <Modal isOpen={nestedModal} toggle={toggleNested} >
+          {/* <Modal isOpen={nestedModal} toggle={toggleNested} >
             <ModalHeader>Nested Modal title</ModalHeader>
             <ModalBody>Stuff and things</ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={toggleNested}>Cancel</Button>
             </ModalFooter>
-          </Modal>
+          </Modal> */}
         </ModalBody>
       </Modal>
 

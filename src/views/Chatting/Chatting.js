@@ -14,11 +14,14 @@ import {
   Row,
   Col,
   Table,
-  Tooltip,
+  Spinner
 } from "reactstrap";
 import Alerts from "../../common/Alerts";
 import classNames from "classnames";
 import Mandatory from "../../components/Common/Mandatory";
+import Loader from "../../components/Loader/Loader";
+
+
 
 
 const Schema = yup.object().shape({
@@ -40,6 +43,7 @@ function Chatting(props) {
 
   const [item, setItem] = useState("");
   const [data, setData] = useState({})
+  const [loading, setLoading] = useState(false);
 
   const { message_type, query_id, query_No, routes } = data
 
@@ -62,6 +66,7 @@ function Chatting(props) {
   const onSubmit = (value) => {
     console.log("value :", value);
 
+    setLoading(true)
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
     formData.append("assign_id", query_id);
@@ -76,12 +81,11 @@ function Chatting(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           reset();
-
           var variable = "Message Successfully Sent "
           Alerts.SuccessNormal(variable)
 
-          // alert.success(" message successfully sent!");
           props.history.push(routes);
         }
       })
@@ -110,78 +114,84 @@ function Chatting(props) {
           </Row>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="row" style={{ display: "flex", justifyContent: "center" }}>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Query No.</label>
-                  <input
-                    type="text"
-                    name="p_query"
-                    className="form-control"
-                    ref={register}
-                    value={query_No}
-                    disabled
-                  />
-                </div>
+          {
+            loading ?
+              <Loader />
+              :
+              <>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div class="row" style={{ display: "flex", justifyContent: "center" }}>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Query No.</label>
+                        <input
+                          type="text"
+                          name="p_query"
+                          className="form-control"
+                          ref={register}
+                          value={query_No}
+                          disabled
+                        />
+                      </div>
 
-                <div class="form-group">
-                  <label>Message Type</label>
-                  {
-                    item &&
-                    <select
-                      className={classNames("form-control", {
-                        "is-invalid": errors.message_type,
-                      })}
-                      name="message_type"
-                      ref={register}
-                      style={{ height: "33px" }}
-                      defaultValue={item}
-                    >
-                      <option value="">--select--</option>
-                      <option value="4">Query Discussion</option>
-                      <option value="2">Proposal Discussion</option>
-                      <option value="5">Payment Discussion</option>
-                      <option value="3">Assignment Discussion</option>
-                      <option value="1">Others</option>
-                    </select>
-                  }
+                      <div class="form-group">
+                        <label>Message Type</label>
+                        {
+                          item &&
+                          <select
+                            className={classNames("form-control", {
+                              "is-invalid": errors.message_type,
+                            })}
+                            name="message_type"
+                            ref={register}
+                            style={{ height: "33px" }}
+                            defaultValue={item}
+                          >
+                            <option value="">--select--</option>
+                            <option value="4">Query Discussion</option>
+                            <option value="2">Proposal Discussion</option>
+                            <option value="5">Payment Discussion</option>
+                            <option value="3">Assignment Discussion</option>
+                            <option value="1">Others</option>
+                          </select>
+                        }
 
-                  {errors.message_type && (
-                    <div className="invalid-feedback">
-                      {errors.message_type.message}
+                        {errors.message_type && (
+                          <div className="invalid-feedback">
+                            {errors.message_type.message}
+                          </div>
+                        )}
+                      </div>
+
+                      <div class="form-group">
+                        <label>Message</label>
+                        <textarea
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_message,
+                          })}
+                          placeholder="Message text here"
+                          rows="5"
+                          ref={register}
+                          name="p_message"
+                        ></textarea>
+                        {errors.p_message && (
+                          <div className="invalid-feedback">
+                            {errors.p_message.message}
+                          </div>
+                        )}
+                      </div>
+
+                      <button type="submit" className="btn btn-primary">
+                        Send
+                      </button>
                     </div>
-                  )}
-                </div>
-
-                <div class="form-group">
-                  <label>Message</label>
-                  <textarea
-                    className={classNames("form-control", {
-                      "is-invalid": errors.p_message,
-                    })}
-                    placeholder="Message text here"
-                    rows="5"
-                    ref={register}
-                    name="p_message"
-                  ></textarea>
-                  {errors.p_message && (
-                    <div className="invalid-feedback">
-                      {errors.p_message.message}
-                    </div>
-                  )}
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Send
-                </button>
-              </div>
-            </div>
-          </form>
-          <Mandatory />
+                  </div>
+                </form>
+                <Mandatory />
+              </>
+          }
 
         </CardBody>
-
       </Card>
     </Layout >
   );
