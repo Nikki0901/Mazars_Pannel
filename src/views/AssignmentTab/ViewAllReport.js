@@ -9,6 +9,7 @@ import * as yup from "yup";
 import classNames from "classnames";
 import CommonServices from "../../common/common";
 import RejectedModal from "./RejectModal";
+import DiscardReport from "./DiscardReport";
 
 
 const Schema = yup.object().shape({
@@ -34,9 +35,16 @@ function ViewReport({
     setDocData(key)
   }
 
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    // setDocData(report)
+  }
+
   useEffect(() => {
     getData();
   }, [report]);
+
 
   const getData = () => {
     let formData = new FormData();
@@ -92,11 +100,21 @@ function ViewReport({
 
 
 
-
   return (
     <div>
-      <Modal isOpen={reportModal} toggle={ViewReport} size="md" scrollable>
-        <ModalHeader toggle={ViewReport}>View All Reports</ModalHeader>
+      <Modal isOpen={reportModal} toggle={ViewReport} size="lg" scrollable>
+        <ModalHeader toggle={ViewReport}>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "55vw" }}>
+            <span>View All Reports</span>
+            <span>
+              <button class="btn btn-success"
+              onClick={() => ViewDiscussionToggel()}
+              >
+                View Discussion
+              </button>
+            </span>
+          </div>
+        </ModalHeader>
         <ModalBody>
           <table class="table table-bordered">
             <thead>
@@ -209,7 +227,6 @@ function ViewReport({
             <ModalBody>Stuff and things</ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={toggleNested}>Cancel</Button>
-
             </ModalFooter>
           </Modal>
         </ModalBody>
@@ -220,6 +237,13 @@ function ViewReport({
         nestedModal={nestedModal}
         dataItem={dataItem}
         docData={docData}
+        getData={getData}
+      />
+
+      <DiscardReport
+        ViewDiscussionToggel={ViewDiscussionToggel}
+        ViewDiscussion={ViewDiscussion}
+        report={report}
         getData={getData}
       />
     </div>

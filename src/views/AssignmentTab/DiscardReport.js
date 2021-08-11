@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { baseUrl } from "../../../config/config";
-import CommonServices from "../../../common/common";
-import Alerts from "../../../common/Alerts";
+import { baseUrl } from "../../config/config";
+import CommonServices from "../../common/common";
+import Alerts from "../../common/Alerts";
 
 
 function DiscardReport({
@@ -13,13 +13,12 @@ function DiscardReport({
   report,
   getData
 }) {
-  const userId = window.localStorage.getItem("tlkey");
+  const userId = window.localStorage.getItem("userid");
   const [data, setData] = useState([]);
 
   useEffect(() => {
     getHistory();
   }, [report]);
-  // mazarapi/v1/tl/getMessage?id=128&q_no=Q-24-72
 
   const getHistory = () => {
     axios.get(`${baseUrl}/tl/getMessage?id=${JSON.parse(userId)}&q_no=${report}`).then((res) => {
