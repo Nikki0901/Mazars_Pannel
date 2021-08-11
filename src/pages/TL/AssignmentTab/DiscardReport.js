@@ -42,16 +42,28 @@ function DiscardReport({
               <tr>
                 <th scope="row">S.No</th>
                 <th scope="row">Date</th>
+                <th scope="row">Name</th>
                 <th scope="row">Message</th>
               </tr>
             </thead>
             {data.length > 0
               ? data.map((p, i) => (
                 <tbody>
-                  <tr>
+                  <tr className={p.type == "sent" ? "send" : "received"}>
                     <td>{i + 1}</td>
-                    <td>{CommonServices.removeTime(p.read_date)}</td>
-                    <td>{p.message}</td>
+                    <td>{CommonServices.removeTime(p.setdate)}</td>
+                    <td>{p.sender}</td>
+                    <td>
+
+                      {
+                        p.type == "sent" ?
+                          <i class="fa fa-mail-forward" style={{ color: "red", marginLeft: "10px", marginRight: "10px" }}></i>
+                          :
+                          <i class="fa fa-mail-reply" style={{ color: "green", marginLeft: "10px", marginRight: "10px" }}></i>
+                      }
+
+                      {p.message}
+                    </td>
                   </tr>
                 </tbody>
               ))

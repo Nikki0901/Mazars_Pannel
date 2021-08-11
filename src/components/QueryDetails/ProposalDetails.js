@@ -52,7 +52,6 @@ function ProposalDetails({
   }
 
 
-
   // curent date
   var date = new Date();
   function convert(str) {
@@ -64,18 +63,25 @@ function ProposalDetails({
 
   const [currentDate] = useState(convert(date));
 
-  // console.log("currentDate", currentDate)
+  console.log("currentDate", currentDate)
 
 
 
 
-  const dueDate = (a) => {
-    var item = a.split(',')
+  const dueDate = (a, b) => {
+    var item1 = a.split(',')
+    var item2 = b.split(',')
 
-    console.log("inst---", item);
+
+    console.log("item1-", item1);
+    console.log("item2", item2);
+
+    // if(currentDate == item2){
+      
+    // }
 
     //total installment
-    var total_Installment = item.reduce(myFunction)
+    var total_Installment = item1.reduce(myFunction)
     function myFunction(total, value) {
       return Number(total) + Number(value);
     }
@@ -263,7 +269,7 @@ function ProposalDetails({
             </tr>
             <tr>
               <th scope="row">Payment Due</th>
-              <td>{dueDate(installment_amount)}</td>
+              <td>{dueDate(installment_amount, due_date)}</td>
             </tr>
             <tr>
               <th scope="row">Payment Outstanding</th>
