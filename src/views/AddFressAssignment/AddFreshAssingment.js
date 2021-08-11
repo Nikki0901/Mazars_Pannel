@@ -59,7 +59,7 @@ function AddFreshAssingment(props) {
 
   const onSubmit = (value) => {
     console.log(value)
-    
+
     const a = value.p_fact;
     const b = value.users;
     if (a == '') {
@@ -274,6 +274,7 @@ function AddFreshAssingment(props) {
                         <br />
                         <div className="form-check">
                           <input
+                            id="a1"
                             className={classNames("form-check-input", {
                               "is-invalid": errors.p_format_word,
                             })}
@@ -283,31 +284,33 @@ function AddFreshAssingment(props) {
                             onChange={remError}
                             defaultChecked
                           />
-                          <label className="form-check-label">
+                          <label className="form-check-label" htmlFor="a1">
                             Softcopy - Word/ Pdf
                           </label>
                         </div>
                         <div className="form-check">
                           <input
+                            id="a2"
                             className="form-check-input"
                             type="checkbox"
                             name="p_format_digital"
                             ref={register}
                             onChange={remError}
                           />
-                          <label className="form-check-label">
+                          <label className="form-check-label" htmlFor="a2">
                             SoftCopy- Digitally Signed
                           </label>
                         </div>
                         <div className="form-check">
                           <input
+                            id="a3"
                             className="form-check-input"
                             type="checkbox"
                             name="p_format_physically"
                             ref={register}
                             onChange={remError}
                           />
-                          <label className="form-check-label">
+                          <label className="form-check-label" htmlFor="a3">
                             Printout- Physically Signed
                           </label>
                         </div>

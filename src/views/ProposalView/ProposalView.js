@@ -105,11 +105,9 @@ function ProposalView(props) {
 
 
   const updateCheckbox = ({ checked }) => {
-    // console.log("checked", checked)
+  
     setValueCheckBox(checked)
     setPaymentModal(checked);
-    // if(valueCheckBox){
-    // }
     setCheckerror("")
   }
 
@@ -346,16 +344,19 @@ function ProposalView(props) {
               <div className="mb-3">
                 <div className="form-check">
                   <input
+                    id="terms_condition"
                     className="form-check-input"
                     type="checkbox"
                     name="p_terms_condition"
                     ref={register}
                     onChange={(e) => updateCheckbox(e.target)}
                   />
-                  <label className="form-check-label"
+                  <label
+                    htmlFor="terms_condition"
+                    className="form-check-label"
                     title="Read"
                     style={{ cursor: "pointer" }}
-                    onClick={() => readTerms()}
+                  // onClick={() => readTerms()}
                   >
                     Engagement Letter
                   </label>

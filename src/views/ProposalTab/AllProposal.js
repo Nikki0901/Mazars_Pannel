@@ -354,13 +354,6 @@ function ProposalTab() {
                 } else {
                     Swal.fire("Oops...", "Errorr ", "error");
                 }
-
-                // if (response.data.code === 1) {
-                // setRejected(false);
-                // getProposalData();
-                //     var variable = "Proposal rejected successfully."
-                //     Alerts.SuccessNormal(variable)
-                // }
             })
             .catch((error) => {
                 console.log("erroror - ", error);

@@ -149,12 +149,11 @@ function Demo() {
     },
   });
 
+
   const B = (key) => {
-    console.log("call B", key)
-    if (key === false) {
-      setRead(true)
-      console.log("read", read)
-    }
+    setRead(!key)
+    // if (key === true || false) {
+    // }
   }
 
 
@@ -166,22 +165,25 @@ function Demo() {
     onAppointmentMetaChange,
     ...restProps
   }) => (
-    <Appointments.Appointment {...restProps}>
-      <div style={{ display: "flex" }} onDoubleClick={() => B(data.owner)}>
-        {
-          console.log("data", data)
-        }
+    <div onDoubleClick={() => B(data.owner)}>
+      <Appointments.Appointment {...restProps}>
+        <div style={{ display: "flex" }}>
+          {
+            console.log("data", data)
+          }
 
-        <div>{children}</div>
-        <div
-          onClick={() => handleJoin(data.question_id)}
-        ><i
-          class="fa fa-video-camera"
-          style={{ fontSize: "12px", color: "#fff" }}
-        ></i>
+          <div>{children}</div>
+          <div
+            onClick={() => handleJoin(data.question_id)}
+          ><i
+            class="fa fa-video-camera"
+            style={{ fontSize: "12px", color: "#fff" }}
+          ></i>
+          </div>
         </div>
-      </div>
-    </Appointments.Appointment>
+      </Appointments.Appointment>
+    </div>
+
   );
 
 
@@ -415,6 +417,8 @@ function Demo() {
     );
   };
 
+
+  console.log("read", read)
 
   return (
     <Paper>

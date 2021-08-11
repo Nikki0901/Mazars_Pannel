@@ -34,6 +34,7 @@ function Demo() {
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [owner, setOwner] = useState([]);
+  const [read, setRead] = useState(false);
 
   const [baseMode, SetbaseMode] = useState("avc");
   const [transcode, SetTranscode] = useState("interop");
@@ -141,6 +142,11 @@ function Demo() {
     },
   });
 
+
+  const B = (key) => {
+    setRead(!key)
+  }
+
   const AppointmentBase = ({
     children,
     data,
@@ -149,23 +155,26 @@ function Demo() {
     onAppointmentMetaChange,
     ...restProps
   }) => (
-    <Appointments.Appointment {...restProps}>
-      <div style={{ display: "flex" }}>
-        {
-          // console.log("children",children)
-          console.log("data", data)
+    <div onDoubleClick={() => B(data.owner)}>
+      <Appointments.Appointment {...restProps}>
+        <div style={{ display: "flex" }}>
+          {
+            // console.log("children",children)
+            console.log("data", data)
 
-        }
-        <div>{children}</div>
-        <div
-          onClick={() => handleJoin(data.question_id)}
-        ><i
-          class="fa fa-video-camera"
-          style={{ fontSize: "12px", color: "#fff" }}
-        ></i>
+          }
+          <div>{children}</div>
+          <div
+            onClick={() => handleJoin(data.question_id)}
+          ><i
+            class="fa fa-video-camera"
+            style={{ fontSize: "12px", color: "#fff" }}
+          ></i>
+          </div>
         </div>
-      </div>
-    </Appointments.Appointment>
+      </Appointments.Appointment>
+    </div>
+
   );
 
 
@@ -410,11 +419,19 @@ function Demo() {
         <ViewSwitcher />
 
         <AppointmentTooltip showOpenButton />
-        <AppointmentForm
-          booleanEditorComponent={BooleanEditor}
-          basicLayoutComponent={BasicLayout}
-          textEditorComponent={TextEditor}
-        />
+
+        {
+          read ?
+            <AppointmentForm
+              readOnly
+            />
+            :
+            <AppointmentForm
+              booleanEditorComponent={BooleanEditor}
+              basicLayoutComponent={BasicLayout}
+              textEditorComponent={TextEditor}
+            />
+        }
 
         <Resources
           data={resources}

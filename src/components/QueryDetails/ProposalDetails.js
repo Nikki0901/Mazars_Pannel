@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CommonServices from "../../common/common";
 import DownloadLink from "react-download-link";
 import axios from "axios";
@@ -12,7 +12,6 @@ function ProposalDetails({
   paymentDetails,
   p,
 }) {
-
 
   const {
     amount,
@@ -38,6 +37,7 @@ function ProposalDetails({
   console.log("installment_amount", installment_amount.split(','));
 
 
+  //installment
   const installAmount = (data) => {
     var item = data.split(',')
     console.log("item", item);
@@ -52,7 +52,54 @@ function ProposalDetails({
   }
 
 
-  // console.log("payment_terms", JSON.parse(payment_terms))
+
+  // curent date
+  var date = new Date();
+  function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  const [currentDate] = useState(convert(date));
+
+  // console.log("currentDate", currentDate)
+
+
+
+
+  const dueDate = (a) => {
+    var item = a.split(',')
+
+    console.log("inst---", item);
+
+    //total installment
+    var total_Installment = item.reduce(myFunction)
+    function myFunction(total, value) {
+      return Number(total) + Number(value);
+    }
+
+    //total payment history
+    var total_Payment_History = paymentDetails.reduce(function (prev, current) {
+      return prev + +current.paid_amount
+    }, 0);
+
+
+    console.log("total_Installment---", total_Installment);
+    console.log('total_Payment_History', total_Payment_History)
+
+    var amount = total_Installment - total_Payment_History
+    console.log('amount', amount)
+
+    if (amount > 0) {
+      return amount
+    }
+
+  }
+
+
+
   return (
     <>
       <div>
@@ -216,7 +263,7 @@ function ProposalDetails({
             </tr>
             <tr>
               <th scope="row">Payment Due</th>
-              <td>{accepted_amount - payment_received}</td>
+              <td>{dueDate(installment_amount)}</td>
             </tr>
             <tr>
               <th scope="row">Payment Outstanding</th>

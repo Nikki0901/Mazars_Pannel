@@ -62,7 +62,7 @@ function CustomerNotification({ tokenKey, name }) {
 
                             <div
                                 class="dropdown-menu dropdown-menu-right"
-                                style={{ height: "300px", overflowY: "scroll" }}
+                                style={{ height: "300px", overflowY: "scroll", width: "600px" }}
                             >
                                 <div class="arrow_box_right">
                                     {notification.map((p, i) => (
