@@ -17,8 +17,6 @@ import Mandatory from "../../components/Common/Mandatory";
 
 
 
-
-
 function SignUp(props) {
   const phone2 = useRef(null)
   const alert = useAlert();
@@ -77,7 +75,6 @@ function SignUp(props) {
   const togglePasssword2 = () => {
     setRepassword(!repassword)
   };
-
 
   useEffect(() => {
     getTime()
@@ -308,8 +305,6 @@ function SignUp(props) {
 
 
 
-
-
   const otpVali = (e) => {
     if (isNaN(e.target.value)) {
       setvaliOtp("Please enter number only")
@@ -320,6 +315,8 @@ function SignUp(props) {
 
     }
   }
+
+
 
   //submit form
   const onSubmit = (value) => {
@@ -405,10 +402,7 @@ function SignUp(props) {
     else {
       setDisplay(true)
     }
-
-
   }
-
 
   return (
     <>

@@ -10,7 +10,7 @@ import { useAlert } from "react-alert";
 import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
-
+import Mandatory from "../../../components/Common/Mandatory";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -33,7 +33,8 @@ function AddNew() {
   });
 
   const userid = window.localStorage.getItem("adminkey");
-
+  const [error, setError] = useState()
+  const [error2, setError2] = useState();
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [mdata, setmdata] = useState([]);
@@ -41,17 +42,33 @@ function AddNew() {
   const [mcatname, setmcatname] = useState([]);
   const [mcategory, setmcategory] = useState([]);
   const [store, setStore] = useState([]);
-  var a;
-  const options = tax.map(d => ({
-    "value": d.id,
-    "label": d.details
-  }))
+  const [subData, subCategeryData] = useState([])
+  const [custCate, setCustcate] = useState([])
+  const [custCate2, setCustcate2] = useState([])
+  var a = [tax2]
+  var da = []
+  const options = tax.map(d => (
+    {
+      "value": d.id,
+      "label": d.details
+    }))
+
   const options2 = tax2.map(v => ({
     "value": v.id,
     "label": v.details
   }))
+  //   da = custCate.map((i) => {
+  //     if (i.value == 1 && i.value == 2){
+  //       return 3
+  //     }
+  //   else if (i.value == 1){
+  //      return 1
 
-
+  //    }
+  //    else if (i.value == 2){
+  //      return 2
+  //    }
+  //  }) 
   useEffect(() => {
     const getCategory = async () => {
       await axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
@@ -64,7 +81,7 @@ function AddNew() {
     getCategory();
   }, []);
 
-  
+
   useEffect(() => {
     const getSubCategory = async () => {
 
@@ -72,75 +89,129 @@ function AddNew() {
 
         if (res.data.code === 1) {
           setTax2(res.data.result)
+          res.data.result.map((d) => {
+
+            a.push(d)
+          })
         }
       });
+
     };
 
 
     getSubCategory();
-    console.log(store)
+
   }, [store]);
 
 
 
   const onSubmit = (value) => {
-    console.log(mcategory)
-    let formData = new FormData();
-    console.log(mcategory)
-    formData.append("email", value.p_email);
-    formData.append("name", value.p_name);
-    formData.append("phone", value.p_phone);
-
-    formData.append("type", "tl");
-
-    formData.append("cat_id", mdata)
-
-    formData.append("pcat_id", mcategory)
-    formData.append("allpcat_id", mcatname)
-    formData.append("allcat_id", mdataName)
-
-
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/AddTeamLead`,
-      data: formData,
+    var categeryList = []
+    var categeryName = []
+    subData.map((i) => {
+      categeryList.push(i.value)
+      categeryName.push(i.label)
     })
+    console.log("subData", subData)
+    if (custCate.length < 1) {
+      setError("Please select at least one value")
+    }
+    else if (subData.length < 1) {
 
-      .then(function (response) {
+      setError2("Please select at least one value")
+    }
+    else {
+      let formData = new FormData();
 
-        if (response.data.code === 1) {
-          alert.success("TL created  !");
-          console.log(response)
-          history.goBack();
-        }
-        if (response.data.code === 0) {
-          response.data.message.map((i) => {
-            alert.error(i)
-          })
-        }
+      formData.append("email", value.p_email);
+      formData.append("name", value.p_name);
+      formData.append("phone", value.p_phone);
 
+      formData.append("type", "tl");
+
+      formData.append("cat_id", categeryList)
+
+      formData.append("pcat_id", mcategory)
+      formData.append("allpcat_id", mcatname)
+      formData.append("allcat_id", categeryName)
+
+
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/AddTeamLead`,
+        data: formData,
       })
-      .catch((error) => {
 
-      });
+        .then(function (response) {
+
+          if (response.data.code === 1) {
+            alert.success("TL created  !");
+
+            history.goBack();
+          }
+          if (response.data.code === 0) {
+            response.data.message.map((i) => {
+              alert.error(i)
+            })
+          }
+
+        })
+        .catch((error) => {
+
+        });
+    }
 
   };
 
-  const multiple = (e) => {
-    e.map((val) => {
-      setmdata([...mdata, val.value])
-      setMdataname([...mdataName, val.label])
-    })
-  }
-  const multiple2 = (v) => {
-    v.map((val) => {
 
-      setmcategory([...mcategory, val.value])
+  const multiple = (e) => {
+    subCategeryData(e)
+    setCustcate2(e)
+    setError2("")
+  }
+
+
+  var vv = []
+  const multiple2 = (v) => {
+    setError("")
+    setCustcate(v)
+    v.map((val) => {
+      vv.push(val.value)
+      setmcategory(val.value)
       setmcatname([...mcatname, val.label])
       setStore(val.value)
-
     })
+    console.log(vv)
+    var kk = []
+    if (vv.length > 0) {
+      if (vv.includes("1") && vv.includes("2")) {
+        console.log("hdd")
+      }
+      else if (vv.includes("1")) {
+
+        for (let i = 0; i < subData.length; i++) {
+          if (subData[i].value < 9) {
+            kk.push(subData[i])
+          }
+        }
+        subCategeryData(kk)
+      }
+      else if (vv.includes("2")) {
+
+        for (let i = 0; i < subData.length; i++) {
+          if (subData[i].value > 9) {
+            kk.push(subData[i])
+          }
+        }
+        subCategeryData(kk)
+      }
+    }
+
+    else if (vv.length === 0) {
+      subCategeryData("")
+    }
+    console.log(vv.length)
   }
 
   return (
@@ -180,11 +251,7 @@ function AddNew() {
                         name="p_name"
                         ref={register}
                       />
-                      {errors.p_name && (
-                        <div className="invalid-feedback">
-                          {errors.p_name.message}
-                        </div>
-                      )}
+
                     </div>
                   </div>
 
@@ -199,12 +266,7 @@ function AddNew() {
                         name="p_phone"
                         ref={register}
                       />
-                      {errors.p_phone && (
-                        <div className="invalid-feedback">
-                          {errors.p_phone.message}
 
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -213,30 +275,26 @@ function AddNew() {
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Category</label>
-                      <Select isMulti options={options} onChange={multiple2}>
+                      <Select isMulti options={options}
+                        className={error ? "customError" : ""}
+
+                        onChange={multiple2}>
 
                       </Select>
 
-                      {errors.p_tax && (
-                        <div className="invalid-feedback">
-                          {errors.p_tax.message}
-                        </div>
-                      )}
+
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Sub Category</label>
-                      <Select isMulti options={options2} onChange={multiple}>
+                      <Select isMulti options={options2}
+                        className={error2 ? "customError" : ""}
+                        onChange={multiple}
+                        value={subData}>
 
                       </Select>
 
-
-                      {errors.p_tax2 && (
-                        <div className="invalid-feedback">
-                          {errors.p_tax2.message}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -253,11 +311,7 @@ function AddNew() {
                         name="p_email"
                         ref={register}
                       />
-                      {errors.p_email && (
-                        <div className="invalid-feedback">
-                          {errors.p_email.message}
-                        </div>
-                      )}
+
                     </div>
                   </div>
                 </div>
@@ -266,7 +320,11 @@ function AddNew() {
                 </button>
               </form>
             </div>
-            <div class="col-lg-2 col-xl-2 col-md-12"></div>
+            <div class="col-lg-2 col-xl-2 col-md-12">
+
+            </div>
+
+            <Mandatory />
           </div>
         </CardHeader>
       </Card>
@@ -276,28 +334,18 @@ function AddNew() {
 
 export default AddNew;
 
-
-
-
-
-
-
-
-
-
-
 // import React, { useState, useEffect } from "react";
 // import Layout from "../../../components/Layout/Layout";
 // import { useForm } from "react-hook-form";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
+// import Select from "react-select";
 // import axios from "axios";
 // import { baseUrl } from "../../../config/config";
 // import { useAlert } from "react-alert";
 // import { Card, CardHeader } from "reactstrap";
 // import { useHistory } from "react-router-dom";
 // import classNames from "classnames";
-// import Alerts from "../../../common/Alerts";
 
 
 // const Schema = yup.object().shape({
@@ -309,15 +357,13 @@ export default AddNew;
 //     .matches(/^[0-9]+$/, "Must be only digits")
 //     .min(10, "Must be exactly 10 digits")
 //     .max(20, "max 20 digits"),
-//   p_tax: yup.string().required("required category"),
-//   p_tax2: yup.string().required("required sub category"),
+
 // });
 
 
 // function AddNew() {
 //   const alert = useAlert();
 //   const history = useHistory();
-
 //   const { handleSubmit, register, reset, errors } = useForm({
 //     resolver: yupResolver(Schema),
 //   });
@@ -326,14 +372,25 @@ export default AddNew;
 
 //   const [tax, setTax] = useState([]);
 //   const [tax2, setTax2] = useState([]);
+//   const [mdata, setmdata] = useState([]);
+//   const [mdataName, setMdataname] = useState([]);
+//   const [mcatname, setmcatname] = useState([]);
+//   const [mcategory, setmcategory] = useState([]);
+//   const [store, setStore] = useState([]);
+//   var a;
+//   const options = tax.map(d => ({
+//     "value": d.id,
+//     "label": d.details
+//   }))
+//   const options2 = tax2.map(v => ({
+//     "value": v.id,
+//     "label": v.details
+//   }))
 
-//   const [store, setStore] = useState("");
-//   const [store2, setStore2] = useState(null);
 
 //   useEffect(() => {
-//     const getCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//         console.log(res);
+//     const getCategory = async () => {
+//       await axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
 //         if (res.data.code === 1) {
 //           setTax(res.data.result);
 //         }
@@ -345,49 +402,82 @@ export default AddNew;
 
 
 //   useEffect(() => {
-//     const getSubCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-//         console.log(res);
+//     const getSubCategory = async () => {
+
+//       await axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+
 //         if (res.data.code === 1) {
-//           setTax2(res.data.result);
+//           setTax2(res.data.result)
 //         }
 //       });
 //     };
+
+
 //     getSubCategory();
+//     console.log(store)
 //   }, [store]);
 
 
 
 //   const onSubmit = (value) => {
-//     console.log("value :", value);
-
+//     console.log(mcategory)
 //     let formData = new FormData();
+//     console.log(mcategory)
 //     formData.append("email", value.p_email);
 //     formData.append("name", value.p_name);
 //     formData.append("phone", value.p_phone);
-//     formData.append("pcat_id", value.p_tax);
-//     formData.append("cat_id", value.p_tax2);
+
 //     formData.append("type", "tl");
+
+//     formData.append("cat_id", mdata)
+
+//     formData.append("pcat_id", mcategory)
+//     formData.append("allpcat_id", mcatname)
+//     formData.append("allcat_id", mdataName)
+
+
 
 //     axios({
 //       method: "POST",
 //       url: `${baseUrl}/tl/AddTeamLead`,
 //       data: formData,
 //     })
+
 //       .then(function (response) {
-//         console.log("res-", response);
+
 //         if (response.data.code === 1) {
-
-//           var variable = "Team Leader Created Successfully"
-//           Alerts.SuccessNormal(variable)
-
+//           alert.success("TL created  !");
+//           console.log(response)
 //           history.goBack();
 //         }
+//         if (response.data.code === 0) {
+//           response.data.message.map((i) => {
+//             alert.error(i)
+//           })
+//         }
+
 //       })
 //       .catch((error) => {
-//         console.log("erroror - ", error);
+
 //       });
+
 //   };
+
+//   const multiple = (e) => {
+//     e.map((val) => {
+//       setmdata([...mdata, val.value])
+//       setMdataname([...mdataName, val.label])
+//     })
+//   }
+//   const multiple2 = (v) => {
+//     v.map((val) => {
+
+//       setmcategory([...mcategory, val.value])
+//       setmcatname([...mcatname, val.label])
+//       setStore(val.value)
+
+//     })
+//   }
 
 //   return (
 //     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -448,6 +538,7 @@ export default AddNew;
 //                       {errors.p_phone && (
 //                         <div className="invalid-feedback">
 //                           {errors.p_phone.message}
+
 //                         </div>
 //                       )}
 //                     </div>
@@ -458,21 +549,10 @@ export default AddNew;
 //                   <div class="col-md-6">
 //                     <div class="form-group">
 //                       <label>Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax,
-//                         })}
-//                         name="p_tax"
-//                         ref={register}
-//                         onChange={(e) => setStore(e.target.value)}
-//                       >
-//                         <option value="">--Select Category--</option>
-//                         {tax.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
+//                       <Select isMulti options={options} onChange={multiple2}>
+
+//                       </Select>
+
 //                       {errors.p_tax && (
 //                         <div className="invalid-feedback">
 //                           {errors.p_tax.message}
@@ -483,21 +563,11 @@ export default AddNew;
 //                   <div class="col-md-6">
 //                     <div class="form-group">
 //                       <label>Sub Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax2,
-//                         })}
-//                         name="p_tax2"
-//                         ref={register}
-//                         onChange={(e) => setStore2(e.target.value)}
-//                       >
-//                         <option value="">--Select Sub-Category--</option>
-//                         {tax2.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
+//                       <Select isMulti options={options2} onChange={multiple}>
+
+//                       </Select>
+
+
 //                       {errors.p_tax2 && (
 //                         <div className="invalid-feedback">
 //                           {errors.p_tax2.message}
@@ -541,3 +611,8 @@ export default AddNew;
 // }
 
 // export default AddNew;
+
+
+
+
+
