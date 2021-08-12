@@ -146,10 +146,13 @@ function InprogressProposal() {
         return (
           <>
             {
-              row.status_code >= "1" ?
-                CommonServices.removeTime(row.exp_delivery_date)
+              row.status == "Declined Query"
+                ? null
                 :
-                null
+                row.status_code >= "1" ?
+                  CommonServices.removeTime(row.exp_delivery_date)
+                  :
+                  null
             }
           </>
         )

@@ -142,14 +142,6 @@ function DeclinedQueries() {
         );
       },
     },
-    {
-      text: "Expected Delivery Date",
-      dataField: "Exp_Delivery_Date",
-      sort: true,
-      headerStyle: () => {
-          return { fontSize: "12px" };
-      },
-  },
   ];
 
   return (

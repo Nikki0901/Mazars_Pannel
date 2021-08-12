@@ -13,6 +13,7 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 function AllQuery() {
 
@@ -22,6 +23,12 @@ function AllQuery() {
     const [records, setRecords] = useState([]);
 
 
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getInCompleteAssingment();
@@ -212,6 +219,18 @@ function AllQuery() {
                                     ></i>
                                 </Link>
                             </div>
+
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
                         </div>
                     </>
                 );
@@ -238,6 +257,13 @@ function AllQuery() {
                         data={incompleteData}
                         columns={columns}
                         rowIndex
+                    />
+
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getInCompleteAssingment}
                     />
                 </CardBody>
             </Card>

@@ -16,12 +16,22 @@ import {
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import Records from "../../components/Records/Records";
+import DiscardReport from "../../pages/Admin/AssignmentTab/DiscardReport";
 
 
 function AllQueriesData() {
 
   const [allQueriesData, setAllQueriesData] = useState([])
   const [records, setRecords] = useState([]);
+  const [assignNo, setAssignNo] = useState('');
+
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
+
+
 
   useEffect(() => {
     getAllQueriesData();
@@ -36,6 +46,8 @@ function AllQueriesData() {
       }
     });
   };
+
+
 
 
   const columns = [
@@ -148,34 +160,49 @@ function AllQueriesData() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px", width: "65px" };
+        return { fontSize: "12px", width: "85px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div title="Send Message">
-              <Link
-                to={{
-                  pathname: `/admin/chatting/${row.id}`,
-                  obj: {
-                    message_type: "4",
-                    query_No: row.assign_no,
-                    query_id: row.id,
-                    routes: `/admin/queriestab`
-                  }
-                }}
-              >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.id}`,
+                    obj: {
+                      message_type: "4",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/admin/queriestab`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
                 <i
                   class="fa fa-comments-o"
                   style={{
                     fontSize: 16,
                     cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "blue"
+                    color: "orange"
                   }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
                 ></i>
-              </Link>
+              </div>
             </div>
+
           </>
         );
       },
@@ -205,6 +232,15 @@ function AllQueriesData() {
             rowIndex
             wrapperClasses="table-responsive"
           />
+
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAllQueriesData}
+          />
+
         </CardBody>
       </Card>
     </>

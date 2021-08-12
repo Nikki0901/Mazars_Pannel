@@ -5,7 +5,6 @@ import * as yup from "yup";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Card,
@@ -36,7 +35,6 @@ function Feedback() {
   const history = useHistory();
   const { id } = useParams();
   const userId = window.localStorage.getItem("userid");
-
   const [loading, setLoading] = useState(false);
 
 
@@ -144,7 +142,6 @@ function Feedback() {
           }
         </CardBody>
       </Card>
-
     </Layout>
   );
 }

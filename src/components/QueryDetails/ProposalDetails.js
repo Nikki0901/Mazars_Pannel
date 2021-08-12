@@ -66,6 +66,7 @@ function ProposalDetails({
   console.log("currentDate", currentDate)
 
 
+  
   const dueDate = (a, b) => {
     var item1 = a.split(',')
     var item2 = b.split(',')

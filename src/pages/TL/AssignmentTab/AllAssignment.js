@@ -376,20 +376,6 @@ function AssignmentTab() {
                 </div>
               )}
 
-
-              {row.vstart < 11 &&
-                row.vend >= 0 &&
-                !(row.vstart == null && row.vend == null) ? (
-                <div style={{ cursor: "pointer" }} title="Video Chat">
-                  <i
-                    class="fa fa-video-camera"
-                    style={{ color: "red", fontSize: "16px" }}
-                    onClick={() => handleJoin(row.id)}
-                  ></i>
-                </div>
-              ) : null}
-
-
               <div title="Send Message">
                 <Link
                   to={{

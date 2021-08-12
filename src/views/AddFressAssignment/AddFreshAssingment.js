@@ -141,7 +141,7 @@ function AddFreshAssingment(props) {
                 icon: 'success',
               })
             }
-            props.history.push("/customer/dashboard");
+            props.history.push("/customer/queries");
           } else {
             setLoad(false);
           }

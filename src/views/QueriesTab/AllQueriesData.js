@@ -20,6 +20,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 import CommonServices from "../../common/common";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -36,6 +37,12 @@ function AllQueriesData() {
         setAdditionalQuery(!additionalQuery);
         setAssignNo(key)
     };
+
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getQueriesData();
@@ -55,6 +62,7 @@ function AllQueriesData() {
                 }
             });
     };
+
 
     const columns = [
         {
@@ -169,10 +177,13 @@ function AllQueriesData() {
                 return (
                     <>
                         {
-                            row.status_code >= "1" ?
-                                CommonServices.removeTime(row.exp_delivery_date)
+                            row.status == "Declined Query"
+                                ? null
                                 :
-                                null
+                                row.status_code >= "1" ?
+                                    CommonServices.removeTime(row.exp_delivery_date)
+                                    :
+                                    null
                         }
                     </>
                 )
@@ -272,7 +283,7 @@ function AllQueriesData() {
                                                         >
                                                             <PublishIcon color="secondary" />
                                                         </div>
-                                                 }
+                                                }
                                                 <div title="Send Message">
                                                     <Link
                                                         to={{
@@ -294,6 +305,18 @@ function AllQueriesData() {
                                                             }}
                                                         ></i>
                                                     </Link>
+                                                </div>
+
+                                                <div title="View Discussion Message">
+                                                    <i
+                                                        class="fa fa-comments-o"
+                                                        style={{
+                                                            fontSize: 16,
+                                                            cursor: "pointer",
+                                                            color: "orange"
+                                                        }}
+                                                        onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                                    ></i>
                                                 </div>
                                             </div>
                                             :
@@ -357,7 +380,7 @@ function AllQueriesData() {
                 <CardHeader>
                     <Row>
                         <Col md="9">
-                            {/* <CardTitle tag="h4">Queries ({queriesCount})</CardTitle> */}
+
                         </Col>
                         <Col md="3">
                             <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -394,6 +417,14 @@ function AllQueriesData() {
                         additionalQuery={additionalQuery}
                         assignNo={assignNo}
                         getQueriesData={getQueriesData}
+                    />
+
+
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getQueriesData}
                     />
 
                 </CardBody>
