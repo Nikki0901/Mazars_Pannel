@@ -23,6 +23,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import Records from "../../components/Records/Records";
 import PaymentIcon from '@material-ui/icons/Payment';
 import PaymentComponent from './PaymentComponent';
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -39,7 +40,7 @@ function Paid() {
     amount: "",
     accepted_amount: "",
     paid_amount: "",
-    assign_id:'',
+    assign_id: '',
 
     amount_type: "",
     amount_fixed: "",
@@ -73,7 +74,12 @@ function Paid() {
     });
   };
 
-
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getPaymentStatus();
@@ -278,18 +284,34 @@ function Paid() {
       formatter: function (cell, row) {
         return (
           <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                {
+                  row.paid_status == "0" ?
+                    <div
+                      style={{ cursor: "pointer" }}
+                      title="Pay Amount"
+                      onClick={() => paymentHandler(row)}>
+                      <PaymentIcon color="primary" />
+                    </div>
+                    :
+                    null
+                }
+              </div>
 
-            {
-              row.paid_status == "0" ?
-                <div
-                  style={{ cursor: "pointer" }}
-                  title="Pay Amount"
-                  onClick={() => paymentHandler(row)}>
-                  <PaymentIcon color="primary" />
-                </div>
-                :
-                null
-            }
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+
+            </div>
 
           </>
         );
@@ -333,6 +355,12 @@ function Paid() {
               getPaymentStatus={getPaymentStatus}
             />
 
+            <DiscardReport
+              ViewDiscussionToggel={ViewDiscussionToggel}
+              ViewDiscussion={ViewDiscussion}
+              report={assignNo}
+              getData={getPaymentStatus}
+            />
           </CardBody>
         </Card>
       </>

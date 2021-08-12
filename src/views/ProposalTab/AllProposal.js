@@ -21,6 +21,7 @@ import Records from "../../components/Records/Records";
 import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
 import ViewComponent from "./ViewComponent";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -31,7 +32,6 @@ function ProposalTab() {
     const [proposalDisplay, setProposalDisplay] = useState([]);
     const [proposalCount, setCountProposal] = useState("");
     const [records, setRecords] = useState([]);
-
     const [reject, setRejected] = useState(true);
 
     const [viewData, setViewData] = useState({});
@@ -41,6 +41,13 @@ function ProposalTab() {
         setViewModal(!viewModal);
         setViewData(key);
     };
+
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
 
     useEffect(() => {
@@ -302,6 +309,18 @@ function ProposalTab() {
 
                                     </div>
                                 ) : null}
+
+                                <div title="View Discussion Message">
+                                    <i
+                                        class="fa fa-comments-o"
+                                        style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            color: "orange"
+                                        }}
+                                        onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                    ></i>
+                                </div>
                             </div>
                         )}
                     </>
@@ -393,6 +412,13 @@ function ProposalTab() {
                         getProposalData={getProposalData}
                     />
 
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getProposalData}
+                    />
+
                 </CardBody>
             </Card>
         </div>
@@ -401,66 +427,3 @@ function ProposalTab() {
 
 export default ProposalTab;
 
-
-
-// axios
-//   .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
-//   .then(function (response) {
-//     console.log("delete-", response);
-// if (response.data.code === 1) {
-//   Swal.fire("Deleted!", "Your file has been deleted.", "success");
-//   getTeamLeader();
-// } else {
-//   Swal.fire("Oops...", "Errorr ", "error");
-// }
-
-//   })
-//   .catch((error) => {
-//     console.log("erroror - ", error);
-//   });
-
-
-
-
-
-// <div title="Send Feedback" style={{ cursor: "pointer" }}>
-// <Link to={`/customer/feedback/${row.assign_no}`}>
-//     <FeedbackIcon />
-// </Link>
-// </div>
-
-
-{/* <div style={{ cursor: "pointer" }} title="Discussion">
-                                            <i
-                                                class="fa fa-comments-o"
-                                                style={{ color: "green", fontSize: "16px" }}
-                                                onClick={() => chatHandler(row)}
-                                            ></i>
-                                        </div> */}
-
-                                           // rejected proposal
-    // const rejected = (key) => {
-    //     console.log("rej", key);
-
-    //     let formData = new FormData();
-    //     formData.append("id", key);
-    //     formData.append("status", 6);
-
-    //     axios({
-    //         method: "POST",
-    //         url: `${baseUrl}/customers/ProposalAccept`,
-    //         data: formData,
-    //     })
-    //         .then(function (response) {
-    //             console.log("res-", response);
-    //             if (response.data.code === 1) {
-    //                 setRejected(false);
-    //                 getProposalData();
-    //                 var variable = "Proposal rejected successfully."
-    //                 Alerts.SuccessNormal(variable)
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.log("erroror - ", error);
-    //         });
-    // };

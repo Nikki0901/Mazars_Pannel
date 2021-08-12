@@ -8,7 +8,8 @@ import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import ChatHistory from "./ChatHistory";
-// import PostAddIcon from '@material-ui/icons/PostAdd';
+import DiscardReport from "../AssignmentTab/DiscardReport";
+
 
 
 
@@ -26,6 +27,14 @@ function AllProposal() {
         setPaymentModal(!addPaymentModal);
         setId(key.assign_no);
     };
+
+
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getProposalList();
@@ -227,7 +236,7 @@ function AllProposal() {
             text: "Action",
             dataField: "",
             headerStyle: () => {
-                return { fontSize: "12px", width: "90px" };
+                return { fontSize: "12px", width: "110px" };
             },
             formatter: function (cell, row) {
                 return (
@@ -297,6 +306,18 @@ function AllProposal() {
                                     />
                                 </a>
                             </div>
+
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
                         </div>
                     </>
                 );
@@ -329,7 +350,12 @@ function AllProposal() {
                         chatHandler={chatHandler}
                         addPaymentModal={addPaymentModal}
                         qno={id}
-                    // getProposalData={getProposalList}
+                    />
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getProposalList}
                     />
                 </CardBody>
             </Card>

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
@@ -37,16 +38,25 @@ function AddNew() {
   const [error2, setError2] = useState();
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
-  const [mdata, setmdata] = useState([]);
-  const [mdataName, setMdataname] = useState([]);
+
   const [mcatname, setmcatname] = useState([]);
   const [mcategory, setmcategory] = useState([]);
   const [store, setStore] = useState([]);
   const [subData, subCategeryData] = useState([])
   const [custCate, setCustcate] = useState([])
   const [custCate2, setCustcate2] = useState([])
-  var a = [tax2]
-  var da = []
+  const [numExist, setNumExist] = useState(null)
+  const [phone, setPhone] = useState('');
+  const [numAvail, setNumAvail] = useState(null)
+  const [indNumError, setIndNumError] = useState(null)
+
+  const [email, setEmail] = useState('');
+  const [valiEmail, setValiemail] = useState(null)
+  const [invalid, setInvalid] = useState(null)
+  const [wEmail, setWemail] = useState();
+  const [display, setDisplay] = useState(false);
+  var kk = []
+  var vv = []
   const options = tax.map(d => (
     {
       "value": d.id,
@@ -57,18 +67,7 @@ function AddNew() {
     "value": v.id,
     "label": v.details
   }))
-  //   da = custCate.map((i) => {
-  //     if (i.value == 1 && i.value == 2){
-  //       return 3
-  //     }
-  //   else if (i.value == 1){
-  //      return 1
 
-  //    }
-  //    else if (i.value == 2){
-  //      return 2
-  //    }
-  //  }) 
   useEffect(() => {
     const getCategory = async () => {
       await axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
@@ -89,21 +88,13 @@ function AddNew() {
 
         if (res.data.code === 1) {
           setTax2(res.data.result)
-          res.data.result.map((d) => {
-
-            a.push(d)
-          })
         }
       });
-
     };
-
-
     getSubCategory();
-
   }, [store]);
 
-
+  // OnSubmit Function
 
   const onSubmit = (value) => {
     var categeryList = []
@@ -120,7 +111,12 @@ function AddNew() {
 
       setError2("Please select at least one value")
     }
+    else if (invalid || wEmail || indNumError) {
+      setDisplay(false)
+    }
+
     else {
+      setDisplay(true)
       let formData = new FormData();
 
       formData.append("email", value.p_email);
@@ -146,13 +142,17 @@ function AddNew() {
         .then(function (response) {
 
           if (response.data.code === 1) {
-            alert.success("TL created  !");
+            Swal.fire({
+              "title": "Success",
+              "html": "TL created successfully",
+              "icon": "success"
+            })
 
             history.goBack();
           }
           if (response.data.code === 0) {
             response.data.message.map((i) => {
-              alert.error(i)
+
             })
           }
 
@@ -164,26 +164,26 @@ function AddNew() {
 
   };
 
-
-  const multiple = (e) => {
+  // Sub Category Function
+  const subCategory = (e) => {
     subCategeryData(e)
     setCustcate2(e)
     setError2("")
   }
 
 
-  var vv = []
-  const multiple2 = (v) => {
+  // Category Function
+  const category = (v) => {
     setError("")
     setCustcate(v)
     v.map((val) => {
       vv.push(val.value)
       setmcategory(val.value)
-      setmcatname([...mcatname, val.label])
+      setmcatname(val.label)
       setStore(val.value)
     })
-    console.log(vv)
-    var kk = []
+
+
     if (vv.length > 0) {
       if (vv.includes("1") && vv.includes("2")) {
         console.log("hdd")
@@ -200,7 +200,7 @@ function AddNew() {
       else if (vv.includes("2")) {
 
         for (let i = 0; i < subData.length; i++) {
-          if (subData[i].value > 9) {
+          if (subData[i].value > 8) {
             kk.push(subData[i])
           }
         }
@@ -211,8 +211,126 @@ function AddNew() {
     else if (vv.length === 0) {
       subCategeryData("")
     }
-    console.log(vv.length)
+
   }
+  // Phone onChange 
+  const phoneHandler = (e) => {
+
+    if (isNaN(e.target.value)) {
+      setIndNumError("")
+      setNumAvail("");
+      setNumExist('Please enter number only')
+      e.target.value = ""
+      setPhone("")
+    }
+    else {
+      setNumAvail("");
+      setNumExist("");
+      setPhone(e.target.value)
+    }
+  };
+
+  // Phone Validation function 
+  const phoneValidation = () => {
+    console.log(phone.length)
+    if (phone.length > 10) {
+      console.log(phone.length)
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Maximum 10 value should be enter")
+    }
+    else if (phone.length < 10) {
+      console.log(phone.length)
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Minimum 10 value should be enter")
+    }
+    else if (phone.length > 15) {
+      setNumAvail("")
+      setNumExist("")
+      setIndNumError("Maximum 15 value should be enter")
+    }
+
+    else {
+      setIndNumError("")
+
+      let formData = new FormData();
+      formData.append("phone", phone);
+      formData.append("type", 2);
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            // setValiphone(response.data.result)
+            console.log(response.data.result)
+            setNumExist('')
+            setNumAvail(response.data.result);
+
+          }
+          else if (response.data.code === 0) {
+            console.log(response.data.result)
+            setNumAvail('')
+            setNumExist(response.data.result)
+
+            console.log("mobile" + setNumExist)
+          }
+
+        })
+        .catch((error) => {
+          // console.log("erroror - ", error);
+        });
+    }
+  }
+
+  //eamil onchange
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+    console.log(e.target.value.length)
+    if (e.target.value.length < 1) {
+      setWemail("")
+    }
+  };
+
+
+  //email validaation with api
+  const emailValidation = (key) => {
+
+    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email.match(validRegex)) {
+      setWemail("");
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("type", 1);
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("resEmail-", response);
+          if (response.data.code === 1) {
+            setValiemail(response.data.result)
+            setInvalid('')
+          } else if (response.data.code === 0) {
+            setInvalid(response.data.result)
+            setValiemail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+    else {
+      setWemail("invalid email")
+    }
+
+  }
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -242,6 +360,38 @@ function AddNew() {
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
+                      <label>Post Name</label>
+                      <input
+                        type="text"
+                        name="post_name"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.post_name,
+                        })}
+                        ref={register}
+                      />
+
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Post Eamil</label>
+                      <input
+                        type="text"
+                        name="post_email"
+                        ref={register}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.post_email,
+                        })}
+                      />
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
                       <label>Name</label>
                       <input
                         type="text"
@@ -261,16 +411,52 @@ function AddNew() {
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_phone,
+                          "is-invalid": errors.p_phone || indNumError,
                         })}
                         name="p_phone"
                         ref={register}
+                        onChange={(e) => phoneHandler(e)}
+                        onBlur={phoneValidation}
                       />
-
+                      {indNumError ? <p className="declined">{indNumError}</p> : <>
+                        {
+                          numAvail ?
+                            <p className="completed"> {numAvail}
+                            </p>
+                            :
+                            <p className="declined">{numExist}</p>
+                        }
+                      </>}
                     </div>
                   </div>
                 </div>
-
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email || wEmail || invalid,
+                        })}
+                        name="p_email"
+                        ref={register}
+                        onChange={(e) => emailHandler(e)}
+                        onBlur={emailValidation}
+                      />
+                      {
+                        wEmail ? <p className="declined">{wEmail}</p> : <>
+                          {valiEmail ?
+                            <p className="completed">
+                              {valiEmail}
+                            </p>
+                            :
+                            <p className="declined">{invalid}</p>}
+                        </>
+                      }
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -278,7 +464,7 @@ function AddNew() {
                       <Select isMulti options={options}
                         className={error ? "customError" : ""}
 
-                        onChange={multiple2}>
+                        onChange={category}>
 
                       </Select>
 
@@ -290,7 +476,7 @@ function AddNew() {
                       <label>Sub Category</label>
                       <Select isMulti options={options2}
                         className={error2 ? "customError" : ""}
-                        onChange={multiple}
+                        onChange={subCategory}
                         value={subData}>
 
                       </Select>
@@ -299,22 +485,7 @@ function AddNew() {
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_email,
-                        })}
-                        name="p_email"
-                        ref={register}
-                      />
 
-                    </div>
-                  </div>
-                </div>
                 <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
@@ -323,7 +494,6 @@ function AddNew() {
             <div class="col-lg-2 col-xl-2 col-md-12">
 
             </div>
-
             <Mandatory />
           </div>
         </CardHeader>

@@ -23,6 +23,7 @@ import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import PaymentIcon from '@material-ui/icons/Payment';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import RejectedModal from "./RejectedModal";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -38,7 +39,6 @@ function AllPayment() {
     const [count, setCount] = useState("");
     const [payment, setPayment] = useState([]);
     const [modal, setModal] = useState(false);
-
     const [assignNo, setAssignNo] = useState("");
 
 
@@ -49,6 +49,11 @@ function AllPayment() {
         setAssignNo(key.assign_no)
     };
 
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getPaymentStatus();
@@ -132,10 +137,6 @@ function AllPayment() {
                 console.log(row);
                 return (
                     <>
-                        {/* <Link to={`/teamleader/queries/${row.assign_id}`}>
-              {row.assign_no}
-            </Link> */}
-
                         <Link
                             to={{
                                 pathname: `/teamleader/queries/${row.assign_id}`,
@@ -318,6 +319,18 @@ function AllPayment() {
                             </div>
 
 
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
+
                         </div>
                     </>
                 );
@@ -356,7 +369,12 @@ function AllPayment() {
                         getPaymentStatus={getPaymentStatus}
                     />
 
-
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getPaymentStatus}
+                    />
                     <Modal isOpen={modal} fade={false} toggle={toggle}>
                         <ModalHeader toggle={toggle}>History</ModalHeader>
                         <ModalBody>

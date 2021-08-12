@@ -7,7 +7,7 @@ import Select from "react-select";
 import './style.css'
 import { Spinner } from "reactstrap";
 import Swal from "sweetalert2";
-import { purpose, assessment_year } from "./data";
+import { purpose } from "./data";
 import Layout from "../../components/Layout/Layout";
 import {
   Card,
@@ -41,6 +41,8 @@ function AddFreshAssingment(props) {
   const [selectedOption, setSelectedOption] = useState([]);
   const [purposeOption, setPurposeOption] = useState([]);
   const [custError, setcustError] = useState([])
+  const [assessmentYear, setAssessmentYear] = useState([]);
+
 
   const [load, setLoad] = useState(false);
   const [selectError, setSelectError] = useState()
@@ -55,6 +57,22 @@ function AddFreshAssingment(props) {
     setSelectError("")
     setPurposeOption(e)
   }
+
+
+  useEffect(() => {
+    getAssementYear();
+  }, []);
+
+  const getAssementYear = () => {
+    axios
+      .get(`${baseUrl}/customers/getAssesmentYear`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setAssessmentYear(res.data.result);
+        }
+      });
+  };
 
 
   const onSubmit = (value) => {
@@ -256,7 +274,7 @@ function AddFreshAssingment(props) {
                           closeMenuOnSelect={false}
                           onChange={setSelectedOption}
                           isMulti
-                          options={assessment_year}
+                          options={assessmentYear}
                         />
 
                       </div>

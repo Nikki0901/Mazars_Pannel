@@ -16,6 +16,8 @@ import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Records from "../../../components/Records/Records";
 import ViewComponent from "../ViewProposal/ViewComponent";
+import DiscardReport from "../AssignmentTab/DiscardReport";
+
 
 function AllProposalComponent({ allProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
@@ -29,6 +31,15 @@ function AllProposalComponent({ allProposal }) {
     setViewData(key);
   };
 
+
+  const [assignNo, setAssignNo] = useState('');
+
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
+
   useEffect(() => {
     getProposalData();
   }, []);
@@ -39,8 +50,6 @@ function AllProposalComponent({ allProposal }) {
       if (res.data.code === 1) {
         setProposalDisplay(res.data.result);
         setRecords(res.data.result.length);
-
-        // allProposal(res.data.result.length);
       }
     });
   };
@@ -237,7 +246,7 @@ function AllProposalComponent({ allProposal }) {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "11px", width: "85px" };
+        return { fontSize: "11px", width: "95px" };
       },
       formatter: function (cell, row) {
         return (
@@ -267,14 +276,6 @@ function AllProposalComponent({ allProposal }) {
                 </Link>
               </div>
 
-              {/* <div style={{ cursor: "pointer" }} title="View Proposal">
-                <i
-                  class="fa fa-eye"
-                  style={{ color: "green", fontSize: "16px" }}
-                  onClick={() => ViewHandler(row)}
-                ></i>
-              </div> */}
-
               <div style={{ cursor: "pointer" }} title="View Proposal">
                 <a
                   href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
@@ -285,6 +286,18 @@ function AllProposalComponent({ allProposal }) {
                     style={{ color: "green", fontSize: "16px" }}
                   />
                 </a>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
               </div>
 
             </div>
@@ -326,6 +339,12 @@ function AllProposalComponent({ allProposal }) {
             getProposalData={getProposalData}
           />
 
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getProposalData}
+          />
         </CardBody>
       </Card>
     </>
@@ -333,35 +352,3 @@ function AllProposalComponent({ allProposal }) {
 }
 
 export default AllProposalComponent;
-
-// headerStyle: () => {
-//   return { width: "100px", textAlign: "center" };
-// },
-
-// events: {
-//   onClick: (e, column, columnIndex, row, rowIndex) => {
-//     console.log("cellContent", row);
-//     console.log("cellContent", row.q_id);
-//     return (
-//       <div>
-//         <Link to={`/admin/queries/${row.q_id}`}>{row.q_id}</Link>
-//       </div>
-//     );
-//   },
-// },
-
-// const defaultSorted = [
-//   {
-//     dataField: "assign_no",
-//     order: "desc",
-//   },
-// ];
-
-// const rowEvents = {
-//   onClick: (e, row, rowIndex) => {
-//     console.log(`clicked on row with index: ${rowIndex}`);
-//     console.log(`clicked on row with index: ${e}`);
-//     console.log(`clicked on row with index: ${row}`);
-//   },
-// };
-

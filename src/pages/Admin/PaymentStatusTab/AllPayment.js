@@ -22,6 +22,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import CommonServices from "../../../common/common";
 import Records from "../../../components/Records/Records";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -32,6 +33,14 @@ function AllPayment() {
     const [paymentcount, setPaymentCount] = useState("");
     const [pay, setPay] = useState([]);
     const [records, setRecords] = useState([]);
+
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
+
 
     useEffect(() => {
         getPaymentStatus();
@@ -262,7 +271,7 @@ function AllPayment() {
             formatter: function (cell, row) {
                 return (
                     <>
-                        <div style={{ display: "flex" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", width: "40px" }}>
 
 
                             <div style={{ cursor: "pointer" }} title="Payment History">
@@ -272,6 +281,20 @@ function AllPayment() {
                                     onClick={() => toggle(row.assign_id)}
                                 ></i>
                             </div>
+
+
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
+
 
                             {/* <div title="Send Message">
                 <Link
@@ -358,6 +381,14 @@ function AllPayment() {
                             </Button>
                         </ModalFooter>
                     </Modal>
+
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getPaymentStatus}
+                    />
+
                 </CardBody>
             </Card>
         </div>
