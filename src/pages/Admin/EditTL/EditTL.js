@@ -396,7 +396,7 @@ function EditTL() {
                         <label>Sub Category</label>
                         <Form.Item name="sub_category">
                           <Select isMulti options={options2}
-                            onChange={subCategory} defaultInputValue={data5} value={subData}>
+                            onChange={subCategory} value={subData} defaultInputValue={data5} value={subData}>
                           </Select>
 
                         </Form.Item>

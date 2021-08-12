@@ -24,13 +24,15 @@ import { withStyles } from "@material-ui/core/styles";
 import * as Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Alerts from "../../../common/Alerts";
+import Loader from "../../../components/Loader/Loader";
 
-// import {owners}  from "./appoinments";
+
 
 function Demo() {
   const userId = window.localStorage.getItem("tlkey");
   const history = useHistory();
 
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [assignmentdata, setAssignmentData] = useState([]);
   const [owner, setOwner] = useState([]);
@@ -224,7 +226,9 @@ function Demo() {
   };
 
   const commitChanges = ({ added, changed, deleted }) => {
+
     if (added) {
+      setLoading(true)
       console.log("added - ", added);
 
       var startDate = added.startDate;
@@ -247,8 +251,10 @@ function Demo() {
         .then(function (response) {
           console.log("res post-", response);
           if (response.data.code === 1) {
+            setLoading(false)
             Alerts.SuccessNormal("New call successfully scheduled.")
           } else if (response.data.code === 0) {
+            setLoading(false)
             var msg = response.data.result
             Alerts.ErrorNormal(msg)
           }
@@ -261,7 +267,7 @@ function Demo() {
     }
     if (changed) {
       console.log("changed", changed);
-
+      setLoading(true)
       const data2 = data.map((appointment) =>
         changed[appointment.id]
           ? { ...appointment, ...changed[appointment.id] }
@@ -309,10 +315,12 @@ function Demo() {
           console.log("res post-", response);
 
           if (response.data.code === 1) {
+            setLoading(false)
             var msg = "Successfully updated"
             Alerts.SuccessNormal(msg)
           }
           else if (response.data.code === 0) {
+            setLoading(false)
             console.log("call 0 code")
             var msg = response.data.result
             Alerts.ErrorNormal(msg)
@@ -326,7 +334,7 @@ function Demo() {
 
     if (deleted !== undefined) {
       console.log("deleted f", deleted);
-
+      setLoading(true)
       var value;
       data.filter((data) => {
         if (data.id == deleted) {
@@ -355,9 +363,11 @@ function Demo() {
           axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
             if (res.data.code === 1) {
+              setLoading(false)
               Swal.fire("Deleted!", "Scheduled call  has been deleted.", "success");
               getData();
             } else {
+              setLoading(false)
               Swal.fire("Oops...", "Errorr ", "error");
             }
           });
@@ -400,44 +410,53 @@ function Demo() {
 
 
   return (
-    <Paper>
-      <Scheduler data={data} height={660}>
-        <ViewState
-          defaultCurrentDate={currentDate}
-          defaultCurrentViewName="Day"
-        />
-        <EditingState onCommitChanges={commitChanges} />
-        <EditRecurrenceMenu />
+    <>
+      {
+        loading ?
+          <Loader />
+          :
+          <>
+            <Paper>
+              <Scheduler data={data} height={660}>
+                <ViewState
+                  defaultCurrentDate={currentDate}
+                  defaultCurrentViewName="Day"
+                />
+                <EditingState onCommitChanges={commitChanges} />
+                <EditRecurrenceMenu />
 
-        <DayView startDayHour={10} endDayHour={24} />
-        <WeekView startDayHour={10} endDayHour={19} />
-        <Appointments appointmentComponent={myAppointment} />
+                <DayView startDayHour={10} endDayHour={24} />
+                <WeekView startDayHour={10} endDayHour={19} />
+                <Appointments appointmentComponent={myAppointment} />
 
-        <Toolbar />
-        <DateNavigator />
-        <TodayButton />
-        <ViewSwitcher />
+                <Toolbar />
+                <DateNavigator />
+                <TodayButton />
+                <ViewSwitcher />
 
-        <AppointmentTooltip showOpenButton />
+                <AppointmentTooltip showOpenButton />
 
-        {
-          read ?
-            <AppointmentForm
-              readOnly
-            />
-            :
-            <AppointmentForm
-              booleanEditorComponent={BooleanEditor}
-              basicLayoutComponent={BasicLayout}
-              textEditorComponent={TextEditor}
-            />
-        }
+                {
+                  read ?
+                    <AppointmentForm
+                      readOnly
+                    />
+                    :
+                    <AppointmentForm
+                      booleanEditorComponent={BooleanEditor}
+                      basicLayoutComponent={BasicLayout}
+                      textEditorComponent={TextEditor}
+                    />
+                }
 
-        <Resources
-          data={resources}
-        />
-      </Scheduler>
-    </Paper>
+                <Resources
+                  data={resources}
+                />
+              </Scheduler>
+            </Paper>
+          </>
+      }
+    </>
   );
 }
 

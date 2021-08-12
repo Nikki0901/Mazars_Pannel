@@ -13,6 +13,8 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import DiscardReport from "../AssignmentTab/DiscardReport";
+
 
 function InCompleteData({ CountIncomplete }) {
   const userid = window.localStorage.getItem("tlkey");
@@ -20,7 +22,12 @@ function InCompleteData({ CountIncomplete }) {
   const [incompleteData, setInCompleteData] = useState([]);
   const [records, setRecords] = useState([]);
 
-
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getInCompleteAssingment();
@@ -154,6 +161,62 @@ function InCompleteData({ CountIncomplete }) {
         );
       },
     },
+    {
+      text: "Action",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                color: "green",
+              }}
+            >
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/teamleader/chatting/${row.id}`,
+                    obj: {
+                      message_type: "2",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/teamleader/proposal`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   return (
@@ -175,6 +238,13 @@ function InCompleteData({ CountIncomplete }) {
             data={incompleteData}
             columns={columns}
             rowIndex
+          />
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getInCompleteAssingment}
           />
         </CardBody>
       </Card>

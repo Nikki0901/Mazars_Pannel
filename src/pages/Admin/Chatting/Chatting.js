@@ -88,6 +88,8 @@ function Chatting(props) {
           var variable = "Message Successfully Sent "
           Alerts.SuccessNormal(variable)
           props.history.push(routes);
+        } if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {

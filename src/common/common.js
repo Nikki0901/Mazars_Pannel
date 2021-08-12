@@ -1,7 +1,6 @@
 //change date format
 
 const changeFormateDate = (oldDate) => {
-  console.log("date", oldDate);
   if (oldDate == null) {
     return null;
   }
@@ -13,8 +12,6 @@ const changeFormateDate = (oldDate) => {
 
 //remove time with date
 const removeTime = (oldDate) => {
-  console.log("RemoveTime - ", oldDate);
-
   if (oldDate == null) {
     return null;
   }
@@ -26,8 +23,6 @@ const removeTime = (oldDate) => {
 
 //removeDATE with TIME
 const removeDate = (oldDate) => {
-  console.log("RemoveTime - ", oldDate);
-
   if (oldDate == null) {
     return null;
   } else {

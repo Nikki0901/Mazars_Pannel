@@ -204,9 +204,9 @@ function QueryAssingment() {
                     <thead>
                       <tr>
                         <th scope="col">Query No.</th>
-                        <th scope="col">Tax Professional</th>
+                        <th scope="col">Tax Professional<span className="declined">*</span></th>
                         <th scope="col">Expected Timeline</th>
-                        <th scope="col">Exp. Delivery Date</th>
+                        <th scope="col">Exp. Delivery Date<span className="declined">*</span></th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>

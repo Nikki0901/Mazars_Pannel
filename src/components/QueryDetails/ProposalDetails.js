@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import CommonServices from "../../common/common";
-import DownloadLink from "react-download-link";
-import axios from "axios";
 import { baseUrl } from "../../config/config";
-
 
 
 function ProposalDetails({
@@ -33,7 +30,6 @@ function ProposalDetails({
 
   const { tlname, date_of_allocation } = diaplayHistory;
 
-
   console.log("installment_amount", installment_amount.split(','));
 
 
@@ -62,28 +58,40 @@ function ProposalDetails({
   }
 
   const [currentDate] = useState(convert(date));
-
   console.log("currentDate", currentDate)
 
 
-  
+
+  const dataCheck = (dateArr) => {
+
+    for (let i = 0; i < dateArr.length; i++) {
+      if (dateArr[i] === currentDate) {
+        console.log("true hai---", currentDate)
+        console.log("i", i)
+        return i
+      }
+    }
+  }
+
   const dueDate = (a, b) => {
     var item1 = a.split(',')
     var item2 = b.split(',')
 
-
     console.log("item1-", item1);
     console.log("item2", item2);
 
-    // if(currentDate == item2){
-      
-    // }
+    var due = dataCheck(item2);
+
+    console.log("due_date_length", due)
 
     //total installment
-    var total_Installment = item1.reduce(myFunction)
-    function myFunction(total, value) {
-      return Number(total) + Number(value);
+
+    var total_Installment = 0;
+    for (var i = 0; i <= due; i++) {
+      // total_Installment = total_Installment + item1[i];
+      total_Installment += +item1[i];
     }
+
 
     //total payment history
     var total_Payment_History = paymentDetails.reduce(function (prev, current) {
@@ -91,7 +99,7 @@ function ProposalDetails({
     }, 0);
 
 
-    console.log("total_Installment---", total_Installment);
+    console.log("total_Installment---",);
     console.log('total_Payment_History', total_Payment_History)
 
     var amount = total_Installment - total_Payment_History
@@ -102,7 +110,6 @@ function ProposalDetails({
     }
 
   }
-
 
 
   return (
@@ -289,3 +296,23 @@ function ProposalDetails({
 }
 
 export default ProposalDetails;
+
+
+
+      // for (const date of dateArr) {
+      // var dateInArr = new Date(date)
+      // var currentDate = new Date()
+      // var same = dateInArr.getDate() <= currentDate.getDate();
+      // if (same) {
+      //   console.log("true hai", date)
+      // } else {
+      //   console.log(`A JavaScript type is: `, date)
+      // }
+      // }
+
+   // var total_Installment = item1.reduce(myFunction)
+    // function myFunction(total, value, index) {
+    //   if (index <= due) {
+    //     return Number(total) + Number(value);
+    //   }
+    // }

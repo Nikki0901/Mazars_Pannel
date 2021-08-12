@@ -105,6 +105,7 @@ function SignUp(props) {
 
   //get country
   const getcountry = (key) => {
+    setCountryName(key)
     setShowPlus(true)
     setPhone("")
     setIndNumError("")
@@ -113,11 +114,8 @@ function SignUp(props) {
     if (key == 101) {
       setCountryId(key)
     }
-
     else {
-
       setCountryId("")
-
     }
 
     var arrayState = []
@@ -131,6 +129,7 @@ function SignUp(props) {
     country.filter((data) => {
       if (key == data.id) {
         setCountryCode(data.phoneCode)
+        setCountryName(data.name)
       }
     })
   };
@@ -312,7 +311,6 @@ function SignUp(props) {
     }
     else {
       setvaliOtp("")
-
     }
   }
 
