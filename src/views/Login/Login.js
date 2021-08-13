@@ -13,7 +13,6 @@ import VerifyOTP from "./VerifyOTP";
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
-import Loader from "../../components/Loader/Loader";
 import { Spinner } from 'reactstrap';
 
 const Schema = yup.object().shape({
@@ -38,7 +37,6 @@ function LoginForm() {
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
   };
-
 
   useEffect(() => {
     getTime()
@@ -67,7 +65,6 @@ function LoginForm() {
     }
 
   }
-
 
   const onSubmit = (value) => {
 

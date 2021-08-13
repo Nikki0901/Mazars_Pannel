@@ -19,12 +19,14 @@ import CommonServices from "../../common/common";
 import Alerts from "../../common/Alerts";
 import classNames from "classnames";
 import Swal from "sweetalert2";
+import Loader from "../../components/Loader/Loader";
 
 
 
 function ProposalView(props) {
-  const { handleSubmit, register, reset, errors } = useForm();
-  const alert = useAlert();
+  const { handleSubmit, register } = useForm();
+
+  const [loading, setLoading] = useState(false);
 
   const userId = window.localStorage.getItem("userid");
   const [queryStatus, setQueryStatus] = useState(null);
@@ -105,7 +107,6 @@ function ProposalView(props) {
 
 
   const updateCheckbox = ({ checked }) => {
-  
     setValueCheckBox(checked)
     setPaymentModal(checked);
     setCheckerror("")
@@ -120,6 +121,7 @@ function ProposalView(props) {
       setCheckerror("Please , You have to select")
     }
     else {
+      setLoading(true)
       let formData = new FormData();
       formData.append("id", id);
       formData.append("status", 5);
@@ -132,13 +134,18 @@ function ProposalView(props) {
       })
         .then(function (response) {
           console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoading(false)
+            var variable = "Proposal accepted successfully."
+            Alerts.SuccessNormal(variable)
+            history.push({
+              pathname: `/customer/proposal`,
+              index: 0,
+            });
+          } if (response.data.code === 0) {
+            setLoading(false)
+          }
 
-          var variable = "Proposal accepted successfully."
-          Alerts.SuccessNormal(variable)
-          history.push({
-            pathname: `/customer/proposal`,
-            index: 0,
-          });
         })
         .catch((error) => {
           console.log("erroror - ", error);
@@ -165,7 +172,6 @@ function ProposalView(props) {
   //rejected
   const rejected = (id) => {
     console.log("del", id);
-
     if (valueCheckBox === false) {
       console.log("catch")
       setCheckerror("Please , You have to select")
@@ -184,13 +190,12 @@ function ProposalView(props) {
         }
       });
     }
-
   };
 
 
   // delete data
   const deleteCliente = (key) => {
-
+    setLoading(true)
     let formData = new FormData();
     formData.append("id", key);
     formData.append("status", 6);
@@ -203,22 +208,22 @@ function ProposalView(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           Swal.fire("Rejected!", "Proposal rejected successfully.", "success");
           history.push({
             pathname: `/customer/proposal`,
             index: 0,
           });
         } else {
+          setLoading(false)
           Swal.fire("Oops...", "Errorr ", "error");
         }
       })
       .catch((error) => {
         console.log("erroror - ", error);
       });
-
   };
 
-  console.log("valueCheckBox", valueCheckBox)
 
   return (
     <Layout custDashboard="custDashboard" custUserId={userId}>
@@ -356,7 +361,6 @@ function ProposalView(props) {
                     className="form-check-label"
                     title="Read"
                     style={{ cursor: "pointer" }}
-                  // onClick={() => readTerms()}
                   >
                     Engagement Letter
                   </label>
@@ -364,29 +368,35 @@ function ProposalView(props) {
                 </div>
                 <br />
 
-                <div className="form-check">
-                  {
-                    valueCheckBox ?
-                      <div>
-                        <button type="submit" className="btn btn-primary">
-                          Accept
-                        </button>
-                        <button type="button" className="btn btn-danger ml-2" onClick={() => rejected(id)}>
-                          Reject
-                        </button>
+                {
+                  loading ?
+                    <Loader />
+                    :
+                    <>
+                      <div className="form-check">
+                        {
+                          valueCheckBox ?
+                            <div>
+                              <button type="submit" className="btn btn-primary">
+                                Accept
+                              </button>
+                              <button type="button" className="btn btn-danger ml-2" onClick={() => rejected(id)}>
+                                Reject
+                              </button>
+                            </div>
+                            :
+                            <div>
+                              <button type="submit" className="btn btn-primary" disabled>
+                                Accept
+                              </button>
+                              <button type="button" className="btn btn-danger ml-2" disabled>
+                                Reject
+                              </button>
+                            </div>
+                        }
                       </div>
-                      :
-                      <div>
-                        <button type="submit" className="btn btn-primary" disabled>
-                          Accept
-                        </button>
-                        <button type="button" className="btn btn-danger ml-2" disabled>
-                          Reject
-                        </button>
-                      </div>
-                  }
-
-                </div>
+                    </>
+                }
               </div>
             </div>
 

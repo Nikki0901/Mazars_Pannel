@@ -18,6 +18,7 @@ import {
 import { useHistory } from "react-router-dom";
 import Mandatory from "../../components/Common/Mandatory";
 import classNames from "classnames";
+import Loader from "../../components/Loader/Loader";
 
 
 
@@ -187,13 +188,14 @@ function AddFreshAssingment(props) {
                 <p style={{ fontSize: "20px" }}>Add Fresh Query</p>
               </Col>
             </Row>
-          </CardHeader>
-          <div className="container">
 
-            <div class="col-xl-8 col-lg-8 col-md-12 py-4">
-              {load ? (
-                <Spinner size="sm" color="primary" />
-              ) : (
+          </CardHeader>
+          {load ? (
+            <Loader />
+          ) : (
+            <div className="container">
+              <div class="col-xl-8 col-lg-8 col-md-12 py-4">
+
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="row">
                     <div className="col-md-6">
@@ -387,12 +389,11 @@ function AddFreshAssingment(props) {
                     Submit
                   </button>
                 </form>
-              )}
+
+              </div>
+              <Mandatory />
             </div>
-            <Mandatory />
-
-          </div>
-
+          )}
         </Card>
       </Layout>
     </>

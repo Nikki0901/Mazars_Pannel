@@ -4,19 +4,16 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import { useHistory, useParams } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { baseUrl, ImageUrl } from "../../config/config";
-import * as yup from "yup";
 import { useAlert } from "react-alert";
 import { Card, CardHeader, Row, Col } from "reactstrap";
-import { Spinner } from "reactstrap";
 import Select from "react-select";
 import DeleteQuery from "./DeleteQuery";
-import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
 import Mandatory from "../../components/Common/Mandatory";
 import classNames from "classnames";
+import Loader from "../../components/Loader/Loader";
 
 
 function EditQuery(props) {
@@ -225,225 +222,230 @@ function EditQuery(props) {
         </CardHeader>
 
         <CardHeader>
-          <div class="col-xl-8 col-lg-8 col-md-12 py-4">
-            {load ? (
-              <Spinner size="sm" color="primary" />
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Facts of the case <span className="declined">*</span></label>
-                      <textarea
-                        className={classNames("form-control", {
-                          "is-invalid": errors.fact_case,
-                        })}
-                        id="textarea"
-                        rows="6"
-                        name="fact_case"
-                        ref={register({ required: true })}
-                      ></textarea>
-                    </div>
-                  </div>
+          {load ? (
+            <Loader />
+          ) : (
+            <div className="container">
+              <div class="col-xl-8 col-lg-8 col-md-12 py-4">
 
-                  <div className="col-md-6">
-                    <div className="question_query mb-2">
-                      <label className="form-label">
-                        Specific Questions for advisory <span className="declined">*</span>
-                      </label>
-                      <div
-                        className="btn btn-primary"
-                        onClick={() => append({ query: "" })}
-                      >
-                        +
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">Facts of the case <span className="declined">*</span></label>
+                        <textarea
+                          className={classNames("form-control", {
+                            "is-invalid": errors.fact_case,
+                          })}
+                          id="textarea"
+                          rows="6"
+                          name="fact_case"
+                          ref={register({ required: true })}
+                        ></textarea>
                       </div>
                     </div>
 
-                    {fields.map((item, index) => (
-                      <div className="question_query_field mb-2" key={index}>
+                    <div className="col-md-6">
+                      <div className="question_query mb-2">
+                        <label className="form-label">
+                          Specific Questions for advisory <span className="declined">*</span>
+                        </label>
+                        <div
+                          className="btn btn-primary"
+                          onClick={() => append({ query: "" })}
+                        >
+                          +
+                        </div>
+                      </div>
+
+                      {fields.map((item, index) => (
+                        <div className="question_query_field mb-2" key={index}>
+                          <input
+                            type="text"
+                            className={classNames("form-control", {
+                              "is-invalid": errors.users,
+                            })}
+                            ref={register}
+                            name={`users[${index}].query`}
+                            defaultValue={`${item.query}`}
+                            placeholder="Specify your query"
+                            ref={register({ required: true })}
+                          />
+                          <div
+                            className="btn btn-primary ml-2"
+                            onClick={() => remove(index)}
+                          >
+                            -
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">Case name</label>
                         <input
                           type="text"
-                          className={classNames("form-control", {
-                            "is-invalid": errors.users,
-                          })}
+                          name="case_name"
                           ref={register}
-                          name={`users[${index}].query`}
-                          defaultValue={`${item.query}`}
-                          placeholder="Specify your query"
-                          ref={register({ required: true })}
+                          className="form-control"
                         />
-                        <div
-                          className="btn btn-primary ml-2"
-                          onClick={() => remove(index)}
-                        >
-                          -
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">Assessment year</label>
+
+                        <Select
+                          closeMenuOnSelect={false}
+                          onChange={setSelectedOption}
+                          value={selectedOption}
+                          isMulti
+                          options={assessmentYear}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <ImageUploads register={register} control={control} />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Format in which Opinion is required
+                        </label>
+                        <br />
+                        <div className="form-check">
+                          <input
+                            id="a1"
+                            className="form-check-input"
+                            type="checkbox"
+                            onChange={remError}
+                            name="p_Softcopy_word"
+                            ref={register}
+                          />
+                          <label className="form-check-label" htmlFor="a1">
+                            Softcopy - Word/ Pdf
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            id="a2"
+                            className="form-check-input"
+                            onChange={remError}
+                            type="checkbox"
+                            name="p_Softcopy_digital"
+                            ref={register}
+                          />
+                          <label className="form-check-label" htmlFor="a2">
+                            SoftCopy- Digitally Signed
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            id="a3"
+                            className="form-check-input"
+                            type="checkbox"
+                            onChange={remError}
+                            name="p_Softcopy_physical"
+                            ref={register}
+                          />
+                          <label className="form-check-label" htmlFor="a3">
+                            Printout- Physically Signed
+                          </label>
+                        </div>
+                        <p className="declined">{custcheckError}</p>  </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Timelines within which Opinion is Required
+                        </label>
+                        <br />
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="p_timelines"
+                            ref={register}
+                            value="Urgent, (4-5 Working Days)"
+                          // disabled
+                          />
+                          <label>Urgent, (4-5 Working Days)</label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="p_timelines"
+                            ref={register}
+                            value="Regular (10-12 Working Days)"
+                          // disabled
+                          />
+                          <label>Regular (10-12 Working Days)</label>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Case name</label>
-                      <input
-                        type="text"
-                        name="case_name"
-                        ref={register}
-                        className="form-control"
-                      />
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Assessment year</label>
 
-                      <Select
-                        closeMenuOnSelect={false}
-                        onChange={setSelectedOption}
-                        value={selectedOption}
-                        isMulti
-                        options={assessmentYear}
-                      />
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">Display Documents</label>
+                        <br />
+
+                        <>
+                          <div>
+                            {queryDocs.map((p, i) => (
+                              <ul>
+                                <li>
+                                  <a
+                                    href={`${ImageUrl}/${p.assign_no}/${p.name}`}
+                                    target="_blank"
+                                  >
+                                    <i
+                                      class="fa fa-photo"
+                                      style={{ width: "50", height: "20" }}
+                                    ></i>
+                                    <span style={{ marginLeft: "10px" }}>{p.name}</span>
+                                  </a>
+                                </li>
+                              </ul>
+                            ))}
+
+                          </div>
+                        </>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <ImageUploads register={register} control={control} />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Format in which Opinion is required
-                      </label>
-                      <br />
-                      <div className="form-check">
-                        <input
-                          id="a1"
-                          className="form-check-input"
-                          type="checkbox"
-                          onChange={remError}
-                          name="p_Softcopy_word"
-                          ref={register}
-                        />
-                        <label className="form-check-label" htmlFor="a1">
-                          Softcopy - Word/ Pdf
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Purpose for which Opinion is sought <span className="declined">*</span>
                         </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          id="a2"
-                          className="form-check-input"
-                          onChange={remError}
-                          type="checkbox"
-                          name="p_Softcopy_digital"
-                          ref={register}
+                        <Select
+                          closeMenuOnSelect={false}
+                          className={selectError ? "customError" : ""}
+                          onChange={purPoseQuery}
+                          value={purposeOption}
+                          isMulti
+                          options={purpose}
                         />
-                        <label className="form-check-label" htmlFor="a2">
-                          SoftCopy- Digitally Signed
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          id="a3"
-                          className="form-check-input"
-                          type="checkbox"
-                          onChange={remError}
-                          name="p_Softcopy_physical"
-                          ref={register}
-                        />
-                        <label className="form-check-label" htmlFor="a3">
-                          Printout- Physically Signed
-                        </label>
-                      </div>
-                      <p className="declined">{custcheckError}</p>  </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Timelines within which Opinion is Required
-                      </label>
-                      <br />
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="p_timelines"
-                          ref={register}
-                          value="Urgent, (4-5 Working Days)"
-                        // disabled
-                        />
-                        <label>Urgent, (4-5 Working Days)</label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="p_timelines"
-                          ref={register}
-                          value="Regular (10-12 Working Days)"
-                        // disabled
-                        />
-                        <label>Regular (10-12 Working Days)</label>
                       </div>
                     </div>
                   </div>
 
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">Display Documents</label>
-                      <br />
+                  <button type="submit" className="btn btn-primary">
+                    Update
+                  </button>
+                </form>
 
-                      <>
-                        <div>
-                          {queryDocs.map((p, i) => (
-                            <ul>
-                              <li>
-                                <a
-                                  href={`${ImageUrl}/${p.assign_no}/${p.name}`}
-                                  target="_blank"
-                                >
-                                  <i
-                                    class="fa fa-photo"
-                                    style={{ width: "50", height: "20" }}
-                                  ></i>
-                                  <span style={{ marginLeft: "10px" }}>{p.name}</span>
-                                </a>
-                              </li>
-                            </ul>
-                          ))}
+              </div>
 
-                        </div>
-                      </>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label">
-                        Purpose for which Opinion is sought <span className="declined">*</span>
-                      </label>
-                      <Select
-                        closeMenuOnSelect={false}
-                        className={selectError ? "customError" : ""}
-                        onChange={purPoseQuery}
-                        value={purposeOption}
-                        isMulti
-                        options={purpose}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Update
-                </button>
-              </form>
-            )}
-          </div>
-          <Mandatory />
+              <Mandatory />
+            </div>
+          )}
         </CardHeader>
       </Card>
     </Layout>

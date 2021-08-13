@@ -12,6 +12,7 @@ import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import Mandatory from "../../../components/Common/Mandatory";
+import Loader from "../../../components/Loader/Loader";
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -32,6 +33,7 @@ function AddNew() {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+  const [loading, setLoading] = useState(false);
 
   const userid = window.localStorage.getItem("adminkey");
   const [error, setError] = useState()
@@ -114,6 +116,8 @@ function AddNew() {
   // OnSubmit Function
 
   const onSubmit = (value) => {
+
+
     var categeryList = []
     var categeryName = []
     var categeryName = []
@@ -141,6 +145,7 @@ function AddNew() {
 
     else {
       setDisplay(true)
+      setLoading(true)
       let formData = new FormData();
 
       formData.append("email", value.p_email);
@@ -157,8 +162,6 @@ function AddNew() {
       formData.append("allpcat_id", parentCategoryName)
       formData.append("allcat_id", categeryName)
 
-
-
       axios({
         method: "POST",
         url: `${baseUrl}/tl/AddTeamLead`,
@@ -168,18 +171,16 @@ function AddNew() {
         .then(function (response) {
 
           if (response.data.code === 1) {
+            setLoading(false)
             Swal.fire({
               "title": "Success",
               "html": "TL created successfully",
               "icon": "success"
             })
-
             history.goBack();
           }
           if (response.data.code === 0) {
-            response.data.message.map((i) => {
-
-            })
+            setLoading(false)
           }
 
         })
@@ -386,152 +387,159 @@ function AddNew() {
         </CardHeader>
 
         <CardHeader>
-          <div class="row mt-3">
-            <div class="col-lg-2 col-xl-2 col-md-12"></div>
-            <div class="col-lg-8 col-xl-8 col-md-12">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Post Name</label>
-                      <input
-                        type="text"
-                        name="post_name"
-                        disabled
-                        className={classNames("form-control", {
-                          "is-invalid": errors.post_name,
-                        })}
-                        ref={register}
-                        value={postValue.post}
+          {
+            loading ?
+              <Loader />
+              :
+              <>
+                <div class="row mt-3">
+                  <div class="col-lg-2 col-xl-2 col-md-12"></div>
+                  <div class="col-lg-8 col-xl-8 col-md-12">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Post Name</label>
+                            <input
+                              type="text"
+                              name="post_name"
+                              disabled
+                              className={classNames("form-control", {
+                                "is-invalid": errors.post_name,
+                              })}
+                              ref={register}
+                              value={postValue.post}
 
-                      />
+                            />
 
-                    </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Post Eamil</label>
+                            <input
+                              type="text"
+                              name="post_email"
+                              ref={register}
+                              value={postValue.tlemail}
+                              disabled
+                              className={classNames("form-control", {
+                                "is-invalid": errors.post_email,
+                              })}
+                            />
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Name <span className="declined">*</span></label>
+                            <input
+                              type="text"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.p_name,
+                              })}
+                              name="p_name"
+                              ref={register}
+                            />
+
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Phone Number <span className="declined">*</span></label>
+                            <input
+                              type="text"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.p_phone || indNumError || numExist,
+                              })}
+                              name="p_phone"
+                              ref={register}
+                              onChange={(e) => phoneHandler(e)}
+                              onBlur={phoneValidation}
+                            />
+                            {indNumError ? <p className="declined">{indNumError}</p> : <>
+                              {
+                                numAvail ?
+                                  <p className="completed"> {numAvail}
+                                  </p>
+                                  :
+                                  <p className="declined">{numExist}</p>
+                              }
+                            </>}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Email <span className="declined">*</span></label>
+                            <input
+                              type="email"
+                              className={classNames("form-control", {
+                                "is-invalid": errors.p_email || wEmail || invalid,
+                              })}
+                              name="p_email"
+                              ref={register}
+                              onChange={(e) => emailHandler(e)}
+                              onBlur={emailValidation}
+                            />
+                            {
+                              wEmail ? <p className="declined">{wEmail}</p> : <>
+                                {valiEmail ?
+                                  <p className="completed">
+                                    {valiEmail}
+                                  </p>
+                                  :
+                                  <p className="declined">{invalid}</p>}
+                              </>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Category <span className="declined">*</span></label>
+                            <Select isMulti options={options}
+                              className={error ? "customError" : ""}
+
+                              onChange={category}>
+
+                            </Select>
+
+
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>Sub Category <span className="declined">*</span></label>
+                            <Select isMulti options={options2}
+                              className={error2 ? "customError" : ""}
+                              onChange={subCategory}
+                              value={subData}>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn btn-primary">
+                        Submit
+                      </button>
+                    </form>
+                  </div>
+                  <div class="col-lg-2 col-xl-2 col-md-12">
+
                   </div>
 
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Post Eamil</label>
-                      <input
-                        type="text"
-                        name="post_email"
-                        ref={register}
-                        value={postValue.tlemail}
-                        disabled
-                        className={classNames("form-control", {
-                          "is-invalid": errors.post_email,
-                        })}
-                      />
-
-                    </div>
-                  </div>
+                  <Mandatory />
                 </div>
-
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Name <span className="declined">*</span></label>
-                      <input
-                        type="text"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_name,
-                        })}
-                        name="p_name"
-                        ref={register}
-                      />
-
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Phone Number <span className="declined">*</span></label>
-                      <input
-                        type="text"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_phone || indNumError || numExist,
-                        })}
-                        name="p_phone"
-                        ref={register}
-                        onChange={(e) => phoneHandler(e)}
-                        onBlur={phoneValidation}
-                      />
-                      {indNumError ? <p className="declined">{indNumError}</p> : <>
-                        {
-                          numAvail ?
-                            <p className="completed"> {numAvail}
-                            </p>
-                            :
-                            <p className="declined">{numExist}</p>
-                        }
-                      </>}
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Email <span className="declined">*</span></label>
-                      <input
-                        type="email"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_email || wEmail || invalid,
-                        })}
-                        name="p_email"
-                        ref={register}
-                        onChange={(e) => emailHandler(e)}
-                        onBlur={emailValidation}
-                      />
-                      {
-                        wEmail ? <p className="declined">{wEmail}</p> : <>
-                          {valiEmail ?
-                            <p className="completed">
-                              {valiEmail}
-                            </p>
-                            :
-                            <p className="declined">{invalid}</p>}
-                        </>
-                      }
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Category <span className="declined">*</span></label>
-                      <Select isMulti options={options}
-                        className={error ? "customError" : ""}
-
-                        onChange={category}>
-
-                      </Select>
-
-
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Sub Category <span className="declined">*</span></label>
-                      <Select isMulti options={options2}
-                        className={error2 ? "customError" : ""}
-                        onChange={subCategory}
-                        value={subData}>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              </form>
-            </div>
-            <div class="col-lg-2 col-xl-2 col-md-12">
-
-            </div>
-
-            <Mandatory />
-          </div>
+              </>
+          }
         </CardHeader>
       </Card>
     </Layout>

@@ -90,7 +90,7 @@ function Chatting(props) {
           var variable = "Message Successfully Sent "
           Alerts.SuccessNormal(variable)
           props.history.push(routes);
-        } if (response.data.code === 0) {
+        } else if (response.data.code === 0) {
           setLoading(false)
         }
       })
@@ -168,7 +168,7 @@ function Chatting(props) {
                       </div>
 
                       <div class="form-group">
-                        <label>To</label>
+                        <label>To<span className="declined">*</span></label>
                         <select
                           className={classNames("form-control", {
                             "is-invalid": errors.p_to,
@@ -190,7 +190,7 @@ function Chatting(props) {
                       </div>
 
                       <div class="form-group">
-                        <label>Message</label>
+                        <label>Message<span className="declined">*</span></label>
                         <textarea
                           className={classNames("form-control", {
                             "is-invalid": errors.p_message,

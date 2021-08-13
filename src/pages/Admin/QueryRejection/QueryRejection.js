@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Mandatory from "../../../components/Common/Mandatory";
+import Loader from "../../../components/Loader/Loader";
 
 const Schema = yup.object().shape({
     p_notes: yup.string().required(""),
@@ -34,10 +35,13 @@ function QueryRejection(props) {
     });
 
     const userId = window.localStorage.getItem("adminkey");
+    const [loading, setLoading] = useState(false);
 
 
     const onSubmit = (value) => {
         console.log("value :", value)
+        setLoading(true)
+
         let formData = new FormData();
         formData.append("id", id);
         formData.append("notes", value.p_notes);
@@ -50,13 +54,15 @@ function QueryRejection(props) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    setLoading(false)
                     var variable = "Query declined successfully. "
                     Alerts.SuccessNormal(variable)
-
                     props.history.push({
                         pathname: `/admin/queriestab`,
                         index: 1,
                     });
+                } else if (response.data.code === 0) {
+                    setLoading(false)
                 }
             })
             .catch((error) => {
@@ -89,42 +95,48 @@ function QueryRejection(props) {
                         </Col>
                     </Row>
                 </CardHeader>
-                <CardHeader>
-                    <div class="row mt-3">
-                        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-                        <div class="col-lg-8 col-xl-8 col-md-12">
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Notes</label>
-                                            <textarea
-                                                className={classNames("form-control", {
-                                                    "is-invalid": errors.p_notes,
-                                                })}
-                                                id="textarea"
-                                                rows="6"
-                                                name="p_notes"
-                                                ref={register}
-                                            ></textarea>
-                                            {errors.p_notes && (
-                                                <div className="invalid-feedback">
-                                                    {errors.p_notes.message}
+                {
+                    loading ?
+                        <Loader />
+                        :
+                        <>
+                            <CardHeader>
+                                <div class="row mt-3">
+                                    <div class="col-lg-2 col-xl-2 col-md-12"></div>
+                                    <div class="col-lg-8 col-xl-8 col-md-12">
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Notes<span className="declined">*</span></label>
+                                                        <textarea
+                                                            className={classNames("form-control", {
+                                                                "is-invalid": errors.p_notes,
+                                                            })}
+                                                            id="textarea"
+                                                            rows="6"
+                                                            name="p_notes"
+                                                            ref={register}
+                                                        ></textarea>
+                                                        {errors.p_notes && (
+                                                            <div className="invalid-feedback">
+                                                                {errors.p_notes.message}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            )}
-                                        </div>
+                                            </div>
+                                            <button type="submit" className="btn btn-primary">
+                                                Submit
+                                            </button>
+                                        </form>
                                     </div>
+                                    <div class="col-lg-2 col-xl-2 col-md-12"></div>
                                 </div>
-                                <button type="submit" className="btn btn-primary">
-                                    Submit
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col-lg-2 col-xl-2 col-md-12"></div>
-                    </div>
-                    <Mandatory />
-
-                </CardHeader>
+                                <Mandatory />
+                            </CardHeader>
+                        </>
+                }
             </Card>
         </Layout>
     );

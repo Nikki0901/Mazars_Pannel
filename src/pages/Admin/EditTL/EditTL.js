@@ -5,23 +5,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
 import { useParams, useHistory } from "react-router-dom";
 import classNames from "classnames";
 import {
   Card,
   CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-  Table,
-  Tooltip,
 } from "reactstrap";
-import Reset from "./Reset";
 import { Form, Input, Button } from "antd";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
+import Loader from "../../../components/Loader/Loader";
+import { Spinner } from 'reactstrap';
+
+
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
   p_email: yup.string().email("invalid email").required("required email"),
@@ -38,9 +34,9 @@ function EditTL() {
   const { Option } = Select;
   const { id } = useParams();
   const history = useHistory();
-  const alert = useAlert();
 
   const userid = window.localStorage.getItem("adminkey");
+  const [loading, setLoading] = useState(false);
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -107,6 +103,7 @@ function EditTL() {
       }
     });
   };
+
   console.log("value -", value.name);
   const data1 = value.name;
   const data2 = value.email;
@@ -147,7 +144,6 @@ function EditTL() {
 
   const onFinish = (value) => {
 
-
     var categeryList = []
     var categeryName = []
     var kk = []
@@ -174,6 +170,7 @@ function EditTL() {
 
     else {
       setDisplay(true)
+      setLoading(true)
       console.log("kkData", kk.length)
       console.log("parentCategoryName", parentCategoryName)
       let formData = new FormData();
@@ -183,25 +180,25 @@ function EditTL() {
 
       {
         categeryList.length > 1 ? formData.append("cat_id", categeryList) :
-        formData.append("cat_id", data8)
+          formData.append("cat_id", data8)
       }
 
 
       {
         kk.length === 0 ? formData.append("pcat_id", data9) :
-        formData.append("pcat_id", kk)
+          formData.append("pcat_id", kk)
       }
 
 
       {
         parentCategoryName.length > 0 ?
-        formData.append("allpcat_id", parentCategoryName) :
-        formData.append("allpcat_id", data4)
+          formData.append("allpcat_id", parentCategoryName) :
+          formData.append("allpcat_id", data4)
       }
 
       {
         categeryName.length > 0 ? formData.append("allcat_id", categeryName) :
-        formData.append("allcat_id", data5)
+          formData.append("allcat_id", data5)
       }
       formData.append("id", id);
 
@@ -213,10 +210,12 @@ function EditTL() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-
+            setLoading(false)
             var variable = "Team Leader Updated Successfully"
             Alerts.SuccessNormal(variable)
             history.goBack();
+          } else if (response.data.code === 0) {
+            setLoading(false)
           }
         })
         .catch((error) => {
@@ -422,170 +421,170 @@ function EditTL() {
         </CardHeader>
 
         {!data1 ? (
-          <CardHeader>loading ...</CardHeader>
+          <CardHeader> <Spinner color="primary" /></CardHeader>
         ) : (
           <CardHeader>
-            <div class="row mt-3">
-              <div class="col-lg-2 col-xl-2 col-md-12"></div>
-              <div class="col-lg-8 col-xl-8 col-md-12">
-                <Form
-                  name="basic"
-                  initialValues={{
-                    name: `${data1}`,
-                    email: `${data2}`,
-                    phone: `${data3}`,
-                    category: `${data4}`,
-                    sub_category: `${data5}`,
-                  }}
-                  onFinish={onFinish}
-                >
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Post Name</label>
-                        <input
-                          type="text"
-                          name="post_name"
-                          disabled
-                          defaultValue={data6}
-                          className={classNames("form-control", {
-                            "is-invalid": errors.post_name,
-                          })}
-                        />
-                      </div>
-                    </div>
+            {
+              loading ?
+                <Loader />
+                :
+                <>
+                  <div class="row mt-3">
+                    <div class="col-lg-2 col-xl-2 col-md-12"></div>
+                    <div class="col-lg-8 col-xl-8 col-md-12">
+                      <Form
+                        name="basic"
+                        initialValues={{
+                          name: `${data1}`,
+                          email: `${data2}`,
+                          phone: `${data3}`,
+                          category: `${data4}`,
+                          sub_category: `${data5}`,
+                        }}
+                        onFinish={onFinish}
+                      >
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Post Name</label>
+                              <input
+                                type="text"
+                                name="post_name"
+                                disabled
+                                defaultValue={data6}
+                                className={classNames("form-control", {
+                                  "is-invalid": errors.post_name,
+                                })}
+                              />
+                            </div>
+                          </div>
 
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Post Eamil</label>
-                        <input
-                          type="text"
-                          name="post_email"
-                          defaultValue={data7}
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Post Eamil</label>
+                              <input
+                                type="text"
+                                name="post_email"
+                                defaultValue={data7}
 
-                          disabled
-                          className={classNames("form-control", {
-                            "is-invalid": errors.post_email,
-                          })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Name <span className="declined">*</span></label>
-                        <Form.Item name="name">
-                          <Input
-                            required
-                            className={classNames("form-control", {
-                              "is-invalid": errors.p_name,
-                            })} />
-                        </Form.Item>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Phone  <span className="declined">*</span></label>
-                        <Form.Item name="phone">
-                          <Input
-                            className={classNames("form-control", {
-                              "is-invalid": errors.p_phone || indNumError || numExist,
-                            })}
-                            onChange={(e) => phoneHandler(e)}
-                            onBlur={phoneValidation} />
-                        </Form.Item>
-                      </div>
-                      {indNumError ? <p className="declined">{indNumError}</p> : <>
-                        {
-                          numAvail ?
-                            <p className="completed"> {numAvail}
-                            </p>
-                            :
-                            <p className="declined">{numExist}</p>
-                        }
-                      </>}
-
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>Email <span className="declined">*</span></label>
-                        <Form.Item name="email">
-                          <Input
-                            className={classNames("form-control", {
-                              "is-invalid": errors.p_email || wEmail || invalid,
-                            })}
-                            onBlur={emailValidation}
-                            onChange={(e) => emailHandler(e)} />
-                        </Form.Item>
-                        {
-                          wEmail ? <p className="declined">{wEmail}</p> : <>
-                            {valiEmail ?
-                              <p className="completed">
-                                {valiEmail}
-                              </p>
-                              :
-                              <p className="declined">{invalid}</p>}
-                          </>
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Category <span className="declined">*</span></label>
-                        <div class="form-group">
-
-                          <Select isMulti options={options}
-                            defaultInputValue={data4} onChange={category}
-                          >
-                          </Select>
-                          {/* <Select onChange={handleChange}>
-                              <Option value="">--Select Category--</Option>
-                              {tax.map((p, index) => (
-                                <Option key={index} value={p.id}>
-                                  {p.details}
-                                </Option>
-                              ))}
-                            </Select> */}
-
+                                disabled
+                                className={classNames("form-control", {
+                                  "is-invalid": errors.post_email,
+                                })}
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
 
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Sub Category <span className="declined">*</span></label>
 
-                        <Select isMulti options={options2}
-                          onChange={subCategory} value={subData} defaultInputValue={data5} >
-                        </Select>
-                      </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Name <span className="declined">*</span></label>
+                              <Form.Item name="name">
+                                <Input
+                                  required
+                                  className={classNames("form-control", {
+                                    "is-invalid": errors.p_name,
+                                  })} />
+                              </Form.Item>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Phone  <span className="declined">*</span></label>
+                              <Form.Item name="phone">
+                                <Input
+                                  className={classNames("form-control", {
+                                    "is-invalid": errors.p_phone || indNumError || numExist,
+                                  })}
+                                  onChange={(e) => phoneHandler(e)}
+                                  onBlur={phoneValidation} />
+                              </Form.Item>
+                            </div>
+                            {indNumError ? <p className="declined">{indNumError}</p> : <>
+                              {
+                                numAvail ?
+                                  <p className="completed"> {numAvail}
+                                  </p>
+                                  :
+                                  <p className="declined">{numExist}</p>
+                              }
+                            </>}
+
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Email <span className="declined">*</span></label>
+                              <Form.Item name="email">
+                                <Input
+                                  className={classNames("form-control", {
+                                    "is-invalid": errors.p_email || wEmail || invalid,
+                                  })}
+                                  onBlur={emailValidation}
+                                  onChange={(e) => emailHandler(e)} />
+                              </Form.Item>
+                              {
+                                wEmail ? <p className="declined">{wEmail}</p> : <>
+                                  {valiEmail ?
+                                    <p className="completed">
+                                      {valiEmail}
+                                    </p>
+                                    :
+                                    <p className="declined">{invalid}</p>}
+                                </>
+                              }
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Category <span className="declined">*</span></label>
+                              <div class="form-group">
+
+                                <Select isMulti options={options}
+                                  defaultInputValue={data4} onChange={category}
+                                >
+                                </Select>
+                             
+
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label>Sub Category <span className="declined">*</span></label>
+
+                              <Select isMulti options={options2}
+                                onChange={subCategory} value={subData} defaultInputValue={data5} >
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                  Update
+                                </Button>
+                              </Form.Item>
+                            </div>
+                          </div>
+                        </div>
+                      </Form>
                     </div>
                   </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <Form.Item>
-                          <Button type="primary" htmlType="submit">
-                            Update
-                          </Button>
-                        </Form.Item>
-                      </div>
-                    </div>
-                  </div>
-                </Form>
-              </div>
-            </div>
+                </>
+            }
           </CardHeader>
         )}
       </Card>

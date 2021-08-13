@@ -159,7 +159,7 @@ function Chatting(props) {
                       </div>
 
                       <div class="form-group">
-                        <label>Message</label>
+                        <label>Message<span className="declined">*</span></label>
                         <textarea
                           className={classNames("form-control", {
                             "is-invalid": errors.p_message,
