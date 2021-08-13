@@ -7,6 +7,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { useParams, useHistory } from "react-router-dom";
+import classNames from "classnames";
 import {
   Card,
   CardHeader,
@@ -21,6 +22,17 @@ import Reset from "./Reset";
 import { Form, Input, Button } from "antd";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
+const Schema = yup.object().shape({
+  p_name: yup.string().required("required name"),
+  p_email: yup.string().email("invalid email").required("required email"),
+  p_phone: yup
+    .string()
+    .required("required phone no")
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(10, "Must be exactly 10 digits")
+    .max(20, "max 20 digits"),
+});
+
 
 function EditTL() {
   const { Option } = Select;
@@ -50,11 +62,16 @@ function EditTL() {
   const [wEmail, setWemail] = useState();
   const [display, setDisplay] = useState(false);
   const [subData, subCategeryData] = useState([])
+  const [categoryData, setCategoryData] = useState([])
   const [custCate, setCustcate] = useState([])
   const [mcatname, setmcatname] = useState([]);
   const [error, setError] = useState()
   const [error2, setError2] = useState();
   const [custCate2, setCustcate2] = useState([])
+  const { handleSubmit, register, reset, errors } = useForm({
+    resolver: yupResolver(Schema),
+  });
+
   var kk = []
   var vv = []
   const options = tax.map(d => ({
@@ -66,10 +83,21 @@ function EditTL() {
     "label": v.details
   }))
 
+
   useEffect(() => {
     getTeamLeader();
   }, [id]);
 
+  useEffect(() => {
+    axios.get(`${baseUrl}/tl/AddTeamLead`).then((res) => {
+      if (res.data.code === 1) {
+        console.log("myData", res.data.result)
+      }
+      else {
+        console.log(res.data.result)
+      }
+    })
+  }, [])
   const getTeamLeader = () => {
     axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
       console.log(res);
@@ -85,6 +113,9 @@ function EditTL() {
   const data3 = value.phone;
   const data4 = value.allpcat_id;
   const data5 = value.allcat_id;
+  const data6 = value.post_name;
+  const data7 = value.post_email;
+
 
   useEffect(() => {
     const getCategory = () => {
@@ -114,12 +145,19 @@ function EditTL() {
 
 
   const onFinish = (value) => {
-    console.log("value :", value);
+
+
     var categeryList = []
     var categeryName = []
+    var kk = []
+    var parentCategoryName = []
     subData.map((i) => {
       categeryList.push(i.value)
       categeryName.push(i.label)
+    })
+    categoryData.map((i) => {
+      kk.push(i.value)
+      parentCategoryName.push(i.label)
     })
     console.log("subData", subData)
     if (custCate.length < 1) {
@@ -141,8 +179,8 @@ function EditTL() {
       formData.append("phone", value.phone);
       formData.append("cat_id", categeryList)
 
-      formData.append("pcat_id", mcategory)
-      formData.append("allpcat_id", mcatname)
+      formData.append("pcat_id", kk)
+      formData.append("allpcat_id", parentCategoryName)
       formData.append("allcat_id", categeryName)
       formData.append("id", id);
 
@@ -164,8 +202,8 @@ function EditTL() {
           console.log("erroror - ", error);
         });
     }
-
   };
+
 
 
   // Phone onChange 
@@ -184,6 +222,7 @@ function EditTL() {
       setPhone(e.target.value)
     }
   };
+
 
   // Phone Validation function 
   const phoneValidation = () => {
@@ -208,7 +247,6 @@ function EditTL() {
 
     else {
       setIndNumError("")
-
       let formData = new FormData();
       formData.append("phone", phone);
       formData.append("type", 2);
@@ -252,12 +290,19 @@ function EditTL() {
 
   // Category Function
   const category = (v) => {
+    setCategoryData(v)
+    console.log("MyData", v)
     setError("")
     setCustcate(v)
+
     v.map((val) => {
       vv.push(val.value)
-      setmcategory(val.value)
-      setmcatname(val.label)
+      setmcategory((oldData) => {
+        return [...oldData, val.value]
+      })
+      setmcatname((oldData) => {
+        return [...oldData, val.label]
+      })
       setStore(val.value)
     })
 
@@ -285,11 +330,9 @@ function EditTL() {
         subCategeryData(kk)
       }
     }
-
     else if (vv.length === 0) {
       subCategeryData("")
     }
-
   }
 
 
@@ -331,7 +374,40 @@ function EditTL() {
                   }}
                   onFinish={onFinish}
                 >
-                  {console.log("categoryData", data1)}
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Post Name</label>
+                        <input
+                          type="text"
+                          name="post_name"
+                          disabled
+                          defaultValue={data6}
+                          className={classNames("form-control", {
+                            "is-invalid": errors.post_name,
+                          })}
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Post Eamil</label>
+                        <input
+                          type="text"
+                          name="post_email"
+                          defaultValue={data7}
+
+                          disabled
+                          className={classNames("form-control", {
+                            "is-invalid": errors.post_email,
+                          })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
@@ -380,13 +456,20 @@ function EditTL() {
                       <div class="form-group">
                         <label>Category</label>
                         <div class="form-group">
-                          <Form.Item name="category">
-                            <Select isMulti options={options}
-                              defaultInputValue={data4} onChange={category}
-                            >
-                            </Select>
 
-                          </Form.Item>
+                          <Select isMulti options={options}
+                            defaultInputValue={data4} onChange={category}
+                          >
+                          </Select>
+                          {/* <Select onChange={handleChange}>
+                              <Option value="">--Select Category--</Option>
+                              {tax.map((p, index) => (
+                                <Option key={index} value={p.id}>
+                                  {p.details}
+                                </Option>
+                              ))}
+                            </Select> */}
+
                         </div>
                       </div>
                     </div>
@@ -394,17 +477,13 @@ function EditTL() {
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Sub Category</label>
-                        <Form.Item name="sub_category">
-                          <Select isMulti options={options2}
-                            onChange={subCategory} value={subData} defaultInputValue={data5} value={subData}>
-                          </Select>
 
-                        </Form.Item>
+                        <Select isMulti options={options2}
+                          onChange={subCategory} value={subData} defaultInputValue={data5} >
+                        </Select>
                       </div>
                     </div>
                   </div>
-
-
 
                   <div class="row">
                     <div class="col-md-6">
@@ -428,7 +507,6 @@ function EditTL() {
 }
 
 export default EditTL;
-
 
 
 

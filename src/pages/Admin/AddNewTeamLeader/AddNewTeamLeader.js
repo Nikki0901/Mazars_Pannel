@@ -38,7 +38,7 @@ function AddNew() {
   const [error2, setError2] = useState();
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
-
+  const [nn, setNn] = useState([])
   const [mcatname, setmcatname] = useState([]);
   const [mcategory, setmcategory] = useState([]);
   const [store, setStore] = useState([]);
@@ -48,8 +48,9 @@ function AddNew() {
   const [numExist, setNumExist] = useState(null)
   const [phone, setPhone] = useState('');
   const [numAvail, setNumAvail] = useState(null)
+  const [categoryData, setCategoryData] = useState([])
   const [indNumError, setIndNumError] = useState(null)
-
+  const [postValue, setPostName] = useState([]);
   const [email, setEmail] = useState('');
   const [valiEmail, setValiemail] = useState(null)
   const [invalid, setInvalid] = useState(null)
@@ -68,10 +69,25 @@ function AddNew() {
     "label": v.details
   }))
 
+
+  useEffect(() => {
+    const postName = async () => {
+      await axios.get(`${baseUrl}/admin/addTlPost`).then((res) => {
+        if (res.data.code === 1) {
+          console.log("myData", res.data.result.post)
+          setPostName(res.data.result);
+        }
+      });
+    };
+
+    postName();
+  }, []);
+
   useEffect(() => {
     const getCategory = async () => {
       await axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
         if (res.data.code === 1) {
+          console.log(res.data.result)
           setTax(res.data.result);
         }
       });
@@ -79,6 +95,7 @@ function AddNew() {
 
     getCategory();
   }, []);
+
 
 
   useEffect(() => {
@@ -99,9 +116,16 @@ function AddNew() {
   const onSubmit = (value) => {
     var categeryList = []
     var categeryName = []
+    var categeryName = []
+    var kk = []
+    var parentCategoryName = []
     subData.map((i) => {
       categeryList.push(i.value)
       categeryName.push(i.label)
+    })
+    categoryData.map((i) => {
+      kk.push(i.value)
+      parentCategoryName.push(i.label)
     })
     console.log("subData", subData)
     if (custCate.length < 1) {
@@ -126,9 +150,11 @@ function AddNew() {
       formData.append("type", "tl");
 
       formData.append("cat_id", categeryList)
+      formData.append("post_name", postValue.post)
+      formData.append("post_email", postValue.tlemail)
 
-      formData.append("pcat_id", mcategory)
-      formData.append("allpcat_id", mcatname)
+      formData.append("pcat_id", kk)
+      formData.append("allpcat_id", parentCategoryName)
       formData.append("allcat_id", categeryName)
 
 
@@ -174,12 +200,19 @@ function AddNew() {
 
   // Category Function
   const category = (v) => {
+
+    setCategoryData(v)
+    setNn((oldData) => {
+      return [...oldData, mcategory]
+    })
     setError("")
     setCustcate(v)
     v.map((val) => {
       vv.push(val.value)
-      setmcategory(val.value)
-      setmcatname(val.label)
+      setmcategory(val.value);
+      setmcatname((oldData) => {
+        return [...oldData, val.label]
+      })
       setStore(val.value)
     })
 
@@ -330,7 +363,7 @@ function AddNew() {
     }
 
   }
-
+  console.log(postValue)
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -364,10 +397,13 @@ function AddNew() {
                       <input
                         type="text"
                         name="post_name"
+                        disabled
                         className={classNames("form-control", {
                           "is-invalid": errors.post_name,
                         })}
                         ref={register}
+                        value={postValue.post}
+
                       />
 
                     </div>
@@ -380,6 +416,8 @@ function AddNew() {
                         type="text"
                         name="post_email"
                         ref={register}
+                        value={postValue.tlemail}
+                        disabled
                         className={classNames("form-control", {
                           "is-invalid": errors.post_email,
                         })}
@@ -485,7 +523,6 @@ function AddNew() {
                   </div>
                 </div>
 
-
                 <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
@@ -494,6 +531,7 @@ function AddNew() {
             <div class="col-lg-2 col-xl-2 col-md-12">
 
             </div>
+
             <Mandatory />
           </div>
         </CardHeader>

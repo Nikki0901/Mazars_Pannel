@@ -13,6 +13,7 @@ import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
 import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
+import Loader from "../../components/Loader/Loader";
 
 
 
@@ -54,6 +55,7 @@ function SignUp(props) {
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
   const [valiOtp, setvaliOtp] = useState()
+  const [loading, setLoading] = useState(false);
 
 
   //Css
@@ -299,7 +301,6 @@ function SignUp(props) {
       setZipError("Maximum 6 digit allowed")
       console.log(zipCode.length)
     }
-
   }
 
 
@@ -319,8 +320,7 @@ function SignUp(props) {
   //submit form
   const onSubmit = (value) => {
     console.log("value :", value);
-
-    console.log("display :", display);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("name", value.p_name);
@@ -350,10 +350,12 @@ function SignUp(props) {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
+            setLoading(false)
             setLoad(true)
             setShow(true)
             Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           } else if (response.data.code === 0) {
+            setLoading(false)
             Alerts.ErrorNormal("Error")
           }
         })
@@ -370,12 +372,14 @@ function SignUp(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           var variable = "Signup successfully."
           Alerts.SuccessNormal(variable)
           localStorage.setItem("userid", JSON.stringify(response.data.id));
           localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
           props.history.push("/customer/select-category");
         } else if (response.data.code === 0) {
+          setLoading(false)
           console.log("res -", response.data.result);
           setLoad(false);
           Alerts.ErrorNormal("Incorrect OTP , please try again.")
@@ -741,6 +745,7 @@ function SignUp(props) {
           </>
 
         </div>
+
       </div>
       <Footer />
     </>

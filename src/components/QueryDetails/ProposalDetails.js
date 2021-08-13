@@ -108,9 +108,7 @@ function ProposalDetails({
     if (amount > 0) {
       return amount
     }
-
   }
-
 
   return (
     <>
