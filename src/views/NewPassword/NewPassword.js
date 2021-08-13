@@ -11,14 +11,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
+import { Spinner } from "reactstrap";
+
+
 
 function NewPassword(props) {
   const alert = useAlert();
   const { register, handleSubmit, errors, getValues, reset } = useForm();
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(false);
 
   const [isPasswordShow, setPasswordShow] = useState(false);
   const [isPasswordShow2, setPasswordShow2] = useState(false);
@@ -65,6 +70,7 @@ function NewPassword(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     // formData.append("user_id", value.p_name);
@@ -81,14 +87,15 @@ function NewPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           var variable = "Reset Password Successfully "
           Alerts.SuccessNormal(variable)
-
           reset();
           props.history.push("/");
         } else if (response.data.code === 0) {
+          setLoading(false)
           console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Alerts.ErrorNormal("Please enter correct details")
         }
       })
       .catch((error) => {
@@ -234,18 +241,33 @@ function NewPassword(props) {
               </div>
             </div>
             {
-              disabled ?
-                ""
+              loading ?
+                <div class="col-md-12">
+                  <Spinner color="primary" />
+                </div>
                 :
-                <button type="submit" className="btn btn-primary" >
-                  Submit
-                </button>
+                <div>
+                  {
+                    disabled ?
+                      ""
+                      :
+                      <div>
+                        <button type="submit" className="btn btn-primary" >
+                          Submit
+                        </button>
+                        <Cancel />
+                      </div>
+                  }
+                </div>
             }
+
+
           </form>
 
           {
             disabled ?
-              <ResendOtp id={id} setDisabled={setDisabled} getTime={getTime} setLoad={setLoad} />
+              <ResendOtp id={id} setDisabled={setDisabled} getTime={getTime}
+                setLoad={setLoad} setLoading={setLoading} />
               :
               null
           }
@@ -263,4 +285,16 @@ function NewPassword(props) {
 export default NewPassword;
 
 
+
+const Cancel = () => {
+  return (
+    <>
+      <Link to="/customer/forget-password" style={{ "margin": "10px" }}>
+        <button type="submit" className="btn btn-secondary">
+          Cancel
+        </button>
+      </Link>
+    </>
+  );
+}
 

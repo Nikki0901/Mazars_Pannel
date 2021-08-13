@@ -105,8 +105,6 @@ function EditComponent() {
 
 
 
-
-
   const onSubmit = (value) => {
   
     var lumsum = value.p_inst_date

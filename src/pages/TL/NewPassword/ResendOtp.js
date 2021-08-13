@@ -6,15 +6,16 @@ import Alerts from "../../../common/Alerts";
 
 
 
-function ResendOtp({ id, setDisabled, getTime }) {
+function ResendOtp({ id, setDisabled, getTime, setLoading }) {
 
     const { handleSubmit, errors, reset } = useForm();
 
     const onSubmit = (value) => {
+        setLoading(true)
 
         let formData = new FormData();
         formData.append("email", id);
-      
+
         axios({
             method: "POST",
             url: `${baseUrl}/tl/forgototp`,
@@ -23,9 +24,12 @@ function ResendOtp({ id, setDisabled, getTime }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    setLoading(false)
                     Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
                     setDisabled(false)
                     getTime();
+                } else if (response.data.code === 0) {
+                    setLoading(false)
                 }
             })
             .catch((error) => {

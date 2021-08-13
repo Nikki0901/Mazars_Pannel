@@ -14,7 +14,7 @@ import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
 import Loader from "../../components/Loader/Loader";
-
+import { Spinner } from 'reactstrap';
 
 const Schema = yup.object().shape({
   p_email: yup.string().email("invalid email").required(""),
@@ -44,6 +44,7 @@ function LoginForm() {
     getTime()
   }, [load]);
 
+
   const getTime = () => {
     // console.log("get time")
     if (load) {
@@ -66,7 +67,6 @@ function LoginForm() {
     }
 
   }
-
 
 
   const onSubmit = (value) => {
@@ -108,106 +108,107 @@ function LoginForm() {
 
   return (
     <>
-
       <Header noSign="noSign" />
-
       <h1 style={{ "textAlign": "center", "margin": "55px 0 30px 0" }}>
         Would you like to post a query
       </h1>
 
-      {
-        loading ?
-          <Loader />
-          :
-          <>
-            <div className="StartPage">
-              <div className="mainContent">
 
-                <div className="signIn">
-                  <div className="signBtn">
-                    <div className="boxOverlay">
-                      <Typography variant="h4" style={{ "margin": "5px auto", "color": "#fff" }}>
-                        For new customers
-                      </Typography>
-                      <button className="btn btn-success">
-                        <Link className="SignUpLink"
-                          to={{
-                            pathname: "/customer/signup",
-                          }}
-                        >
-                          Sign Up
-                        </Link>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="signUp">
-                  <Typography variant="h4" style={{ "margin": "5px auto", "color": "#2b345f" }}>
-                    For existing customers
-                  </Typography>
-                  {
-                    show ? <div className="customForm">
+      <div className="StartPage">
+        <div className="mainContent">
 
-                      <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad}
-                        setDisabled={setDisabled} disabled={disabled} setLoading={setLoading}/>
-                    </div>
-                      :
-                      <div className="customForm">
-                        <form onSubmit={handleSubmit(onSubmit)} className="signInForm">
-                          <div className="form-group">
-                            <label className="form-label">Email <span className="declined">*</span></label>
-                            <input
-                              type="text"
-                              className={classNames("form-control", {
-                                "is-invalid": errors.p_email,
-                              })}
-                              name="p_email"
-                              ref={register}
-                              placeholder="Enter Email"
-                              onChange={(e) => handleChange(e)}
-                            />
-                          </div>
-
-                          <div className="form-group passForm ">
-                            <label className="form-label">Password <span className="declined">*</span></label>
-                            <input
-                              type={isPasswordShow ? "text" : "password"}
-                              className={classNames("form-control", {
-                                "is-invalid": errors.p_password,
-                              })}
-                              name="p_password"
-                              placeholder="Enter Password"
-                              ref={register}
-                            />
-                            <i
-                              className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
-                              onClick={togglePasssword}
-                            />
-                          </div>
-
-                          <div style={{ display: "flex", margin: "0 0 30px 0", justifyContent: "flex-end" }}>
-                            <Link
-                              to={{
-                                pathname: "/customer/forget-password",
-                                email: `${email}`,
-                              }}
-                            >
-                              Forgot Password
-                            </Link>
-                          </div>
-                          <button className="btn btn-success" type="submit">
-                            Send OTP
-                          </button>
-                        </form>
-                      </div>
-                  }
-                  <Mandatory />
-                </div>
-
+          <div className="signIn">
+            <div className="signBtn">
+              <div className="boxOverlay">
+                <Typography variant="h4" style={{ "margin": "5px auto", "color": "#fff" }}>
+                  For new customers
+                </Typography>
+                <button className="btn btn-success">
+                  <Link className="SignUpLink"
+                    to={{
+                      pathname: "/customer/signup",
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                </button>
               </div>
             </div>
-          </>
-      }
+          </div>
+          <div className="signUp">
+            <Typography variant="h4" style={{ "margin": "5px auto", "color": "#2b345f" }}>
+              For existing customers
+            </Typography>
+            {
+              show ? <div className="customForm">
+
+                <VerifyOTP email={email} uid={uid} time={time} setLoad={setLoad}
+                  setDisabled={setDisabled} disabled={disabled} setLoading={setLoading}
+                  loading={loading} />
+              </div>
+                :
+                <div className="customForm">
+                  <form onSubmit={handleSubmit(onSubmit)} className="signInForm">
+                    <div className="form-group">
+                      <label className="form-label">Email <span className="declined">*</span></label>
+                      <input
+                        type="text"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email,
+                        })}
+                        name="p_email"
+                        ref={register}
+                        placeholder="Enter Email"
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </div>
+
+                    <div className="form-group passForm ">
+                      <label className="form-label">Password <span className="declined">*</span></label>
+                      <input
+                        type={isPasswordShow ? "text" : "password"}
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_password,
+                        })}
+                        name="p_password"
+                        placeholder="Enter Password"
+                        ref={register}
+                      />
+                      <i
+                        className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon-login`}
+                        onClick={togglePasssword}
+                      />
+                    </div>
+
+                    <div style={{ display: "flex", margin: "0 0 30px 0", justifyContent: "flex-end" }}>
+                      <Link
+                        to={{
+                          pathname: "/customer/forget-password",
+                          email: `${email}`,
+                        }}
+                      >
+                        Forgot Password
+                      </Link>
+                    </div>
+
+                    {
+                      loading ?
+                        <Spinner color="primary" />
+                        :
+                        <button className="btn btn-success" type="submit">
+                          Send OTP
+                        </button>
+                    }
+
+                  </form>
+                </div>
+            }
+            <Mandatory />
+          </div>
+
+        </div>
+      </div>
+
 
       <Footer />
     </>

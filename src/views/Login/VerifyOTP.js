@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../common/Alerts";
+import { Spinner } from 'reactstrap';
 
 
 const Schema = yup.object().shape({
@@ -15,7 +16,7 @@ const Schema = yup.object().shape({
 
 
 function VerifyOTP({ email, uid, time, setLoad,
-    setDisabled, disabled, setLoading }) {
+    setDisabled, disabled, loading, setLoading }) {
     const { handleSubmit, register, errors, reset } = useForm({
         resolver: yupResolver(Schema),
     });
@@ -54,7 +55,7 @@ function VerifyOTP({ email, uid, time, setLoad,
                     localStorage.setItem("custEmail", JSON.stringify(response.data.name));
                     history.push("customer/dashboard");
                 } else {
-                    Alerts.ErrorNormal("Incorrect OTP")
+                    Alerts.ErrorNormal("Incorrect OTP , please try again.") 
                     setLoading(false)
                     reset();
                 }
@@ -99,7 +100,6 @@ function VerifyOTP({ email, uid, time, setLoad,
     return (
 
         <div>
-
             <form onSubmit={handleSubmit(onSubmit)}>
                 {
                     disabled ?
@@ -123,22 +123,24 @@ function VerifyOTP({ email, uid, time, setLoad,
                             </small>
 
                         </div>
-
                 }
 
-
-                <div className="form-group">
-                    {
-                        disabled ?
-                            <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
-                            :
-                            <button type="submit" className="btn btn-success">
-                                Login
-                            </button>
-                    }
-                </div>
+                {
+                    loading ?
+                        <Spinner color="primary" />
+                        :
+                        <div className="form-group">
+                            {
+                                disabled ?
+                                    <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
+                                    :
+                                    <button type="submit" className="btn btn-success">
+                                        Login
+                                    </button>
+                            }
+                        </div>
+                }
             </form>
-
         </div>
     );
 }

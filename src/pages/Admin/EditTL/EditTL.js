@@ -115,7 +115,8 @@ function EditTL() {
   const data5 = value.allcat_id;
   const data6 = value.post_name;
   const data7 = value.post_email;
-
+  const data8 = value.cat_id;
+  const data9 = value.pcat_id
 
   useEffect(() => {
     const getCategory = () => {
@@ -160,10 +161,10 @@ function EditTL() {
       parentCategoryName.push(i.label)
     })
     console.log("subData", subData)
-    if (custCate.length < 1) {
+    if (custCate.length < 1 && data4.length < 1) {
       setError("Please select at least one value")
     }
-    else if (subData.length < 1) {
+    else if (subData.length < 1 && data5.length < 1) {
 
       setError2("Please select at least one value")
     }
@@ -173,15 +174,35 @@ function EditTL() {
 
     else {
       setDisplay(true)
+      console.log("kkData", kk.length)
+      console.log("parentCategoryName", parentCategoryName)
       let formData = new FormData();
       formData.append("email", value.email);
       formData.append("name", value.name);
       formData.append("phone", value.phone);
-      formData.append("cat_id", categeryList)
 
-      formData.append("pcat_id", kk)
-      formData.append("allpcat_id", parentCategoryName)
-      formData.append("allcat_id", categeryName)
+      {
+        categeryList.length > 1 ? formData.append("cat_id", categeryList) :
+        formData.append("cat_id", data8)
+      }
+
+
+      {
+        kk.length === 0 ? formData.append("pcat_id", data9) :
+        formData.append("pcat_id", kk)
+      }
+
+
+      {
+        parentCategoryName.length > 0 ?
+        formData.append("allpcat_id", parentCategoryName) :
+        formData.append("allpcat_id", data4)
+      }
+
+      {
+        categeryName.length > 0 ? formData.append("allcat_id", categeryName) :
+        formData.append("allcat_id", data5)
+      }
       formData.append("id", id);
 
       axios({
@@ -231,18 +252,18 @@ function EditTL() {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Maximum 10 value should be enter")
+      setIndNumError("Maximum 10 digit should be enter")
     }
     else if (phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Minimum 10 value should be enter")
+      setIndNumError("Minimum 10 digit should be enter")
     }
     else if (phone.length > 15) {
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Maximum 15 value should be enter")
+      setIndNumError("Maximum 15 digit should be enter")
     }
 
     else {
@@ -290,6 +311,7 @@ function EditTL() {
 
   // Category Function
   const category = (v) => {
+
     setCategoryData(v)
     console.log("MyData", v)
     setError("")
@@ -335,7 +357,50 @@ function EditTL() {
     }
   }
 
+  //eamil onchange
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+    console.log(e.target.value.length)
+    if (e.target.value.length < 1) {
+      setWemail("")
+    }
+  };
 
+
+  //email validaation with api
+  const emailValidation = (key) => {
+
+    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email.match(validRegex)) {
+      setWemail("");
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("type", 1);
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("resEmail-", response);
+          if (response.data.code === 1) {
+            setValiemail(response.data.result)
+            setInvalid('')
+          } else if (response.data.code === 0) {
+            setInvalid(response.data.result)
+            setValiemail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+    else {
+      setWemail("invalid email")
+    }
+
+  }
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -411,18 +476,25 @@ function EditTL() {
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Name</label>
+                        <label>Name <span className="declined">*</span></label>
                         <Form.Item name="name">
-                          <Input />
+                          <Input
+                            required
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_name,
+                            })} />
                         </Form.Item>
                       </div>
                     </div>
 
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Phone Number</label>
+                        <label>Phone  <span className="declined">*</span></label>
                         <Form.Item name="phone">
                           <Input
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_phone || indNumError || numExist,
+                            })}
                             onChange={(e) => phoneHandler(e)}
                             onBlur={phoneValidation} />
                         </Form.Item>
@@ -443,10 +515,25 @@ function EditTL() {
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Email</label>
+                        <label>Email <span className="declined">*</span></label>
                         <Form.Item name="email">
-                          <Input />
+                          <Input
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_email || wEmail || invalid,
+                            })}
+                            onBlur={emailValidation}
+                            onChange={(e) => emailHandler(e)} />
                         </Form.Item>
+                        {
+                          wEmail ? <p className="declined">{wEmail}</p> : <>
+                            {valiEmail ?
+                              <p className="completed">
+                                {valiEmail}
+                              </p>
+                              :
+                              <p className="declined">{invalid}</p>}
+                          </>
+                        }
                       </div>
                     </div>
                   </div>
@@ -454,7 +541,7 @@ function EditTL() {
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Category</label>
+                        <label>Category <span className="declined">*</span></label>
                         <div class="form-group">
 
                           <Select isMulti options={options}
@@ -476,7 +563,7 @@ function EditTL() {
 
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Sub Category</label>
+                        <label>Sub Category <span className="declined">*</span></label>
 
                         <Select isMulti options={options2}
                           onChange={subCategory} value={subData} defaultInputValue={data5} >
@@ -507,7 +594,6 @@ function EditTL() {
 }
 
 export default EditTL;
-
 
 
 // import React, { useState, useEffect } from "react";

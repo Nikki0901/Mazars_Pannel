@@ -11,6 +11,7 @@ import classNames from "classnames";
 import Alerts from "../../../common/Alerts";
 import { Link } from "react-router-dom";
 import Mandatory from "../../../components/Common/Mandatory";
+import { Spinner } from "reactstrap";
 
 
 const Schema = yup.object().shape({
@@ -24,9 +25,11 @@ function ForgetPassword(props) {
     resolver: yupResolver(Schema),
   });
 
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("email", value.p_email);
@@ -39,10 +42,12 @@ function ForgetPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           props.history.push(`/teamleader/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
-          Alerts.ErrorNormal("Error.")
+          Alerts.ErrorNormal("Please enter correct email")
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -70,38 +75,43 @@ function ForgetPassword(props) {
           <div className="heading">
             <h2>Forgot Password</h2>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          {
+            loading ?
+              <div class="col-md-12">
+                <Spinner color="primary" />
+              </div>
+              :
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="text"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_email,
+                    })}
+                    name="p_email"
+                    ref={register}
+                    placeholder="Enter Email"
+                    defaultValue={valueHandler()}
 
+                  />
+                  {errors.p_email && (
+                    <div className="invalid-feedback">{errors.p_email.message}</div>
+                  )}
+                </div>
 
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="text"
-                className={classNames("form-control", {
-                  "is-invalid": errors.p_email,
-                })}
-                name="p_email"
-                ref={register}
-                placeholder="Enter Email"
-                defaultValue={valueHandler()}
+                <button type="submit" className="btn btn-primary">
+                  Get OTP
+                </button>
+                <Link to="/teamleader/login" style={{ "margin": "10px" }}>
+                  <button type="submit" className="btn btn-secondary">
+                    Cancel
+                  </button>
+                </Link>
 
-              />
-              {errors.p_email && (
-                <div className="invalid-feedback">{errors.p_email.message}</div>
-              )}
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Get OTP
-            </button>
-            <Link to="/teamleader/login" style={{ "margin": "10px" }}>
-              <button type="submit" className="btn btn-secondary">
-                Cancel
-              </button>
-            </Link>
-
-            <Mandatory />
-          </form>
+                <Mandatory />
+              </form>
+          }
         </div>
       </div>
 

@@ -13,7 +13,8 @@ import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
 import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
-import Loader from "../../components/Loader/Loader";
+
+
 
 
 
@@ -337,6 +338,7 @@ function SignUp(props) {
     formData.append("stdcode", countryCode);
 
     if (display) {
+
       let formData = new FormData();
       formData.append("email", email);
       formData.append("phone", phone);
@@ -381,7 +383,6 @@ function SignUp(props) {
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log("res -", response.data.result);
-          setLoad(false);
           Alerts.ErrorNormal("Incorrect OTP , please try again.")
         }
       })
@@ -715,20 +716,30 @@ function SignUp(props) {
                       </div>
                       : null
                   }
-                  <div class="col-md-6" style={cusSub}>
-                    {
-                      show ?
-                        <div>
-                          {
-                            disabled ? null
-                              :
-                              <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
-                          }
-                        </div>
-                        :
-                        <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
-                    }
-                  </div>
+
+                  {
+                    loading ?
+                      <div class="col-md-12" style={cusSub}>
+                        <Spinner color="primary" />
+                      </div>
+                      :
+                      <div class="col-md-12">
+                        {
+                          show ?
+                            <div>
+                              {
+                                disabled ? null
+                                  :
+                                  <div>
+                                    <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                                  </div>
+                              }
+                            </div>
+                            :
+                            <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
+                        }
+                      </div>
+                  }
                 </div>
               </form>
 
@@ -736,7 +747,8 @@ function SignUp(props) {
                 disabled ?
                   <ResendOtp setDisabled={setDisabled} getTime={getTime}
                     email={email} phone={phone} setLoad={setLoad} invalid={invalid} indNumError={indNumError}
-                    wEmail={wEmail} zipError={zipError} passError={passError} />
+                    wEmail={wEmail} zipError={zipError} passError={passError}
+                    setLoading={setLoading} loading={loading} />
                   :
                   null
               }

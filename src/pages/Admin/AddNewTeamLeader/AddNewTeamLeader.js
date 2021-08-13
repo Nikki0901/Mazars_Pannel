@@ -270,18 +270,18 @@ function AddNew() {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Maximum 10 value should be enter")
+      setIndNumError("Maximum 10 digit should be enter")
     }
     else if (phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Minimum 10 value should be enter")
+      setIndNumError("Minimum 10 digit should be enter")
     }
     else if (phone.length > 15) {
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Maximum 15 value should be enter")
+      setIndNumError("Maximum 15 digit should be enter")
     }
 
     else {
@@ -430,7 +430,7 @@ function AddNew() {
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Name</label>
+                      <label>Name <span className="declined">*</span></label>
                       <input
                         type="text"
                         className={classNames("form-control", {
@@ -445,11 +445,11 @@ function AddNew() {
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Phone Number</label>
+                      <label>Phone Number <span className="declined">*</span></label>
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_phone || indNumError,
+                          "is-invalid": errors.p_phone || indNumError || numExist,
                         })}
                         name="p_phone"
                         ref={register}
@@ -471,7 +471,7 @@ function AddNew() {
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Email</label>
+                      <label>Email <span className="declined">*</span></label>
                       <input
                         type="email"
                         className={classNames("form-control", {
@@ -498,7 +498,7 @@ function AddNew() {
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Category</label>
+                      <label>Category <span className="declined">*</span></label>
                       <Select isMulti options={options}
                         className={error ? "customError" : ""}
 
@@ -511,14 +511,12 @@ function AddNew() {
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Sub Category</label>
+                      <label>Sub Category <span className="declined">*</span></label>
                       <Select isMulti options={options2}
                         className={error2 ? "customError" : ""}
                         onChange={subCategory}
                         value={subData}>
-
                       </Select>
-
                     </div>
                   </div>
                 </div>

@@ -11,6 +11,7 @@ import classNames from "classnames";
 import Alerts from "../../common/Alerts";
 import Mandatory from "../../components/Common/Mandatory";
 import ResendOtp from "./ResendOtp";
+import { Spinner } from "reactstrap";
 
 
 
@@ -18,6 +19,7 @@ function ChangePassword(props) {
   const userId = window.localStorage.getItem("userid");
   const { register, handleSubmit, errors, getValues, reset } = useForm();
 
+  const [loading, setLoading] = useState(false);
   const [isPasswordShow, setPasswordShow] = useState(false);
   const [isPasswordShow2, setPasswordShow2] = useState(false);
   const [disabled, setDisabled] = useState(false)
@@ -64,6 +66,7 @@ function ChangePassword(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     setEmail(value.p_email)
 
@@ -88,11 +91,13 @@ function ChangePassword(props) {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
+            setLoading(false)
             setLoad(true)
             setShow(true)
             Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           } else if (response.data.code === 0) {
-            Alerts.ErrorNormal("Error")
+            setLoading(false)
+            Alerts.ErrorNormal("Please enter correct details")
           }
         })
         .catch((error) => {
@@ -108,10 +113,12 @@ function ChangePassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           var variable = "Change Password Successfully"
           Alerts.SuccessNormal(variable)
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
+          setLoading(false)
           console.log(response.data.result);
           Alerts.ErrorNormal("Incorrect OTP , please try again.")
         }
@@ -195,7 +202,7 @@ function ChangePassword(props) {
                     })}
                     autocomplete="off"
                   />
-                 
+
                   <i
                     className={`fa ${isPasswordShow ? "fa-eye-slash" : "fa-eye"} password-icon`}
                     onClick={togglePasssword}
@@ -271,35 +278,42 @@ function ChangePassword(props) {
                   </div>
                   : null
               }
-              <div class="col-md-6">
-                {
-                  show ?
-                    <div>
-                      {
-                        disabled ? null
-                          :
-                          <>
-                            <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
-                            <Cancel />
-                          </>
-                      }
-                    </div>
-                    :
-                    <>
-                      <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
-                      <Cancel />
-                    </>
-                }
-              </div>
-            </div>
 
+              {
+                loading ?
+                  <div class="col-md-12">
+                    <Spinner color="primary" />
+                  </div>
+                  :
+                  <div class="col-md-6">
+                    {
+                      show ?
+                        <div>
+                          {
+                            disabled ? null
+                              :
+                              <>
+                                <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                                <Cancel />
+                              </>
+                          }
+                        </div>
+                        :
+                        <>
+                          <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
+                          <Cancel />
+                        </>
+                    }
+                  </div>
+              }
+            </div>
 
           </form>
 
           {
             disabled ?
               <ResendOtp setDisabled={setDisabled} getTime={getTime}
-                email={email} setLoad={setLoad} />
+                email={email} setLoad={setLoad} setLoading={setLoading} loading={loading} />
               :
               null
           }

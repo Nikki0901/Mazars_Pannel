@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import Alerts from "../../common/Alerts";
+import { Spinner } from 'reactstrap';
 
 
-function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email, phone, setDisabled, getTime, setLoad }) {
+function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email,
+    phone, setDisabled, getTime, setLoad, loading, setLoading }) {
 
     const { handleSubmit, errors, reset } = useForm();
 
     const onSubmit = (value) => {
+        setLoading(true)
         let formData = new FormData();
         formData.append("email", email);
         formData.append("phone", phone);
@@ -33,6 +36,9 @@ function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email, p
                         setDisabled(false)
                         getTime();
                         setLoad(true)
+                        setLoading(false)
+                    } if (response.data.code === 0) {
+                        setLoading(false)
                     }
                 })
                 .catch((error) => {
@@ -44,9 +50,11 @@ function ResendOtp({ invalid, wEmail, indNumError, zipError, passError, email, p
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
+
                 <div style={{ paddingTop: "10px" }}>
                     <button type="submit" class="btn btn-success">SEND OTP</button>
                 </div>
+
             </form>
         </>
     );

@@ -9,7 +9,7 @@ import { baseUrl } from "../../config/config";
 import { useAlert } from "react-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// import NewPassword from "../NewPassword/NewPassword";
+import { Spinner } from "reactstrap";
 import classNames from "classnames";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -28,15 +28,16 @@ function ForgetPassword(props) {
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
+  const [loading, setLoading] = useState(false);
 
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("email", value.p_email);
     formData.append("p", "forgot");
-
 
     axios({
       method: "POST",
@@ -46,11 +47,13 @@ function ForgetPassword(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
           props.history.push(`/customer/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
+          setLoading(false)
           console.log(response.data.result);
-          Swal.fire("Oops...", "Errorr : " + response.data.result, "error");
+          Alerts.ErrorNormal("Please enter correct email")
         }
       })
       .catch((error) => {
@@ -75,33 +78,41 @@ function ForgetPassword(props) {
           <div className="heading">
             <h2>Forgot Password</h2>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
-              <label className="form-label">Email<span className="declined">*</span></label>
-              <input
-                type="text"
-                className={classNames("form-control", {
-                  "is-invalid": errors.p_email,
-                })}
-                name="p_email"
-                ref={register}
-                placeholder="Enter Email"
-                defaultValue={valueHandler()}
-              />
-              {errors.p_email && (
-                <div className="invalid-feedback">{errors.p_email.message}</div>
-              )}
-            </div>
 
-            <button type="submit" className="btn btn-primary">
-              Get OTP
-            </button>
-            <Link to="/" style={{ "margin": "10px" }}>
-              <button type="submit" className="btn btn-secondary">
-                Cancel
-              </button>
-            </Link>
-          </form>
+          {
+            loading ?
+              <div class="col-md-12">
+                <Spinner color="primary" />
+              </div>
+              :
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-3">
+                  <label className="form-label">Email<span className="declined">*</span></label>
+                  <input
+                    type="text"
+                    className={classNames("form-control", {
+                      "is-invalid": errors.p_email,
+                    })}
+                    name="p_email"
+                    ref={register}
+                    placeholder="Enter Email"
+                    defaultValue={valueHandler()}
+                  />
+                  {errors.p_email && (
+                    <div className="invalid-feedback">{errors.p_email.message}</div>
+                  )}
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Get OTP
+                </button>
+                <Link to="/" style={{ "margin": "10px" }}>
+                  <button type="submit" className="btn btn-secondary">
+                    Cancel
+                  </button>
+                </Link>
+              </form>
+          }
         </div>
       </div>
 
@@ -111,6 +122,10 @@ function ForgetPassword(props) {
 }
 
 export default ForgetPassword;
+
+
+
+
 
 {
   /* <Link
