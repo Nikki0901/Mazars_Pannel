@@ -161,7 +161,7 @@ function QueryAssingment() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Query Assigned Successfully"
+          var variable = "Query assigned successfully."
           Alerts.SuccessNormal(variable)
           getQuery();
           reset();

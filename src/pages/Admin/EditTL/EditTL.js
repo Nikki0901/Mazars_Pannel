@@ -215,7 +215,7 @@ function EditTL() {
           console.log("res-", response);
           if (response.data.code === 1) {
 
-            var variable = "Team Leader Updated Successfully"
+            var variable = "Team Leader details updated successfully."
             Alerts.SuccessNormal(variable)
             history.goBack();
           }

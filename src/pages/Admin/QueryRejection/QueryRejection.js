@@ -55,8 +55,7 @@ function QueryRejection(props) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
                     setLoading(false)
-                    var variable = "Query declined successfully. "
-                    Alerts.SuccessNormal(variable)
+                    Alerts.SuccessNormal("Query declined successfully.")
                     props.history.push({
                         pathname: `/admin/queriestab`,
                         index: 1,

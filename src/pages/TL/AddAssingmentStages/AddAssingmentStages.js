@@ -69,7 +69,7 @@ function AddAssingmentStages() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("Assignment successfully added")
+          Alerts.SuccessNormal("Assignment added successfully.")
           getAssignmentList();
           history.push("/teamleader/assignment");
         } else if (response.data.code === 0) {

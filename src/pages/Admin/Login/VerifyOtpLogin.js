@@ -96,13 +96,13 @@ function VerifyOtp({ email, uid, loading, setLoading }) {
 
         if (response.data.code == 1) {
           setLoading(false)
-          Alerts.SuccessLogin()
+          Alerts.SuccessLogin("Logged in successfully.")
           localStorage.setItem("adminkey", JSON.stringify(response.data["user id"]));
           localStorage.setItem("adminEmail", JSON.stringify(response.data.name));
           history.push("/admin/dashboard");
 
         } else {
-          Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
           setLoading(false)
           reset();
         }
@@ -129,7 +129,7 @@ function VerifyOtp({ email, uid, loading, setLoading }) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           setDisabled(false)
         }
         else if (response.data.code === 0) {

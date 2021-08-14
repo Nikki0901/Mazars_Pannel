@@ -24,11 +24,12 @@ function ResendOtp({ id, setDisabled, getTime, setLoading }) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
                     setLoading(false)
-                    Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+                    Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
                     setDisabled(false)
                     getTime();
                 } else if (response.data.code === 0) {
                     setLoading(false)
+                    Alerts.ErrorNormal("Some thing went wrong, please try again")
                 }
             })
             .catch((error) => {

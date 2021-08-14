@@ -48,7 +48,7 @@ function RejectedModal({
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("Query successfully rejected")
+          Alerts.SuccessNormal("Query rejected successfully.")
           getPendingforAcceptance();
           rejectHandler();
         } else if (response.data.code === 0) {

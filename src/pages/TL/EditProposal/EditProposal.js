@@ -131,8 +131,6 @@ function EditComponent() {
         formData.append("due_date", date) :
         formData.append("due_date", "")
 
-
-
     if (payment.value == "installment") {
   
       if (amount.length === 1) {
@@ -144,10 +142,9 @@ function EditComponent() {
       }
       console.log("sum -", sum)
       if (amount.length === 1 && value.p_fixed != sum) {
-        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+        Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}.`)
       }
   else{
-
     axios({
       method: "POST",
       url: `${baseUrl}/tl/updateProposal`,
@@ -158,7 +155,7 @@ function EditComponent() {
         if (response.data.code === 1) {
           reset();
 
-          var variable = "Proposal Successfully Sent "
+          var variable = "Proposal updated successfully."
           Alerts.SuccessNormal(variable)
 
           history.push("/teamleader/proposal");
@@ -167,9 +164,7 @@ function EditComponent() {
       .catch((error) => {
         console.log("erroror - ", error);
       });
-
   }
-    
 }
     else {
       axios({
@@ -181,7 +176,7 @@ function EditComponent() {
           console.log("res-", response);
           if (response.data.code === 1) {
 
-            var variable = "Proposal Updated Successfully "
+            var variable = "Proposal updated successfully."
             Alerts.SuccessNormal(variable)
             history.push("/teamleader/proposal");
           }

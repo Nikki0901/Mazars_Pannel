@@ -170,7 +170,7 @@ function AddNew() {
           if (response.data.code === 1) {
             Swal.fire({
               "title": "Success",
-              "html": "TL created successfully",
+              "html": "Team Leader created successfully.",
               "icon": "success"
             })
 
@@ -298,7 +298,7 @@ function AddNew() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-            // setValiphone(response.data.result)
+    
             console.log(response.data.result)
             setNumExist('')
             setNumAvail(response.data.result);

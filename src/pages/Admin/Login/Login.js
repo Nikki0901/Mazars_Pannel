@@ -61,7 +61,7 @@ function Login(props) {
         if (response.data.code === 1) {
           setLoading(false)
           setShow(true)
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           setUid(response.data["user id"])
         } else if (response.data.code === 0) {
           setLoading(false)
