@@ -34,8 +34,41 @@ function TeamLeaderTab() {
       },
     },
     {
+      dataField: "post_name",
+      text: "Post_ID",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+
+    {
+      dataField: "email",
+      text: "Post_Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
       dataField: "name",
-      text: "Name",
+      text: "Name of TL",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "personal_email",
+      text: "Personal Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "phone",
+      text: "Personal Mobile No",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -96,22 +129,7 @@ function TeamLeaderTab() {
         )
       }
     },
-    {
-      dataField: "email",
-      text: "Email",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      dataField: "phone",
-      text: "Phone",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
+   
     {
       dataField: "",
       text: "Edit",

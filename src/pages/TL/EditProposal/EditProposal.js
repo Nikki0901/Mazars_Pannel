@@ -18,6 +18,7 @@ import Payment from "./Payment";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
 import classNames from "classnames";
+import { date } from "yup";
 
 
 
@@ -33,12 +34,16 @@ function EditComponent() {
   const [date, setDate] = useState();
 
   const [load, setLoad] = useState(true);
-
-
+ const [dateError, setDateError] = useState();
+  const [paymentError, setpaymentError] = useState();
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
   const [diserror, setdiserror] = useState("")
+  const [amountError, setAmountError] = useState("")
+  const [clearVal,setClearval] = useState(1);
+  const [datee, getDate] = useState()
+  var a = [0, 0, 0, 0]
   const history = useHistory();
   const { id } = useParams();
 
@@ -108,8 +113,9 @@ function EditComponent() {
 
 
   const onSubmit = (value) => {
-  
-    var lumsum = value.p_inst_date
+ console.log(date)
+   
+      var lumsum = value.p_inst_date
     setDate(lumsum)
 
     let formData = new FormData();
@@ -191,6 +197,7 @@ function EditComponent() {
         .catch((error) => {
           console.log("erroror - ", error);
         });
+    
     }
   };
 
@@ -209,22 +216,25 @@ function EditComponent() {
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
 
-    // var array1 = []
-    // Object.entries(data).map(([key, value]) => {
-    //   array1.push(value)
-    // });
     setAmount(data);
     console.log(data)
   };
 
   const paymentDate = (data) => {
     console.log("paymentDate", data)
-
-    var array2 = []
+  getDate(data)
+var array2 = []
+    var arr4 = []
     Object.entries(data).map(([key, value]) => {
       array2.push(value)
+     
     });
     setDate(array2);
+    Object.entries(data).map(([ke, value]) => {
+      console.log(value)
+     getDate(value[0])
+    });
+  
   };
 
 
@@ -357,7 +367,13 @@ function EditComponent() {
 
                       <Select
                         closeMenuOnSelect={true}
-                        onChange={setInstallment}
+                        className={paymentError ? "customError" : ""}
+                        onChange={(e) => {
+                          setInstallment(e);
+                          setClearval(0);
+                          setpaymentError("")
+                          setDate("")
+                        }}
                         value={installment}
                         options={noInstallments}
                       />
@@ -379,6 +395,12 @@ function EditComponent() {
                       installment_amount={installment_amount}
                       due_date={due_date}
                       getQuery={getQuery}
+                      blankFeild = {amountError}
+                      setBlankFeild = {setAmountError}
+                      dateError = {dateError}
+                      setDateError= {setDateError}
+                      installmentValue = {installment.value}
+                      clearVal = {clearVal}
                     />
 
                 }
@@ -396,7 +418,7 @@ function EditComponent() {
     </Layout>
   );
 }
-
+console.log(date)
 export default EditComponent;
 
 const paymentsTerms = [

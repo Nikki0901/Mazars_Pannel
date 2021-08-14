@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 export default class YourComponent extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class YourComponent extends React.Component {
     }
 
 
-
+ custError = this.props.blankFeild;
     amount = this.props.installment_amount
     installment_amount = this.amount.split(',');
     temp = this.installment_amount
@@ -23,6 +24,7 @@ export default class YourComponent extends React.Component {
 
 
     handleChange1(i, e) {
+        this.props.setBlankFeild("")
         const { value } = e.target
         this.temp[i] = value
         var val2 =[]
@@ -38,6 +40,7 @@ export default class YourComponent extends React.Component {
 
 
     handleChange2(i, e) {
+        this.props.setDateError("")
         const { value } = e.target
         this.installmentDueDate[i] = value
         var val3 = []
@@ -68,7 +71,7 @@ export default class YourComponent extends React.Component {
 
 
     render() {
-
+console.log("installmentValue", this.props.installmentValue)
         var amount = this.props.installment_amount
         var date = this.props.due_date
 
@@ -85,18 +88,23 @@ export default class YourComponent extends React.Component {
                         <label>Amount</label>
                         <input
                             type="text"
-                            className="form-control"
+                            className={classNames("form-control", {
+                                "is-invalid": this.props.blankFeild,
+                              })}
                             name={this.state.values[i]}
                             onChange={this.handleChange1.bind(this, i)}
                             defaultValue={installment_amount[i]}
                         />
+                       
                     </div>
 
                     <div class="col-md-6">
                         <label>Due Dates</label>
                         <input
                             type="date"
-                            className="form-control"
+                            className={classNames("form-control", {
+                                "is-invalid": this.props.dateError,
+                              })}
                             name={this.state.dates[i]}
                             onChange={this.handleChange2.bind(this, i)}
                             defaultValue={due_date[i]}
