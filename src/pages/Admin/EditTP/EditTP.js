@@ -277,20 +277,3 @@ function EditTP() {
 
 export default EditTP;
 
-
-// useEffect(() => {
-//   const getTaxProfessional = () => {
-//     axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
-//       console.log(res);
-//       if (res.data.code === 1) {
-//         setUser({
-//           name: res.data.result[0].name,
-//           email: res.data.result[0].email,
-//           phone: res.data.result[0].phone,
-//         });
-//       }
-//     });
-//   };
-
-//   getTaxProfessional();
-// }, [id]);

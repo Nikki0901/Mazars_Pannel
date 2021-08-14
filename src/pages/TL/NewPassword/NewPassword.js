@@ -121,7 +121,7 @@ function NewPassword(props) {
                       required: true,
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Please enter valid email address",
+                        message: "Please enter valid email address.",
                       },
                     })}
                   />
