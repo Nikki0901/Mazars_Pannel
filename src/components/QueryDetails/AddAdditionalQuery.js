@@ -34,11 +34,11 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Document Uploaded Successfully"
+          var variable = "File uploaded successfully."
           Alerts.SuccessNormal(variable)
           reset();
           getQuery();
-        }else if (response.data.code === 0) {
+        } else if (response.data.code === 0) {
           setLoading(false)
         }
       })

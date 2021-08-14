@@ -76,25 +76,29 @@ function ProposalView(props) {
         console.log(res);
         if (res.data.code === 1) {
           console.log(res.data.result[0].query_status);
-          setQueryStatus(res.data.result[0].query_status);
-          setDisplayProposal({
-            accepted_amount: res.data.proposal_queries[0].accepted_amount,
-            payment_received: res.data.proposal_queries[0].paid_amount,
-            amount: res.data.proposal_queries[0].amount,
-            proposal_date: res.data.proposal_queries[0].created,
-            name: res.data.proposal_queries[0].tlname,
-            description: res.data.proposal_queries[0].description,
-            amount_type: res.data.proposal_queries[0].amount_type,
-            amount_fixed: res.data.proposal_queries[0].amount_fixed,
-            amount_hourly: res.data.proposal_queries[0].amount_hourly,
 
-            payment_terms: res.data.proposal_queries[0].payment_terms,
-            no_of_installment: res.data.proposal_queries[0].no_of_installment,
-            installment_amount: res.data.proposal_queries[0].installment_amount,
-            due_date: res.data.proposal_queries[0].due_date,
+          if (res.data.result[0].query_status) {
+            setQueryStatus(res.data.result[0].query_status);
+          }
+          if (res.data.proposal_queries.length > 0) {
+            setDisplayProposal({
+              accepted_amount: res.data.proposal_queries[0].accepted_amount,
+              payment_received: res.data.proposal_queries[0].paid_amount,
+              amount: res.data.proposal_queries[0].amount,
+              proposal_date: res.data.proposal_queries[0].created,
+              name: res.data.proposal_queries[0].tlname,
+              description: res.data.proposal_queries[0].description,
+              amount_type: res.data.proposal_queries[0].amount_type,
+              amount_fixed: res.data.proposal_queries[0].amount_fixed,
+              amount_hourly: res.data.proposal_queries[0].amount_hourly,
 
+              payment_terms: res.data.proposal_queries[0].payment_terms,
+              no_of_installment: res.data.proposal_queries[0].no_of_installment,
+              installment_amount: res.data.proposal_queries[0].installment_amount,
+              due_date: res.data.proposal_queries[0].due_date,
+            });
+          }
 
-          });
         }
       });
   };
@@ -178,7 +182,7 @@ function ProposalView(props) {
     } else {
       Swal.fire({
         title: "Are you sure?",
-        text: "Do you want to reject proposal?",
+        text: "Want to reject proposal ?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

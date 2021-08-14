@@ -56,7 +56,7 @@ function Feedback() {
         if (response.data.code === 1) {
           setLoading(false)
           reset();
-          Alerts.SuccessNormal("Feedback successfully sent.")
+          Alerts.SuccessNormal("Feedback sent successfully.")
           history.push({
             pathname: `/customer/queries`,
             index: 0,

@@ -94,7 +94,7 @@ function ChangePassword(props) {
             setLoading(false)
             setLoad(true)
             setShow(true)
-            Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+            Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           } else if (response.data.code === 0) {
             setLoading(false)
             Alerts.ErrorNormal("Please enter correct details")
@@ -114,13 +114,13 @@ function ChangePassword(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Change Password Successfully"
+          var variable = "Password changed successfully."
           Alerts.SuccessNormal(variable)
           props.history.push("/customer/dashboard");
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log(response.data.result);
-          Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
         }
       })
       .catch((error) => {
@@ -197,7 +197,7 @@ function ChangePassword(props) {
                       pattern: {
                         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                         message:
-                          "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                          "UPassword should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
                       },
                     })}
                     autocomplete="off"
@@ -235,7 +235,7 @@ function ChangePassword(props) {
                       required: true,
                       validate: (value) =>
                         value === getValues("p_password") ||
-                        "password doesn 't match",
+                        "Password doesn't match.",
                     })}
                     autocomplete="off"
                   />

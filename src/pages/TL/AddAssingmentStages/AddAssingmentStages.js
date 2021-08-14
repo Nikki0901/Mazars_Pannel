@@ -14,12 +14,14 @@ import {
   Col,
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
+import { Spinner } from 'reactstrap';
 
 function AddAssingmentStages() {
-  const alert = useAlert();
+
   const { register, handleSubmit, errors, reset } = useForm();
   const [assignmentStages, setAssignmentstages] = useState([]);
   const [clientDiscussion, setClientDiscussion] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const userid = window.localStorage.getItem("tlkey");
   const { id } = useParams();
@@ -46,6 +48,7 @@ function AddAssingmentStages() {
 
   const onSubmit = (value) => {
     console.log(value);
+    setLoading(true)
 
     let formData = new FormData();
 
@@ -65,9 +68,12 @@ function AddAssingmentStages() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           Alerts.SuccessNormal("Assignment successfully added")
           getAssignmentList();
           history.push("/teamleader/assignment");
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -465,9 +471,14 @@ function AddAssingmentStages() {
                       }
                       <br />
                       <div class="form-group">
-                        <button type="submit" class="btn btn-primary">
-                          Submit
-                        </button>
+                        {
+                          loading ?
+                            <Spinner color="primary" />
+                            :
+                            <button type="submit" class="btn btn-primary">
+                              Submit
+                            </button>
+                        }
                       </div>
                     </form>
                   </div>

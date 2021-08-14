@@ -48,6 +48,7 @@ function AddFreshAssingment(props) {
   const [load, setLoad] = useState(false);
   const [selectError, setSelectError] = useState()
 
+
   const remError = () => {
     setCheckerror("")
   }
@@ -59,10 +60,10 @@ function AddFreshAssingment(props) {
     setPurposeOption(e)
   }
 
-
   useEffect(() => {
     getAssementYear();
   }, []);
+
 
   const getAssementYear = () => {
     axios
@@ -82,16 +83,15 @@ function AddFreshAssingment(props) {
     const a = value.p_fact;
     const b = value.users;
     if (a == '') {
-      setcustError("This feild is required");
+      setcustError("");
       console.log(b)
     }
-
     else if (purposeOption < 1) {
       setSelectError("At least one value should be enter")
     }
     else if (value.p_format_word === false && value.p_format_digital === false && value.p_format_physically === false) {
       console.log("catch")
-      setCheckerror("you have to select at least one")
+      setCheckerror("Please select at least one.")
     }
 
     else {
@@ -139,7 +139,7 @@ function AddFreshAssingment(props) {
             if (message == "") {
               Swal.fire({
                 title: 'Success !',
-                html: `<p>Query no.- ${query_no} has been submitted successfully.
+                html: `<p>Query no.- ${query_no} submitted successfully.
                  Mazars team will contact you shortly.
                 </p>`,
                 icon: 'success',
@@ -153,7 +153,7 @@ function AddFreshAssingment(props) {
             else if (message.faill) {
               Swal.fire({
                 title: 'Success !',
-                html: `<p>Query no.- ${query_no} has been submitted successfully.
+                html: `<p>Query no.- ${query_no} submitted successfully.
                  Mazars team will contact you shortly.
                 </p> 
                 <br/><p class="text-danger">${message.faill}</p>`,
@@ -211,7 +211,6 @@ function AddFreshAssingment(props) {
                           onChange={valiFun}
                           ref={register({ required: true })}
                         ></textarea>
-
                       </div>
                     </div>
 
@@ -251,7 +250,6 @@ function AddFreshAssingment(props) {
                               -
                             </div>
                           </div>
-
                         ))}
                     </div>
 
@@ -265,7 +263,6 @@ function AddFreshAssingment(props) {
 
                           className="form-control"
                         />
-
                       </div>
                     </div>
 
@@ -278,7 +275,6 @@ function AddFreshAssingment(props) {
                           isMulti
                           options={assessmentYear}
                         />
-
                       </div>
                     </div>
 

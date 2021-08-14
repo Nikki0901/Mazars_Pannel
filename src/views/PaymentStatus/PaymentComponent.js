@@ -47,7 +47,7 @@ function PaymentModal({
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Payment Done Successfully "
+          var variable = "Payment made successfully."
           Alerts.SuccessNormal(variable)
           getPaymentStatus();
           paymentHandler();

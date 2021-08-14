@@ -3,12 +3,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
-import Alerts from "../../common/Alerts";
-import CommonServices from "../../common/common";
 import Swal from "sweetalert2";
-
+import { Spinner } from 'reactstrap';
 
 function AdditionalQueryModal({
   additionalQuery,
@@ -17,9 +13,12 @@ function AdditionalQueryModal({
   getQueriesData,
 }) {
   const { handleSubmit, register } = useForm();
+  
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     var uploadImg = value.p_upload;
@@ -29,9 +28,8 @@ function AdditionalQueryModal({
         formData.append("upload[]", file);
       }
     }
-
     formData.append("assign_no", assignNo);
-    // formData.append("upload", value.p_upload[0]);
+
 
     axios({
       method: "POST",
@@ -41,7 +39,7 @@ function AdditionalQueryModal({
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-
+          setLoading(false)
           var message = response.data.message
           if (message.invalid) {
             Swal.fire({
@@ -51,26 +49,27 @@ function AdditionalQueryModal({
           } else if (message.faill && message.success) {
             Swal.fire({
               title: 'Success',
-              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
+              html: `<p class="text-danger">File ${message.faill}</p> <br/> <p>File ${message.success}</p> `,
               icon: 'success',
             })
           } else if (message.success) {
             Swal.fire({
               title: 'Success',
-              html: `<p>${message.success}</p>`,
+              html: `<p>File ${message.success}</p>`,
               icon: 'success',
             })
           }
           else if (message.faill) {
             Swal.fire({
               title: 'Success !',
-              html: `<p class="text-danger">${message.faill}</p>`,
+              html: `<p class="text-danger">File ${message.faill}</p>`,
               icon: 'success',
             })
           }
-
           additionalHandler();
           getQueriesData();
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -98,12 +97,17 @@ function AdditionalQueryModal({
             </div>
 
             <div class="modal-footer">
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
-                Submit
-              </button>
+              {
+                loading ?
+                  <Spinner color="primary" />
+                  :
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                  >
+                    Submit
+                  </button>
+              }
             </div>
           </form>
         </ModalBody>

@@ -82,7 +82,7 @@ function LoginForm() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           setShow(true)
           setLoad(true)
           setUid(response.data.user_id)

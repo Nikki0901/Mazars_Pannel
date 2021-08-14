@@ -80,7 +80,7 @@ function Chatting(props) {
         if (response.data.code === 1) {
           reset();
           setLoading(false)
-          var variable = "Message Successfully Sent "
+          var variable = "Message sent successfully."
           Alerts.SuccessNormal(variable)
           props.history.push(routes);
         }

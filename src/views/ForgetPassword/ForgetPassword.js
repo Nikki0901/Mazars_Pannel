@@ -48,12 +48,12 @@ function ForgetPassword(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your regsitered email address.")
           props.history.push(`/customer/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log(response.data.result);
-          Alerts.ErrorNormal("Please enter correct email")
+          Alerts.ErrorNormal("Please enter correct email address.")
         }
       })
       .catch((error) => {

@@ -4,7 +4,7 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import { useHistory } from "react-router-dom";
 
-function DeleteQuery({ id }) {
+function DeleteQuery({ id, setLoad }) {
   const userId = window.localStorage.getItem("userid");
   const history = useHistory();
 
@@ -16,7 +16,7 @@ function DeleteQuery({ id }) {
 
     Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to delete query ?",
+      text: "Want to delete query ?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -30,6 +30,7 @@ function DeleteQuery({ id }) {
   };
 
   const deleteCliente = (id) => {
+    setLoad(true)
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
     formData.append("id", id);
@@ -42,10 +43,12 @@ function DeleteQuery({ id }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoad(false)
           Swal.fire("", "Query deleted successfully.", "success");
           history.push("/customer/queries");
         } else {
-          Swal.fire("Oops...", "Errorr ", "error");
+          setLoad(false)
+          Swal.fire("Oops...", "Query not deleted", "error");
         }
       })
       .catch((error) => {

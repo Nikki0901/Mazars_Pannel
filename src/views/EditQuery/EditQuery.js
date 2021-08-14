@@ -17,8 +17,6 @@ import Loader from "../../components/Loader/Loader";
 
 
 function EditQuery(props) {
-  // const { Option } = Select;
-  const alert = useAlert();
 
   const history = useHistory();
   const { id } = useParams();
@@ -54,7 +52,6 @@ function EditQuery(props) {
   const remError = () => {
     setCheckerror("")
   }
-
 
 
   useEffect(() => {
@@ -120,12 +117,13 @@ function EditQuery(props) {
     console.log(value.p_Softcopy_word)
     console.log(value.p_Softcopy_digital)
     console.log(value.p_Softcopy_physical)
+    
     if (purposeOption < 1) {
       setSelectError("At least one value should be enter")
     }
     else if (value.p_Softcopy_word === false && value.p_Softcopy_digital === false && value.p_Softcopy_physical === false) {
       console.log("checked")
-      setCheckerror("you have to select at least one")
+      setCheckerror("Please select at least one.")
     }
     else {
       setLoad(true);
@@ -172,7 +170,7 @@ function EditQuery(props) {
             if (message == "") {
               Swal.fire(
                 "Success",
-                `Query Updated Successfully.`,
+                `Query updated successfully.`,
                 "success"
               )
             } else if (message.invalid) {
@@ -216,7 +214,7 @@ function EditQuery(props) {
               <p style={{ fontSize: "20px" }}>Update Query</p>
             </Col>
             <Col md="4" style={{ display: "flex", justifyContent: "flex-end" }}>
-              <DeleteQuery id={id} />
+              <DeleteQuery id={id} setLoad={setLoad}/>
             </Col>
           </Row>
         </CardHeader>

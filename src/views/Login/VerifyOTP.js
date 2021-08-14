@@ -28,7 +28,7 @@ function VerifyOTP({ email, uid, time, setLoad,
     const validOtp = (e) => {
         if (isNaN(e.target.value)) {
             e.target.value = ""
-            noSetText("Please enter number only")
+            noSetText("Please enter number only.")
         }
     }
 
@@ -50,12 +50,12 @@ function VerifyOTP({ email, uid, time, setLoad,
 
                 if (response.data.code == 1) {
                     setLoading(false)
-                    Alerts.SuccessLogin()
+                    Alerts.SuccessLogin("Logged in successfully.")
                     localStorage.setItem("userid", JSON.stringify(response.data.user_id));
                     localStorage.setItem("custEmail", JSON.stringify(response.data.name));
                     history.push("customer/dashboard");
                 } else {
-                    Alerts.ErrorNormal("Incorrect OTP , please try again.") 
+                    Alerts.ErrorNormal("Incorrect OTP") 
                     setLoading(false)
                     reset();
                 }
@@ -82,13 +82,12 @@ function VerifyOTP({ email, uid, time, setLoad,
                 console.log("res-", response);
                 if (response.data.code === 1) {
                     setLoading(false)
-                    Alerts.SuccessNormal("An OTP sent to your mail")
+                    Alerts.SuccessNormal("An OTP has been sent to your registered email address.")
                     setLoad(true)
                     setDisabled(false)
                 }
                 else if (response.data.code === 0) {
                     setLoading(false)
-
                     Alerts.ErrorNormal("Some thing went wrong, please try again")
                 }
             })

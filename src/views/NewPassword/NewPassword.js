@@ -88,14 +88,14 @@ function NewPassword(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Reset Password Successfully "
+          var variable = "Password reset successfully."
           Alerts.SuccessNormal(variable)
           reset();
           props.history.push("/");
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log(response.data.result);
-          Alerts.ErrorNormal("Please enter correct details")
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
         }
       })
       .catch((error) => {
@@ -159,7 +159,7 @@ function NewPassword(props) {
                       pattern: {
                         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                         message:
-                          "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                          "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
                       },
                     })}
                     onPaste={((e) => {
@@ -195,7 +195,7 @@ function NewPassword(props) {
                       required: true,
                       validate: (value) =>
                         value === getValues("p_password") ||
-                        "password doesn 't match",
+                        "Password doesn't match.",
                     })}
                     onPaste={((e) => {
                       e.preventDefault();

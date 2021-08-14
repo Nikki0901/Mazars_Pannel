@@ -11,10 +11,7 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
-import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
-
-
 
 
 
@@ -166,6 +163,7 @@ function SignUp(props) {
   };
 
 
+
   //email validaation with api
   const emailValidation = (key) => {
 
@@ -196,9 +194,8 @@ function SignUp(props) {
         });
     }
     else {
-      setWemail("invalid email")
+      setWemail("Invalid email")
     }
-
   }
 
 
@@ -208,7 +205,7 @@ function SignUp(props) {
     if (isNaN(e.target.value)) {
       setIndNumError("")
       setNumAvail("");
-      setNumExist('Please enter number only')
+      setNumExist('Please enter number only.')
       e.target.value = ""
       setPhone("")
     }
@@ -219,6 +216,7 @@ function SignUp(props) {
     }
   };
 
+
   //phone validaation with api
   const phoneValidation = () => {
     console.log(phone.length)
@@ -226,13 +224,13 @@ function SignUp(props) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Maximum 10 value should be enter")
+      setIndNumError("Enter 10 digit mobile number.")
     }
     else if (countryId && phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Minimum 10 value should be enter")
+      setIndNumError("Enter 10 digit mobile number.")
     }
     else if (!countryId && phone.length > 15) {
       setNumAvail("")
@@ -280,7 +278,7 @@ function SignUp(props) {
   //zip oncahnge
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
-      setZipError("Please enter number only")
+      setZipError("Please enter number only.")
       e.target.value = ""
     }
     else {
@@ -294,12 +292,12 @@ function SignUp(props) {
   const zipVali2 = (e) => {
 
     if (countryId && zipCode && zipCode.length < 6) {
-      setZipError("Minumum 6 digit should be there")
+      setZipError("Enter 6 digit zip code")
       console.log(zipCode.length)
     }
 
     else if (countryId && zipCode && zipCode.length > 6) {
-      setZipError("Maximum 6 digit allowed")
+      setZipError("Enter 6 digit zip code")
       console.log(zipCode.length)
     }
   }
@@ -308,7 +306,7 @@ function SignUp(props) {
 
   const otpVali = (e) => {
     if (isNaN(e.target.value)) {
-      setvaliOtp("Please enter number only")
+      setvaliOtp("Please enter number only.")
       e.target.value = ""
     }
     else {
@@ -375,7 +373,7 @@ function SignUp(props) {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          var variable = "Signup successfully."
+          var variable = "Signed up successfully."
           Alerts.SuccessNormal(variable)
           localStorage.setItem("userid", JSON.stringify(response.data.id));
           localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
@@ -383,7 +381,7 @@ function SignUp(props) {
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log("res -", response.data.result);
-          Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
         }
       })
       .catch((error) => {
@@ -633,7 +631,7 @@ function SignUp(props) {
                           pattern: {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                             message:
-                              "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                              "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
                           },
                         })}
                       // autocomplete="off"
@@ -672,7 +670,7 @@ function SignUp(props) {
                           required: true,
                           validate: (value) =>
                             value === getValues("p_password") ||
-                            "password doesn 't match",
+                            "Password doesn't match.",
                         })}
                         autocomplete="off"
                       />
@@ -995,7 +993,7 @@ export default SignUp;
 //   //phone onchange
 //   const phoneHandler = (e) => {
 //     if (isNaN(e.target.value)) {
-//       setNumExist('Please enter number only')
+//       setNumExist('Please enter number only.')
 //     }
 //     else {
 //       setPhone(e.target.value)
@@ -1012,7 +1010,7 @@ export default SignUp;
 //       console.log(phone.length)
 //       setNumAvail("")
 //       setNumExist("")
-//       setIndNumError("Maximum 10 value should be enter")
+//       setIndNumError("Enter 10 digit mobile number.")
 //     }
 //     else if (countryId && phone.length < 10) {
 //       console.log(phone.length)
@@ -1061,7 +1059,7 @@ export default SignUp;
 //   //zip oncahnge
 //   const zipValue = (e) => {
 //     if (isNaN(e.target.value)) {
-//       setZipError("Please enter number only")
+//       setZipError("Please enter number only.")
 //     }
 //     else {
 //       setZipCode(e.target.value)
@@ -1178,7 +1176,7 @@ export default SignUp;
 //       .then(function (response) {
 //         console.log("res-", response);
 //         if (response.data.code === 1) {
-//           var variable = "Signup successfully."
+//           var variable = "Signed up successfully."
 //           Alerts.SuccessNormal(variable)
           // localStorage.setItem("userid", JSON.stringify(response.data.id));
           // localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
@@ -1186,7 +1184,7 @@ export default SignUp;
 //         } else if (response.data.code === 0) {
 //           console.log("res -", response.data.result);
 //           setLoad(false);
-//           Alerts.ErrorNormal("Incorrect OTP , please try again.")
+//           Alerts.ErrorNormal("Incorrect OTP, please try again.")
 //         }
 //       })
 //       .catch((error) => {
