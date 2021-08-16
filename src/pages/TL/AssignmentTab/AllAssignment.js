@@ -334,7 +334,7 @@ function AssignmentTab() {
                 width: "60px"
               }}
             >
-              {row.accepted_amount == row.paid_amount &&
+              {
                 !row.final_report && row.client_discussion == "completed" &&
                 !(
                   row.delivery_report == "completed" &&

@@ -18,8 +18,7 @@ import Payment from "./Payment";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
 import classNames from "classnames";
-import { date } from "yup";
-
+import Mandatory from "../../../components/Common/Mandatory";
 
 
 function EditComponent() {
@@ -34,15 +33,12 @@ function EditComponent() {
   const [date, setDate] = useState();
 
   const [load, setLoad] = useState(true);
-  const [dateError, setDateError] = useState();
-  const [paymentError, setpaymentError] = useState();
+
+
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
   const [diserror, setdiserror] = useState("")
-  const [amountError, setAmountError] = useState("")
-  const [datee, getDate] = useState()
-  const [clVal, setclVal] = useState(1);
   const history = useHistory();
   const { id } = useParams();
 
@@ -55,6 +51,7 @@ function EditComponent() {
     installment_amount: "",
     due_date: "",
   });
+
 
   const { query, name, description, fixed_amount,
     due_date, installment_amount } = proposal;
@@ -108,81 +105,50 @@ function EditComponent() {
 
 
 
+
+
   const onSubmit = (value) => {
-    console.log(date)
+    console.log(value);
 
-    if (payment.length < 1) {
-      setpaymentError("Please select at lease one")
-    }
+    // console.log("amount", amount);
+    console.log("date", date);
 
-    // if (!(value.p_inst_date) && installment.value == 0) {
-    //   setpaymentError("Please select at lease one")
-    // }
-    // else if (!(value.p_inst_date) && amount[0] == 0) {
-    //   console.log("Please enter amount")
-    //   setAmountError("Please fill amount ")
-    //   console.log(amountError)
-    // }
 
-    // else if (!(value.p_inst_date) && date == 0 || !(value.p_inst_date) && datee.length != installment.value) {
-    //   setDateError("Please enter date")
-    // }
 
-    else {
-      var lumsum = value.p_inst_date
-      setDate(lumsum)
+    var lumsum = value.p_inst_date
+    setDate(lumsum)
 
-      let formData = new FormData();
+    let formData = new FormData();
 
-      formData.append("assign_no", value.p_assingment);
-      formData.append("name", value.p_name);
-      formData.append("type", "tl");
-      formData.append("id", JSON.parse(userid));
-      formData.append("description", value.description);
-      formData.append("customer_id", custId);
-      formData.append("assign_id", id);
-      formData.append("amount_type", "fixed");
-      formData.append("amount", value.p_fixed);
-      formData.append("installment_amount", amount);
-      formData.append("payment_terms", payment.value);
-      formData.append("no_of_installment", installment.value);
+    formData.append("assign_no", value.p_assingment);
+    formData.append("name", value.p_name);
+    formData.append("type", "tl");
+    formData.append("id", JSON.parse(userid));
+    formData.append("description", value.description);
+    formData.append("customer_id", custId);
+    formData.append("assign_id", id);
+    formData.append("amount_type", "fixed");
+    formData.append("amount", value.p_fixed);
+    formData.append("installment_amount", amount);
+    formData.append("payment_terms", payment.value);
+    formData.append("no_of_installment", installment.value);
 
-      payment.label == "lumpsum" ?
-        formData.append("due_date", lumsum) :
-        payment.label == "installment" ?
-          formData.append("due_date", date) :
-          formData.append("due_date", "")
+    payment.label == "lumpsum" ?
+      formData.append("due_date", lumsum) :
+      payment.label == "installment" ?
+        formData.append("due_date", date) :
+        formData.append("due_date", "")
 
-      if (payment.value == "installment") {
-        if (amount) {
-          var sum = amount.reduce(myFunction)
-          function myFunction(total, value) {
-            return Number(total) + Number(value);
-          }
+
+    if (payment.value == "installment") {
+      if (amount) {
+        var sum = amount.reduce(myFunction)
+        function myFunction(total, value) {
+          return Number(total) + Number(value);
         }
-        console.log("sum -", sum)
-        if (value.p_fixed != sum) {
-          Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}`)
-        }
-        else {
-          axios({
-            method: "POST",
-            url: `${baseUrl}/tl/updateProposal`,
-            data: formData,
-          })
-            .then(function (response) {
-              console.log("res-", response);
-              if (response.data.code === 1) {
-                reset();
-                var variable = "Proposal Successfully Sent."
-                Alerts.SuccessNormal(variable)
-                history.push("/teamleader/proposal");
-              }
-            })
-            .catch((error) => {
-              console.log("erroror - ", error);
-            });
-        }
+      }
+      if (value.p_fixed != sum) {
+        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
       }
       else {
         axios({
@@ -193,7 +159,8 @@ function EditComponent() {
           .then(function (response) {
             console.log("res-", response);
             if (response.data.code === 1) {
-              var variable = "Proposal Updated Successfully "
+              reset();
+              var variable = "Proposal Successfully Sent "
               Alerts.SuccessNormal(variable)
               history.push("/teamleader/proposal");
             }
@@ -202,6 +169,25 @@ function EditComponent() {
             console.log("erroror - ", error);
           });
       }
+
+    }
+    else {
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/updateProposal`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            var variable = "Proposal Updated Successfully "
+            Alerts.SuccessNormal(variable)
+            history.push("/teamleader/proposal");
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
     }
   };
 
@@ -219,24 +205,22 @@ function EditComponent() {
 
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
-    setAmount(data);
-    console.log(data)
+
+    var array1 = []
+    Object.entries(data).map(([key, value]) => {
+      array1.push(value)
+    });
+    setAmount(array1);
   };
 
-  
   const paymentDate = (data) => {
     console.log("paymentDate", data)
-    getDate(data)
+
     var array2 = []
-    var arr4 = []
     Object.entries(data).map(([key, value]) => {
       array2.push(value)
     });
     setDate(array2);
-    Object.entries(data).map(([ke, value]) => {
-      console.log(value)
-      getDate(value[0])
-    });
   };
 
 
@@ -266,8 +250,10 @@ function EditComponent() {
 
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
+
             <div style={{ display: "flex" }}>
               <div class="col-md-6">
+
                 <div class="form-group">
                   <label>Query No.</label>
                   <input
@@ -292,7 +278,7 @@ function EditComponent() {
                 </div>
 
                 <div class="form-group">
-                  <label>Fixed Price</label>
+                  <label>Fixed Price<span className="declined">*</span></label>
                   <input
                     type="text"
                     name="p_fixed"
@@ -308,7 +294,7 @@ function EditComponent() {
                 <p style={{ "color": "red" }}>{diserror}</p>
 
                 <div class="form-group">
-                  <label>Scope of Work</label>
+                  <label>Scope of Work<span className="declined">*</span></label>
                   <textarea
                     className={classNames("form-control", {
                       "is-invalid": errors.description,
@@ -324,7 +310,6 @@ function EditComponent() {
 
 
               <div class="col-md-6">
-
                 <div class="form-group">
                   <label>Customer Name</label>
                   <input
@@ -336,16 +321,14 @@ function EditComponent() {
                   />
                 </div>
 
-
                 <div class="form-group">
-                  <label>Payment Terms</label>
+                  <label>Payment Terms<span className="declined">*</span></label>
                   <Select
                     closeMenuOnSelect={true}
                     onChange={setPayment}
                     value={payment}
                     options={paymentsTerms}
                   />
-
                 </div>
 
                 {payment.label == "lumpsum" ? (
@@ -364,23 +347,12 @@ function EditComponent() {
                   payment.label == "installment" ? (
                     <div class="form-group">
                       <label>No of Installments</label>
-
                       <Select
                         closeMenuOnSelect={true}
-                        className={paymentError ? "customError" : ""}
-                        onChange={(e) => {
-                          console.log(proposal.installment_amount)
-                          installment.values = e.value
-                          setclVal(0)
-                          setInstallment(e);
-                          setpaymentError("")
-                          setDate("");
-                          getDate("")
-                        }}
+                        onChange={setInstallment}
                         value={installment}
                         options={noInstallments}
                       />
-
                     </div>
                   )
                     : ""
@@ -390,7 +362,7 @@ function EditComponent() {
                     ?
                     ""
                     :
-                    installment_amount &&
+                    installment_amount && due_date &&
                     <Payment
                       installment={installment.label}
                       paymentAmount={paymentAmount}
@@ -398,14 +370,7 @@ function EditComponent() {
                       installment_amount={installment_amount}
                       due_date={due_date}
                       getQuery={getQuery}
-                      blankFeild={amountError}
-                      setBlankFeild={setAmountError}
-                      dateError={dateError}
-                      setDateError={setDateError}
-                      installmentValue={installment.value}
-                      setclVal={clVal}
                     />
-
                 }
               </div>
             </div>
@@ -416,13 +381,15 @@ function EditComponent() {
               </button>
             </div>
           </form>
+
+          <Mandatory />
         </CardBody>
       </Card>
     </Layout>
   );
 }
-export default EditComponent;
 
+export default EditComponent;
 
 const paymentsTerms = [
   {
@@ -476,7 +443,6 @@ const noInstallments = [
 
 // function EditComponent() {
 
-//   const alert = useAlert();
 //   const { register, handleSubmit, reset, errors } = useForm();
 //   const userid = window.localStorage.getItem("tlkey");
 
@@ -486,12 +452,15 @@ const noInstallments = [
 //   const [date, setDate] = useState();
 
 //   const [load, setLoad] = useState(true);
-
-
+//   const [dateError, setDateError] = useState();
+//   const [paymentError, setpaymentError] = useState();
 //   const [payment, setPayment] = useState([]);
 //   const [installment, setInstallment] = useState([]);
 //   const [error, setError] = useState('');
 //   const [diserror, setdiserror] = useState("")
+//   const [amountError, setAmountError] = useState("")
+//   const [datee, getDate] = useState()
+//   const [clVal, setclVal] = useState(1);
 //   const history = useHistory();
 //   const { id } = useParams();
 
@@ -504,7 +473,6 @@ const noInstallments = [
 //     installment_amount: "",
 //     due_date: "",
 //   });
-
 
 //   const { query, name, description, fixed_amount,
 //     due_date, installment_amount } = proposal;
@@ -558,91 +526,100 @@ const noInstallments = [
 
 
 
-
-
 //   const onSubmit = (value) => {
-//     console.log(value);
+//     console.log(date)
 
-//     // console.log("amount", amount);
-//     console.log("date", date);
+//     if (payment.length < 1) {
+//       setpaymentError("Please select at lease one")
+//     }
 
+//     if (!(value.p_inst_date) && installment.value == 0) {
+//       setpaymentError("Please select at lease one")
+//     }
+//     else if (!(value.p_inst_date) && amount[0] == 0) {
+//       console.log("Please enter amount")
+//       setAmountError("Please fill amount ")
+//       console.log(amountError)
+//     }
 
+//     else if (!(value.p_inst_date) && date == 0 || !(value.p_inst_date) && datee.length != installment.value) {
+//       setDateError("Please enter date")
+//     }
 
-//     var lumsum = value.p_inst_date
-//     setDate(lumsum)
+//     else {
+//       var lumsum = value.p_inst_date
+//       setDate(lumsum)
 
-//     let formData = new FormData();
+//       let formData = new FormData();
 
-//     formData.append("assign_no", value.p_assingment);
-//     formData.append("name", value.p_name);
-//     formData.append("type", "tl");
-//     formData.append("id", JSON.parse(userid));
-//     formData.append("description", value.description);
-//     formData.append("customer_id", custId);
-//     formData.append("assign_id", id);
-//     formData.append("amount_type", "fixed");
-//     formData.append("amount", value.p_fixed);
-//     formData.append("installment_amount", amount);
-//     formData.append("payment_terms", payment.value);
-//     formData.append("no_of_installment", installment.value);
+//       formData.append("assign_no", value.p_assingment);
+//       formData.append("name", value.p_name);
+//       formData.append("type", "tl");
+//       formData.append("id", JSON.parse(userid));
+//       formData.append("description", value.description);
+//       formData.append("customer_id", custId);
+//       formData.append("assign_id", id);
+//       formData.append("amount_type", "fixed");
+//       formData.append("amount", value.p_fixed);
+//       formData.append("installment_amount", amount);
+//       formData.append("payment_terms", payment.value);
+//       formData.append("no_of_installment", installment.value);
 
-//     payment.label == "lumpsum" ?
-//       formData.append("due_date", lumsum) :
-//       payment.label == "installment" ?
-//         formData.append("due_date", date) :
-//         formData.append("due_date", "")
+//       payment.label == "lumpsum" ?
+//         formData.append("due_date", lumsum) :
+//         payment.label == "installment" ?
+//           formData.append("due_date", date) :
+//           formData.append("due_date", "")
 
-
-
-//     if (payment.value == "installment") {
-//       if (amount) {
-//         var sum = amount.reduce(myFunction)
-//         function myFunction(total, value) {
-//           return Number(total) + Number(value);
+//       if (payment.value == "installment") {
+//         if (amount) {
+//           var sum = amount.reduce(myFunction)
+//           function myFunction(total, value) {
+//             return Number(total) + Number(value);
+//           }
+//         }
+//         console.log("sum -", sum)
+//         if (value.p_fixed != sum) {
+//           Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}`)
+//         }
+//         else {
+//           axios({
+//             method: "POST",
+//             url: `${baseUrl}/tl/updateProposal`,
+//             data: formData,
+//           })
+//             .then(function (response) {
+//               console.log("res-", response);
+//               if (response.data.code === 1) {
+//                 reset();
+//                 var variable = "Proposal Successfully Sent."
+//                 Alerts.SuccessNormal(variable)
+//                 history.push("/teamleader/proposal");
+//               }
+//             })
+//             .catch((error) => {
+//               console.log("erroror - ", error);
+//             });
 //         }
 //       }
-//       if (value.p_fixed != sum) {
-//         console.log(`installment amount should be eqaul to ${value.p_fixed}`)
-//         Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+//       else {
+//         axios({
+//           method: "POST",
+//           url: `${baseUrl}/tl/updateProposal`,
+//           data: formData,
+//         })
+//           .then(function (response) {
+//             console.log("res-", response);
+//             if (response.data.code === 1) {
+//               var variable = "Proposal Updated Successfully "
+//               Alerts.SuccessNormal(variable)
+//               history.push("/teamleader/proposal");
+//             }
+//           })
+//           .catch((error) => {
+//             console.log("erroror - ", error);
+//           });
 //       }
-//       axios({
-//         method: "POST",
-//         url: `${baseUrl}/tl/updateProposal`,
-//         data: formData,
-//       })
-//         .then(function (response) {
-//           console.log("res-", response);
-//           if (response.data.code === 1) {
-//             // reset();
-
-//             var variable = "Proposal Updated Successfully "
-//             Alerts.SuccessNormal(variable)
-
-//             history.push("/teamleader/proposal");
-//           }
-//         })
-//         .catch((error) => {
-//           console.log("erroror - ", error);
-//         });
-//     }
-//     else {
-//       axios({
-//         method: "POST",
-//         url: `${baseUrl}/tl/updateProposal`,
-//         data: formData,
-//       })
-//         .then(function (response) {
-//           console.log("res-", response);
-//           if (response.data.code === 1) {
-
-//             var variable = "Proposal Updated Successfully "
-//             Alerts.SuccessNormal(variable)
-//             history.push("/teamleader/proposal");
-//           }
-//         })
-//         .catch((error) => {
-//           console.log("erroror - ", error);
-//         });
 //     }
 //   };
 
@@ -665,17 +642,24 @@ const noInstallments = [
 //     Object.entries(data).map(([key, value]) => {
 //       array1.push(value)
 //     });
-//     setAmount(array1);
+
+//     setAmount(data);
+//     console.log(data)
 //   };
 
 //   const paymentDate = (data) => {
 //     console.log("paymentDate", data)
-
+//     getDate(data)
 //     var array2 = []
 //     Object.entries(data).map(([key, value]) => {
 //       array2.push(value)
 //     });
 //     setDate(array2);
+
+//     Object.entries(data).map(([ke, value]) => {
+//       console.log(value)
+//       getDate(value[0])
+//     });
 //   };
 
 
@@ -705,10 +689,8 @@ const noInstallments = [
 
 //         <CardBody>
 //           <form onSubmit={handleSubmit(onSubmit)}>
-
 //             <div style={{ display: "flex" }}>
 //               <div class="col-md-6">
-
 //                 <div class="form-group">
 //                   <label>Query No.</label>
 //                   <input
@@ -808,7 +790,16 @@ const noInstallments = [
 
 //                       <Select
 //                         closeMenuOnSelect={true}
-//                         onChange={setInstallment}
+//                         className={paymentError ? "customError" : ""}
+//                         onChange={(e) => {
+//                           console.log(proposal.installment_amount)
+//                           installment.values = e.value
+//                           setclVal(0)
+//                           setInstallment(e);
+//                           setpaymentError("")
+//                           setDate("");
+//                           getDate("")
+//                         }}
 //                         value={installment}
 //                         options={noInstallments}
 //                       />
@@ -830,8 +821,13 @@ const noInstallments = [
 //                       installment_amount={installment_amount}
 //                       due_date={due_date}
 //                       getQuery={getQuery}
+//                       blankFeild={amountError}
+//                       setBlankFeild={setAmountError}
+//                       dateError={dateError}
+//                       setDateError={setDateError}
+//                       installmentValue={installment.value}
+//                       setclVal={clVal}
 //                     />
-
 //                 }
 //               </div>
 //             </div>
@@ -847,8 +843,8 @@ const noInstallments = [
 //     </Layout>
 //   );
 // }
-
 // export default EditComponent;
+
 
 // const paymentsTerms = [
 //   {
@@ -875,7 +871,3 @@ const noInstallments = [
 //     label: "4",
 //   },
 // ];
-
-
-
-//nitin edit proposal

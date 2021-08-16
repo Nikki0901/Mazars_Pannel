@@ -22,6 +22,10 @@ import Reset from "./Reset";
 import { Form, Input, Button } from "antd";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
+import { Spinner } from 'reactstrap';
+import Mandatory from "../../../components/Common/Mandatory";
+
+
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
   p_email: yup.string().email("invalid email").required("required email"),
@@ -41,6 +45,7 @@ function EditTL() {
   const alert = useAlert();
 
   const userid = window.localStorage.getItem("adminkey");
+  const [loading, setLoading] = useState(false);
 
   const [tax, setTax] = useState([]);
   const [tax2, setTax2] = useState([]);
@@ -174,6 +179,7 @@ function EditTL() {
 
     else {
       setDisplay(true)
+      setLoading(true)
       console.log("kkData", kk.length)
       console.log("parentCategoryName", parentCategoryName)
       let formData = new FormData();
@@ -184,25 +190,25 @@ function EditTL() {
       formData.append("post_name", data6)
       {
         categeryList.length > 1 ? formData.append("cat_id", categeryList) :
-        formData.append("cat_id", data8)
+          formData.append("cat_id", data8)
       }
 
 
       {
         kk.length === 0 ? formData.append("pcat_id", data9) :
-        formData.append("pcat_id", kk)
+          formData.append("pcat_id", kk)
       }
 
 
       {
         parentCategoryName.length > 0 ?
-        formData.append("allpcat_id", parentCategoryName) :
-        formData.append("allpcat_id", data4)
+          formData.append("allpcat_id", parentCategoryName) :
+          formData.append("allpcat_id", data4)
       }
 
       {
         categeryName.length > 0 ? formData.append("allcat_id", categeryName) :
-        formData.append("allcat_id", data5)
+          formData.append("allcat_id", data5)
       }
       formData.append("id", id);
 
@@ -214,10 +220,12 @@ function EditTL() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-
+            setLoading(false)
             var variable = "Team Leader details updated successfully."
             Alerts.SuccessNormal(variable)
             history.goBack();
+          } else if (response.data.code === 0) {
+            setLoading(false)
           }
         })
         .catch((error) => {
@@ -548,7 +556,7 @@ function EditTL() {
                           <Select isMulti options={options}
                             defaultInputValue={data4} onChange={category}
                           >
-                          </Select>                  
+                          </Select>
                         </div>
                       </div>
                     </div>
@@ -568,9 +576,14 @@ function EditTL() {
                     <div class="col-md-6">
                       <div class="form-group">
                         <Form.Item>
-                          <Button type="primary" htmlType="submit">
-                            Update
-                          </Button>
+                          {
+                            loading ?
+                              <Spinner color="primary" />
+                              :
+                              <Button type="primary" htmlType="submit">
+                                Update
+                              </Button>
+                          }
                         </Form.Item>
                       </div>
                     </div>
@@ -578,6 +591,7 @@ function EditTL() {
                 </Form>
               </div>
             </div>
+            <Mandatory />
           </CardHeader>
         )}
       </Card>

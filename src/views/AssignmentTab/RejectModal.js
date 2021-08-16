@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Alerts from "../../common/Alerts";
+import { Spinner } from 'reactstrap';
+
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
@@ -25,11 +27,13 @@ function RejectedModal({
     resolver: yupResolver(Schema),
   });
 
+  const [loading, setLoading] = useState(false);
 
   console.log("dataItem :", dataItem);
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
@@ -47,10 +51,13 @@ function RejectedModal({
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           toggleNested();
           getData();
           var variable = "Submitted Successfully "
           Alerts.SuccessNormal(variable)
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -81,10 +88,17 @@ function RejectedModal({
               )}
             </div>
             <div class="modal-footer">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-              <Button color="primary" onClick={toggleNested}>Cancel</Button>
+              {
+                loading ?
+                  <Spinner color="primary" />
+                  :
+                  <div>
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
+                    <Button color="primary" onClick={toggleNested}>Cancel</Button>
+                  </div>
+              }
             </div>
           </form>
         </ModalBody>

@@ -73,197 +73,121 @@ function AddNew() {
     "value": v.id,
     "label": v.details
   }))
-
-  const teamleader1 = teamleader.map(v => (
-    console.log(v), {
-      "value": v.id,
-      "label": v.name
-    }))
+ 
+const teamleader1 = teamleader.map(v => (
+  console.log(v), {
+  "value" : v.id,
+  "label" : v.name
+}))
   useEffect(() => {
-    const getTeamLeader = () => {
-      axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTeamLeader(res.data.result);
-        }
-      });
-    };
-    getTeamLeader();
-  }, []);
-
-  useEffect(() => {
-    const getCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax(res.data.result);
-        }
-      });
-    };
-
-    getCategory();
-  }, []);
-
-  useEffect(() => {
-    const getSubCategory = () => {
-      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-        console.log(res);
-        if (res.data.code === 1) {
-          setTax2(res.data.result);
-        }
-      });
-    };
-    getSubCategory();
-  }, [store]);
+        const getTeamLeader = () => {
+          axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+            console.log(res);
+            if (res.data.code === 1) {
+              setTeamLeader(res.data.result);
+            }
+          });
+        };
+        getTeamLeader();
+      }, []);
+    
+      useEffect(() => {
+        const getCategory = () => {
+          axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+            console.log(res);
+            if (res.data.code === 1) {
+              setTax(res.data.result);
+            }
+          });
+        };
+    
+        getCategory();
+      }, []);
+    
+      useEffect(() => {
+        const getSubCategory = () => {
+          axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+            console.log(res);
+            if (res.data.code === 1) {
+              setTax2(res.data.result);
+            }
+          });
+        };
+        getSubCategory();
+      }, [store]);
 
   // OnSubmit Function
   const onSubmit = (value) => {
-    console.log("tealId", tl)
-    var categeryList = []
-    var categeryName = []
-    var categeryName = []
-    var kk = []
+    console.log("tealId" , tl)
+       var categeryList = []
+     var categeryName = []
+     var categeryName = []
+     var kk = []
+    
+     var parentCategoryName = []
+     subData.map((i) => {
+       categeryList.push(i.value)
+       categeryName.push(i.label)
+     })
+     categoryData.map((i) => {
+       kk.push(i.value)
+       parentCategoryName.push(i.label)
+     })
+    
+     console.log("subData", subData)
+     if (custCate.length < 1) {
+       setError("Please select at least one value")
+     }
+     else if (subData.length < 1) {
 
-    var parentCategoryName = []
-    subData.map((i) => {
-      categeryList.push(i.value)
-      categeryName.push(i.label)
-    })
-    categoryData.map((i) => {
-      kk.push(i.value)
-      parentCategoryName.push(i.label)
-    })
+       setError2("Please select at least one value")
+     }
+     else if (invalid || wEmail || indNumError) {
+       setDisplay(false)
+     }
 
-    console.log("subData", subData)
-    if (custCate.length < 1) {
-      setError("Please select at least one value")
-    }
-    else if (subData.length < 1) {
-
-      setError2("Please select at least one value")
-    }
-    else if (invalid || wEmail || indNumError) {
-      setDisplay(false)
-    }
-
-    else {
-      console.log("value :", value);
-
-      let formData = new FormData();
-      formData.append("email", post1.email)
-      formData.append("post_name", post1.post)
-      formData.append("personal_email", value.p_email);
-      formData.append("name", value.p_name);
-      formData.append("phone", value.p_phone);
-      formData.append("pcat_id", kk);
-      formData.append("cat_id", categeryList);
-      formData.append("type", "tp");
-      formData.append("tp_id", tl);
-      formData.append("allpcat_id", parentCategoryName)
-      formData.append("allcat_id", categeryName)
-      formData.append("tlpost", post_na)
-
-      axios({
-        method: "POST",
-        url: `${baseUrl}/tp/AddTaxProfessional`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
-
-            var variable = "Tax Professional Created Successfully"
-
-            Swal.fire({
-              "title": "success",
-              "html": "Tax Professional Created Successfully",
-              "icon": "success"
-            })
-
-            history.goBack();
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    };
-  }
-  // const onSubmit = (value) => {
-  //   var categeryList = []
-  //   var categeryName = []
-  //   var categeryName = []
-  //   var kk = []
-  //   var parentCategoryName = []
-  //   subData.map((i) => {
-  //     categeryList.push(i.value)
-  //     categeryName.push(i.label)
-  //   })
-  //   categoryData.map((i) => {
-  //     kk.push(i.value)
-  //     parentCategoryName.push(i.label)
-  //   })
-  //   console.log("subData", subData)
-  //   if (custCate.length < 1) {
-  //     setError("Please select at least one value")
-  //   }
-  //   else if (subData.length < 1) {
-
-  //     setError2("Please select at least one value")
-  //   }
-  //   else if (invalid || wEmail || indNumError) {
-  //     setDisplay(false)
-  //   }
-
-  //   else {
-  //     setDisplay(true)
-  //     let formData = new FormData();
-
-  //     formData.append("email", value.p_email);
-  //     formData.append("name", value.p_name);
-  //     formData.append("phone", value.p_phone);
-
-  //     formData.append("type", "tl");
-
-  //     formData.append("cat_id", categeryList)
-  //     formData.append("post_name", postValue.post)
-  //     formData.append("post_email", postValue.tlemail)
-
-  //     formData.append("pcat_id", kk)
-  //     formData.append("allpcat_id", parentCategoryName)
-  //     formData.append("allcat_id", categeryName)
-
-
-
-  //     axios({
-  //       method: "POST",
-  //       url: `${baseUrl}/tl/AddTeamLead`,
-  //       data: formData,
-  //     })
-
-  //       .then(function (response) {
-
-  //         if (response.data.code === 1) {
-  //           Swal.fire({
-  //             "title": "Success",
-  //             "html": "TL created successfully",
-  //             "icon": "success"
-  //           })
-
-  //           history.goBack();
-  //         }
-  //         if (response.data.code === 0) {
-  //           response.data.message.map((i) => {
-
-  //           })
-  //         }
-
-  //       })
-  //       .catch((error) => {
-
-  //       });
-  //   }
-
-  // };
+     else {  console.log("value :", value);
+    
+         let formData = new FormData();
+         formData.append("email", post1.email)
+         formData.append("post_name", post1.post)
+         formData.append("personal_email", value.p_email);
+         formData.append("name", value.p_name);
+         formData.append("phone", value.p_phone);
+         formData.append("pcat_id", kk);
+         formData.append("cat_id", categeryList);
+         formData.append("type", "tp");
+         formData.append("tp_id", tl);
+         formData.append("allpcat_id", parentCategoryName)
+         formData.append("allcat_id", categeryName)
+         formData.append("tlpost", post_na)
+    
+         axios({
+           method: "POST",
+           url: `${baseUrl}/tp/AddTaxProfessional`,
+           data: formData,
+         })
+           .then(function (response) {
+             console.log("res-", response);
+             if (response.data.code === 1) {
+    
+               var variable = "Tax Professional Created Successfully"
+        
+              Swal.fire({
+                "title" : "success", 
+                "html" : "Tax Professional Created Successfully",
+                "icon" : "success"
+              })
+    
+               history.goBack();
+             }
+           })
+           .catch((error) => {
+             console.log("erroror - ", error);
+           });
+       };
+      }
+ 
 
   // Sub Category Function
   const subCategory = (e) => {
@@ -441,38 +365,40 @@ function AddNew() {
 
   // Tl Function 
   const tlFun = (e) => {
-    var a;
-    console.log("id", e)
-    teamleader.filter((p) => {
+    var a ;
+  console.log("id", e)
+  teamleader.filter((p) => {
 
-      if (p.id == e) {
-        console.log(p.post_name)
-
-        setTl(p.id)
-        setPost_na(p.post_name)
-      }
-    })
-    console.log(post_na)
+    if(p.id == e){
+   console.log(p.post_name)
+     
+     setTl(p.id)
+     setPost_na(p.post_name)
+     a = p.post_name
+     console.log("aa", a)
+    }
+  })
+ console.log(post_na)
     let formData = new FormData()
-    formData.append("post", post_na)
+    formData.append("post", a)
     axios({
-      method: "POST",
-      url: `${baseUrl}/admin/addTpPost?post=${post_na}`,
-      data: formData
+      method  :"POST",
+      url  : `${baseUrl}/admin/addTpPost?post=${a}`,
+      data : formData
     })
-      .then(function (response) {
-        if (response.data.code === 1) {
-          setPost1(response.data.result)
-        }
-        else if (response.data.code === 0) {
-          console.log(response.data.result)
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+    .then(function (response) {
+      if(response.data.code === 1){
+        setPost1(response.data.result)
+      }
+      else if(response.data.code === 0){
+        console.log(response.data.result)
+      }
+    } )
+    .catch((error) => {
+      console.log("erroror - ", error);
+    });
   }
-
+  
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -489,7 +415,7 @@ function AddNew() {
               </button>
             </div>
             <div class="text-center ml-5">
-              <h4>Add New Tax Professionals</h4>
+            <h4>Add New Tax Professionals</h4>
             </div>
           </div>
         </CardHeader>
@@ -499,41 +425,44 @@ function AddNew() {
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
             <div class="col-lg-8 col-xl-8 col-md-12">
               <form onSubmit={handleSubmit(onSubmit)}>
-
+            
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Select teamleader</label>
+                  <div class="form-group">
+                    <label>Select teamleader</label>
+                    {/* <Select 
+                    onChange={tlFun} options = {teamleader1}>
 
-                      <select
-                        name="p_teamleader"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_teamleader,
-                        })}
-                        onChange={(e) => tlFun(e.target.value)}
-                        ref={register}
-                      >
-                        <option value="">--select--</option>
-                        {teamleader.map((p) =>
-                        (
-                          console.log("pp", p.id),
-                          <option key={p.Id} value={p.id}>
-                            {p.name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.p_teamleader && (
-                        <div className="invalid-feedback">
-                          {errors.p_teamleader.message}
-                        </div>
-                      )}
-
+                    </Select> */}
+                       <select
+                         name="p_teamleader"
+                         className={classNames("form-control", {
+                           "is-invalid": errors.p_teamleader,
+                         })}
+                         onChange = {(e) => tlFun(e.target.value)}
+                         ref={register}
+                       >
+                         <option value="">--select--</option>
+                         {teamleader.map((p) =>
+                          (
+                            console.log("pp", p.id),
+                           <option key={p.Id} value={p.id}>
+                             {p.name}
+                           </option>
+                         ))}
+                       </select>
+                       {errors.p_teamleader && (
+                         <div className="invalid-feedback">
+                           {errors.p_teamleader.message}
+                         </div>
+                       )} 
+                     
                     </div>
-
+                  
                   </div>
 
                   <div class="col-md-6">
-                    <div class="form-group">
+                  <div class="form-group">
                       <label>Email <span className="declined">*</span></label>
                       <input
                         type="email"

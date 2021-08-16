@@ -427,13 +427,7 @@ function AddAssingmentStages() {
                         </div>
                       </div>
 
-                      {p.accepted_amount == p.paid_amount &&
-                        (
-                          p.client_discussion == "completed" &&
-                          p.draft_report == "completed" &&
-                          p.delivery_report == "completed" &&
-                          p.final_discussion == "completed"
-                        ) ?
+                     
                         <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
@@ -466,9 +460,7 @@ function AddAssingmentStages() {
                             </div>
                           </div>
                         </div>
-                        :
-                        null
-                      }
+                        
                       <br />
                       <div class="form-group">
                         {

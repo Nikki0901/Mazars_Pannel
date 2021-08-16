@@ -12,6 +12,8 @@ import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import Mandatory from "../../../components/Common/Mandatory";
+import { Spinner } from 'reactstrap';
+
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -27,13 +29,15 @@ const Schema = yup.object().shape({
 
 
 function AddNew() {
-  const alert = useAlert();
+
   const history = useHistory();
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
   const userid = window.localStorage.getItem("adminkey");
+  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState()
   const [error2, setError2] = useState();
   const [tax, setTax] = useState([]);
@@ -114,6 +118,8 @@ function AddNew() {
   // OnSubmit Function
 
   const onSubmit = (value) => {
+
+
     var categeryList = []
     var categeryName = []
     var categeryName = []
@@ -141,8 +147,9 @@ function AddNew() {
 
     else {
       setDisplay(true)
-      let formData = new FormData();
+      setLoading(true)
 
+      let formData = new FormData();
       formData.append("personal_email", value.p_email);
       formData.append("name", value.p_name);
       formData.append("phone", value.p_phone);
@@ -168,20 +175,17 @@ function AddNew() {
         .then(function (response) {
 
           if (response.data.code === 1) {
+            setLoading(false)
             Swal.fire({
               "title": "Success",
               "html": "Team Leader created successfully.",
               "icon": "success"
             })
-
             history.goBack();
           }
-          if (response.data.code === 0) {
-            response.data.message.map((i) => {
-
-            })
+          else if (response.data.code === 0) {
+            setLoading(false)
           }
-
         })
         .catch((error) => {
 
@@ -298,7 +302,7 @@ function AddNew() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-    
+
             console.log(response.data.result)
             setNumExist('')
             setNumAvail(response.data.result);
@@ -518,10 +522,14 @@ function AddNew() {
                     </div>
                   </div>
                 </div>
-
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
+                {
+                  loading ?
+                    <Spinner color="primary" />
+                    :
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
+                }
               </form>
             </div>
             <div class="col-lg-2 col-xl-2 col-md-12">
