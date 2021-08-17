@@ -83,95 +83,6 @@ function ProposalComponent(props) {
     var lumsum = value.p_inst_date
     setDate(lumsum)
     console.log("lumsum date -", lumsum)
-<<<<<<< HEAD
-    if(payment.length < 1){
-      setpaymentError("Please select at lease one")
-    }
-   else{
-     setpaymentError("")
-     let formData = new FormData();
-
-     formData.append("assign_no", assingNo);
-     formData.append("name", value.p_name);
-     formData.append("type", "tl");
-     formData.append("id", JSON.parse(userid));
-     formData.append("assign_id", assignId);
-     formData.append("customer_id", custId);
-     formData.append("description", value.description);
- 
-     formData.append("amount_type", "fixed");
-     formData.append("amount", value.p_fixed);
-     formData.append("installment_amount", amount);
- 
-     formData.append("payment_terms", payment.value);
-     formData.append("no_of_installment", installment.value);
- 
-     payment.label == "lumpsum" ?
-       formData.append("due_date", lumsum) :
-       payment.label == "installment" ?
-         formData.append("due_date", date) :
-         formData.append("due_date", "")
- 
- 
-     // console.log("date -", date)
-     // console.log("amount -", amount)
- 
-     console.log("payment -", payment.label)
- 
- 
-     if (payment.value == "installment") {
- 
-       if (amount) {
-         var sum = amount.reduce(myFunction)
-         function myFunction(total, value) {
-           return Number(total) + Number(value);
-         }
-       }
-       console.log("sum -", sum)
-       if (value.p_fixed != sum) {
-         Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
-       }
-       else {
-         axios({
-           method: "POST",
-           url: `${baseUrl}/tl/uploadProposal`,
-           data: formData,
-         })
-           .then(function (response) {
-             console.log("res-", response);
-             if (response.data.code === 1) {
-               reset();
- 
-               Alerts.SuccessNormal("Proposal successfully sent")
-               history.push("/teamleader/proposal");
-             }
-           })
-           .catch((error) => {
-             console.log("erroror - ", error);
-           });
-       }
-     }
-     else {
-       axios({
-         method: "POST",
-         url: `${baseUrl}/tl/uploadProposal`,
-         data: formData,
-       })
-         .then(function (response) {
-           console.log("res-", response);
-           if (response.data.code === 1) {
-             reset();
-             var variable = "Proposal Successfully Sent "
-             Alerts.SuccessNormal(variable)
-             history.push("/teamleader/proposal");
-           }
-         })
-         .catch((error) => {
-           console.log("erroror - ", error);
-         });
-     }
-   }
-=======
     if (payment.length < 1) {
       setpaymentError("Please select at lease one")
     }
@@ -255,7 +166,6 @@ function ProposalComponent(props) {
           });
       }
     }
->>>>>>> 95548708321125ef3638685eec24d125059fe546
 
   };
 
@@ -396,11 +306,6 @@ function ProposalComponent(props) {
                     }}
                     options={payment_terms}
                   />
-<<<<<<< HEAD
-              
-=======
-
->>>>>>> 95548708321125ef3638685eec24d125059fe546
                 </div>
 
                 {payment.label == "lumpsum" ? (
@@ -413,11 +318,6 @@ function ProposalComponent(props) {
                       className={classNames("form-control", {
                         "is-invalid": errors.p_inst_date
                       })}
-<<<<<<< HEAD
-                     
-=======
-
->>>>>>> 95548708321125ef3638685eec24d125059fe546
                       ref={register}
                       placeholder="Enter Hourly basis"
                       min={item}

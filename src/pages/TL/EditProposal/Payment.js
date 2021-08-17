@@ -1,9 +1,5 @@
 import React from "react";
-<<<<<<< HEAD
-import classNames from "classnames";
-=======
 import Alerts from "../../../common/Alerts";
->>>>>>> 95548708321125ef3638685eec24d125059fe546
 
 
 
@@ -16,27 +12,6 @@ export default class Payment extends React.Component {
         };
     }
 
-<<<<<<< HEAD
-
- custError = this.props.blankFeild;
-    amount = this.props.installment_amount
-    installment_amount = this.amount.split(',');
-    temp = this.installment_amount
-
-
-     due_date = this.props.due_date;
-     installment_due_dates = this.due_date.split(',')
-    installmentDueDate = this.installment_due_dates;
-
-
-    handleChange1(i, e) {
-        this.props.setBlankFeild("")
-        const { value } = e.target
-        this.temp[i] = value
-        var val2 =[]
-     val2.push(...this.temp)
-     var a = val2.slice(0, i+1)
-=======
     handleChange1(i, e) {
         if (isNaN(e.target.value)) {
             this.setState({ error: "Please insert only digit" })
@@ -44,7 +19,6 @@ export default class Payment extends React.Component {
         else {
             this.setState({ error: "" })
         }
->>>>>>> 95548708321125ef3638685eec24d125059fe546
         this.setState({
             values: { ...this.state.values, [i]: e.target.value }
         },
@@ -55,15 +29,6 @@ export default class Payment extends React.Component {
     }
 
     handleChange2(i, e) {
-<<<<<<< HEAD
-        this.props.setDateError("")
-        const { value } = e.target
-        this.installmentDueDate[i] = value
-        var val3 = []
-        val3.push(this.installmentDueDate);
-         var d = val3.slice(0, i+1)
-=======
->>>>>>> 95548708321125ef3638685eec24d125059fe546
         this.setState({
             dates: { ...this.state.dates, [i]: e.target.value }
         },
@@ -74,16 +39,6 @@ export default class Payment extends React.Component {
     }
 
     render() {
-<<<<<<< HEAD
-console.log("installmentValue", this.props.installmentValue)
-        var amount = this.props.installment_amount
-        var date = this.props.due_date
-
-        const installment_amount = amount.split(',');
-        const due_date = date.split(',');
-
-=======
->>>>>>> 95548708321125ef3638685eec24d125059fe546
         var fieldsArray = [];
 
         for (var i = 1; i <= this.props.installment; i++) {
@@ -99,11 +54,7 @@ console.log("installmentValue", this.props.installmentValue)
                             name={this.state.values[i]}
                             onChange={this.handleChange1.bind(this, i)}
                         />
-<<<<<<< HEAD
-                       
-=======
                         <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
->>>>>>> 95548708321125ef3638685eec24d125059fe546
                     </div>
 
                     <div class="col-md-6">

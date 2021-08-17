@@ -199,12 +199,7 @@ const [subm, setSub] = useState(false)
         });
     }
     else {
-<<<<<<< HEAD
-      setEmailError(true)
-      setWemail("invalid email")
-=======
       setWemail("Invalid email")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
   }
 
@@ -237,23 +232,13 @@ const [subm, setSub] = useState(false)
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-<<<<<<< HEAD
-      setIndNumError("Maximum 10 value should be enter")
-      setPhoneError(true)
-=======
       setIndNumError("Enter 10 digit mobile number.")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
     else if (countryId && phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-<<<<<<< HEAD
-      setIndNumError("Minimum 10 value should be enter")
-      setPhoneError(true)
-=======
       setIndNumError("Enter 10 digit mobile number.")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
     else if (!countryId && phone.length > 15) {
       setNumAvail("")
@@ -305,12 +290,7 @@ const [subm, setSub] = useState(false)
   //zip oncahnge
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
-<<<<<<< HEAD
-      setZipError("Please enter number only")
-      setZipError1(true)
-=======
       setZipError("Please enter number only.")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
       e.target.value = ""
     }
     else {
@@ -325,22 +305,12 @@ const [subm, setSub] = useState(false)
   const zipVali2 = (e) => {
 
     if (countryId && zipCode && zipCode.length < 6) {
-<<<<<<< HEAD
-      setZipError1(true)
-      setZipError("Minumum 6 digit should be there")
-=======
       setZipError("Enter 6 digit zip code")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
       console.log(zipCode.length)
     }
 
     else if (countryId && zipCode && zipCode.length > 6) {
-<<<<<<< HEAD
-      setZipError1(true)
-      setZipError("Maximum 6 digit allowed")
-=======
       setZipError("Enter 6 digit zip code")
->>>>>>> 95548708321125ef3638685eec24d125059fe546
       console.log(zipCode.length)
     }
     else{
@@ -381,10 +351,6 @@ const [subm, setSub] = useState(false)
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
-<<<<<<< HEAD
-   
-    if(emailError === false && phoneError === false && zipError1 === false && subm === true ){
-=======
     if (display) {
 
       let formData = new FormData();
@@ -392,7 +358,6 @@ const [subm, setSub] = useState(false)
       formData.append("phone", phone);
       formData.append("p", "registration");
 
->>>>>>> 95548708321125ef3638685eec24d125059fe546
       axios({
         method: "POST",
         url: `${baseUrl}/customers/signup`,
@@ -418,8 +383,6 @@ const [subm, setSub] = useState(false)
           console.log("erroror - ", error);
         });
     }
-<<<<<<< HEAD
-=======
     axios({
       method: "POST",
       url: `${baseUrl}/customers/signup`,
@@ -443,7 +406,6 @@ const [subm, setSub] = useState(false)
       .catch((error) => {
         console.log("erroror - ", error);
       });
->>>>>>> 95548708321125ef3638685eec24d125059fe546
   };
 
 
