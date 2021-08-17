@@ -163,10 +163,6 @@ function AddNew() {
       formData.append("cat_id", categeryList)
       formData.append("post_name", postValue.post)
       formData.append("email", postValue.email)
-<<<<<<< HEAD
-=======
-
->>>>>>> 95548708321125ef3638685eec24d125059fe546
       formData.append("pcat_id", kk)
       formData.append("allpcat_id", parentCategoryName)
       formData.append("allcat_id", JSON.stringify(dd))
@@ -532,27 +528,6 @@ var indir = []
                       <label>Category <span className="declined">*</span></label>
                       <Select isMulti options={options}
                         className={error ? "customError" : ""}
-<<<<<<< HEAD
-                        styles={{
-                          option: (styles, { data }) => {
-                            return {
-                              ...styles,
-                               
-                              color: data.value == 1
-                                ? "blue"
-                                : "green" 
-                            };
-                          },
-                          multiValueLabel: (styles, { data }) => ({
-                            ...styles,
-                            color: data.value == 1
-                                ? "blue"
-                                : "green"
-                          }),
-                        }}
-                        isSelected = {{"backgroundColor" : "green"}}
-=======
->>>>>>> 95548708321125ef3638685eec24d125059fe546
                         onChange={category}>
                       </Select>
 
@@ -606,8 +581,6 @@ var indir = []
 }
 
 export default AddNew;
-<<<<<<< HEAD
-=======
 
 
 // import React, { useState, useEffect } from "react";
@@ -892,4 +865,3 @@ export default AddNew;
 
 
 
->>>>>>> 95548708321125ef3638685eec24d125059fe546
