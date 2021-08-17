@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
-import "./index.css";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { baseUrl } from "../../../config/config";
-import { useAlert } from "react-alert";
 import {
   Card,
   CardHeader,
@@ -14,14 +9,35 @@ import {
   Col,
   Table,
 } from "reactstrap";
-import BootstrapTable from "react-bootstrap-table-next";
+import axios from "axios";
+import { baseUrl } from "../../../config/config";
+import { Link } from "react-router-dom";
+import { useAlert } from "react-alert";
 import Swal from "sweetalert2";
+import BootstrapTable from "react-bootstrap-table-next";
+import TaxProffesionalService from "../../../config/services/TaxProffesional";
 
-function TeamLeaderTab() {
+function TaxProfessionalsTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
-  const [tlCount, setTlCount] = useState("");
+  const [tpCount, setTpCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
+
+  useEffect(() => {
+    getTaxProf();
+  }, []);
+
+  const getTaxProf = () => {
+    axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+      console.log(res);
+      if (res.data.code === 1) {
+        setData(res.data.result);
+        setTpCount(res.data.result.length);
+      }
+    });
+  };
+
+  
 
   const columns = [
     {
@@ -52,33 +68,16 @@ function TeamLeaderTab() {
       },
     },
     {
-      dataField: "post_name",
-      text: "Post_ID",
+      dataField: "name",
+      text: "Name of TP",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
-
     {
       dataField: "email",
-      text: "Post_Email",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      dataField: "name",
-      text: "Name of TL",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      dataField: "personal_email",
-      text: "Personal Email",
+      text: "Personal email",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -99,56 +98,58 @@ function TeamLeaderTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter: function nameFormatter(cell, row) {
+      formatter : function nameFormatter(cell, row) {
         var digit2 = [];
         digit2 = row.allpcat_id.split(",")
-
-        return (
+       
+        return(
           <>
-
-            {
-              digit2.map((e) => {
-                return (
-                  <>
-                    {e + ","}
-                  </>
-                )
-              })
-            }
+          
+         {
+            digit2.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
           </>
         )
       }
     },
+   
+   
     {
-
-
+      
+     
       text: "Sub Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter: function nameFormatter(cell, row) {
+      formatter : function nameFormatter(cell, row) {
         var digit = [];
-        var obj = []
-        
         digit = row.allcat_id.split(",")
-
-        return (
+       
+        return(
           <>
-
-            {
-              digit.map((e) => {
-                return (
-                  <>
-                    {e + ","}
-                  </>
-                )
-              })
-            }
+          
+         {
+            digit.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
           </>
         )
       }
     },
+   
+   
     {
       dataField: "",
       text: "Edit",
@@ -158,7 +159,7 @@ function TeamLeaderTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <Link to={`/admin/edittl/${row.id}`}>
+            <Link to={`/admin/edittp/${row.id}`}>
               <i
                 className="fa fa-edit"
                 style={{
@@ -192,23 +193,6 @@ function TeamLeaderTab() {
     },
   ];
 
-  useEffect(() => {
-    getTeamLeader();
-
-  }, []);
-
-  const getTeamLeader = () => {
-    axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-      console.log(res);
-      if (res.data.code === 1) {
-        console.log(data)
-        setData(res.data.result);
-        setTlCount(res.data.result.length);
-      }
-    });
-  };
-
-
   //check
   const del = (id) => {
     console.log("del", id);
@@ -229,17 +213,17 @@ function TeamLeaderTab() {
 
   // delete data
   const deleteCliente = (id) => {
+    console.log("del", id);
     axios
       .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
       .then(function (response) {
         console.log("delete-", response);
         if (response.data.code === 1) {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
-          getTeamLeader();
+          getTaxProf();
         } else {
           Swal.fire("Oops...", "Errorr ", "error");
         }
-
       })
       .catch((error) => {
         console.log("erroror - ", error);
@@ -253,24 +237,22 @@ function TeamLeaderTab() {
         <CardHeader>
           <Row>
             <Col md="10">
-              <CardTitle tag="h4">Team Leaders ({tlCount})</CardTitle>
+              <CardTitle tag="h4">Tax Professionals ({tpCount})</CardTitle>
             </Col>
             <Col md="2">
-              <Link to={"/admin/addnewtl"} class="btn btn-primary">
+              <Link to={"/admin/addnewtp"} class="btn btn-primary">
                 Add New
               </Link>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
-
           <BootstrapTable
             bootstrap4
             keyField="id"
             data={data}
             columns={columns}
             rowIndex
-            wrapperClasses="table-responsive"
           />
         </CardBody>
       </Card>
@@ -278,15 +260,11 @@ function TeamLeaderTab() {
   );
 }
 
-export default TeamLeaderTab;
+export default TaxProfessionalsTab;
+
 
 // import React, { useState, useEffect } from "react";
 // import Layout from "../../../components/Layout/Layout";
-// import "./index.css";
-// import { Link } from "react-router-dom";
-// import axios from "axios";
-// import { baseUrl } from "../../../config/config";
-// import { useAlert } from "react-alert";
 // import {
 //   Card,
 //   CardHeader,
@@ -296,13 +274,35 @@ export default TeamLeaderTab;
 //   Col,
 //   Table,
 // } from "reactstrap";
-// import BootstrapTable from "react-bootstrap-table-next";
+// import axios from "axios";
+// import { baseUrl } from "../../../config/config";
+// import { Link } from "react-router-dom";
+// import { useAlert } from "react-alert";
 // import Swal from "sweetalert2";
-// function TeamLeaderTab() {
+// import BootstrapTable from "react-bootstrap-table-next";
+// import TaxProffesionalService from "../../../config/services/TaxProffesional";
+
+// function TaxProfessionalsTab() {
 //   const alert = useAlert();
 //   const [data, setData] = useState([]);
-//   const [tlCount, setTlCount] = useState("");
+//   const [tpCount, setTpCount] = useState("");
 //   const userid = window.localStorage.getItem("adminkey");
+
+//   useEffect(() => {
+//     getTaxProf();
+//   }, []);
+
+//   const getTaxProf = () => {
+//     axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
+//       console.log(res);
+//       if (res.data.code === 1) {
+//         setData(res.data.result);
+//         setTpCount(res.data.result.length);
+//       }
+//     });
+//   };
+
+  
 
 //   const columns = [
 //     {
@@ -312,7 +312,7 @@ export default TeamLeaderTab;
 //         return rowIndex + 1;
 //       },
 //       headerStyle: () => {
-//         return { fontSize: "12px" ,width:"50px"};
+//         return { fontSize: "12px", width: "50px" };
 //       },
 //     },
 //     {
@@ -324,59 +324,20 @@ export default TeamLeaderTab;
 //       },
 //     },
 //     {
-//       // dataField: "parent_id",
+//       dataField: "parent_id",
 //       text: "Category",
 //       sort: true,
 //       headerStyle: () => {
 //         return { fontSize: "12px" };
 //       },
-//       formatter : function nameFormatter(cell, row) {
-//         var digit2 = [];
-//         digit2 = row.allpcat_id.split(",")
-
-//         return(
-//           <>
-
-//          {
-//             digit2.map((e) => {
-//             return(
-//               <>
-//              {e + ","}
-//               </>
-//             ) 
-//           })
-//          }
-//           </>
-//         )
-//       }
 //     },
 //     {
-
-
+//       dataField: "cat_name",
 //       text: "Sub Category",
 //       sort: true,
 //       headerStyle: () => {
 //         return { fontSize: "12px" };
 //       },
-//       formatter : function nameFormatter(cell, row) {
-//         var digit = [];
-//         digit = row.allcat_id.split(",")
-
-//         return(
-//           <>
-
-//          {
-//             digit.map((e) => {
-//             return(
-//               <>
-//              {e + ","}
-//               </>
-//             ) 
-//           })
-//          }
-//           </>
-//         )
-//       }
 //     },
 //     {
 //       dataField: "email",
@@ -403,7 +364,7 @@ export default TeamLeaderTab;
 //       formatter: function (cell, row) {
 //         return (
 //           <>
-//             <Link to={`/admin/edittl/${row.id}`}>
+//             <Link to={`/admin/edittp/${row.id}`}>
 //               <i
 //                 className="fa fa-edit"
 //                 style={{
@@ -437,27 +398,9 @@ export default TeamLeaderTab;
 //     },
 //   ];
 
-//   useEffect(() => {
-//     getTeamLeader();
-
-//   }, []);
-
-//   const getTeamLeader = () => {
-//     axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-//       console.log(res);
-//       if (res.data.code === 1) {
-//         console.log(data)
-//         setData(res.data.result);
-//         setTlCount(res.data.result.length);
-//       }
-//     });
-//   };
-
-
-// //check
+//   //check
 //   const del = (id) => {
 //     console.log("del", id);
-
 //     Swal.fire({
 //       title: "Are you sure?",
 //       text: "It will permanently deleted !",
@@ -475,23 +418,22 @@ export default TeamLeaderTab;
 
 //   // delete data
 //   const deleteCliente = (id) => {
+//     console.log("del", id);
 //     axios
 //       .get(`${baseUrl}/tl/deleteTeamLeader?id=${id}`)
 //       .then(function (response) {
 //         console.log("delete-", response);
 //         if (response.data.code === 1) {
 //           Swal.fire("Deleted!", "Your file has been deleted.", "success");
-//           getTeamLeader();
+//           getTaxProf();
 //         } else {
 //           Swal.fire("Oops...", "Errorr ", "error");
 //         }
-
 //       })
 //       .catch((error) => {
 //         console.log("erroror - ", error);
 //       });
 //   };
-
 
 
 //   return (
@@ -500,10 +442,10 @@ export default TeamLeaderTab;
 //         <CardHeader>
 //           <Row>
 //             <Col md="10">
-//               <CardTitle tag="h4">Team Leaders ({tlCount})</CardTitle>
+//               <CardTitle tag="h4">Tax Professionals ({tpCount})</CardTitle>
 //             </Col>
 //             <Col md="2">
-//               <Link to={"/admin/addnewtl"} class="btn btn-primary">
+//               <Link to={"/admin/addnewtp"} class="btn btn-primary">
 //                 Add New
 //               </Link>
 //             </Col>
@@ -523,4 +465,5 @@ export default TeamLeaderTab;
 //   );
 // }
 
-// export default TeamLeaderTab;
+// export default TaxProfessionalsTab;
+
