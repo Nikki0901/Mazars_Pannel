@@ -1,309 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import Layout from "../../../components/Layout/Layout";
-// import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
-// import axios from "axios";
-// import { baseUrl } from "../../../config/config";
-// import { useAlert } from "react-alert";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   CardTitle,
-//   Row,
-//   Col,
-//   Table,
-//   Tooltip,
-// } from "reactstrap";
-// import { useHistory } from "react-router-dom";
-// import classNames from "classnames";
-// import Alerts from "../../../common/Alerts";
-
-// const Schema = yup.object().shape({
-//   p_name: yup.string().required("required name"),
-//   p_email: yup.string().email("invalid email").required("required email"),
-//   p_phone: yup
-//     .string()
-//     .required("required phone no")
-//     .matches(/^[0-9]+$/, "Must be only digits")
-//     .min(10, "Must be exactly 10 digits")
-//     .max(20, "max 20 digits"),
-//   p_tax: yup.string().required("required category"),
-//   p_tax2: yup.string().required("required sub category"),
-//   p_teamleader: yup.string().required("required sub teamleader"),
-// });
-
-// function AddNew() {
-//   const alert = useAlert();
-//   const { handleSubmit, register, reset, errors } = useForm({
-//     resolver: yupResolver(Schema),
-//   });
-
-//   const [teamleader, setTeamLeader] = useState([]);
-//   const userid = window.localStorage.getItem("adminkey");
-
-//   const history = useHistory();
-//   const [tax, setTax] = useState([]);
-//   const [tax2, setTax2] = useState([]);
-
-//   const [store, setStore] = useState("");
-//   const [store2, setStore2] = useState(null);
-
-//   useEffect(() => {
-//     const getTeamLeader = () => {
-//       axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTeamLeader(res.data.result);
-//         }
-//       });
-//     };
-//     getTeamLeader();
-//   }, []);
-
-//   useEffect(() => {
-//     const getCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTax(res.data.result);
-//         }
-//       });
-//     };
-
-//     getCategory();
-//   }, []);
-
-//   useEffect(() => {
-//     const getSubCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTax2(res.data.result);
-//         }
-//       });
-//     };
-//     getSubCategory();
-//   }, [store]);
-
-
-//   const onSubmit = (value) => {
-//     console.log("value :", value);
-
-//     let formData = new FormData();
-//     formData.append("email", value.p_email);
-//     formData.append("name", value.p_name);
-//     formData.append("phone", value.p_phone);
-//     formData.append("pcat_id", value.p_tax);
-//     formData.append("cat_id", value.p_tax2);
-//     formData.append("type", "tp");
-//     formData.append("tp_id", value.p_teamleader);
-
-//     axios({
-//       method: "POST",
-//       url: `${baseUrl}/tp/AddTaxProfessional`,
-//       data: formData,
-//     })
-//       .then(function (response) {
-//         console.log("res-", response);
-//         if (response.data.code === 1) {
-
-//           var variable = "Tax Professional Created Successfully"
-//           Alerts.SuccessNormal(variable)
-
-//           history.goBack();
-//         }
-//       })
-//       .catch((error) => {
-//         console.log("erroror - ", error);
-//       });
-//   };
-
-//   return (
-//     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
-//       <Card>
-//         <CardHeader>
-//           <div class="col-md-12 d-flex">
-//             <div>
-//               <button
-//                 class="btn btn-success ml-3"
-//                 onClick={() => history.goBack()}
-//               >
-//                 <i class="fas fa-arrow-left mr-2"></i>
-//                 Go Back
-//               </button>
-//             </div>
-//             <div class="text-center ml-5">
-//               <h4>Add New Tax Professionals</h4>
-//             </div>
-//           </div>
-//         </CardHeader>
-
-//         <CardHeader>
-//           <div class="row mt-3">
-//             <div class="col-lg-2 col-xl-2 col-md-12"></div>
-//             <div class="col-lg-8 col-xl-8 col-md-12">
-//               <form onSubmit={handleSubmit(onSubmit)}>
-//                 <div class="row">
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Name</label>
-//                       <input
-//                         type="text"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_name,
-//                         })}
-//                         name="p_name"
-//                         ref={register}
-//                       />
-//                       {errors.p_name && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_name.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Phone Number</label>
-//                       <input
-//                         type="text"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_phone,
-//                         })}
-//                         name="p_phone"
-//                         ref={register}
-//                       />
-//                       {errors.p_phone && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_phone.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Email</label>
-//                       <input
-//                         type="email"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_email,
-//                         })}
-//                         name="p_email"
-//                         ref={register}
-//                       />
-//                       {errors.p_email && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_email.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Select teamleader</label>
-//                       <select
-//                         name="p_teamleader"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_teamleader,
-//                         })}
-//                         ref={register}
-//                       >
-//                         <option value="">--select--</option>
-//                         {teamleader.map((p) => (
-//                           <option key={p.Id} value={p.id}>
-//                             {p.name}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_teamleader && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_teamleader.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 <div class="row">
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax,
-//                         })}
-//                         name="p_tax"
-//                         ref={register}
-//                         onChange={(e) => setStore(e.target.value)}
-//                       >
-//                         <option value="">--Select Category--</option>
-//                         {tax.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_tax && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_tax.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Sub Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax2,
-//                         })}
-//                         name="p_tax2"
-//                         ref={register}
-//                         onChange={(e) => setStore2(e.target.value)}
-//                       >
-//                         <option value="">--Select Sub-Category--</option>
-//                         {tax2.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_tax2 && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_tax2.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <button type="submit" className="btn btn-primary">
-//                   Submit
-//                 </button>
-//               </form>
-//             </div>
-//           </div>
-//         </CardHeader>
-//       </Card>
-//     </Layout>
-//   );
-// }
-
-// export default AddNew;
-
-// // const Schema = yup.object().shape({
-// //   p_name: yup.string().required("required name"),
-// //   p_email: yup.string().email("invalid email").required("required email"),
-// //   p_phone: yup
-// //   .string()
-// //   .required("required phone no")
-// //   .matches(/^[0-9]+$/, "Must be only digits")
-// //   .min(10, "Must be exactly 10 digits")
-// //   .max(20, "max 20 digits"),
-// // });
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
@@ -364,8 +58,11 @@ function AddNew() {
   const [display, setDisplay] = useState(false);
   const [teamleader, setTeamLeader] = useState([]);
   const [tl, setTl] = useState([])
+  const [post1, setPost1] = useState([])
+  const [post_na, setPost_na] = useState()
   var kk = []
   var vv = []
+  var post_name;
   const options = tax.map(d => (
     {
       "value": d.id,
@@ -376,7 +73,7 @@ function AddNew() {
     "value": v.id,
     "label": v.details
   }))
-  console.log("teamleader", teamleader)
+ 
 const teamleader1 = teamleader.map(v => (
   console.log(v), {
   "value" : v.id,
@@ -421,24 +118,23 @@ const teamleader1 = teamleader.map(v => (
 
   // OnSubmit Function
   const onSubmit = (value) => {
+    console.log("tealId" , tl)
        var categeryList = []
      var categeryName = []
      var categeryName = []
      var kk = []
-     var tpId = []
+    
      var parentCategoryName = []
      subData.map((i) => {
        categeryList.push(i.value)
        categeryName.push(i.label)
      })
-     categoryData.map((i) => {
-       kk.push(i.value)
-       parentCategoryName.push(i.label)
-     })
-     tl.map((e) => {
-       tpId.push(e.value)
-     })
-     console.log("subData", subData)
+    //  categoryData.map((i) => {
+    //    kk.push(i.value)
+    //    parentCategoryName.push(i.label)
+    //  })
+    
+     console.log("subData", categoryData.label)
      if (custCate.length < 1) {
        setError("Please select at least one value")
      }
@@ -453,16 +149,18 @@ const teamleader1 = teamleader.map(v => (
      else {  console.log("value :", value);
     
          let formData = new FormData();
-         formData.append("email", value.p_email);
+         formData.append("email", post1.email)
+         formData.append("post_name", post1.post)
+         formData.append("personal_email", value.p_email);
          formData.append("name", value.p_name);
          formData.append("phone", value.p_phone);
-         formData.append("pcat_id", kk);
+         formData.append("pcat_id", categoryData.value);
          formData.append("cat_id", categeryList);
          formData.append("type", "tp");
-         formData.append("tp_id", tpId);
-         formData.append("allpcat_id", parentCategoryName)
+         formData.append("tp_id", tl);
+         formData.append("allpcat_id", categoryData.label)
          formData.append("allcat_id", categeryName)
-       
+         formData.append("tlpost", post_na)
     
          axios({
            method: "POST",
@@ -489,82 +187,7 @@ const teamleader1 = teamleader.map(v => (
            });
        };
       }
-  // const onSubmit = (value) => {
-  //   var categeryList = []
-  //   var categeryName = []
-  //   var categeryName = []
-  //   var kk = []
-  //   var parentCategoryName = []
-  //   subData.map((i) => {
-  //     categeryList.push(i.value)
-  //     categeryName.push(i.label)
-  //   })
-  //   categoryData.map((i) => {
-  //     kk.push(i.value)
-  //     parentCategoryName.push(i.label)
-  //   })
-  //   console.log("subData", subData)
-  //   if (custCate.length < 1) {
-  //     setError("Please select at least one value")
-  //   }
-  //   else if (subData.length < 1) {
-
-  //     setError2("Please select at least one value")
-  //   }
-  //   else if (invalid || wEmail || indNumError) {
-  //     setDisplay(false)
-  //   }
-
-  //   else {
-  //     setDisplay(true)
-  //     let formData = new FormData();
-
-  //     formData.append("email", value.p_email);
-  //     formData.append("name", value.p_name);
-  //     formData.append("phone", value.p_phone);
-
-  //     formData.append("type", "tl");
-
-  //     formData.append("cat_id", categeryList)
-  //     formData.append("post_name", postValue.post)
-  //     formData.append("post_email", postValue.tlemail)
-
-  //     formData.append("pcat_id", kk)
-  //     formData.append("allpcat_id", parentCategoryName)
-  //     formData.append("allcat_id", categeryName)
-
-
-
-  //     axios({
-  //       method: "POST",
-  //       url: `${baseUrl}/tl/AddTeamLead`,
-  //       data: formData,
-  //     })
-
-  //       .then(function (response) {
-
-  //         if (response.data.code === 1) {
-  //           Swal.fire({
-  //             "title": "Success",
-  //             "html": "TL created successfully",
-  //             "icon": "success"
-  //           })
-
-  //           history.goBack();
-  //         }
-  //         if (response.data.code === 0) {
-  //           response.data.message.map((i) => {
-
-  //           })
-  //         }
-
-  //       })
-  //       .catch((error) => {
-
-  //       });
-  //   }
-
-  // };
+ 
 
   // Sub Category Function
   const subCategory = (e) => {
@@ -583,14 +206,20 @@ const teamleader1 = teamleader.map(v => (
     })
     setError("")
     setCustcate(v)
-    v.map((val) => {
-      vv.push(val.value)
-      setmcategory(val.value);
-      setmcatname((oldData) => {
-        return [...oldData, val.label]
-      })
-      setStore(val.value)
+    setStore(v.value)
+    vv.push(v.value);
+    setmcategory(v.value)
+    setmcatname((oldData) => {
+      return [...oldData, v.label]
     })
+    // v.map((val) => {
+    //   vv.push(val.value)
+    //   setmcategory(val.value);
+    //   setmcatname((oldData) => {
+    //     return [...oldData, val.label]
+    //   })
+    //   setStore(val.value)
+    // })
 
 
     if (vv.length > 0) {
@@ -739,7 +368,43 @@ const teamleader1 = teamleader.map(v => (
     }
 
   }
-  console.log(postValue)
+
+  // Tl Function 
+  const tlFun = (e) => {
+    var a ;
+  console.log("id", e)
+  teamleader.filter((p) => {
+
+    if(p.id == e){
+   console.log(p.post_name)
+     
+     setTl(p.id)
+     setPost_na(p.post_name)
+     a = p.post_name
+     console.log("aa", a)
+    }
+  })
+ console.log(post_na)
+    let formData = new FormData()
+    formData.append("post", a)
+    axios({
+      method  :"POST",
+      url  : `${baseUrl}/admin/addTpPost?post=${a}`,
+      data : formData
+    })
+    .then(function (response) {
+      if(response.data.code === 1){
+        setPost1(response.data.result)
+      }
+      else if(response.data.code === 0){
+        console.log(response.data.result)
+      }
+    } )
+    .catch((error) => {
+      console.log("erroror - ", error);
+    });
+  }
+  
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -766,6 +431,68 @@ const teamleader1 = teamleader.map(v => (
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
             <div class="col-lg-8 col-xl-8 col-md-12">
               <form onSubmit={handleSubmit(onSubmit)}>
+            
+                <div class="row">
+                  <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Select teamleader</label>
+                    {/* <Select 
+                    onChange={tlFun} options = {teamleader1}>
+
+                    </Select> */}
+                       <select
+                         name="p_teamleader"
+                         className={classNames("form-control", {
+                           "is-invalid": errors.p_teamleader,
+                         })}
+                         onChange = {(e) => tlFun(e.target.value)}
+                         ref={register}
+                       >
+                         <option value="">--select--</option>
+                         {teamleader.map((p) =>
+                          (
+                            console.log("pp", p.id),
+                           <option key={p.Id} value={p.id}>
+                             {p.name}
+                           </option>
+                         ))}
+                       </select>
+                       {errors.p_teamleader && (
+                         <div className="invalid-feedback">
+                           {errors.p_teamleader.message}
+                         </div>
+                       )} 
+                     
+                    </div>
+                  
+                  </div>
+
+                  <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Email <span className="declined">*</span></label>
+                      <input
+                        type="email"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_email || wEmail || invalid,
+                        })}
+                        name="p_email"
+                        ref={register}
+                        onChange={(e) => emailHandler(e)}
+                        onBlur={emailValidation}
+                      />
+                      {
+                        wEmail ? <p className="declined">{wEmail}</p> : <>
+                          {valiEmail ?
+                            <p className="completed">
+                              {valiEmail}
+                            </p>
+                            :
+                            <p className="declined">{invalid}</p>}
+                        </>
+                      }
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -778,7 +505,7 @@ const teamleader1 = teamleader.map(v => (
                           "is-invalid": errors.post_name,
                         })}
                         ref={register}
-                        value={postValue.post}
+                        value={post1.post}
 
                       />
 
@@ -787,12 +514,12 @@ const teamleader1 = teamleader.map(v => (
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Post Eamil</label>
+                      <label>Post Email</label>
                       <input
                         type="text"
                         name="post_email"
                         ref={register}
-                        value={postValue.tlemail}
+                        value={post1.email}
                         disabled
                         className={classNames("form-control", {
                           "is-invalid": errors.post_email,
@@ -847,65 +574,8 @@ const teamleader1 = teamleader.map(v => (
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Email <span className="declined">*</span></label>
-                      <input
-                        type="email"
-                        className={classNames("form-control", {
-                          "is-invalid": errors.p_email || wEmail || invalid,
-                        })}
-                        name="p_email"
-                        ref={register}
-                        onChange={(e) => emailHandler(e)}
-                        onBlur={emailValidation}
-                      />
-                      {
-                        wEmail ? <p className="declined">{wEmail}</p> : <>
-                          {valiEmail ?
-                            <p className="completed">
-                              {valiEmail}
-                            </p>
-                            :
-                            <p className="declined">{invalid}</p>}
-                        </>
-                      }
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                    <label>Select teamleader</label>
-                    <Select isMulti 
-                    onChange={(e) => setTl(e)} options = {teamleader1}>
-
-                    </Select>
-                       {/* <select
-                         name="p_teamleader"
-                         className={classNames("form-control", {
-                           "is-invalid": errors.p_teamleader,
-                         })}
-                         ref={register}
-                       >
-                         <option value="">--select--</option>
-                         {teamleader.map((p) => (
-                           <option key={p.Id} value={p.id}>
-                             {p.name}
-                           </option>
-                         ))}
-                       </select>
-                       {errors.p_teamleader && (
-                         <div className="invalid-feedback">
-                           {errors.p_teamleader.message}
-                         </div>
-                       )} */}
-                     
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
                       <label>Category <span className="declined">*</span></label>
-                      <Select isMulti options={options}
+                      <Select  options={options}
                         className={error ? "customError" : ""}
 
                         onChange={category}>
@@ -947,9 +617,3 @@ const teamleader1 = teamleader.map(v => (
 }
 
 export default AddNew;
-
-
-
-
-
-

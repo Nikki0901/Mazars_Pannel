@@ -22,10 +22,10 @@ function SignUp(props) {
   const phone2 = useRef(null)
   const alert = useAlert();
   const { handleSubmit, register, errors, getValues } = useForm();
-  const [inputValue, setInputValue] = useState("");
+
 
   const [display, setDisplay] = useState(false);
-  const [otpMsg, setOtpMsg] = useState();
+ 
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);
   const [password, setPassword] = useState(false);
@@ -50,14 +50,16 @@ function SignUp(props) {
   const [indNumError, setIndNumError] = useState(null)
   const [zipCode, setZipCode] = useState('')
   const [zipError, setZipError] = useState(null)
-  const [passData1, setPassData1] = useState([])
+  
   const [wEmail, setWemail] = useState();
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
   const [valiOtp, setvaliOtp] = useState()
   const [loading, setLoading] = useState(false);
-
-
+const [emailError, setEmailError] = useState(null)
+const [phoneError, setPhoneError] = useState(null)
+const [zipError1, setZipError1] = useState(null);
+const [subm, setSub] = useState(false)
   //Css
   const CountryNumStyle = {
     "display": "flex",
@@ -112,7 +114,7 @@ function SignUp(props) {
     setPhone("")
     setIndNumError("")
     setNumAvail("")
-    setInvalid("")
+  
     if (key == 101) {
       setCountryId(key)
     }
@@ -171,6 +173,7 @@ function SignUp(props) {
     var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email.match(validRegex)) {
       setWemail("");
+     setEmailError(false)
       let formData = new FormData();
       formData.append("email", email);
       formData.append("type", 1);
@@ -185,9 +188,11 @@ function SignUp(props) {
           if (response.data.code === 1) {
             setValiemail(response.data.result)
             setInvalid('')
+            setEmailError(false)
           } else if (response.data.code === 0) {
             setInvalid(response.data.result)
             setValiemail('')
+            setEmailError(true)
           }
         })
         .catch((error) => {
@@ -195,6 +200,7 @@ function SignUp(props) {
         });
     }
     else {
+      setEmailError(true)
       setWemail("invalid email")
     }
 
@@ -210,8 +216,10 @@ function SignUp(props) {
       setNumExist('Please enter number only')
       e.target.value = ""
       setPhone("")
+      setPhoneError(true)
     }
     else {
+      setPhoneError(false)
       setNumAvail("");
       setNumExist("");
       setPhone(e.target.value)
@@ -220,26 +228,31 @@ function SignUp(props) {
 
   //phone validaation with api
   const phoneValidation = () => {
+    setPhoneError(false)
     console.log(phone.length)
     if (countryId && phone.length > 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
       setIndNumError("Maximum 10 value should be enter")
+      setPhoneError(true)
     }
     else if (countryId && phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
       setIndNumError("Minimum 10 value should be enter")
+      setPhoneError(true)
     }
     else if (!countryId && phone.length > 15) {
       setNumAvail("")
       setNumExist("")
+      setPhoneError(true)
       setIndNumError("Maximum 15 value should be enter")
     }
 
     else {
+      setPhoneError(false)
       setIndNumError("")
       console.log(countryId)
       let formData = new FormData();
@@ -255,11 +268,13 @@ function SignUp(props) {
           if (response.data.code === 1) {
             // setValiphone(response.data.result)
             console.log(response.data.result)
+            setPhoneError(false)
             setNumExist('')
             setNumAvail(response.data.result);
 
           }
           else if (response.data.code === 0) {
+            setPhoneError(true)
             console.log(response.data.result)
             setNumAvail('')
             setNumExist(response.data.result)
@@ -280,11 +295,13 @@ function SignUp(props) {
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
       setZipError("Please enter number only")
+      setZipError1(true)
       e.target.value = ""
     }
     else {
       setZipCode(e.target.value)
       setZipError("")
+      setZipError1(false)
     }
   }
 
@@ -293,13 +310,18 @@ function SignUp(props) {
   const zipVali2 = (e) => {
 
     if (countryId && zipCode && zipCode.length < 6) {
+      setZipError1(true)
       setZipError("Minumum 6 digit should be there")
       console.log(zipCode.length)
     }
 
     else if (countryId && zipCode && zipCode.length > 6) {
+      setZipError1(true)
       setZipError("Maximum 6 digit allowed")
       console.log(zipCode.length)
+    }
+    else{
+      setZipError1(false)
     }
   }
 
@@ -336,7 +358,49 @@ function SignUp(props) {
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
-    if (display) {
+   
+    if(emailError === false && phoneError === false && zipError1 === false && subm === true ){
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/signup`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoading(false)
+            var variable = "Signup successfully."
+            Alerts.SuccessNormal(variable)
+            localStorage.setItem("userid", JSON.stringify(response.data.id));
+            localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+            props.history.push("/customer/select-category");
+          } else if (response.data.code === 0) {
+            setLoading(false)
+            console.log("res -", response.data.result);
+            setLoad(false);
+            Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+  };
+
+
+  //setotp
+  const setOtp = () => {
+    setDisplay(false)
+    setSub(true)
+  }
+
+  //get OTP
+  const getOtp = () => {
+    if (emailError === true || phoneError === true || zipError1 === true)  {
+      setDisplay(false)
+    }
+    else {
+      setDisplay(true)
       let formData = new FormData();
       formData.append("email", email);
       formData.append("phone", phone);
@@ -362,47 +426,6 @@ function SignUp(props) {
         .catch((error) => {
           console.log("erroror - ", error);
         });
-      return false
-    }
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/signup`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          setLoading(false)
-          var variable = "Signup successfully."
-          Alerts.SuccessNormal(variable)
-          localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
-          props.history.push("/customer/select-category");
-        } else if (response.data.code === 0) {
-          setLoading(false)
-          console.log("res -", response.data.result);
-          setLoad(false);
-          Alerts.ErrorNormal("Incorrect OTP , please try again.")
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-
-  //setotp
-  const setOtp = () => {
-    setDisplay(false)
-  }
-
-  //get OTP
-  const getOtp = () => {
-    if (invalid || wEmail || indNumError || zipError || passError) {
-      setDisplay(false)
-    }
-    else {
-      setDisplay(true)
     }
   }
 
@@ -442,7 +465,7 @@ function SignUp(props) {
                         type="text"
                         name="p_email"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_email || wEmail || invalid,
+                          "is-invalid": errors.p_email || emailError === true || wEmail || invalid,
                         })}
                         onChange={(e) => emailHandler(e)}
                         onBlur={emailValidation}
@@ -567,7 +590,7 @@ function SignUp(props) {
                         <input
                           type="text"
                           className={classNames("form-control", {
-                            "is-invalid": errors.p_phone || indNumError,
+                            "is-invalid": errors.p_phone || phoneError === true || indNumError,
                           })}
                           name="p_phone"
                           value={phone}
@@ -597,7 +620,7 @@ function SignUp(props) {
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_zipCode || zipError,
+                          "is-invalid": errors.p_zipCode || zipError1 === true || zipError,
                         })}
                         name="p_zipCode"
                         ref={register({ required: true })}

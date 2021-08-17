@@ -117,7 +117,7 @@ function EditTL() {
   const data7 = value.email;
   const data8 = value.cat_id;
   const data9 = value.pcat_id
-console.log(data2)
+  console.log(data2)
   useEffect(() => {
     const getCategory = () => {
       axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
@@ -182,20 +182,28 @@ console.log(data2)
       formData.append("phone", value.phone);
       formData.append("email", data7)
       formData.append("post_name", data6)
-     {categeryList.length > 1 ?  formData.append("cat_id", categeryList) : 
-     formData.append("cat_id", data8) }
+      {
+        categeryList.length > 1 ? formData.append("cat_id", categeryList) :
+        formData.append("cat_id", data8)
+      }
 
 
-     {kk.length === 0 ?  formData.append("pcat_id", data9) : 
-     formData.append("pcat_id", kk) }
+      {
+        kk.length === 0 ? formData.append("pcat_id", data9) :
+        formData.append("pcat_id", kk)
+      }
 
 
-      { parentCategoryName.length > 0 ?
-      formData.append("allpcat_id", parentCategoryName) : 
-      formData.append("allpcat_id", data4) } 
+      {
+        parentCategoryName.length > 0 ?
+        formData.append("allpcat_id", parentCategoryName) :
+        formData.append("allpcat_id", data4)
+      }
 
-     { categeryName.length > 0 ? formData.append("allcat_id", categeryName) : 
-     formData.append("allcat_id", data5) }
+      {
+        categeryName.length > 0 ? formData.append("allcat_id", categeryName) :
+        formData.append("allcat_id", data5)
+      }
       formData.append("id", id);
 
       axios({
@@ -207,7 +215,7 @@ console.log(data2)
           console.log("res-", response);
           if (response.data.code === 1) {
 
-            var variable = "Team Leader Updated Successfully"
+            var variable = "Team Leader details updated successfully."
             Alerts.SuccessNormal(variable)
             history.goBack();
           }
@@ -304,7 +312,7 @@ console.log(data2)
 
   // Category Function
   const category = (v) => {
-   
+
     setCategoryData(v)
     console.log("MyData", v)
     setError("")
@@ -350,50 +358,50 @@ console.log(data2)
     }
   }
 
- //eamil onchange
- const emailHandler = (e) => {
-  setEmail(e.target.value);
-  console.log(e.target.value.length)
-  if (e.target.value.length < 1) {
-    setWemail("")
-  }
-};
+  //eamil onchange
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+    console.log(e.target.value.length)
+    if (e.target.value.length < 1) {
+      setWemail("")
+    }
+  };
 
 
-//email validaation with api
-const emailValidation = (key) => {
+  //email validaation with api
+  const emailValidation = (key) => {
 
-  var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (email.match(validRegex)) {
-    setWemail("");
-    let formData = new FormData();
-    formData.append("email", email);
-    formData.append("type", 1);
+    var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email.match(validRegex)) {
+      setWemail("");
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("type", 1);
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/validateregistration`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("resEmail-", response);
-        if (response.data.code === 1) {
-          setValiemail(response.data.result)
-          setInvalid('')
-        } else if (response.data.code === 0) {
-          setInvalid(response.data.result)
-          setValiemail('')
-        }
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/validateregistration`,
+        data: formData,
       })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  }
-  else {
-    setWemail("invalid email")
-  }
+        .then(function (response) {
+          console.log("resEmail-", response);
+          if (response.data.code === 1) {
+            setValiemail(response.data.result)
+            setInvalid('')
+          } else if (response.data.code === 0) {
+            setInvalid(response.data.result)
+            setValiemail('')
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+    else {
+      setWemail("invalid email")
+    }
 
-}
+  }
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Card>
@@ -472,10 +480,10 @@ const emailValidation = (key) => {
                         <label>Name <span className="declined">*</span></label>
                         <Form.Item name="name">
                           <Input
-                       required
-                           className={classNames("form-control", {
-                            "is-invalid": errors.p_name,
-                          })} />
+                            required
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_name,
+                            })} />
                         </Form.Item>
                       </div>
                     </div>
@@ -485,9 +493,9 @@ const emailValidation = (key) => {
                         <label>Phone  <span className="declined">*</span></label>
                         <Form.Item name="phone">
                           <Input
-                           className={classNames("form-control", {
-                            "is-invalid": errors.p_phone || indNumError || numExist,
-                          })}
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_phone || indNumError || numExist,
+                            })}
                             onChange={(e) => phoneHandler(e)}
                             onBlur={phoneValidation} />
                         </Form.Item>
@@ -511,22 +519,22 @@ const emailValidation = (key) => {
                         <label>Email <span className="declined">*</span></label>
                         <Form.Item name="email">
                           <Input
-                          className={classNames("form-control", {
-                            "is-invalid": errors.p_email || wEmail || invalid,
-                          })}
-                         onBlur={emailValidation} 
-                         onChange={(e) => emailHandler(e)} />
+                            className={classNames("form-control", {
+                              "is-invalid": errors.p_email || wEmail || invalid,
+                            })}
+                            onBlur={emailValidation}
+                            onChange={(e) => emailHandler(e)} />
                         </Form.Item>
                         {
-                        wEmail ? <p className="declined">{wEmail}</p> : <>
-                          {valiEmail ?
-                            <p className="completed">
-                              {valiEmail}
-                            </p>
-                            :
-                            <p className="declined">{invalid}</p>}
-                        </>
-                      }
+                          wEmail ? <p className="declined">{wEmail}</p> : <>
+                            {valiEmail ?
+                              <p className="completed">
+                                {valiEmail}
+                              </p>
+                              :
+                              <p className="declined">{invalid}</p>}
+                          </>
+                        }
                       </div>
                     </div>
                   </div>
@@ -540,16 +548,7 @@ const emailValidation = (key) => {
                           <Select isMulti options={options}
                             defaultInputValue={data4} onChange={category}
                           >
-                          </Select>
-                          {/* <Select onChange={handleChange}>
-                              <Option value="">--Select Category--</Option>
-                              {tax.map((p, index) => (
-                                <Option key={index} value={p.id}>
-                                  {p.details}
-                                </Option>
-                              ))}
-                            </Select> */}
-
+                          </Select>                  
                         </div>
                       </div>
                     </div>
@@ -587,4 +586,3 @@ const emailValidation = (key) => {
 }
 
 export default EditTL;
-

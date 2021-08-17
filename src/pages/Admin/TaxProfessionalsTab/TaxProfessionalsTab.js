@@ -51,24 +51,25 @@ function TaxProfessionalsTab() {
       },
     },
     {
+      dataField: "post_name",
+      text: "Post_ID",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+
+    {
+      dataField: "email",
+      text: "Post_Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
       dataField: "name",
-      text: "Name",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      dataField: "parent_id",
-      text: "Category",
-      sort: true,
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-    },
-    {
-      dataField: "cat_name",
-      text: "Sub Category",
+      text: "Name of TP",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -76,7 +77,7 @@ function TaxProfessionalsTab() {
     },
     {
       dataField: "email",
-      text: "Email",
+      text: "Personal email",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -84,12 +85,69 @@ function TaxProfessionalsTab() {
     },
     {
       dataField: "phone",
-      text: "Phone",
+      text: "Personal Mobile No",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
+    {
+      // dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter : function nameFormatter(cell, row) {
+        var digit2 = [];
+        digit2 = row.allpcat_id.split(",")
+       
+        return(
+          <>
+          
+         {
+            digit2.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
+          </>
+        )
+      }
+    },
+    {
+      
+     
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter : function nameFormatter(cell, row) {
+        var digit = [];
+        digit = row.allcat_id.split(",")
+       
+        return(
+          <>
+          
+         {
+            digit.map((e) => {
+            return(
+              <>
+             {e + ","}
+              </>
+            ) 
+          })
+         }
+          </>
+        )
+      }
+    },
+   
+   
     {
       dataField: "",
       text: "Edit",
@@ -203,14 +261,3 @@ function TaxProfessionalsTab() {
 export default TaxProfessionalsTab;
 
 
-// const getTaxProf = () => {
-//   TaxProffesionalService.getAll()
-//     .then((response) => {
-//       setData(response.data.result);
-//       setTpCount(response.data.result.length);
-//       console.log(response.data);
-//     })
-//     .catch((e) => {
-//       console.log(e);
-//     });
-// };

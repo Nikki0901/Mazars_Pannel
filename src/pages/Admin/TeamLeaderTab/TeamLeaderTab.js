@@ -84,6 +84,7 @@ function TeamLeaderTab() {
       formatter : function nameFormatter(cell, row) {
         var digit2 = [];
         digit2 = row.allpcat_id.split(",")
+     
        
         return(
           <>
@@ -111,8 +112,11 @@ function TeamLeaderTab() {
       },
       formatter : function nameFormatter(cell, row) {
         var digit = [];
+        var obj = []
+        
         digit = row.allcat_id.split(",")
-       
+        digit = digit.replace(/\\/g, '');
+      console.log("digit", digit)
         return(
           <>
           
