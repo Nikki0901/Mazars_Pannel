@@ -102,6 +102,7 @@ function SignUp(props) {
           return;
         }
         setDisabled(true)
+        // setDisplay(false)
       }
       timer(60);
     }
@@ -293,10 +294,15 @@ function SignUp(props) {
 
   //zip oncahnge
   const zipValue = (e) => {
+    console.log("zipValue", e.target.value.length)
     if (isNaN(e.target.value)) {
+
       setZipError("Please enter number only")
       setZipError1(true)
       e.target.value = ""
+    }
+    else if (e.target.value.length == 0) {
+      setZipError1(true)
     }
     else {
       setZipCode(e.target.value)
@@ -339,9 +345,8 @@ function SignUp(props) {
 
 
 
-  //submit form
   const onSubmit = (value) => {
-    console.log("value :", value);
+
 
 
     let formData = new FormData();
@@ -358,52 +363,7 @@ function SignUp(props) {
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
-
-    if (emailError === false && phoneError === false && zipError1 === false && subm === true) {
-      setLoading(true)
-
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/signup`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
-            setLoading(false)
-            var variable = "Signup successfully."
-            Alerts.SuccessNormal(variable)
-            localStorage.setItem("userid", JSON.stringify(response.data.id));
-            localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
-            props.history.push("/customer/select-category");
-          } else if (response.data.code === 0) {
-            setLoading(false)
-            console.log("res -", response.data.result);
-            setLoad(false);
-            Alerts.ErrorNormal("Incorrect OTP , please try again.")
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
-    }
-  };
-
-
-  //setotp
-  const setOtp = () => {
-    setDisplay(false)
-    setSub(true)
-  }
-
-  //get OTP
-  const getOtp = () => {
-  
-    if (emailError === true || phoneError === true || zipError1 === true) {
-      setDisplay(false)
-    }
-    else {
-      // setDisplay(true)
+    if (display === true && subm === false) {
       setLoading(true)
       let formData = new FormData();
       formData.append("email", email);
@@ -430,8 +390,54 @@ function SignUp(props) {
         .catch((error) => {
           console.log("erroror - ", error);
         });
+
+    }
+    else if (emailError === false && phoneError === false && zipError1 === false && subm === true) {
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/signup`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoading(false)
+            var variable = "Signup successfully."
+            Alerts.SuccessNormal(variable)
+            localStorage.setItem("userid", JSON.stringify(response.data.id));
+            localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+            props.history.push("/customer/select-category");
+          } else if (response.data.code === 0) {
+            setLoading(false)
+            console.log("res -", response.data.result);
+            setLoad(false);
+            Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+
+  };
+
+
+  //setotp
+  const setOtp = () => {
+
+    setSub(true)
+  }
+
+  //get OTP
+  const getOtp = () => {
+    if (emailError === true || phoneError === true || zipError1 === true) {
+      setDisplay(false)
+    }
+    else {
+      setDisplay(true)
     }
   }
+
 
   return (
     <>
@@ -659,10 +665,11 @@ function SignUp(props) {
                           pattern: {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                             message:
-                              "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                              "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
                           },
                         })}
-                      // autocomplete="off"
+
+                        autocomplete="off"
                       />
                       <i
                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
@@ -771,7 +778,10 @@ function SignUp(props) {
                   <ResendOtp setDisabled={setDisabled} getTime={getTime}
                     email={email} phone={phone} setLoad={setLoad} invalid={invalid} indNumError={indNumError}
                     wEmail={wEmail} zipError={zipError} passError={passError}
-                    setLoading={setLoading} loading={loading} />
+                    setLoading={setLoading} loading={loading}
+                    display={display}
+                    emailError={emailError}
+                    phoneError={phoneError} zipError1={zipError1} />
                   :
                   null
               }

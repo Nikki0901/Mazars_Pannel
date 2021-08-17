@@ -87,14 +87,45 @@ function ProposalComponent(props) {
     console.log("amount --", amount)
     console.log("date --", date)
 
+    var lumsum = value.p_inst_date
+    if (payment.label == "lumpsum") {
+      setDate(lumsum)
+    }
+    // var arrAmount = []
+    // var arrDate = []
+
+    let formData = new FormData();
+    formData.append("assign_no", assingNo);
+    formData.append("name", value.p_name);
+    formData.append("type", "tl");
+    formData.append("id", JSON.parse(userid));
+    formData.append("assign_id", assignId);
+    formData.append("customer_id", custId);
+    formData.append("description", value.description);
+    formData.append("amount_type", "fixed");
+    formData.append("amount", value.p_fixed);
+    formData.append("installment_amount", amount);
+
+    formData.append("payment_terms", payment.value);
+    formData.append("no_of_installment", installment.value);
+
+    payment.label == "lumpsum" ?
+      formData.append("due_date", lumsum) :
+      payment.label == "installment" ?
+        formData.append("due_date", date) :
+        formData.append("due_date", "")
+
     if (payment.length < 1) {
       console.log("please select payments terms --")
+      setpaymentError("Please select at lease one")
     } else
       if (payment.value == "installment") {
         if (installment == "") {
-          console.log("please select installment call for installment --", installment)
+          Alerts.ErrorNormal(`Please select no of installment .`)
+          console.log("Please select no of installment --", installment)
         } else
           if (!amount || !date) {
+            Alerts.ErrorNormal(`please enter all fields .`)
             console.log("please enter all fields")
           } else if (amount && date) {
             console.log("all deatils ** here --")
@@ -102,158 +133,77 @@ function ProposalComponent(props) {
             console.log("installment.value -", installment.value)
 
             if (installment.value > 0) {
-
               var a = Number(installment.value)
               for (let i = 0; i < a; i++) {
-
-                console.log("i", i, amount[i])
-                // var arr1 = []
-                // arr1.push(amount[i])
-                // setAmount(arr1)
-                // console.log("updated amount --", amount)
-                
+                // arrAmount.push(amount[i])
+                // arrDate.push(date[i])
                 if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
+                  Alerts.ErrorNormal(`Amount is blank.`)
                   console.log("amount is blank---")
                   return false
                 }
                 if (date[i] == "" || date[i] == undefined) {
+                  Alerts.ErrorNormal(`Date is blank.`)
                   console.log("date is blank---")
                   return false
                 }
-
-               
-
               }
               var sum = amount.reduce(myFunction)
               function myFunction(total, value) {
                 return Number(total) + Number(value);
               }
               if (value.p_fixed != sum) {
+                Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}.`)
                 console.log(`Sum of all installments should be equal to ${value.p_fixed}.`)
               } else {
                 console.log("call else fine api for installment")
+                setLoading(true)
+                axios({
+                  method: "POST",
+                  url: `${baseUrl}/tl/uploadProposal`,
+                  data: formData,
+                })
+                  .then(function (response) {
+                    console.log("res-", response);
+                    if (response.data.code === 1) {
+                      setLoading(false)
+                      Alerts.SuccessNormal("Proposal sent successfully.")
+                      history.push("/teamleader/proposal");
+                    } else if (response.data.code === 0) {
+                      setLoading(false)
+                    }
+                  })
+                  .catch((error) => {
+                    console.log("erroror - ", error);
+                  });
               }
             }
           }
       } else if (payment.label == "lumpsum") {
         console.log("call api for lumshum",)
-        setDate('')
-        setAmount('')
+        setLoading(true)
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/uploadProposal`,
+          data: formData,
+        })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              setLoading(false)
+              var variable = "Proposal sent successfully. "
+              Alerts.SuccessNormal(variable)
+              history.push("/teamleader/proposal");
+            } else if (response.data.code === 0) {
+              setLoading(false)
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
       }
 
 
-    // var lumsum = value.p_inst_date
-    // setDate(lumsum)
-
-    // if (payment.length < 1) {
-    //   setpaymentError("Please select at lease one")
-    // }
-    // else {
-    //   setpaymentError("")
-    //   let formData = new FormData();
-
-    //   formData.append("assign_no", assingNo);
-    //   formData.append("name", value.p_name);
-    //   formData.append("type", "tl");
-    //   formData.append("id", JSON.parse(userid));
-    //   formData.append("assign_id", assignId);
-    //   formData.append("customer_id", custId);
-    //   formData.append("description", value.description);
-
-    //   formData.append("amount_type", "fixed");
-    //   formData.append("amount", value.p_fixed);
-    //   formData.append("installment_amount", amount);
-
-    //   formData.append("payment_terms", payment.value);
-    //   formData.append("no_of_installment", installment.value);
-
-    //   payment.label == "lumpsum" ?
-    //     formData.append("due_date", lumsum) :
-    //     payment.label == "installment" ?
-    //       formData.append("due_date", date) :
-    //       formData.append("due_date", "")
-
-    //   console.log("payment -", payment.label)
-
-    //   if (payment.value == "installment") {
-    //     console.log("amount --", amount)
-    //     console.log("date --", date)
-
-    // if (!amount || !date) {
-    //   Alerts.ErrorNormal(`please enter all fields`)
-    // } else
-    // if (amount && date) {
-    //   if (installment.value > 0) {
-    //     console.log("installment** --")
-
-    //     var a = Number(installment.value)
-    //     for (let i = 0; i < a; i++) {
-    //       // console.log("call for loop", i, amount[i])
-    //       if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
-    //         console.log("amount --1", amount[i])
-    //         Alerts.ErrorNormal(`please insert all fields.`)
-    //         return false
-    //       }
-    //     }
-    //     var sum = amount.reduce(myFunction)
-    //     function myFunction(total, value) {
-    //       return Number(total) + Number(value);
-    //     }
-    //     if (value.p_fixed != sum) {
-    //       Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}.`)
-    //     } else {
-    //       console.log("calll else fine api")
-    //     }
-    //   }
-    //       }
-    //       else {
-    //         console.log("call else")
-    //         return false
-    //         setLoading(true)
-    //         axios({
-    //           method: "POST",
-    //           url: `${baseUrl}/tl/uploadProposal`,
-    //           data: formData,
-    //         })
-    //           .then(function (response) {
-    //             console.log("res-", response);
-    //             if (response.data.code === 1) {
-    //               setLoading(false)
-    //               Alerts.SuccessNormal("Proposal sent successfully.")
-    //               history.push("/teamleader/proposal");
-    //             } else if (response.data.code === 0) {
-    //               setLoading(false)
-    //             }
-    //           })
-    //           .catch((error) => {
-    //             console.log("erroror - ", error);
-    //           });
-    //       }
-    //   }
-    //   else {
-    //     setLoading(true)
-    //     axios({
-    //       method: "POST",
-    //       url: `${baseUrl}/tl/uploadProposal`,
-    //       data: formData,
-    //     })
-    //       .then(function (response) {
-    //         console.log("res-", response);
-    //         if (response.data.code === 1) {
-    //           setLoading(false)
-
-    //           var variable = "Proposal sent successfully. "
-    //           Alerts.SuccessNormal(variable)
-    //           history.push("/teamleader/proposal");
-    //         } else if (response.data.code === 0) {
-    //           setLoading(false)
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.log("erroror - ", error);
-    //       });
-    //   }
-    // }
 
   };
 
@@ -291,6 +241,10 @@ function ProposalComponent(props) {
     setTotalAmount(e.target.value);
   };
 
+  const installmentHandler = (key) => {
+    // console.log("key", key)
+    setInstallment(key)
+  }
 
   return (
     <>
@@ -416,7 +370,7 @@ function ProposalComponent(props) {
                     <div class="form-group">
                       <label>No of Installments</label>
                       <Select
-                        onChange={setInstallment}
+                        onChange={(e => installmentHandler(e))}
                         options={no_installments}
                       />
                     </div>
@@ -504,3 +458,116 @@ const no_installments = [
         //   console.log("call date")
         //   Alerts.ErrorNormal(`Please date should be enter`)
         // }
+
+ // var lumsum = value.p_inst_date
+    // setDate(lumsum)
+
+    // if (payment.length < 1) {
+    //   setpaymentError("Please select at lease one")
+    // }
+    // else {
+    //   setpaymentError("")
+    //   let formData = new FormData();
+
+    // formData.append("assign_no", assingNo);
+    // formData.append("name", value.p_name);
+    // formData.append("type", "tl");
+    // formData.append("id", JSON.parse(userid));
+    // formData.append("assign_id", assignId);
+    // formData.append("customer_id", custId);
+    // formData.append("description", value.description);
+
+    // formData.append("amount_type", "fixed");
+    // formData.append("amount", value.p_fixed);
+    // formData.append("installment_amount", amount);
+
+    // formData.append("payment_terms", payment.value);
+    // formData.append("no_of_installment", installment.value);
+
+    // payment.label == "lumpsum" ?
+    //   formData.append("due_date", lumsum) :
+    //   payment.label == "installment" ?
+    //     formData.append("due_date", date) :
+    //     formData.append("due_date", "")
+
+    //   console.log("payment -", payment.label)
+
+    //   if (payment.value == "installment") {
+    //     console.log("amount --", amount)
+    //     console.log("date --", date)
+
+    // if (!amount || !date) {
+    //   Alerts.ErrorNormal(`please enter all fields`)
+    // } else
+    // if (amount && date) {
+    //   if (installment.value > 0) {
+    //     console.log("installment** --")
+
+    //     var a = Number(installment.value)
+    //     for (let i = 0; i < a; i++) {
+    //       // console.log("call for loop", i, amount[i])
+    //       if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
+    //         console.log("amount --1", amount[i])
+    //         Alerts.ErrorNormal(`please insert all fields.`)
+    //         return false
+    //       }
+    //     }
+    //     var sum = amount.reduce(myFunction)
+    //     function myFunction(total, value) {
+    //       return Number(total) + Number(value);
+    //     }
+    //     if (value.p_fixed != sum) {
+    //       Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}.`)
+    //     } else {
+    //       console.log("calll else fine api")
+    //     }
+    //   }
+    //       }
+    //       else {
+    //         console.log("call else")
+    //         return false
+    //         setLoading(true)
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/tl/uploadProposal`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
+    //     if (response.data.code === 1) {
+    //       setLoading(false)
+    //       Alerts.SuccessNormal("Proposal sent successfully.")
+    //       history.push("/teamleader/proposal");
+    //     } else if (response.data.code === 0) {
+    //       setLoading(false)
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
+    //       }
+    //   }
+    //   else {
+    // setLoading(true)
+    // axios({
+    //   method: "POST",
+    //   url: `${baseUrl}/tl/uploadProposal`,
+    //   data: formData,
+    // })
+    //   .then(function (response) {
+    //     console.log("res-", response);
+    //     if (response.data.code === 1) {
+    //       setLoading(false)
+
+    //       var variable = "Proposal sent successfully. "
+    //       Alerts.SuccessNormal(variable)
+    //       history.push("/teamleader/proposal");
+    //     } else if (response.data.code === 0) {
+    //       setLoading(false)
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("erroror - ", error);
+    //   });
+    //   }
+    // }

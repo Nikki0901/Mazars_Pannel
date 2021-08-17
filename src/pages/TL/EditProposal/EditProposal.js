@@ -106,20 +106,14 @@ function EditComponent() {
 
 
 
-
   const onSubmit = (value) => {
     console.log(value);
 
-    // console.log("amount", amount);
     console.log("date", date);
-
-
-
     var lumsum = value.p_inst_date
     setDate(lumsum)
 
     let formData = new FormData();
-
     formData.append("assign_no", value.p_assingment);
     formData.append("name", value.p_name);
     formData.append("type", "tl");
