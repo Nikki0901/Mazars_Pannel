@@ -102,14 +102,8 @@ function TeamLeaderTab() {
       formatter: function nameFormatter(cell, row) {
         var digit2 = [];
         digit2 = row.allpcat_id.split(",")
-<<<<<<< HEAD
-     
-       
-        return(
-=======
 
         return (
->>>>>>> 95548708321125ef3638685eec24d125059fe546
           <>
 
             {
@@ -138,14 +132,8 @@ function TeamLeaderTab() {
         var obj = []
         
         digit = row.allcat_id.split(",")
-<<<<<<< HEAD
-        digit = digit.replace(/\\/g, '');
-      console.log("digit", digit)
-        return(
-=======
 
         return (
->>>>>>> 95548708321125ef3638685eec24d125059fe546
           <>
 
             {
@@ -161,11 +149,6 @@ function TeamLeaderTab() {
         )
       }
     },
-<<<<<<< HEAD
-   
-=======
-
->>>>>>> 95548708321125ef3638685eec24d125059fe546
     {
       dataField: "",
       text: "Edit",
