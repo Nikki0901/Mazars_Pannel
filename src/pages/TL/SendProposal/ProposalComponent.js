@@ -106,19 +106,23 @@ function ProposalComponent(props) {
               var a = Number(installment.value)
               for (let i = 0; i < a; i++) {
 
-                console.log("amount", i, amount[i])
-       
-
+                console.log("i", i, amount[i])
+                // var arr1 = []
+                // arr1.push(amount[i])
+                // setAmount(arr1)
+                // console.log("updated amount --", amount)
+                
                 if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
-                  console.log("amount --1", amount[i])
                   console.log("amount is blank---")
                   return false
                 }
                 if (date[i] == "" || date[i] == undefined) {
-                  console.log("date --1", date[i])
                   console.log("date is blank---")
                   return false
                 }
+
+               
+
               }
               var sum = amount.reduce(myFunction)
               function myFunction(total, value) {
