@@ -6,14 +6,13 @@ import * as yup from "yup";
 import Select from "react-select";
 import Swal from 'sweetalert2';
 import axios from "axios";
+
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import { Card, CardHeader } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import classNames from "classnames";
 import Mandatory from "../../../components/Common/Mandatory";
-import { Spinner } from 'reactstrap';
-
 
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
@@ -29,15 +28,13 @@ const Schema = yup.object().shape({
 
 
 function AddNew() {
-
+  const alert = useAlert();
   const history = useHistory();
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
 
   const userid = window.localStorage.getItem("adminkey");
-  const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState()
   const [error2, setError2] = useState();
   const [tax, setTax] = useState([]);
@@ -60,8 +57,16 @@ function AddNew() {
   const [invalid, setInvalid] = useState(null)
   const [wEmail, setWemail] = useState();
   const [display, setDisplay] = useState(false);
+  const [dd, setDd] = useState({
+    direct: [],
+    indirect: [],
+  });
+
   var kk = []
   var vv = []
+ 
+  
+ 
   const options = tax.map(d => (
     {
       "value": d.id,
@@ -118,14 +123,15 @@ function AddNew() {
   // OnSubmit Function
 
   const onSubmit = (value) => {
-
-
+  
     var categeryList = []
     var categeryName = []
     var categeryName = []
     var kk = []
     var parentCategoryName = []
+    console.log(subData)
     subData.map((i) => {
+      console.log(i)
       categeryList.push(i.value)
       categeryName.push(i.label)
     })
@@ -147,22 +153,19 @@ function AddNew() {
 
     else {
       setDisplay(true)
-      setLoading(true)
-
+      console.log("ddd", dd)
       let formData = new FormData();
+
       formData.append("personal_email", value.p_email);
       formData.append("name", value.p_name);
       formData.append("phone", value.p_phone);
-
       formData.append("type", "tl");
-
       formData.append("cat_id", categeryList)
       formData.append("post_name", postValue.post)
       formData.append("email", postValue.email)
-
       formData.append("pcat_id", kk)
       formData.append("allpcat_id", parentCategoryName)
-      formData.append("allcat_id", categeryName)
+      formData.append("allcat_id", JSON.stringify(dd))
 
 
 
@@ -175,17 +178,20 @@ function AddNew() {
         .then(function (response) {
 
           if (response.data.code === 1) {
-            setLoading(false)
             Swal.fire({
               "title": "Success",
               "html": "Team Leader created successfully.",
               "icon": "success"
             })
+
             history.goBack();
           }
-          else if (response.data.code === 0) {
-            setLoading(false)
+          if (response.data.code === 0) {
+            response.data.message.map((i) => {
+
+            })
           }
+
         })
         .catch((error) => {
 
@@ -193,12 +199,29 @@ function AddNew() {
     }
 
   };
-
+var allData1 = {}
+var dir = []
+var indir = []
   // Sub Category Function
   const subCategory = (e) => {
+    console.log("categoryData", dd)
     subCategeryData(e)
     setCustcate2(e)
     setError2("")
+    console.log(e)
+    console.log("allData", allData1)
+    e.map((i) => {
+    
+      i.value > 8 ? dir.push(i.label) : indir.push(i.label)
+    })
+    // allData1 = e.map(v => ({
+    //   "direct Tax" : dir,
+    //   "indirect Tax" : indir
+    // }))
+    setDd({
+      direct: dir,
+      indirect: indir
+    })
   }
 
 
@@ -302,7 +325,7 @@ function AddNew() {
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-
+    
             console.log(response.data.result)
             setNumExist('')
             setNumAvail(response.data.result);
@@ -367,7 +390,7 @@ function AddNew() {
     }
 
   }
-  console.log(postValue)
+ console.log(subData)
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -517,19 +540,32 @@ function AddNew() {
                       <Select isMulti options={options2}
                         className={error2 ? "customError" : ""}
                         onChange={subCategory}
+                        styles={{
+                          option: (styles, { data }) => {
+                            return {
+                              ...styles,
+                              color: data.value > 8
+                                ? "green"
+                                : "blue"
+                            };
+                          },
+                          multiValueLabel: (styles, { data }) => ({
+                            ...styles,
+                            color: data.value > 8
+                                ? "green"
+                                : "blue"
+                          }),
+                        }}
+                       
                         value={subData}>
                       </Select>
                     </div>
                   </div>
                 </div>
-                {
-                  loading ?
-                    <Spinner color="primary" />
-                    :
-                    <button type="submit" className="btn btn-primary">
-                      Submit
-                    </button>
-                }
+
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
               </form>
             </div>
             <div class="col-lg-2 col-xl-2 col-md-12">
@@ -545,7 +581,6 @@ function AddNew() {
 }
 
 export default AddNew;
-
 
 // import React, { useState, useEffect } from "react";
 // import Layout from "../../../components/Layout/Layout";

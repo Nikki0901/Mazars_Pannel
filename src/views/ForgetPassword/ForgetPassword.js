@@ -11,9 +11,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Spinner } from "reactstrap";
 import classNames from "classnames";
-import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import Alerts from "../../common/Alerts";
+import Mandatory from "../../components/Common/Mandatory";
 
 
 const Schema = yup.object().shape({
@@ -53,7 +53,7 @@ function ForgetPassword(props) {
         } else if (response.data.code === 0) {
           setLoading(false)
           console.log(response.data.result);
-          Alerts.ErrorNormal("Please enter correct email address.")
+          Alerts.ErrorNormal("Invalid email.")
         }
       })
       .catch((error) => {
@@ -113,7 +113,9 @@ function ForgetPassword(props) {
                 </Link>
               </form>
           }
+          <Mandatory />
         </div>
+
       </div>
 
       <Footer />

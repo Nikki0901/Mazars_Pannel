@@ -142,13 +142,28 @@ function EditComponent() {
 
     if (payment.value == "installment") {
       if (amount) {
+        console.log("amount --", amount)
+    
+        if (installment.value > 0) {
+          console.log("installment** --")
+          var a = Number(installment.value)
+          for (let i = 0; i < a; i++) {
+            if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
+              console.log("amount --1", amount[i])
+              Alerts.ErrorNormal(`please insert all fields.`)
+              return false
+            }
+          }
+        }
+      }
+      if (amount) {
         var sum = amount.reduce(myFunction)
         function myFunction(total, value) {
           return Number(total) + Number(value);
         }
       }
       if (value.p_fixed != sum) {
-        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
+        Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}.`)
       }
       else {
         axios({

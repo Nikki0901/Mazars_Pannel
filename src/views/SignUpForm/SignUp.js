@@ -11,6 +11,7 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
+import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
 
 
@@ -20,10 +21,10 @@ function SignUp(props) {
   const phone2 = useRef(null)
   const alert = useAlert();
   const { handleSubmit, register, errors, getValues } = useForm();
-  const [inputValue, setInputValue] = useState("");
+
 
   const [display, setDisplay] = useState(false);
-  const [otpMsg, setOtpMsg] = useState();
+
   const [load, setLoad] = useState(false);
   const [store, setStore] = useState(0);
   const [password, setPassword] = useState(false);
@@ -48,13 +49,17 @@ function SignUp(props) {
   const [indNumError, setIndNumError] = useState(null)
   const [zipCode, setZipCode] = useState('')
   const [zipError, setZipError] = useState(null)
-  const [passData1, setPassData1] = useState([])
+
   const [wEmail, setWemail] = useState();
   const [time, setTime] = useState('')
   const [disabled, setDisabled] = useState(false)
   const [valiOtp, setvaliOtp] = useState()
-  const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState(null)
+  const [phoneError, setPhoneError] = useState(null)
+  const [zipError1, setZipError1] = useState(null);
+  const [subm, setSub] = useState(false)
 
+  const [loading, setLoading] = useState(false);
 
   //Css
   const CountryNumStyle = {
@@ -102,7 +107,6 @@ function SignUp(props) {
     }
   }
 
-
   //get country
   const getcountry = (key) => {
     setCountryName(key)
@@ -110,7 +114,7 @@ function SignUp(props) {
     setPhone("")
     setIndNumError("")
     setNumAvail("")
-    setInvalid("")
+    // setInvalid("")
     if (key == 101) {
       setCountryId(key)
     }
@@ -163,13 +167,13 @@ function SignUp(props) {
   };
 
 
-
   //email validaation with api
   const emailValidation = (key) => {
 
     var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email.match(validRegex)) {
       setWemail("");
+      setEmailError(false)
       let formData = new FormData();
       formData.append("email", email);
       formData.append("type", 1);
@@ -184,9 +188,11 @@ function SignUp(props) {
           if (response.data.code === 1) {
             setValiemail(response.data.result)
             setInvalid('')
+            setEmailError(false)
           } else if (response.data.code === 0) {
             setInvalid(response.data.result)
             setValiemail('')
+            setEmailError(true)
           }
         })
         .catch((error) => {
@@ -194,8 +200,10 @@ function SignUp(props) {
         });
     }
     else {
-      setWemail("Invalid email")
+      setEmailError(true)
+      setWemail("invalid email")
     }
+
   }
 
 
@@ -205,40 +213,46 @@ function SignUp(props) {
     if (isNaN(e.target.value)) {
       setIndNumError("")
       setNumAvail("");
-      setNumExist('Please enter number only.')
+      setNumExist('Please enter number only')
       e.target.value = ""
       setPhone("")
+      setPhoneError(true)
     }
     else {
+      setPhoneError(false)
       setNumAvail("");
       setNumExist("");
       setPhone(e.target.value)
     }
   };
 
-
   //phone validaation with api
   const phoneValidation = () => {
+    setPhoneError(false)
     console.log(phone.length)
     if (countryId && phone.length > 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Enter 10 digit mobile number.")
+      setIndNumError("Maximum 10 value should be enter")
+      setPhoneError(true)
     }
     else if (countryId && phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
-      setIndNumError("Enter 10 digit mobile number.")
+      setIndNumError("Minimum 10 value should be enter")
+      setPhoneError(true)
     }
     else if (!countryId && phone.length > 15) {
       setNumAvail("")
       setNumExist("")
+      setPhoneError(true)
       setIndNumError("Maximum 15 value should be enter")
     }
 
     else {
+      setPhoneError(false)
       setIndNumError("")
       console.log(countryId)
       let formData = new FormData();
@@ -254,11 +268,13 @@ function SignUp(props) {
           if (response.data.code === 1) {
             // setValiphone(response.data.result)
             console.log(response.data.result)
+            setPhoneError(false)
             setNumExist('')
             setNumAvail(response.data.result);
 
           }
           else if (response.data.code === 0) {
+            setPhoneError(true)
             console.log(response.data.result)
             setNumAvail('')
             setNumExist(response.data.result)
@@ -278,12 +294,14 @@ function SignUp(props) {
   //zip oncahnge
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
-      setZipError("Please enter number only.")
+      setZipError("Please enter number only")
+      setZipError1(true)
       e.target.value = ""
     }
     else {
       setZipCode(e.target.value)
       setZipError("")
+      setZipError1(false)
     }
   }
 
@@ -292,13 +310,18 @@ function SignUp(props) {
   const zipVali2 = (e) => {
 
     if (countryId && zipCode && zipCode.length < 6) {
-      setZipError("Enter 6 digit zip code")
+      setZipError1(true)
+      setZipError("Minumum 6 digit should be there")
       console.log(zipCode.length)
     }
 
     else if (countryId && zipCode && zipCode.length > 6) {
-      setZipError("Enter 6 digit zip code")
+      setZipError1(true)
+      setZipError("Maximum 6 digit allowed")
       console.log(zipCode.length)
+    }
+    else {
+      setZipError1(false)
     }
   }
 
@@ -306,7 +329,7 @@ function SignUp(props) {
 
   const otpVali = (e) => {
     if (isNaN(e.target.value)) {
-      setvaliOtp("Please enter number only.")
+      setvaliOtp("Please enter number only")
       e.target.value = ""
     }
     else {
@@ -319,7 +342,7 @@ function SignUp(props) {
   //submit form
   const onSubmit = (value) => {
     console.log("value :", value);
-    setLoading(true)
+
 
     let formData = new FormData();
     formData.append("name", value.p_name);
@@ -335,8 +358,53 @@ function SignUp(props) {
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
-    if (display) {
 
+    if (emailError === false && phoneError === false && zipError1 === false && subm === true) {
+      setLoading(true)
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/customers/signup`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoading(false)
+            var variable = "Signup successfully."
+            Alerts.SuccessNormal(variable)
+            localStorage.setItem("userid", JSON.stringify(response.data.id));
+            localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+            props.history.push("/customer/select-category");
+          } else if (response.data.code === 0) {
+            setLoading(false)
+            console.log("res -", response.data.result);
+            setLoad(false);
+            Alerts.ErrorNormal("Incorrect OTP , please try again.")
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+  };
+
+
+  //setotp
+  const setOtp = () => {
+    setDisplay(false)
+    setSub(true)
+  }
+
+  //get OTP
+  const getOtp = () => {
+  
+    if (emailError === true || phoneError === true || zipError1 === true) {
+      setDisplay(false)
+    }
+    else {
+      // setDisplay(true)
+      setLoading(true)
       let formData = new FormData();
       formData.append("email", email);
       formData.append("phone", phone);
@@ -362,46 +430,6 @@ function SignUp(props) {
         .catch((error) => {
           console.log("erroror - ", error);
         });
-      return false
-    }
-    axios({
-      method: "POST",
-      url: `${baseUrl}/customers/signup`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          setLoading(false)
-          var variable = "Signed up successfully."
-          Alerts.SuccessNormal(variable)
-          localStorage.setItem("userid", JSON.stringify(response.data.id));
-          localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
-          props.history.push("/customer/select-category");
-        } else if (response.data.code === 0) {
-          setLoading(false)
-          console.log("res -", response.data.result);
-          Alerts.ErrorNormal("Incorrect OTP, please try again.")
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-  };
-
-
-  //setotp
-  const setOtp = () => {
-    setDisplay(false)
-  }
-
-  //get OTP
-  const getOtp = () => {
-    if (invalid || wEmail || indNumError || zipError || passError) {
-      setDisplay(false)
-    }
-    else {
-      setDisplay(true)
     }
   }
 
@@ -416,7 +444,7 @@ function SignUp(props) {
           </div>
           <>
             <div>
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
                 <div className="row">
                   <div className="col-md-6">
 
@@ -441,7 +469,7 @@ function SignUp(props) {
                         type="text"
                         name="p_email"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_email || wEmail || invalid,
+                          "is-invalid": errors.p_email || emailError === true || wEmail || invalid,
                         })}
                         onChange={(e) => emailHandler(e)}
                         onBlur={emailValidation}
@@ -566,7 +594,7 @@ function SignUp(props) {
                         <input
                           type="text"
                           className={classNames("form-control", {
-                            "is-invalid": errors.p_phone || indNumError,
+                            "is-invalid": errors.p_phone || phoneError === true || indNumError,
                           })}
                           name="p_phone"
                           value={phone}
@@ -596,7 +624,7 @@ function SignUp(props) {
                       <input
                         type="text"
                         className={classNames("form-control", {
-                          "is-invalid": errors.p_zipCode || zipError,
+                          "is-invalid": errors.p_zipCode || zipError1 === true || zipError,
                         })}
                         name="p_zipCode"
                         ref={register({ required: true })}
@@ -631,7 +659,7 @@ function SignUp(props) {
                           pattern: {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                             message:
-                              "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
+                              "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
                           },
                         })}
                       // autocomplete="off"
@@ -670,7 +698,7 @@ function SignUp(props) {
                           required: true,
                           validate: (value) =>
                             value === getValues("p_password") ||
-                            "Password doesn't match.",
+                            "password doesn 't match",
                         })}
                         autocomplete="off"
                       />
@@ -714,23 +742,20 @@ function SignUp(props) {
                       </div>
                       : null
                   }
-
                   {
                     loading ?
                       <div class="col-md-12" style={cusSub}>
                         <Spinner color="primary" />
                       </div>
                       :
-                      <div class="col-md-12">
+                      <div class="col-md-6" style={cusSub}>
                         {
                           show ?
                             <div>
                               {
                                 disabled ? null
                                   :
-                                  <div>
-                                    <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
-                                  </div>
+                                  <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
                               }
                             </div>
                             :
@@ -764,51 +789,8 @@ function SignUp(props) {
 
 export default SignUp;
 
-
-
-  //password
-  // const valiPassword = (e) => {
-  //   let arr3 = []
-  //   arr3.push(e.target.value)
-  //   setPassData1(...arr3)
-  //   console.log(e.target.value.length)
-  //   if (arr3.length >= 0) {
-
-  //     if (e.target.value == false) {
-  //       setpassError("");
-  //     }
-  //     else if (e.target.value.search(/[a-z]/) === -1) {
-  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
-  //     }
-  //     else if (e.target.value.search(/[A-Z]/) === -1) {
-  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-  //     }
-
-  //     else if (e.target.value.search(/[0-9]/) === -1) {
-  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-  //     }
-
-  //     else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
-  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
-  //     }
-  //     else if (e.target.value.length < 8) {
-  //       setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-  //     }
-  //     else {
-  //       setpassError("")
-  //     }
-  //   }
-  //   else {
-  //     setpassError("")
-  //   }
-  // }
-
-
-// import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect, useRef } from "react";
 // import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
 // import Header from "../../components/Header/Header";
 // import Footer from "../../components/Footer/Footer";
 // import axios from "axios";
@@ -821,14 +803,16 @@ export default SignUp;
 // import Alerts from "../../common/Alerts";
 // import ResendOtp from "./ResendOtp";
 // import Mandatory from "../../components/Common/Mandatory";
+// import { ContactsOutlined } from "@material-ui/icons";
 
 
 
 
 // function SignUp(props) {
+//   const phone2 = useRef(null)
 //   const alert = useAlert();
 //   const { handleSubmit, register, errors, getValues } = useForm();
-
+//   const [inputValue, setInputValue] = useState("");
 
 //   const [display, setDisplay] = useState(false);
 //   const [otpMsg, setOtpMsg] = useState();
@@ -838,8 +822,7 @@ export default SignUp;
 //   const [passError, setpassError] = useState()
 //   const [repassword, setRepassword] = useState(false);
 //   const [show, setShow] = useState(false);
-
-
+//   const [changeNum, setChangeNum] = useState(false)
 //   const [State, setState] = useState([]);
 //   const [city, setCity] = useState([]);
 //   const [countryCode, setCountryCode] = useState('')
@@ -847,7 +830,7 @@ export default SignUp;
 //   const [email, setEmail] = useState('');
 //   const [phone, setPhone] = useState('');
 //   const [valiEmail, setValiemail] = useState(null)
-//   const [invalid, setInvalid] = useState(null)
+
 //   const [numExist, setNumExist] = useState(null)
 //   const [numAvail, setNumAvail] = useState(null)
 //   const [countryName, setCountryName] = useState(null)
@@ -858,7 +841,28 @@ export default SignUp;
 //   const [zipCode, setZipCode] = useState('')
 //   const [zipError, setZipError] = useState(null)
 //   const [passData1, setPassData1] = useState([])
+//   const [wEmail, setWemail] = useState();
+//   const [time, setTime] = useState('')
+//   const [disabled, setDisabled] = useState(false)
+//   const [valiOtp, setvaliOtp] = useState()
+//   const [loading, setLoading] = useState(false);
 
+//   const [invalid, setInvalid] = useState(null)
+//   const [emailRegistred, setEmailRegisterd] = useState(null)
+
+
+//   //Css
+//   const CountryNumStyle = {
+//     "display": "flex",
+//     "width": "76px",
+//     "textAlign": "center"
+//   }
+//   // cusSub
+//   const cusSub = {
+//     "display": "flex",
+//     "alignItems": "center"
+//   }
+//   // Toggle Password
 //   const togglePasssword = () => {
 //     setPassword(!password)
 //   };
@@ -867,10 +871,6 @@ export default SignUp;
 //     setRepassword(!repassword)
 //   };
 
-//   const [time, setTime] = useState('')
-//   const [disabled, setDisabled] = useState(false)
-
-
 //   useEffect(() => {
 //     getTime()
 //   }, [load]);
@@ -878,7 +878,6 @@ export default SignUp;
 
 //   const getTime = () => {
 //     console.log("get time")
-
 //     if (load) {
 //       var timerOn = true;
 //       function timer(remaining) {
@@ -901,21 +900,18 @@ export default SignUp;
 
 //   //get country
 //   const getcountry = (key) => {
+//     setCountryName(key)
 //     setShowPlus(true)
-
+//     setPhone("")
+//     setIndNumError("")
+//     setNumAvail("")
+//     setInvalid("")
 //     if (key == 101) {
 //       setCountryId(key)
 //     }
 //     else {
 //       setCountryId("")
 //     }
-
-//     country.filter((p) => {
-//       if (p.id == key) {
-//         setCountryCode(p.phoneCode)
-//         setCountryName(p.name)
-//       }
-//     });
 
 //     var arrayState = []
 //     states.filter((data) => {
@@ -924,13 +920,18 @@ export default SignUp;
 //       }
 //     });
 //     setState(arrayState)
+
+//     country.filter((data) => {
+//       if (key == data.id) {
+//         setCountryCode(data.phoneCode)
+//         setCountryName(data.name)
+//       }
+//     })
 //   };
 
 
 //   //get city
 //   const getCity = (key) => {
-
-
 //     states.filter((p) => {
 //       if (p.id == key) {
 //         setStateName(p.name)
@@ -950,6 +951,10 @@ export default SignUp;
 //   //eamil onchange
 //   const emailHandler = (e) => {
 //     setEmail(e.target.value);
+//     console.log(e.target.value.length)
+//     if (e.target.value.length < 1) {
+//       setWemail("")
+//     }
 //   };
 
 
@@ -958,6 +963,7 @@ export default SignUp;
 
 //     var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 //     if (email.match(validRegex)) {
+//       setWemail("");
 //       let formData = new FormData();
 //       formData.append("email", email);
 //       formData.append("type", 1);
@@ -973,6 +979,7 @@ export default SignUp;
 //             setValiemail(response.data.result)
 //             setInvalid('')
 //           } else if (response.data.code === 0) {
+//             console.log("response.data.result")
 //             setInvalid(response.data.result)
 //             setValiemail('')
 //           }
@@ -981,27 +988,29 @@ export default SignUp;
 //           console.log("erroror - ", error);
 //         });
 //     }
-//     else if (email.length > 0) {
-//       console.log("error")
-//       setInvalid("invalid email")
-//     } else if (email.length === 0) {
-//       setInvalid("")
+//     else {
+//       setWemail("Invalid email")
 //     }
 //   }
 
 
 //   //phone onchange
 //   const phoneHandler = (e) => {
+
 //     if (isNaN(e.target.value)) {
+//       setIndNumError("")
+//       setNumAvail("");
 //       setNumExist('Please enter number only.')
+//       e.target.value = ""
+//       setPhone("")
 //     }
 //     else {
+//       setNumAvail("");
+//       setNumExist("");
 //       setPhone(e.target.value)
 //     }
-//     if (phone.length > 10) {
-//       setIndNumError("")
-//     }
 //   };
+
 
 //   //phone validaation with api
 //   const phoneValidation = () => {
@@ -1016,9 +1025,13 @@ export default SignUp;
 //       console.log(phone.length)
 //       setNumAvail("")
 //       setNumExist("")
-//       setIndNumError("Minimum 10 value should be enter")
+//       setIndNumError("Enter 10 digit mobile number.")
 //     }
-
+//     else if (!countryId && phone.length > 15) {
+//       setNumAvail("")
+//       setNumExist("")
+//       setIndNumError("Maximum 15 value should be enter")
+//     }
 //     else {
 //       setIndNumError("")
 //       console.log(countryId)
@@ -1037,14 +1050,11 @@ export default SignUp;
 //             console.log(response.data.result)
 //             setNumExist('')
 //             setNumAvail(response.data.result);
-
-
 //           }
 //           else if (response.data.code === 0) {
 //             console.log(response.data.result)
 //             setNumAvail('')
 //             setNumExist(response.data.result)
-
 //             console.log("mobile" + setNumExist)
 //           }
 
@@ -1056,10 +1066,12 @@ export default SignUp;
 //   }
 
 
+
 //   //zip oncahnge
 //   const zipValue = (e) => {
 //     if (isNaN(e.target.value)) {
 //       setZipError("Please enter number only.")
+//       e.target.value = ""
 //     }
 //     else {
 //       setZipCode(e.target.value)
@@ -1070,62 +1082,37 @@ export default SignUp;
 
 //   // onblur
 //   const zipVali2 = (e) => {
-//     if (countryId && zipCode && zipCode.length < 5) {
-//       setZipError("")
-//       console.log(zipCode.length)
-//     }
-//     else if (countryId && zipCode && zipCode.length > 6) {
-//       setZipError("Maximum 6 digit allowed")
+
+//     if (countryId && zipCode && zipCode.length < 6) {
+//       setZipError("Enter 6 digit zip code")
 //       console.log(zipCode.length)
 //     }
 
+//     else if (countryId && zipCode && zipCode.length > 6) {
+//       setZipError("Enter 6 digit zip code")
+//       console.log(zipCode.length)
+//     }
 //   }
 
 
-//   //password
-//   const valiPassword = (e) => {
-//     let arr3 = []
-//     arr3.push(e.target.value)
-//     setPassData1(...arr3)
-//     console.log(e.target.value.length)
-//     if (arr3.length >= 0) {
 
-//       if (e.target.value == false) {
-//         setpassError("");
-//       }
-//       else if (e.target.value.search(/[a-z]/) === -1) {
-//         setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
-//       }
-//       else if (e.target.value.search(/[A-Z]/) === -1) {
-//         setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-//       }
-
-//       else if (e.target.value.search(/[0-9]/) === -1) {
-//         setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
-//       }
-
-//       else if (e.target.value.search(/[!#$%&@? "]/) === -1) {
-//         setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-
-//       }
-//       else if (e.target.value.length < 8) {
-//         setpassError("UpperCase, LowerCase, Number/SpecialChar and min 8 Chars");
-//       }
-//       else {
-//         setpassError("")
-//       }
+//   const otpVali = (e) => {
+//     if (isNaN(e.target.value)) {
+//       setvaliOtp("Please enter number only.")
+//       e.target.value = ""
 //     }
 //     else {
-//       setpassError("")
+//       setvaliOtp("")
 //     }
 //   }
+
 
 
 //   //submit form
 //   const onSubmit = (value) => {
 //     console.log("value :", value);
 
+//     // setLoading(true)
 
 //     let formData = new FormData();
 //     formData.append("name", value.p_name);
@@ -1141,32 +1128,43 @@ export default SignUp;
 //     formData.append("state", stateName);
 //     formData.append("stdcode", countryCode);
 
-//     //get otp
 //     if (display) {
-//       let formData = new FormData();
-//       formData.append("email", email);
-//       formData.append("phone", phone);
-//       formData.append("p", "registration");
-
-//       axios({
-//         method: "POST",
-//         url: `${baseUrl}/customers/forgototp`,
-//         data: formData,
-//       })
-//         .then(function (response) {
-//           console.log("res-", response);
-//           if (response.data.code === 1) {
-//             setLoad(true)
-//             setShow(true)
-//             Alerts.SuccessNormal("OTP sent to your email address.")
-//           } else if (response.data.code === 0) {
-//             Alerts.ErrorNormal("Error")
-//           }
+//       console.log("display")
+//       if (invalid || wEmail || indNumError || zipError || passError) {
+//         console.log("call invalid")
+//       }
+//       else {
+//         console.log("call else")
+//         let formData = new FormData();
+//         formData.append("email", email);
+//         formData.append("phone", phone);
+//         formData.append("p", "registration");
+//         axios({
+//           method: "POST",
+//           url: `${baseUrl}/customers/forgototp`,
+//           data: formData,
 //         })
-//         .catch((error) => {
-//           console.log("erroror - ", error);
-//         });
-//       return false
+//           .then(function (response) {
+//             console.log("res-", response);
+//             if (response.data.code === 1) {
+//               setLoading(false)
+//               setLoad(true)
+//               setShow(true)
+//               Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+//             } else if (response.data.code === 0) {
+//               setLoading(false)
+//               var err = response.data.message[0]
+//               Alerts.ErrorNormal(err)
+//             }
+//           })
+//           .catch((error) => {
+//             console.log("erroror - ", error);
+//           });
+//         return false
+//       }
+//     }
+//     if (invalid || wEmail || indNumError || zipError || passError) {
+//       console.log("call invalid")
 //     }
 //     axios({
 //       method: "POST",
@@ -1176,14 +1174,15 @@ export default SignUp;
 //       .then(function (response) {
 //         console.log("res-", response);
 //         if (response.data.code === 1) {
+//           setLoading(false)
 //           var variable = "Signed up successfully."
 //           Alerts.SuccessNormal(variable)
-          // localStorage.setItem("userid", JSON.stringify(response.data.id));
-          // localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+//           localStorage.setItem("userid", JSON.stringify(response.data.id));
+//           localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
 //           props.history.push("/customer/select-category");
 //         } else if (response.data.code === 0) {
+//           setLoading(false)
 //           console.log("res -", response.data.result);
-//           setLoad(false);
 //           Alerts.ErrorNormal("Incorrect OTP, please try again.")
 //         }
 //       })
@@ -1197,6 +1196,7 @@ export default SignUp;
 //   const setOtp = () => {
 //     setDisplay(false)
 //   }
+
 
 //   //get OTP
 //   const getOtp = () => {
@@ -1215,7 +1215,7 @@ export default SignUp;
 //           </div>
 //           <>
 //             <div>
-//               <form onSubmit={handleSubmit(onSubmit)}>
+//               <form onSubmit={handleSubmit(onSubmit)} autocomplete="off">
 //                 <div className="row">
 //                   <div className="col-md-6">
 
@@ -1240,7 +1240,7 @@ export default SignUp;
 //                         type="text"
 //                         name="p_email"
 //                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_email,
+//                           "is-invalid": errors.p_email || wEmail || invalid,
 //                         })}
 //                         onChange={(e) => emailHandler(e)}
 //                         onBlur={emailValidation}
@@ -1248,12 +1248,14 @@ export default SignUp;
 //                         ref={register({ required: true })}
 //                       />
 //                       {
-//                         valiEmail ?
-//                           <p className="completed">
-//                             {valiEmail}
-//                           </p>
-//                           :
-//                           <p className="declined">{invalid}</p>
+//                         wEmail ? <p className="declined">{wEmail}</p> : <>
+//                           {valiEmail ?
+//                             <p className="completed">
+//                               {valiEmail}
+//                             </p>
+//                             :
+//                             <p className="declined">{invalid}</p>}
+//                         </>
 //                       }
 //                     </div>
 //                   </div>
@@ -1363,9 +1365,11 @@ export default SignUp;
 //                         <input
 //                           type="text"
 //                           className={classNames("form-control", {
-//                             "is-invalid": errors.p_phone,
+//                             "is-invalid": errors.p_phone || indNumError,
 //                           })}
 //                           name="p_phone"
+//                           value={phone}
+
 //                           ref={register({ required: true })}
 //                           placeholder="Mobile number"
 //                           onChange={(e) => phoneHandler(e)}
@@ -1391,7 +1395,7 @@ export default SignUp;
 //                       <input
 //                         type="text"
 //                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_zipCode,
+//                           "is-invalid": errors.p_zipCode || zipError,
 //                         })}
 //                         name="p_zipCode"
 //                         ref={register({ required: true })}
@@ -1408,7 +1412,6 @@ export default SignUp;
 //                       <label className="form-label">Password<span className="declined">*</span></label>
 //                       <input
 //                         type={password ? "text" : "password"}
-//                         ref={register({ required: true })}
 //                         onCopy={(e) => {
 //                           e.preventDefault();
 //                           return false
@@ -1417,18 +1420,29 @@ export default SignUp;
 //                           e.preventDefault();
 //                           return false
 //                         }}
-//                         name="p_password"
 //                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_password,
+//                           "is-invalid": errors.p_password || passError,
 //                         })}
+//                         name="p_password"
 //                         placeholder="Enter Your Password"
-//                         onChange={(e) => valiPassword(e)}
+//                         ref={register({
+//                           required: true,
+//                           pattern: {
+//                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
+//                             message:
+//                               "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
+//                           },
+//                         })}
 //                       />
 //                       <i
 //                         className={`fa ${password ? "fa-eye-slash" : "fa-eye"} password-icon`}
 //                         onClick={togglePasssword}
 //                       />
-//                       <p className="declined">{passError}</p>
+//                       {errors.p_password && (
+//                         <div className="invalid-feedback">
+//                           {errors.p_password.message}
+//                         </div>
+//                       )}
 //                     </div>
 //                   </div>
 
@@ -1454,7 +1468,7 @@ export default SignUp;
 //                           required: true,
 //                           validate: (value) =>
 //                             value === getValues("p_password") ||
-//                             "password doesn 't match",
+//                             "Password doesn't match.",
 //                         })}
 //                       />
 //                       <i
@@ -1481,40 +1495,55 @@ export default SignUp;
 //                             })}
 //                             name="p_otp"
 //                             ref={register({ required: true })}
+//                             onChange={otpVali}
 //                             placeholder="Enter your OTP"
+//                             autocomplete="off"
 //                           />
-                          // {
-                          //   disabled ? null
-                          //     :
-                          //     <small class="text-center">
-                          //       Note: OTP is valid for {time} seconds.
-                          //     </small>
-                          // }
+//                           <p className="declined"> {valiOtp ? valiOtp : ""}</p>
+//                           {
+//                             disabled ? null
+//                               :
+//                               <small class="text-center">
+//                                 Note: OTP is valid for {time} seconds.
+//                               </small>
+//                           }
 //                         </div>
 //                       </div>
 //                       : null
 //                   }
-//                   <div class="col-md-6">
-//                     {
-//                       show ?
-//                         <div>
-//                           {
-//                             disabled ? null
-//                               :
-//                               <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
-//                           }
-//                         </div>
-//                         :
-//                         <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>Get OTP</button>
-//                     }
-//                   </div>
+
+                  // {
+                  //   loading ?
+                  //     <div class="col-md-12" style={cusSub}>
+                  //       <Spinner color="primary" />
+                  //     </div>
+                  //     :
+//                       <div class="col-md-12">
+//                         {
+//                           show ?
+//                             <div>
+//                               {
+//                                 disabled ? null
+//                                   :
+//                                   <div>
+//                                     <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+//                                   </div>
+//                               }
+//                             </div>
+//                             :
+//                             <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
+//                         }
+//                       </div>
+//                   }
 //                 </div>
 //               </form>
 
 //               {
 //                 disabled ?
 //                   <ResendOtp setDisabled={setDisabled} getTime={getTime}
-//                     email={email} phone={phone} setLoad={setLoad} />
+//                     email={email} phone={phone} setLoad={setLoad} invalid={invalid} indNumError={indNumError}
+//                     wEmail={wEmail} zipError={zipError} passError={passError}
+//                     setLoading={setLoading} loading={loading} />
 //                   :
 //                   null
 //               }
@@ -1523,6 +1552,7 @@ export default SignUp;
 //           </>
 
 //         </div>
+
 //       </div>
 //       <Footer />
 //     </>
@@ -1530,4 +1560,3 @@ export default SignUp;
 // }
 
 // export default SignUp;
-

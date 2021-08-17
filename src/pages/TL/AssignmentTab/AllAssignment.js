@@ -336,24 +336,24 @@ function AssignmentTab() {
             >
               {
                 !row.final_report && row.client_discussion == "completed" &&
-                !(
-                  row.delivery_report == "completed" &&
-                  row.draft_report == "completed" &&
-                  row.final_discussion == "completed"
-                ) ? (
-                <div title="upload Pdf">
-                  <p
-                    style={{ cursor: "pointer", color: "green" }}
-                    onClick={() => uploadDraftReport(row.id)}
-                  >
-                    <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                    draft
-                  </p>
-                </div>
-              ) : null}
+                  !(
+                    row.delivery_report == "completed" &&
+                    row.draft_report == "completed" &&
+                    row.final_discussion == "completed"
+                  ) ? (
+                  <div title="upload Pdf">
+                    <p
+                      style={{ cursor: "pointer", color: "green" }}
+                      onClick={() => uploadDraftReport(row.id)}
+                    >
+                      <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                      draft
+                    </p>
+                  </div>
+                ) : null}
 
 
-              {row.final_report ? null : (
+              {row.other_stage == "completed" ? null : (
                 <div title="upload Pdf">
                   <p
                     style={{ cursor: "pointer", color: "red" }}
@@ -362,16 +362,16 @@ function AssignmentTab() {
                     {row.client_discussion == "completed" &&
                       row.delivery_report == "completed" &&
                       row.draft_report == "completed" &&
-                      row.final_discussion == "completed" &&
-                      row.amount == row.paid_amount ? (
-                      <div>
-                        <i
-                          class="fa fa-upload"
-                          style={{ fontSize: "16px" }}
-                        ></i>
-                        final
-                      </div>
-                    ) : null}
+                      row.final_discussion == "completed"
+                      ? (
+                        <div>
+                          <i
+                            class="fa fa-upload"
+                            style={{ fontSize: "16px" }}
+                          ></i>
+                          final
+                        </div>
+                      ) : null}
                   </p>
                 </div>
               )}
@@ -678,38 +678,3 @@ export default AssignmentTab;
 
 
 
-
-// {
-//   text: "Deliverable",
-//   dataField: "",
-//   headerStyle: () => {
-//     return { fontSize: "12px" };
-//   },
-//   formatter: function (cell, row) {
-//     return (
-//       <>
-//         {!row.final_report == "" ? (
-//           <div>
-//             <a
-//               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-//               target="_blank"
-//             >
-//               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-//               final
-//             </a>
-//           </div>
-//         ) : row.assignement_draft_report ? (
-//           <div>
-//             <a
-//               href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
-//               target="_blank"
-//             >
-//               <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-//               draft
-//             </a>
-//           </div>
-//         ) : null}
-//       </>
-//     );
-//   },
-// },

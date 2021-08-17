@@ -49,20 +49,20 @@ function AdditionalQueryModal({
           } else if (message.faill && message.success) {
             Swal.fire({
               title: 'Success',
-              html: `<p class="text-danger">File ${message.faill}</p> <br/> <p>File ${message.success}</p> `,
+              html: `<p class="text-danger">${message.faill}</p> <br/> <p>${message.success}</p> `,
               icon: 'success',
             })
           } else if (message.success) {
             Swal.fire({
               title: 'Success',
-              html: `<p>File ${message.success}</p>`,
+              html: `<p>${message.success}</p>`,
               icon: 'success',
             })
           }
           else if (message.faill) {
             Swal.fire({
               title: 'Success !',
-              html: `<p class="text-danger">File ${message.faill}</p>`,
+              html: `<p class="text-danger">${message.faill}</p>`,
               icon: 'success',
             })
           }
