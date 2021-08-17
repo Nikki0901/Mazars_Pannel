@@ -5,16 +5,19 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
 import Swal from "sweetalert2";
+import { Spinner } from 'reactstrap';
 
 
 function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
   const alert = useAlert();
   const { handleSubmit, register, reset } = useForm();
 
+  const [loading, setLoading] = useState(false);
 
-  console.log("id-", id)
+
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
 
@@ -37,10 +40,11 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
       })
       .then((response) => {
         console.log(response.data);
+        if (response.data.code === 1) {
+          setLoading(false)
 
-
-        var message = response.data.message
-        if (message.invalid) {
+          var message = response.data.message
+          if (message.invalid) {
             Swal.fire({
               title: 'Error !',
               html: `<p class="text-danger">${message.invalid}</p>`,
@@ -65,10 +69,12 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
               icon: 'success',
             })
           }
-
-
-        getAssignmentList();
-        uploadFinalReport();
+          getAssignmentList();
+          uploadFinalReport();
+          
+        } else if (response.data.code === 0) {
+          setLoading(false)
+        }
       });
   };
 
@@ -90,9 +96,14 @@ function DraftReport({ fianlModal, uploadFinalReport, id, getAssignmentList }) {
               />
             </div>
             <div class="modal-footer">
-              <button type="submit" className="btn btn-primary">
-                Upload
-              </button>
+              {
+                loading ?
+                  <Spinner color="primary" />
+                  :
+                  <button type="submit" className="btn btn-primary">
+                    Upload
+                  </button>
+              }
             </div>
           </form>
         </ModalBody>

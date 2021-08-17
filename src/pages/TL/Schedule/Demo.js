@@ -252,7 +252,7 @@ function Demo() {
           console.log("res post-", response);
           if (response.data.code === 1) {
             setLoading(false)
-            Alerts.SuccessNormal("New call successfully scheduled.")
+            Alerts.SuccessNormal("New call scheduled successfully.")
           } else if (response.data.code === 0) {
             setLoading(false)
             var msg = response.data.result
@@ -316,7 +316,7 @@ function Demo() {
 
           if (response.data.code === 1) {
             setLoading(false)
-            var msg = "Successfully updated"
+            var msg = "Call details updated successfully."
             Alerts.SuccessNormal(msg)
           }
           else if (response.data.code === 0) {
@@ -364,7 +364,7 @@ function Demo() {
             console.log("res -", res);
             if (res.data.code === 1) {
               setLoading(false)
-              Swal.fire("Deleted!", "Scheduled call  has been deleted.", "success");
+              Swal.fire("Deleted!", "Scheduled call has been deleted.", "success");
               getData();
             } else {
               setLoading(false)
@@ -439,6 +439,9 @@ function Demo() {
                 {
                   read ?
                     <AppointmentForm
+                      booleanEditorComponent={BooleanEditor}
+                      basicLayoutComponent={BasicLayout}
+                      textEditorComponent={TextEditor}
                       readOnly
                     />
                     :

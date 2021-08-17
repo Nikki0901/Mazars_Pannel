@@ -285,30 +285,24 @@ function ProposalTab() {
                                     </Link>
                                 </div>
 
-                                {row.negotiated_amount === "0" &&
-                                    row.accepted_amount === "0" ? (
+                                {row.status == "Accepted; Proposal" ?
+                                    null :
                                     <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
                                         <div style={{ cursor: "pointer" }} title="Proposal Accepted">
                                             <Link to={`/customer/proposal_view/${row.q_id}`}>
                                                 <i
-                                                    class="fa fa-check"
+                                                    class="fa fa-share"
                                                     style={{
                                                         color: "blue",
-                                                        fontSize: "16px",
+                                                        fontSize: "14px",
                                                     }}
                                                 ></i>
                                             </Link>
                                         </div>
-                                        <div style={{ cursor: "pointer" }} title="Rejected">
-                                            <i
-                                                class="fa fa-times"
-                                                style={{ color: "red", fontSize: "16px" }}
-                                                onClick={() => rejected(row.q_id)}
-                                            ></i>
-                                        </div>
+
 
                                     </div>
-                                ) : null}
+                                }
 
                                 <div title="View Discussion Message">
                                     <i
@@ -427,3 +421,12 @@ function ProposalTab() {
 
 export default ProposalTab;
 
+{/* <div style={{ cursor: "pointer" }} title="Rejected">
+                                            <i
+                                                class="fa fa-times"
+                                                style={{ color: "red", fontSize: "16px" }}
+                                                onClick={() => rejected(row.q_id)}
+                                            ></i>
+                                        </div> */}
+  // {row.negotiated_amount === "0" &&
+// row.accepted_amount === "0"

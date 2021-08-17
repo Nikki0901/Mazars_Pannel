@@ -11,10 +11,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import RejectedModal from "./RejectedModal";
 import Alerts from "../../../common/Alerts";
+import { Spinner } from 'reactstrap';
 
 
 function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
   const userid = window.localStorage.getItem("tlkey");
+  const [loading, setLoading] = useState(false);
 
   const [pendingData, setPendingData] = useState([]);
   const [records, setRecords] = useState([]);
@@ -189,6 +191,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
 
   const acceptHandler = (key) => {
     console.log("acceptHandler", key);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("set", 1);
@@ -204,9 +207,12 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
       .then(function (response) {
         console.log("response-", response);
         if (response.data.code === 1) {
-          Alerts.SuccessNormal("Query successfully accepted")
+          setLoading(false)
+          Alerts.SuccessNormal("Query accepted successfully.")
           getPendingforAcceptance();
           updateTab(1);
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -229,13 +235,18 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
           />
         </CardHeader>
         <CardBody>
-          <BootstrapTable
-            bootstrap4
-            keyField="id"
-            data={pendingData}
-            columns={columns}
-            rowIndex
-          />
+          {
+            loading ?
+              <Spinner color="primary" />
+              :
+              <BootstrapTable
+                bootstrap4
+                keyField="id"
+                data={pendingData}
+                columns={columns}
+                rowIndex
+              />
+          }
           <RejectedModal
             rejectHandler={rejectHandler}
             addPaymentModal={addPaymentModal}

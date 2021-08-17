@@ -13,6 +13,8 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import DiscardReport from "../AssignmentTab/DiscardReport";
+
 
 
 function AllQuery() {
@@ -23,7 +25,12 @@ function AllQuery() {
     const [records, setRecords] = useState([]);
 
 
- 
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getInCompleteAssingment();
@@ -191,7 +198,7 @@ function AllQuery() {
                                 }
                             </Link>
 
-                            {/* <div title="Send Message">
+                            <div title="Send Message">
                                 <Link
                                     to={{
                                         pathname: `/teamleader/chatting/${row.id}`,
@@ -225,7 +232,7 @@ function AllQuery() {
                                     }}
                                     onClick={() => ViewDiscussionToggel(row.assign_no)}
                                 ></i>
-                            </div> */}
+                            </div>
                         </div>
                     </>
                 );
@@ -253,8 +260,13 @@ function AllQuery() {
                         columns={columns}
                         rowIndex
                     />
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getInCompleteAssingment}
+                    />
 
-                   
                 </CardBody>
             </Card>
         </>

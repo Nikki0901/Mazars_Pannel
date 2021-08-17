@@ -153,7 +153,7 @@ function ViewReport({
                                       ></i>
                                     </div> :
                                     p.status == "3" ?
-                                      <p style={{ color: "red" }}>Discarded</p> :
+                                      <p style={{ color: "red" }}>Discarted</p> :
                                       null
                             }
                           </div>

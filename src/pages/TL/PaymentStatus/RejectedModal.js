@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Alerts from "../../../common/Alerts";
+import { Spinner } from 'reactstrap';
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required(""),
@@ -24,10 +25,12 @@ function RejectedModal({
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
-  const alert = useAlert();
+
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
@@ -42,9 +45,12 @@ function RejectedModal({
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          Alerts.SuccessNormal("Declined successfully payment")
+          setLoading(false)
+          Alerts.SuccessNormal("Marked as customer declined payment.")
           getPaymentStatus();
           rejectHandler();
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -71,9 +77,14 @@ function RejectedModal({
               ></textarea>
             </div>
             <div class="modal-footer">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+              {
+                loading ?
+                  <Spinner color="primary" />
+                  :
+                  <button type="submit" className="btn btn-primary">
+                    Submit
+                  </button>
+              }
             </div>
           </form>
         </ModalBody>

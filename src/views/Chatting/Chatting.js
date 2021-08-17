@@ -83,7 +83,7 @@ function Chatting(props) {
         if (response.data.code === 1) {
           setLoading(false)
           reset();
-          var variable = "Message Successfully Sent "
+          var variable = "Message sent successfully. "
           Alerts.SuccessNormal(variable)
 
           props.history.push(routes);
@@ -164,7 +164,7 @@ function Chatting(props) {
                       </div>
 
                       <div class="form-group">
-                        <label>Message</label>
+                        <label>Message<span className="declined">*</span></label>
                         <textarea
                           className={classNames("form-control", {
                             "is-invalid": errors.p_message,
@@ -211,3 +211,6 @@ export default Chatting;
                     <option value="2">Proposal Discussion</option>
                     <option value="3">Assignment Discussion</option>
                   </select> */}
+
+
+                

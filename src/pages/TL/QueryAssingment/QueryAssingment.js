@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classNames from "classnames";
 import Mandatory from "../../../components/Common/Mandatory";
+import Loader from "../../../components/Loader/Loader";
 
 
 const Schema = yup.object().shape({
@@ -40,6 +41,7 @@ function QueryAssingment() {
   const [taxProfessionDisplay, setTaxProfessionDisplay] = useState([]);
   const [taxID, setTaxID] = useState(null);
   const [teamName, setTeamName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [hideQuery, setHideQuery] = useState({
     name: "",
@@ -131,6 +133,7 @@ function QueryAssingment() {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     var expdeliverydate = value.p_expdeldate.replace(
       /(\d\d)\/(\d\d)\/(\d{4})/,
@@ -157,10 +160,13 @@ function QueryAssingment() {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          var variable = "Query Assigned Successfully"
+          setLoading(false)
+          var variable = "Query assigned successfully."
           Alerts.SuccessNormal(variable)
           getQuery();
           reset();
+        } if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -195,126 +201,134 @@ function QueryAssingment() {
             </Col>
           </Row>
         </CardHeader>
-        <CardHeader>
-          <div class="row mt-3">
-            <div class="col-xl-12 col-lg-12 col-md-12">
-              <div class="col-md-12">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Query No.</th>
-                        <th scope="col">Tax Professional<span className="declined">*</span></th>
-                        <th scope="col">Expected Timeline</th>
-                        <th scope="col">Exp. Delivery Date<span className="declined">*</span></th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {query ? (
-                        <tr>
-                          <th scope="row">{queryNo}</th>
-                          <td>
-                            <select
-                              className={classNames("form-control", {
-                                "is-invalid": errors.p_taxprof,
-                              })}
-                              name="p_taxprof"
-                              ref={register}
-                              onChange={(e) => handleChange(e)}
-                            >
-                              <option value="">--select--</option>
-                              {taxProfessionDisplay.map((p, index) => (
-                                <option key={index} value={p.id}>
-                                  {p.name}
-                                </option>
-                              ))}
-                            </select>
-                            {errors.p_taxprof && (
-                              <div className="invalid-feedback">
-                                {errors.p_taxprof.message}
-                              </div>
+
+        {
+          loading ?
+            <Loader />
+            :
+            <>
+              <CardHeader>
+                <div class="row mt-3">
+                  <div class="col-xl-12 col-lg-12 col-md-12">
+                    <div class="col-md-12">
+                      <form onSubmit={handleSubmit(onSubmit)}>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Query No.</th>
+                              <th scope="col">Tax Professional<span className="declined">*</span></th>
+                              <th scope="col">Expected Timeline</th>
+                              <th scope="col">Exp. Delivery Date<span className="declined">*</span></th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {query ? (
+                              <tr>
+                                <th scope="row">{queryNo}</th>
+                                <td>
+                                  <select
+                                    className={classNames("form-control", {
+                                      "is-invalid": errors.p_taxprof,
+                                    })}
+                                    name="p_taxprof"
+                                    ref={register}
+                                    onChange={(e) => handleChange(e)}
+                                  >
+                                    <option value="">--select--</option>
+                                    {taxProfessionDisplay.map((p, index) => (
+                                      <option key={index} value={p.id}>
+                                        {p.name}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  {errors.p_taxprof && (
+                                    <div className="invalid-feedback">
+                                      {errors.p_taxprof.message}
+                                    </div>
+                                  )}
+                                </td>
+
+                                <td>
+                                  <input
+                                    type="text"
+                                    ref={register}
+                                    name="p_timelines"
+                                    value={timelines}
+                                    class="form-control"
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    ref={register}
+                                    name="p_expdeldate"
+                                    className={classNames("form-control", {
+                                      "is-invalid": errors.p_expdeldate,
+                                    })}
+                                    value={expect_dd}
+                                    min={item}
+                                  />
+                                  {errors.p_expdeldate && (
+                                    <div className="invalid-feedback">
+                                      {errors.p_expdeldate.message}
+                                    </div>
+                                  )}
+                                </td>
+
+                                <td>
+                                  <button type="submit" class="btn btn-success">
+                                    Assign
+                                  </button>
+                                </td>
+                              </tr>
+                            ) : (
+                              <tr>
+                                <th scope="row">{queryNo}</th>
+                                <td>
+                                  <select class="form-control w-75 p-0" disabled>
+                                    <option>{hideQuery.name}</option>
+                                  </select>
+                                </td>
+
+                                <td>
+                                  <input
+                                    type="text"
+                                    ref={register}
+                                    name="p_timelines"
+                                    value={hideQuery.timeline}
+                                    disabled
+                                    class="form-control"
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="date"
+                                    ref={register}
+                                    name="p_expdeldate"
+                                    value={hideQuery.expdeliverydate}
+                                    disabled
+                                    class="form-control"
+                                  />
+                                </td>
+
+                                <td>
+                                  <button class="btn btn-success" disabled>
+                                    Assigned
+                                  </button>
+                                </td>
+                              </tr>
                             )}
-                          </td>
-
-                          <td>
-                            <input
-                              type="text"
-                              ref={register}
-                              name="p_timelines"
-                              value={timelines}
-                              class="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              ref={register}
-                              name="p_expdeldate"
-                              className={classNames("form-control", {
-                                "is-invalid": errors.p_expdeldate,
-                              })}
-                              value={expect_dd}
-                              min={item}
-                            />
-                            {errors.p_expdeldate && (
-                              <div className="invalid-feedback">
-                                {errors.p_expdeldate.message}
-                              </div>
-                            )}
-                          </td>
-
-                          <td>
-                            <button type="submit" class="btn btn-success">
-                              Assign
-                            </button>
-                          </td>
-                        </tr>
-                      ) : (
-                        <tr>
-                          <th scope="row">{queryNo}</th>
-                          <td>
-                            <select class="form-control w-75 p-0" disabled>
-                              <option>{hideQuery.name}</option>
-                            </select>
-                          </td>
-
-                          <td>
-                            <input
-                              type="text"
-                              ref={register}
-                              name="p_timelines"
-                              value={hideQuery.timeline}
-                              disabled
-                              class="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="date"
-                              ref={register}
-                              name="p_expdeldate"
-                              value={hideQuery.expdeliverydate}
-                              disabled
-                              class="form-control"
-                            />
-                          </td>
-
-                          <td>
-                            <button class="btn btn-success" disabled>
-                              Assigned
-                            </button>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </form>
-                <Mandatory />
-              </div>
-            </div>
-          </div>
-        </CardHeader>
+                          </tbody>
+                        </table>
+                      </form>
+                      <Mandatory />
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+            </>
+        }
       </Card>
     </Layout>
   );

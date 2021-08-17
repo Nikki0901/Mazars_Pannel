@@ -48,7 +48,7 @@ function ViewReport({
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, discarded it!",
+      confirmButtonText: "Yes, discarted it!",
     }).then((result) => {
       if (result.value) {
         deleteCliente(id);
@@ -73,7 +73,7 @@ function ViewReport({
         console.log("response-", response);
         if (response.data.code === 1) {
           getData()
-          Alerts.SuccessNormal("Discarded Successfully")
+          Alerts.SuccessNormal("Discarted Successfully")
         }
       })
       .catch((error) => {
@@ -204,7 +204,7 @@ function ViewReport({
                                     </div>
                                     :
                                     p.status == "3" ?
-                                      <p style={{ color: "red" }}>Discarded</p> :
+                                      <p style={{ color: "red" }}>Discarted</p> :
                                       null
                             }
                           </div>

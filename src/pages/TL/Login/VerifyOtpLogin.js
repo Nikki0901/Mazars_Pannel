@@ -8,6 +8,7 @@ import classNames from "classnames";
 import { useHistory } from "react-router-dom";
 import Alerts from "../../../common/Alerts";
 import Mandatory from "../../../components/Common/Mandatory";
+import { Spinner } from "reactstrap";
 
 
 const Schema = yup.object().shape({
@@ -15,7 +16,7 @@ const Schema = yup.object().shape({
 });
 
 
-function VerifyOtp({ email, uid }) {
+function VerifyOtp({ email, uid, loading, setLoading }) {
   console.log("email :", email);
   console.log("uid :", uid);
 
@@ -79,6 +80,7 @@ function VerifyOtp({ email, uid }) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("email", email);
@@ -91,14 +93,16 @@ function VerifyOtp({ email, uid }) {
     })
       .then(function (response) {
         console.log("res-", response);
-  
+
         if (response.data.code == 1) {
-          Alerts.SuccessLogin()
+          setLoading(false)
+          Alerts.SuccessLogin("Logged in successfully.")
           localStorage.setItem("tlkey", JSON.stringify(response.data.user_id));
           localStorage.setItem("tlEmail", JSON.stringify(response.data.name));
           history.push("/teamleader/dashboard");
         } else {
-          Alerts.ErrorNormal("Incorrect OTP. Please try again.")
+          setLoading(false)
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
           reset();
         }
       })
@@ -109,6 +113,7 @@ function VerifyOtp({ email, uid }) {
 
 
   const resendOtp = () => {
+    setLoading(true)
     changeNum(true)
     let formData = new FormData();
     formData.append("email", email);
@@ -122,10 +127,12 @@ function VerifyOtp({ email, uid }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          setLoading(false)
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           setDisabled(false)
         }
         else if (response.data.code === 0) {
+          setLoading(false)
           Alerts.ErrorNormal("Some thing went wrong, please try again")
         }
       })
@@ -174,15 +181,19 @@ function VerifyOtp({ email, uid }) {
                   <Mandatory />
                 </div>
             }
-
-            <div class="text-center">
-              {
-                disabled ?
-                  <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
-                  :
-                  <button type="submit" class="btn btn-primary">VERIFY OTP</button>
-              }
-            </div>
+            {
+              loading ?
+                <Spinner color="primary" />
+                :
+                <div class="text-center">
+                  {
+                    disabled ?
+                      <button type="submit" class="btn btn-success" onClick={resendOtp}>SEND OTP</button>
+                      :
+                      <button type="submit" class="btn btn-primary">VERIFY OTP</button>
+                  }
+                </div>
+            }
           </form>
 
         </div>

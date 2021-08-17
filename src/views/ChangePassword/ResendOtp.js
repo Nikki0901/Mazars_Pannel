@@ -6,12 +6,13 @@ import Alerts from "../../common/Alerts";
 
 
 
-function ResendOtp({ email,  setDisabled, getTime, setLoad }) {
+function ResendOtp({ email, setDisabled, getTime, setLoad, setLoading, loading }) {
     const userId = window.localStorage.getItem("userid");
 
     const { handleSubmit, errors, reset } = useForm();
 
     const onSubmit = (value) => {
+        setLoading(true)
         let formData = new FormData();
         formData.append("email", email);
         formData.append("uid", JSON.parse(userId));
@@ -24,10 +25,13 @@ function ResendOtp({ email,  setDisabled, getTime, setLoad }) {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
-                    Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+                    setLoading(false)
+                    Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
                     setDisabled(false)
                     getTime();
                     setLoad(true)
+                } if (response.data.code === 0) {
+                    setLoading(false)
                 }
             })
             .catch((error) => {

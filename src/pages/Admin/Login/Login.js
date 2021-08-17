@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Alerts from "../../../common/Alerts";
 import Mandatory from "../../../components/Common/Mandatory";
 import VerifyOtpLogin from "./VerifyOtpLogin";
+import { Spinner } from "reactstrap";
 
 
 const Schema = yup.object().shape({
@@ -20,8 +21,8 @@ const Schema = yup.object().shape({
   password: yup
     .string()
     .required("")
-    .min(5, "at least 5 digits")
-    .max(20, "max 20 digits"),
+    // .min(5, "at least 5 digits")
+    // .max(20, "max 20 digits"),
 });
 
 
@@ -36,6 +37,7 @@ function Login(props) {
   const [show, setShow] = useState(false);
   const [uid, setUid] = useState('')
   const [isPasswordShow, setPasswordShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const togglePasssword = () => {
     setPasswordShow(!isPasswordShow)
@@ -43,6 +45,7 @@ function Login(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("userid", value.p_email);
@@ -56,10 +59,12 @@ function Login(props) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
+          setLoading(false)
           setShow(true)
-          Alerts.SuccessNormal("As per your request , OTP has been sent to your email address.")
+          Alerts.SuccessNormal("As per your request, OTP has been sent to your registered email address.")
           setUid(response.data["user id"])
         } else if (response.data.code === 0) {
+          setLoading(false)
           Alerts.ErrorNormal("Invalid email or password.")
         }
       })
@@ -81,7 +86,9 @@ function Login(props) {
 
         {
           show ? <div>
-            <VerifyOtpLogin email={email} uid={uid} />
+            <VerifyOtpLogin email={email} uid={uid}
+              loading={loading}
+              setLoading={setLoading} />
           </div>
             :
             <div class="form">
@@ -135,9 +142,17 @@ function Login(props) {
                     </div>
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
+
+                {
+                  loading ?
+                    <div class="col-md-12">
+                      <Spinner color="primary" />
+                    </div>
+                    :
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
+                }
 
                 <div style={{ display: "flex", flexDirection: "row-reverse" }}>
                   <Link

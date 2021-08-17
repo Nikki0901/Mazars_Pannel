@@ -5,6 +5,8 @@ import { baseUrl } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { useAlert } from "react-alert";
 import Alerts from "../../common/Alerts";
+import { Spinner } from 'reactstrap';
+
 
 function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
 
@@ -13,8 +15,11 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
   const alert = useAlert();
   const { handleSubmit, register, reset } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = (value) => {
     console.log("value :", value);
+    setLoading(true)
 
     let formData = new FormData();
     formData.append("assign_no", assingNo);
@@ -28,11 +33,13 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-
-          var variable = "Document Uploaded Successfully"
+          setLoading(false)
+          var variable = "File uploaded successfully."
           Alerts.SuccessNormal(variable)
           reset();
           getQuery();
+        } else if (response.data.code === 0) {
+          setLoading(false)
         }
       })
       .catch((error) => {
@@ -47,7 +54,7 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
       <Modal isOpen={addModal} toggle={addHandler} size="md">
         <ModalHeader toggle={addHandler}>
           UPLOAD DOCUMENTS
-          </ModalHeader>
+        </ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -62,13 +69,18 @@ function AddAdditionalQuery({ addHandler, addModal, assingNo, getQuery }) {
             </div>
 
             <div class="modal-footer">
-              <button
-                type="submit"
-                onClick={addHandler}
-                className="btn btn-primary"
-              >
-                Submit
-              </button>
+              {
+                loading ?
+                  <Spinner color="primary" />
+                  :
+                  <button
+                    type="submit"
+                    onClick={addHandler}
+                    className="btn btn-primary"
+                  >
+                    Submit
+                  </button>
+              }
             </div>
           </form>
         </ModalBody>

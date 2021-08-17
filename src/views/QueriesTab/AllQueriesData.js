@@ -21,15 +21,16 @@ import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 import CommonServices from "../../common/common";
 import DiscardReport from "../AssignmentTab/DiscardReport";
+import Loader from "../../components/Loader/Loader";
 
 
 
 function AllQueriesData() {
-    const alert = useAlert();
     const userId = window.localStorage.getItem("userid");
     const [query, setQuery] = useState([]);
     const [queriesCount, setCountQueries] = useState(null);
     const [records, setRecords] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const [assignNo, setAssignNo] = useState('');
     const [additionalQuery, setAdditionalQuery] = useState(false);
@@ -337,7 +338,7 @@ function AllQueriesData() {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to delete query ?",
+            text: "Want to delete query ?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -351,6 +352,8 @@ function AllQueriesData() {
     };
 
     const deleteCliente = (id) => {
+        setLoading(true)
+
         let formData = new FormData();
         formData.append("uid", JSON.parse(userId));
         formData.append("id", id);
@@ -363,10 +366,12 @@ function AllQueriesData() {
             .then(function (response) {
                 console.log("res-", response);
                 if (response.data.code === 1) {
+                    setLoading(false)
                     Swal.fire("", "Query deleted successfully.", "success");
                     getQueriesData();
-                } else {
-                    Swal.fire("Oops...", "Errorr ", "error");
+                } else if (response.data.code === 0) {
+                    setLoading(false)
+                    Swal.fire("Oops...", "Query not deleted ", "error");
                 }
             })
             .catch((error) => {
@@ -403,15 +408,21 @@ function AllQueriesData() {
                 </CardHeader>
                 <CardBody>
                     <Records records={records} />
-
-                    <BootstrapTable
-                        bootstrap4
-                        keyField="id"
-                        data={query}
-                        columns={columns}
-                        rowIndex
-                    />
-
+                    {
+                        loading ?
+                            <Loader />
+                            :
+                            <>
+                                <BootstrapTable
+                                    bootstrap4
+                                    keyField="id"
+                                    data={query}
+                                    columns={columns}
+                                    rowIndex
+                                />
+                            </>
+                    }
+                    
                     <AdditionalQueryModal
                         additionalHandler={additionalHandler}
                         additionalQuery={additionalQuery}

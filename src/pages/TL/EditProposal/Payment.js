@@ -1,16 +1,22 @@
 import React from "react";
+<<<<<<< HEAD
 import classNames from "classnames";
+=======
+import Alerts from "../../../common/Alerts";
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
 
-export default class YourComponent extends React.Component {
+
+
+export default class Payment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             values: [],
             dates: [],
-            isLoading: true
         };
     }
 
+<<<<<<< HEAD
 
  custError = this.props.blankFeild;
     amount = this.props.installment_amount
@@ -30,47 +36,45 @@ export default class YourComponent extends React.Component {
         var val2 =[]
      val2.push(...this.temp)
      var a = val2.slice(0, i+1)
+=======
+    handleChange1(i, e) {
+        if (isNaN(e.target.value)) {
+            this.setState({ error: "Please insert only digit" })
+        }
+        else {
+            this.setState({ error: "" })
+        }
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
         this.setState({
-            values: [a]
+            values: { ...this.state.values, [i]: e.target.value }
         },
             () => {
                 this.props.paymentAmount(this.state.values)
             })
+
     }
 
-
     handleChange2(i, e) {
+<<<<<<< HEAD
         this.props.setDateError("")
         const { value } = e.target
         this.installmentDueDate[i] = value
         var val3 = []
         val3.push(this.installmentDueDate);
          var d = val3.slice(0, i+1)
+=======
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
         this.setState({
-            dates: [d]
+            dates: { ...this.state.dates, [i]: e.target.value }
         },
             () => {
                 this.props.paymentDate(this.state.dates)
             })
+
     }
-
-    componentDidMount() {
-        this.setState({ isLoading: false });
-
-        var amount = this.props.installment_amount
-        var date = this.props.due_date
-
-        const installment_amount = amount.split(',');
-        const due_date = date.split(',');
-
-
-        this.props.paymentAmount(installment_amount);
-        this.props.paymentDate(due_date)
-    }
-
-
 
     render() {
+<<<<<<< HEAD
 console.log("installmentValue", this.props.installmentValue)
         var amount = this.props.installment_amount
         var date = this.props.due_date
@@ -78,10 +82,11 @@ console.log("installmentValue", this.props.installmentValue)
         const installment_amount = amount.split(',');
         const due_date = date.split(',');
 
+=======
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
         var fieldsArray = [];
 
-
-        for (var i = 0; i < this.props.installment; i++) {
+        for (var i = 1; i <= this.props.installment; i++) {
             fieldsArray.push(
                 <div className="row">
                     <div class="col-md-6">
@@ -93,9 +98,12 @@ console.log("installmentValue", this.props.installmentValue)
                               })}
                             name={this.state.values[i]}
                             onChange={this.handleChange1.bind(this, i)}
-                            defaultValue={installment_amount[i]}
                         />
+<<<<<<< HEAD
                        
+=======
+                        <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
                     </div>
 
                     <div class="col-md-6">
@@ -107,16 +115,13 @@ console.log("installmentValue", this.props.installmentValue)
                               })}
                             name={this.state.dates[i]}
                             onChange={this.handleChange2.bind(this, i)}
-                            defaultValue={due_date[i]}
+                            min={this.props.item}
                         />
                     </div>
-                </div>
+                </div >
             );
         }
 
-        if (this.state.isLoading) {
-            return <div>Loading...</div>
-        }
         return (
             <div className="inputs">
                 {fieldsArray}
@@ -124,6 +129,7 @@ console.log("installmentValue", this.props.installmentValue)
         );
     }
 }
+
 
 
 // import React from "react";
@@ -146,7 +152,7 @@ console.log("installmentValue", this.props.installmentValue)
 //         const { value } = e.target
 //         this.temp[i] = value
 //         console.log(this.temp)
-    
+
 //         this.setState({
 //             values: {
 //               ...this.temp

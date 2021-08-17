@@ -693,4 +693,9 @@ function EditTP() {
   );
 }
 
+<<<<<<< HEAD
 export default EditTP;
+=======
+export default EditTP;
+
+>>>>>>> 95548708321125ef3638685eec24d125059fe546

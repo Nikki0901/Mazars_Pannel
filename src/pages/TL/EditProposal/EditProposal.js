@@ -34,16 +34,25 @@ function EditComponent() {
   const [date, setDate] = useState();
 
   const [load, setLoad] = useState(true);
+<<<<<<< HEAD
  const [dateError, setDateError] = useState();
+=======
+  const [dateError, setDateError] = useState();
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
   const [paymentError, setpaymentError] = useState();
   const [payment, setPayment] = useState([]);
   const [installment, setInstallment] = useState([]);
   const [error, setError] = useState('');
   const [diserror, setdiserror] = useState("")
   const [amountError, setAmountError] = useState("")
+<<<<<<< HEAD
   const [clearVal,setClearval] = useState(1);
   const [datee, getDate] = useState()
   var a = [0, 0, 0, 0]
+=======
+  const [datee, getDate] = useState()
+  const [clVal, setclVal] = useState(1);
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
   const history = useHistory();
   const { id } = useParams();
 
@@ -56,7 +65,6 @@ function EditComponent() {
     installment_amount: "",
     due_date: "",
   });
-
 
   const { query, name, description, fixed_amount,
     due_date, installment_amount } = proposal;
@@ -110,9 +118,8 @@ function EditComponent() {
 
 
 
-
-
   const onSubmit = (value) => {
+<<<<<<< HEAD
  console.log(date)
    
       var lumsum = value.p_inst_date
@@ -138,66 +145,108 @@ function EditComponent() {
       payment.label == "installment" ?
         formData.append("due_date", date) :
         formData.append("due_date", "")
+=======
+    console.log(date)
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
 
+    if (payment.length < 1) {
+      setpaymentError("Please select at lease one")
+    }
 
+    // if (!(value.p_inst_date) && installment.value == 0) {
+    //   setpaymentError("Please select at lease one")
+    // }
+    // else if (!(value.p_inst_date) && amount[0] == 0) {
+    //   console.log("Please enter amount")
+    //   setAmountError("Please fill amount ")
+    //   console.log(amountError)
+    // }
 
-    if (payment.value == "installment") {
-  
-      if (amount.length === 1) {
-        console.log(amount.length)
-        var sum = amount[0].reduce(myFunction)
-        function myFunction(total, value) {
-          return Number(total) + Number(value);
-        }
-      }
-      console.log("sum -", sum)
-      if (amount.length === 1 && value.p_fixed != sum) {
-        Alerts.ErrorNormal(`installment amount should be eqaul to ${value.p_fixed}`)
-      }
-  else{
+    // else if (!(value.p_inst_date) && date == 0 || !(value.p_inst_date) && datee.length != installment.value) {
+    //   setDateError("Please enter date")
+    // }
 
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/updateProposal`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          reset();
-
-          var variable = "Proposal Successfully Sent "
-          Alerts.SuccessNormal(variable)
-
-          history.push("/teamleader/proposal");
-        }
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
-
-  }
-    
-}
     else {
-      axios({
-        method: "POST",
-        url: `${baseUrl}/tl/updateProposal`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
+      var lumsum = value.p_inst_date
+      setDate(lumsum)
 
-            var variable = "Proposal Updated Successfully "
-            Alerts.SuccessNormal(variable)
-            history.push("/teamleader/proposal");
+      let formData = new FormData();
+
+      formData.append("assign_no", value.p_assingment);
+      formData.append("name", value.p_name);
+      formData.append("type", "tl");
+      formData.append("id", JSON.parse(userid));
+      formData.append("description", value.description);
+      formData.append("customer_id", custId);
+      formData.append("assign_id", id);
+      formData.append("amount_type", "fixed");
+      formData.append("amount", value.p_fixed);
+      formData.append("installment_amount", amount);
+      formData.append("payment_terms", payment.value);
+      formData.append("no_of_installment", installment.value);
+
+      payment.label == "lumpsum" ?
+        formData.append("due_date", lumsum) :
+        payment.label == "installment" ?
+          formData.append("due_date", date) :
+          formData.append("due_date", "")
+
+      if (payment.value == "installment") {
+        if (amount) {
+          var sum = amount.reduce(myFunction)
+          function myFunction(total, value) {
+            return Number(total) + Number(value);
           }
+        }
+        console.log("sum -", sum)
+        if (value.p_fixed != sum) {
+          Alerts.ErrorNormal(`Sum of all installments should be equal to ${value.p_fixed}`)
+        }
+        else {
+          axios({
+            method: "POST",
+            url: `${baseUrl}/tl/updateProposal`,
+            data: formData,
+          })
+            .then(function (response) {
+              console.log("res-", response);
+              if (response.data.code === 1) {
+                reset();
+                var variable = "Proposal Successfully Sent."
+                Alerts.SuccessNormal(variable)
+                history.push("/teamleader/proposal");
+              }
+            })
+            .catch((error) => {
+              console.log("erroror - ", error);
+            });
+        }
+      }
+      else {
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/updateProposal`,
+          data: formData,
         })
+<<<<<<< HEAD
         .catch((error) => {
           console.log("erroror - ", error);
         });
     
+=======
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              var variable = "Proposal Updated Successfully "
+              Alerts.SuccessNormal(variable)
+              history.push("/teamleader/proposal");
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+      }
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
   };
 
@@ -215,15 +264,24 @@ function EditComponent() {
 
   const paymentAmount = (data) => {
     console.log("paymentAmount", data)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     setAmount(data);
     console.log(data)
   };
 
+  
   const paymentDate = (data) => {
     console.log("paymentDate", data)
+<<<<<<< HEAD
   getDate(data)
 var array2 = []
+=======
+    getDate(data)
+    var array2 = []
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     var arr4 = []
     Object.entries(data).map(([key, value]) => {
       array2.push(value)
@@ -232,9 +290,14 @@ var array2 = []
     setDate(array2);
     Object.entries(data).map(([ke, value]) => {
       console.log(value)
+<<<<<<< HEAD
      getDate(value[0])
     });
   
+=======
+      getDate(value[0])
+    });
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
   };
 
 
@@ -264,10 +327,8 @@ var array2 = []
 
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-
             <div style={{ display: "flex" }}>
               <div class="col-md-6">
-
                 <div class="form-group">
                   <label>Query No.</label>
                   <input
@@ -369,10 +430,20 @@ var array2 = []
                         closeMenuOnSelect={true}
                         className={paymentError ? "customError" : ""}
                         onChange={(e) => {
+<<<<<<< HEAD
                           setInstallment(e);
                           setClearval(0);
                           setpaymentError("")
                           setDate("")
+=======
+                          console.log(proposal.installment_amount)
+                          installment.values = e.value
+                          setclVal(0)
+                          setInstallment(e);
+                          setpaymentError("")
+                          setDate("");
+                          getDate("")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
                         }}
                         value={installment}
                         options={noInstallments}
@@ -395,12 +466,21 @@ var array2 = []
                       installment_amount={installment_amount}
                       due_date={due_date}
                       getQuery={getQuery}
+<<<<<<< HEAD
                       blankFeild = {amountError}
                       setBlankFeild = {setAmountError}
                       dateError = {dateError}
                       setDateError= {setDateError}
                       installmentValue = {installment.value}
                       clearVal = {clearVal}
+=======
+                      blankFeild={amountError}
+                      setBlankFeild={setAmountError}
+                      dateError={dateError}
+                      setDateError={setDateError}
+                      installmentValue={installment.value}
+                      setclVal={clVal}
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
                     />
 
                 }
@@ -418,8 +498,12 @@ var array2 = []
     </Layout>
   );
 }
+<<<<<<< HEAD
 console.log(date)
+=======
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
 export default EditComponent;
+
 
 const paymentsTerms = [
   {

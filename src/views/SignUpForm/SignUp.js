@@ -11,9 +11,7 @@ import { professionName, country, states } from './data';
 import { cities } from './city';
 import Alerts from "../../common/Alerts";
 import ResendOtp from "./ResendOtp";
-import GetOTP from "./GetOTP";
 import Mandatory from "../../components/Common/Mandatory";
-import Loader from "../../components/Loader/Loader";
 
 
 
@@ -167,6 +165,7 @@ const [subm, setSub] = useState(false)
   };
 
 
+
   //email validaation with api
   const emailValidation = (key) => {
 
@@ -200,10 +199,13 @@ const [subm, setSub] = useState(false)
         });
     }
     else {
+<<<<<<< HEAD
       setEmailError(true)
       setWemail("invalid email")
+=======
+      setWemail("Invalid email")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
-
   }
 
 
@@ -213,7 +215,7 @@ const [subm, setSub] = useState(false)
     if (isNaN(e.target.value)) {
       setIndNumError("")
       setNumAvail("");
-      setNumExist('Please enter number only')
+      setNumExist('Please enter number only.')
       e.target.value = ""
       setPhone("")
       setPhoneError(true)
@@ -226,6 +228,7 @@ const [subm, setSub] = useState(false)
     }
   };
 
+
   //phone validaation with api
   const phoneValidation = () => {
     setPhoneError(false)
@@ -234,15 +237,23 @@ const [subm, setSub] = useState(false)
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
+<<<<<<< HEAD
       setIndNumError("Maximum 10 value should be enter")
       setPhoneError(true)
+=======
+      setIndNumError("Enter 10 digit mobile number.")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
     else if (countryId && phone.length < 10) {
       console.log(phone.length)
       setNumAvail("")
       setNumExist("")
+<<<<<<< HEAD
       setIndNumError("Minimum 10 value should be enter")
       setPhoneError(true)
+=======
+      setIndNumError("Enter 10 digit mobile number.")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
     }
     else if (!countryId && phone.length > 15) {
       setNumAvail("")
@@ -294,8 +305,12 @@ const [subm, setSub] = useState(false)
   //zip oncahnge
   const zipValue = (e) => {
     if (isNaN(e.target.value)) {
+<<<<<<< HEAD
       setZipError("Please enter number only")
       setZipError1(true)
+=======
+      setZipError("Please enter number only.")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
       e.target.value = ""
     }
     else {
@@ -310,14 +325,22 @@ const [subm, setSub] = useState(false)
   const zipVali2 = (e) => {
 
     if (countryId && zipCode && zipCode.length < 6) {
+<<<<<<< HEAD
       setZipError1(true)
       setZipError("Minumum 6 digit should be there")
+=======
+      setZipError("Enter 6 digit zip code")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
       console.log(zipCode.length)
     }
 
     else if (countryId && zipCode && zipCode.length > 6) {
+<<<<<<< HEAD
       setZipError1(true)
       setZipError("Maximum 6 digit allowed")
+=======
+      setZipError("Enter 6 digit zip code")
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
       console.log(zipCode.length)
     }
     else{
@@ -329,7 +352,7 @@ const [subm, setSub] = useState(false)
 
   const otpVali = (e) => {
     if (isNaN(e.target.value)) {
-      setvaliOtp("Please enter number only")
+      setvaliOtp("Please enter number only.")
       e.target.value = ""
     }
     else {
@@ -358,8 +381,18 @@ const [subm, setSub] = useState(false)
     formData.append("state", stateName);
     formData.append("stdcode", countryCode);
 
+<<<<<<< HEAD
    
     if(emailError === false && phoneError === false && zipError1 === false && subm === true ){
+=======
+    if (display) {
+
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("p", "registration");
+
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
       axios({
         method: "POST",
         url: `${baseUrl}/customers/signup`,
@@ -385,6 +418,32 @@ const [subm, setSub] = useState(false)
           console.log("erroror - ", error);
         });
     }
+<<<<<<< HEAD
+=======
+    axios({
+      method: "POST",
+      url: `${baseUrl}/customers/signup`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);
+        if (response.data.code === 1) {
+          setLoading(false)
+          var variable = "Signed up successfully."
+          Alerts.SuccessNormal(variable)
+          localStorage.setItem("userid", JSON.stringify(response.data.id));
+          localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
+          props.history.push("/customer/select-category");
+        } else if (response.data.code === 0) {
+          setLoading(false)
+          console.log("res -", response.data.result);
+          Alerts.ErrorNormal("Incorrect OTP, please try again.")
+        }
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+>>>>>>> 95548708321125ef3638685eec24d125059fe546
   };
 
 
@@ -655,7 +714,7 @@ const [subm, setSub] = useState(false)
                           pattern: {
                             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/,
                             message:
-                              "UpperCase, LowerCase, Number,SpecialChar and min 8 Chars",
+                              "Password should be of minimum 8 Characters, including at least 1 upper case, lower case, special character and number.",
                           },
                         })}
                       // autocomplete="off"
@@ -694,7 +753,7 @@ const [subm, setSub] = useState(false)
                           required: true,
                           validate: (value) =>
                             value === getValues("p_password") ||
-                            "password doesn 't match",
+                            "Password doesn't match.",
                         })}
                         autocomplete="off"
                       />
@@ -738,20 +797,30 @@ const [subm, setSub] = useState(false)
                       </div>
                       : null
                   }
-                  <div class="col-md-6" style={cusSub}>
-                    {
-                      show ?
-                        <div>
-                          {
-                            disabled ? null
-                              :
-                              <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
-                          }
-                        </div>
-                        :
-                        <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
-                    }
-                  </div>
+
+                  {
+                    loading ?
+                      <div class="col-md-12" style={cusSub}>
+                        <Spinner color="primary" />
+                      </div>
+                      :
+                      <div class="col-md-12">
+                        {
+                          show ?
+                            <div>
+                              {
+                                disabled ? null
+                                  :
+                                  <div>
+                                    <button type="submit" className="btn btn-primary" onClick={() => setOtp()}>Submit</button>
+                                  </div>
+                              }
+                            </div>
+                            :
+                            <button type="submit" class="btn btn-success" onClick={() => getOtp("otp")}>SEND OTP</button>
+                        }
+                      </div>
+                  }
                 </div>
               </form>
 
@@ -759,7 +828,8 @@ const [subm, setSub] = useState(false)
                 disabled ?
                   <ResendOtp setDisabled={setDisabled} getTime={getTime}
                     email={email} phone={phone} setLoad={setLoad} invalid={invalid} indNumError={indNumError}
-                    wEmail={wEmail} zipError={zipError} passError={passError} />
+                    wEmail={wEmail} zipError={zipError} passError={passError}
+                    setLoading={setLoading} loading={loading} />
                   :
                   null
               }
@@ -1006,7 +1076,7 @@ export default SignUp;
 //   //phone onchange
 //   const phoneHandler = (e) => {
 //     if (isNaN(e.target.value)) {
-//       setNumExist('Please enter number only')
+//       setNumExist('Please enter number only.')
 //     }
 //     else {
 //       setPhone(e.target.value)
@@ -1023,7 +1093,7 @@ export default SignUp;
 //       console.log(phone.length)
 //       setNumAvail("")
 //       setNumExist("")
-//       setIndNumError("Maximum 10 value should be enter")
+//       setIndNumError("Enter 10 digit mobile number.")
 //     }
 //     else if (countryId && phone.length < 10) {
 //       console.log(phone.length)
@@ -1072,7 +1142,7 @@ export default SignUp;
 //   //zip oncahnge
 //   const zipValue = (e) => {
 //     if (isNaN(e.target.value)) {
-//       setZipError("Please enter number only")
+//       setZipError("Please enter number only.")
 //     }
 //     else {
 //       setZipCode(e.target.value)
@@ -1189,7 +1259,7 @@ export default SignUp;
 //       .then(function (response) {
 //         console.log("res-", response);
 //         if (response.data.code === 1) {
-//           var variable = "Signup successfully."
+//           var variable = "Signed up successfully."
 //           Alerts.SuccessNormal(variable)
           // localStorage.setItem("userid", JSON.stringify(response.data.id));
           // localStorage.setItem("custEmail", JSON.stringify(response.data.user_id));
@@ -1197,7 +1267,7 @@ export default SignUp;
 //         } else if (response.data.code === 0) {
 //           console.log("res -", response.data.result);
 //           setLoad(false);
-//           Alerts.ErrorNormal("Incorrect OTP , please try again.")
+//           Alerts.ErrorNormal("Incorrect OTP, please try again.")
 //         }
 //       })
 //       .catch((error) => {
