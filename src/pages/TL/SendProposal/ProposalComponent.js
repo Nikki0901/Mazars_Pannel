@@ -125,8 +125,8 @@ function ProposalComponent(props) {
           console.log("Please select no of installment --", installment)
         } else
           if (!amount || !date) {
-            Alerts.ErrorNormal(`please enter all fields .`)
-            console.log("please enter all fields")
+            Alerts.ErrorNormal(`Please enter all fields.`)
+            console.log("Please enter all fields")
           } else if (amount && date) {
             console.log("all deatils ** here --")
 
@@ -138,13 +138,13 @@ function ProposalComponent(props) {
                 // arrAmount.push(amount[i])
                 // arrDate.push(date[i])
                 if (amount[i] == "" || amount[i] == undefined || amount[i] <= 0) {
-                  Alerts.ErrorNormal(`Amount is blank.`)
-                  console.log("amount is blank---")
+                  Alerts.ErrorNormal(`Please enter amount`)
+                  console.log("Please enter amount")
                   return false
                 }
                 if (date[i] == "" || date[i] == undefined) {
-                  Alerts.ErrorNormal(`Date is blank.`)
-                  console.log("date is blank---")
+                  Alerts.ErrorNormal(`Please enter date`)
+                  console.log("Please enter date")
                   return false
                 }
               }
@@ -355,12 +355,10 @@ function ProposalComponent(props) {
                     <input
                       type="date"
                       name="p_inst_date"
-                      required
                       className={classNames("form-control", {
                         "is-invalid": errors.p_inst_date
                       })}
-
-                      ref={register}
+                      ref={register({ required: true })}
                       placeholder="Enter Hourly basis"
                       min={item}
                     />

@@ -21,6 +21,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 import Swal from "sweetalert2";
 import CommonServices from "../../common/common";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 function InprogressAllocation() {
@@ -38,6 +39,11 @@ function InprogressAllocation() {
     setAssignNo(key)
   };
 
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getQueriesData();
@@ -311,6 +317,18 @@ function InprogressAllocation() {
                             ></i>
                           </Link>
                         </div>
+
+                        <div title="View Discussion Message">
+                          <i
+                            class="fa fa-comments-o"
+                            style={{
+                              fontSize: 16,
+                              cursor: "pointer",
+                              color: "orange"
+                            }}
+                            onClick={() => ViewDiscussionToggel(row.assign_no)}
+                          ></i>
+                        </div>
                       </div>
                       :
                       null
@@ -401,6 +419,14 @@ function InprogressAllocation() {
             assignNo={assignNo}
             getQueriesData={getQueriesData}
           />
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getQueriesData}
+          />
+
         </CardBody>
       </Card>
     </div>

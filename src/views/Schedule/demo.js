@@ -138,8 +138,6 @@ function Demo() {
 
   const commitChanges = ({ added, changed, deleted }) => {
     console.log("added", added)
-
-
   };
 
 
@@ -257,8 +255,8 @@ function Demo() {
         <EditingState onCommitChanges={commitChanges} />
         <EditRecurrenceMenu />
 
-        <DayView startDayHour={10} endDayHour={24} />
-        <WeekView startDayHour={10} endDayHour={19} />
+        <DayView startDayHour={0} endDayHour={24} />
+        <WeekView startDayHour={0} endDayHour={24} />
 
         <Appointments appointmentComponent={myAppointment} />
 

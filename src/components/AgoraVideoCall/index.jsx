@@ -1,9 +1,16 @@
 import React from "react";
 import { merge } from "lodash";
 import AgoraRTC from "agora-rtc-sdk";
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import axios from "axios";
 
 import "./canvas.css";
 import "../../assets/fonts/css/icons.css";
+
+
+var customer_id = "d339577a294c458c86d8a78b474141fc";
+var customer_secret = "1a61a4bef2144e78be6f671d5cf3fc32";
+
 
 const tile_canvas = {
   "1": ["span 12/span 24"],
@@ -367,7 +374,7 @@ class AgoraCanvas extends React.Component {
       this.client = null;
       this.localStream = null;
       // redirect to index
-      window.location.hash = "/customer/assignment";
+      window.location.hash = "/customer/schedule";
     }
   };
 
@@ -443,6 +450,61 @@ class AgoraCanvas extends React.Component {
     stream.setVideoProfile(videoProfile);
     return stream;
   };
+
+
+
+//   function AquireRecording(){
+//     var settingsAquire = {
+    //  "async": true,
+    //  "crossDomain": true,
+//      "url": "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/acquire",
+//      "method": "POST",
+//      "headers": {
+//        "content-type": "application/json;charset=utf-8",
+//        "authorization": "Basic "+encodedString,
+//        "cache-control": "no-cache",
+//      },
+//      "processData": false,
+//      "data": "{\n  \"cname\": \""+channelName+"\",\n  \"uid\": \""+uid+"\",\n  \"clientRequest\":{\n  }\n}"
+//    }
+//    $.ajax(settingsAquire).done(function (response) {
+//      console.log(response);
+//      resourceID = response["resourceId"];
+//      console.log(resourceID);
+//      localStorage.setItem("resourceID", resourceID);
+//      StartRecording(resourceID);
+//    });
+//  }
+
+  // $.appId
+
+   encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
+
+  recordStream = () => {
+    console.log("recordStream call")
+
+    let formData = new FormData();
+    formData.append("uid", 1);
+    formData.append("cname", this.props.channel);
+
+    axios({
+      method: "POST",
+      headers: {
+        "content-type": "application/json;charset=utf-8",
+        "authorization": "Basic "+this.encodedString,
+        "cache-control": "no-cache",
+      },
+      url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/acquire`,
+      data: formData,
+    })
+      .then(function (response) {
+        console.log("res-", response);      
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
 
   render() {
 
@@ -526,6 +588,21 @@ class AgoraCanvas extends React.Component {
       </span>
     );
 
+
+
+    const recordingBtn = (
+      <span
+        onClick={this.recordStream}
+        className={
+          this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
+        }
+        title="Record"
+      >
+        <RecordVoiceOverIcon />
+      </span>
+    );
+
+
     return (
       <div id="ag-canvas" style={style}>
         <div className="ag-btn-group">
@@ -543,6 +620,7 @@ class AgoraCanvas extends React.Component {
           }
           {switchDisplayBtn}
           {hideRemoteBtn}
+          {recordingBtn}
         </div>
       </div>
     );
