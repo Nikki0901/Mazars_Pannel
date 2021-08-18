@@ -434,3 +434,15 @@ function InprogressAllocation() {
 }
 
 export default InprogressAllocation;
+
+
+const arr = [
+  { name: "nitin", add: "noida" },
+  { name: "nitin", add: "noida" },
+  { name: "nitin", add: "noida" },
+  { name: "nitin", add: "noida" },
+  { name: "nitin", add: "noida" },
+  { name: "nitin", add: "noida" },
+
+  { name: "nitin", add: "noida" },
+]

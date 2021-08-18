@@ -259,8 +259,7 @@ function ProposalTab() {
                 return (
                     <>
                         {row.statuscode === "6" ? null : (
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-
+                            <div style={{ display: "flex", justifyContent: "space-between", width: "80px" }}>
                                 <div title="Send Message">
                                     <Link
                                         to={{
@@ -278,31 +277,11 @@ function ProposalTab() {
                                             style={{
                                                 fontSize: 16,
                                                 cursor: "pointer",
-                                                marginLeft: "8px",
                                                 color: "blue"
                                             }}
                                         ></i>
                                     </Link>
                                 </div>
-
-                                {row.status == "Accepted; Proposal" ?
-                                    null :
-                                    <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
-                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
-                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
-                                                <i
-                                                    class="fa fa-share"
-                                                    style={{
-                                                        color: "blue",
-                                                        fontSize: "14px",
-                                                    }}
-                                                ></i>
-                                            </Link>
-                                        </div>
-
-
-                                    </div>
-                                }
 
                                 <div title="View Discussion Message">
                                     <i
@@ -315,6 +294,37 @@ function ProposalTab() {
                                         onClick={() => ViewDiscussionToggel(row.assign_no)}
                                     ></i>
                                 </div>
+
+                                <div>
+                                    {row.status == "Accepted; Proposal" ?
+                                        <div style={{ cursor: "pointer" }} title="View Proposal">
+                                            <a
+                                                href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                                                target="_blank"
+                                            >
+                                                <i
+                                                    class="fa fa-eye"
+                                                    style={{ color: "green", fontSize: "16px" }}
+                                                />
+                                            </a>
+                                        </div>
+                                        :
+                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
+                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                <i
+                                                    class="fa fa-share"
+                                                    style={{
+                                                        color: "blue",
+                                                        fontSize: "13px",
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+                                    }
+                                </div>
+
+
+
                             </div>
                         )}
                     </>

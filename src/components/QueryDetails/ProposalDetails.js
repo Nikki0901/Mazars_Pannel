@@ -279,6 +279,10 @@ function ProposalDetails({
               <th scope="row">Payment Outstanding</th>
               <td>{accepted_amount - payment_received}</td>
             </tr>
+            <tr>
+              <th scope="row">Payment declined reason</th>
+              <td>{p.notes}</td>
+            </tr>
             {
               p.paid_status == "2" &&
               <tr>

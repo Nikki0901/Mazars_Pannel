@@ -266,38 +266,10 @@ function AllProposal() {
                                     </Link>
                                 ) : null}
                             </div>
-                            {
-                                row.status == "Customer Declined; Proposal" ?
-                                    null
-                                    :
-                                    <div title="Send Message">
-                                        <Link
-                                            to={{
-                                                pathname: `/teamleader/chatting/${row.id}`,
-                                                obj: {
-                                                    message_type: "2",
-                                                    query_No: row.assign_no,
-                                                    query_id: row.id,
-                                                    routes: `/teamleader/proposal`
-                                                }
-                                            }}
-                                        >
-                                            <i
-                                                class="fa fa-comments-o"
-                                                style={{
-                                                    fontSize: 16,
-                                                    cursor: "pointer",
-                                                    marginLeft: "8px",
-                                                    color: "blue"
-                                                }}
-                                            ></i>
-                                        </Link>
-                                    </div>
-                            }
 
                             <div style={{ cursor: "pointer", marginLeft: "8px" }} title="View Proposal">
                                 <a
-                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.id}`}
+                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.id}&viewpdf=1`}
                                     target="_blank"
                                 >
                                     <i
@@ -305,6 +277,38 @@ function AllProposal() {
                                         style={{ color: "green", fontSize: "16px" }}
                                     />
                                 </a>
+                            </div>
+
+
+                            <div>
+                                {
+                                    row.status == "Customer Declined; Proposal" ?
+                                        null
+                                        :
+                                        <div title="Send Message">
+                                            <Link
+                                                to={{
+                                                    pathname: `/teamleader/chatting/${row.id}`,
+                                                    obj: {
+                                                        message_type: "2",
+                                                        query_No: row.assign_no,
+                                                        query_id: row.id,
+                                                        routes: `/teamleader/proposal`
+                                                    }
+                                                }}
+                                            >
+                                                <i
+                                                    class="fa fa-comments-o"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        cursor: "pointer",
+                                                        marginLeft: "8px",
+                                                        color: "blue"
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+                                }
                             </div>
 
                             <div title="View Discussion Message">

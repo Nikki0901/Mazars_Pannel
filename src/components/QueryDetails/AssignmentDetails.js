@@ -127,6 +127,12 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal, reports, ass
                         <td style={{ marginLeft: "15px", color: "green" }}>
                           {p.stages_type == 2 && "Draft Report" || p.stages_type == 3 && "Final Report"}
                         </td>
+                        <td>
+                          {p.status == "3"
+                            ?
+                            <p className="declined">Discarted</p>
+                            : null}
+                        </td>
                       </tr>
                     </div>
                   ))

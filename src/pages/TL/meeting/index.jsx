@@ -5,6 +5,7 @@ import "./meeting.css";
 import AgoraVideoCall from "../AgoraVideoCall/index";
 import { AGORA_APP_ID } from "../../../agora.config";
 
+
 class Meeting extends React.Component {
   constructor(props) {
     super(props);
@@ -26,8 +27,6 @@ class Meeting extends React.Component {
   render() {
     console.log("channelid-",this.channel)
     console.log("render")
-
-
 
     return (
       <div className="wrapper meeting">

@@ -16,6 +16,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
 import Alerts from "../../common/Alerts";
 import Swal from "sweetalert2";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -31,7 +32,12 @@ function InprogressProposal() {
     const [id, setId] = useState(null);
     const [reject, setRejected] = useState(true);
 
-
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
     useEffect(() => {
         getProposalData();
     }, []);
@@ -48,11 +54,6 @@ function InprogressProposal() {
                 }
             });
     };
-
-
-
-
-
 
     const columns = [
         {
@@ -245,8 +246,7 @@ function InprogressProposal() {
                 return (
                     <>
                         {row.statuscode === "6" ? null : (
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-
+                            <div style={{ display: "flex", justifyContent: "space-between", width: "80px" }}>
                                 <div title="Send Message">
                                     <Link
                                         to={{
@@ -264,37 +264,54 @@ function InprogressProposal() {
                                             style={{
                                                 fontSize: 16,
                                                 cursor: "pointer",
-                                                marginLeft: "8px",
                                                 color: "blue"
                                             }}
                                         ></i>
                                     </Link>
                                 </div>
 
-                                {row.negotiated_amount === "0" &&
-                                    row.accepted_amount === "0" ? (
-                                    <div style={{ display: "flex", width: "80px", justifyContent: "space-evenly" }}>
+                                <div title="View Discussion Message">
+                                    <i
+                                        class="fa fa-comments-o"
+                                        style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            color: "orange"
+                                        }}
+                                        onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                    ></i>
+                                </div>
+
+                                <div>
+                                    {row.status == "Accepted; Proposal" ?
+                                        <div style={{ cursor: "pointer" }} title="View Proposal">
+                                            <a
+                                                href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                                                target="_blank"
+                                            >
+                                                <i
+                                                    class="fa fa-eye"
+                                                    style={{ color: "green", fontSize: "16px" }}
+                                                />
+                                            </a>
+                                        </div>
+                                        :
                                         <div style={{ cursor: "pointer" }} title="Proposal Accepted">
                                             <Link to={`/customer/proposal_view/${row.q_id}`}>
                                                 <i
-                                                    class="fa fa-check"
+                                                    class="fa fa-share"
                                                     style={{
                                                         color: "blue",
-                                                        fontSize: "16px",
+                                                        fontSize: "13px",
                                                     }}
                                                 ></i>
                                             </Link>
                                         </div>
-                                        <div style={{ cursor: "pointer" }} title="Rejected">
-                                            <i
-                                                class="fa fa-times"
-                                                style={{ color: "red", fontSize: "16px" }}
-                                                onClick={() => rejected(row.q_id)}
-                                            ></i>
-                                        </div>
+                                    }
+                                </div>
 
-                                    </div>
-                                ) : null}
+
+
                             </div>
                         )}
                     </>
@@ -375,6 +392,12 @@ function InprogressProposal() {
                         classes="table-responsive"
                     />
 
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getProposalData}
+                    />
                 </CardBody>
             </Card>
         </div>

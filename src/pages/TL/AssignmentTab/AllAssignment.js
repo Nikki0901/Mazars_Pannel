@@ -337,9 +337,7 @@ function AssignmentTab() {
               {
                 !row.final_report && row.client_discussion == "completed" &&
                   !(
-                    row.delivery_report == "completed" &&
-                    row.draft_report == "completed" &&
-                    row.final_discussion == "completed"
+                    row.delivery_report == "completed"
                   ) ? (
                   <div title="upload Pdf">
                     <p
@@ -352,15 +350,13 @@ function AssignmentTab() {
                   </div>
                 ) : null}
 
-
-              {row.other_stage == "completed" ? null : (
+              {row.delivery_report == "completed" ? null : (
                 <div title="upload Pdf">
                   <p
                     style={{ cursor: "pointer", color: "red" }}
                     onClick={() => uploadFinalReport(row)}
                   >
                     {row.client_discussion == "completed" &&
-                      row.delivery_report == "completed" &&
                       row.draft_report == "completed" &&
                       row.final_discussion == "completed"
                       ? (

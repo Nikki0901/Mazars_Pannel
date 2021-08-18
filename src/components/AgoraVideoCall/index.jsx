@@ -453,56 +453,38 @@ class AgoraCanvas extends React.Component {
 
 
 
-//   function AquireRecording(){
-//     var settingsAquire = {
-    //  "async": true,
-    //  "crossDomain": true,
-//      "url": "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/acquire",
-//      "method": "POST",
-//      "headers": {
-//        "content-type": "application/json;charset=utf-8",
-//        "authorization": "Basic "+encodedString,
-//        "cache-control": "no-cache",
-//      },
-//      "processData": false,
-//      "data": "{\n  \"cname\": \""+channelName+"\",\n  \"uid\": \""+uid+"\",\n  \"clientRequest\":{\n  }\n}"
-//    }
-//    $.ajax(settingsAquire).done(function (response) {
-//      console.log(response);
-//      resourceID = response["resourceId"];
-//      console.log(resourceID);
-//      localStorage.setItem("resourceID", resourceID);
-//      StartRecording(resourceID);
-//    });
-//  }
+// startRecording = (resourceID) => {
+//   console.log("resourceID - ", resourceID);
+// };
 
-  // $.appId
-
-   encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
+encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
 
   recordStream = () => {
     console.log("recordStream call")
+    var data = JSON.stringify({
+      "cname":"demo",
+      "uid":"527841",
+      "clientRequest":{ "resourceExpiredHour": 24}});
 
-    let formData = new FormData();
-    formData.append("uid", 1);
-    formData.append("cname", this.props.channel);
-
-    axios({
-      method: "POST",
-      headers: {
-        "content-type": "application/json;charset=utf-8",
-        "authorization": "Basic "+this.encodedString,
-        "cache-control": "no-cache",
-      },
+      var config = {
+      method: 'post',
       url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/acquire`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);      
-      })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': 'Basic '+this.encodedString,
+      },
+      data : data
+      };
+        axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response));
+          console.log("resid",response)
+          // var resID = response.data.resourceId
+          // this.startRecording(resID);    
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
   };
 
 
@@ -628,3 +610,7 @@ class AgoraCanvas extends React.Component {
 }
 
 export default AgoraCanvas;
+
+
+// https://mazars.multitvsolution.com/#/customer/dashboard
+

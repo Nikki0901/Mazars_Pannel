@@ -17,12 +17,19 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../components/Search-Filter/AdminFilter";
 import Records from "../../components/Records/Records";
+import DiscardReport from "../../pages/Admin/AssignmentTab/DiscardReport";
 
 
 function PendingForAcceptence({ pendingProposal }) {
   const [proposalDisplay, setProposalDisplay] = useState([]);
   const [records, setRecords] = useState([]);
 
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getPendingAcceptedProposal();
@@ -38,9 +45,6 @@ function PendingForAcceptence({ pendingProposal }) {
       }
     });
   };
-
-
-
 
 
   const columns = [
@@ -225,33 +229,63 @@ function PendingForAcceptence({ pendingProposal }) {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "11px", width: "65px" };
+        return { fontSize: "11px", width: "95px" };
       },
       formatter: function (cell, row) {
         return (
           <>
-            <div title="Send Message">
-              <Link
-                to={{
-                  pathname: `/admin/chatting/${row.q_id}`,
-                  obj: {
-                    message_type: "2",
-                    query_No: row.assign_no,
-                    query_id: row.q_id,
-                    routes: `/admin/proposal`
-                  }
-                }}
-              >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+
+              <div style={{ cursor: "pointer" }} title="View Proposal">
+                <a
+                  href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                  target="_blank"
+                >
+                  <i
+                    class="fa fa-eye"
+                    style={{ color: "green", fontSize: "16px" }}
+                  />
+                </a>
+              </div>
+
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "2",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/admin/proposal`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
                 <i
                   class="fa fa-comments-o"
                   style={{
                     fontSize: 16,
                     cursor: "pointer",
-                    marginLeft: "8px",
-                    color: "blue"
+                    color: "orange"
                   }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
                 ></i>
-              </Link>
+              </div>
+
             </div>
           </>
         );
@@ -284,6 +318,12 @@ function PendingForAcceptence({ pendingProposal }) {
             classes="table-responsive"
           />
 
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getPendingAcceptedProposal}
+          />
         </CardBody>
       </Card>
     </div>

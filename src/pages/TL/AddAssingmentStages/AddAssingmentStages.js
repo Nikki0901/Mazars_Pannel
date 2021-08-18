@@ -33,7 +33,7 @@ function AddAssingmentStages() {
 
   const getAssignmentList = () => {
     axios
-      .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}`)
+      .get(`${baseUrl}/tl/getUploadedProposals?assign_no=${id}&uid=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         console.log("dt -", res.data.result[0].client_discussion);
@@ -427,40 +427,40 @@ function AddAssingmentStages() {
                         </div>
                       </div>
 
-                     
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label
-                                style={{
-                                  fontSize: "20px",
-                                  fontWeight: "500",
-                                  paddingTop: "30px",
-                                }}
-                              >
-                                Awaiting Completion
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <select
-                                class="form-control"
-                                ref={register}
-                                name="other_stage"
-                              >
-                                <option value="inprogress">Inprogress</option>
-                                <option value="completed">Completed</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <div></div>
-                            </div>
+
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label
+                              style={{
+                                fontSize: "20px",
+                                fontWeight: "500",
+                                paddingTop: "30px",
+                              }}
+                            >
+                              Awaiting Completion
+                            </label>
                           </div>
                         </div>
-                        
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <select
+                              class="form-control"
+                              ref={register}
+                              name="other_stage"
+                            >
+                              <option value="inprogress">Inprogress</option>
+                              <option value="completed">Completed</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <div></div>
+                          </div>
+                        </div>
+                      </div>
+
                       <br />
                       <div class="form-group">
                         {

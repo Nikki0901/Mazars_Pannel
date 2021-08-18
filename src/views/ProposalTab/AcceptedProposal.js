@@ -18,6 +18,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Records from "../../components/Records/Records";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 function AcceptedProposal() {
@@ -31,7 +32,12 @@ function AcceptedProposal() {
     const [id, setId] = useState(null);
     const [reject, setRejected] = useState(true);
 
-
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getProposalData();
@@ -208,6 +214,60 @@ function AcceptedProposal() {
                 return { fontSize: "11px", color: "#21a3ce" };
             },
         },
+        {
+            text: "Action",
+            dataField: "",
+            style: {
+                fontSize: "11px",
+            },
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
+            formatter: function (cell, row) {
+                return (
+                    <>
+                        {row.statuscode === "6" ? null : (
+                            <div style={{ display: "flex", justifyContent: "space-between", width: "60px" }}>
+                                <div title="Send Message">
+                                    <Link
+                                        to={{
+                                            pathname: `/customer/chatting/${row.q_id}`,
+                                            obj: {
+                                                message_type: "2",
+                                                query_No: row.assign_no,
+                                                query_id: row.q_id,
+                                                routes: `/customer/proposal`
+                                            }
+                                        }}
+                                    >
+                                        <i
+                                            class="fa fa-comments-o"
+                                            style={{
+                                                fontSize: 16,
+                                                cursor: "pointer",
+                                                color: "blue"
+                                            }}
+                                        ></i>
+                                    </Link>
+                                </div>
+
+                                <div title="View Discussion Message">
+                                    <i
+                                        class="fa fa-comments-o"
+                                        style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            color: "orange"
+                                        }}
+                                        onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                    ></i>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                );
+            },
+        },
     ];
 
     return (
@@ -234,6 +294,12 @@ function AcceptedProposal() {
                         classes="table-responsive"
                     />
 
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getProposalData}
+                    />
                 </CardBody>
             </Card>
         </div>

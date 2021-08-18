@@ -85,6 +85,7 @@ function Paid() {
     getPaymentStatus();
   }, []);
 
+
   const getPaymentStatus = () => {
     axios.get(`${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(userId)}`).then((res) => {
       console.log(res);
@@ -92,7 +93,6 @@ function Paid() {
         setPayment(res.data.result);
         setCount(res.data.result.length);
         setRecords(res.data.result.length);
-
       }
     });
   };

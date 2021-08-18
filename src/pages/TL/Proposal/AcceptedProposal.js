@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -23,6 +24,13 @@ function AcceptedProposal() {
         setPaymentModal(!addPaymentModal);
         setId(key.assign_no);
     };
+
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getProposalList();
@@ -209,6 +217,101 @@ function AcceptedProposal() {
                 return { fontSize: "11px", color: "#21a3ce" };
             },
         },
+        {
+            text: "Action",
+            dataField: "",
+            headerStyle: () => {
+                return { fontSize: "12px", width: "110px" };
+            },
+            formatter: function (cell, row) {
+                return (
+                    <>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div>
+                                {row.status_code == "4" ? (
+                                    <Link to={`/teamleader/edit-proposal/${row.id}`}>
+                                        <i
+                                            className="fa fa-edit"
+                                            style={{
+                                                fontSize: "16px",
+                                                cursor: "pointer",
+                                                color: "green",
+                                            }}
+                                        ></i>
+                                    </Link>
+                                ) : row.status_code == "2" ? (
+                                    <Link to={`/teamleader/sendproposal/${row.id}`}>
+                                        <i
+                                            class="fa fa-mail-forward"
+                                            style={{
+                                                fontSize: "14px",
+                                                cursor: "pointer",
+                                            }}
+                                        ></i>
+                                    </Link>
+                                ) : null}
+                            </div>
+
+                            <div style={{ cursor: "pointer", marginLeft: "8px" }} title="View Proposal">
+                                <a
+                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.id}&viewpdf=1`}
+                                    target="_blank"
+                                >
+                                    <i
+                                        class="fa fa-eye"
+                                        style={{ color: "green", fontSize: "16px" }}
+                                    />
+                                </a>
+                            </div>
+
+
+                            <div>
+                                {
+                                    row.status == "Customer Declined; Proposal" ?
+                                        null
+                                        :
+                                        <div title="Send Message">
+                                            <Link
+                                                to={{
+                                                    pathname: `/teamleader/chatting/${row.id}`,
+                                                    obj: {
+                                                        message_type: "2",
+                                                        query_No: row.assign_no,
+                                                        query_id: row.id,
+                                                        routes: `/teamleader/proposal`
+                                                    }
+                                                }}
+                                            >
+                                                <i
+                                                    class="fa fa-comments-o"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        cursor: "pointer",
+                                                        marginLeft: "8px",
+                                                        color: "blue"
+                                                    }}
+                                                ></i>
+                                            </Link>
+                                        </div>
+                                }
+                            </div>
+
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
+                        </div>
+                    </>
+                );
+            },
+        },
     ];
 
     return (
@@ -230,6 +333,12 @@ function AcceptedProposal() {
                         data={proposal}
                         columns={columns}
                         rowIndex
+                    />
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getProposalList}
                     />
                 </CardBody>
             </Card>
