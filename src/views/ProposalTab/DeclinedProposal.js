@@ -215,6 +215,13 @@ function DeclinedProposal() {
                 return { fontSize: "11px", color: "#21a3ce" };
             },
         },
+        {
+            text: "Action",
+            dataField: "",
+            headerStyle: () => {
+                return { fontSize: "11px" };
+            },
+        }
     ];
 
     return (

@@ -5,8 +5,8 @@ import { baseUrl } from "../../config/config";
 import { Tab, Tabs, TabPanel, TabList } from "react-tabs";
 
 
+import Unpaid from "./Unpaid";
 import Paid from "./Paid";
-import UnPaid from "./UnPaid";
 import AllPayment from "./AllPayment";
 
 
@@ -113,11 +113,11 @@ function PaymentStatus(props) {
           </TabPanel>
 
           <TabPanel>
-            <Paid />
+            <Unpaid />
           </TabPanel>
 
           <TabPanel>
-            <UnPaid />
+            <Paid />
           </TabPanel>
         </Tabs>
       </div>

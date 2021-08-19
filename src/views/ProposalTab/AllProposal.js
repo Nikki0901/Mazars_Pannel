@@ -323,7 +323,6 @@ function ProposalTab() {
                                     }
                                 </div>
 
-
                             </div>
                         )}
                     </>
