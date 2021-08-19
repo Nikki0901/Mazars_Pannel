@@ -253,18 +253,21 @@ function AllProposalComponent({ allProposal }) {
           <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
 
-
-              <div style={{ cursor: "pointer" }} title="View Proposal">
-                <a
-                  href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
-                  target="_blank"
-                >
-                  <i
-                    class="fa fa-eye"
-                    style={{ color: "green", fontSize: "16px" }}
-                  />
-                </a>
-              </div>
+              {row.statuscode > "3" ?
+                <div style={{ cursor: "pointer" }} title="View Proposal">
+                  <a
+                    href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                    target="_blank"
+                  >
+                    <i
+                      class="fa fa-eye"
+                      style={{ color: "green", fontSize: "16px" }}
+                    />
+                  </a>
+                </div>
+                :
+                null
+              }
 
 
               <div title="Send Message">

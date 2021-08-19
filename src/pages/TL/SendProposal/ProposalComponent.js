@@ -91,6 +91,7 @@ function ProposalComponent(props) {
     if (payment.label == "lumpsum") {
       setDate(lumsum)
     }
+    
     // var arrAmount = []
     // var arrDate = []
 
@@ -242,7 +243,7 @@ function ProposalComponent(props) {
   };
 
   const installmentHandler = (key) => {
-    // console.log("key", key)
+    console.log("key", key)
     setInstallment(key)
   }
 

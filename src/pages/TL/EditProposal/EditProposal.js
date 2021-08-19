@@ -253,8 +253,11 @@ function EditComponent() {
     setDate(array2);
   };
 
+  const installmentHandler = (key) => {
+    console.log("key", key)
+    setInstallment(key)
+  }
 
-  console.log("installment : ", installment.label)
 
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
@@ -381,7 +384,7 @@ function EditComponent() {
                       <label>No of Installments</label>
                       <Select
                         closeMenuOnSelect={true}
-                        onChange={setInstallment}
+                        onChange={(e => installmentHandler(e))}
                         value={installment}
                         options={noInstallments}
                       />
