@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
 import {
     Card,
     CardHeader,
     CardBody,
-    CardTitle,
     Row,
     Col,
     Table,
@@ -20,8 +18,8 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import PublishIcon from '@material-ui/icons/Publish';
 import AdditionalQueryModal from "./AdditionalQueryModal";
 import CommonServices from "../../common/common";
-import DiscardReport from "../AssignmentTab/DiscardReport";
 import Loader from "../../components/Loader/Loader";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -32,13 +30,13 @@ function AllQueriesData() {
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const [assignNo, setAssignNo] = useState('');
     const [additionalQuery, setAdditionalQuery] = useState(false);
     const additionalHandler = (key) => {
         setAdditionalQuery(!additionalQuery);
         setAssignNo(key)
     };
 
+    const [assignNo, setAssignNo] = useState('');
     const [ViewDiscussion, setViewDiscussion] = useState(false);
     const ViewDiscussionToggel = (key) => {
         setViewDiscussion(!ViewDiscussion);
@@ -332,6 +330,7 @@ function AllQueriesData() {
         },
     ];
 
+
     //check
     const del = (id) => {
         console.log("del", id);
@@ -422,7 +421,7 @@ function AllQueriesData() {
                                 />
                             </>
                     }
-                    
+
                     <AdditionalQueryModal
                         additionalHandler={additionalHandler}
                         additionalQuery={additionalQuery}

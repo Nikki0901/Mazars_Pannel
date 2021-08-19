@@ -158,7 +158,12 @@ function InprogressProposal() {
         )
       },
     },
-
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", textAlign: "center", width: "130px" };
+      }
+    }
   ];
 
   return (

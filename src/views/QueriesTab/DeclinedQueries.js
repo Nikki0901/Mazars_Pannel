@@ -17,6 +17,9 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
 import Records from "../../components/Records/Records";
 import CommonServices from "../../common/common";
+import DiscardReport from "../AssignmentTab/DiscardReport";
+import FeedbackIcon from '@material-ui/icons/Feedback';
+import PublishIcon from '@material-ui/icons/Publish';
 
 
 
@@ -27,6 +30,12 @@ function DeclinedQueries() {
   const [queriesCount, setCountQueries] = useState(null);
   const [records, setRecords] = useState([]);
 
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getQueriesData();
@@ -141,6 +150,37 @@ function DeclinedQueries() {
           </>
         );
       },
+    },
+    {
+      text: "Expected Delivery Date",
+      dataField: "exp_delivery_date",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.exp_delivery_date);
+
+        return (
+          <>
+            {
+              row.status == "Declined Query"
+                ? null
+                :
+                row.status_code >= "1" ?
+                  CommonServices.removeTime(row.exp_delivery_date)
+                  :
+                  null
+            }
+          </>
+        )
+      },
+    },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", textAlign: "center", width: "130px" };
+      }
     },
   ];
 

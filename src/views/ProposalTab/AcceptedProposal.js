@@ -228,6 +228,7 @@ function AcceptedProposal() {
                     <>
                         {row.statuscode === "6" ? null : (
                             <div style={{ display: "flex", justifyContent: "space-between", width: "60px" }}>
+
                                 <div title="Send Message">
                                     <Link
                                         to={{
@@ -262,6 +263,19 @@ function AcceptedProposal() {
                                         onClick={() => ViewDiscussionToggel(row.assign_no)}
                                     ></i>
                                 </div>
+
+                                <div style={{ cursor: "pointer" }} title="View Proposal">
+                                    <a
+                                        href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                                        target="_blank"
+                                    >
+                                        <i
+                                            class="fa fa-eye"
+                                            style={{ color: "green", fontSize: "16px" }}
+                                        />
+                                    </a>
+                                </div>
+
                             </div>
                         )}
                     </>

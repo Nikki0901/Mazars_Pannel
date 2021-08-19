@@ -254,38 +254,10 @@ export default App;
 
 
 
-// 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
+// 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
 
 
 
 
 
 
-
-
-{/* <Route exact path="/" component={Start} />
-          <Route exact path="/abc" component={Layout} />
-
-          <Route exact path="/signin" component={Signin} />
-          <Route exact path="/signup" component={SignUp} />
-          <Route exact path="/register-yourself" component={RegisterYourSelf} />
-          <Route exact path="/verify-otp" component={VerifyOtp} />
-          <Route exact path="/otp" component={VerifyOtpLogin} />
-          <Route exact path="/questionnaire-page" component={QuestionnairePage} />
-             
-          <Route exact path="/questionnaire" component={Questionnaire} />    
-          <Route exact path="/feedback" component={Feedback} />
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/my-assingment/:id" component={MyAssingment} />
-          <Route exact path="/addfresh" component={AddFreshAssingment} /> */}
-{/*  */ }
-
-  // <Switch>
-      //   <Route exact path="/" component={Login} />
-      //   <PrivateRoute
-      //     path="/admin"
-      //     render={(props) => <AdminLayout {...props} />}
-      //   />
-
-
-      // </Switch>
