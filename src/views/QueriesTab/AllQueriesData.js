@@ -317,6 +317,7 @@ function AllQueriesData() {
                                                         onClick={() => ViewDiscussionToggel(row.assign_no)}
                                                     ></i>
                                                 </div>
+                                            
                                             </div>
                                             :
                                             null

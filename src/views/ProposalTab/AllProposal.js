@@ -296,91 +296,50 @@ function ProposalTab() {
                                 </div>
 
                                 <div>
-                                    {row.status == "Accepted; Proposal" ?
-                                        <div style={{ cursor: "pointer" }} title="View Proposal">
-                                            <a
-                                                href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
-                                                target="_blank"
-                                            >
-                                                <i
-                                                    class="fa fa-eye"
-                                                    style={{ color: "green", fontSize: "16px" }}
-                                                />
-                                            </a>
-                                        </div>
-                                        :
-                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
-                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
-                                                <i
-                                                    class="fa fa-share"
-                                                    style={{
-                                                        color: "blue",
-                                                        fontSize: "13px",
-                                                    }}
-                                                ></i>
-                                            </Link>
-                                        </div>
+                                    {
+                                        row.statuscode > 6 ?
+                                            <div style={{ cursor: "pointer" }} title="View EL">
+                                                <a
+                                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                                                    target="_blank"
+                                                >
+                                                    <i
+                                                        class="fa fa-eye"
+                                                        style={{ color: "green", fontSize: "16px" }}
+                                                    />
+                                                </a>
+                                            </div>
+                                            :
+                                            null
+                                    }
+
+                                    {
+                                        row.statuscode == 4
+                                            ?
+                                            <div style={{ cursor: "pointer" }} title="Proposal Accepted/Rejected">
+                                                <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                    <i
+                                                        class="fa fa-share"
+                                                        style={{
+                                                            color: "blue",
+                                                            fontSize: "13px",
+                                                        }}
+                                                    ></i>
+                                                </Link>
+                                            </div>
+                                            :
+                                            null
                                     }
                                 </div>
 
                             </div>
-                        )}
+                        )
+                        }
                     </>
                 );
             },
         },
     ];
-
-
-
-
-
-    //rejected
-    const rejected = (id) => {
-        console.log("del", id);
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to reject proposal?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, rejected it!",
-        }).then((result) => {
-            if (result.value) {
-                deleteCliente(id);
-            }
-        });
-    };
-
-
-    // delete data
-    const deleteCliente = (key) => {
-
-        let formData = new FormData();
-        formData.append("id", key);
-        formData.append("status", 6);
-
-        axios({
-            method: "POST",
-            url: `${baseUrl}/customers/ProposalAccept`,
-            data: formData,
-        })
-            .then(function (response) {
-                console.log("res-", response);
-                if (response.data.code === 1) {
-                    setRejected(false);
-                    Swal.fire("Rejected!", "Proposal rejected successfully.", "success");
-                    getProposalData();
-                } else {
-                    Swal.fire("Oops...", "Errorr ", "error");
-                }
-            })
-            .catch((error) => {
-                console.log("erroror - ", error);
-            });
-
-    };
 
 
 
@@ -436,5 +395,5 @@ export default ProposalTab;
                                                 onClick={() => rejected(row.q_id)}
                                             ></i>
                                         </div> */}
-  // {row.negotiated_amount === "0" &&
+//   {row.negotiated_amount === "0" &&
 // row.accepted_amount === "0"

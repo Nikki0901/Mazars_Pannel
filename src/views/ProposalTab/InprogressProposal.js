@@ -283,34 +283,41 @@ function InprogressProposal() {
                                 </div>
 
                                 <div>
-                                    {row.status == "Accepted; Proposal" ?
-                                        <div style={{ cursor: "pointer" }} title="View Proposal">
-                                            <a
-                                                href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
-                                                target="_blank"
-                                            >
-                                                <i
-                                                    class="fa fa-eye"
-                                                    style={{ color: "green", fontSize: "16px" }}
-                                                />
-                                            </a>
-                                        </div>
-                                        :
-                                        <div style={{ cursor: "pointer" }} title="Proposal Accepted">
-                                            <Link to={`/customer/proposal_view/${row.q_id}`}>
-                                                <i
-                                                    class="fa fa-share"
-                                                    style={{
-                                                        color: "blue",
-                                                        fontSize: "13px",
-                                                    }}
-                                                ></i>
-                                            </Link>
-                                        </div>
+                                    {
+                                        row.statuscode > 6 ?
+                                            <div style={{ cursor: "pointer" }} title="View EL">
+                                                <a
+                                                    href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
+                                                    target="_blank"
+                                                >
+                                                    <i
+                                                        class="fa fa-eye"
+                                                        style={{ color: "green", fontSize: "16px" }}
+                                                    />
+                                                </a>
+                                            </div>
+                                            :
+                                            null
+                                    }
+
+                                    {
+                                        row.statuscode == 4
+                                            ?
+                                            <div style={{ cursor: "pointer" }} title="Proposal Accepted/Rejected">
+                                                <Link to={`/customer/proposal_view/${row.q_id}`}>
+                                                    <i
+                                                        class="fa fa-share"
+                                                        style={{
+                                                            color: "blue",
+                                                            fontSize: "13px",
+                                                        }}
+                                                    ></i>
+                                                </Link>
+                                            </div>
+                                            :
+                                            null
                                     }
                                 </div>
-
-
 
                             </div>
                         )}

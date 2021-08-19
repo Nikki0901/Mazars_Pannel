@@ -24,63 +24,19 @@ import Records from "../../components/Records/Records";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import Alerts from "../../common/Alerts";
 import PaymentIcon from '@material-ui/icons/Payment';
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
 function InprogressAssignment() {
-  const history = useHistory();
-  const alert = useAlert();
   const userId = window.localStorage.getItem("userid");
   const [assignmentDisplay, setAssignmentDisplay] = useState([]);
   const [assignmentCount, setAssignmentQueries] = useState("");
   const [records, setRecords] = useState([]);
 
-  const [baseMode, SetbaseMode] = useState("avc");
-  const [transcode, SetTranscode] = useState("interop");
-  const [attendeeMode, SetAttendeeMode] = useState("video");
-  const [videoProfile, SetVideoProfile] = useState("480p_4");
 
   const [rejectedItem, setRejectedItem] = useState({});
   const [report, setReport] = useState();
-
-  const [pay, setPay] = useState({
-    pay: "",
-    amount: "",
-    accepted_amount: "",
-    paid_amount: "",
-
-    amount_type: "",
-    amount_fixed: "",
-    amount_hourly: "",
-
-    payment_terms: "",
-    no_of_installment: "",
-    installment_amount: "",
-    due_date: "",
-  });
-
-  const [addPaymentModal, setPaymentModal] = useState(false);
-  const paymentHandler = (key) => {
-    setPaymentModal(!addPaymentModal);
-    setPay({
-      amount: key.accepted_amount,
-      id: key.id,
-      accepted_amount: key.accepted_amount,
-      paid_amount: key.paid_amount,
-
-      amount_type: key.amount_type,
-      amount_fixed: key.amount_fixed,
-      amount_hourly: key.amount_hourly,
-
-
-      payment_terms: key.payment_terms,
-      no_of_installment: key.no_of_installment,
-      installment_amount: key.installment_amount,
-      due_date: key.due_date,
-
-    });
-  };
-
 
 
   const [rejectModal, setRejectModal] = useState(false);
@@ -90,7 +46,6 @@ function InprogressAssignment() {
   };
 
 
-
   const [reportModal, setReportModal] = useState(false);
   const ViewReport = (key) => {
     console.log("key - ", key);
@@ -98,6 +53,13 @@ function InprogressAssignment() {
     setReport(key);
   };
 
+
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getAssignmentData();
@@ -302,7 +264,56 @@ function InprogressAssignment() {
       },
       formatter: priceFormatter,
     },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", textAlign: "center", width: "70px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
 
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "4",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   //accept handler
@@ -376,12 +387,13 @@ function InprogressAssignment() {
             data={assignmentDisplay}
             columns={columns}
           />
-          <PaymentModal
+
+          {/* <PaymentModal
             paymentHandler={paymentHandler}
             addPaymentModal={addPaymentModal}
             pay={pay}
             getProposalData={getAssignmentData}
-          />
+          /> */}
 
           <RejectedModal
             rejectHandler={rejectHandler}
@@ -396,6 +408,14 @@ function InprogressAssignment() {
             report={report}
             getPendingforAcceptance={getAssignmentData}
           />
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentData}
+          />
+
 
         </CardBody>
       </Card>

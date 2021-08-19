@@ -65,7 +65,7 @@ function Paid() {
     console.log("key", key);
     setModal(!modal);
 
-    fetch(`${baseUrl}//admin/getPaymentDetail?id=${key}`, {
+    fetch(`${baseUrl}/admin/getPaymentDetail?id=${key}`, {
       method: "GET",
       headers: new Headers({
         Accept: "application/vnd.github.cloak-preview",

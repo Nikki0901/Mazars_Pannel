@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
-import { baseUrl,ReportUrl } from "../../config/config";
+import { baseUrl, ReportUrl } from "../../config/config";
 import {
   Card,
   CardHeader,
@@ -24,6 +24,7 @@ import Records from "../../components/Records/Records";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import Alerts from "../../common/Alerts";
 import PaymentIcon from '@material-ui/icons/Payment';
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -37,7 +38,7 @@ function CompleteAssignment() {
 
   const [report, setReport] = useState();
 
-  
+
 
   const [reportModal, setReportModal] = useState(false);
   const ViewReport = (key) => {
@@ -46,6 +47,13 @@ function CompleteAssignment() {
     setReport(key);
   };
 
+
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getAssignmentData();
@@ -250,7 +258,56 @@ function CompleteAssignment() {
       },
       formatter: priceFormatter,
     },
- 
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", textAlign: "center", width: "70px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "4",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   //accept handler
@@ -298,7 +355,7 @@ function CompleteAssignment() {
     return null;
   }
 
- 
+
 
 
 
@@ -324,12 +381,18 @@ function CompleteAssignment() {
             data={assignmentDisplay}
             columns={columns}
           />
-         
+
           <ViewAllReportModal
             ViewReport={ViewReport}
             reportModal={reportModal}
             report={report}
             getPendingforAcceptance={getAssignmentData}
+          />
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentData}
           />
 
         </CardBody>

@@ -21,6 +21,7 @@ import ViewAllReportModal from "./ViewAllReport";
 import Records from "../../components/Records/Records";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import Alerts from "../../common/Alerts";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -59,6 +60,12 @@ function AllAssignment() {
     setDataItem(key)
   };
 
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getAssignmentData();
@@ -218,7 +225,57 @@ function AllAssignment() {
         return { fontSize: "12px" };
       },
       formatter: priceFormatter,
-    }
+    },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", textAlign: "center", width: "70px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.id}`,
+                    obj: {
+                      message_type: "4",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/customer/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
 
@@ -235,11 +292,8 @@ function AllAssignment() {
         </>
       );
     }
-
     return null;
   }
-
-
 
   return (
     <>
@@ -272,6 +326,13 @@ function AllAssignment() {
             dataItem={dataItem}
           />
 
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentData}
+          />
+
         </CardBody>
       </Card>
     </>
@@ -280,118 +341,3 @@ function AllAssignment() {
 
 export default AllAssignment;
 
-
-
-// const [pay, setPay] = useState({
-//   pay: "",
-//   amount: "",
-//   accepted_amount: "",
-//   paid_amount: "",
-
-//   amount_type: "",
-//   amount_fixed: "",
-//   amount_hourly: "",
-
-//   payment_terms: "",
-//   no_of_installment: "",
-//   installment_amount: "",
-//   due_date: "",
-// });
-
-// const [addPaymentModal, setPaymentModal] = useState(false);
-// const paymentHandler = (key) => {
-//   setPaymentModal(!addPaymentModal);
-//   setPay({
-//     amount: key.accepted_amount,
-//     id: key.id,
-//     accepted_amount: key.accepted_amount,
-//     paid_amount: key.paid_amount,
-
-//     amount_type: key.amount_type,
-//     amount_fixed: key.amount_fixed,
-//     amount_hourly: key.amount_hourly,
-
-
-//     payment_terms: key.payment_terms,
-//     no_of_installment: key.no_of_installment,
-//     installment_amount: key.installment_amount,
-//     due_date: key.due_date,
-
-//   });
-// };
-// function schedultTime(cell, row) {
-//   // console.log("schedultTime", row);
-//   console.log("schedultTime", row.schedule_time);
-//   // console.log("setSeconds", setSeconds(row.schedule_time));
-
-//   var d = row.schedule_time;
-//   var date = new Date(d); // some mock date
-//   var milliseconds = date.getTime();
-//   console.log("milliseconds - ", milliseconds);
-
-//   var date2 = new Date(); // current time
-//   var milliseconds2 = date2.getTime();
-//   console.log("current - ", milliseconds2);
-
-//   var diff = milliseconds - milliseconds2;
-//   console.log("diff - ", diff);
-//   var total = diff - 900000;
-//   console.log("total - ", total);
-
-//   if (total > 0 && 900000 > total) {
-//     return (
-//       <>
-//         <div style={{ cursor: "pointer" }} title="Video Chat">
-//           <i
-//             class="fa fa-video-camera"
-//             style={{ color: "red", fontSize: "16px" }}
-//             onClick={() => handleJoin(row.id)}
-//           ></i>
-//         </div>
-//       </>
-//     );
-//   }
-// }
-
-{/* {row.assignment_draft_report && !row.final_report ? (
-                    row.draft_report == "completed" ?
-                      null :
-                      <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                        <div style={{ cursor: "pointer" }} title="Accepted">
-                          <i
-                            class="fa fa-check"
-                            style={{
-                              color: "green",
-                              fontSize: "16px",
-                            }}
-                            onClick={() => acceptHandler(row)}
-                          ></i>
-                        </div>
-
-                        <div title="Send Message">
-                          <Link
-                            to={{
-                              pathname: `/customer/chatting/${row.id}`,
-                              obj: {
-                                message_type: "3",
-                                query_No: row.assign_no,
-                                query_id: row.id,
-                                routes: `/customer/assignment`
-                              }
-                            }}
-                          >
-                            <i
-                              class="fa fa-comments-o"
-                              style={{
-                                fontSize: 16,
-                                cursor: "pointer",
-                                marginLeft: "8px",
-                                color: "green"
-                              }}
-                            ></i>
-                          </Link>
-                        </div>
-                      </div>
-
-) : null} */}
