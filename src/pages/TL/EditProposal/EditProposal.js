@@ -217,8 +217,6 @@ function EditComponent() {
             console.log("erroror - ", error);
           });
       }
-
-
   };
 
 

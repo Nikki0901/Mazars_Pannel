@@ -279,7 +279,7 @@ function Paid() {
         fontSize: "11px",
       },
       headerStyle: () => {
-        return { fontSize: "11px", width: "70px" };
+        return { fontSize: "11px", width: "90px" };
       },
       formatter: function (cell, row) {
         return (
@@ -299,6 +299,28 @@ function Paid() {
                 }
               </div>
 
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/customer/chatting/${row.assign_id}`,
+                    obj: {
+                      message_type: "2",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/customer/proposal`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
               <div title="View Discussion Message">
                 <i
                   class="fa fa-comments-o"
@@ -310,6 +332,7 @@ function Paid() {
                   onClick={() => ViewDiscussionToggel(row.assign_no)}
                 ></i>
               </div>
+
 
             </div>
 

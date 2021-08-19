@@ -35,18 +35,15 @@ function CustomerDeclinedPayment() {
     const [assignmentCount, setAssignmentQueries] = useState("");
     const [records, setRecords] = useState([]);
     const [report, setReport] = useState();
-
-
-
-  
-
+    const [dataItem, setDataItem] = useState({});
 
 
     const [reportModal, setReportModal] = useState(false);
     const ViewReport = (key) => {
         console.log("key - ", key);
         setReportModal(!reportModal);
-        setReport(key);
+        setReport(key.assign_no);
+        setDataItem(key)
     };
 
 
@@ -186,61 +183,15 @@ function CustomerDeclinedPayment() {
                                     {row.assignment_draft_report || row.final_report ?
                                         <div title="View All Report"
                                             style={{ cursor: "pointer", textAlign: "center" }}
-                                            onClick={() => ViewReport(row.assign_no)}
+                                            onClick={() => ViewReport(row)}
                                         >
                                             <DescriptionOutlinedIcon color="secondary" />
                                         </div>
                                         :
                                         null
                                     }
-
-                                    {row.assignment_draft_report && !row.final_report ? (
-                                        row.draft_report == "completed" ?
-                                            null :
-                                            <div style={{ display: "flex", justifyContent: "space-around" }}>
-
-                                                <div style={{ cursor: "pointer" }} title="Accepted">
-                                                    <i
-                                                        class="fa fa-check"
-                                                        style={{
-                                                            color: "green",
-                                                            fontSize: "16px",
-                                                        }}
-                                                        onClick={() => acceptHandler(row)}
-                                                    ></i>
-                                                </div>
-
-                                                <div title="Send Message">
-                                                    <Link
-                                                        to={{
-                                                            pathname: `/customer/chatting/${row.id}`,
-                                                            obj: {
-                                                                message_type: "3",
-                                                                query_No: row.assign_no,
-                                                                query_id: row.id,
-                                                                routes: `/customer/assignment`
-                                                            }
-                                                        }}
-                                                    >
-                                                        <i
-                                                            class="fa fa-comments-o"
-                                                            style={{
-                                                                fontSize: 16,
-                                                                cursor: "pointer",
-                                                                marginLeft: "8px",
-                                                                color: "green"
-                                                            }}
-                                                        ></i>
-                                                    </Link>
-                                                </div>
-                                            </div>
-
-                                    ) : null}
-
                                 </div>
                         }
-
-
                     </>
                 );
             },
@@ -255,33 +206,6 @@ function CustomerDeclinedPayment() {
         },
     ];
 
-    //accept handler
-    const acceptHandler = (key) => {
-        console.log("acceptHandler", key);
-
-        let formData = new FormData();
-        formData.append("uid", JSON.parse(userId));
-        formData.append("id", key.id);
-        formData.append("query_no", key.assign_no);
-        formData.append("type", 1);
-
-        axios({
-            method: "POST",
-            url: `${baseUrl}/customers/draftAccept`,
-            data: formData,
-        })
-            .then(function (response) {
-                console.log("response-", response);
-                if (response.data.code === 1) {
-
-                    var variable = "Draft accepted successfully "
-                    Alerts.SuccessNormal(variable)
-                }
-            })
-            .catch((error) => {
-                console.log("erroror - ", error);
-            });
-    };
 
 
     //tl,phone,email
@@ -299,8 +223,6 @@ function CustomerDeclinedPayment() {
 
         return null;
     }
-
-
 
 
 
@@ -326,15 +248,15 @@ function CustomerDeclinedPayment() {
                         data={assignmentDisplay}
                         columns={columns}
                     />
-                   
+
 
                     <ViewAllReportModal
                         ViewReport={ViewReport}
                         reportModal={reportModal}
                         report={report}
                         getPendingforAcceptance={getAssignmentData}
+                        dataItem={dataItem}
                     />
-
                 </CardBody>
             </Card>
         </>

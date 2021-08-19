@@ -20,6 +20,7 @@ import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import Records from "../../../components/Records/Records";
 import ViewAllReportModal from "./ViewAllReport";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 function AssignmentComponent() {
@@ -50,6 +51,20 @@ function AssignmentComponent() {
     setReport(key);
   };
 
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
+
+  const [viewData, setViewData] = useState({});
+  const [viewModal, setViewModal] = useState(false);
+  const ViewHandler = (key) => {
+    console.log(key);
+    setViewModal(!viewModal);
+    setViewData(key);
+  };
 
   useEffect(() => {
     getAssignmentData();
@@ -304,34 +319,44 @@ function AssignmentComponent() {
       formatter: function (cell, row) {
         return (
           <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
 
-            {
-              row.paid_status == "2" ? null :
-                <div title="Send Message">
-                  <Link
-                    to={{
-                      pathname: `/admin/chatting/${row.q_id}`,
-                      obj: {
-                        message_type: "3",
-                        query_No: row.assign_no,
-                        query_id: row.q_id,
-                        routes: `/admin/assignment`
-                      }
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "3",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/admin/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
                     }}
-                  >
-                    <i
-                      class="fa fa-comments-o"
-                      style={{
-                        fontSize: 16,
-                        cursor: "pointer",
-                        marginLeft: "8px",
-                        color: "blue"
-                      }}
-                    ></i>
-                  </Link>
-                </div>
-            }
+                  ></i>
+                </Link>
+              </div>
 
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+            </div>
           </>
         );
       },
@@ -538,6 +563,13 @@ function AssignmentComponent() {
             getPendingforAcceptance={getAssignmentData}
           />
 
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentData}
+          />
+
         </CardBody>
       </Card>
     </div>
@@ -545,76 +577,3 @@ function AssignmentComponent() {
 }
 
 export default AssignmentComponent;
-
-{
-  /*            
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.final_discussion}</p>
-            <p style={{ fontSize: "10px" }}>{row.draft_report}</p>
-            <p style={{ fontSize: "10px" }}>{row.other_stage}</p> */
-}
-{
-  /* <div>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Client Discussion :
-                        </span>
-                        {p.client_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>Draft report :</span>
-                        {p.draft_report}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Final Discussion :
-                        </span>
-                        {p.final_discussion}
-                      </p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>
-                          Delivery of report :
-                        </span> 
-                        {p.delivery_report}
-                      </p>
-                    </div> */
-}
-
-/* <div className="mb-3">
-                      <select
-                        className="form-select form-control"
-                        name="p_purpose"
-                      >
-                        <option >status</option>
-                        <option >Client Discussion : {p.client_discussion}</option>
-                        <option >Draft report : {p.draft_report}</option>
-                        <option >Final Discussion : {p.final_discussion}</option>
-                        <option >Delivery of report : {p.delivery_report}</option>
-                      </select>
-                    </div> */
-//  {/* <AdminFilter
-//             setData={setAssignmentDisplay}
-//             getData={getAssignmentData}
-//             assignment="assignment"
-//           />
-{/* <div>
-                {!row.final_report == "" ? (
-                  <div title="Final Report">
-                    <a
-                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.final_report}`}
-                      target="_blank"
-                    >
-                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                    </a>
-                  </div>
-                ) : row.assignement_draft_report ? (
-                  <div title="Draft Report">
-                    <a
-                      href={`http://65.0.220.156/mazarapi/assets/upload/report/${row.assign_no}/${row.assignement_draft_report}`}
-                      target="_blank"
-                    >
-                      <i class="fa fa-file-text" style={{ fontSize: "16px" }}></i>{" "}
-                    </a>
-                  </div>
-                ) : null}
-              </div> */}

@@ -73,121 +73,122 @@ function AddNew() {
     "value": v.id,
     "label": v.details
   }))
- 
-const teamleader1 = teamleader.map(v => (
-  console.log(v), {
-  "value" : v.id,
-  "label" : v.name
-}))
+
+  const teamleader1 = teamleader.map(v => (
+    console.log(v), {
+      "value": v.id,
+      "label": v.name
+    }))
   useEffect(() => {
-        const getTeamLeader = () => {
-          axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-            console.log(res);
-            if (res.data.code === 1) {
-              setTeamLeader(res.data.result);
-            }
-          });
-        };
-        getTeamLeader();
-      }, []);
-    
-      useEffect(() => {
-        const getCategory = () => {
-          axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-            console.log(res);
-            if (res.data.code === 1) {
-              setTax(res.data.result);
-            }
-          });
-        };
-    
-        getCategory();
-      }, []);
-    
-      useEffect(() => {
-        const getSubCategory = () => {
-          axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-            console.log(res);
-            if (res.data.code === 1) {
-              setTax2(res.data.result);
-            }
-          });
-        };
-        getSubCategory();
-      }, [store]);
+    const getTeamLeader = () => {
+      axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTeamLeader(res.data.result);
+        }
+      });
+    };
+    getTeamLeader();
+  }, []);
+
+  useEffect(() => {
+    const getCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax(res.data.result);
+        }
+      });
+    };
+
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    const getSubCategory = () => {
+      axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+        console.log(res);
+        if (res.data.code === 1) {
+          setTax2(res.data.result);
+        }
+      });
+    };
+    getSubCategory();
+  }, [store]);
 
   // OnSubmit Function
   const onSubmit = (value) => {
-    console.log("tealId" , tl)
-       var categeryList = []
-     var categeryName = []
-     var categeryName = []
-     var kk = []
-    
-     var parentCategoryName = []
-     subData.map((i) => {
-       categeryList.push(i.value)
-       categeryName.push(i.label)
-     })
-     categoryData.map((i) => {
-       kk.push(i.value)
-       parentCategoryName.push(i.label)
-     })
-    
-     console.log("subData", subData)
-     if (custCate.length < 1) {
-       setError("Please select at least one value")
-     }
-     else if (subData.length < 1) {
+    console.log("tealId", tl)
+    var categeryList = []
+    var categeryName = []
+    var categeryName = []
+    var kk = []
 
-       setError2("Please select at least one value")
-     }
-     else if (invalid || wEmail || indNumError) {
-       setDisplay(false)
-     }
+    var parentCategoryName = []
+    subData.map((i) => {
+      categeryList.push(i.value)
+      categeryName.push(i.label)
+    })
+    //  categoryData.map((i) => {
+    //    kk.push(i.value)
+    //    parentCategoryName.push(i.label)
+    //  })
 
-     else {  console.log("value :", value);
-    
-         let formData = new FormData();
-         formData.append("email", post1.email)
-         formData.append("post_name", post1.post)
-         formData.append("personal_email", value.p_email);
-         formData.append("name", value.p_name);
-         formData.append("phone", value.p_phone);
-         formData.append("pcat_id", kk);
-         formData.append("cat_id", categeryList);
-         formData.append("type", "tp");
-         formData.append("tp_id", tl);
-         formData.append("allpcat_id", parentCategoryName)
-         formData.append("allcat_id", categeryName)
-         formData.append("tlpost", post_na)
-    
-         axios({
-           method: "POST",
-           url: `${baseUrl}/tp/AddTaxProfessional`,
-           data: formData,
-         })
-           .then(function (response) {
-             console.log("res-", response);
-             if (response.data.code === 1) {
-    
-               var variable = "Tax Professional Created Successfully"
-        
-              Swal.fire({
-                "title" : "success", 
-                "html" : "Tax Professional Created Successfully",
-                "icon" : "success"
-              })
-    
-               history.goBack();
-             }
-           })
-           .catch((error) => {
-             console.log("erroror - ", error);
-           });
-       };
-      }
- 
+    console.log("subData", categoryData.label)
+    if (custCate.length < 1) {
+      setError("Please select at least one value")
+    }
+    else if (subData.length < 1) {
+
+      setError2("Please select at least one value")
+    }
+    else if (invalid || wEmail || indNumError) {
+      setDisplay(false)
+    }
+
+    else {
+      console.log("value :", value);
+
+      let formData = new FormData();
+      formData.append("email", value.post_email)
+      formData.append("post_name", value.post_name)
+      formData.append("personal_email", value.p_email);
+      formData.append("name", value.p_name);
+      formData.append("phone", value.p_phone);
+      formData.append("pcat_id", categoryData.value);
+      formData.append("cat_id", categeryList);
+      formData.append("type", "tp");
+      formData.append("tp_id", tl);
+      formData.append("allpcat_id", categoryData.label)
+      formData.append("allcat_id", categeryName)
+      formData.append("tlpost", post_na)
+
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tp/AddTaxProfessional`,
+        data: formData,
+      })
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+
+            var variable = "Tax Professional Created Successfully"
+
+            Swal.fire({
+              "title": "success",
+              "html": "Tax Professional Created Successfully",
+              "icon": "success"
+            })
+
+            history.goBack();
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    };
+  }
+
 
   // Sub Category Function
   const subCategory = (e) => {
@@ -206,14 +207,20 @@ const teamleader1 = teamleader.map(v => (
     })
     setError("")
     setCustcate(v)
-    v.map((val) => {
-      vv.push(val.value)
-      setmcategory(val.value);
-      setmcatname((oldData) => {
-        return [...oldData, val.label]
-      })
-      setStore(val.value)
+    setStore(v.value)
+    vv.push(v.value);
+    setmcategory(v.value)
+    setmcatname((oldData) => {
+      return [...oldData, v.label]
     })
+    // v.map((val) => {
+    //   vv.push(val.value)
+    //   setmcategory(val.value);
+    //   setmcatname((oldData) => {
+    //     return [...oldData, val.label]
+    //   })
+    //   setStore(val.value)
+    // })
 
 
     if (vv.length > 0) {
@@ -365,40 +372,22 @@ const teamleader1 = teamleader.map(v => (
 
   // Tl Function 
   const tlFun = (e) => {
-    var a ;
-  console.log("id", e)
-  teamleader.filter((p) => {
+    var a;
+    console.log("id", e)
+    teamleader.filter((p) => {
 
-    if(p.id == e){
-   console.log(p.post_name)
-     
-     setTl(p.id)
-     setPost_na(p.post_name)
-     a = p.post_name
-     console.log("aa", a)
-    }
-  })
- console.log(post_na)
-    let formData = new FormData()
-    formData.append("post", a)
-    axios({
-      method  :"POST",
-      url  : `${baseUrl}/admin/addTpPost?post=${a}`,
-      data : formData
+      if (p.id == e) {
+        console.log("pdi", p.id)
+
+        setTl(p.id)
+        setPost_na(p.post_name)
+        a = p.post_name
+        console.log("aa", a)
+      }
     })
-    .then(function (response) {
-      if(response.data.code === 1){
-        setPost1(response.data.result)
-      }
-      else if(response.data.code === 0){
-        console.log(response.data.result)
-      }
-    } )
-    .catch((error) => {
-      console.log("erroror - ", error);
-    });
+    console.log(post_na)
   }
-  
+
 
   return (
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -415,7 +404,7 @@ const teamleader1 = teamleader.map(v => (
               </button>
             </div>
             <div class="text-center ml-5">
-            <h4>Add New Tax Professionals</h4>
+              <h4>Add New Tax Professionals</h4>
             </div>
           </div>
         </CardHeader>
@@ -425,51 +414,48 @@ const teamleader1 = teamleader.map(v => (
             <div class="col-lg-2 col-xl-2 col-md-12"></div>
             <div class="col-lg-8 col-xl-8 col-md-12">
               <form onSubmit={handleSubmit(onSubmit)}>
-            
+
                 <div class="row">
                   <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Select teamleader</label>
-                    {/* <Select 
-                    onChange={tlFun} options = {teamleader1}>
+                    <div class="form-group">
+                      <label>Teamleader post name <span className="declined">*</span></label>
 
-                    </Select> */}
-                       <select
-                         name="p_teamleader"
-                         className={classNames("form-control", {
-                           "is-invalid": errors.p_teamleader,
-                         })}
-                         onChange = {(e) => tlFun(e.target.value)}
-                         ref={register}
-                       >
-                         <option value="">--select--</option>
-                         {teamleader.map((p) =>
-                          (
-                            console.log("pp", p.id),
-                           <option key={p.Id} value={p.id}>
-                             {p.name}
-                           </option>
-                         ))}
-                       </select>
-                       {errors.p_teamleader && (
-                         <div className="invalid-feedback">
-                           {errors.p_teamleader.message}
-                         </div>
-                       )} 
-                     
+                      <select
+                        name="p_teamleader"
+                        className={classNames("form-control", {
+                          "is-invalid": errors.p_teamleader,
+                        })}
+                        onChange={(e) => tlFun(e.target.value)}
+                        ref={register}
+                      >
+                        <option value="">--select--</option>
+                        {teamleader.map((p) =>
+                        (
+                          console.log("pp", p.id),
+                          <option key={p.Id} value={p.id}>
+                            {p.post_name}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.p_teamleader && (
+                        <div className="invalid-feedback">
+                          {errors.p_teamleader.message}
+                        </div>
+                      )}
+
                     </div>
-                  
+
                   </div>
 
                   <div class="col-md-6">
-                  <div class="form-group">
-                      <label>Email <span className="declined">*</span></label>
+                    <div class="form-group">
+                      <label> Post Email <span className="declined">*</span></label>
                       <input
                         type="email"
                         className={classNames("form-control", {
                           "is-invalid": errors.p_email || wEmail || invalid,
                         })}
-                        name="p_email"
+                        name="post_email"
                         ref={register}
                         onChange={(e) => emailHandler(e)}
                         onBlur={emailValidation}
@@ -484,17 +470,19 @@ const teamleader1 = teamleader.map(v => (
                             <p className="declined">{invalid}</p>}
                         </>
                       }
+
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Post Name</label>
+                      <label>tlpost name <span className="declined">*</span></label>
                       <input
                         type="text"
                         name="post_name"
-                        disabled
+
+
                         className={classNames("form-control", {
                           "is-invalid": errors.post_name,
                         })}
@@ -508,13 +496,15 @@ const teamleader1 = teamleader.map(v => (
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Post Email</label>
+
+
+                      <label>Email <span className="declined">*</span></label>
                       <input
                         type="text"
-                        name="post_email"
+                        name="p_email"
                         ref={register}
                         value={post1.email}
-                        disabled
+
                         className={classNames("form-control", {
                           "is-invalid": errors.post_email,
                         })}
@@ -569,11 +559,25 @@ const teamleader1 = teamleader.map(v => (
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Category <span className="declined">*</span></label>
-                      <Select isMulti options={options}
+                      <Select options={options}
                         className={error ? "customError" : ""}
-
+                        styles={{
+                          option: (styles, { data }) => {
+                            return {
+                              ...styles,
+                              color: data.value == 2
+                                ? "green"
+                                : "blue"
+                            };
+                          },
+                          multiValueLabel: (styles, { data }) => ({
+                            ...styles,
+                            color: data.value == 2
+                              ? "green"
+                              : "blue"
+                          }),
+                        }}
                         onChange={category}>
-
                       </Select>
 
 
@@ -585,14 +589,27 @@ const teamleader1 = teamleader.map(v => (
                       <Select isMulti options={options2}
                         className={error2 ? "customError" : ""}
                         onChange={subCategory}
+                        styles={{
+                          option: (styles, { data }) => {
+                            return {
+                              ...styles,
+                              color: data.value > 8
+                                ? "green"
+                                : "blue"
+                            };
+                          },
+                          multiValueLabel: (styles, { data }) => ({
+                            ...styles,
+                            color: data.value > 8
+                              ? "green"
+                              : "blue"
+                          }),
+                        }}
                         value={subData}>
-
                       </Select>
-
                     </div>
                   </div>
                 </div>
-
                 <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
@@ -609,9 +626,7 @@ const teamleader1 = teamleader.map(v => (
     </Layout>
   );
 }
-
 export default AddNew;
-
 
 
 // import React, { useState, useEffect } from "react";
@@ -619,22 +634,15 @@ export default AddNew;
 // import { useForm } from "react-hook-form";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
+// import Select from "react-select";
+// import Swal from 'sweetalert2';
 // import axios from "axios";
 // import { baseUrl } from "../../../config/config";
 // import { useAlert } from "react-alert";
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   CardTitle,
-//   Row,
-//   Col,
-//   Table,
-//   Tooltip,
-// } from "reactstrap";
+// import { Card, CardHeader } from "reactstrap";
 // import { useHistory } from "react-router-dom";
 // import classNames from "classnames";
-// import Alerts from "../../../common/Alerts";
+// import Mandatory from "../../../components/Common/Mandatory";
 
 // const Schema = yup.object().shape({
 //   p_name: yup.string().required("required name"),
@@ -645,96 +653,383 @@ export default AddNew;
 //     .matches(/^[0-9]+$/, "Must be only digits")
 //     .min(10, "Must be exactly 10 digits")
 //     .max(20, "max 20 digits"),
-//   p_tax: yup.string().required("required category"),
-//   p_tax2: yup.string().required("required sub category"),
-//   p_teamleader: yup.string().required("required sub teamleader"),
+
 // });
+
 
 // function AddNew() {
 //   const alert = useAlert();
+//   const history = useHistory();
 //   const { handleSubmit, register, reset, errors } = useForm({
 //     resolver: yupResolver(Schema),
 //   });
 
-//   const [teamleader, setTeamLeader] = useState([]);
 //   const userid = window.localStorage.getItem("adminkey");
-
-//   const history = useHistory();
+//   const [error, setError] = useState()
+//   const [error2, setError2] = useState();
 //   const [tax, setTax] = useState([]);
 //   const [tax2, setTax2] = useState([]);
+//   const [nn, setNn] = useState([])
+//   const [mcatname, setmcatname] = useState([]);
+//   const [mcategory, setmcategory] = useState([]);
+//   const [store, setStore] = useState([]);
+//   const [subData, subCategeryData] = useState([])
+//   const [custCate, setCustcate] = useState([])
+//   const [custCate2, setCustcate2] = useState([])
+//   const [numExist, setNumExist] = useState(null)
+//   const [phone, setPhone] = useState('');
+//   const [numAvail, setNumAvail] = useState(null)
+//   const [categoryData, setCategoryData] = useState([])
+//   const [indNumError, setIndNumError] = useState(null)
+//   const [postValue, setPostName] = useState([]);
+//   const [email, setEmail] = useState('');
+//   const [valiEmail, setValiemail] = useState(null)
+//   const [invalid, setInvalid] = useState(null)
+//   const [wEmail, setWemail] = useState();
+//   const [display, setDisplay] = useState(false);
+//   const [teamleader, setTeamLeader] = useState([]);
+//   const [tl, setTl] = useState([])
+//   const [post1, setPost1] = useState([])
+//   const [post_na, setPost_na] = useState()
+//   var kk = []
+//   var vv = []
+//   var post_name;
+//   const options = tax.map(d => (
+//     {
+//       "value": d.id,
+//       "label": d.details
+//     }))
 
-//   const [store, setStore] = useState("");
-//   const [store2, setStore2] = useState(null);
+//   const options2 = tax2.map(v => ({
+//     "value": v.id,
+//     "label": v.details
+//   }))
 
+// const teamleader1 = teamleader.map(v => (
+//   console.log(v), {
+//   "value" : v.id,
+//   "label" : v.name
+// }))
 //   useEffect(() => {
-//     const getTeamLeader = () => {
-//       axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTeamLeader(res.data.result);
-//         }
-//       });
-//     };
-//     getTeamLeader();
-//   }, []);
+//         const getTeamLeader = () => {
+//           axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
+//             console.log(res);
+//             if (res.data.code === 1) {
+//               setTeamLeader(res.data.result);
+//             }
+//           });
+//         };
+//         getTeamLeader();
+//       }, []);
 
-//   useEffect(() => {
-//     const getCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTax(res.data.result);
-//         }
-//       });
-//     };
+//       useEffect(() => {
+//         const getCategory = () => {
+//           axios.get(`${baseUrl}/customers/getCategory?pid=0`).then((res) => {
+//             console.log(res);
+//             if (res.data.code === 1) {
+//               setTax(res.data.result);
+//             }
+//           });
+//         };
 
-//     getCategory();
-//   }, []);
+//         getCategory();
+//       }, []);
 
-//   useEffect(() => {
-//     const getSubCategory = () => {
-//       axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
-//         console.log(res);
-//         if (res.data.code === 1) {
-//           setTax2(res.data.result);
-//         }
-//       });
-//     };
-//     getSubCategory();
-//   }, [store]);
+//       useEffect(() => {
+//         const getSubCategory = () => {
+//           axios.get(`${baseUrl}/customers/getCategory?pid=${store}`).then((res) => {
+//             console.log(res);
+//             if (res.data.code === 1) {
+//               setTax2(res.data.result);
+//             }
+//           });
+//         };
+//         getSubCategory();
+//       }, [store]);
 
-
+//   // OnSubmit Function
 //   const onSubmit = (value) => {
-//     console.log("value :", value);
+//     console.log("tealId" , tl)
+//        var categeryList = []
+//      var categeryName = []
+//      var categeryName = []
+//      var kk = []
 
-//     let formData = new FormData();
-//     formData.append("email", value.p_email);
-//     formData.append("name", value.p_name);
-//     formData.append("phone", value.p_phone);
-//     formData.append("pcat_id", value.p_tax);
-//     formData.append("cat_id", value.p_tax2);
-//     formData.append("type", "tp");
-//     formData.append("tp_id", value.p_teamleader);
+//      var parentCategoryName = []
+//      subData.map((i) => {
+//        categeryList.push(i.value)
+//        categeryName.push(i.label)
+//      })
+//      categoryData.map((i) => {
+//        kk.push(i.value)
+//        parentCategoryName.push(i.label)
+//      })
 
-//     axios({
-//       method: "POST",
-//       url: `${baseUrl}/tp/AddTaxProfessional`,
-//       data: formData,
+//      console.log("subData", subData)
+//      if (custCate.length < 1) {
+//        setError("Please select at least one value")
+//      }
+//      else if (subData.length < 1) {
+
+//        setError2("Please select at least one value")
+//      }
+//      else if (invalid || wEmail || indNumError) {
+//        setDisplay(false)
+//      }
+
+//      else {  console.log("value :", value);
+
+//          let formData = new FormData();
+//          formData.append("email", post1.email)
+//          formData.append("post_name", post1.post)
+//          formData.append("personal_email", value.p_email);
+//          formData.append("name", value.p_name);
+//          formData.append("phone", value.p_phone);
+//          formData.append("pcat_id", kk);
+//          formData.append("cat_id", categeryList);
+//          formData.append("type", "tp");
+//          formData.append("tp_id", tl);
+//          formData.append("allpcat_id", parentCategoryName)
+//          formData.append("allcat_id", categeryName)
+//          formData.append("tlpost", post_na)
+
+//          axios({
+//            method: "POST",
+//            url: `${baseUrl}/tp/AddTaxProfessional`,
+//            data: formData,
+//          })
+//            .then(function (response) {
+//              console.log("res-", response);
+//              if (response.data.code === 1) {
+
+//                var variable = "Tax Professional Created Successfully"
+
+//               Swal.fire({
+//                 "title" : "success", 
+//                 "html" : "Tax Professional Created Successfully",
+//                 "icon" : "success"
+//               })
+
+//                history.goBack();
+//              }
+//            })
+//            .catch((error) => {
+//              console.log("erroror - ", error);
+//            });
+//        };
+//       }
+
+
+//   // Sub Category Function
+//   const subCategory = (e) => {
+//     subCategeryData(e)
+//     setCustcate2(e)
+//     setError2("")
+//   }
+
+
+//   // Category Function
+//   const category = (v) => {
+
+//     setCategoryData(v)
+//     setNn((oldData) => {
+//       return [...oldData, mcategory]
 //     })
-//       .then(function (response) {
-//         console.log("res-", response);
-//         if (response.data.code === 1) {
-
-//           var variable = "Tax Professional Created Successfully"
-//           Alerts.SuccessNormal(variable)
-
-//           history.goBack();
-//         }
+//     setError("")
+//     setCustcate(v)
+//     v.map((val) => {
+//       vv.push(val.value)
+//       setmcategory(val.value);
+//       setmcatname((oldData) => {
+//         return [...oldData, val.label]
 //       })
-//       .catch((error) => {
-//         console.log("erroror - ", error);
-//       });
+//       setStore(val.value)
+//     })
+
+
+//     if (vv.length > 0) {
+//       if (vv.includes("1") && vv.includes("2")) {
+//         console.log("hdd")
+//       }
+//       else if (vv.includes("1")) {
+
+//         for (let i = 0; i < subData.length; i++) {
+//           if (subData[i].value < 9) {
+//             kk.push(subData[i])
+//           }
+//         }
+//         subCategeryData(kk)
+//       }
+//       else if (vv.includes("2")) {
+
+//         for (let i = 0; i < subData.length; i++) {
+//           if (subData[i].value > 8) {
+//             kk.push(subData[i])
+//           }
+//         }
+//         subCategeryData(kk)
+//       }
+//     }
+
+//     else if (vv.length === 0) {
+//       subCategeryData("")
+//     }
+
+//   }
+//   // Phone onChange 
+//   const phoneHandler = (e) => {
+
+//     if (isNaN(e.target.value)) {
+//       setIndNumError("")
+//       setNumAvail("");
+//       setNumExist('Please enter number only')
+//       e.target.value = ""
+//       setPhone("")
+//     }
+//     else {
+//       setNumAvail("");
+//       setNumExist("");
+//       setPhone(e.target.value)
+//     }
 //   };
+
+//   // Phone Validation function 
+//   const phoneValidation = () => {
+//     console.log(phone.length)
+//     if (phone.length > 10) {
+//       console.log(phone.length)
+//       setNumAvail("")
+//       setNumExist("")
+//       setIndNumError("Maximum 10 digit should be enter")
+//     }
+//     else if (phone.length < 10) {
+//       console.log(phone.length)
+//       setNumAvail("")
+//       setNumExist("")
+//       setIndNumError("Minimum 10 digit should be enter")
+//     }
+//     else if (phone.length > 15) {
+//       setNumAvail("")
+//       setNumExist("")
+//       setIndNumError("Maximum 15 digit should be enter")
+//     }
+
+//     else {
+//       setIndNumError("")
+
+//       let formData = new FormData();
+//       formData.append("phone", phone);
+//       formData.append("type", 2);
+//       axios({
+//         method: "POST",
+//         url: `${baseUrl}/customers/validateregistration`,
+//         data: formData,
+//       })
+//         .then(function (response) {
+//           console.log("res-", response);
+//           if (response.data.code === 1) {
+//             // setValiphone(response.data.result)
+//             console.log(response.data.result)
+//             setNumExist('')
+//             setNumAvail(response.data.result);
+
+//           }
+//           else if (response.data.code === 0) {
+//             console.log(response.data.result)
+//             setNumAvail('')
+//             setNumExist(response.data.result)
+
+//             console.log("mobile" + setNumExist)
+//           }
+
+//         })
+//         .catch((error) => {
+//           // console.log("erroror - ", error);
+//         });
+//     }
+//   }
+
+//   //eamil onchange
+//   const emailHandler = (e) => {
+//     setEmail(e.target.value);
+//     console.log(e.target.value.length)
+//     if (e.target.value.length < 1) {
+//       setWemail("")
+//     }
+//   };
+
+
+//   //email validaation with api
+//   const emailValidation = (key) => {
+
+//     var validRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     if (email.match(validRegex)) {
+//       setWemail("");
+//       let formData = new FormData();
+//       formData.append("email", email);
+//       formData.append("type", 1);
+
+//       axios({
+//         method: "POST",
+//         url: `${baseUrl}/customers/validateregistration`,
+//         data: formData,
+//       })
+//         .then(function (response) {
+//           console.log("resEmail-", response);
+//           if (response.data.code === 1) {
+//             setValiemail(response.data.result)
+//             setInvalid('')
+//           } else if (response.data.code === 0) {
+//             setInvalid(response.data.result)
+//             setValiemail('')
+//           }
+//         })
+//         .catch((error) => {
+//           console.log("erroror - ", error);
+//         });
+//     }
+//     else {
+//       setWemail("invalid email")
+//     }
+
+//   }
+
+//   // Tl Function 
+//   const tlFun = (e) => {
+//     var a ;
+//   console.log("id", e)
+//   teamleader.filter((p) => {
+
+//     if(p.id == e){
+//    console.log(p.post_name)
+
+//      setTl(p.id)
+//      setPost_na(p.post_name)
+//      a = p.post_name
+//      console.log("aa", a)
+//     }
+//   })
+//  console.log(post_na)
+//     let formData = new FormData()
+//     formData.append("post", a)
+//     axios({
+//       method  :"POST",
+//       url  : `${baseUrl}/admin/addTpPost?post=${a}`,
+//       data : formData
+//     })
+//     .then(function (response) {
+//       if(response.data.code === 1){
+//         setPost1(response.data.result)
+//       }
+//       else if(response.data.code === 0){
+//         console.log(response.data.result)
+//       }
+//     } )
+//     .catch((error) => {
+//       console.log("erroror - ", error);
+//     });
+//   }
+
 
 //   return (
 //     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
@@ -751,7 +1046,7 @@ export default AddNew;
 //               </button>
 //             </div>
 //             <div class="text-center ml-5">
-//               <h4>Add New Tax Professionals</h4>
+//             <h4>Add New Tax Professionals</h4>
 //             </div>
 //           </div>
 //         </CardHeader>
@@ -761,10 +1056,109 @@ export default AddNew;
 //             <div class="col-lg-2 col-xl-2 col-md-12"></div>
 //             <div class="col-lg-8 col-xl-8 col-md-12">
 //               <form onSubmit={handleSubmit(onSubmit)}>
+
+//                 <div class="row">
+//                   <div class="col-md-6">
+//                   <div class="form-group">
+//                     <label>Select teamleader</label>
+//                     {/* <Select 
+//                     onChange={tlFun} options = {teamleader1}>
+
+//                     </Select> */}
+//                        <select
+//                          name="p_teamleader"
+//                          className={classNames("form-control", {
+//                            "is-invalid": errors.p_teamleader,
+//                          })}
+//                          onChange = {(e) => tlFun(e.target.value)}
+//                          ref={register}
+//                        >
+//                          <option value="">--select--</option>
+//                          {teamleader.map((p) =>
+//                           (
+//                             console.log("pp", p.id),
+//                            <option key={p.Id} value={p.id}>
+//                              {p.name}
+//                            </option>
+//                          ))}
+//                        </select>
+//                        {errors.p_teamleader && (
+//                          <div className="invalid-feedback">
+//                            {errors.p_teamleader.message}
+//                          </div>
+//                        )} 
+
+//                     </div>
+
+//                   </div>
+
+//                   <div class="col-md-6">
+//                   <div class="form-group">
+//                       <label>Email <span className="declined">*</span></label>
+//                       <input
+//                         type="email"
+//                         className={classNames("form-control", {
+//                           "is-invalid": errors.p_email || wEmail || invalid,
+//                         })}
+//                         name="p_email"
+//                         ref={register}
+//                         onChange={(e) => emailHandler(e)}
+//                         onBlur={emailValidation}
+//                       />
+//                       {
+//                         wEmail ? <p className="declined">{wEmail}</p> : <>
+//                           {valiEmail ?
+//                             <p className="completed">
+//                               {valiEmail}
+//                             </p>
+//                             :
+//                             <p className="declined">{invalid}</p>}
+//                         </>
+//                       }
+//                     </div>
+//                   </div>
+//                 </div>
 //                 <div class="row">
 //                   <div class="col-md-6">
 //                     <div class="form-group">
-//                       <label>Name</label>
+//                       <label>Post Name</label>
+//                       <input
+//                         type="text"
+//                         name="post_name"
+//                         disabled
+//                         className={classNames("form-control", {
+//                           "is-invalid": errors.post_name,
+//                         })}
+//                         ref={register}
+//                         value={post1.post}
+
+//                       />
+
+//                     </div>
+//                   </div>
+
+//                   <div class="col-md-6">
+//                     <div class="form-group">
+//                       <label>Post Email</label>
+//                       <input
+//                         type="text"
+//                         name="post_email"
+//                         ref={register}
+//                         value={post1.email}
+//                         disabled
+//                         className={classNames("form-control", {
+//                           "is-invalid": errors.post_email,
+//                         })}
+//                       />
+
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 <div class="row">
+//                   <div class="col-md-6">
+//                     <div class="form-group">
+//                       <label>Name <span className="declined">*</span></label>
 //                       <input
 //                         type="text"
 //                         className={classNames("form-control", {
@@ -773,134 +1167,73 @@ export default AddNew;
 //                         name="p_name"
 //                         ref={register}
 //                       />
-//                       {errors.p_name && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_name.message}
-//                         </div>
-//                       )}
+
 //                     </div>
 //                   </div>
+
 //                   <div class="col-md-6">
 //                     <div class="form-group">
-//                       <label>Phone Number</label>
+//                       <label>Phone Number <span className="declined">*</span></label>
 //                       <input
 //                         type="text"
 //                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_phone,
+//                           "is-invalid": errors.p_phone || indNumError,
 //                         })}
 //                         name="p_phone"
 //                         ref={register}
+//                         onChange={(e) => phoneHandler(e)}
+//                         onBlur={phoneValidation}
 //                       />
-//                       {errors.p_phone && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_phone.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Email</label>
-//                       <input
-//                         type="email"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_email,
-//                         })}
-//                         name="p_email"
-//                         ref={register}
-//                       />
-//                       {errors.p_email && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_email.message}
-//                         </div>
-//                       )}
-//                     </div>
-//                   </div>
-
-//                   <div class="col-md-6">
-//                     <div class="form-group">
-//                       <label>Select teamleader</label>
-//                       <select
-//                         name="p_teamleader"
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_teamleader,
-//                         })}
-//                         ref={register}
-//                       >
-//                         <option value="">--select--</option>
-//                         {teamleader.map((p) => (
-//                           <option key={p.Id} value={p.id}>
-//                             {p.name}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_teamleader && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_teamleader.message}
-//                         </div>
-//                       )}
+//                       {indNumError ? <p className="declined">{indNumError}</p> : <>
+//                         {
+//                           numAvail ?
+//                             <p className="completed"> {numAvail}
+//                             </p>
+//                             :
+//                             <p className="declined">{numExist}</p>
+//                         }
+//                       </>}
 //                     </div>
 //                   </div>
 //                 </div>
-
 //                 <div class="row">
 //                   <div class="col-md-6">
 //                     <div class="form-group">
-//                       <label>Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax,
-//                         })}
-//                         name="p_tax"
-//                         ref={register}
-//                         onChange={(e) => setStore(e.target.value)}
-//                       >
-//                         <option value="">--Select Category--</option>
-//                         {tax.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_tax && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_tax.message}
-//                         </div>
-//                       )}
+//                       <label>Category <span className="declined">*</span></label>
+//                       <Select isMulti options={options}
+//                         className={error ? "customError" : ""}
+
+//                         onChange={category}>
+
+//                       </Select>
+
+
 //                     </div>
 //                   </div>
 //                   <div class="col-md-6">
 //                     <div class="form-group">
-//                       <label>Sub Category</label>
-//                       <select
-//                         className={classNames("form-control", {
-//                           "is-invalid": errors.p_tax2,
-//                         })}
-//                         name="p_tax2"
-//                         ref={register}
-//                         onChange={(e) => setStore2(e.target.value)}
-//                       >
-//                         <option value="">--Select Sub-Category--</option>
-//                         {tax2.map((p, index) => (
-//                           <option key={index} value={p.id}>
-//                             {p.details}
-//                           </option>
-//                         ))}
-//                       </select>
-//                       {errors.p_tax2 && (
-//                         <div className="invalid-feedback">
-//                           {errors.p_tax2.message}
-//                         </div>
-//                       )}
+//                       <label>Sub Category <span className="declined">*</span></label>
+//                       <Select isMulti options={options2}
+//                         className={error2 ? "customError" : ""}
+//                         onChange={subCategory}
+//                         value={subData}>
+
+//                       </Select>
+
 //                     </div>
 //                   </div>
 //                 </div>
+
 //                 <button type="submit" className="btn btn-primary">
 //                   Submit
 //                 </button>
 //               </form>
 //             </div>
+//             <div class="col-lg-2 col-xl-2 col-md-12">
+
+//             </div>
+
+//             <Mandatory />
 //           </div>
 //         </CardHeader>
 //       </Card>

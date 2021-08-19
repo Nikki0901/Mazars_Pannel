@@ -23,6 +23,7 @@ import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import * as Cookies from "js-cookie";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import ViewAllReportModal from "./ViewAllReport";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 
@@ -63,6 +64,13 @@ function AssignmentTab() {
     setReport(key.assign_no);
     setDataItem(key)
   };
+
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
 
   useEffect(() => {
     getAssignmentList();
@@ -322,7 +330,7 @@ function AssignmentTab() {
     {
       text: "Action",
       headerStyle: () => {
-        return { fontSize: "12px" };
+        return { fontSize: "12px", width: "90px" };
       },
       formatter: function (cell, row) {
         return (
@@ -331,7 +339,6 @@ function AssignmentTab() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: "60px"
               }}
             >
               {
@@ -372,6 +379,17 @@ function AssignmentTab() {
                 </div>
               )}
 
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
               <div title="Send Message">
                 <Link
                   to={{
@@ -401,21 +419,8 @@ function AssignmentTab() {
         );
       },
     },
-
   ];
 
-
-  //handleJoin
-  const handleJoin = (id) => {
-    console.log("id", id);
-
-    Cookies.set("channel_2", id);
-    Cookies.set("baseMode_2", baseMode);
-    Cookies.set("transcode_2", transcode);
-    Cookies.set("attendeeMode_2", attendeeMode);
-    Cookies.set("videoProfile_2", videoProfile);
-    history.push("/teamleader/meeting");
-  };
 
 
   // draft modal
@@ -655,6 +660,13 @@ function AssignmentTab() {
             reportModal={reportModal}
             report={report}
             dataItem={dataItem}
+          />
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentList}
           />
         </CardBody>
       </Card>

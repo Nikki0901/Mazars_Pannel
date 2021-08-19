@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 function AssignmentTab() {
@@ -36,7 +37,12 @@ function AssignmentTab() {
     console.log("current_date :", current_date);
     const [item] = useState(current_date);
 
-
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
     useEffect(() => {
         getAssignmentList();
     }, []);
@@ -242,7 +248,64 @@ function AssignmentTab() {
                 }
                 return oldDate.slice(0, 10).toString().split("-").reverse().join("-");
             },
-        }
+        },
+        {
+            text: "Action",
+            headerStyle: () => {
+                return { fontSize: "12px" };
+            },
+            formatter: function (cell, row) {
+                return (
+                    <>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "60px"
+                            }}
+                        >
+
+                            <div title="View Discussion Message">
+                                <i
+                                    class="fa fa-comments-o"
+                                    style={{
+                                        fontSize: 16,
+                                        cursor: "pointer",
+                                        color: "orange"
+                                    }}
+                                    onClick={() => ViewDiscussionToggel(row.assign_no)}
+                                ></i>
+                            </div>
+
+                            <div title="Send Message">
+                                <Link
+                                    to={{
+                                        pathname: `/teamleader/chatting/${row.q_id}`,
+                                        obj: {
+                                            message_type: "3",
+                                            query_No: row.assign_no,
+                                            query_id: row.q_id,
+                                            routes: `/teamleader/assignment`
+                                        }
+                                    }}
+                                >
+                                    <i
+                                        class="fa fa-comments-o"
+                                        style={{
+                                            fontSize: 16,
+                                            cursor: "pointer",
+                                            marginLeft: "8px",
+                                            color: "blue"
+                                        }}
+                                    ></i>
+                                </Link>
+                            </div>
+
+                        </div>
+                    </>
+                );
+            },
+        },
     ];
 
 
@@ -366,7 +429,6 @@ function AssignmentTab() {
                                 />
                             </div>
 
-                                              
                             <div class="form-group mx-sm-1  mb-2">
                                 <label className="form-select form-control">Total Records : {records}</label>
                             </div>
@@ -386,6 +448,13 @@ function AssignmentTab() {
                         data={assignment}
                         columns={columns}
                         rowIndex
+                    />
+
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getAssignmentList}
                     />
                 </CardBody>
             </Card>

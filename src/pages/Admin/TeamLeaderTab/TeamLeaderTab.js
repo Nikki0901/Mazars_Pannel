@@ -16,12 +16,15 @@ import {
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
-
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tlCount, setTlCount] = useState("");
+  const [subCat, setsubCat] = useState([])
   const userid = window.localStorage.getItem("adminkey");
+  var kk = []
+  var pp = []
+
 
   const columns = [
     {
@@ -76,7 +79,7 @@ function TeamLeaderTab() {
       },
     },
     {
-      // dataField: "parent_id",
+      dataField: "parent_id",
       text: "Category",
       sort: true,
       headerStyle: () => {
@@ -103,30 +106,24 @@ function TeamLeaderTab() {
       }
     },
     {
-
-
-      text: "Sub Category",
+      dataField: "allcat_id",
+      text: "Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
       formatter: function nameFormatter(cell, row) {
         var digit = [];
-        digit = row.allcat_id.split(",")
+
+        digit = JSON.parse(row.allcat_id)
+
 
         return (
           <>
-
-            {
-              digit.map((e) => {
-                return (
-                  <>
-                    {e + ","}
-                  </>
-                )
-              })
-            }
+            <p style={{ "color": "blue", "diplay": "block" }}>{digit.direct + ","} </p>
+            <p style={{ "color": "green", "display": "block" }}>{digit.indirect + ","}</p>
           </>
+
         )
       }
     },
@@ -181,9 +178,9 @@ function TeamLeaderTab() {
 
   const getTeamLeader = () => {
     axios.get(`${baseUrl}/tl/getTeamLeader`).then((res) => {
-      console.log(res);
+
       if (res.data.code === 1) {
-        console.log(data)
+
         setData(res.data.result);
         setTlCount(res.data.result.length);
       }
@@ -194,6 +191,7 @@ function TeamLeaderTab() {
   //check
   const del = (id) => {
     console.log("del", id);
+
     Swal.fire({
       title: "Are you sure?",
       text: "It will permanently deleted !",
@@ -229,8 +227,11 @@ function TeamLeaderTab() {
   };
 
 
+
   return (
+
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
+      {console.log("Layout")}
       <Card>
         <CardHeader>
           <Row>
@@ -238,21 +239,19 @@ function TeamLeaderTab() {
               <CardTitle tag="h4">Team Leaders ({tlCount})</CardTitle>
             </Col>
             <Col md="2">
-              <Link to={"/admin/addnewtl"} class="btn btn-primary">
+              <Link to={"/admin/addnewtl"} className="btn btn-primary">
                 Add New
               </Link>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
-
           <BootstrapTable
             bootstrap4
             keyField="id"
             data={data}
             columns={columns}
             rowIndex
-            wrapperClasses="table-responsive"
           />
         </CardBody>
       </Card>
@@ -260,7 +259,7 @@ function TeamLeaderTab() {
   );
 }
 
-export default TeamLeaderTab;
+export default TeamLeaderTab
 
 // import React, { useState, useEffect } from "react";
 // import Layout from "../../../components/Layout/Layout";
@@ -280,6 +279,7 @@ export default TeamLeaderTab;
 // } from "reactstrap";
 // import BootstrapTable from "react-bootstrap-table-next";
 // import Swal from "sweetalert2";
+
 // function TeamLeaderTab() {
 //   const alert = useAlert();
 //   const [data, setData] = useState([]);
@@ -294,12 +294,45 @@ export default TeamLeaderTab;
 //         return rowIndex + 1;
 //       },
 //       headerStyle: () => {
-//         return { fontSize: "12px" ,width:"50px"};
+//         return { fontSize: "12px", width: "50px" };
+//       },
+//     },
+//     {
+//       dataField: "post_name",
+//       text: "Post_ID",
+//       sort: true,
+//       headerStyle: () => {
+//         return { fontSize: "12px" };
+//       },
+//     },
+
+//     {
+//       dataField: "email",
+//       text: "Post_Email",
+//       sort: true,
+//       headerStyle: () => {
+//         return { fontSize: "12px" };
 //       },
 //     },
 //     {
 //       dataField: "name",
-//       text: "Name",
+//       text: "Name of TL",
+//       sort: true,
+//       headerStyle: () => {
+//         return { fontSize: "12px" };
+//       },
+//     },
+//     {
+//       dataField: "personal_email",
+//       text: "Personal Email",
+//       sort: true,
+//       headerStyle: () => {
+//         return { fontSize: "12px" };
+//       },
+//     },
+//     {
+//       dataField: "phone",
+//       text: "Personal Mobile No",
 //       sort: true,
 //       headerStyle: () => {
 //         return { fontSize: "12px" };
@@ -312,22 +345,22 @@ export default TeamLeaderTab;
 //       headerStyle: () => {
 //         return { fontSize: "12px" };
 //       },
-//       formatter : function nameFormatter(cell, row) {
+//       formatter: function nameFormatter(cell, row) {
 //         var digit2 = [];
 //         digit2 = row.allpcat_id.split(",")
 
-//         return(
+//         return (
 //           <>
 
-//          {
-//             digit2.map((e) => {
-//             return(
-//               <>
-//              {e + ","}
-//               </>
-//             ) 
-//           })
-//          }
+//             {
+//               digit2.map((e) => {
+//                 return (
+//                   <>
+//                     {e + ","}
+//                   </>
+//                 )
+//               })
+//             }
 //           </>
 //         )
 //       }
@@ -340,42 +373,27 @@ export default TeamLeaderTab;
 //       headerStyle: () => {
 //         return { fontSize: "12px" };
 //       },
-//       formatter : function nameFormatter(cell, row) {
+//       formatter: function nameFormatter(cell, row) {
 //         var digit = [];
 //         digit = row.allcat_id.split(",")
 
-//         return(
+//         return (
 //           <>
 
-//          {
-//             digit.map((e) => {
-//             return(
-//               <>
-//              {e + ","}
-//               </>
-//             ) 
-//           })
-//          }
+//             {
+//               digit.map((e) => {
+//                 return (
+//                   <>
+//                     {e + ","}
+//                   </>
+//                 )
+//               })
+//             }
 //           </>
 //         )
 //       }
 //     },
-//     {
-//       dataField: "email",
-//       text: "Email",
-//       sort: true,
-//       headerStyle: () => {
-//         return { fontSize: "12px" };
-//       },
-//     },
-//     {
-//       dataField: "phone",
-//       text: "Phone",
-//       sort: true,
-//       headerStyle: () => {
-//         return { fontSize: "12px" };
-//       },
-//     },
+
 //     {
 //       dataField: "",
 //       text: "Edit",
@@ -436,10 +454,9 @@ export default TeamLeaderTab;
 //   };
 
 
-// //check
+//   //check
 //   const del = (id) => {
 //     console.log("del", id);
-
 //     Swal.fire({
 //       title: "Are you sure?",
 //       text: "It will permanently deleted !",
@@ -475,7 +492,6 @@ export default TeamLeaderTab;
 //   };
 
 
-
 //   return (
 //     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
 //       <Card>
@@ -492,12 +508,14 @@ export default TeamLeaderTab;
 //           </Row>
 //         </CardHeader>
 //         <CardBody>
+
 //           <BootstrapTable
 //             bootstrap4
 //             keyField="id"
 //             data={data}
 //             columns={columns}
 //             rowIndex
+//             wrapperClasses="table-responsive"
 //           />
 //         </CardBody>
 //       </Card>
@@ -506,3 +524,5 @@ export default TeamLeaderTab;
 // }
 
 // export default TeamLeaderTab;
+
+

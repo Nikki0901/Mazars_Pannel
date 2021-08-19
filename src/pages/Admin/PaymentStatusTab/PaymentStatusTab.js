@@ -32,7 +32,9 @@ function PaymentStatus(props) {
       .get(`${baseUrl}/tl/getUploadedProposals`)
       .then((res) => {
         console.log(res);
-        setAllPayment(res.data.result.length);
+        if (res.data.code === 1) {
+          setAllPayment(res.data.result.length);
+        }
       });
   };
 
@@ -41,7 +43,9 @@ function PaymentStatus(props) {
       .get(`${baseUrl}/tl/getUploadedProposals?status=1`)
       .then((res) => {
         console.log(res);
-        setPaid(res.data.result.length);
+        if (res.data.code === 1) {
+          setPaid(res.data.result.length);
+        }
       });
   };
 
@@ -50,7 +54,9 @@ function PaymentStatus(props) {
       .get(`${baseUrl}/tl/getUploadedProposals?status=2`)
       .then((res) => {
         console.log(res);
-        setUnpaid(res.data.result.length);
+        if (res.data.code === 1) {
+          setUnpaid(res.data.result.length);
+        }
       });
   };
 

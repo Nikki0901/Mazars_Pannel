@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import axios from "axios";
-import { baseUrl,ReportUrl } from "../../config/config";
+import { baseUrl, ReportUrl } from "../../config/config";
 import {
   Card,
   CardHeader,
@@ -302,33 +302,7 @@ function InprogressAssignment() {
       },
       formatter: priceFormatter,
     },
-    {
-      text: "Action",
-      dataField: "",
-      style: {
-        fontSize: "11px",
-      },
-      headerStyle: () => {
-        return { fontSize: "11px", width: "70px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
 
-            {
-              row.status == "Payment Decliend" ? null :
-                <div
-                  style={{ cursor: "pointer" }}
-                  title="Pay Amount"
-                  onClick={() => paymentHandler(row)}>
-                  <PaymentIcon color="primary" />
-                </div>
-            }
-
-          </>
-        );
-      },
-    },
   ];
 
   //accept handler
@@ -376,7 +350,7 @@ function InprogressAssignment() {
     return null;
   }
 
- 
+
 
 
 

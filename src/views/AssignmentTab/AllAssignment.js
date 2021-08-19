@@ -239,18 +239,6 @@ function AllAssignment() {
     return null;
   }
 
-  //handleJoin
-  const handleJoin = (id) => {
-    console.log("id", id);
-    Cookies.set("channel", id);
-    Cookies.set("baseMode", baseMode);
-    Cookies.set("transcode", transcode);
-    Cookies.set("attendeeMode", attendeeMode);
-    Cookies.set("videoProfile", videoProfile);
-    history.push("/customer/meeting");
-  };
-
-
 
 
   return (

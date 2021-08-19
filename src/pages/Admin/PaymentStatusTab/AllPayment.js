@@ -53,7 +53,6 @@ function AllPayment() {
                 setPayment(res.data.result);
                 setPaymentCount(res.data.result.length);
                 setRecords(res.data.result.length);
-
             }
         });
     };

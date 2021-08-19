@@ -22,7 +22,7 @@ function TaxProfessionalsTab() {
   const [data, setData] = useState([]);
   const [tpCount, setTpCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
-
+  const [myPurpose, setPurpose] = useState([])
   useEffect(() => {
     getTaxProf();
   }, []);
@@ -37,7 +37,7 @@ function TaxProfessionalsTab() {
     });
   };
 
-  
+
 
   const columns = [
     {
@@ -98,56 +98,60 @@ function TaxProfessionalsTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter : function nameFormatter(cell, row) {
+      formatter: function nameFormatter(cell, row) {
         var digit2 = [];
         digit2 = row.allpcat_id.split(",")
-       
-        return(
+
+        return (
           <>
-          
-         {
-            digit2.map((e) => {
-            return(
-              <>
-             {e + ","}
-              </>
-            ) 
-          })
-         }
+
+            {
+              digit2.map((e) => {
+                return (
+                  <>
+                    {e + ","}
+                  </>
+                )
+              })
+            }
           </>
         )
       }
     },
+
+
     {
-      
-     
+
+
       text: "Sub Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter : function nameFormatter(cell, row) {
+      formatter: function nameFormatter(cell, row) {
         var digit = [];
+
         digit = row.allcat_id.split(",")
-       
-        return(
+
+
+        return (
           <>
-          
-         {
-            digit.map((e) => {
-            return(
-              <>
-             {e + ","}
-              </>
-            ) 
-          })
-         }
+
+            {
+              digit.map((e) => {
+                return (
+                  <>
+                    {e + ","}
+                  </>
+                )
+              })
+            }
           </>
         )
       }
     },
-   
-   
+
+
     {
       dataField: "",
       text: "Edit",
@@ -300,7 +304,7 @@ export default TaxProfessionalsTab;
 //     });
 //   };
 
-  
+
 
 //   const columns = [
 //     {

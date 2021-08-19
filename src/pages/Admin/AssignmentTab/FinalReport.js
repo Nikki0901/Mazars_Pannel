@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import AdminFilter from "../../../components/Search-Filter/AdminFilter";
 import Records from "../../../components/Records/Records";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
 function FinalReport() {
@@ -37,6 +38,15 @@ function FinalReport() {
   var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
   console.log("current_date :", current_date);
   const [item] = useState(current_date);
+
+
+  const [assignNo, setAssignNo] = useState('');
+  const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const ViewDiscussionToggel = (key) => {
+    setViewDiscussion(!ViewDiscussion);
+    setAssignNo(key)
+  }
+
 
   useEffect(() => {
     getAssignmentData();
@@ -284,6 +294,56 @@ function FinalReport() {
         return { fontSize: "12px" };
       },
     },
+    {
+      text: "Action",
+      headerStyle: () => {
+        return { fontSize: "12px", width: "75px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+
+              <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/admin/chatting/${row.q_id}`,
+                    obj: {
+                      message_type: "3",
+                      query_No: row.assign_no,
+                      query_id: row.q_id,
+                      routes: `/admin/assignment`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div>
+
+              <div title="View Discussion Message">
+                <i
+                  class="fa fa-comments-o"
+                  style={{
+                    fontSize: 16,
+                    cursor: "pointer",
+                    color: "orange"
+                  }}
+                  onClick={() => ViewDiscussionToggel(row.assign_no)}
+                ></i>
+              </div>
+            </div>
+          </>
+        );
+      },
+    },
   ];
 
   const onSubmit = (data) => {
@@ -414,6 +474,13 @@ function FinalReport() {
             data={assignmentDisplay}
             columns={columns}
             rowIndex
+          />
+
+          <DiscardReport
+            ViewDiscussionToggel={ViewDiscussionToggel}
+            ViewDiscussion={ViewDiscussion}
+            report={assignNo}
+            getData={getAssignmentData}
           />
         </CardBody>
       </Card>

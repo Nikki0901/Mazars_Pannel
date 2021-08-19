@@ -10,34 +10,154 @@ import Layout from "../../../components/Layout/Layout";
 function Dashboard() {
   const userid = window.localStorage.getItem("tpkey");
   const [incomplete, setIncomplete] = useState("");
-  const [complete, setcomplete] = useState("");
+  // const [complete, setcomplete] = useState("");
+
+  const [allQueries, setAllQueries] = useState({
+    total: '',
+    inprogress_queries: '',
+    inprogress_allocation: '',
+    inprogress_proposal: '',
+    inprogress_assignment: '',
+    complete_query: '',
+    declined_queries: '',
+    admin_declined_query: '',
+    customer_declined_Query: '',
+    customer_declined_proposal: '',
+    Customer_declined_payment: '',
+
+    allproposal: '',
+    accepted_proposals: '',
+    InProgress: '',
+    inprogress_preparation: '',
+    inprogress_acceptance: '',
+    declined: '',
+  });
+
+
+  const [assignment, setAssignment] = useState({
+    inprogress: '',
+    complete: '',
+    client_discussion: '',
+    draft_report: '',
+    final_discussion: '',
+    final_report: '',
+    complete_inprocess: '',
+    customer_declined_payment: ''
+  });
+
+  const [payment, setPayment] = useState({
+    paid: '',
+    unpaid: '',
+    totalpayment: '',
+  });
+
+  const { total, inprogress_queries,
+    inprogress_allocation, inprogress_proposal,
+    inprogress_assignment, complete_query,
+    declined_queries, admin_declined_query,
+    customer_declined_Query, customer_declined_proposal,
+    Customer_declined_payment,
+    allproposal,
+    inprogress_preparation,
+    declined, inprogress_acceptance,
+    accepted_proposals, InProgress } = allQueries;
+
+
+  const {
+    inprogress,
+    complete, client_discussion, draft_report, final_discussion,
+    final_report, complete_inprocess,
+    customer_declined_payment } = assignment;
+
+  const {
+    paid,
+    unpaid,
+    totalpayment } = payment;
+
+
 
   useEffect(() => {
-    const getIncomplete = () => {
+
+    const getAllQueries = () => {
       axios
-        .get(`${baseUrl}/tp/GetIncompleteQues?id=${JSON.parse(userid)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setIncomplete(res.data.result.length);
+        .get(`${baseUrl}/admin/totalComplete?tp_id=${JSON.parse(userid)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setAllQueries({
+              total: response.data.result.total,
+              inprogress_queries: response.data.result.inprogress_queries,
+              inprogress_allocation: response.data.result.inprogress_allocation,
+              inprogress_proposal: response.data.result.inprogress_proposal,
+              inprogress_assignment: response.data.result.inprogress_assignment,
+              complete_query: response.data.result.complete_query,
+              declined_queries: response.data.result.declined_queries,
+              admin_declined_query: response.data.result.admin_declined_query,
+              customer_declined_Query: response.data.result.customer_declined_Query,
+              customer_declined_proposal: response.data.result.customer_declined_proposal,
+              Customer_declined_payment: response.data.result.Customer_declined_payment,
+
+              allproposal: response.data.result.proposal.allproposal,
+              InProgress: response.data.result.proposal.InProgress,
+              inprogress_preparation: response.data.result.proposal.inprogress_preparation,
+              inprogress_acceptance: response.data.result.proposal.inprogress_acceptance,
+              accepted_proposals: response.data.result.proposal.accepted_proposals,
+              declined: response.data.result.proposal["customer_declined_proposals "],
+            })
           }
+        })
+        .catch((error) => {
+          console.log("error", error);
         });
     };
 
-    const getComplete = () => {
+    const getAssignment = () => {
       axios
-        .get(`${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(userid)}`)
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 1) {
-            setcomplete(res.data.result.length);
+        .get(`${baseUrl}/admin/getAssignmentsCount?tp_id=${JSON.parse(userid)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setAssignment({
+              inprogress: response.data.result.inprogress,
+              complete: response.data.result.complete,
+              client_discussion: response.data.result.client_discussion,
+              draft_report: response.data.result.draft_report,
+              final_discussion: response.data.result.final_discussion,
+              final_report: response.data.result.final_report,
+              complete_inprocess: response.data.result.complete_inprocess,
+              customer_declined_payment: response.data.result.customer_declined_payment,
+            })
           }
+        })
+        .catch((error) => {
+          console.log("error", error);
         });
     };
 
-    getIncomplete();
-    getComplete();
+    const getPayment = () => {
+      axios
+        .get(`${baseUrl}/admin/getAssignmentsPaymentCount?tp_id=${JSON.parse(userid)}`)
+        .then((response) => {
+          console.log("code---", response);
+          if (response.data.code === 1) {
+            setPayment({
+              paid: response.data.result.paid,
+              unpaid: response.data.result.unpaid,
+              totalpayment: response.data.result.totalpayment,
+            })
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
+
+    getAllQueries();
+    getPayment();
+    getAssignment();
   }, []);
+
+
 
   return (
     <Layout TPDashboard="TPDashboard" TPuserId={userid}>
@@ -107,54 +227,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-{
-  /* <div>
-        <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
-          <TabList
-            style={{
-              listStyleType: "none",
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
-              Pending for Acceptance
-            </Tab>
-            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>Inprogress</Tab>
-            <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>Complete</Tab>
-          </TabList>
-
-          <TabPanel>
-            <p> Pending for Acceptance</p>
-            <button onClick={() => setTabIndex(1)}>go to 1st tab</button>
-          </TabPanel>
-          <TabPanel>
-            <p>Inprogress tab</p>
-          </TabPanel>
-          <TabPanel>
-            <p>Complete tab</p>
-          </TabPanel>
-        </Tabs>
-      </div> */
-}
-
-// const myStyle1 = {
-//   backgroundColor: "grey",
-//  padding: "12px",
-//   borderRadius: "50px",
-//   width: "200px",
-//   textAlign: "center",
-//   color: "white",
-//   cursor: "pointer",
-// };
-// const myStyle2 = {
-//  padding: "12px",
-//   borderRadius: "50px",
-//   width: "200px",
-//   textAlign: "center",
-//   backgroundColor: "blue",
-//   color: "white",
-//   cursor: "pointer",
-// };
-
-// const [tabIndex, setTabIndex] = useState(0);
