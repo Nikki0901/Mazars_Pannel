@@ -75,7 +75,7 @@ function Dashboard() {
 
     const getAllQueries = () => {
       axios
-        .get(`${baseUrl}/admin/totalComplete?tl_id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/admin/totalComplete?tp_id==${JSON.parse(userid)}`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
@@ -108,7 +108,7 @@ function Dashboard() {
 
     const getAssignment = () => {
       axios
-        .get(`${baseUrl}/admin/getAssignmentsCount?tl_id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/admin/getAssignmentsCount?tp_id=${JSON.parse(userid)}`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
@@ -131,7 +131,7 @@ function Dashboard() {
 
     const getPayment = () => {
       axios
-        .get(`${baseUrl}/admin/getAssignmentsPaymentCount?tl_id=${JSON.parse(userid)}`)
+        .get(`${baseUrl}/admin/getAssignmentsPaymentCount?tp_id=${JSON.parse(userid)}`)
         .then((response) => {
           console.log("code---", response);
           if (response.data.code === 1) {
