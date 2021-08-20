@@ -1,10 +1,8 @@
 import React from "react";
 import { merge } from "lodash";
 import AgoraRTC from "agora-rtc-sdk";
-
 import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
 import axios from "axios";
-
 import "./canvas.css";
 import "../../../assets/fonts/css/icons.css";
 
@@ -457,7 +455,7 @@ class AgoraCanvas extends React.Component {
   };
 
 
-  encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
+encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
 
 
   //recording
@@ -482,20 +480,12 @@ class AgoraCanvas extends React.Component {
         console.log("res-", response);  
         // console.log("resid",response.data.resourceId)
         var res = response.data.resourceId   
-
         this.startRecording();
       })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+      // .catch((error) => {
+      //   console.log("error - ", error);
+      // });
   };
-
-
-
-
-
- 
-
 
 
   render() {

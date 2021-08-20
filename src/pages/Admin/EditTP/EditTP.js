@@ -19,10 +19,11 @@ import {
   Table,
   Tooltip,
 } from "reactstrap";
-
 import { Form, Input, Button } from "antd";
 import Select from "react-select";
 import Alerts from "../../../common/Alerts";
+
+
 const Schema = yup.object().shape({
   p_name: yup.string().required("required name"),
   p_email: yup.string().email("invalid email").required("required email"),
@@ -72,6 +73,7 @@ function EditTP() {
   const [teamleader, setTeamLeader] = useState([]);
   const [tl, setTl] = useState([])
   const [post1, setPost1] = useState([])
+  const [show, setShow] = useState([])
   const [post_na, setPost_na] = useState()
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
@@ -448,6 +450,40 @@ function EditTP() {
     }
   }
 
+  // tlFun Function
+  //   const tlFun = (e) => {
+  //     var a ;
+  //   console.log("id", e)
+
+  //   teamleader.filter((p) => {
+
+  //     if(p.id == e){
+  //    console.log(p.post_name)
+  //    console.log("teamLeader", p.id)
+  //      setTl(p.id)
+  //      setPost_na(p.post_name)
+  //     }
+  //   })
+  //  console.log("tlId", tl)
+  //     let formData = new FormData()
+  //     formData.append("post", post_na)
+  //     axios({
+  //       method  :"POST",
+  //       url  : `${baseUrl}/admin/addTpPost?post=${post_na}`,
+  //       data : formData
+  //     })
+  //     .then(function (response) {
+  //       if(response.data.code === 1){
+  //         setPost1(response.data.result)
+  //       }
+  //       else if(response.data.code === 0){
+  //         console.log(response.data.result)
+  //       }
+  //     } )
+  //     .catch((error) => {
+  //       console.log("erroror - ", error);
+  //     });
+  //   }
   const defSubValue = () => {
 
     console.log("done2")
@@ -501,30 +537,19 @@ function EditTP() {
                   onFinish={onFinish}
                 >
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label>Teamleader post name <span className="declined">*</span></label>
                         <input type="text" className="form-control" defaultValue={data11} disabled />
-
-                        {errors.p_teamleader && (
-                          <div className="invalid-feedback">
-                            {errors.p_teamleader.message}
-                          </div>
-                        )}
-
                       </div>
-
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Post Email</label>
+                        <label> Teamleader post email <span className="declined">*</span></label>
                         <input
                           type="text"
                           name="post_email"
                           defaultValue={data7}
-
                           disabled
                           className={classNames("form-control", {
                             "is-invalid": errors.post_email,
@@ -532,11 +557,14 @@ function EditTP() {
                         />
                       </div>
                     </div>
+                  </div>
 
+
+                  <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
 
-                        <label>tlpost name <span className="declined">*</span></label>
+                        <label>TP post name <span className="declined">*</span></label>
                         <input
                           type="text"
                           name="post_name"
@@ -548,6 +576,28 @@ function EditTP() {
                         />
                       </div>
                     </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+
+
+                        <label> TP post email <span className="declined">*</span></label>
+                        <input
+                          type="text"
+                          name="p_email"
+                          ref={register}
+                          disabled
+
+                          className={classNames("form-control", {
+                            "is-invalid": errors.post_email,
+                          })}
+                          onChange={(e) => emailHandler(e)}
+                          onBlur={emailValidation}
+                        />
+
+                      </div>
+                    </div>
+
+
                   </div>
 
 
@@ -558,7 +608,7 @@ function EditTP() {
                         <Form.Item name="name">
                           <input
                             required
-                            disabled
+
                             className={classNames("form-control", {
                               "is-invalid": errors.p_name,
                             })} />
@@ -654,6 +704,7 @@ function EditTP() {
                         <Select isMulti options={options2}
                           onChange={subCategory}
                           defaultValue={subdefval}
+                          // value = {subData}
                           styles={{
                             option: (styles, { data }) => {
                               return {
@@ -698,7 +749,6 @@ function EditTP() {
 }
 
 export default EditTP;
-
 
 // import React, { useState, useEffect } from "react";
 // import Layout from "../../../components/Layout/Layout";

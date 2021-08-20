@@ -2,6 +2,9 @@ import React from "react";
 import { merge } from "lodash";
 import AgoraRTC from "agora-rtc-sdk";
 
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import axios from "axios";
+
 import "./canvas.css";
 import "../../../assets/fonts/css/icons.css";
 
@@ -444,6 +447,46 @@ class AgoraCanvas extends React.Component {
     return stream;
   };
 
+
+
+  startRecording = () => {
+    console.log("startRecording - ");
+  };
+
+encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
+
+
+  //recording
+  recordStream = () => {
+    // console.log("recordStream call")
+    var data = JSON.stringify({
+      "cname":"demo",
+      "uid":"527841",
+      "clientRequest":{ "resourceExpiredHour": 24}});
+
+    axios({
+      method: "POST",
+      headers: {
+        "content-type": "application/json;charset=utf-8",
+        "authorization": "Basic "+this.encodedString,
+        "cache-control": "no-cache",
+      },
+      url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/acquire`,
+      data: data,
+    })
+      .then(function (response) {
+        console.log("res-", response);  
+        // console.log("resid",response.data.resourceId)
+        var res = response.data.resourceId   
+
+        this.startRecording();
+      })
+      .catch((error) => {
+        console.log("erroror - ", error);
+      });
+  };
+
+
   render() {
 
     const style = {
@@ -526,6 +569,21 @@ class AgoraCanvas extends React.Component {
       </span>
     );
 
+
+
+    //recording btn
+    const recordingBtn = (
+      <span
+        onClick={this.recordStream}
+        className={
+          this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
+        }
+        title="Record"
+      >
+        <RecordVoiceOverIcon />
+      </span>
+    );
+
     return (
       <div id="ag-canvas" style={style}>
         <div className="ag-btn-group">
@@ -543,6 +601,7 @@ class AgoraCanvas extends React.Component {
           }
           {switchDisplayBtn}
           {hideRemoteBtn}
+          {recordingBtn}
         </div>
       </div>
     );
