@@ -23,6 +23,7 @@ import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import Records from "../../components/Records/Records";
 import DiscardReport from "../AssignmentTab/DiscardReport";
 import PaymentIcon from '@material-ui/icons/Payment';
+import PaymentComponent from './PaymentComponent';
 
 
 function Paid() {
@@ -31,11 +32,49 @@ function Paid() {
   const userId = window.localStorage.getItem("userid");
   const [records, setRecords] = useState([]);
 
-  const [pay, setPay] = useState([]);
+
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
   const [modal, setModal] = useState(false);
 
+  const [pay, setPay] = useState({
+    pay: "",
+    amount: "",
+    accepted_amount: "",
+    paid_amount: "",
+    assign_id: '',
+
+    amount_type: "",
+    amount_fixed: "",
+    amount_hourly: "",
+
+    payment_terms: "",
+    no_of_installment: "",
+    installment_amount: "",
+    due_date: "",
+  });
+
+  const [addPaymentModal, setPaymentModal] = useState(false);
+  const paymentHandler = (key) => {
+    setPaymentModal(!addPaymentModal);
+    setPay({
+      amount: key.accepted_amount,
+      assign_id: key.assign_id,
+      accepted_amount: key.accepted_amount,
+      paid_amount: key.paid_amount,
+
+      amount_type: key.amount_type,
+      amount_fixed: key.amount_fixed,
+      amount_hourly: key.amount_hourly,
+
+
+      payment_terms: key.payment_terms,
+      no_of_installment: key.no_of_installment,
+      installment_amount: key.installment_amount,
+      due_date: key.due_date,
+
+    });
+  };
 
   const [assignNo, setAssignNo] = useState('');
   const [ViewDiscussion, setViewDiscussion] = useState(false);
@@ -265,7 +304,34 @@ function Paid() {
         return (
           <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-             
+
+              <div>
+                {
+                  row.paid_status == "0" ?
+                    <div
+                      style={{ cursor: "pointer" }}
+                      title="Pay Amount"
+                      onClick={() => paymentHandler(row)}>
+                      <PaymentIcon color="primary" />
+                    </div>
+                    :
+                    null
+                }
+              </div>
+
+              {
+                row.paid_amount > 0 ? <div style={{ cursor: "pointer" }} title="Payment History">
+                  <i
+                    class="fa fa-credit-card"
+                    style={{ color: "green", fontSize: "16px" }}
+                    onClick={() => toggle(row.assign_id)}
+                  ></i>
+                </div>
+                  :
+                  null
+              }
+
+
               <div title="Send Message">
                 <Link
                   to={{
@@ -367,7 +433,12 @@ function Paid() {
             </Modal>
 
 
-          
+            <PaymentComponent
+              paymentHandler={paymentHandler}
+              addPaymentModal={addPaymentModal}
+              pay={pay}
+              getPaymentStatus={getPaymentStatus}
+            />
 
             <DiscardReport
               ViewDiscussionToggel={ViewDiscussionToggel}

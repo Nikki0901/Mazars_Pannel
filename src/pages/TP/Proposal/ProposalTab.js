@@ -13,7 +13,7 @@ import DeclinedProposal from "./DeclinedProposal";
 
 
 function ProposalTab(props) {
-    const userid = window.localStorage.getItem("tlkey");
+    const userid = window.localStorage.getItem("tpkey");
     const [tabIndex, setTabIndex] = useState(0);
 
 
@@ -106,7 +106,7 @@ function ProposalTab(props) {
 
 
     return (
-        <Layout TLDashboard="TLDashboard" TLuserId={userid}>
+        <Layout TPDashboard="TPDashboard" TPuserId={userid}>
             <div>
                 <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                     <TabList

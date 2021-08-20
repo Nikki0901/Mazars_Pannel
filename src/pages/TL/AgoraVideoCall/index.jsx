@@ -1,10 +1,12 @@
 import React from "react";
 import { merge } from "lodash";
 import AgoraRTC from "agora-rtc-sdk";
-import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import MicNoneIcon from '@material-ui/icons/MicNone';
+import MicOffIcon from '@material-ui/icons/MicOff';
 import axios from "axios";
 import "./canvas.css";
 import "../../../assets/fonts/css/icons.css";
+import { baseUrl } from "../../../config/config";
 
 const tile_canvas = {
   "1": ["span 12/span 24"],
@@ -450,17 +452,135 @@ class AgoraCanvas extends React.Component {
   };
 
 
-  startRecording = () => {
-    console.log("startRecording - ");
-  };
+
+  
+  // CreateS3Folder = (uid) =>{
+  //   console.log("CreateS3Folder",uid)
+  //   axios
+  //           .get(`${baseUrl}/s3/createMPObject.php?folder_id=${JSON.parse(uid)}`)
+  //           .then((res) => {
+  //               console.log(res);    
+  //           });
+  // }
+
+
+  // async function GetRecordingStatus(resourceID,sID){
+  //   console.log('Taking a break...');
+  //   await sleep(5000);
+  //   console.log('5 seconds later, showing sleep in a loop...');
+  
+  //   var settingsStatus = {
+  //    "async": true,
+  //    "crossDomain": true,
+  //    "url": "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/resourceid/"+resourceID+"/sid/"+sID+"/mode/mix/query",
+  //    "method": "GET",
+    //  "headers": {
+    //   "content-type": "application/json;charset=utf-8",
+    //   "authorization": "Basic "+encodedString,
+    //   "cache-control": "no-cache",
+    //  }
+  //  }
+  //  $.ajax(settingsStatus).done(function (response) {
+  //    console.log(response);
+  //     FileName = response.serverResponse.fileList;
+  //     FileName = FileName.split("/"); 
+  //     RefinedFilename = FileName[FileName.length - 1]; 
+  //    return response;
+  //  });
+  // }
+  
 
 
 encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
 
 
-  //recording
+//get recording status
+  GetRecordingStatus = (json) =>{
+    console.log("GetRecordingStatus",json)
+
+    var resourceId = json.data.resourceId;
+    var sid = json.data.sid;
+
+    localStorage.setItem("resourceId", resourceId);
+    localStorage.setItem("sid", sid);
+
+
+    fetch(`https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/sid/${sid}/mode/mix/query`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json;charset=utf-8",
+        "authorization": "Basic "+this.encodedString,
+        "cache-control": "no-cache",
+      },
+  })
+      .then((res) => res.json())
+      .then((response) => {
+          console.log(response);
+      })
+      .catch((error) => console.log(error));
+  
+  }
+
+
+//start recording
+  startRecording = (key) =>{
+    console.log("startRecording - ",key);
+    var resourceId = key.data.resourceId 
+
+    // this.CreateS3Folder("527841");
+    var data = JSON.stringify({
+      "cname":"demo", 
+      "uid":"527841",       // userid who i want to record...is this correct????
+      "clientRequest":{
+          //  "token": "temp_token_generated_from_agora_console",
+            "recordingConfig":{
+              "channelType":0,
+              "streamTypes":2,
+              "audioProfile":1,
+              "videoStreamType":0,
+              "maxIdleTime":120,
+              "transcodingConfig":{
+                  "width":360,
+                  "height":640,
+                  "fps":30,
+                  "bitrate":600,
+                  "maxResolutionUid":"1",
+                  "mixedVideoLayout":1
+                  }
+              },
+              "subscribeVideoUids": ["936239554"],    // is this correct?? 
+              "subscribeAudioUids": ["936239554"],    //is this correct??
+          "storageConfig":{
+              "vendor":1,
+              "region":14,
+              "bucket":"my_bucket_name",
+              "accessKey":"xxxx",
+              "secretKey":"xxxx"
+          }   
+      }
+  });
+
+    axios({
+      method: "POST",
+      headers: {
+        "content-type": "application/json;charset=utf-8",
+        "authorization": "Basic "+this.encodedString,
+        "cache-control": "no-cache",
+      },
+      url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/mode/mix/start`,
+      data: data,
+    })
+    .then(json => this.GetRecordingStatus(json)) 
+      .catch((error) => {
+        console.log("error - ", error);
+      });
+  };
+
+
+
+  //recording  acquire
   recordStream = () => {
-    // console.log("recordStream call")
+    console.log("recordStream - ");
     var data = JSON.stringify({
       "cname":"demo",
       "uid":"527841",
@@ -476,17 +596,61 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
       url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/acquire`,
       data: data,
     })
-      .then(function (response) {
-        console.log("res-", response);  
-        // console.log("resid",response.data.resourceId)
-        var res = response.data.resourceId   
-        this.startRecording();
-      })
-      // .catch((error) => {
-      //   console.log("error - ", error);
-      // });
+      .then(json => this.startRecording(json)) 
+      .catch((error) => {
+        console.log("error - ", error);
+      });
   };
 
+
+
+  // function StopRecording(resourceID,sID){
+  //   var settingsStop = {
+  //    "async": true,
+  //    "crossDomain": true,
+  //    "url" : "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/resourceid/"+resourceID+"/sid/"+sID+"/mode/mix/stop",
+  
+  //    "headers": {
+  //     "content-type": "application/json;charset=utf-8",
+  //     "authorization": "Basic "+encodedString,
+  //     "cache-control": "no-cache",
+  //    },
+  //    "processData": false,
+  //    "data": "{\n\t\"cname\": \""+channelName+"\",\n\t\"uid\": \""+uid+"\",\n\t\"clientRequest\":{}\n}"
+  //  }
+  
+  //  $.ajax(settingsStop).done(function (response) {
+  //    console.log(response);
+  //  });
+  // }
+
+
+ //stop recording 
+ stopRecording = () => {
+  console.log("stopRecording - ");
+
+  var resourceId = localStorage.getItem("resourceId");
+  var sid = localStorage.getItem("sid");
+
+  var data = JSON.stringify({
+    "cname":"demo",
+    "uid":"527841",
+    "clientRequest":{ }});
+  axios({
+    method: "POST",
+    headers: {
+      "content-type": "application/json;charset=utf-8",
+      "authorization": "Basic "+this.encodedString,
+      "cache-control": "no-cache",
+    },
+    url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/sid/${sid}/mode/mix/stop`,
+    data: data,
+  })
+    .then(json =>(json)) 
+    .catch((error) => {
+      console.log("error - ", error);
+    });
+};
 
   render() {
 
@@ -570,18 +734,32 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
       </span>
     );
 
-//recording btn
+//recording btn on
     const recordingBtn = (
       <span
         onClick={this.recordStream}
         className={
           this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
         }
-        title="Record"
+        title="Record On"
       >
-        <RecordVoiceOverIcon />
+        <MicNoneIcon />
       </span>
     );
+
+//recording btn off
+const recordingBtnOff = (
+  <span
+    onClick={this.stopRecording}
+    className={
+      this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
+    }
+    title="Record Off"
+  >
+    <MicOffIcon />
+  </span>
+);
+
 
     return (
       <div id="ag-canvas" style={style}>
@@ -601,6 +779,7 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
           {switchDisplayBtn}
           {hideRemoteBtn}
           {recordingBtn}
+          {recordingBtnOff}
         </div>
       </div>
     );
@@ -610,3 +789,27 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
 export default AgoraCanvas;
 
 
+
+// "data": 
+// "{"cname\":\""+channelName+"\",
+// "uid\":\""+uid+"\",
+// "clientRequest\":{
+//   "recordingConfig\":{"maxIdleTime":60,
+//                         "channelType":1,
+//                         "transcodingConfig":{"width\":1280,
+//                         "height\":720,
+//                         "fps\":30,
+//                         "bitrate\":3420,
+//                         "mixedVideoLayout\":1,
+//                         "maxResolutionUid\":\""+uid+"
+//                       },
+                        
+//                     "storageConfig":
+//                     {"vendor\":"+vendor+",
+//                    "region\":"+region+",
+//                    "bucket\":\""+bucket+",
+//                    "accessKey\":\""+accessKey+"",
+//                    "fileNamePrefix\": [\"recordings\",\"mp\",\""+uid+"\"],
+//                    "secretKey\":\""+secretKey+"\"
+//                   }
+//                   }

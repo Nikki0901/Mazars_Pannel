@@ -10,7 +10,7 @@ const PrivateRouteTP = ({ component: Component, ...rest }) => {
         if (token) {
           return <Component {...props} />;
         } else {
-          return <Redirect to={"/taxprofession/login"} />;
+          return <Redirect to={"/taxprofessional/login"} />;
         }
       }}
     />

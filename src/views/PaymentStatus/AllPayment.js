@@ -34,6 +34,7 @@ function Paid() {
   const [records, setRecords] = useState([]);
   const [count, setCount] = useState("");
   const [payment, setPayment] = useState([]);
+  const [modal, setModal] = useState(false);
 
   const [pay, setPay] = useState({
     pay: "",
@@ -85,6 +86,23 @@ function Paid() {
     getPaymentStatus();
   }, []);
 
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(`${baseUrl}/admin/getPaymentDetail?id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setPay(response.payment_detail);
+      })
+      .catch((error) => console.log(error));
+  };
 
   const getPaymentStatus = () => {
     axios.get(`${baseUrl}/tl/getUploadedProposals?cid=${JSON.parse(userId)}`).then((res) => {
@@ -299,6 +317,22 @@ function Paid() {
                 }
               </div>
 
+              <div>
+                {
+                  row.paid_amount > 0 ?
+                    <div style={{ cursor: "pointer" }} title="Payment History">
+                      <i
+                        class="fa fa-credit-card"
+                        style={{ color: "green", fontSize: "16px" }}
+                        onClick={() => toggle(row.assign_id)}
+                      ></i>
+                    </div>
+                    :
+                    null
+                }
+              </div>
+
+
               <div title="Send Message">
                 <Link
                   to={{
@@ -361,6 +395,7 @@ function Paid() {
             />
           </CardHeader>
 
+
           <CardBody>
             <Records records={records} />
             <BootstrapTable
@@ -384,6 +419,39 @@ function Paid() {
               report={assignNo}
               getData={getPaymentStatus}
             />
+
+
+            <Modal isOpen={modal} fade={false} toggle={toggle}>
+              <ModalHeader toggle={toggle}>History</ModalHeader>
+              <ModalBody>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="row">S.No</th>
+                      <th scope="row">Date</th>
+                      <th scope="row">Amount</th>
+                    </tr>
+                  </thead>
+                  {pay.length > 0
+                    ? pay.map((p, i) => (
+                      <tbody>
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{CommonServices.removeTime(p.payment_date)}</td>
+                          <td>{p.paid_amount}</td>
+                        </tr>
+                      </tbody>
+                    ))
+                    : null}
+                </table>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+
           </CardBody>
         </Card>
       </>

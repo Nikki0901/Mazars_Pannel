@@ -118,16 +118,16 @@ function InprogressProposal() {
       formatter: function nameFormatter(cell, row) {
         return (
           <>
-            <div>
-              {row.status}/
-              {
+            <div className="completed">
+              {row.status}
+              {/* {
                 row.status == "Inprogress" ?
-                  <p className="inprogress">
+                  <p className="completed">
                     {row.statusdescription}
                   </p>
                   :
                   null
-              }
+              } */}
             </div>
           </>
         );

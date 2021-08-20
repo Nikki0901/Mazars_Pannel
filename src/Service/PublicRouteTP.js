@@ -15,7 +15,7 @@ const PublicRoutesTP = ({ component: Component, ...rest }) => {
                 if (token) {
                     return (
                         <>
-                            <Redirect to={"/taxprofession/dashboard"} />
+                            <Redirect to={"/taxprofessional/dashboard"} />
                         </>
                     )
                 } else {
