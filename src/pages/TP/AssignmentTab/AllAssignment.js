@@ -30,7 +30,7 @@ import DiscardReport from "../AssignmentTab/DiscardReport";
 function AssignmentTab() {
 
   const history = useHistory();
-  const userid = window.localStorage.getItem("tlkey");
+  const userid = window.localStorage.getItem("tpkey");
 
   const { handleSubmit, register, errors, reset } = useForm();
   const { Option, OptGroup } = Select;

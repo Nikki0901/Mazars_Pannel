@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./style.css";
 import Layout from "../../../components/Layout/Layout";
 import {
   Card,
@@ -23,6 +24,7 @@ function TaxProfessionalsTab() {
   const [tpCount, setTpCount] = useState("");
   const userid = window.localStorage.getItem("adminkey");
   const [myPurpose, setPurpose] = useState([])
+  var digit2 = [];
   useEffect(() => {
     getTaxProf();
   }, []);
@@ -37,7 +39,7 @@ function TaxProfessionalsTab() {
     });
   };
 
-
+  
 
   const columns = [
     {
@@ -51,8 +53,24 @@ function TaxProfessionalsTab() {
       },
     },
     {
+      dataField: "tl_name",
+      text: "TL post name",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "email",
+      text: "TL post email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
       dataField: "post_name",
-      text: "Post_ID",
+      text: "TP post name",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -61,7 +79,7 @@ function TaxProfessionalsTab() {
 
     {
       dataField: "email",
-      text: "Post_Email",
+      text: "TP post email",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -76,8 +94,8 @@ function TaxProfessionalsTab() {
       },
     },
     {
-      dataField: "email",
-      text: "Personal email",
+      dataField: "personal_email",
+      text: "Email",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -85,7 +103,7 @@ function TaxProfessionalsTab() {
     },
     {
       dataField: "phone",
-      text: "Personal Mobile No",
+      text: "Mobile No",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -98,63 +116,63 @@ function TaxProfessionalsTab() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter: function nameFormatter(cell, row) {
-        var digit2 = [];
+      formatter : function nameFormatter(cell, row) {
+       
         digit2 = row.allpcat_id.split(",")
-
-        return (
+       
+        return(
           <>
-
-            {
-              digit2.map((e) => {
-                return (
-                  <>
-                    {e + ","}
-                  </>
-                )
-              })
-            }
-          </>
+          
+          {
+             digit2.map((e) => {
+             return(
+               <>
+            <p className= {e.includes("Indirect") === true ? "dirCla" : "indirCla"}> {e + ","}</p>  
+               </>
+             ) 
+           })
+          }
+           </>
         )
       }
     },
-
-
+   
+   
     {
-
-
+      
+     
       text: "Sub Category",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
-      formatter: function nameFormatter(cell, row) {
+      formatter : function nameFormatter(cell, row) {
         var digit = [];
-
+         
         digit = row.allcat_id.split(",")
-
-
-        return (
+      
+      
+        return(
           <>
-
-            {
-              digit.map((e) => {
-                return (
-                  <>
-                    {e + ","}
-                  </>
-                )
-              })
-            }
+          
+         {
+            digit.map((e) => {
+            return(
+              <>
+             <p className= {row.allpcat_id.includes("Indirect") === true ? "dirCla" : "indirCla"}> {e + ","}</p>  
+              </>
+            ) 
+          })
+         }
           </>
         )
       }
     },
-
-
+   
+   
     {
       dataField: "",
-      text: "Edit",
+      text: "Action",
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -171,19 +189,6 @@ function TaxProfessionalsTab() {
                 }}
               ></i>
             </Link>
-          </>
-        );
-      },
-    },
-    {
-      dataField: "phone",
-      text: "Delete",
-      headerStyle: () => {
-        return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-        return (
-          <>
             <i
               className="fa fa-trash"
               style={{ fontSize: 20, cursor: "pointer", marginLeft: "8px" }}
@@ -193,6 +198,7 @@ function TaxProfessionalsTab() {
         );
       },
     },
+    
   ];
 
   //check
@@ -304,7 +310,7 @@ export default TaxProfessionalsTab;
 //     });
 //   };
 
-
+  
 
 //   const columns = [
 //     {
@@ -468,4 +474,3 @@ export default TaxProfessionalsTab;
 // }
 
 // export default TaxProfessionalsTab;
-

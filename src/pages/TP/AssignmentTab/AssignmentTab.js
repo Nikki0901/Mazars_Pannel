@@ -12,7 +12,7 @@ import DeliveryFinalTab from "./DeliveryFinalTab";
 
 
 function QueriesTab(props) {
-  const userid = window.localStorage.getItem("tlkey");
+  const userid = window.localStorage.getItem("tpkey");
   const [tabIndex, setTabIndex] = useState(0);
 
 
@@ -91,7 +91,7 @@ function QueriesTab(props) {
 
 
   return (
-    <Layout TLDashboard="TLDashboard" TLuserId={userid}>
+    <Layout TPDashboard="TLDashboard" TPuserId={userid}>
       <div>
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
           <TabList

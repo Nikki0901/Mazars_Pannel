@@ -347,6 +347,60 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/paymentstatus"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Payment Status
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/assignment"}>
+                  <i class="fa fa-file"></i>
+                  <span class="menu-title" data-i18n="">
+                    Assignments
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/schedule"}>
+                  <i class="fa fa-rss-square"></i>
+                  <span class="menu-title" data-i18n="">
+                    schedule
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/message"}>
+                  <i class="fa fa-envelope"></i>
+                  <span class="menu-title" data-i18n="">
+                    Message
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/addteamprof"}>
+                  <i class="fa fa-users"></i>
+                  <span class="menu-title" data-i18n="">
+                    View T.P
+                  </span>
+                </NavLink>
+              </li>
+
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/feedback"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Feedback
+                  </span>
+                </NavLink>
+              </li>
+
             </ul>
           )}
         </div>

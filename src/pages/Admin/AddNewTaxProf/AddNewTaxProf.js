@@ -156,7 +156,7 @@ function AddNew() {
       formData.append("name", value.p_name);
       formData.append("phone", value.p_phone);
       formData.append("tp_id", tl);
-      formData.append("email", tpEmail);
+      formData.append("email", value.p_email);
       formData.append("post_name", value.post_name)
       formData.append("cat_id", categeryList);
       formData.append("pcat_id", categoryData.value);
