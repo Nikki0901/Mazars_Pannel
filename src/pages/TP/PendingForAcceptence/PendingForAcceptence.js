@@ -195,13 +195,13 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
 
     let formData = new FormData();
     formData.append("set", 1);
-    formData.append("tlid", JSON.parse(userid));
+    formData.append("tp_id", JSON.parse(userid));
     formData.append("assignment_id", key.id);
     formData.append("allocation_id", key.allocation_id);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/AcceptRejectQuery`,
+      url: `${baseUrl}/tp/AcceptRejectQuery`,
       data: formData,
     })
       .then(function (response) {

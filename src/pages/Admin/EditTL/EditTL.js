@@ -172,22 +172,18 @@ console.log(data2)
       kk.push(i.value)
       parentCategoryName.push(i.label)
     })
-    console.log("subData", subData)
+
     if (custCate.length < 1 && data4.length < 1) {
       setError("Please select at least one value")
     }
     else if (subData.length < 1 && data5.length < 1) {
-
       setError2("Please select at least one value")
     }
     else if (invalid || wEmail || indNumError) {
       setDisplay(false)
     }
-
     else {
       setDisplay(true)
-      console.log("kkData", kk.length)
-      console.log("parentCategoryName", parentCategoryName)
       let formData = new FormData();
       formData.append("personal_email", value.email);
       formData.append("name", value.name);
@@ -196,17 +192,12 @@ console.log(data2)
       formData.append("post_name", data6)
      {categeryList.length > 1 ?  formData.append("cat_id", categeryList) : 
      formData.append("cat_id", data8) }
-
-
      {kk.length === 0 ?  formData.append("pcat_id", data9) : 
      formData.append("pcat_id", kk) }
-
-
       { parentCategoryName.length > 0 ?
       formData.append("allpcat_id", parentCategoryName) : 
       formData.append("allpcat_id", data4) } 
-
-     { categeryName.length > 0 ? formData.append("allcat_id", categeryName) : 
+     { categeryName.length > 0 ? formData.append("allcat_id", JSON.stringify(dd)) : 
      formData.append("allcat_id", data5) }
       formData.append("id", id);
 
@@ -224,9 +215,7 @@ console.log(data2)
               "icon": "success"
             })
             history.goBack();
-            // history.goBack();
-            // var variable = ""
-            // Alerts.SuccessNormal(variable)
+         
            
           }
         })
@@ -290,14 +279,14 @@ console.log(data2)
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-            // setValiphone(response.data.result)
-            console.log(response.data.result)
+          
+          
             setNumExist('')
             setNumAvail(response.data.result);
 
           }
           else if (response.data.code === 0) {
-            console.log(response.data.result)
+          
             setNumAvail('')
             setNumExist(response.data.result)
 
@@ -438,7 +427,7 @@ const defSubValue = () => {
  var kk = []
  var d = 3;
  var ind = 9;
- console.log("done2", JSON.parse(value.allcat_id))
+
  var subcatgerydefvalue = JSON.parse(value.allcat_id);
  indirvalue = subcatgerydefvalue.indirect;
  dirvalue = subcatgerydefvalue.direct;

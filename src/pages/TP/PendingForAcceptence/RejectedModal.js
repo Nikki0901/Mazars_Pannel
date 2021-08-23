@@ -34,14 +34,14 @@ function RejectedModal({
 
     let formData = new FormData();
     formData.append("set", 0);
-    formData.append("tlid", JSON.parse(userid));
+    formData.append("tp_id", JSON.parse(userid));
     formData.append("assignment_id", id);
     formData.append("allocation_id", allocation_id);
     formData.append("reject_reason", value.p_chat);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/AcceptRejectQuery`,
+      url: `${baseUrl}/tp/AcceptRejectQuery`,
       data: formData,
     })
       .then(function (response) {

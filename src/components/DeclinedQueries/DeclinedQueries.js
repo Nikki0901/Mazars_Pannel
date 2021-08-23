@@ -114,6 +114,7 @@ function DeclinedQueries({ CountPendingForPayment }) {
         return { fontSize: "12px" };
       },
     },
+   
     {
       text: "Status",
       headerStyle: () => {
@@ -143,6 +144,14 @@ function DeclinedQueries({ CountPendingForPayment }) {
             </div>
           </>
         );
+      },
+    },
+    {
+      text: "Action",
+      dataField: "",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
       },
     },
   ];

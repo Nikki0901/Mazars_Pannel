@@ -181,7 +181,7 @@ function AllQuery() {
                                 color: "green",
                             }}
                         >
-                            <Link to={`/taxprofessional/queryassing/${row.id}`}>
+                            {/* <Link to={`/taxprofessional/queryassing/${row.id}`}>
                                 {row.tp_status == "1" ? (
                                     <div title="Assigned">
                                         <i class="fa fa-share" style={{ color: "green" }}></i>
@@ -196,7 +196,7 @@ function AllQuery() {
                                         :
                                         ""
                                 }
-                            </Link>
+                            </Link> */}
 
                             <div title="Send Message">
                                 <Link

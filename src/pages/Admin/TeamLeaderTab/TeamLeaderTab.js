@@ -117,9 +117,9 @@ function TeamLeaderTab() {
       formatter: function nameFormatter(cell, row) {
         var digit = [];
         //  console.log(JSON.parse(row.allcat_id))
-        digit = JSON.parse(row.allcat_id);
+         digit = JSON.parse(row.allcat_id);
 
-
+// digit = row.allcat_id;
         return (
           <>
             <p style={{ "color": "blue", "diplay": "block" }}>{digit.direct + ","} </p>
