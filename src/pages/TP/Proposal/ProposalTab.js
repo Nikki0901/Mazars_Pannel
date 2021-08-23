@@ -55,7 +55,7 @@ function ProposalTab(props) {
 
         const AllProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}`)
+                .get(`${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(userid)}`)
                 .then((response) => {
                     console.log("code---", response);
                     if (response.data.code === 1) {
@@ -66,7 +66,7 @@ function ProposalTab(props) {
 
         const InprogressProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=1`)
+                .get(`${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(userid)}&status=1`)
                 .then((response) => {
                     console.log("code---", response);
                     if (response.data.code === 1) {
@@ -77,7 +77,7 @@ function ProposalTab(props) {
 
         const AcceptedProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=2`)
+                .get(`${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(userid)}&status=2`)
                 .then((response) => {
                     console.log("code---", response);
                     if (response.data.code === 1) {
@@ -88,7 +88,7 @@ function ProposalTab(props) {
 
         const DeclinedProposal = () => {
             axios
-                .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=3`)
+                .get(`${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(userid)}&status=3`)
                 .then((response) => {
                     console.log("code---", response);
                     if (response.data.code === 1) {

@@ -165,8 +165,8 @@ function AddNew() {
       formData.append("phone", value.p_phone);
       formData.append("type", "tl");
       formData.append("cat_id", categeryList)
-      formData.append("post_name", postValue.post)
-      formData.append("email", postValue.email)
+      formData.append("post_name", value.post_name)
+      formData.append("email", value.post_email)
       formData.append("pcat_id", kk)
       formData.append("allpcat_id", parentCategoryName)
       formData.append("allcat_id", JSON.stringify(dd))
@@ -216,7 +216,7 @@ function AddNew() {
     console.log("allData", allData1)
     e.map((i) => {
 
-      i.value > 8 ? dir.push(i.label) : indir.push(i.label)
+      i.value < 8 ? dir.push(i.label) : indir.push(i.label)
     })
     // allData1 = e.map(v => ({
     //   "direct Tax" : dir,
@@ -482,7 +482,8 @@ function AddNew() {
                   </div> */}
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Name <span className="declined">*</span></label>
+                    <label>Teamleader Post Name <span className="declined">*</span></label>
+                      
                       <input
                         type="text"
                         className={classNames("form-control", {
@@ -497,19 +498,19 @@ function AddNew() {
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Post Email</label>
+                    <label>Teamleader Post Email <span className="declined">*</span></label>
                       <input
                         type="text"
                         name="post_email"
                         ref={register}
                         defaultValue={postValue.email}
-                        onChange={(e) => emailHandlerPost(e)}
-                        onBlur={emailValidationPost}
+                        // onChange={(e) => emailHandlerPost(e)}
+                        // onBlur={emailValidationPost}
                         className={classNames("form-control", {
                           "is-invalid": errors.post_email,
                         })}
                       />
-                      {
+                      {/* {
                         wEmailPost ? <p className="declined">{wEmailPost}</p> : <>
                           {valiEmailPost ?
                             <p className="completed">
@@ -518,7 +519,7 @@ function AddNew() {
                             :
                             <p className="declined">{invalidPost}</p>}
                         </>
-                      }
+                      } */}
                     </div>
                   </div>
                 </div>

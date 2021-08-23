@@ -47,7 +47,7 @@ function ProposalComponent() {
   }, []);
 
   const getQuery = () => {
-    axios.get(`${baseUrl}/tl/getProposalDetail?id=${id}`).then((res) => {
+    axios.get(`${baseUrl}/tp/getProposalDetail?id=${id}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
         setProposal({
@@ -95,7 +95,7 @@ function ProposalComponent() {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/updateProposal`,
+      url: `${baseUrl}/tp/updateProposal`,
       data: formData,
     })
       .then(function (response) {

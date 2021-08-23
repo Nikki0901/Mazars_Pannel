@@ -107,7 +107,7 @@ function Message(props) {
                 console.log(row);
                 return (
                     <>
-                        <Link to={`/teamleader/view-notification/${row.id}`}>
+                        <Link to={`/taxprofessional/view-notification/${row.id}`}>
                             {
                                 row.is_read == "0" ?
                                     <div

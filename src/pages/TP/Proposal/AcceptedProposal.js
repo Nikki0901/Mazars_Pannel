@@ -38,7 +38,7 @@ function AcceptedProposal() {
 
     const getProposalList = () => {
         axios
-            .get(`${baseUrl}/tl/getProposalTl?id=${JSON.parse(userid)}&status=2`)
+            .get(`${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(userid)}&status=2`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -99,7 +99,7 @@ function AcceptedProposal() {
 
                         <Link
                             to={{
-                                pathname: `/teamleader/queries/${row.id}`,
+                                pathname: `/taxprofessional/queries/${row.id}`,
                                 routes: "proposal",
                             }}
                         >
@@ -229,7 +229,7 @@ function AcceptedProposal() {
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                             <div>
                                 {row.status_code == "4" ? (
-                                    <Link to={`/teamleader/edit-proposal/${row.id}`}>
+                                    <Link to={`/taxprofessional/edit-proposal/${row.id}`}>
                                         <i
                                             className="fa fa-edit"
                                             style={{
@@ -240,7 +240,7 @@ function AcceptedProposal() {
                                         ></i>
                                     </Link>
                                 ) : row.status_code == "2" ? (
-                                    <Link to={`/teamleader/sendproposal/${row.id}`}>
+                                    <Link to={`/taxprofessional/sendproposal/${row.id}`}>
                                         <i
                                             class="fa fa-mail-forward"
                                             style={{
@@ -278,12 +278,12 @@ function AcceptedProposal() {
                                         <div title="Send Message">
                                             <Link
                                                 to={{
-                                                    pathname: `/teamleader/chatting/${row.id}`,
+                                                    pathname: `/taxprofessional/chatting/${row.id}`,
                                                     obj: {
                                                         message_type: "2",
                                                         query_No: row.assign_no,
                                                         query_id: row.id,
-                                                        routes: `/teamleader/proposal`
+                                                        routes: `/taxprofessional/proposal`
                                                     }
                                                 }}
                                             >

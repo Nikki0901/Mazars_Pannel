@@ -30,7 +30,7 @@ import RejectedModal from "./RejectedModal";
 function AllPayment() {
     const alert = useAlert();
     const { id } = useParams();
-    const userid = window.localStorage.getItem("tlkey");
+    const userid = window.localStorage.getItem("tpkey");
     const cust_id = window.localStorage.getItem("userid");
     const [records, setRecords] = useState([]);
 
@@ -55,7 +55,7 @@ function AllPayment() {
     }, []);
 
     const getPaymentStatus = () => {
-        axios.get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userid)}&status=1`).then((res) => {
+        axios.get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userid)}&status=1`).then((res) => {
             console.log(res);
             if (res.data.code === 1) {
                 setPayment(res.data.result);

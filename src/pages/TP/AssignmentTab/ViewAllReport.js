@@ -66,7 +66,7 @@ function ViewReport({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/draftDiscussion`,
+      url: `${baseUrl}/tp/draftDiscussion`,
       data: formData,
     })
       .then(function (response) {
@@ -94,7 +94,7 @@ function ViewReport({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/getstagesinfo`,
+      url: `${baseUrl}/tp/getstagesinfo`,
       data: formData,
     })
       .then(function (response) {

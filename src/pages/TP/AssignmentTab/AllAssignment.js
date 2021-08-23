@@ -78,7 +78,7 @@ function AssignmentTab() {
 
   const getAssignmentList = () => {
     axios
-      .get(`${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tp/getAssignments?tp_id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -182,7 +182,7 @@ function AssignmentTab() {
           <>
             <Link
               to={{
-                pathname: `/teamleader/queries/${row.q_id}`,
+                pathname: `/taxprofession/queries/${row.q_id}`,
                 routes: "assignment",
               }}
             >
@@ -319,7 +319,7 @@ function AssignmentTab() {
               title="Add Assignment stages"
               style={{ cursor: "pointer", textAlign: "center" }}
             >
-              <Link to={`/teamleader/addassingment/${row.q_id}`}>
+              <Link to={`/taxprofession/addassingment/${row.q_id}`}>
                 <i class="fa fa-tasks"></i>
               </Link>
             </div>
@@ -393,12 +393,12 @@ function AssignmentTab() {
               <div title="Send Message">
                 <Link
                   to={{
-                    pathname: `/teamleader/chatting/${row.q_id}`,
+                    pathname: `/taxprofession/chatting/${row.q_id}`,
                     obj: {
                       message_type: "3",
                       query_No: row.assign_no,
                       query_id: row.q_id,
-                      routes: `/teamleader/assignment`
+                      routes: `/taxprofession/assignment`
                     }
                   }}
                 >
@@ -446,7 +446,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tl/getAssignments?tl_id=${JSON.parse(
+        `${baseUrl}/tp/getAssignments?tp_id=${JSON.parse(
           userid
         )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
         }&assignment_status=${status}&stages_status=${data.p_status

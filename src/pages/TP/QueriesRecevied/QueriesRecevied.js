@@ -48,7 +48,7 @@ function QueriesRecevied() {
 
   const [diaplayHistory, setDisplayHistory] = useState([
     {
-      tlname: "",
+      tpname: "",
       date_of_allocation: "",
       date_of_delivery: "",
     },
@@ -107,7 +107,7 @@ function QueriesRecevied() {
           }
           if (res.data.history_queries.length > 0) {
             setDisplayHistory({
-              tlname: res.data.history_queries[0].tname,
+              tpname: res.data.history_queries[0].tname,
               date_of_allocation:
                 res.data.history_queries[0].date_of_allocation,
             });
@@ -126,7 +126,7 @@ function QueriesRecevied() {
 
   const getQuery = () => {
     axios
-      .get(`${baseUrl}/tl/GetAdditionalQueries?assignno=${assingNo}`)
+      .get(`${baseUrl}/tp/GetAdditionalQueries?assignno=${assingNo}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {

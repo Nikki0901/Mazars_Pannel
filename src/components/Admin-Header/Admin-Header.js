@@ -43,7 +43,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
   const CustEmail = window.localStorage.getItem("custEmail");
   const adminEmail = window.localStorage.getItem("adminEmail");
   const tlEmail = window.localStorage.getItem("tlEmail");
-
+  const tpEmail = window.localStorage.getItem("tpEmail")
  
   
   return (
@@ -69,7 +69,7 @@ function AdminHeader({ custUserId, adminUserId, TLuserId, TPuserId }) {
         />}
 
         {TPuserId && <NavWrapper color="#9799BA" logout={tpLogout}
-          name="taxprofessional" email={adminEmail}
+          name="taxprofessional" email={tpEmail}
         />}
       </nav>
     </div>

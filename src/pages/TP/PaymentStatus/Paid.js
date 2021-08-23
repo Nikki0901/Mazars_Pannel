@@ -55,7 +55,7 @@ function AllPayment() {
     }, []);
 
     const getPaymentStatus = () => {
-        axios.get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userid)}&status=2`).then((res) => {
+        axios.get(`${baseUrl}/taxprofessional/getUploadedProposals?uid=${JSON.parse(userid)}&status=2`).then((res) => {
             console.log(res);
             if (res.data.code === 1) {
                 setPayment(res.data.result);
@@ -138,7 +138,7 @@ function AllPayment() {
 
                         <Link
                             to={{
-                                pathname: `/teamleader/queries/${row.assign_id}`,
+                                pathname: `/taxprofessional/queries/${row.assign_id}`,
                                 routes: "paymentstatus",
                             }}
                         >

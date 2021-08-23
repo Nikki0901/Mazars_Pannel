@@ -234,6 +234,8 @@ function App() {
 
             <PublicRouteTP exact path="/taxprofessional/start" component={TpStart} />
             <PublicRouteTP exact path="/taxprofessional/login" component={TpLogin} />
+            <PublicRouteTP exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
+            <PublicRouteTP exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
             <PrivateRouteTP exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
             <PrivateRouteTP exact path="/taxprofessional/queriestab" component={TpQueriesTab} />
             <PrivateRouteTP exact path="/taxprofessional/proposal" component={TpProposalTab} />
@@ -241,8 +243,8 @@ function App() {
             <PrivateRouteTP exact path="/taxprofessional/edit-proposal/:id" component={TpEditProposal} />
             <PrivateRouteTP exact path="/taxprofessional/change-password" component={TpChangePassword} />
             <PrivateRouteTP exact path="/taxprofessional/dashboard" component={TpDashboard} />
-            <PrivateRouteTP exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
-            <PrivateRouteTP exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
+           
+            
             <PrivateRouteTP exact path="/taxprofessional/paymentstatus" component={TpPaymentStatus} />
             <PrivateRouteTP exact path="/taxprofessional/assignment" component={TpAssignmentTab} />
             <PrivateRouteTP exact path="/taxprofessional/schedule" component={TpSchedule} />

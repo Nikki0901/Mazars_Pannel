@@ -3,3 +3,9 @@
     justify-content: space-between;
     padding: 5px 10px;
 }
+.dirCla{
+    color: green;
+}
+.indirCla{
+    color : blue;
+}

@@ -21,7 +21,7 @@ function ProposalComponent(props) {
 
   const alert = useAlert();
   const { register, handleSubmit, reset } = useForm();
-  const userid = window.localStorage.getItem("tlkey");
+  const userid = window.localStorage.getItem("tpkey");
 
   const [custId, setCustId] = useState("");
   const [custname, setCustName] = useState();
@@ -34,7 +34,7 @@ function ProposalComponent(props) {
     const getQuery = () => {
       axios
         .get(
-          `${baseUrl}/tl/pendingTlProposal?tl_id=${JSON.parse(
+          `${baseUrl}/tp/pendingTpProposal?tp_id=${JSON.parse(
             userid
           )}&assign_id=${id}`
         )
@@ -72,7 +72,7 @@ function ProposalComponent(props) {
 
     formData.append("assign_no", assingNo);
     formData.append("name", value.p_name);
-    formData.append("type", "tl");
+    formData.append("type", "tp");
     formData.append("id", JSON.parse(userid));
     formData.append("amount", value.p_amount);
     formData.append("payable", value.p_payable);
@@ -84,7 +84,7 @@ function ProposalComponent(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tl/uploadProposal`,
+      url: `${baseUrl}/tp/uploadProposal`,
       data: formData,
     })
       .then(function (response) {

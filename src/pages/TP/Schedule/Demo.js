@@ -86,7 +86,7 @@ function Demo() {
 
   const getAssignmentNo = () => {
     axios
-      .get(`${baseUrl}/admin/getAllQuery?uid=${JSON.parse(userId)}`)
+      .get(`${baseUrl}/admin/getAllQuery?tp_id=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -202,7 +202,7 @@ function Demo() {
     Cookies.set("transcode_2", transcode);
     Cookies.set("attendeeMode_2", attendeeMode);
     Cookies.set("videoProfile_2", videoProfile);
-    history.push("/teamleader/meeting");
+    history.push("/taxprofessional/meeting");
   };
 
   const changeFormat = (d) => {
@@ -245,7 +245,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tp/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -308,7 +308,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tp/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -360,7 +360,7 @@ function Demo() {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.value) {
-          axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
+          axios.get(`${baseUrl}/tp/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
             if (res.data.code === 1) {
               setLoading(false)

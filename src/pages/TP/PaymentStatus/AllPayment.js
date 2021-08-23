@@ -60,7 +60,7 @@ function AllPayment() {
     }, []);
 
     const getPaymentStatus = () => {
-        axios.get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userid)}`).then((res) => {
+        axios.get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userid)}`).then((res) => {
             console.log(res);
             if (res.data.code === 1) {
                 setPayment(res.data.result);
@@ -139,7 +139,7 @@ function AllPayment() {
                     <>
                         <Link
                             to={{
-                                pathname: `/teamleader/queries/${row.assign_id}`,
+                                pathname: `/taxprofessional/queries/${row.assign_id}`,
                                 routes: "paymentstatus",
                             }}
                         >
@@ -286,12 +286,12 @@ function AllPayment() {
                             <div title="Send Message">
                                 <Link
                                     to={{
-                                        pathname: `/teamleader/chatting/${row.assign_id}`,
+                                        pathname: `/taxprofessional/chatting/${row.assign_id}`,
                                         obj: {
                                             message_type: "2",
                                             query_No: row.assign_no,
                                             query_id: row.assign_id,
-                                            routes: `/teamleader/proposal`
+                                            routes: `/taxprofessional/proposal`
                                         }
                                     }}
                                 >

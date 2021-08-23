@@ -34,13 +34,18 @@ function ForgetPassword(props) {
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customers/forgototp`,
+      url: `${baseUrl}/tp/forgototp`,
       data: formData,
     })
       .then(function (response) {
         console.log("res-", response);
         if (response.data.code === 1) {
-          alert.success("otp send your email !");
+          Swal.fire({
+            "title" : "success", 
+            "html" : "otp send your email !",
+            "icon" : "success"
+          })
+        
           props.history.push(`/taxprofessional/new-password/${value.p_email}`)
         } else if (response.data.code === 0) {
           console.log(response.data.result);

@@ -34,7 +34,7 @@ function QueriesTab(props) {
 
   const getAllPaid = () => {
     axios
-      .get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userId)}`)
+      .get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
         setAllPayment(res.data.result.length);
@@ -43,7 +43,7 @@ function QueriesTab(props) {
 
   const getPaid = () => {
     axios
-      .get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userId)}&status=1`)
+      .get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userId)}&status=1`)
       .then((res) => {
         console.log(res);
         setPaid(res.data.result.length);
@@ -52,7 +52,7 @@ function QueriesTab(props) {
 
   const getUnpaid = () => {
     axios
-      .get(`${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(userId)}&status=2`)
+      .get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userId)}&status=2`)
       .then((res) => {
         console.log(res);
         setUnpaid(res.data.result.length);

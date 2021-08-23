@@ -12,24 +12,28 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import Tpfilter from "../../../components/Search-Filter/tpfilter";
+import TeamFilter from "../../../components/Search-Filter/tlFilter";
 
-function Complete() {
-  const [completeData, setCompleteData] = useState([]);
+function DeclinedQuery({ CountIncomplete }) {
   const userid = window.localStorage.getItem("tpkey");
 
+  const [incompleteData, setInCompleteData] = useState([]);
+  const [records, setRecords] = useState([]);
+
+
+
   useEffect(() => {
-    getComplete();
+    getInCompleteAssingment();
   }, []);
 
-  const getComplete = () => {
+  const getInCompleteAssingment = () => {
     axios
-      .get(`${baseUrl}/tp/GetCompleteQues?id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tl/declinedQueries?tp_id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
-          //   CountIncomplete(res.data.result.length);
-          setCompleteData(res.data.result);
+          setInCompleteData(res.data.result);
+          setRecords(res.data.result.length);
         }
       });
   };
@@ -47,7 +51,7 @@ function Complete() {
     },
     {
       text: "Date",
-      dataField: "query_date",
+      dataField: "created",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
@@ -56,7 +60,6 @@ function Complete() {
     {
       text: "Query No",
       dataField: "assign_no",
-      sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
@@ -64,7 +67,16 @@ function Complete() {
         console.log(row);
         return (
           <>
-            <Link to={`/taxprofessional/queries/${row.id}`}>{row.assign_no}</Link>
+            {/* <Link to={`/teamleader/queries/${row.id}`}>{row.assign_no}</Link> */}
+            <Link
+              to={{
+                pathname: `/taxprofessional/queries/${row.id}`,
+                index: 1,
+                routes: "queriestab",
+              }}
+            >
+              {row.assign_no}
+            </Link>
           </>
         );
       },
@@ -100,24 +112,57 @@ function Complete() {
       headerStyle: () => {
         return { fontSize: "12px" };
       },
+      formatter: function dateFormat(cell, row) {
+        console.log("dt", row.Exp_Delivery_Date);
+        var oldDate = row.Exp_Delivery_Date;
+        if (oldDate == null) {
+          return null;
+        }
+        return oldDate.toString().split("-").reverse().join("-");
+      },
+    },
+    {
+      text: "Status",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function nameFormatter(cell, row) {
+        return (
+          <>
+            <div>
+              {row.status} /
+              {
+                row.status == "Declined Query" ?
+                  <p className="declined">
+                    {row.statusdescription}
+                  </p>
+                  :
+                  null
+              }
+            </div>
+          </>
+        );
+      },
     },
   ];
 
   return (
     <>
       <Card>
-      <CardHeader>
-          <Tpfilter
-            setData={setCompleteData}
-            getData={getComplete}
-            completeAssignment="completeAssignment"
+        <CardHeader>
+          <TeamFilter
+            setData={setInCompleteData}
+            getData={getInCompleteAssingment}
+            DeclinedQuery="DeclinedQuery"
+            setRecords={setRecords}
+            records={records}
           />
         </CardHeader>
         <CardBody>
           <BootstrapTable
             bootstrap4
             keyField="id"
-            data={completeData}
+            data={incompleteData}
             columns={columns}
             rowIndex
           />
@@ -127,4 +172,4 @@ function Complete() {
   );
 }
 
-export default Complete;
+export default DeclinedQuery;
