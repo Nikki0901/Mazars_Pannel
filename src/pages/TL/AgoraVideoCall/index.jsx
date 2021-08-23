@@ -454,15 +454,7 @@ class AgoraCanvas extends React.Component {
 
 
   
-  // CreateS3Folder = (uid) =>{
-  //   console.log("CreateS3Folder",uid)
-  //   axios
-  //           .get(`${baseUrl}/s3/createMPObject.php?folder_id=${JSON.parse(uid)}`)
-  //           .then((res) => {
-  //               console.log(res);    
-  //           });
-  // }
-
+  
 
   // async function GetRecordingStatus(resourceID,sID){
   //   console.log('Taking a break...');
@@ -489,6 +481,14 @@ class AgoraCanvas extends React.Component {
   //  });
   // }
   
+  CreateS3Folder = (uid) =>{
+    console.log("CreateS3Folder",uid)
+    axios
+            .get(`https://virtualapi.multitvsolution.com/s3/createMPObject.php?folder_id=${JSON.parse(uid)}`)
+            .then((res) => {
+                console.log(res);    
+            });
+  }
 
 
 encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
@@ -518,7 +518,6 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
           console.log(response);
       })
       .catch((error) => console.log(error));
-  
   }
 
 
@@ -527,7 +526,8 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
     console.log("startRecording - ",key);
     var resourceId = key.data.resourceId 
 
-    // this.CreateS3Folder("527841");
+    this.CreateS3Folder("527841");
+
     var data = JSON.stringify({
       "cname":"demo", 
       "uid":"527841",       // userid who i want to record...is this correct????
@@ -602,27 +602,6 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
       });
   };
 
-
-
-  // function StopRecording(resourceID,sID){
-  //   var settingsStop = {
-  //    "async": true,
-  //    "crossDomain": true,
-  //    "url" : "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/resourceid/"+resourceID+"/sid/"+sID+"/mode/mix/stop",
-  
-  //    "headers": {
-  //     "content-type": "application/json;charset=utf-8",
-  //     "authorization": "Basic "+encodedString,
-  //     "cache-control": "no-cache",
-  //    },
-  //    "processData": false,
-  //    "data": "{\n\t\"cname\": \""+channelName+"\",\n\t\"uid\": \""+uid+"\",\n\t\"clientRequest\":{}\n}"
-  //  }
-  
-  //  $.ajax(settingsStop).done(function (response) {
-  //    console.log(response);
-  //  });
-  // }
 
 
  //stop recording 
