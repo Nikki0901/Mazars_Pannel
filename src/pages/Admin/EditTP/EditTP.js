@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef} from "react";
 import Layout from "../../../components/Layout/Layout";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -74,6 +74,7 @@ function EditTP() {
   const [post1, setPost1] = useState([])
   const [show, setShow] = useState([])
   const [post_na, setPost_na] = useState()
+  const selectInputRef = useRef();
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
   });
@@ -101,6 +102,7 @@ function EditTP() {
   }, [id]);
 
   useEffect(() => {
+    console.log("baseUrl", baseUrl)
     axios.get(`${baseUrl}/tp/getTaxProfessional`).then((res) => {
       if (res.data.code === 1) {
         console.log("myData", res.data.result)
@@ -111,6 +113,7 @@ function EditTP() {
     })
   }, [])
   const getTeamLeader = () => {
+   
     axios.get(`${baseUrl}/tl/getTeamLeader?id=${id}`).then((res) => {
       console.log(res);
       if (res.data.code === 1) {
@@ -131,6 +134,7 @@ function EditTP() {
   const data9 = value.pcat_id
   const data10 = value.tl_id
   const data11 = value.tl_name
+  const postEmmail = value.tl_post_email;
   console.log(data2)
   useEffect(() => {
     const getCategory = () => {
@@ -311,35 +315,35 @@ function EditTP() {
 
     else {
       setIndNumError("")
-      let formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("type", 2);
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("res-", response);
-          if (response.data.code === 1) {
-            // setValiphone(response.data.result)
-            console.log(response.data.result)
-            setNumExist('')
-            setNumAvail(response.data.result);
+      // let formData = new FormData();
+      // formData.append("phone", phone);
+      // formData.append("type", 2);
+      // axios({
+      //   method: "POST",
+      //   url: `${baseUrl}/customers/validateregistration`,
+      //   data: formData,
+      // })
+      //   .then(function (response) {
+      //     console.log("res-", response);
+      //     if (response.data.code === 1) {
+      //       // setValiphone(response.data.result)
+      //       console.log(response.data.result)
+      //       setNumExist('')
+      //       setNumAvail(response.data.result);
 
-          }
-          else if (response.data.code === 0) {
-            console.log(response.data.result)
-            setNumAvail('')
-            setNumExist(response.data.result)
+      //     }
+      //     else if (response.data.code === 0) {
+      //       console.log(response.data.result)
+      //       setNumAvail('')
+      //       setNumExist(response.data.result)
 
-            console.log("mobile" + setNumExist)
-          }
+      //       console.log("mobile" + setNumExist)
+      //     }
 
-        })
-        .catch((error) => {
-          // console.log("erroror - ", error);
-        });
+      //   })
+      //   .catch((error) => {
+      //     // console.log("erroror - ", error);
+      //   });
     }
   }
 
@@ -353,7 +357,7 @@ function EditTP() {
 
   // Category Function
   const category = (v) => {
-
+    selectInputRef.current.select.clearValue();
     setCategoryData(v)
     console.log("MyData", v)
     setError("")
@@ -376,7 +380,7 @@ function EditTP() {
     setmcatname((oldData) => {
       return [...oldData, v.label]
     })
-
+    subdefval = {}
     if (vv.length > 0) {
       if (vv.includes("1") && vv.includes("2")) {
         console.log("hdd")
@@ -425,27 +429,27 @@ function EditTP() {
       formData.append("email", email);
       formData.append("type", 1);
 
-      axios({
-        method: "POST",
-        url: `${baseUrl}/customers/validateregistration`,
-        data: formData,
-      })
-        .then(function (response) {
-          console.log("resEmail-", response);
-          if (response.data.code === 1) {
-            setValiemail(response.data.result)
-            setInvalid('')
-          } else if (response.data.code === 0) {
-            setInvalid(response.data.result)
-            setValiemail('')
-          }
-        })
-        .catch((error) => {
-          console.log("erroror - ", error);
-        });
+      // axios({
+      //   method: "POST",
+      //   url: `${baseUrl}/customers/validateregistration`,
+      //   data: formData,
+      // })
+      //   .then(function (response) {
+      //     console.log("resEmail-", response);
+      //     if (response.data.code === 1) {
+      //       setValiemail(response.data.result)
+      //       setInvalid('')
+      //     } else if (response.data.code === 0) {
+      //       setInvalid(response.data.result)
+      //       setValiemail('')
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("erroror - ", error);
+      //   });
     }
     else {
-      setWemail("invalid email")
+      setWemail("Invalid email")
     }
   }
 
@@ -484,14 +488,17 @@ function EditTP() {
 //     });
 //   }
  const defSubValue = () => {
+ var k;
  
    console.log("done2")
    var subcatgerydefvalue = value.allcat_id.split(",");
+   value.allpcat_id.includes("Indirect") === true  ? k = 8 : k = 2
  
   subdefval = subcatgerydefvalue.map((i => ({
-   "value" : i,
+   "value" : ++k,
    "label" : i
  }) ))
+ console.log("subDefVal33", value.allpcat_id)
   }
  
  if(data5 != undefined){
@@ -548,7 +555,7 @@ function EditTP() {
                         <input
                           type="text"
                           name="post_email"
-                          defaultValue={data7}
+                          defaultValue = {postEmmail}
                           disabled
                           className={classNames("form-control", {
                             "is-invalid": errors.post_email,
@@ -585,7 +592,7 @@ function EditTP() {
                         name="p_email"
                         ref={register}
                       disabled
-                        
+                      defaultValue={data7}
                         className={classNames("form-control", {
                           "is-invalid": errors.post_email,
                         })}
@@ -627,15 +634,7 @@ function EditTP() {
                             onBlur={phoneValidation} />
                         </Form.Item>
                       </div>
-                      {indNumError ? <p className="declined">{indNumError}</p> : <>
-                        {
-                          numAvail ?
-                            <p className="completed"> {numAvail}
-                            </p>
-                            :
-                            <p className="declined">{numExist}</p>
-                        }
-                      </>}
+                      {indNumError ? <p className="declined">{indNumError}</p> :""}
 
                     </div>
                   </div>
@@ -653,14 +652,8 @@ function EditTP() {
                             onChange={(e) => emailHandler(e)} />
                         </Form.Item>
                         {
-                          wEmail ? <p className="declined">{wEmail}</p> : <>
-                            {valiEmail ?
-                              <p className="completed">
-                                {valiEmail}
-                              </p>
-                              :
-                              <p className="declined">{invalid}</p>}
-                          </>
+                          wEmail ? <p className="declined">{wEmail}</p> : ""
+                           
                         }
                       </div>
                     </div>
@@ -703,21 +696,23 @@ function EditTP() {
                         <Select isMulti options={options2}
                           onChange={subCategory}
                           defaultValue = { subdefval}
+                          ref={selectInputRef}
+
                           // value = {subData}
                           styles={{
                             option: (styles, { data }) => {
                               return {
                                 ...styles,
-                                color: data.value == 2
+                                color: data.value > 8
                                   ? "green"
                                   : "blue"
                               };
                             },
                             multiValueLabel: (styles, { data }) => ({
                               ...styles,
-                              color: data.value  == 2
-                                  ? "green"
-                                  : "blue"
+                              color: data.value > 8
+                                ? "green"
+                                : "blue"
                             }),
                           }}
                          >

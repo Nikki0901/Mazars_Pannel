@@ -22,6 +22,7 @@ function EditTP() {
 
   useEffect(() => {
     const getTeamLeader = () => {
+      console.log("bb2", baseUrl)
       axios.get(`${baseUrl}/tp/getTaxProfessional?id=${id}`).then((res) => {
         console.log(res);
         if (res.data.code === 1) {

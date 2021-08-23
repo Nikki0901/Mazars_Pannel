@@ -6,6 +6,7 @@ import * as yup from "yup";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
+import Swal from 'sweetalert2'
 import { useParams, useHistory } from "react-router-dom";
 import classNames from "classnames";
 import {
@@ -70,6 +71,10 @@ function EditTL() {
   const [custCate2, setCustcate2] = useState([])
   const { handleSubmit, register, reset, errors } = useForm({
     resolver: yupResolver(Schema),
+  });
+  const [dd, setDd] = useState({
+    direct: [],
+    indirect: [],
   });
 
   var kk = []
@@ -213,10 +218,16 @@ console.log(data2)
         .then(function (response) {
           console.log("res-", response);
           if (response.data.code === 1) {
-
-            var variable = "Team Leader Updated Successfully"
-            Alerts.SuccessNormal(variable)
+            Swal.fire({
+              "title": "Success",
+              "html": "Team Leader Updated Successfully",
+              "icon": "success"
+            })
             history.goBack();
+            // history.goBack();
+            // var variable = ""
+            // Alerts.SuccessNormal(variable)
+           
           }
         })
         .catch((error) => {
@@ -299,13 +310,23 @@ console.log(data2)
         });
     }
   }
-
+  var allData1 = {}
+  var dir = []
+  var indir = []
 
   // Sub Category Function
   const subCategory = (e) => {
     subCategeryData(e)
     setCustcate2(e)
     setError2("")
+    e.map((i) => {
+
+      i.value < 8 ? dir.push(i.label) : indir.push(i.label)
+    })
+    setDd({
+      direct: dir,
+      indirect: indir
+    })
   }
 
 

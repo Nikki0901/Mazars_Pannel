@@ -61,7 +61,7 @@ function TaxProfessionalsTab() {
       },
     },
     {
-      dataField: "email",
+      dataField: "tl_post_email",
       text: "TL post email",
       sort: true,
       headerStyle: () => {
