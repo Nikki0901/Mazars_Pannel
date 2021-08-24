@@ -94,7 +94,7 @@ function ViewReport({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tp/getstagesinfo`,
+      url: `${baseUrl}/tl/getstagesinfo`,
       data: formData,
     })
       .then(function (response) {

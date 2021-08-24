@@ -53,7 +53,7 @@ function ProposalComponent(props) {
     const getQuery = () => {
       axios
         .get(
-          `${baseUrl}/tp/pendingTlProposal?tp_id=${JSON.parse(
+          `${baseUrl}/tl/pendingTlProposal?tp_id=${JSON.parse(
             userid
           )}&assign_id=${id}`
         )

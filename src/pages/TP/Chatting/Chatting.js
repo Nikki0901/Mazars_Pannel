@@ -36,7 +36,7 @@ function Chatting(props) {
     resolver: yupResolver(Schema),
   });
 
-  const userId = window.localStorage.getItem("tlkey");
+  const userId = window.localStorage.getItem("tpkey");
 
   const [loading, setLoading] = useState(false);
   const [item, setItem] = useState("");
@@ -91,7 +91,7 @@ function Chatting(props) {
   };
 
   return (
-    <Layout TLDashboard="TLDashboard" TLuserId={userId}>
+    <Layout TPDashboard="TPDashboard" TPuserId={userId}>
       <Card>
         <CardHeader>
           <Row>

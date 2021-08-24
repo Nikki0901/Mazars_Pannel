@@ -172,14 +172,15 @@ function AllQueriesData() {
             },
             formatter: function dateFormat(cell, row) {
                 console.log("dt", row.exp_delivery_date);
-
+                console.log("userStatueCode", row.status_code)
                 return (
+                  
                     <>
                         {
                             row.status == "Declined Query"
                                 ? null
                                 :
-                                row.status_code >= "1" ?
+                                row.status_code > "1" ?
                                     CommonServices.removeTime(row.exp_delivery_date)
                                     :
                                     null

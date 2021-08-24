@@ -236,6 +236,7 @@ function App() {
             <PublicRouteTP exact path="/taxprofessional/login" component={TpLogin} />
             <PublicRouteTP exact path="/taxprofessional/new-password/:id" component={TpNewPassword} />
             <PublicRouteTP exact path="/taxprofessional/forget-password" component={TpForgetPassword} />
+            
             <PrivateRouteTP exact path="/taxprofessional/queries/:id" component={TpQueriesRecevied} />
             <PrivateRouteTP exact path="/taxprofessional/queriestab" component={TpQueriesTab} />
             <PrivateRouteTP exact path="/taxprofessional/proposal" component={TpProposalTab} />

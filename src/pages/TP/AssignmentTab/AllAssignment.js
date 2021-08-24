@@ -78,7 +78,7 @@ function AssignmentTab() {
 
   const getAssignmentList = () => {
     axios
-      .get(`${baseUrl}/tp/getAssignments?tp_id=${JSON.parse(userid)}`)
+      .get(`${baseUrl}/tl/getAssignments?tp_id=${JSON.parse(userid)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -446,7 +446,7 @@ function AssignmentTab() {
     console.log("selectedData :", selectedData);
     axios
       .get(
-        `${baseUrl}/tp/getAssignments?tp_id=${JSON.parse(
+        `${baseUrl}/tl/getAssignments?tp_id=${JSON.parse(
           userid
         )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
         }&assignment_status=${status}&stages_status=${data.p_status

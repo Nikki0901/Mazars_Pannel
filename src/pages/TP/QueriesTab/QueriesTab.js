@@ -142,9 +142,9 @@ function QueriesTab(props) {
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
               Inprogress; Queries ({incomplete})
             </Tab>
-            <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
+            {/* <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
             Pending for assignment({complete})
-            </Tab>
+            </Tab> */}
             {/* <Tab style={tabIndex == 4 ? myStyle2 : myStyle1}>
               Declined; Queries ({declined})
             </Tab> */}
