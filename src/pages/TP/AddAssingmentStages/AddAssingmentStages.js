@@ -71,7 +71,7 @@ function AddAssingmentStages() {
           setLoading(false)
           Alerts.SuccessNormal("Assignment added successfully.")
           getAssignmentList();
-          history.push("/taxprofessional/assignment");
+          history.push("/taxprofessional/dashboard");
         } else if (response.data.code === 0) {
           setLoading(false)
         }

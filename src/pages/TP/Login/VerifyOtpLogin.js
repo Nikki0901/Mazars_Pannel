@@ -292,11 +292,11 @@ function VerifyOtp({ email, uid, loading, setLoading }) {
     changeNum(true)
     let formData = new FormData();
     formData.append("email", email);
-    formData.append("uid", uid);
+    formData.append("id", uid);
 
     axios({
       method: "POST",
-      url: `${baseUrl}/admin/regenrateotp`,
+      url: `${baseUrl}/tp/regenrateotp`,
       data: formData,
     })
       .then(function (response) {
