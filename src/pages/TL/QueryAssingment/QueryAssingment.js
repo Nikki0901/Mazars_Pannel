@@ -144,7 +144,7 @@ function QueryAssingment() {
     formData.append("who", taxID);
     formData.append("id", id);
     formData.append("user", JSON.parse(userId));
-    formData.append("type", "tl");
+    formData.append("type", "tp");
     formData.append("types", "tp");
     formData.append("name", teamName);
     formData.append("timeline", value.p_timelines);

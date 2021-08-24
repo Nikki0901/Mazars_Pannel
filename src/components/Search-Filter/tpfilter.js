@@ -10,8 +10,22 @@ function TaxProfessionalFilter(props) {
   const { handleSubmit, register, errors, reset } = useForm();
 
   const {
+    records,
+    setRecords,
     setData,
     getData,
+    AllQuery,
+    pendingForAcceptence,
+    InprogressQuery,
+    DeclinedQuery,
+
+  
+    AllProposal,
+    InprogressProposal,
+    assignment,
+    AllPayment,
+    Unpaid,
+    Paid,
     inCompleteQuery,
     completeAssignment,
     proposal,
@@ -21,7 +35,7 @@ function TaxProfessionalFilter(props) {
   const [selectedData, setSelectedData] = useState([]);
   const [tax2, setTax2] = useState([]);
   const [store2, setStore2] = useState([]);
-
+  const [status1, setStatus1] = useState(1);
   useEffect(() => {
     const getSubCategory = () => {
       axios
@@ -192,7 +206,6 @@ function TaxProfessionalFilter(props) {
                     X
                   </button>
                 </div>
-
                 <div class="form-group mx-sm-1  mb-2">
                   <label className="form-select form-control">From</label>
                 </div>
@@ -236,6 +249,93 @@ function TaxProfessionalFilter(props) {
                   )}
                 </div>
 
+                <div class="form-group mx-sm-1  mb-2">
+
+{AllQuery == "AllQuery" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+  >
+    <option value="">--select--</option>
+    <option value="1">Inprogress; Queries</option>
+    <option value="2">Completed; Queries</option>
+    <option value="3">Declined; Queries</option>
+  </select>
+)}
+
+{InprogressQuery == "InprogressQuery" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+    onChange={(e) => setStatus1(e.target.value)}
+  >
+    <option value="">--select--</option>
+    <option value="4">Inprogress; Allocation</option>
+    <option value="5">Inprogress; Proposals</option>
+    <option value="6">Inprogress; Assignments</option>
+  </select>
+)}
+
+
+{DeclinedQuery == "DeclinedQuery" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+  >
+    <option value="">--select--</option>
+    <option value="3">Customer Declined; Proposals</option>
+    <option value="4">Customer Declined; Payment</option>
+  </select>
+)}
+
+{AllProposal == "AllProposal" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+  >
+    <option value="">--select--</option>
+    <option value="1">Inprogress; Proposals</option>
+    <option value="2">Accepted; Proposals</option>
+    <option value="3">Customer Declined; Proposals</option>
+  </select>
+)}
+
+{InprogressProposal == "InprogressProposal" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+  >
+    <option value="">--select--</option>
+    <option value="4">Inprogress; Preparation</option>
+    <option value="5">Inprogress; Acceptance</option>
+  </select>
+)}
+
+{AllPayment == "AllPayment" && (
+  <select
+    className="form-select form-control"
+    name="p_status"
+    ref={register}
+    style={{ height: "33px" }}
+  >
+    <option value="">--select--</option>
+    <option value="1">Unpaid</option>
+    <option value="2">Paid</option>
+  </select>
+)}
+</div>
+
+              
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>

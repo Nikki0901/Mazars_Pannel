@@ -172,6 +172,7 @@ function AllQuery() {
                 return { fontSize: "12px" };
             },
             formatter: function (cell, row) {
+                console.log("StatusCode", row)
                 return (
                     <>
                         <div
@@ -187,7 +188,7 @@ function AllQuery() {
                                         <i class="fa fa-share" style={{ color: "green" }}></i>
                                     </div>
                                 ) :
-                                    row.status_code < "4" ?
+                                    row.status_code == "2" ?
                                         (
                                             <div title="Assign to">
                                                 <i class="fa fa-share"></i>

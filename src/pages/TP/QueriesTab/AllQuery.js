@@ -12,7 +12,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
@@ -40,7 +40,7 @@ function AllQuery() {
         axios
             .get(`${baseUrl}/tl/getIncompleteQues?tp_id=${JSON.parse(userid)}`)
             .then((res) => {
-                console.log(res);
+                console.log("resultTP", res.data.result);
                 if (res.data.code === 1) {
                     setInCompleteData(res.data.result);
                     setRecords(res.data.result.length);
@@ -244,7 +244,7 @@ function AllQuery() {
         <>
             <Card>
                 <CardHeader>
-                    <TeamFilter
+                    <TaxProfessionalFilter
                         setData={setInCompleteData}
                         getData={getInCompleteAssingment}
                         AllQuery="AllQuery"

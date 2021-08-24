@@ -69,7 +69,7 @@ function Chatting(props) {
     formData.append("assign_id", query_id);
     formData.append("message_type", value.msg_type);
     formData.append("message", value.p_message);
-
+    formData.append("sst", "tp")
     axios({
       method: "POST",
       url: `${baseUrl}/tl/messageSent`,
