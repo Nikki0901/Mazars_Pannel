@@ -87,7 +87,7 @@ function QueriesTab(props) {
 
     const getComplete = () => {
       axios
-        .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userid)}&status=2`)
+      .get(`${baseUrl}/tl/pendingAllocation?uid=${JSON.parse(userid)}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {

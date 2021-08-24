@@ -29,12 +29,12 @@ function AllProposal() {
     };
 
 
-    // const [assignNo, setAssignNo] = useState('');
-    // const [ViewDiscussion, setViewDiscussion] = useState(false);
-    // const ViewDiscussionToggel = (key) => {
-    //     setViewDiscussion(!ViewDiscussion);
-    //     setAssignNo(key)
-    // }
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
 
     useEffect(() => {
         getProposalList();
@@ -332,6 +332,107 @@ function AllProposal() {
                 );
             },
         },
+        // {
+        //     text: "Action",
+        //     dataField: "",
+        //     headerStyle: () => {
+        //         return { fontSize: "12px", width: "110px" };
+        //     },
+        //     formatter: function (cell, row) {
+        //         return (
+        //             <>
+        //                 <div style={{ display: "flex", justifyContent: "space-between" }}>
+        //                     <div>
+        //                         {row.status_code == "4" ? (
+        //                             <Link to={`/taxprofessional/edit-proposal/${row.id}`}>
+        //                                 <i
+        //                                     className="fa fa-edit"
+        //                                     style={{
+        //                                         fontSize: "16px",
+        //                                         cursor: "pointer",
+        //                                         color: "green",
+        //                                     }}
+        //                                 ></i>
+        //                             </Link>
+        //                         ) : row.status_code == "2" ? (
+        //                             <Link to={`/taxprofessional/sendproposal/${row.id}`}>
+        //                                 <i
+        //                                     class="fa fa-mail-forward"
+        //                                     style={{
+        //                                         fontSize: "14px",
+        //                                         cursor: "pointer",
+        //                                     }}
+        //                                 ></i>
+        //                             </Link>
+        //                         ) : null}
+        //                     </div>
+
+        //                     {row.status_code > "3" ?
+        //                         <div style={{ cursor: "pointer", marginLeft: "8px" }} title="View Proposal">
+
+        //                             <a
+        //                                 href={`${baseUrl}/customers/dounloadpdf?id=${row.id}&viewpdf=1`}
+        //                                 target="_blank"
+        //                             >
+        //                                 <i
+        //                                     class="fa fa-eye"
+        //                                     style={{ color: "green", fontSize: "16px" }}
+        //                                 />
+        //                             </a>
+        //                         </div>
+        //                         :
+        //                         null
+        //                     }
+
+
+        //                     <div>
+        //                         {
+        //                             row.status == "Customer Declined; Proposal" ?
+        //                                 null
+        //                                 :
+        //                                 <div title="Send Message">
+        //                                     <Link
+        //                                         to={{
+        //                                             pathname: `/taxprofessional/chatting/${row.id}`,
+        //                                             obj: {
+        //                                                 message_type: "2",
+        //                                                 query_No: row.assign_no,
+        //                                                 query_id: row.id,
+        //                                                 routes: `/teamleader/proposal`
+        //                                             }
+        //                                         }}
+        //                                     >
+        //                                         <i
+        //                                             class="fa fa-comments-o"
+        //                                             style={{
+        //                                                 fontSize: 16,
+        //                                                 cursor: "pointer",
+        //                                                 marginLeft: "8px",
+        //                                                 color: "blue"
+        //                                             }}
+        //                                         ></i>
+        //                                     </Link>
+        //                                 </div>
+        //                         }
+        //                     </div>
+
+        //                     <div title="View Discussion Message">
+        //                         <i
+        //                             class="fa fa-comments-o"
+        //                             style={{
+        //                                 fontSize: 16,
+        //                                 cursor: "pointer",
+        //                                 color: "orange"
+        //                             }}
+                                     
+        //                             onClick={() => ViewDiscussionToggel(row.assign_no)}
+        //                         ></i>
+        //                     </div>
+        //                 </div>
+        //             </>
+        //         );
+        //     },
+        // },
     ];
 
     return (

@@ -161,7 +161,7 @@ function ProposalComponent(props) {
                 setLoading(true)
                 axios({
                   method: "POST",
-                  url: `${baseUrl}/tl/uploadProposal`,
+                  url: `${baseUrl}/tp/uploadProposal`,
                   data: formData,
                 })
                   .then(function (response) {
@@ -185,7 +185,7 @@ function ProposalComponent(props) {
         setLoading(true)
         axios({
           method: "POST",
-          url: `${baseUrl}/tl/uploadProposal`,
+          url: `${baseUrl}/tp/uploadProposal`,
           data: formData,
         })
           .then(function (response) {

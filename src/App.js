@@ -115,7 +115,7 @@ import TpAssignmentTab from './pages/TP/AssignmentTab/AssignmentTab'
 import TpSchedule from './pages/TP/Schedule/Schedule'
 import TpMessage from './pages/TP/Message/Message'
 import TpChatting from './pages/TP/Chatting/Chatting'
-
+import TpAddAssingmentStages from './pages/TP/AddAssingmentStages/AddAssingmentStages'
 
 
 //private routes
@@ -244,8 +244,8 @@ function App() {
             <PrivateRouteTP exact path="/taxprofessional/edit-proposal/:id" component={TpEditProposal} />
             <PrivateRouteTP exact path="/taxprofessional/change-password" component={TpChangePassword} />
             <PrivateRouteTP exact path="/taxprofessional/dashboard" component={TpDashboard} />
-            <PrivateRouteTP exact path = "/taxprofessional/chatting/:id" component = {TpChatting} />
-            
+            <PrivateRouteTP exact path ="/taxprofessional/chatting/:id" component = {TpChatting} />
+            <PrivateRouteTP exact path="/taxprofessional/addassingment/:id" component={TpAddAssingmentStages} />
             <PrivateRouteTP exact path="/taxprofessional/paymentstatus" component={TpPaymentStatus} />
             <PrivateRouteTP exact path="/taxprofessional/assignment" component={TpAssignmentTab} />
             <PrivateRouteTP exact path="/taxprofessional/schedule" component={TpSchedule} />

@@ -182,7 +182,7 @@ function AssignmentTab() {
           <>
             <Link
               to={{
-                pathname: `/taxprofession/queries/${row.q_id}`,
+                pathname: `/taxprofessional/queries/${row.q_id}`,
                 routes: "assignment",
               }}
             >
@@ -319,7 +319,7 @@ function AssignmentTab() {
               title="Add Assignment stages"
               style={{ cursor: "pointer", textAlign: "center" }}
             >
-              <Link to={`/taxprofession/addassingment/${row.q_id}`}>
+              <Link to={`/taxprofessional/addassingment/${row.q_id}`}>
                 <i class="fa fa-tasks"></i>
               </Link>
             </div>
@@ -393,12 +393,12 @@ function AssignmentTab() {
               <div title="Send Message">
                 <Link
                   to={{
-                    pathname: `/taxprofession/chatting/${row.q_id}`,
+                    pathname: `/taxprofessional/chatting/${row.q_id}`,
                     obj: {
                       message_type: "3",
                       query_No: row.assign_no,
                       query_id: row.q_id,
-                      routes: `/taxprofession/assignment`
+                      routes: `/taxprofessional/assignment`
                     }
                   }}
                 >

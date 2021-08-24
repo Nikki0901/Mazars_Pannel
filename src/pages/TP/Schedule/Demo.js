@@ -245,7 +245,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tp/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {

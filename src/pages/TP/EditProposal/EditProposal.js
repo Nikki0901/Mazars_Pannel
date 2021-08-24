@@ -183,7 +183,7 @@ function EditComponent() {
                       setLoading(false)
                       var variable = "Proposal Updated Successfully "
                       Alerts.SuccessNormal(variable)
-                      history.push("/teamleader/proposal");
+                      history.push("/taxprofessional/proposal");
                     } else if (response.data.code === 0) {
                       setLoading(false)
                     }
@@ -208,7 +208,7 @@ function EditComponent() {
               setLoading(false)
               var variable = "Proposal Updated Successfully "
               Alerts.SuccessNormal(variable)
-              history.push("/teamleader/proposal");
+              history.push("/taxprofessional/proposal");
             } else if (response.data.code === 0) {
               setLoading(false)
             }
