@@ -39,7 +39,8 @@ function AdminFilter(props) {
   //get category
   useEffect(() => {
     const getSubCategory = () => {
-      axios
+      if(selectedData.length > 0){
+        axios
         .get(`${baseUrl}/customers/getCategory?pid=${selectedData}`)
         .then((res) => {
           console.log(res);
@@ -47,6 +48,7 @@ function AdminFilter(props) {
             setTax2(res.data.result);
           }
         });
+      }
     };
     getSubCategory();
   }, [selectedData]);

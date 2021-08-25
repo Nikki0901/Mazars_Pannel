@@ -434,13 +434,13 @@ function Demo() {
               <Scheduler data={data} height={660}>
                 <ViewState
                   defaultCurrentDate={currentDate}
-                  defaultCurrentViewName="Day"
+                  defaultCurrentViewName="Week"
                 />
                 <EditingState onCommitChanges={commitChanges} />
                 <EditRecurrenceMenu />
 
-                <DayView startDayHour={0} endDayHour={24} />
-                <WeekView startDayHour={0} endDayHour={24}  />
+                <DayView cellDuration={60} startDayHour={0} endDayHour={24} />
+                <WeekView cellDuration={60} startDayHour={0} endDayHour={24}  />
 
                 <Appointments appointmentComponent={myAppointment} />
                 <Toolbar />

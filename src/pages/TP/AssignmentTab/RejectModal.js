@@ -34,7 +34,7 @@ function RejectedModal({
     setLoading(true)
 
     let formData = new FormData();
-    formData.append("uid", JSON.parse(userId));
+    formData.append("tp_id", JSON.parse(userId));
     formData.append("id", dataItem.q_id);
     formData.append("query_no", dataItem.assign_no);
     formData.append("message", value.p_chat);

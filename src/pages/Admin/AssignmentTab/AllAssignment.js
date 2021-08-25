@@ -51,7 +51,7 @@ function AssignmentComponent() {
     setReport(key);
   };
 
-  const [assignNo, setAssignNo] = useState('');
+  const [assignNo, setAssignNo] = useState(null);
   const [ViewDiscussion, setViewDiscussion] = useState(false);
   const ViewDiscussionToggel = (key) => {
     setViewDiscussion(!ViewDiscussion);

@@ -130,7 +130,7 @@ function AssignmentDetails({ p, diaplayAssignment, diaplayProposal, reports, ass
                         <td>
                           {p.status == "3"
                             ?
-                            <p className="declined">Discarted</p>
+                            <p className="declined">Discarded</p>
                             : null}
                         </td>
                       </tr>

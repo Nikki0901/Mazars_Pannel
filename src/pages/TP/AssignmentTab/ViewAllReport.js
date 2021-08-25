@@ -59,7 +59,7 @@ function ViewReport({
   const deleteCliente = (id) => {
     console.log(id)
     let formData = new FormData();
-    formData.append("uid", JSON.parse(userId));
+    formData.append("tp_id", JSON.parse(userId));
     formData.append("id", dataItem.q_id);
     formData.append("query_no", dataItem.assign_no);
     formData.append("type", 2);
@@ -74,7 +74,7 @@ function ViewReport({
         console.log("response-", response);
         if (response.data.code === 1) {
           getData()
-          Alerts.SuccessNormal("Discarted Successfully")
+          Alerts.SuccessNormal("Discarded Successfully")
         }
       })
       .catch((error) => {
@@ -205,7 +205,7 @@ function ViewReport({
                                     </div>
                                     :
                                     p.status == "3" ?
-                                      <p style={{ color: "red" }}>Discarted</p> :
+                                      <p style={{ color: "red" }}>Discarded</p> :
                                       null
                             }
                           </div>

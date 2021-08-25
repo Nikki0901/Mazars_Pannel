@@ -341,7 +341,8 @@ function AssignmentTab() {
                 justifyContent: "space-between",
               }}
             >
-              {
+              
+              {/* {
                 !row.final_report && row.client_discussion == "completed" &&
                   !(
                     row.delivery_report == "completed"
@@ -355,29 +356,40 @@ function AssignmentTab() {
                       draft
                     </p>
                   </div>
-                ) : null}
-
-              {row.delivery_report == "completed" ? null : (
-                <div title="upload Pdf">
-                  <p
-                    style={{ cursor: "pointer", color: "red" }}
-                    onClick={() => uploadFinalReport(row)}
-                  >
-                    {row.client_discussion == "completed" &&
-                      row.draft_report == "completed" &&
-                      row.final_discussion == "completed"
-                      ? (
-                        <div>
-                          <i
-                            class="fa fa-upload"
-                            style={{ fontSize: "16px" }}
-                          ></i>
-                          final
-                        </div>
-                      ) : null}
-                  </p>
-                </div>
-              )}
+                ) : null} */}
+                 {
+                 row.client_discussion == "completed" && row.draft_report == "inprogress" ?
+                 <div title="upload Pdf">
+                 <p
+                   style={{ cursor: "pointer", color: "green" }}
+                   onClick={() => uploadDraftReport(row.id)}
+                 >
+                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                   draft
+                 </p>
+               </div> : null
+              }
+{
+    row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "completed" && row.delivery_report == "inprogress" ?
+   
+   <div title="upload Pdf">
+    <p
+      style={{ cursor: "pointer", color: "red" }}
+      onClick={() => uploadFinalReport(row)}
+    >
+    
+          <div>
+            <i
+              class="fa fa-upload"
+              style={{ fontSize: "16px" }}
+            ></i>
+            final
+          </div>
+       
+    </p>
+  </div> : null
+  }
+             
 
               <div title="View Discussion Message">
                 <i

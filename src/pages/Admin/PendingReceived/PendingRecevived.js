@@ -133,7 +133,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`https://mazarsapi.multitvsolution.com/mazarapi/assets/image/${p.upload_doc_1}`}
+                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -157,7 +157,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`https://mazarsapi.multitvsolution.com/mazarapi/assets/image/${p.upload_doc_3}`}
+                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>

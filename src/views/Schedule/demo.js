@@ -255,8 +255,8 @@ function Demo() {
         <EditingState onCommitChanges={commitChanges} />
         <EditRecurrenceMenu />
 
-        <DayView startDayHour={0} endDayHour={24} />
-        <WeekView startDayHour={0} endDayHour={24} />
+        <DayView cellDuration={60} startDayHour={0} endDayHour={24} />
+        <WeekView cellDuration={60} startDayHour={0} endDayHour={24}  />
 
         <Appointments appointmentComponent={myAppointment} />
 
