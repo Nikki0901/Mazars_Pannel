@@ -245,7 +245,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tp/PostCallSchedule`,
+        url: `${baseUrl}/tl/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -308,7 +308,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tp/PostCallSchedule`,
+        url: `${baseUrl}/tl/PostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -360,7 +360,7 @@ function Demo() {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.value) {
-          axios.get(`${baseUrl}/tp/freeslot?id=${deleted}`).then((res) => {
+          axios.get(`${baseUrl}/tl/freeslot?id=${deleted}`).then((res) => {
             console.log("res -", res);
             if (res.data.code === 1) {
               setLoading(false)

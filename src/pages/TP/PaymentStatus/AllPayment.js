@@ -60,7 +60,7 @@ function AllPayment() {
     }, []);
 
     const getPaymentStatus = () => {
-        axios.get(`${baseUrl}/tp/getUploadedProposals?uid=${JSON.parse(userid)}`).then((res) => {
+        axios.get(`${baseUrl}/tl/getUploadedProposals?tp_id=${JSON.parse(userid)}`).then((res) => {
             console.log(res);
             if (res.data.code === 1) {
                 setPayment(res.data.result);
@@ -305,7 +305,7 @@ function AllPayment() {
                                     ></i>
                                 </Link>
                             </div>
-                            <div>
+                            {/* <div>
                                 {
                                     row.paid_status == "0" ?
                                         <div title="Payment decline"
@@ -316,7 +316,7 @@ function AllPayment() {
                                         </div>
                                         : null
                                 }
-                            </div>
+                            </div> */}
 
 
                             <div title="View Discussion Message">

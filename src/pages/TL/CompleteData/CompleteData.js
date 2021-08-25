@@ -13,7 +13,7 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
-
+import History from "../../../components/PendingForAllocation/History";
 
 
 function CompletedQuery() {
@@ -24,6 +24,9 @@ function CompletedQuery() {
  
   const [assignNo, setAssignNo] = useState('');
   const [ViewDiscussion, setViewDiscussion] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [modal, setModal] = useState(false);
+  // const [records, setRecords] = useState([]);
   const ViewDiscussionToggel = (key) => {
       setViewDiscussion(!ViewDiscussion);
       setAssignNo(key)
@@ -34,7 +37,23 @@ function CompletedQuery() {
   useEffect(() => {
     getInCompleteAssingment();
   }, []);
-
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+  console.log("userid", userid)
+    fetch(`${baseUrl}/customers/getQueryHistory?q_id=${key}&uid=${JSON.parse(userid)}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setHistory(response.result);
+      })
+      .catch((error) => console.log(error));
+  };
   const getInCompleteAssingment = () => {
     axios
       .get(`${baseUrl}/tl/pendingAllocation?uid=${JSON.parse(userid)}`)
@@ -166,79 +185,168 @@ function CompletedQuery() {
           );
       },
   },
-    {
-      text: "Action",
-      dataField: "",
-      headerStyle: () => {
-          return { fontSize: "12px" };
-      },
-      formatter: function (cell, row) {
-          console.log("StatusCode", row)
-          return (
-              <>
-                  <div
-                      style={{
-                          display: "flex",
-                          justifyContent: "space-evenly",
-                          color: "green",
-                      }}
-                  >
-                      <Link to={`/teamleader/queryassing/${row.id}`}>
-                          {row.statuscode == "1" ? (
-                              <div title="Assigned">
-                                  <i class="fa fa-share" style={{ color: "green" }}></i>
-                              </div>
-                          ) :
-                              row.statuscode == "2" ?
-                                  (
-                                      <div title="Assign to">
-                                          <i class="fa fa-share"></i>
-                                      </div>
-                                  )
-                                  :
-                                  ""
-                          }
-                      </Link>
+  //   {
+  //     text: "Action",
+  //     dataField: "",
+  //     headerStyle: () => {
+  //         return { fontSize: "12px" };
+  //     },
+  //     formatter: function (cell, row) {
+  //         console.log("StatusCode", row)
+  //         return (
+  //             <>
+  //                 <div
+  //                     style={{
+  //                         display: "flex",
+  //                         justifyContent: "space-evenly",
+  //                         color: "green",
+  //                     }}
+  //                 >
+  //                     <Link to={`/teamleader/queryassing/${row.id}`}>
+  //                         {row.statuscode == "1" ? (
+  //                             <div title="Assigned">
+  //                                 <i class="fa fa-share" style={{ color: "green" }}></i>
+  //                             </div>
+  //                         ) :
+  //                             row.statuscode == "2" ?
+  //                                 (
+  //                                     <div title="Assign to">
+  //                                         <i class="fa fa-share"></i>
+  //                                     </div>
+  //                                 )
+  //                                 :
+  //                                 ""
+  //                         }
+  //                     </Link>
 
-                      <div title="Send Message">
-                          <Link
-                              to={{
-                                  pathname: `/teamleader/chatting/${row.id}`,
-                                  obj: {
-                                      message_type: "2",
-                                      query_No: row.assign_no,
-                                      query_id: row.id,
-                                      routes: `/teamleader/proposal`
-                                  }
-                              }}
-                          >
-                              <i
-                                  class="fa fa-comments-o"
-                                  style={{
-                                      fontSize: 16,
-                                      cursor: "pointer",
-                                      marginLeft: "8px",
-                                      color: "blue"
-                                  }}
-                              ></i>
-                          </Link>
-                      </div>
+  //                     <div title="Send Message">
+  //                         <Link
+  //                             to={{
+  //                                 pathname: `/teamleader/chatting/${row.id}`,
+  //                                 obj: {
+  //                                     message_type: "2",
+  //                                     query_No: row.assign_no,
+  //                                     query_id: row.id,
+  //                                     routes: `/teamleader/proposal`
+  //                                 }
+  //                             }}
+  //                         >
+  //                             <i
+  //                                 class="fa fa-comments-o"
+  //                                 style={{
+  //                                     fontSize: 16,
+  //                                     cursor: "pointer",
+  //                                     marginLeft: "8px",
+  //                                     color: "blue"
+  //                                 }}
+  //                             ></i>
+  //                         </Link>
+  //                     </div>
 
-                      <div title="View Discussion Message">
-                          <i
-                              class="fa fa-comments-o"
-                              style={{
-                                  fontSize: 16,
-                                  cursor: "pointer",
-                                  color: "orange"
-                              }}
-                              onClick={() => ViewDiscussionToggel(row.assign_no)}
-                          ></i>
-                      </div>
-                  </div>
-              </>
-          );
-      },
+  //                     <div title="View Discussion Message">
+  //                         <i
+  //                             class="fa fa-comments-o"
+  //                             style={{
+  //                                 fontSize: 16,
+  //                                 cursor: "pointer",
+  //                                 color: "orange"
+  //                             }}
+  //                             onClick={() => ViewDiscussionToggel(row.assign_no)}
+  //                         ></i>
+  //                     </div>
+  //                 </div>
+  //             </>
+  //         );
+  //     },
+  // },
+  {
+    text: "Action",
+    dataField: "",
+    headerStyle: () => {
+      return { fontSize: "12px" };
+    },
+    formatter: function (cell, row) {
+      return (
+        <>
+          {row.statuscode === "0" || row.statuscode === "3"? (
+             <Link
+                  to={`/teamleader/queryassing/${row.id}`}
+                >
+                  <i class="fa fa-share"></i>
+                </Link>
+          
+          ) : (
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              {/* <div title="Assign to">
+               
+
+              </div>
+              <div title="Decline Query">
+                <Link
+                  to={`/teamleader/query_rejection/${row.id}`}
+                >
+                  <i
+                    className="fa fa-trash"
+                  ></i>
+                </Link>
+              </div> */}
+  <p style={{ color: "green", fontSize: "10px" }}>
+
+ Allocated to {row.tname} on
+<p>{row.allocation_time}</p>
+</p>
+              {/* <div title="Send Message">
+                <Link
+                  to={{
+                    pathname: `/teamleader/chatting/${row.id}`,
+                    obj: {
+                      message_type: "4",
+                      query_No: row.assign_no,
+                      query_id: row.id,
+                      routes: `/teamleader/queriestab`
+                    }
+                  }}
+                >
+                  <i
+                    class="fa fa-comments-o"
+                    style={{
+                      fontSize: 16,
+                      cursor: "pointer",
+                      marginLeft: "8px",
+                      color: "blue"
+                    }}
+                  ></i>
+                </Link>
+              </div> */}
+
+            </div>
+
+
+
+          )}
+        </>
+      );
+    },
+  },
+  {
+    text: "History",
+    dataField: "",
+    headerStyle: () => {
+      return { fontSize: "12px" };
+    },
+    formatter: function (cell, row) {
+      return (
+        <>
+          <button
+            type="button"
+            class="btn btn-info btn-sm"
+            onClick={() => toggle(row.id)}
+          >
+            History
+          </button>
+        </>
+      );
+    },
   },
   ];
 
@@ -262,6 +370,7 @@ function CompletedQuery() {
             columns={columns}
             rowIndex
           />
+            <History history={history} toggle={toggle} modal={modal} />
         </CardBody>
       </Card>
     </>

@@ -33,7 +33,7 @@ function DraftReport({ draftModal, uploadDraftReport, id, getAssignmentList }) {
     }
 
     formData.append("id", id);
-    axios.post(`${baseUrl}/tp/UploadReport`, formData, {
+    axios.post(`${baseUrl}/tl/UploadReport`, formData, {
       headers: {
         'content-type': 'multipart/form-data'
       }
