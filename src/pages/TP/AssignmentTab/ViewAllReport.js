@@ -57,6 +57,7 @@ function ViewReport({
   };
 
   const deleteCliente = (id) => {
+    console.log(id)
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
     formData.append("id", dataItem.q_id);
@@ -66,7 +67,7 @@ function ViewReport({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tp/draftDiscussion`,
+      url: `${baseUrl}/tl/draftDiscussion`,
       data: formData,
     })
       .then(function (response) {

@@ -132,11 +132,12 @@ function QueriesTab(props) {
             <Tab style={tabIndex == 0 ? myStyle2 : myStyle1}>
               All Query ({allQuery})
             </Tab>
+           
             <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
-              Pending For Acceptence ({pendindForAccepttence})
+              Inprogress; Queries ({incomplete})
             </Tab>
             <Tab style={tabIndex == 2 ? myStyle2 : myStyle1}>
-              Inprogress; Queries ({incomplete})
+              Pending For Acceptence ({pendindForAccepttence})
             </Tab>
             <Tab style={tabIndex == 3 ? myStyle2 : myStyle1}>
             Pending for assignment ({complete})
@@ -151,13 +152,14 @@ function QueriesTab(props) {
             <AllQuery
             />
           </TabPanel>
+         
           <TabPanel>
-            <PendingForAcceptence
-              updateTab={updateTab}
+            <InCompleteData
             />
           </TabPanel>
           <TabPanel>
-            <InCompleteData
+            <PendingForAcceptence
+              updateTab={updateTab}
             />
           </TabPanel>
           <TabPanel>

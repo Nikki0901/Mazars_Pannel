@@ -43,7 +43,7 @@ function RejectedModal({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/tp/draftDiscussion`,
+      url: `${baseUrl}/tl/draftDiscussion`,
       data: formData,
     })
       .then(function (response) {

@@ -188,7 +188,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                            href={`https://mazarsapi.multitvsolution.com/mazarapi/assets/image/${p.upload_doc_1}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -200,7 +200,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                            href={`https://mazarsapi.multitvsolution.com/mazarapi/assets/image/${p.upload_doc_2}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -292,7 +292,7 @@ function PendingRecevied() {
                         ) : (
                           <p>
                             <a
-                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                              href={`https://mazarsapi.multitvsolution.com/mazarapi/assets/image/${p.upload_doc}`}
                             >
                               <i class="fa fa-photo"></i>
                             </a>
