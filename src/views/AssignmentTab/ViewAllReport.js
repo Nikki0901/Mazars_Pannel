@@ -10,6 +10,7 @@ import classNames from "classnames";
 import CommonServices from "../../common/common";
 import RejectedModal from "./RejectModal";
 import DiscardReport from "./DiscardReport";
+import Assignmodal from "./Assignmodal";
 import PublishIcon from '@material-ui/icons/Publish';
 
 const Schema = yup.object().shape({
@@ -30,6 +31,7 @@ function ViewReport({
   const [additionalQuery, setAdditionalQuery] = useState(false);
   const [assignNo, setAssignNo] = useState('');
   const [nestedModal, setNestedModal] = useState(false);
+  const [modaldoc, setModaldoc] = useState({})
   const toggleNested = (key) => {
     setNestedModal(!nestedModal);
     setDocData(key)
@@ -65,9 +67,10 @@ function ViewReport({
         console.log("erroror - ", error);
       });
   }
-  const additionalHandler = (key) => {
+  const additionalHandler = (p) => {
+ setModaldoc(p.docid)
     setAdditionalQuery(!additionalQuery);
-    setAssignNo(key)
+    setAssignNo(userId)
 };
 
 
@@ -175,12 +178,7 @@ function ViewReport({
                                   ></i>
                                 </div>
                               
-                                                        <div title="Upload Additional Documents"
-                                                            style={{ cursor: "pointer" }}
-                                                            onClick={(e) => additionalHandler(e.assign_no)}
-                                                        >
-                                                            <PublishIcon color="secondary" />
-                                                        </div>
+                                                      
                                                 
                                 <div title="Discussion">
                                   <i
@@ -194,6 +192,13 @@ function ViewReport({
                                     onClick={() => toggleNested(p)}
                                   ></i>
                                 </div>
+                                <div title="Upload Additional Documents"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() => additionalHandler(p)}
+                                                           
+                                                        >
+                                                            <PublishIcon color="secondary" />
+                                                        </div>
                               </div>
                               :
                               p.status == "1" ?
@@ -241,7 +246,13 @@ function ViewReport({
         docData={docData}
         getData={getData}
       />
-
+     <Assignmodal
+                        additionalHandler={additionalHandler}
+                        additionalQuery={additionalQuery}
+                        assignNo={assignNo}
+                        modaldoc = {modaldoc}
+                        // getQueriesData={getQueriesData}
+                    />
       <DiscardReport
         ViewDiscussionToggel={ViewDiscussionToggel}
         ViewDiscussion={ViewDiscussion}
