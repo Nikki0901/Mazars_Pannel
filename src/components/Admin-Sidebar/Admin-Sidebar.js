@@ -304,14 +304,7 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              {/* <li class="nav-item">
-                <NavLink to={"/teamleader/queriestab2"}>
-                  <i class="fa fa-clone"></i>
-                  <span class="menu-title" data-i18n="">
-                    Queries test
-                  </span>
-                </NavLink>
-              </li> */}
+             
             </ul>
           )}
 
@@ -380,6 +373,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   <i class="fa fa-envelope"></i>
                   <span class="menu-title" data-i18n="">
                     Message
+                  </span>
+                </NavLink>
+              </li>
+              <li class="nav-item">
+                <NavLink to={"/taxprofessional/feedback"}>
+                  <i class="fa fa-file-text"></i>
+                  <span class="menu-title" data-i18n="">
+                    Feedback
                   </span>
                 </NavLink>
               </li>

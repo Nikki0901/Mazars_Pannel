@@ -10,7 +10,7 @@ import classNames from "classnames";
 import CommonServices from "../../common/common";
 import RejectedModal from "./RejectModal";
 import DiscardReport from "./DiscardReport";
-
+import PublishIcon from '@material-ui/icons/Publish';
 
 const Schema = yup.object().shape({
   p_chat: yup.string().required("required discussion"),
@@ -27,8 +27,8 @@ function ViewReport({
   const userId = window.localStorage.getItem("userid");
   const [data, setData] = useState([]);
   const [docData, setDocData] = useState({});
-
-
+  const [additionalQuery, setAdditionalQuery] = useState(false);
+  const [assignNo, setAssignNo] = useState('');
   const [nestedModal, setNestedModal] = useState(false);
   const toggleNested = (key) => {
     setNestedModal(!nestedModal);
@@ -65,6 +65,10 @@ function ViewReport({
         console.log("erroror - ", error);
       });
   }
+  const additionalHandler = (key) => {
+    setAdditionalQuery(!additionalQuery);
+    setAssignNo(key)
+};
 
 
   //accept handler
@@ -170,7 +174,14 @@ function ViewReport({
                                     onClick={() => acceptHandler(p)}
                                   ></i>
                                 </div>
-
+                              
+                                                        <div title="Upload Additional Documents"
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={(e) => additionalHandler(e.assign_no)}
+                                                        >
+                                                            <PublishIcon color="secondary" />
+                                                        </div>
+                                                
                                 <div title="Discussion">
                                   <i
                                     class="fa fa-comments-o"

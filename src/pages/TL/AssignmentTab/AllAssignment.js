@@ -369,6 +369,18 @@ function AssignmentTab() {
                  </p>
                </div> : null
               }
+               {
+                 row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "inprogress" ?
+                 <div title="upload Pdf">
+                 <p
+                   style={{ cursor: "pointer", color: "green" }}
+                   onClick={() => uploadDraftReport(row.id)}
+                 >
+                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                   draft
+                 </p>
+               </div> : null
+              }
 {
     row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "completed" && row.delivery_report == "inprogress" ?
    

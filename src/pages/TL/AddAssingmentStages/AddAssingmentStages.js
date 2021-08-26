@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import Alerts from "../../../common/Alerts";
 import { Spinner } from 'reactstrap';
+import { result } from "lodash";
 
 function AddAssingmentStages() {
 
@@ -39,6 +40,7 @@ function AddAssingmentStages() {
         console.log("dt -", res.data.result[0].client_discussion);
 
         if (res.data.code === 1) {
+          console.log("ress2", res.data.result)
           setAssignmentstages(res.data.result);
           reset(res.data.result[0]);
           setClientDiscussion(res.data.result[0].client_discussion)
@@ -69,7 +71,7 @@ function AddAssingmentStages() {
         console.log("res-", response);
         if (response.data.code === 1) {
           setLoading(false)
-          Alerts.SuccessNormal("Assignment added successfully.")
+          Alerts.SuccessNormal("Assignment Stage updated successfully.")
           getAssignmentList();
           history.push("/teamleader/assignment");
         } else if (response.data.code === 0) {
@@ -288,9 +290,7 @@ function AddAssingmentStages() {
                             >
                               <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
-                              <option value="notApplicable">
-                                Not Applicable
-                              </option>
+                              
                             </select>
                           </div>
                         </div>
@@ -336,9 +336,7 @@ function AddAssingmentStages() {
                             >
                               <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
-                              <option value="notApplicable">
-                                Not Applicable
-                              </option>
+                              
                             </select>
                           </div>
                         </div>
@@ -378,9 +376,7 @@ function AddAssingmentStages() {
                             >
                               <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
-                              <option value="notApplicable">
-                                Not Applicable
-                              </option>
+                             
                             </select>
                           </div>
                         </div>
@@ -414,9 +410,7 @@ function AddAssingmentStages() {
                             >
                               <option value="inprogress">Inprogress</option>
                               <option value="completed">Completed</option>
-                              <option value="notApplicable">
-                                Not Applicable
-                              </option>
+                              
                             </select>
                           </div>
                         </div>

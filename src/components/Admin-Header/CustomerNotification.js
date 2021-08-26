@@ -28,20 +28,7 @@ function CustomerNotification({ tokenKey, name }) {
     };
 
 
-    // readnotification
-    const readNotification = (id) => {
-        axios
-            .get(`${baseUrl}/customers/markReadNotification?id=${id}`)
-            .then(function (response) {
-                console.log("delete-", response);
-                if (response.data.code === 1) {
-                    console.log(response.data.result);
-                }
-            })
-            .catch((error) => {
-                console.log("erroror - ", error);
-            });
-    };
+
 
     return (
         <>
@@ -55,34 +42,14 @@ function CustomerNotification({ tokenKey, name }) {
                                 data-toggle="dropdown"
                             >
                                 <a href="#" class="notification">
-                                    <span>Inbox</span>
+                                <Link to ={`/${name}/message`} style={{color : "white"}}>Inbox</Link>
                                     <span class="badge">{countNotification}</span>
+                                   
                                 </a>
                             </a>
 
-                            <div
-                                class="dropdown-menu dropdown-menu-right"
-                                style={{ height: "300px", overflowY: "scroll", width: "600px" }}
-                            >
-                                <div class="arrow_box_right">
-                                    {notification.map((p, i) => (
-                                        <div
-                                            class="dropdown-item"
-                                            style={{ padding: "0", fontSize: "12px" }}
-                                        >
-                                            <Link to={`/${name}/view-notification/${p.id}`}>
-                                                <p
-                                                    class="dropdown-item"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => readNotification(p.id)}
-                                                >
-                                                    {p.message}
-                                                </p>
-                                            </Link>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                           
+                                
                         </div>
                     ) : null}
                 </li>

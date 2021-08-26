@@ -180,7 +180,7 @@ function AllQueriesData() {
                             row.status == "Declined Query"
                                 ? null
                                 :
-                                row.status_code > "1" ?
+                                row.status_code != "3" && row.status_code > "1" ?
                                     CommonServices.removeTime(row.exp_delivery_date)
                                     :
                                     null
