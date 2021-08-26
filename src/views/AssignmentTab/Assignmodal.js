@@ -23,15 +23,13 @@ function Assignmodal({
 
     let formData = new FormData();
     var uploadImg = value.p_upload;
-    // if (uploadImg) {
-    //   for (var i = 0; i < uploadImg.length; i++) {
-    //     let file = uploadImg[i];
-    //     formData.append("upload[]", file);
+    if (uploadImg) {
+      for (var i = 0; i < uploadImg.length; i++) {
+        let file = uploadImg[i];
+        formData.append("upload", file);
        
-    //   }
-
-    // }
-    formData.append("upload", value.p_upload)
+      }
+    }
     formData.append("uid", assignNo);
     formData.append("doc_id", modaldoc);
     // formData.append("assign_no", assignNo);

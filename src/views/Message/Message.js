@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../components/Layout/Layout";
-import axios from "axios";
-import { baseUrl } from "../../config/config";
-import { useAlert } from "react-alert";
 import {
     Card,
     CardHeader,
@@ -12,14 +8,16 @@ import {
     Col,
     Table,
 } from "reactstrap";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import PaymentModal from "./PaymentModal";
-import CommonServices from "../../common/common";
+import TeamFilter from "../../../src/components/Search-Filter/tlFilter";
+import DiscardReport from "../AssignmentTab/DiscardReport";
 
 
-function Message(props) {
-    console.log("props", props.location.obj)
+
+function AllQuery() {
 
     const userId = window.localStorage.getItem("userid");
     const [query, setQuery] = useState([]);
@@ -30,13 +28,18 @@ function Message(props) {
         console.log("key", key);
         setPaymentModal(!addPaymentModal);
     };
+ 
 
-    // useEffect(() => {
-    //     var dataItem = props.location.obj.message_type
-    //     setData(dataItem)
-    // }, [data]);
+    const [incompleteData, setInCompleteData] = useState([]);
+    const [records, setRecords] = useState([]);
 
 
+    const [assignNo, setAssignNo] = useState('');
+    const [ViewDiscussion, setViewDiscussion] = useState(false);
+    const ViewDiscussionToggel = (key) => {
+        setViewDiscussion(!ViewDiscussion);
+        setAssignNo(key)
+    }
     useEffect(() => {
         getMessage();
     }, []);
@@ -56,13 +59,26 @@ function Message(props) {
             });
     };
 
+    useEffect(() => {
+        getInCompleteAssingment();
+    }, []);
 
-
+    const getInCompleteAssingment = () => {
+        axios
+            .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userId)}`)
+            .then((res) => {
+                console.log(res);
+                if (res.data.code === 1) {
+                    setInCompleteData(res.data.result);
+                    setRecords(res.data.result.length);
+                }
+            });
+    };
 
     const columns = [
         {
             text: "S.No",
-            sort: true,
+          
             formatter: (cellContent, row, rowIndex) => {
                 return rowIndex + 1;
             },
@@ -72,7 +88,7 @@ function Message(props) {
         },
         {
             text: "Date",
-            sort: true,
+           sort : true,
             headerStyle: () => {
                 return { fontSize: "12px", width: "50px" };
             },
@@ -87,6 +103,7 @@ function Message(props) {
                     </>
                 );
             },
+              sort: true,
         },
         {
             text: "Query No",
@@ -166,16 +183,17 @@ function Message(props) {
             });
     };
 
-
     return (
-        <Layout custDashboard="custDashboard" custUserId={userId}>
+        <>
             <Card>
                 <CardHeader>
-                    <Row>
-                        <Col md="9">
-                            <CardTitle tag="h4">Message</CardTitle>
-                        </Col>
-                    </Row>
+                    <TeamFilter
+                        setData={setInCompleteData}
+                        getData={getInCompleteAssingment}
+                        AllQuery="AllQuery"
+                        setRecords={setRecords}
+                        records={records}
+                    />
                 </CardHeader>
                 <CardBody>
                     <BootstrapTable
@@ -185,55 +203,17 @@ function Message(props) {
                         columns={columns}
                         rowIndex
                     />
-
-                    <PaymentModal
-                        paymentHandler={paymentHandler}
-                        addPaymentModal={addPaymentModal}
-                    // data={data}
-                    // getProposalData={getAssignmentData}
+                    <DiscardReport
+                        ViewDiscussionToggel={ViewDiscussionToggel}
+                        ViewDiscussion={ViewDiscussion}
+                        report={assignNo}
+                        getData={getInCompleteAssingment}
                     />
+
                 </CardBody>
             </Card>
-        </Layout>
+        </>
     );
 }
 
-export default Message;
-
-{/* <Col md="3">
-                            <div style={{ display: "flex", justifyContent: "space-around" }}
-                                class="btn btn-primary"
-                            // onClick={() => paymentHandler()}
-                            >
-                                <Link
-                                    to={{
-                                        pathname: `/customer/chatting`,
-                                        obj: props.location.obj
-                                    }}
-
-                                >
-                                    Add Message
-                                </Link>
-                            </div>
-                        </Col> */}
-
-{/* <Link to={`/customer/view-notification/${row.id}`}>
-                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div>{row.message}</div>
-                                <div>{
-                                    row.is_read == "0" ?
-                                        <p style={{ color: 'blue' }} title="read"
-                                            onClick={() => readNotification(row.id)}
-                                        >
-                                            <i class="fa fa-bullseye"></i>
-                                        </p>
-                                        :
-                                        <p style={{ color: 'green' }} title="unread"
-                                        >
-                                            <i class="fa fa-circle"></i>
-                                        </p>
-                                }
-                                </div>
-                            </div>
-
-                        </Link> */}
+export default AllQuery;

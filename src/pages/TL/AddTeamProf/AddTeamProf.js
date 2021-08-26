@@ -40,8 +40,8 @@ function AddTeamProf() {
 
   const columns = [
     {
-      text: "S.No",
       dataField: "",
+      text: "S.No",
       formatter: (cellContent, row, rowIndex) => {
         return rowIndex + 1;
       },
@@ -49,31 +49,109 @@ function AddTeamProf() {
         return { fontSize: "12px", width: "50px" };
       },
     },
+   
     {
-      text: "Name",
-      dataField: "name",
+      dataField: "post_name",
+      text: "TP post name",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
+
     {
-      text: "Email",
       dataField: "email",
+      text: "TP post email",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
     {
-      text: "Phone",
-      dataField: "phone",
+      dataField: "name",
+      text: "Name of TP",
       sort: true,
       headerStyle: () => {
         return { fontSize: "12px" };
       },
     },
-  ];
+    {
+      dataField: "personal_email",
+      text: "Email",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      dataField: "phone",
+      text: "Mobile No",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+    },
+    {
+      // dataField: "parent_id",
+      text: "Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter : function nameFormatter(cell, row) {
+        var digit2 = [];
+        digit2 = row.allpcat_id.split(",")
+       
+        return(
+          <>
+          
+          {
+             digit2.map((e) => {
+             return(
+               <>
+            <p className= {e.includes("Indirect") === true ? "dirCla" : "indirCla"}> {e + ","}</p>  
+               </>
+             ) 
+           })
+          }
+           </>
+        )
+      }
+    },
+   
+   
+    {
+      
+     
+      text: "Sub Category",
+      sort: true,
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter : function nameFormatter(cell, row) {
+        var digit = [];
+         
+        digit = row.allcat_id.split(",")
+      
+      
+        return(
+          <>
+          
+         {
+            digit.map((e) => {
+            return(
+              <>
+             <p className= {row.allpcat_id.includes("Indirect") === true ? "dirCla" : "indirCla"}> {e + ","}</p>  
+              </>
+            ) 
+          })
+         }
+          </>
+        )
+      }
+    },
+   
+  ]
   // delete data
   const del = (id) => {
     console.log("del", id);
