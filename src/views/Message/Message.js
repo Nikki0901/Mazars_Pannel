@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import Layout from "../../components/Layout/Layout";
+import axios from "axios";
+import { baseUrl } from "../../config/config";
+import { useAlert } from "react-alert";
 import {
     Card,
     CardHeader,
@@ -8,16 +12,14 @@ import {
     Col,
     Table,
 } from "reactstrap";
-import axios from "axios";
-import { baseUrl } from "../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../src/components/Search-Filter/tlFilter";
-import DiscardReport from "../AssignmentTab/DiscardReport";
+import PaymentModal from "./PaymentModal";
+import CommonServices from "../../common/common";
 
 
-
-function AllQuery() {
+function Message(props) {
+    console.log("props", props.location.obj)
 
     const userId = window.localStorage.getItem("userid");
     const [query, setQuery] = useState([]);
@@ -28,18 +30,10 @@ function AllQuery() {
         console.log("key", key);
         setPaymentModal(!addPaymentModal);
     };
- 
 
-    const [incompleteData, setInCompleteData] = useState([]);
-    const [records, setRecords] = useState([]);
+  
 
 
-    const [assignNo, setAssignNo] = useState('');
-    const [ViewDiscussion, setViewDiscussion] = useState(false);
-    const ViewDiscussionToggel = (key) => {
-        setViewDiscussion(!ViewDiscussion);
-        setAssignNo(key)
-    }
     useEffect(() => {
         getMessage();
     }, []);
@@ -52,28 +46,15 @@ function AllQuery() {
                 &type_list=all`
             )
             .then((res) => {
-                console.log(res);
+                console.log(res.data.result);
                 if (res.data.code === 1) {
                     setQuery(res.data.result);
                 }
             });
     };
 
-    useEffect(() => {
-        getInCompleteAssingment();
-    }, []);
 
-    const getInCompleteAssingment = () => {
-        axios
-            .get(`${baseUrl}/tl/getIncompleteQues?id=${JSON.parse(userId)}`)
-            .then((res) => {
-                console.log(res);
-                if (res.data.code === 1) {
-                    setInCompleteData(res.data.result);
-                    setRecords(res.data.result.length);
-                }
-            });
-    };
+
 
     const columns = [
         {
@@ -88,23 +69,31 @@ function AllQuery() {
         },
         {
             text: "Date",
-           sort : true,
+            dataField: "setdate",
+            sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "50px" };
+                return { fontSize: "12px" };
             },
-            formatter: function nameFormatter(cell, row) {
-                console.log(row);
-                return (
-                    <>
-                        <div style={{ display: "flex" }}>
-                            <p>{CommonServices.removeTime(row.setdate)}</p>
-                            <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p>
-                        </div>
-                    </>
-                );
-            },
-              sort: true,
         },
+        // {
+        //     text: "Date",
+        //    sort : true,
+        //     headerStyle: () => {
+        //         return { fontSize: "12px", width: "50px" };
+        //     },
+        //     formatter: function nameFormatter(cell, row) {
+        //         console.log(row);
+        //         return (
+        //             <>
+        //                 <div style={{ display: "flex" }}>
+        //                     <p>{CommonServices.removeTime(row.setdate)}</p>
+        //                     {/* <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p> */}
+        //                 </div>
+        //             </>
+        //         );
+        //     },
+        //       sort: true,
+        // },
         {
             text: "Query No",
             dataField: "assign_no",      
@@ -183,17 +172,16 @@ function AllQuery() {
             });
     };
 
+
     return (
-        <>
+        <Layout custDashboard="custDashboard" custUserId={userId}>
             <Card>
                 <CardHeader>
-                    <TeamFilter
-                        setData={setInCompleteData}
-                        getData={getInCompleteAssingment}
-                        AllQuery="AllQuery"
-                        setRecords={setRecords}
-                        records={records}
-                    />
+                    <Row>
+                        <Col md="9">
+                            <CardTitle tag="h4">Message</CardTitle>
+                        </Col>
+                    </Row>
                 </CardHeader>
                 <CardBody>
                     <BootstrapTable
@@ -203,17 +191,18 @@ function AllQuery() {
                         columns={columns}
                         rowIndex
                     />
-                    <DiscardReport
-                        ViewDiscussionToggel={ViewDiscussionToggel}
-                        ViewDiscussion={ViewDiscussion}
-                        report={assignNo}
-                        getData={getInCompleteAssingment}
-                    />
 
+                    <PaymentModal
+                        paymentHandler={paymentHandler}
+                        addPaymentModal={addPaymentModal}
+                    // data={data}
+                    // getProposalData={getAssignmentData}
+                    />
                 </CardBody>
             </Card>
-        </>
+        </Layout>
     );
 }
 
-export default AllQuery;
+export default Message;
+

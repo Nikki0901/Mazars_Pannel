@@ -37,7 +37,7 @@ function Assignmodal({
 
     axios({
       method: "POST",
-      url: `${baseUrl}/customer/documentAttach`,
+      url: `${baseUrl}/customers/documentAttach`,
       data: formData,
     })
       .then(function (response) {
