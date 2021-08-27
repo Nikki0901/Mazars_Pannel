@@ -9,6 +9,7 @@ import {
     Col,
     Table,
 } from "reactstrap";
+import moment from "moment";
 import { Link } from "react-router-dom";
 import CustomerFilter from "../../components/Search-Filter/CustomerFilter";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -20,6 +21,7 @@ import AdditionalQueryModal from "./AdditionalQueryModal";
 import CommonServices from "../../common/common";
 import Loader from "../../components/Loader/Loader";
 import DiscardReport from "../AssignmentTab/DiscardReport";
+import { date } from "yup";
 
 
 
@@ -29,8 +31,9 @@ function AllQueriesData() {
     const [queriesCount, setCountQueries] = useState(null);
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    
     const [additionalQuery, setAdditionalQuery] = useState(false);
+    const [feedback2, setfeedback] = useState(false)
     const additionalHandler = (key) => {
         setAdditionalQuery(!additionalQuery);
         setAssignNo(key)
@@ -47,6 +50,7 @@ function AllQueriesData() {
         getQueriesData();
     }, []);
 
+   
     const getQueriesData = () => {
         axios
             .get(
@@ -173,6 +177,7 @@ function AllQueriesData() {
             formatter: function dateFormat(cell, row) {
                 console.log("dt", row.exp_delivery_date);
                 console.log("userStatueCode", row.status_code)
+           
                 return (
                   
                     <>
@@ -195,6 +200,13 @@ function AllQueriesData() {
                 return { fontSize: "12px", textAlign: "center", width: "130px" };
             },
             formatter: function (cell, row) {
+                var dateMnsFive = moment(row.exp_delivery_date).add(15, 'day');  
+                 var date = dateMnsFive.format("YYYY-MM-DD");
+                 if(moment().diff(date) > 0){
+                     setfeedback(true)
+                 }
+                 console.log(moment().diff(date))
+                //  { moment().diff(date) > 0 ? setfeedback(true): ""}
                 return (
                     <>
                         {
@@ -257,24 +269,26 @@ function AllQueriesData() {
                                     }
 
                                     {
-                                        row.status_code == "4" || row.status_code == "9" || row.status_code == "2" ?
-                                            <div style={{ display: "flex", justifyContent: "space-around" }}>
+                                        row.status_code == "4" || 8 < parseInt(row.status_code) || row.status_code == "2" ?
+                                          
+                                          <div style={{ display: "flex", justifyContent: "space-around" }}>
 
+                                                {feedback2 === false ?
                                                 <div title="Send Feedback"
-                                                    style={{
-                                                        cursor: "pointer",
-                                                    }}>
-                                                    <Link
-                                                        to={{
-                                                            pathname: `/customer/feedback/${row.assign_no}`,
-                                                            obj: {
-                                                                routes: `/customer/queries`
-                                                            }
-                                                        }}
-                                                    >
-                                                        <FeedbackIcon />
-                                                    </Link>
-                                                </div>
+                                                style={{
+                                                    cursor: "pointer",
+                                                }}>
+                                                <Link
+                                                    to={{
+                                                        pathname: `/customer/feedback/${row.assign_no}`,
+                                                        obj: {
+                                                            routes: `/customer/queries`
+                                                        }
+                                                    }}
+                                                >
+                                                    <FeedbackIcon />
+                                                </Link>
+                                            </div> : ""}
                                                 {
                                                     row.delivery_report == "completed" ? null :
                                                         <div title="Upload Additional Documents"
@@ -284,29 +298,31 @@ function AllQueriesData() {
                                                             <PublishIcon color="secondary" />
                                                         </div>
                                                 }
+                                                {row.status_code == "10" ? null 
+                                                : 
                                                 <div title="Send Message">
-                                                    <Link
-                                                        to={{
-                                                            pathname: `/customer/chatting/${row.id}`,
-                                                            obj: {
-                                                                message_type: "4",
-                                                                query_No: row.assign_no,
-                                                                query_id: row.id,
-                                                                routes: `/customer/queries`
-                                                            }
+                                                <Link
+                                                    to={{
+                                                        pathname: `/customer/chatting/${row.id}`,
+                                                        obj: {
+                                                            message_type: "4",
+                                                            query_No: row.assign_no,
+                                                            query_id: row.id,
+                                                            routes: `/customer/queries`
+                                                        }
+                                                    }}
+                                                >
+                                                    <i
+                                                        class="fa fa-comments-o"
+                                                        style={{
+                                                            fontSize: 16,
+                                                            cursor: "pointer",
+                                                            color: "blue"
                                                         }}
-                                                    >
-                                                        <i
-                                                            class="fa fa-comments-o"
-                                                            style={{
-                                                                fontSize: 16,
-                                                                cursor: "pointer",
-                                                                color: "blue"
-                                                            }}
-                                                        ></i>
-                                                    </Link>
-                                                </div>
-
+                                                    ></i>
+                                                </Link>
+                                            </div>
+}
                                                 <div title="View Discussion Message">
                                                     <i
                                                         class="fa fa-comments-o"

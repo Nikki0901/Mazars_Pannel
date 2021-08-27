@@ -267,7 +267,7 @@ function AllProposal() {
                                 ) : null}
                             </div>
 
-                            {row.status_code > "3" ?
+                            {row.status_code > "3"  || row.status_code == "10" ?
                                 <div style={{ cursor: "pointer", marginLeft: "8px" }} title="View Proposal">
 
                                     <a

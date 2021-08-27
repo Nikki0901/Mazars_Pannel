@@ -253,7 +253,7 @@ function AllProposalComponent({ allProposal }) {
           <>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
 
-              {row.statuscode > "3" ?
+              {row.statuscode > "3" || row.statuscode == "10" ?
                 <div style={{ cursor: "pointer" }} title="View Proposal">
                   <a
                     href={`${baseUrl}/customers/dounloadpdf?id=${row.q_id}&viewpdf=1`}
