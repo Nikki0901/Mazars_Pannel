@@ -161,13 +161,12 @@ function Demo() {
       <Appointments.Appointment {...restProps}>
         <div style={{ display: "flex" }}>
           {
-            // console.log("children",children)
             console.log("data", data)
-
           }
           <div>{children}</div>
+          
           <div
-            onClick={() => handleJoin(data.question_id)}
+            onClick={() => handleJoin(data)}
           ><i
             class="fa fa-video-camera"
             style={{ fontSize: "12px", color: "#fff" }}
@@ -176,9 +175,9 @@ function Demo() {
         </div>
       </Appointments.Appointment>
     </div>
-
   );
 
+  
 
   const Appointment = withStyles(styles, { name: "Appointment" })(
     AppointmentBase
@@ -193,16 +192,19 @@ function Demo() {
     );
   };
 
-  //handleJoin
-  const handleJoin = (id) => {
-    console.log("id", id);
 
-    Cookies.set("channel_2", id);
+  //handleJoin
+  const handleJoin = (data) => {
+    // console.log("data", data);
+
+    Cookies.set("channel_2", data.question_id);
     Cookies.set("baseMode_2", baseMode);
     Cookies.set("transcode_2", transcode);
     Cookies.set("attendeeMode_2", attendeeMode);
     Cookies.set("videoProfile_2", videoProfile);
-    history.push("/teamleader/meeting");
+    // history.push("/teamleader/meeting/");
+    history.push(`/teamleader/meeting/${data.id}`);
+
   };
 
   const changeFormat = (d) => {
@@ -427,7 +429,7 @@ function Demo() {
 
                 <DayView cellDuration={60} startDayHour={0} endDayHour={24} />
                 <WeekView cellDuration={60} startDayHour={0} endDayHour={24}  />
-
+                
                 <Appointments appointmentComponent={myAppointment} />
 
                 <Toolbar />
@@ -465,36 +467,3 @@ function Demo() {
 }
 
 export default Demo;
-
-
-
-// const styles = {
-//   toolbarRoot: {
-//     position: "relative",
-//   },
-//   progress: {
-//     position: "absolute",
-//     width: "100%",
-//     bottom: 0,
-//     left: 0,
-//   },
-// };
-
-// const ToolbarWithLoading = withStyles(styles, { name: "Toolbar" })(
-//   ({ children, classes, ...restProps }) => (
-//     <div className={classes.toolbarRoot}>
-//       <Toolbar.Root {...restProps}>{children}</Toolbar.Root>
-//       <LinearProgress className={classes.progress} />
-//     </div>
-//   )
-// );
-
-// const newArrayOfObj = data.map(
-//   ({ assign_no: text, q_id: id, id: d_id, ...rest }) => ({
-//     text,
-//     id,
-//     d_id,
-//     ...rest,
-//   })
-// );
-// console.log("dt--", newArrayOfObj);

@@ -4,9 +4,21 @@ import AgoraRTC from "agora-rtc-sdk";
 import MicNoneIcon from '@material-ui/icons/MicNone';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import axios from "axios";
+import { baseUrl } from "../../../config/config";
 import "./canvas.css";
 import "../../../assets/fonts/css/icons.css";
-import { baseUrl } from "../../../config/config";
+import {
+  Modal,
+  ModalTitle,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "reactstrap";
+import RecordingModal from "./RecordingModal";
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { green ,red} from '@material-ui/core/colors';
+
 
 const tile_canvas = {
   "1": ["span 12/span 24"],
@@ -63,10 +75,26 @@ class AgoraCanvas extends React.Component {
       readyState: false,
       stateSharing: false,
       resID: '',
+      showModal: false,
+      recordDisplay: false,
+      data: {},
+      item:{}
     };
 
+    this.toggleModal = this.toggleModal.bind(this);
     this.startRecording = this.startRecording.bind(this);
   }
+
+  // userId = window.localStorage.getItem("tlkey");
+  
+  uid = Math.floor((Math.random() * 10000) + 1);
+  channelName = this.props.channel
+
+ vendor = 1
+ region = 14;
+ bucket = "vride-multitvm";
+ accessKey = "AKIASTLI4S4OJH3WGMFM";
+ secretKey = "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";
 
 
   componentWillMount() {
@@ -116,13 +144,27 @@ class AgoraCanvas extends React.Component {
         btnGroup.classList.remove("active");
       }, 2000);
     });
+    this.getSchedulerData()
+    // this.accuire()
   }
 
-  // componentWillUnmount () {
-  //     // remove listener
-  //     let canvas = document.querySelector('#ag-canvas')
-  //     canvas.removeEventListener('mousemove')
-  // }
+
+  getSchedulerData =() =>{
+    console.log("getSchedulerData--",this.props.id)
+
+    axios
+            .get(`${baseUrl}/tl/videoScheduler?id=${this.props.id}`)
+            .then((res) => {
+                console.log(res);
+                console.log("kk**",res.data.result.items[0]);
+                if (res.data.code === 1) {
+                  this.setState({
+                    item:res.data.result.items[0],
+                  })          
+                }
+            });
+  }
+
 
   componentDidUpdate() {
     // rerendering
@@ -222,7 +264,6 @@ class AgoraCanvas extends React.Component {
     stream.setVideoProfile(videoProfile);
     return stream;
   };
-
 
   subscribeStreamEvents = () => {
     let rt = this;
@@ -452,58 +493,35 @@ class AgoraCanvas extends React.Component {
   };
 
 
-
-  
-  // CreateS3Folder = (uid) =>{
-  //   console.log("CreateS3Folder",uid)
-  //   axios
-  //           .get(`${baseUrl}/s3/createMPObject.php?folder_id=${JSON.parse(uid)}`)
-  //           .then((res) => {
-  //               console.log(res);    
-  //           });
-  // }
-
-
-  // async function GetRecordingStatus(resourceID,sID){
-  //   console.log('Taking a break...');
-  //   await sleep(5000);
-  //   console.log('5 seconds later, showing sleep in a loop...');
-  
-  //   var settingsStatus = {
-  //    "async": true,
-  //    "crossDomain": true,
-  //    "url": "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/resourceid/"+resourceID+"/sid/"+sID+"/mode/mix/query",
-  //    "method": "GET",
-    //  "headers": {
-    //   "content-type": "application/json;charset=utf-8",
-    //   "authorization": "Basic "+encodedString,
-    //   "cache-control": "no-cache",
-    //  }
-  //  }
-  //  $.ajax(settingsStatus).done(function (response) {
-  //    console.log(response);
-  //     FileName = response.serverResponse.fileList;
-  //     FileName = FileName.split("/"); 
-  //     RefinedFilename = FileName[FileName.length - 1]; 
-  //    return response;
-  //  });
-  // }
-  
+  CreateS3Folder = (uid) =>{
+    console.log("CreateS3Folder",uid)
+    axios
+            .get(`https://virtualapi.multitvsolution.com/s3/createMPObject.php?folder_id=${JSON.parse(uid)}`)
+            .then((res) => {
+                console.log(res);    
+            });
+  }
 
 
 encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU3OGJlNmY2NzFkNWNmM2ZjMzI=";
 
 
+
+
+sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 //get recording status
-  GetRecordingStatus = (json) =>{
+ async GetRecordingStatus(json){
     console.log("GetRecordingStatus",json)
 
+    await this.sleep(1000); 
     var resourceId = json.data.resourceId;
     var sid = json.data.sid;
 
     localStorage.setItem("resourceId", resourceId);
     localStorage.setItem("sid", sid);
-
 
     fetch(`https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/sid/${sid}/mode/mix/query`, {
       method: "GET",
@@ -516,51 +534,27 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
       .then((res) => res.json())
       .then((response) => {
           console.log(response);
+          this.setState({
+            data:response,
+            recordDisplay:!this.state.recordDisplay
+          })
       })
       .catch((error) => console.log(error));
-  
   }
 
 
+
 //start recording
-  startRecording = (key) =>{
+async startRecording(key){
     console.log("startRecording - ",key);
     var resourceId = key.data.resourceId 
+    
+    this.CreateS3Folder(JSON.stringify(this.uid));
 
-    // this.CreateS3Folder("527841");
-    var data = JSON.stringify({
-      "cname":"demo", 
-      "uid":"527841",       // userid who i want to record...is this correct????
-      "clientRequest":{
-          //  "token": "temp_token_generated_from_agora_console",
-            "recordingConfig":{
-              "channelType":0,
-              "streamTypes":2,
-              "audioProfile":1,
-              "videoStreamType":0,
-              "maxIdleTime":120,
-              "transcodingConfig":{
-                  "width":360,
-                  "height":640,
-                  "fps":30,
-                  "bitrate":600,
-                  "maxResolutionUid":"1",
-                  "mixedVideoLayout":1
-                  }
-              },
-              "subscribeVideoUids": ["936239554"],    // is this correct?? 
-              "subscribeAudioUids": ["936239554"],    //is this correct??
-          "storageConfig":{
-              "vendor":1,
-              "region":14,
-              "bucket":"my_bucket_name",
-              "accessKey":"xxxx",
-              "secretKey":"xxxx"
-          }   
-      }
-  });
+    var data =  "{\n\t\"cname\":\""+this.channelName+"\",\n\t\"uid\":\""+this.uid+"\",\n\t\"clientRequest\":{\n\t\t\"recordingConfig\":{\n\t\t\t\"maxIdleTime\":60,\n\t\t\t\"channelType\":1,\n\t\t\t\"transcodingConfig\":{\n\t\t\t\t\"width\":1280,\n\t\t\t\t\"height\":720,\n\t\t\t\t\"fps\":30,\n\t\t\t\t\"bitrate\":3420,\n\t\t\t\t\"mixedVideoLayout\":1,\n\t\t\t\t\"maxResolutionUid\":\""+this.uid+"\"\n\t\t\t\t}\n\t\t\t},\n\t\t\"storageConfig\":{\n\t\t\t\"vendor\":"+this.vendor+",\n\t\t\t\"region\":"+this.region+",\n\t\t\t\"bucket\":\""+this.bucket+"\",\n\t\t\t\"accessKey\":\""+this.accessKey+"\",\n\"fileNamePrefix\": [\"recordings\",\"mp\",\""+this.uid+"\"],\n\t\t\t\"secretKey\":\""+this.secretKey+"\"\n\t\t}\t\n\t}\n} \n"
+ 
 
-    axios({
+  await axios({
       method: "POST",
       headers: {
         "content-type": "application/json;charset=utf-8",
@@ -568,7 +562,7 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
         "cache-control": "no-cache",
       },
       url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/mode/mix/start`,
-      data: data,
+      data: data,    
     })
     .then(json => this.GetRecordingStatus(json)) 
       .catch((error) => {
@@ -577,14 +571,10 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
   };
 
 
-
   //recording  acquire
-  recordStream = () => {
-    console.log("recordStream - ");
-    var data = JSON.stringify({
-      "cname":"demo",
-      "uid":"527841",
-      "clientRequest":{ "resourceExpiredHour": 24}});
+   accuire = () =>{
+    console.log("accuire - ");
+    var data = "{\n  \"cname\": \"" + this.channelName + "\",\n  \"uid\": \"" + this.uid + "\",\n  \"clientRequest\":{\n  }\n}"
 
     axios({
       method: "POST",
@@ -596,7 +586,9 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
       url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/acquire`,
       data: data,
     })
-      .then(json => this.startRecording(json)) 
+      .then(json => 
+        this.startRecording(json)) 
+        // console.log("accuire - ",json))
       .catch((error) => {
         console.log("error - ", error);
       });
@@ -604,25 +596,14 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
 
 
 
-  // function StopRecording(resourceID,sID){
-  //   var settingsStop = {
-  //    "async": true,
-  //    "crossDomain": true,
-  //    "url" : "https://api.agora.io/v1/apps/"+agoraAppId+"/cloud_recording/resourceid/"+resourceID+"/sid/"+sID+"/mode/mix/stop",
-  
-  //    "headers": {
-  //     "content-type": "application/json;charset=utf-8",
-  //     "authorization": "Basic "+encodedString,
-  //     "cache-control": "no-cache",
-  //    },
-  //    "processData": false,
-  //    "data": "{\n\t\"cname\": \""+channelName+"\",\n\t\"uid\": \""+uid+"\",\n\t\"clientRequest\":{}\n}"
-  //  }
-  
-  //  $.ajax(settingsStop).done(function (response) {
-  //    console.log(response);
-  //  });
-  // }
+  //toggelStop
+  toggleModal = (key) =>{
+  console.log("key",key)
+  this.setState({
+    showModal: !this.state.showModal,
+    recordDisplay:false
+  })
+}
 
 
  //stop recording 
@@ -633,8 +614,8 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
   var sid = localStorage.getItem("sid");
 
   var data = JSON.stringify({
-    "cname":"demo",
-    "uid":"527841",
+    "cname":this.channelName,
+    "uid":JSON.stringify(this.uid),
     "clientRequest":{ }});
   axios({
     method: "POST",
@@ -646,13 +627,17 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
     url: `https://api.agora.io/v1/apps/${this.props.appId}/cloud_recording/resourceid/${resourceId}/sid/${sid}/mode/mix/stop`,
     data: data,
   })
-    .then(json =>(json)) 
+  .then(json => 
+    this.toggleModal(json)) 
     .catch((error) => {
       console.log("error - ", error);
     });
 };
 
+
   render() {
+
+    // console.log("data",this.state.data)
 
     const style = {
       display: "grid",
@@ -692,7 +677,6 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
         ""
       );
 
-
     const switchDisplayBtn = (
       <span
         onClick={this.switchDisplay}
@@ -706,7 +690,6 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
         <i className="ag-icon ag-icon-switch-display"></i>
       </span>
     );
-
 
     const hideRemoteBtn = (
       <span
@@ -737,15 +720,16 @@ encodedString = "ZDMzOTU3N2EyOTRjNDU4Yzg2ZDhhNzhiNDc0MTQxZmM6MWE2MWE0YmVmMjE0NGU
 //recording btn on
     const recordingBtn = (
       <span
-        onClick={this.recordStream}
+        onClick={this.accuire}
         className={
           this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
         }
         title="Record On"
       >
-        <MicNoneIcon />
+        <FiberManualRecordIcon style={{ color: green[500] }}/>
       </span>
     );
+
 
 //recording btn off
 const recordingBtnOff = (
@@ -756,14 +740,22 @@ const recordingBtnOff = (
     }
     title="Record Off"
   >
-    <MicOffIcon />
+            <FiberManualRecordIcon style={{ color: red[500] }}/>
   </span>
 );
 
-
     return (
-      <div id="ag-canvas" style={style}>
+      <>
+      <div id="ag-canvas" style={style}>   
         <div className="ag-btn-group">
+
+        <RecordingModal 
+        isOpen={this.state.showModal}
+         toggle={this.toggleModal}
+         data={this.state.data}
+         item={this.state.item}
+         />
+                
           {exitBtn}
           {videoControlBtn}
           {audioControlBtn}
@@ -778,38 +770,19 @@ const recordingBtnOff = (
           }
           {switchDisplayBtn}
           {hideRemoteBtn}
-          {recordingBtn}
-          {recordingBtnOff}
+
+          {
+            this.state.recordDisplay ? null : recordingBtn
+          }
+
+          {
+            this.state.recordDisplay ? recordingBtnOff : null
+          }
         </div>
       </div>
+        </>
     );
   }
 }
 
 export default AgoraCanvas;
-
-
-
-// "data": 
-// "{"cname\":\""+channelName+"\",
-// "uid\":\""+uid+"\",
-// "clientRequest\":{
-//   "recordingConfig\":{"maxIdleTime":60,
-//                         "channelType":1,
-//                         "transcodingConfig":{"width\":1280,
-//                         "height\":720,
-//                         "fps\":30,
-//                         "bitrate\":3420,
-//                         "mixedVideoLayout\":1,
-//                         "maxResolutionUid\":\""+uid+"
-//                       },
-                        
-//                     "storageConfig":
-//                     {"vendor\":"+vendor+",
-//                    "region\":"+region+",
-//                    "bucket\":\""+bucket+",
-//                    "accessKey\":\""+accessKey+"",
-//                    "fileNamePrefix\": [\"recordings\",\"mp\",\""+uid+"\"],
-//                    "secretKey\":\""+secretKey+"\"
-//                   }
-//                   }

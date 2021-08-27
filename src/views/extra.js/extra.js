@@ -203,3 +203,23 @@
 //       width: 160,
 //     },
 //   ];
+// feedback function
+// var qdate = new Date();
+//     var dateMnsFive = moment(query[0].exp_delivery_date).add(15, 'day');  
+//     var date = dateMnsFive.format("YYYY-MM-DD");
+// if(qdate != date){
+//     console.log("fined")
+// }
+
+// var feedbackdate;  
+//  var current3 = moment();
+//    if(query.length > 0){
+//   var qdate = new Date().getDate().toLocaleString();
+//     var dateMnsFive = moment(query[0].exp_delivery_date).subtract(18, 'day');  
+//     var date = dateMnsFive.format("YYYY-MM-DD");
+// if(qdate != date){
+//     console.log("fined")
+// }
+
+// console.log(moment().diff(date));
+//     }

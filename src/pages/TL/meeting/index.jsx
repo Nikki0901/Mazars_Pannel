@@ -51,6 +51,7 @@ class Meeting extends React.Component {
               baseMode={this.baseMode}
               appId={this.appId}
               uid={this.uid}
+              id={this.props.id}
             />
           </div>
         </div>

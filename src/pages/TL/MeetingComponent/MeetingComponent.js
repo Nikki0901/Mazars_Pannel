@@ -5,9 +5,10 @@ import Meeting from "../meeting/index";
 function MeetingComponent(props) {
   const userid = window.localStorage.getItem("tlkey");
 
+  console.log("ppp", props.match.params.id)
   return (
     <Layout TLDashboard="TLDashboard" TLuserId={userid}>
-      <Meeting />
+      <Meeting id={props.match.params.id} />
     </Layout>
   );
 }

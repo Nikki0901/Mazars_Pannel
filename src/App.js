@@ -94,8 +94,7 @@ import TlChatting from './pages/TL/Chatting/Chatting'
 import TlMessage from './pages/TL/Message/Message'
 import TlSchedule from './pages/TL/Schedule/Schedule'
 import TlMeetingComponent from './pages/TL/MeetingComponent/MeetingComponent'
-
-
+import TlRecording from './pages/TL/Recording/Recording'
 
 
 // TP routes
@@ -223,13 +222,13 @@ function App() {
             <PrivateRouteTL exact path="/teamleader/edit-proposal/:id" component={TlEditProposal} />
             <PrivateRouteTL exact path="/teamleader/pending/:id" component={TlPendingReceived} />
             <PrivateRouteTL exact path="/teamleader/assignment-form/:id" component={TlAssignmentForm} />
-            <PrivateRouteTL exact path="/teamleader/meeting" component={TlMeetingComponent} />
+            <PrivateRouteTL exact path="/teamleader/meeting/:id" component={TlMeetingComponent} />
             <PrivateRouteTL exact path="/teamleader/view-report/:id" component={TlViewReport} />
             <PrivateRouteTL exact path="/teamleader/schedule" component={TlSchedule} />
             <PrivateRouteTL exact path="/teamleader/view-notification/:id" component={TlViewNotification} />
             <PrivateRouteTL exact path="/teamleader/chatting/:id" component={TlChatting} />
             <PrivateRouteTL exact path="/teamleader/message" component={TlMessage} />
-
+            <PrivateRouteTL exact path="/teamleader/recording" component={TlRecording} />
 
 
             <PublicRouteTP exact path="/taxprofessional/start" component={TpStart} />
