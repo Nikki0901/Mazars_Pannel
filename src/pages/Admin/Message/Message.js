@@ -56,24 +56,33 @@ function Message(props) {
                 return { fontSize: "12px", width: "20px" };
             },
         },
+        // {
+        //     text: "Date",
+        //     sort: true,
+        //     headerStyle: () => {
+        //         return { fontSize: "12px", width: "50px" };
+        //     },
+        //     formatter: function nameFormatter(cell, row) {
+        //         console.log(row);
+        //         return (
+        //             <>
+        //                 <div style={{ display: "flex" }}>
+        //                     <p>{CommonServices.removeTime(row.setdate)}</p>
+        //                     <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p>
+        //                 </div>
+        //             </>
+        //         );
+        //     },
+        // },
         {
             text: "Date",
+            dataField: "setdate",
             sort: true,
             headerStyle: () => {
-                return { fontSize: "12px", width: "50px" };
-            },
-            formatter: function nameFormatter(cell, row) {
-                console.log(row);
-                return (
-                    <>
-                        <div style={{ display: "flex" }}>
-                            <p>{CommonServices.removeTime(row.setdate)}</p>
-                            <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p>
-                        </div>
-                    </>
-                );
+                return { fontSize: "12px", width: "60px" };
             },
         },
+          
         {
             text: "Query No",
             dataField: "assign_no",

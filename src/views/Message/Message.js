@@ -46,7 +46,7 @@ function Message(props) {
                 &type_list=all`
             )
             .then((res) => {
-                console.log(res.data.result);
+                console.log(res);
                 if (res.data.code === 1) {
                     setQuery(res.data.result);
                 }
@@ -67,33 +67,15 @@ function Message(props) {
                 return { fontSize: "12px", width: "10px" };
             },
         },
-        {
-            text: "Date",
-            dataField: "setdate",
-            sort: true,
-            headerStyle: () => {
-                return { fontSize: "12px" };
-            },
-        },
-        // {
-        //     text: "Date",
-        //    sort : true,
-        //     headerStyle: () => {
-        //         return { fontSize: "12px", width: "50px" };
-        //     },
-        //     formatter: function nameFormatter(cell, row) {
-        //         console.log(row);
-        //         return (
-        //             <>
-        //                 <div style={{ display: "flex" }}>
-        //                     <p>{CommonServices.removeTime(row.setdate)}</p>
-        //                     {/* <p style={{ marginLeft: "15px" }}>{CommonServices.removeDate(row.setdate)}</p> */}
-        //                 </div>
-        //             </>
-        //         );
-        //     },
-        //       sort: true,
-        // },
+        
+ {
+    text: "Date",
+    dataField: "setdate",
+    sort: true,
+    headerStyle: () => {
+        return { fontSize: "12px", width: "60px" };
+    },
+},
         {
             text: "Query No",
             dataField: "assign_no",      
@@ -205,4 +187,3 @@ function Message(props) {
 }
 
 export default Message;
-

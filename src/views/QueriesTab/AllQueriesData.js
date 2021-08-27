@@ -164,7 +164,7 @@ function AllQueriesData() {
             },
         },
         {
-            text: "Expected Delivery Date",
+            text: "Expected / Actual Delivery Date",
             dataField: "exp_delivery_date",
             sort: true,
             headerStyle: () => {

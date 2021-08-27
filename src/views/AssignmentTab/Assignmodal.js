@@ -96,7 +96,7 @@ function Assignmodal({
                 name="p_upload"
                 ref={register}
                 className="form-control-file"
-                multiple
+              
               />
             </div>
 

@@ -141,6 +141,7 @@ function ViewReport({
                     <td>{i + 1}</td>
                     <td>{CommonServices.removeTime(p.created_date)}</td>
                     <td>
+                      <tr>
                       {p.document && (
                         <p style={{ display: "flex" }}>
                           <a
@@ -152,7 +153,19 @@ function ViewReport({
                           <p style={{ marginLeft: "15px" }}>{p.document}</p>
                         </p>
                       )}
+                      </tr>
+                     {p.customer_files && 
+                      <tr>
+                      <p>Reviewed Report : &nbsp;
+                      <a
+                            href={`${ReportUrl}/${report}/${p.customer_files}`}
+                            target="_blank"
+                          >
+                            <i class="fa fa-photo"></i> 
+                          </a> &nbsp; &nbsp; &nbsp;{p.customer_files}</p>
+                    </tr> }
                     </td>
+                  
                     <td>
                       {p.stages_type == 2 && "Draft Report" || p.stages_type == 3 && "Final Report"}
                     </td>
