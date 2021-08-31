@@ -63,7 +63,7 @@ import AdminMeetingComponent from './pages/Admin/MeetingComponent/MeetingCompone
 import AdminChatting from './pages/Admin/Chatting/Chatting'
 import AdminMessage from './pages/Admin/Message/Message'
 import AdminViewNotification from './pages/Admin/ViewNotification/ViewNotification'
-
+import AdminRecording from './pages/Admin/Recording/Recording'
 
 
 
@@ -197,7 +197,7 @@ function App() {
             <PrivateRouteAdmin exact path="/admin/chatting/:id" component={AdminChatting} />
             <PrivateRouteAdmin exact path="/admin/message" component={AdminMessage} />
             <PrivateRouteAdmin exact path="/admin/view-notification/:id" component={AdminViewNotification} />
-
+            <PrivateRouteAdmin exact path="/admin/recording" component={AdminRecording} />
 
 
             <PublicRouteTL exact path="/teamleader/start" component={TlStart} />
