@@ -15,6 +15,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
+import ReactHlsPlayer from 'react-hls-player'
 // import '../../../../node_modules/react-modal-video/scss/modal-video.scss';
 
 
@@ -126,8 +127,9 @@ function Recording() {
     console.log("videourl", videoid)
 
     return (
-        <Layout TLDashboard="TLDashboard" TLuserId={userid}>
-            <Card>
+     
+           <div>
+                <Card>
                 <CardHeader>
                     <Row>
                         <Col md="7">
@@ -146,17 +148,16 @@ function Recording() {
                     />
                 </CardBody>
             </Card>
+            <ReactHlsPlayer
+    src={videoid}
+    hlsConfig={{
+      maxLoadingDelay: 4,
+      minAutoBitrate: 0,
+      lowLatencyMode: true,
+    }}
+  />
+           </div>
 
-
-            <ModalVideo
-                channel="custom"
-                isOpen={isOpen}
-                // videoId={videoid}
-                onClose={() => setIsOpen(false)}
-                url={videoid}
-            // url="https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4"
-            />
-        </Layout>
     );
 }
 

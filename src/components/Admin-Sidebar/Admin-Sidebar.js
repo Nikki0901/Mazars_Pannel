@@ -303,14 +303,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                   </span>
                 </NavLink>
               </li>
-              <li class="active nav-item">
+              {/* <li class="active nav-item">
                 <NavLink to={"/teamleader/recording"}>
                   <i class="fa fa-home"></i>
                   <span class="menu-title" data-i18n="">
                     Recording
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
              
             </ul>
           )}
