@@ -78,7 +78,8 @@ class AgoraCanvas extends React.Component {
       showModal: false,
       recordDisplay: false,
       data: {},
-      item:{}
+      item:{},
+      showButton : ''
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -160,7 +161,9 @@ class AgoraCanvas extends React.Component {
                 if (res.data.code === 1) {
                   this.setState({
                     item:res.data.result.items[0],
-                  })          
+                    showButton : res.data.result.items[0].owner
+                  })  
+                  console.log("data2", res.data.result.items[0].owner)        
                 }
             });
   }

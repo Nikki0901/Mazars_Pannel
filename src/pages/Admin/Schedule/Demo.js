@@ -511,7 +511,7 @@ import Loader from "../../../components/Loader/Loader";
 
 
 function Demo() {
-  const userId = window.localStorage.getItem("tlkey");
+  const userId = window.localStorage.getItem("adminkey");
   const history = useHistory();
 
   const [loading, setLoading] = useState(false);
@@ -542,7 +542,7 @@ function Demo() {
 
   const getData = () => {
     axios
-      .get(`${baseUrl}/tl/videoScheduler?tl_id=${JSON.parse(userId)}`)
+    .get(`${baseUrl}/tl/videoScheduler?tl_id=1`)
       .then((res) => {
         console.log("res -", res);
         var a = res.data.result.items;
@@ -568,7 +568,7 @@ function Demo() {
 
   const getAssignmentNo = () => {
     axios
-      .get(`${baseUrl}/admin/getAllQuery?uid=${JSON.parse(userId)}`)
+    .get(`${baseUrl}/admin/getAllQuery`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {
@@ -729,7 +729,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tl/aminPostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -792,7 +792,7 @@ function Demo() {
 
       axios({
         method: "POST",
-        url: `${baseUrl}/tl/PostCallSchedule`,
+        url: `${baseUrl}/tl/aminPostCallSchedule`,
         data: formData,
       })
         .then(function (response) {
@@ -904,7 +904,7 @@ function Demo() {
               <Scheduler data={data} height={660}>
                 <ViewState
                   defaultCurrentDate={currentDate}
-                  defaultCurrentViewName="Day"
+                  defaultCurrentViewName="Week"
                 />
                 <EditingState onCommitChanges={commitChanges} />
                 <EditRecurrenceMenu />

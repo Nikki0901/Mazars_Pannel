@@ -15,8 +15,6 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
-import ReactHlsPlayer from 'react-hls-player'
-import ReactPlayer from 'react-player'
 // import '../../../../node_modules/react-modal-video/scss/modal-video.scss';
 
 
@@ -38,7 +36,7 @@ function Recording() {
 
     const getRecording = () => {
         axios
-            .get(`${baseUrl}/tl/callRecordingPostlist?uid=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/callRecordingPostlist?assign_id=Q-23-71`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -128,9 +126,8 @@ function Recording() {
     console.log("videourl", videoid)
 
     return (
-     
-           <div>
-                <Card>
+       <>
+            <Card>
                 <CardHeader>
                     <Row>
                         <Col md="7">
@@ -149,23 +146,17 @@ function Recording() {
                     />
                 </CardBody>
             </Card>
-            <ReactHlsPlayer
-    src={videoid}    autoPlay={false}
-    controls={true}
-    width="100%"
-    height="auto"
-  />
-            {/* <ReactHlsPlayer
-    src={videoid}
-    hlsConfig={{
-      maxLoadingDelay: 4,
-      minAutoBitrate: 0,
-      lowLatencyMode: true,
-    }}
-  /> */}
-  {/* <ReactPlayer url={videoid} /> */}
-           </div>
 
+
+            <ModalVideo
+                channel="custom"
+                isOpen={isOpen}
+                // videoId={videoid}
+                onClose={() => setIsOpen(false)}
+                url={videoid}
+            // url="https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4"
+            />
+       </>
     );
 }
 
