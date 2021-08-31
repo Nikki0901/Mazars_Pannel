@@ -119,7 +119,7 @@ function BasicQuery({ p, diaplaySpecific, queryDocs, year, purpose }) {
                   <th scope="row">Reasons for Admin Decline Query</th>
                   <td colspan="1">
                     {
-                      p.notes
+                      p.decline_notes
                     }
                   </td>
                 </tr>

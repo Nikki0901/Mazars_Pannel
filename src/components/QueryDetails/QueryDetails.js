@@ -7,6 +7,7 @@ import AdditionalQuery from "./AdditionalQuery";
 import AddAdditionalQuery from "./AddAdditionalQuery";
 import DraftReports from "./DraftReports";
 import CommonServices from "../../common/common";
+import Recording from "../../pages/TL/Recording/Recording";
 import {
   TabContent, TabPane, Nav, NavItem, NavLink, Card, Row, Col
 } from 'reactstrap';
@@ -85,7 +86,13 @@ function QueryDetails({
               Feedback
             </NavLink>
           </NavItem>
-
+          <NavItem>
+            <NavLink
+            className = {classnames({ active : activeTab === '5'})}
+            onClick = {() => { toggle('5');}} >
+              Recording
+            </NavLink>
+          </NavItem>
           {/* <NavItem>
             <NavLink
               className={classnames({ active: activeTab === '5' })}
@@ -157,7 +164,15 @@ function QueryDetails({
               </Col>
             </Row>
           </TabPane>
-
+       <TabPane tabId="5">
+         <Row>
+           <Col sm="12">
+             <Card body>
+               <Recording/>
+             </Card>
+           </Col>
+           </Row>
+       </TabPane>
           {/* <TabPane tabId="5">
             <Row>
               <Col sm="12">

@@ -69,7 +69,7 @@ function Chatting(props) {
     formData.append("assign_id", query_id);
     formData.append("message_type", value.msg_type);
     formData.append("message", value.p_message);
-
+    formData.append("to", value.p_to);
     axios({
       method: "POST",
       url: `${baseUrl}/tl/messageSent`,
@@ -156,6 +156,27 @@ function Chatting(props) {
                           </div>
                         )}
 
+                      </div>
+                      <div class="form-group">
+                        <label>To<span className="declined">*</span></label>
+                        <select
+                          className={classNames("form-control", {
+                            "is-invalid": errors.p_to,
+                          })}
+                          name="p_to"
+                          ref={register}
+                          style={{ height: "33px" }}
+                        >
+                          <option value="">--select--</option>
+                          <option value="customer">Customer</option>
+                          <option value="tl">Tax Professional</option>
+                          <option value="both">Both</option>
+                        </select>
+                        {errors.p_to && (
+                          <div className="invalid-feedback">
+                            {errors.p_to.message}
+                          </div>
+                        )}
                       </div>
 
                       <div class="form-group">

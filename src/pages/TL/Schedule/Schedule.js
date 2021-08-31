@@ -37,6 +37,12 @@ function Schedule() {
         <Layout TLDashboard="TLDashboard" TLuserId={userid}>
       <Card>
         <CardHeader>
+        <Row>
+            <Col md="7">
+              <CardTitle tag="h4">Schedule </CardTitle>
+            </Col>
+            <Col md="5"></Col>
+          </Row>
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
           <TabList
             style={{
@@ -62,12 +68,7 @@ function Schedule() {
            <Recording />
           </TabPanel>
           </Tabs>
-          <Row>
-            <Col md="7">
-              <CardTitle tag="h4">Schedule </CardTitle>
-            </Col>
-            <Col md="5"></Col>
-          </Row>
+         
         </CardHeader>
       
       </Card>

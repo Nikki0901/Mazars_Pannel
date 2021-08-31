@@ -98,14 +98,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <NavLink to={"/customer/message"}>
                   <i class="fa fa-envelope"></i>
                   <span class="menu-title" data-i18n="">
                     Message
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
 
               <li class="nav-item">
                 <NavLink to={"/customer/feedback-data"}>
@@ -179,14 +179,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <NavLink to={"/admin/message"}>
                   <i class="fa fa-envelope"></i>
                   <span class="menu-title" data-i18n="">
                     Message
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
 
               <li class="nav-item">
                 <NavLink to={"/admin/teamleaders"}>
@@ -277,14 +277,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <NavLink to={"/teamleader/message"}>
                   <i class="fa fa-envelope"></i>
                   <span class="menu-title" data-i18n="">
                     Message
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
 
               <li class="nav-item">
                 <NavLink to={"/teamleader/addteamprof"}>
