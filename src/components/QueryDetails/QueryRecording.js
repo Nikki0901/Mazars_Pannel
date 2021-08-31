@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../../components/Layout/Layout";
+import Layout from "../../components/Layout/Layout";
 import ModalVideo from "react-modal-video";
 import {
     Card,
@@ -12,7 +12,7 @@ import {
     Button,
 } from "reactstrap";
 import axios from "axios";
-import { baseUrl } from "../../../config/config";
+import { baseUrl } from "../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
 import ReactHlsPlayer from 'react-hls-player'
@@ -21,8 +21,8 @@ import ReactPlayer from 'react-player'
 
 
 
-function Recording() {
-    const userid = window.localStorage.getItem("adminkey");
+function QueryRecording(assingNo) {
+    // const userid = window.localStorage.getItem("tlkey");
     const [feedbackData, setFeedBackData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [videoid, setVideoId] = useState(null);
@@ -33,12 +33,14 @@ function Recording() {
     };
 
     useEffect(() => {
+
         getRecording();
     }, []);
-
+   
+console.log("assignNo", assingNo.assingNo)
     const getRecording = () => {
         axios
-            .get(`${baseUrl}/tl/callRecordingPostlist?uid=${JSON.parse(userid)}`)
+            .get(`${baseUrl}/tl/callRecordingPostlist?assign_id=${assingNo.assingNo}`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
@@ -46,8 +48,10 @@ function Recording() {
                 }
             });
     };
-
-
+   
+    // if(assingNo.assingNo != undefined){
+    //     getRecording();
+    // }
     const columns = [
         {
             text: "S.No",
@@ -126,7 +130,7 @@ function Recording() {
 
 
     console.log("videourl", videoid)
-
+   
     return (
      
            <div>
@@ -150,7 +154,8 @@ function Recording() {
                 </CardBody>
             </Card>
             <ReactHlsPlayer
-    src={videoid}    autoPlay={false}
+    src={videoid}   
+     autoPlay={false}
     controls={true}
     width="100%"
     height="auto"
@@ -169,4 +174,4 @@ function Recording() {
     );
 }
 
-export default Recording;
+export default QueryRecording;

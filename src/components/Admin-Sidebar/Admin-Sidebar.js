@@ -375,14 +375,14 @@ function Sidebar({ adminDashboard, custDashboard, TLDashboard, TPDashboard }) {
                 </NavLink>
               </li>
 
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <NavLink to={"/taxprofessional/message"}>
                   <i class="fa fa-envelope"></i>
                   <span class="menu-title" data-i18n="">
                     Message
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
               <li class="nav-item">
                 <NavLink to={"/taxprofessional/feedback"}>
                   <i class="fa fa-file-text"></i>

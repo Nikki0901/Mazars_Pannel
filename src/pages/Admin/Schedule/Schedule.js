@@ -81,18 +81,18 @@ function Schedule() {
             Scheduler
             </Tab>
            
-            {/* <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
+            <Tab style={tabIndex == 1 ? myStyle2 : myStyle1}>
              Recording
-            </Tab> */}
+            </Tab>
           </TabList>
 
           <TabPanel>
           <Demo />
           </TabPanel>
          
-          {/* <TabPanel>
+          <TabPanel>
            <Recording />
-          </TabPanel> */}
+          </TabPanel>
           </Tabs>
           <Row>
             <Col md="7">

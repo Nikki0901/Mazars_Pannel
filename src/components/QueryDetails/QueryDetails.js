@@ -7,7 +7,7 @@ import AdditionalQuery from "./AdditionalQuery";
 import AddAdditionalQuery from "./AddAdditionalQuery";
 import DraftReports from "./DraftReports";
 import CommonServices from "../../common/common";
-import Recording from "../../pages/TL/Recording/Recording";
+import QueryRecording from "./QueryRecording";
 import {
   TabContent, TabPane, Nav, NavItem, NavLink, Card, Row, Col
 } from 'reactstrap';
@@ -168,42 +168,13 @@ function QueryDetails({
          <Row>
            <Col sm="12">
              <Card body>
-               <Recording/>
+               <QueryRecording
+  assingNo={p.assign_no}/>
              </Card>
            </Col>
            </Row>
        </TabPane>
-          {/* <TabPane tabId="5">
-            <Row>
-              <Col sm="12">
-                <Card body>
-                  <div class="d-flex">
-                    <div class="additional">
-                      {customerQuery == "customerQuery" && (
-                        <button
-                          type="button"
-                          class="btn btn-info"
-                          onClick={addHandler}
-                        >
-                          Additional Document
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  <AddAdditionalQuery
-                    addHandler={addHandler}
-                    addModal={addModal}
-                    assingNo={assingNo}
-                    getQuery={getQuery}
-                  />
-                  <AdditionalQuery
-                    displayQuery={displayQuery}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </TabPane> */}
+          
 
         </TabContent>
       </div>
@@ -214,77 +185,3 @@ function QueryDetails({
 
 export default QueryDetails;
 
-
-
-
-{
-  /* <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <p class="m-0" style={{ fontSize: "15px" }}>
-                Submitted on
-              </p>
-              <p class="m-0" style={{ fontSize: "15px" }}>
-                : {CommonServices.changeFormateDate(p.created)}
-              </p>
-            </div>
-            <div class="d-flex">
-              <div class="additional">
-                {customerQuery == "customerQuery" && (
-                  <button
-                    type="button"
-                    class="btn btn-info"
-                    onClick={addHandler}
-                  >
-                    Additional Query
-                  </button>
-                )}
-              </div>
-            </div> */
-}
-
-{/* <div class="card-body">
-        <BasicQuery
-          p={p}
-          diaplaySpecific={diaplaySpecific}
-          purpose={purpose}
-          queryDocs={queryDocs}
-          year={year}
-        />
-        <ProposalDetails
-          diaplayProposal={diaplayProposal}
-          diaplayHistory={diaplayHistory}
-          paymentDetails={paymentDetails}
-          p={p}
-        />
-        <AssignmentDetails
-          diaplayAssignment={diaplayAssignment}
-          p={p}
-          diaplayProposal={diaplayProposal}
-        />
-
-        <AddAdditionalQuery
-          addHandler={addHandler}
-          addModal={addModal}
-          assingNo={assingNo}
-          getQuery={getQuery}
-        />
-
-        <DraftReports id={p.id} />
-        <div class="d-flex">
-          <div class="additional">
-            {customerQuery == "customerQuery" && (
-              <button
-                type="button"
-                class="btn btn-info"
-                onClick={addHandler}
-              >
-                Additional Query
-              </button>
-            )}
-          </div>
-        </div>
-
-
-        <AdditionalQuery displayQuery={displayQuery} />
-
-
-      </div> */}

@@ -15,6 +15,7 @@ function NavWrapper(props) {
   const userId = window.localStorage.getItem("userid");
   const adminkey = window.localStorage.getItem("adminkey");
   const tlkey = window.localStorage.getItem("tlkey");
+  const tpkey = window.localStorage.getItem("tpkey")
 
   // const CustEmail = window.localStorage.getItem("email");
 
@@ -73,6 +74,9 @@ function NavWrapper(props) {
 
               {name == "teamleader" && (
                 <CustomerNotification tokenKey={tlkey} name={name} />
+              )}
+               {name == "taxprofessional" && (
+                <CustomerNotification tokenKey={tpkey} name={name} />
               )}
 
 
