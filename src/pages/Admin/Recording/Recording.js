@@ -16,6 +16,7 @@ import { baseUrl } from "../../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
 import ReactHlsPlayer from 'react-hls-player'
+import { VideoLibraryRounded } from "@material-ui/icons";
 
 // import '../../../../node_modules/react-modal-video/scss/modal-video.scss';
 
@@ -28,6 +29,7 @@ function Recording() {
     const [videoid, setVideoId] = useState(null);
 
     const openModal = (videoContent) => {
+      
         setIsOpen(true);
         setVideoId(videoContent);
     };
@@ -49,8 +51,12 @@ function Recording() {
     const modalBox = {
         display : "flex",
         position : "absolute",
-        top : "0",
-        left : "0",
+        top : "0%",
+        left : "0%",
+        botttom: "0%", 
+        right: "0%",
+        translateX: "-50%", 
+        translateY: "-50%",
         width : "100%", 
         height: "auto"
     }
@@ -137,8 +143,8 @@ function Recording() {
     console.log("videourl", videoid)
 
     return (
-     
-           <div>
+     <>
+           <div style={{position:"relative", height : "100vh", overflow : "scroll"}}>
                 <Card>
                 <CardHeader>
                     <Row>
@@ -157,9 +163,12 @@ function Recording() {
                         rowIndex
                     />
                 </CardBody>
+
             </Card>
-           
-            {isOpen === true ?
+          
+           </div>
+            
+           {isOpen === true ?
          <div style={modalBox}>
                 <ReactHlsPlayer
             src={videoid}    autoPlay={false}
@@ -168,7 +177,7 @@ function Recording() {
             height="100%"
           />
              </div> : ""}
-           </div>
+           </>
 
     );
 }

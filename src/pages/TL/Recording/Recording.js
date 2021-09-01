@@ -48,8 +48,12 @@ function Recording() {
     const modalBox = {
         display : "flex",
         position : "absolute",
-        top : "0",
-        left : "0",
+        top : "0%",
+        left : "0%",
+        botttom: "0%", 
+        right: "0%",
+        translateX: "-50%", 
+        translateY: "-50%",
         width : "100%", 
         height: "auto"
     }
@@ -136,46 +140,43 @@ function Recording() {
     console.log("videourl", videoid)
 
     return (
-       <>
-            <Card>
-                <CardHeader>
-                    <Row>
-                        <Col md="7">
-                            <CardTitle tag="h4">Recording of Discussion</CardTitle>
-                        </Col>
-                        <Col md="5"></Col>
-                    </Row>
-                </CardHeader>
-                <CardBody>
-                    <BootstrapTable
-                        bootstrap4
-                        keyField="id"
-                        data={feedbackData}
-                        columns={columns}
-                        rowIndex
-                    />
-                </CardBody>
-            </Card>
-
-            {isOpen === true ?
-         <div style={modalBox}>
-                <ReactHlsPlayer
-            src={videoid}    autoPlay={false}
-            controls={true}
-            width="100%"
-            height="100%"
-          />
-             </div> : ""}
-            {/* <ModalVideo
-                channel="custom"
-                isOpen={isOpen}
-                // videoId={videoid}
-                onClose={() => setIsOpen(false)}
-                url={videoid}
-            // url="https://www.rmp-streaming.com/media/big-buck-bunny-360p.mp4"
-            /> */}
-       </>
-    );
-}
-
-export default Recording;
+        <>
+              <div style={{position:"relative", height : "100vh", overflow : "scroll"}}>
+                   <Card>
+                   <CardHeader>
+                       <Row>
+                           <Col md="7">
+                               <CardTitle tag="h4">Recording of Discussion</CardTitle>
+                           </Col>
+                           <Col md="5"></Col>
+                       </Row>
+                   </CardHeader>
+                   <CardBody>
+                       <BootstrapTable
+                           bootstrap4
+                           keyField="id"
+                           data={feedbackData}
+                           columns={columns}
+                           rowIndex
+                       />
+                   </CardBody>
+   
+               </Card>
+             
+              </div>
+               
+              {isOpen === true ?
+            <div style={modalBox}>
+                   <ReactHlsPlayer
+               src={videoid}    autoPlay={false}
+               controls={true}
+               width="100%"
+               height="100%"
+             />
+                </div> : ""}
+              </>
+   
+       );
+   }
+   
+   export default Recording;
