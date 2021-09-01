@@ -169,7 +169,7 @@ function Chatting(props) {
                         >
                           <option value="">--select--</option>
                           <option value="customer">Customer</option>
-                          <option value="tl">Tax Professional</option>
+                          <option value="tp">Tax Professional</option>
                           <option value="both">Both</option>
                         </select>
                         {errors.p_to && (

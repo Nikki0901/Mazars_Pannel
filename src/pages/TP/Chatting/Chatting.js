@@ -69,7 +69,7 @@ function Chatting(props) {
     formData.append("assign_id", query_id);
     formData.append("message_type", value.msg_type);
     formData.append("message", value.p_message);
-    formData.append("to", value.p_to);
+   
     formData.append("sst", "tp")
     axios({
       method: "POST",
@@ -158,7 +158,7 @@ function Chatting(props) {
                         )}
 
                       </div>
-                      <div class="form-group">
+                      {/* <div class="form-group">
                         <label>To<span className="declined">*</span></label>
                         <select
                           className={classNames("form-control", {
@@ -178,7 +178,7 @@ function Chatting(props) {
                             {errors.p_to.message}
                           </div>
                         )}
-                      </div>
+                      </div> */}
 
                       <div class="form-group">
                         <label>Message<span className="declined">*</span></label>
