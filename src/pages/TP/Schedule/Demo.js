@@ -86,7 +86,7 @@ function Demo() {
 
   const getAssignmentNo = () => {
     axios
-      .get(`${baseUrl}/admin/getAllQuery?uid=${JSON.parse(userId)}`)
+      .get(`${baseUrl}/admin/getAllQuery?tp_id=${JSON.parse(userId)}`)
       .then((res) => {
         console.log(res);
         if (res.data.code === 1) {

@@ -78,7 +78,8 @@ class AgoraCanvas extends React.Component {
       showModal: false,
       recordDisplay: false,
       data: {},
-      item:{}
+      item:{},
+      showButton : ''
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -89,7 +90,7 @@ class AgoraCanvas extends React.Component {
   
   uid = Math.floor((Math.random() * 10000) + 1);
   channelName = this.props.channel
-
+  adminKey = window.localStorage.getItem("adminkey");
  vendor = 1
  region = 14;
  bucket = "vride-multitvm";
@@ -155,11 +156,11 @@ class AgoraCanvas extends React.Component {
     axios
             .get(`${baseUrl}/tl/videoScheduler?id=${this.props.id}`)
             .then((res) => {
-                console.log(res);
-                console.log("kk**",res.data.result.items[0]);
+               
                 if (res.data.code === 1) {
                   this.setState({
                     item:res.data.result.items[0],
+                    showButton : res.data.result.items[0].owner_id
                   })          
                 }
             });
@@ -772,7 +773,7 @@ const recordingBtnOff = (
           {hideRemoteBtn}
 
           {
-            this.state.recordDisplay ? null : recordingBtn
+            this.state.recordDisplay || this.state.showButton == JSON.parse(this.adminKey) ? recordingBtn : null
           }
 
           {

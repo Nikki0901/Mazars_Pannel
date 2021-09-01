@@ -78,7 +78,8 @@ class AgoraCanvas extends React.Component {
       showModal: false,
       recordDisplay: false,
       data: {},
-      item:{}
+      item:{},
+      showButton : ''
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -86,7 +87,7 @@ class AgoraCanvas extends React.Component {
   }
 
   // userId = window.localStorage.getItem("tlkey");
-  
+  teamKey = window.localStorage.getItem("tpkey");
   uid = Math.floor((Math.random() * 10000) + 1);
   channelName = this.props.channel
 
@@ -130,7 +131,7 @@ class AgoraCanvas extends React.Component {
       });
     });
   }
-
+ 
   componentDidMount() {
     // add listener to control btn group
     let canvas = document.querySelector("#ag-canvas");
@@ -145,9 +146,10 @@ class AgoraCanvas extends React.Component {
       }, 2000);
     });
     this.getSchedulerData()
+  
     // this.accuire()
   }
-
+schdrularName;
 
   getSchedulerData =() =>{
     console.log("getSchedulerData--",this.props.id)
@@ -156,11 +158,14 @@ class AgoraCanvas extends React.Component {
             .get(`${baseUrl}/tl/videoScheduler?id=${this.props.id}`)
             .then((res) => {
                 console.log(res);
-                console.log("kk**",res.data.result.items[0]);
+           
+               
                 if (res.data.code === 1) {
                   this.setState({
                     item:res.data.result.items[0],
-                  })          
+                   showButton : res.data.result.items[0].owner_id
+                  })  
+                        
                 }
             });
   }
@@ -772,7 +777,7 @@ const recordingBtnOff = (
           {hideRemoteBtn}
 
           {
-            this.state.recordDisplay ? null : recordingBtn
+            this.state.recordDisplay || this.state.showButton == JSON.parse(this.teamKey) ? recordingBtn : null
           }
 
           {
