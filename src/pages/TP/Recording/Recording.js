@@ -47,7 +47,14 @@ function Recording() {
             });
     };
 
-
+const modalBox = {
+    display : "flex",
+    position : "absolute",
+    top : "0",
+    left : "0",
+    width : "100%", 
+    height: "auto"
+}
     const columns = [
         {
             text: "S.No",
@@ -60,19 +67,21 @@ function Recording() {
             },
         },
         {
+            text: "Date",
+            sort : true,
+            dataField: "created_date",
+            headerStyle: () => {
+                return { fontSize: "12px", width: "40px" };
+            },
+        },
+        {
             text: "Query No",
             dataField: "assign_id",
             headerStyle: () => {
                 return { fontSize: "12px", width: "30px" };
             },
         },
-        {
-            text: "Date",
-            dataField: "created_date",
-            headerStyle: () => {
-                return { fontSize: "12px", width: "40px" };
-            },
-        },
+        
 
         {
             text: "Participants",
@@ -149,12 +158,15 @@ function Recording() {
                     />
                 </CardBody>
             </Card>
-            <ReactHlsPlayer
-    src={videoid}    autoPlay={false}
-    controls={true}
-    width="100%"
-    height="auto"
-  />
+            {isOpen === true ?
+         <div style={modalBox}>
+                <ReactHlsPlayer
+            src={videoid}    autoPlay={false}
+            controls={true}
+            width="100%"
+            height="100%"
+          />
+             </div> : ""}
             {/* <ReactHlsPlayer
     src={videoid}
     hlsConfig={{

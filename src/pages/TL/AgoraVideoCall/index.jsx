@@ -146,7 +146,7 @@ class AgoraCanvas extends React.Component {
       }, 2000);
     });
     this.getSchedulerData()
-  
+    this.accuire();
     // this.accuire()
   }
 schdrularName;
@@ -723,17 +723,17 @@ async startRecording(key){
     );
 
 //recording btn on
-    const recordingBtn = (
-      <span
-        onClick={this.accuire}
-        className={
-          this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
-        }
-        title="Record On"
-      >
-        <FiberManualRecordIcon style={{ color: green[500] }}/>
-      </span>
-    );
+    // const recordingBtn = (
+    //   <span
+    //     onClick={this.accuire}
+    //     className={
+    //       this.state.readyState ? "ag-btn exitBtn" : "ag-btn exitBtn disabled"
+    //     }
+    //     title="Record On"
+    //   >
+    //     <FiberManualRecordIcon style={{ color: green[500] }}/>
+    //   </span>
+    // );
 
 
 //recording btn off
@@ -776,9 +776,9 @@ const recordingBtnOff = (
           {switchDisplayBtn}
           {hideRemoteBtn}
 
-          {
+          {/* {
             this.state.recordDisplay || this.state.showButton == JSON.parse(this.teamKey) ? recordingBtn : null
-          }
+          } */}
 
           {
             this.state.recordDisplay ? recordingBtnOff : null

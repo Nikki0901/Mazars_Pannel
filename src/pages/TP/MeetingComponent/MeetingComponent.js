@@ -7,7 +7,7 @@ function MeetingComponent(props) {
 
   console.log("ppp", props.match.params.id)
   return (
-    <Layout TPDashboard="TpDashboard" TLuserId={userid}>
+    <Layout TPDashboard="TPDashboard" TPuserId={userid}>
       <Meeting id={props.match.params.id} />
     </Layout>
   );
