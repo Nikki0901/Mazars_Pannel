@@ -12,7 +12,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 
 function DeclinedQuery({ CountIncomplete }) {
   const userid = window.localStorage.getItem("tpkey");
@@ -150,7 +150,7 @@ function DeclinedQuery({ CountIncomplete }) {
     <>
       <Card>
         <CardHeader>
-          <TeamFilter
+          <TaxProfessionalFilter
             setData={setInCompleteData}
             getData={getInCompleteAssingment}
             DeclinedQuery="DeclinedQuery"

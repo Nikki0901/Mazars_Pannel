@@ -8,7 +8,7 @@ import {
   CardBody,
 } from "reactstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 import RejectedModal from "./RejectedModal";
 import Alerts from "../../../common/Alerts";
 import { Spinner } from 'reactstrap';
@@ -226,7 +226,7 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
     <>
       <Card>
         <CardHeader>
-          <TeamFilter
+          <TaxProfessionalFilter
             setData={setPendingData}
             getData={getPendingforAcceptance}
             pendingForAcceptence="pendingForAcceptence"

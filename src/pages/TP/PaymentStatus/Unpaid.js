@@ -19,7 +19,7 @@ import { useAlert } from "react-alert";
 import { Link, useParams } from "react-router-dom";
 import CommonServices from "../../../common/common";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
 import PaymentIcon from '@material-ui/icons/Payment';
 import RejectedModal from "./RejectedModal";
@@ -333,7 +333,7 @@ function AllPayment() {
             <Card>
 
                 <CardHeader>
-                    <TeamFilter
+                    <TaxProfessionalFilter
                         setData={setPayment}
                         getData={getPaymentStatus}
                         Unpaid="Unpaid"

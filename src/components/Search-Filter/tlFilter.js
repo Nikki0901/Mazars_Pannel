@@ -181,7 +181,7 @@ function TeamFilter(props) {
     if (AllProposal == "AllProposal") {
       axios
         .get(
-          `${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(
+          `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
@@ -200,7 +200,7 @@ function TeamFilter(props) {
     if (InprogressProposal == "InprogressProposal") {
       axios
         .get(
-          `${baseUrl}/tl/getProposalTl?tp_id=${JSON.parse(
+          `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
