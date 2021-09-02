@@ -275,6 +275,7 @@ function ViewReport({
                         additionalQuery={additionalQuery}
                         assignNo={assignNo}
                         modaldoc = {modaldoc}
+                        getData = {getData}
                         // getQueriesData={getQueriesData}
                     />
       <DiscardReport

@@ -5,18 +5,20 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import Swal from "sweetalert2";
 import { Spinner } from 'reactstrap';
-
+import { useHistory } from "react-router-dom";
 function Assignmodal({
   additionalQuery,
   additionalHandler,
   assignNo,
   modaldoc,
+  getData,
   getQueriesData,
 }) {
   const { handleSubmit, register } = useForm();
   
   const [loading, setLoading] = useState(false);
-
+ 
+  let history = useHistory();
   const onSubmit = (value) => {
     console.log("valueAssign :", value.p_upload);
     setLoading(true)
@@ -70,11 +72,12 @@ function Assignmodal({
               icon: 'success',
             })
           }
-          additionalHandler();
-          getQueriesData();
+       
+        history.push("/customer/assignment")
         } else if (response.data.code === 0) {
           setLoading(false)
         }
+       
       })
       .catch((error) => {
         console.log("erroror - ", error);
