@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../../components/Layout/Layout";
 import ModalVideo from "react-modal-video";
+import CloseIcon from '@material-ui/icons/Close';
+import ReactPlayer from "react-player";
 import {
     Card,
     CardHeader,
@@ -48,16 +50,22 @@ function Recording() {
     const modalBox = {
         display : "flex",
         position : "absolute",
-        top : "0%",
+        top : "10%",
         left : "0%",
         botttom: "0%", 
         right: "0%",
-        translateX: "-50%", 
-        translateY: "-50%",
+       
         width : "100%", 
         height: "auto"
     }
-
+const canBtn = {
+    position: "absolute",
+    top: "0",
+    right: "10px",
+    left: "90%",
+    padding: "20px",
+    cursor : "pointer"
+}
     const columns = [
         {
             text: "S.No",
@@ -166,14 +174,34 @@ function Recording() {
               </div>
                
               {isOpen === true ?
-            <div style={modalBox}>
-                   <ReactHlsPlayer
+             
+                    
+                    <div style={modalBox}>
+                    <span style={canBtn} onClick= {() => setIsOpen(false)}> <CloseIcon /> </span>
+                   {/* <ReactHlsPlayer
                src={videoid}    autoPlay={false}
                controls={true}
                width="100%"
                height="100%"
-             />
-                </div> : ""}
+               hlsConfig={{
+                   maxLoadingDelay: 4,
+                   minAutoBitrate: 0,
+                   lowLatencyMode: true,
+                 }}
+             /> */}
+          
+             <div style={{margin: "50px 0 0 0"}}>
+             <ReactPlayer
+               url={videoid}
+               controls={true}
+               playing={false}
+               width='100%'
+               height='100%'
+              />
+                 </div>
+               
+              </div>
+            : ""}
               </>
    
        );

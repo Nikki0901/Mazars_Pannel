@@ -6,7 +6,7 @@ import { baseUrl, ReportUrl } from "../../../config/config";
 import * as yup from "yup";
 import CommonServices from "../../../common/common";
 import DiscardReport from "./DiscardReport";
-
+import './modalSty.css';
 const Schema = yup.object().shape({
   p_chat: yup.string().required(""),
 });
@@ -25,7 +25,11 @@ function ViewReport({
   const ViewDiscussionToggel = (key) => {
     setViewDiscussion(!ViewDiscussion);
   }
-
+const viewStyle = {
+  display: "block",
+    width: "100%",
+    border: "1px solid black"
+}
   useEffect(() => {
     getData();
   }, [report]);
@@ -81,11 +85,11 @@ function ViewReport({
             {data.length > 0
               ? data.map((p, i) => (
                 <tbody>
-                  <tr>
+                  <tr class="modalTable">
                     <td>{i + 1}</td>
                     <td>{CommonServices.removeTime(p.created_date)}</td>
                     <td>
-                    <td>
+                    <td class="table2">
                       <tr>
                       {p.document && (
                         <p style={{ display: "flex" }}>

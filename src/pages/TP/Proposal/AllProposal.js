@@ -6,7 +6,7 @@ import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 import ChatHistory from "./ChatHistory";
 // import DiscardReport from "../AssignmentTab/DiscardReport";
 
@@ -439,7 +439,7 @@ function AllProposal() {
         <>
             <Card>
                 <CardHeader>
-                    <TeamFilter
+                    <TaxProfessionalFilter
                         setData={setProposal}
                         getData={getProposalList}
                         AllProposal="AllProposal"

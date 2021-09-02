@@ -56,7 +56,9 @@ function RecordingModal({
                     // var variable = "Message sent successfully."
                     // Alerts.SuccessNormal(variable)
                     // props.history.push(routes);
+                  
                 }
+               
             })
             .catch((error) => {
                 console.log("erroror - ", error);

@@ -11,13 +11,15 @@ import {
     Table,
     Button,
 } from "reactstrap";
+import CloseIcon from '@material-ui/icons/Close';
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
 import ReactHlsPlayer from 'react-hls-player'
 import { VideoLibraryRounded } from "@material-ui/icons";
-
+import ReactPlayer from "react-player";
+import { padEnd } from "lodash";
 // import '../../../../node_modules/react-modal-video/scss/modal-video.scss';
 
 
@@ -51,15 +53,22 @@ function Recording() {
     const modalBox = {
         display : "flex",
         position : "absolute",
-        top : "0%",
+        top : "10%",
         left : "0%",
         botttom: "0%", 
         right: "0%",
-        translateX: "-50%", 
-        translateY: "-50%",
+       
         width : "100%", 
         height: "auto"
     }
+const canBtn = {
+    position: "absolute",
+    top: "0",
+    right: "10px",
+    left: "90%",
+    padding: "20px",
+    cursor : "pointer"
+}
 
     const columns = [
         {
@@ -169,14 +178,34 @@ function Recording() {
            </div>
             
            {isOpen === true ?
-         <div style={modalBox}>
-                <ReactHlsPlayer
+          
+                 
+                 <div style={modalBox}>
+                 <span style={canBtn} onClick= {() => setIsOpen(false)}> <CloseIcon /> </span>
+                {/* <ReactHlsPlayer
             src={videoid}    autoPlay={false}
             controls={true}
             width="100%"
             height="100%"
-          />
-             </div> : ""}
+            hlsConfig={{
+                maxLoadingDelay: 4,
+                minAutoBitrate: 0,
+                lowLatencyMode: true,
+              }}
+          /> */}
+       
+          <div style={{margin: "50px 0 0 0"}}>
+          <ReactPlayer
+            url={videoid}
+            controls={true}
+            playing={false}
+            width='100%'
+            height='100%'
+           />
+              </div>
+            
+           </div>
+         : ""}
            </>
 
     );
