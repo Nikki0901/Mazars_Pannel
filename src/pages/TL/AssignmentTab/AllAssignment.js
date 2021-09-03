@@ -221,6 +221,11 @@ function AssignmentTab() {
         return (
           <>
             <div>
+            {row.paid_status == "2" &&
+                <p>
+                  <span style={{ color: "red" }}>Payment Declined</span>
+                </p>
+              }
               <p>
                 <span style={{ fontWeight: "bold" }}>Client Discussion :</span>
                 {row.client_discussion}
@@ -335,110 +340,99 @@ function AssignmentTab() {
       formatter: function (cell, row) {
         return (
           <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              
-              {/* {
-                !row.final_report && row.client_discussion == "completed" &&
-                  !(
-                    row.delivery_report == "completed"
-                  ) ? (
-                  <div title="upload Pdf">
-                    <p
-                      style={{ cursor: "pointer", color: "green" }}
-                      onClick={() => uploadDraftReport(row.id)}
-                    >
-                      <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                      draft
-                    </p>
-                  </div>
-                ) : null} */}
-                 {
-                 row.client_discussion == "completed" && row.draft_report == "inprogress" ?
-                 <div title="upload Pdf">
-                 <p
-                   style={{ cursor: "pointer", color: "green" }}
-                   onClick={() => uploadDraftReport(row.id)}
-                 >
-                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                   draft
-                 </p>
-               </div> : null
-              }
-               {
-                 row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "inprogress" ?
-                 <div title="upload Pdf">
-                 <p
-                   style={{ cursor: "pointer", color: "green" }}
-                   onClick={() => uploadDraftReport(row.id)}
-                 >
-                   <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
-                   draft
-                 </p>
-               </div> : null
-              }
+         {
+           row.paid_status == "2" ? null : 
+           <div
+           style={{
+             display: "flex",
+             justifyContent: "space-between",
+           }}
+         >
+           
+           
+              {
+              row.client_discussion == "completed" && row.draft_report == "inprogress" ?
+              <div title="upload Pdf">
+              <p
+                style={{ cursor: "pointer", color: "green" }}
+                onClick={() => uploadDraftReport(row.id)}
+              >
+                <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                draft
+              </p>
+            </div> : null
+           }
+            {
+              row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "inprogress" ?
+              <div title="upload Pdf">
+              <p
+                style={{ cursor: "pointer", color: "green" }}
+                onClick={() => uploadDraftReport(row.id)}
+              >
+                <i class="fa fa-upload" style={{ fontSize: "16px" }}></i>
+                draft
+              </p>
+            </div> : null
+           }
 {
-    row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "completed" && row.delivery_report == "inprogress" ?
-   
-   <div title="upload Pdf">
-    <p
-      style={{ cursor: "pointer", color: "red" }}
-      onClick={() => uploadFinalReport(row)}
-    >
+ row.client_discussion == "completed" && row.draft_report == "completed" && row.final_discussion == "completed" && row.delivery_report == "inprogress" ?
+
+<div title="upload Pdf">
+ <p
+   style={{ cursor: "pointer", color: "red" }}
+   onClick={() => uploadFinalReport(row)}
+ >
+ 
+       <div>
+         <i
+           class="fa fa-upload"
+           style={{ fontSize: "16px" }}
+         ></i>
+         final
+       </div>
     
-          <div>
-            <i
-              class="fa fa-upload"
-              style={{ fontSize: "16px" }}
-            ></i>
-            final
-          </div>
-       
-    </p>
-  </div> : null
-  }
-             
+ </p>
+</div> : null
+}
+          
 
-              <div title="View Discussion Message">
-                <i
-                  class="fa fa-comments-o"
-                  style={{
-                    fontSize: 16,
-                    cursor: "pointer",
-                    color: "orange"
-                  }}
-                  onClick={() => ViewDiscussionToggel(row.assign_no)}
-                ></i>
-              </div>
-              <div title="Send Message">
-                <Link
-                  to={{
-                    pathname: `/teamleader/chatting/${row.q_id}`,
-                    obj: {
-                      message_type: "3",
-                      query_No: row.assign_no,
-                      query_id: row.q_id,
-                      routes: `/teamleader/assignment`
-                    }
-                  }}
-                >
-                  <i
-                    class="fa fa-comments-o"
-                    style={{
-                      fontSize: 16,
-                      cursor: "pointer",
-                      marginLeft: "8px",
-                      color: "blue"
-                    }}
-                  ></i>
-                </Link>
-              </div>
+           <div title="View Discussion Message">
+             <i
+               class="fa fa-comments-o"
+               style={{
+                 fontSize: 16,
+                 cursor: "pointer",
+                 color: "orange"
+               }}
+               onClick={() => ViewDiscussionToggel(row.assign_no)}
+             ></i>
+           </div>
+           <div title="Send Message">
+             <Link
+               to={{
+                 pathname: `/teamleader/chatting/${row.q_id}`,
+                 obj: {
+                   message_type: "3",
+                   query_No: row.assign_no,
+                   query_id: row.q_id,
+                   routes: `/teamleader/assignment`
+                 }
+               }}
+             >
+               <i
+                 class="fa fa-comments-o"
+                 style={{
+                   fontSize: 16,
+                   cursor: "pointer",
+                   marginLeft: "8px",
+                   color: "blue"
+                 }}
+               ></i>
+             </Link>
+           </div>
 
-            </div>
+         </div>
+         }
           </>
         );
       },

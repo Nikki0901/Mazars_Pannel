@@ -65,7 +65,7 @@ function Chatting(props) {
 
   const onSubmit = (value) => {
     console.log("value :", value);
-
+console.log(query_id)
     setLoading(true)
     let formData = new FormData();
     formData.append("uid", JSON.parse(userId));
