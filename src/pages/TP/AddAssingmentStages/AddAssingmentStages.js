@@ -5,7 +5,9 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
+import Swal from "sweetalert2";
 import {
+
   Card,
   CardHeader,
   CardBody,
