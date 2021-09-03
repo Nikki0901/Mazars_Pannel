@@ -50,8 +50,61 @@ function AddAssingmentStages() {
 
   const onSubmit = (value) => {
     console.log(value);
+    if(assignmentStages[0].paid_status=='0' && value.other_stage=='completed')
+    {    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Query no- "+assignmentStages[0].assign_no+" payment is due,Do you still want to process to complete this query !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.value === true) {
+        setLoading(true)
+
+        let formData = new FormData();
     
+        formData.append("q_id", id);
+        formData.append("user_id", JSON.parse(userid));
+        formData.append("stage_1_status", value.client_discussion);
+        formData.append("stage_2_status", value.draft_report);
+        formData.append("stage_3_status", value.final_discussion);
+        formData.append("stage_4_status", value.delivery_report);
+        formData.append("stage_5_status", value.other_stage);
     
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/postAssignmentStages`,
+          data: formData,
+        })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              setLoading(false)
+              Alerts.SuccessNormal("Assignment Stage updated successfully.")
+              getAssignmentList();
+              history.push("/taxprofessional/assignment");
+            } else if (response.data.code === 0) {
+              setLoading(false)
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+      
+      //   history.push("/teamleader/assignment");
+      //  return false;
+      }
+      else{
+        history.push("/taxprofessional/assignment");
+        return false
+      }
+    });
+	return false;
+    }
+    else{
       setLoading(true)
 
       let formData = new FormData();
@@ -84,6 +137,8 @@ function AddAssingmentStages() {
           console.log("erroror - ", error);
         });
     
+    }
+     
     
   };
 

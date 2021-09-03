@@ -42,7 +42,8 @@ function EditComponent() {
   const [diserror, setdiserror] = useState("")
   const history = useHistory();
   const { id } = useParams();
-
+  var current_date = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+  const [item] = useState(current_date);
   const [proposal, setProposal] = useState({
     query: "",
     name: "",
@@ -403,6 +404,7 @@ function EditComponent() {
                       installment_amount={installment_amount}
                       due_date={due_date}
                       getQuery={getQuery}
+                      item={item}
                     />
                 }
               </div>

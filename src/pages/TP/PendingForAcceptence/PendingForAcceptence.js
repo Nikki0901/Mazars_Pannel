@@ -261,21 +261,3 @@ function PendingForAcceptence({ CountPendingForAcceptence, updateTab }) {
 
 export default PendingForAcceptence;
 
-{
-  /* <button onClick={() => update(1)}>go to 1st tab</button> */
-}
-// http://13.232.121.233/mazarapi/v1/tl/AcceptRejectQuery
-
-// axios.post(`${baseUrl}/tl/AcceptRejectQuery`, formData)
-// .then(res => {
-//   console.log(res);
-//   if (res.data.code === 1) {
-//     alert.success("Query rejected!");
-//     getPendingforAcceptance();
-//   }
-// });
-
-// set: 1
-// tlid: 128
-// assignment_id: 11
-// allocation_id: 36

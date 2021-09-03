@@ -249,8 +249,8 @@ function App() {
             <PrivateRouteTP exact path="/taxprofessional/assignment" component={TpAssignmentTab} />
             <PrivateRouteTP exact path="/taxprofessional/schedule" component={TpSchedule} />
             <PrivateRouteTP exact path="/taxprofessional/message" component={TpMessage} />
-            <PrivateRouteTL exact path="/taxprofessional/feedback" component={TpFeedbackTab} />
-            <PrivateRouteTL exact path="/taxprofessional/meeting/:id" component={TpMeetingComponent} />
+            <PrivateRouteTP exact path="/taxprofessional/feedback" component={TpFeedbackTab} />
+            <PrivateRouteTP exact path="/taxprofessional/meeting/:id" component={TpMeetingComponent} />
             <Route exact path="/*" component={PageNotFound} />
 
           </Switch>

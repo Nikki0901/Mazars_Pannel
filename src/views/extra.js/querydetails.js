@@ -3,7 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl, baseUrl2 } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { useAlert } from "react-alert";
 
@@ -290,7 +290,7 @@ function MyAssingment() {
                           ) : (
                             <p>
                               <a
-                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                                href={`${baseUrl2}/mazarapi/assets/image/${p.upload_doc_1}`}
                               >
                                 <i class="fa fa-photo"></i>
                               </a>
@@ -302,7 +302,7 @@ function MyAssingment() {
                           ) : (
                             <p>
                               <a
-                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                                href={`${baseUrl2}/mazarapi/assets/image/${p.upload_doc_2}`}
                               >
                                 <i class="fa fa-photo"></i>
                               </a>
@@ -314,7 +314,7 @@ function MyAssingment() {
                           ) : (
                             <p>
                               <a
-                                href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
+                                href={`${baseUrl2}/mazarapi/assets/image/${p.upload_doc_3}`}
                               >
                                 <i class="fa fa-photo"></i>
                               </a>
@@ -547,7 +547,7 @@ function MyAssingment() {
                             ) : (
                               <p>
                                 <a
-                                  href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                                  href={`${baseUrl2}/mazarapi/assets/image/${p.upload_doc}`}
                                 >
                                   <i class="fa fa-photo"></i>
                                 </a>

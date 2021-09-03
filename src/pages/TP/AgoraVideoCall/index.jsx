@@ -420,7 +420,7 @@ schdrularName;
       this.client = null;
       this.localStream = null;
       // redirect to index
-      window.location.hash = "/teamleader/schedule";
+      window.location.hash = "/taxprofessional/schedule";
     }
   };
 

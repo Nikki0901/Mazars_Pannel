@@ -45,11 +45,11 @@ function History({ history,toggle,modal }) {
                   <tbody>
                     <tr>
                       <td>{i + 1}</td>
+                      <td>{p.from_date}</td>
+                      <td>{p.to_date}</td>
                       <td>{p.name}</td>
-                      <td>{p.assign_no}</td>
-                      <td>{p.status}</td>
-                      <td>{ChangeFormateDate(p.date_of_allocation)}</td>
-                      <td>{p.notes}</td>
+                      <td>{p.personal_email}</td>
+                      <td>{p.phone}</td>
                     </tr>
                   </tbody>
                 ))

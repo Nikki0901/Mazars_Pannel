@@ -577,12 +577,12 @@ if(data5 != undefined){
                         <Form.Item name="email">
                           <Input
                           className={classNames("form-control", {
-                            "is-invalid": errors.p_email || wEmail || invalid,
+                            "is-invalid": errors.p_email,
                           })}
-                         onBlur={emailValidation} 
+                        //  onBlur={emailValidation} 
                          onChange={(e) => emailHandler(e)} />
                         </Form.Item>
-                        {
+                        {/* {
                         wEmail ? <p className="declined">{wEmail}</p> : <>
                           {valiEmail ?
                             <p className="completed">
@@ -591,7 +591,7 @@ if(data5 != undefined){
                             :
                             <p className="declined">{invalid}</p>}
                         </>
-                      }
+                      } */}
                       </div>
                     </div>
                   </div>

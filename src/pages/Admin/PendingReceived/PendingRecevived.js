@@ -4,6 +4,7 @@ import Layout from "../../../components/Layout/Layout";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { Link, useParams, useHistory } from "react-router-dom";
+import { baseUrl2 } from '../../../config/config';
 import {
   Card,
   CardHeader,
@@ -133,7 +134,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_1}`}
+                            href={`${baseUrl2}/mazarsapi/assets/image/${p.upload_doc_1}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -145,7 +146,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_2}`}
+                            href={`${baseUrl2}/mazarsapi/mazarapi/assets/image/${p.upload_doc_2}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -157,7 +158,7 @@ function PendingRecevied() {
                       ) : (
                         <p>
                           <a
-                            href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc_3}`}
+                            href={`${baseUrl2}/mazarsapi/mazarapi/assets/image/${p.upload_doc_3}`}
                           >
                             <i class="fa fa-photo"></i>
                           </a>
@@ -220,7 +221,7 @@ function PendingRecevied() {
                         ) : (
                           <p>
                             <a
-                              href={`http://13.232.121.233/mazarapi/assets/image/${p.upload_doc}`}
+                              href={`${baseUrl2}/mazarsapi/mazarapi/assets/image/${p.upload_doc}`}
                             >
                               <i class="fa fa-photo"></i>
                             </a>

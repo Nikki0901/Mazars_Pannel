@@ -41,8 +41,8 @@ export default class Payment extends React.Component {
         for (var i = 1; i <= this.props.installment; i++) {
             fieldsArray.push(
                 <div className="row">
-                    <div class="col-md-6">
-                        <label>Amount</label>
+                    <div class="col-md-6 my-2">
+                      
                         <input
                             type="text"
                             className="form-control"
@@ -52,8 +52,8 @@ export default class Payment extends React.Component {
                         <p style={{ "display": "block", "color": "red" }}>{this.state.error}</p>
                     </div>
 
-                    <div class="col-md-6">
-                        <label>Due Dates</label>
+                    <div class="col-md-6 my-2">
+                      
                         <input
                             type="date"
                             className="form-control"
@@ -68,8 +68,12 @@ export default class Payment extends React.Component {
 
         return (
             <div className="inputs">
-                {fieldsArray}
-            </div>
+            <tr style={{display : "flex", width : "100%", justifyContent : "space-around"}}>
+              <td>Payment</td>
+              <td>Due Dates</td>
+          </tr>
+          {fieldsArray}
+      </div>
         );
     }
 }
