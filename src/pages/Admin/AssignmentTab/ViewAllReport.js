@@ -105,13 +105,13 @@ const viewStyle = {
                       </tr>
                      {p.customer_files && 
                       <tr>
-                      <p>Reviewed Report : &nbsp;
+                    
                       <a
                             href={`${ReportUrl}/${report}/${p.customer_files}`}
                             target="_blank"
                           >
                             <i class="fa fa-photo"></i> 
-                          </a> &nbsp; &nbsp; &nbsp;{p.customer_files}</p>
+                          </a> &nbsp; &nbsp; &nbsp;{p.customer_files}
                     </tr> }
                     </td>
                   
@@ -120,8 +120,11 @@ const viewStyle = {
                    
 
                     <td>
-                      {p.stages_type == 2 && "Draft Report" || p.stages_type == 3 && "Final Report"}
-                    </td>
+                  <p>    {p.stages_type == 2 && "Draft Report" || p.stages_type == 3 && "Final Report"}</p>
+                  
+                  <br>
+                  </br> 
+                  Reviewed Report</td>
                     <td>
                       {
                         p.stages_type == "2" ?
