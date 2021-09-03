@@ -366,7 +366,7 @@ const hist = useHistory();
       }
       else{
         console.log("no");
-        axios.get(`${baseUrl}/tl/getProposalTl?id=${userid}`).then((res) => {
+        axios.get(`${baseUrl}/tl/workby?uid=${JSON.parse(userid)}&qid=${id}`).then((res) => {
           if(res.data.code === 1){
             hist.push(`/teamleader/proposal`)
            

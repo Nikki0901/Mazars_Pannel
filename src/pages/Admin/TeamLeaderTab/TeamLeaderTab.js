@@ -17,16 +17,38 @@ import {
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
 import { TurnedIn } from "@material-ui/icons";
+import History from './History.js';
 function TeamLeaderTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tlCount, setTlCount] = useState("");
   const [subCat, setsubCat] = useState([])
+  const [history, setHistory] = useState([]);
   const userid = window.localStorage.getItem("adminkey");
   var kk = []
   var pp = []
-  console.log(data)
-  console.log(pp)
+  
+
+  const [modal, setModal] = useState(false);
+
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(`${baseUrl}/admin/userhistory?id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setHistory(response.result);
+      })
+      .catch((error) => console.log(error));
+  };
+
   const columns = [
     {
       dataField: "",
@@ -160,7 +182,26 @@ function TeamLeaderTab() {
       },
 
     },
-
+    {
+      text: "History",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <button
+              type="button"
+              class="btn btn-info btn-sm"
+              onClick={() => toggle(row.id)}
+            >
+              History
+            </button>
+          </>
+        );
+      },
+    },
   ];
 
   useEffect(() => {
@@ -249,6 +290,7 @@ function TeamLeaderTab() {
           />
         </CardBody>
       </Card>
+      <History history={history} toggle={toggle} modal={modal} />
     </Layout>
   );
 }

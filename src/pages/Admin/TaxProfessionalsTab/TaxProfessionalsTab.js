@@ -15,13 +15,15 @@ import { baseUrl } from "../../../config/config";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import Swal from "sweetalert2";
+
 import BootstrapTable from "react-bootstrap-table-next";
 import TaxProffesionalService from "../../../config/services/TaxProffesional";
-
+import History from './History.js';
 function TaxProfessionalsTab() {
   const alert = useAlert();
   const [data, setData] = useState([]);
   const [tpCount, setTpCount] = useState("");
+  const [history, setHistory] = useState([]);
   const userid = window.localStorage.getItem("adminkey");
   const [myPurpose, setPurpose] = useState([])
   var digit2 = [];
@@ -39,7 +41,26 @@ function TaxProfessionalsTab() {
     });
   };
 
-  
+  const [modal, setModal] = useState(false);
+
+  const toggle = (key) => {
+    console.log("key", key);
+    setModal(!modal);
+
+    fetch(`${baseUrl}/admin/userhistory?id=${key}`, {
+      method: "GET",
+      headers: new Headers({
+        Accept: "application/vnd.github.cloak-preview",
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+        setHistory(response.result);
+      })
+      .catch((error) => console.log(error));
+  };
+
 
   const columns = [
     {
@@ -198,7 +219,26 @@ function TaxProfessionalsTab() {
         );
       },
     },
-    
+    {
+      text: "History",
+      dataField: "",
+      headerStyle: () => {
+        return { fontSize: "12px" };
+      },
+      formatter: function (cell, row) {
+        return (
+          <>
+            <button
+              type="button"
+              class="btn btn-info btn-sm"
+              onClick={() => toggle(row.id)}
+            >
+              History
+            </button>
+          </>
+        );
+      },
+    },
   ];
 
   //check
@@ -264,6 +304,7 @@ function TaxProfessionalsTab() {
           />
         </CardBody>
       </Card>
+      <History history={history} toggle={toggle} modal={modal} />
     </Layout>
   );
 }
