@@ -14,11 +14,12 @@ import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import TeamFilter from "../../../components/Search-Filter/tlFilter";
 import History from "../../../components/PendingForAllocation/History";
-
+import Swal from "sweetalert2";
+import { useParams, useHistory } from "react-router-dom";
 
 function CompletedQuery() {
   const userid = window.localStorage.getItem("tlkey");
-
+const hist = useHistory();
   const [incompleteData, setInCompleteData] = useState([]);
   const [records, setRecords] = useState([]);
  
@@ -269,12 +270,8 @@ function CompletedQuery() {
       return (
         <>
           {row.statuscode === "0" || row.statuscode === "3"? (
-             <Link
-                  to={`/teamleader/queryassing/${row.id}`}
-                >
-                  <i class="fa fa-share"></i>
-                </Link>
-          
+           
+           <i onClick ={() => assignConfirm(row.id, row.assign_no)} class="fa fa-share" style={{color : "blue", cursor : "pointer"}}></i>
           ) : (
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               {/* <div title="Assign to">
@@ -349,6 +346,34 @@ function CompletedQuery() {
     },
   },
   ];
+
+
+
+  const  assignConfirm = (id, assign_number) => {
+   console.log("id", id)
+    Swal.fire({
+      title: "Are you sure?",
+      text: `do you want to assign ${assign_number} to taxprofessional`,
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, assign it!",
+    }).then((result) => {
+      if (result.value) {
+        console.log(result.value)
+       hist.push(`/teamleader/queryassing/${id}`)
+      }
+      else{
+        console.log("no");
+        axios.get(`${baseUrl}/tl/getProposalTl?id=${userid}`).then((res) => {
+          if(res.data.code === 1){
+            hist.push(`/teamleader/proposal`)
+          }
+        })
+      }
+    });
+  };
 
   return (
     <>
