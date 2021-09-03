@@ -5,6 +5,7 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import { useAlert } from "react-alert";
+import Swal from "sweetalert2";
 import {
   Card,
   CardHeader,
@@ -51,7 +52,24 @@ function AddAssingmentStages() {
   const onSubmit = (value) => {
     console.log(value);
     setLoading(true)
-
+    if(assignmentStages[0].paid_status=='0' && value.other_stage=='completed')
+    {    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Query no- "+assignmentStages[0].assign_no+" payment is due,Do you still want to process to complete this query !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (!result.value) {
+        history.push("/teamleader/assignment");
+       return false;
+      }
+    });
+	return false;
+    }
     let formData = new FormData();
 
     formData.append("q_id", id);

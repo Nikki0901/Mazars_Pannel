@@ -50,25 +50,8 @@ function AddAssingmentStages() {
 
   const onSubmit = (value) => {
     console.log(value);
-    if(assignmentStages[0].paid_status=='0' && value.other_stage=='completed')
-    {    
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Query no- "+assignmentStages[0].assign_no+" payment is due,Do you still want to process to complete this query !",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      if (!result.value) {
-        history.push("/teamleader/assignment");
-       return false;
-      }
-    });
-	return false;
-    }
-    else{
+    
+    
       setLoading(true)
 
       let formData = new FormData();
@@ -100,7 +83,7 @@ function AddAssingmentStages() {
         .catch((error) => {
           console.log("erroror - ", error);
         });
-    }
+    
     
   };
 
