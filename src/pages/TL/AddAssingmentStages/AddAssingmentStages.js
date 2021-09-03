@@ -51,7 +51,7 @@ function AddAssingmentStages() {
 
   const onSubmit = (value) => {
     console.log(value);
-    setLoading(true)
+   
     if(assignmentStages[0].paid_status=='0' && value.other_stage=='completed')
     {    
     Swal.fire({
@@ -63,42 +63,79 @@ function AddAssingmentStages() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes",
     }).then((result) => {
-      if (!result.value) {
+      if (result.value === true) {
+        setLoading(true)
+        let formData = new FormData();
+    
+        formData.append("q_id", id);
+        formData.append("user_id", JSON.parse(userid));
+        formData.append("stage_1_status", value.client_discussion);
+        formData.append("stage_2_status", value.draft_report);
+        formData.append("stage_3_status", value.final_discussion);
+        formData.append("stage_4_status", value.delivery_report);
+        formData.append("stage_5_status", value.other_stage);
+    
+        axios({
+          method: "POST",
+          url: `${baseUrl}/tl/postAssignmentStages`,
+          data: formData,
+        })
+          .then(function (response) {
+            console.log("res-", response);
+            if (response.data.code === 1) {
+              setLoading(false)
+              Alerts.SuccessNormal("Assignment Stage updated successfully.")
+              getAssignmentList();
+              history.push("/teamleader/assignment");
+            } else if (response.data.code === 0) {
+              setLoading(false)
+            }
+          })
+          .catch((error) => {
+            console.log("erroror - ", error);
+          });
+      }
+      else{
+
         history.push("/teamleader/assignment");
        return false;
       }
     });
 	return false;
     }
-    let formData = new FormData();
-
-    formData.append("q_id", id);
-    formData.append("user_id", JSON.parse(userid));
-    formData.append("stage_1_status", value.client_discussion);
-    formData.append("stage_2_status", value.draft_report);
-    formData.append("stage_3_status", value.final_discussion);
-    formData.append("stage_4_status", value.delivery_report);
-    formData.append("stage_5_status", value.other_stage);
-
-    axios({
-      method: "POST",
-      url: `${baseUrl}/tl/postAssignmentStages`,
-      data: formData,
-    })
-      .then(function (response) {
-        console.log("res-", response);
-        if (response.data.code === 1) {
-          setLoading(false)
-          Alerts.SuccessNormal("Assignment Stage updated successfully.")
-          getAssignmentList();
-          history.push("/teamleader/assignment");
-        } else if (response.data.code === 0) {
-          setLoading(false)
-        }
+    else{
+      setLoading(true)
+      let formData = new FormData();
+  
+      formData.append("q_id", id);
+      formData.append("user_id", JSON.parse(userid));
+      formData.append("stage_1_status", value.client_discussion);
+      formData.append("stage_2_status", value.draft_report);
+      formData.append("stage_3_status", value.final_discussion);
+      formData.append("stage_4_status", value.delivery_report);
+      formData.append("stage_5_status", value.other_stage);
+  
+      axios({
+        method: "POST",
+        url: `${baseUrl}/tl/postAssignmentStages`,
+        data: formData,
       })
-      .catch((error) => {
-        console.log("erroror - ", error);
-      });
+        .then(function (response) {
+          console.log("res-", response);
+          if (response.data.code === 1) {
+            setLoading(false)
+            Alerts.SuccessNormal("Assignment Stage updated successfully.")
+            getAssignmentList();
+            history.push("/teamleader/assignment");
+          } else if (response.data.code === 0) {
+            setLoading(false)
+          }
+        })
+        .catch((error) => {
+          console.log("erroror - ", error);
+        });
+    }
+  
   };
 
 

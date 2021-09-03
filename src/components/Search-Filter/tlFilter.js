@@ -146,7 +146,7 @@ function TeamFilter(props) {
     if (DeclinedQuery == "DeclinedQuery") {
       axios
         .get(
-          `${baseUrl}/tl/declinedQueries?tp_id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
+          `${baseUrl}/tl/declinedQueries?id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -162,7 +162,7 @@ function TeamFilter(props) {
     if (completeAssignment == "completeAssignment") {
       axios
         .get(
-          `${baseUrl}/tl/getCompleteQues?tp_id=${JSON.parse(
+          `${baseUrl}/tl/getCompleteQues?id=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
         )
@@ -200,7 +200,7 @@ function TeamFilter(props) {
     if (InprogressProposal == "InprogressProposal") {
       axios
         .get(
-          `${baseUrl}/tl/getProposalTl?id=${JSON.parse(
+          `${baseUrl}/tl/getProposalTl?uid=${JSON.parse(
             userid
           )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo
           }&status=${data.p_status}&pcat_id=${selectedData}`
@@ -220,7 +220,9 @@ function TeamFilter(props) {
     if (AllPayment == "AllPayment") {
       axios
         .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
+          `${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=${data.p_status}&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -236,7 +238,9 @@ function TeamFilter(props) {
     if (Unpaid == "Unpaid") {
       axios
         .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
+          `${baseUrl}/tl/getUploadedProposals?uid=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=1&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
@@ -252,7 +256,9 @@ function TeamFilter(props) {
     if (Paid == "Paid") {
       axios
         .get(
-          `${baseUrl}/tl/getUploadedProposals?cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
+          `${baseUrl}/tl/getUploadedProposals?id=${JSON.parse(
+            userid
+          )}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&status=2&pcat_id=${selectedData}`
         )
         .then((res) => {
           console.log(res);
