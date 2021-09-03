@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import "antd/dist/antd.css";
 import { Select } from "antd";
 import BootstrapTable from "react-bootstrap-table-next";
-import TeamFilter from "../../../components/Search-Filter/tlFilter";
+import TaxProfessionalFilter from "../../../components/Search-Filter/tpfilter";
 import * as Cookies from "js-cookie";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import ViewAllReportModal from "./ViewAllReport";
