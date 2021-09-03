@@ -253,7 +253,7 @@ function InprogressProposal() {
                                             }}
                                         ></i>
                                     </Link>
-                                ) : row.status_code == "2" ? (
+                                ) : row.status_code == "2" &&  row.work_by != "0" ? (
                                     <Link to={`/teamleader/sendproposal/${row.id}`}>
                                         <i
                                             class="fa fa-mail-forward"
