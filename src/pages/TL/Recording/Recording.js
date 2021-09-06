@@ -39,7 +39,7 @@ function Recording() {
 
     const getRecording = () => {
         axios
-            .get(`${baseUrl}/tl/callRecordingPostlist?assign_id=Q-23-71`)
+            .get(`${baseUrl}/tl/callRecordingPostlist?uid=${JSON.parse(userid)}`)
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 1) {
