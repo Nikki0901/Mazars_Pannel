@@ -58,18 +58,22 @@ const [showTl, setShowTl] = useState(false)
     setItem(data2.message_type)
   }, []);
 
+  useEffect(() => {
+    checkAssigned();
+  }, [item]);
 
-useEffect(() => {
-  axios
-  .get(`${baseUrl}/tl/TlCheckIfAssigned?assignno=${query_No}`).then((res) => {
-    if(res.data.code === 0){
-         setShowTl(false)
-    }
-    else{
-      setShowTl(true)
-    }
-  })
-})
+  const checkAssigned = () => {
+    axios
+    .get(`${baseUrl}/tl/TlCheckIfAssigned?assignno=${query_No}`).then((res) => {
+           if(res.data.code === 0){
+                setShowTl(false)
+           }
+           else{
+             setShowTl(true)
+           }
+         })
+  };
+
 
   const onSubmit = (value) => {
     console.log("value :", value);
