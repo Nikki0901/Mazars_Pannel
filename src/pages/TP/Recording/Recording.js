@@ -29,7 +29,7 @@ function Recording() {
     const [feedbackData, setFeedBackData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [videoid, setVideoId] = useState(null);
-
+    const [records, setRecords] = useState([]);
     const openModal = (videoContent) => {
         setIsOpen(true);
         setVideoId(videoContent);
@@ -46,6 +46,7 @@ function Recording() {
                 console.log(res);
                 if (res.data.code === 1) {
                     setFeedBackData(res.data.result);
+                    setRecords(res.data.result.length)
                 }
             });
     };
@@ -170,7 +171,16 @@ const canBtn = {
                    </CardHeader>
 
                    <CardBody>
-                       <RecordingFilter />                       <BootstrapTable
+                       <RecordingFilter
+                       setData={setFeedBackData}
+                    //    getData={getInCompleteAssingment}
+                       SearchQuery="SearchQuery"
+                      setRecords={setRecords}
+                       records={records} 
+                    /> 
+
+
+                          <BootstrapTable
                            bootstrap4
                            keyField="id"
                            data={feedbackData}

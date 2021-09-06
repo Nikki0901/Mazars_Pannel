@@ -877,7 +877,7 @@ class AgoraCanvas extends React.Component {
   }
 
   // userId = window.localStorage.getItem("tlkey");
-  teamKey = window.localStorage.getItem("admin");
+  teamKey = window.localStorage.getItem("adminkey");
   uid = Math.floor((Math.random() * 10000) + 1);
   channelName = this.props.channel
 
@@ -1535,7 +1535,11 @@ const recordingBtnOff = (
     }
     title="Record Off"
   >
-            <FiberManualRecordIcon style={{ color: red[500] }}/>
+    {
+      this.state.showButton == JSON.parse(this.teamKey) ?
+      <FiberManualRecordIcon style={{ color: red[500] }}/> : ""
+    }
+           
   </span>
 );
 
@@ -1571,7 +1575,7 @@ const recordingBtnOff = (
           } */}
 
           {
-            this.state.recordDisplay ? recordingBtnOff : null
+            this.state.recordDisplay  ? recordingBtnOff : null
           }
         </div>
       </div>

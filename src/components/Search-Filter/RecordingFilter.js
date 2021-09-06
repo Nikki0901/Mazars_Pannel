@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { baseUrl } from "../../config/config";
+import { baseUrl, baseUrl2 } from "../../config/config";
 import { useForm } from "react-hook-form";
 import { Select } from "antd";
 
@@ -46,14 +46,12 @@ function RecordingFilter(props) {
   };
 
   const onSubmit = (data) => {
-    console.log("data :", data);
-    console.log("store2 :", store2);
-
-    if (SearchQuery == "SearchQuery") {
-      axios
+  console.log()
+if(SearchQuery == "SearchQuery") {
+   console.log("myQuery", data.queryNo)
+    axios
         .get(
-          `${baseUrl}/tl/getIncompleteQues?tp_id=${JSON.parse(userid)}&status=${data.p_status}&cat_id=${store2}&from=${data.p_dateFrom}&to=${data.p_dateTo}&pcat_id=${selectedData}`
-        )
+          `${baseUrl}/tl/callRecordingPostlist?uid=${JSON.parse(userid)}&assign_id=${data.queryNo}`)
         .then((res) => {
           console.log(res);
           if (res.data.code === 1) {
@@ -64,8 +62,7 @@ function RecordingFilter(props) {
             }
           }
         });
-    }
-
+}
 
     // if (pendingForAcceptence == "pendingForAcceptence") {
     //   axios
@@ -252,10 +249,18 @@ function RecordingFilter(props) {
           <div>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div class="form-inline">
-            <input
+            {/* <input
             type = "text" 
+            name = "queryNO"
             className = "form-control"
-            name="recordingsearch"/>
+            name="recordingsearch"/> */}
+             <input
+                    type="text"
+                    name="queryNo"
+                    ref={register}
+                    className="form-select form-control"
+                    
+                  />
                 <button type="submit" class="btn btn-primary mx-sm-1 mb-2">
                   Search
                 </button>

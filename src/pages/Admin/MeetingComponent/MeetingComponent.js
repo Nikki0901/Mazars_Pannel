@@ -25,6 +25,7 @@ function MeetingComponent(props) {
     <Layout adminDashboard="adminDashboard" adminUserId={userid}>
       <Meeting id={props.match.params.id} />
     </Layout>
+    // <Meeting id={props.match.params.id} />
   );
 }
 
