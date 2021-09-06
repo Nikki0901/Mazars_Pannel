@@ -19,7 +19,7 @@ import { baseUrl } from "../../../config/config";
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-modal-video/scss/modal-video.scss";
 import ReactHlsPlayer from 'react-hls-player'
-
+import RecordingFilter from "../../../components/Search-Filter/RecordingFilter";
 // import '../../../../node_modules/react-modal-video/scss/modal-video.scss';
 
 
@@ -168,8 +168,9 @@ const canBtn = {
                            <Col md="5"></Col>
                        </Row>
                    </CardHeader>
+
                    <CardBody>
-                       <BootstrapTable
+                       <RecordingFilter />                       <BootstrapTable
                            bootstrap4
                            keyField="id"
                            data={feedbackData}

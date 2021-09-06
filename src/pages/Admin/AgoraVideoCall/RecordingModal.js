@@ -5,7 +5,7 @@ import axios from "axios";
 import { baseUrl } from "../../../config/config";
 import CommonServices from "../../../common/common";
 import Alerts from "../../../common/Alerts";
-
+import { useHistory } from "react-router";
 
 function RecordingModal({
     isOpen,
@@ -13,6 +13,7 @@ function RecordingModal({
     data,
     item
 }) {
+    const history = useHistory();
     const { handleSubmit, register, errors } = useForm();
     const userId = window.localStorage.getItem("adminkey");
 
@@ -51,6 +52,7 @@ function RecordingModal({
                 console.log("res-", response);
                 if (response.data.code === 1) {
                     toggle()
+                    history.push('/admin/schedule');
                     // reset();
                     // setLoading(false)
                     // var variable = "Message sent successfully."

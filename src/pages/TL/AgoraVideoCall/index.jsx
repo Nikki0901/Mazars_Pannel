@@ -521,7 +521,7 @@ sleep(ms) {
  async GetRecordingStatus(json){
     console.log("GetRecordingStatus",json)
 
-    await this.sleep(1000); 
+    await this.sleep(3000); 
     var resourceId = json.data.resourceId;
     var sid = json.data.sid;
 
