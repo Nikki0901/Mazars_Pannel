@@ -1541,7 +1541,10 @@ const recordingBtnOff = (
     }
     title="Record Off"
   >
-            <FiberManualRecordIcon style={{ color: red[500] }}/>
+             {
+      this.state.showButton == JSON.parse(this.teamKey) ?
+      <FiberManualRecordIcon style={{ color: red[500] }}/> : ""
+    }
   </span>
 );
 

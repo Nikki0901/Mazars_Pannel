@@ -9,3 +9,6 @@
 .indirCla{
     color : blue;
 }
+.table tbody{
+    word-break: break-all;
+}
