@@ -317,7 +317,7 @@ function AllProposal() {
                                 }
                             </div>
 
-                            <div title="View Discussion Message">
+                            {/* <div title="View Discussion Message">
                                 <i
                                     class="fa fa-comments-o"
                                     style={{
@@ -327,7 +327,7 @@ function AllProposal() {
                                     }}
                                     onClick={() => ViewDiscussionToggel(row.assign_no)}
                                 ></i>
-                            </div>
+                            </div> */}
                         </div>
                     </>
                 );
